@@ -154,7 +154,7 @@
                                                         <!--end::Input group Name-->
                                                     </div>
                                                     <!--begin::Col-->
-                                                    <div class="col-6">
+                                                    {{-- <div class="col-6">
                                                         <!--begin::Input group Website-->
                                                         <!--begin::Input group Name-->
                                                         <div class="fv-row mb-7">
@@ -184,7 +184,7 @@
                                                             </h6>
                                                         @enderror
                                                         <!--end::Input group Name-->
-                                                    </div>
+                                                    </div> --}}
                                                 </div>
 
 
@@ -406,7 +406,7 @@
                                     const formData = new FormData();
                                     formData.append("_token", "{{ csrf_token() }}");
                                     formData.append("id_contract", "{{ $contract->id_contract }}")
-                                    formData.append("kode_proyek", "{{ $contract->project?_id }}")
+                                    formData.append("kode_proyek", "{{ $contract->project_id }}")
                                     formData.append("periode", "{{ (int)date("m")-1 }}")
                                     formData.append("tahun", "{{ (int)date("Y") }}")
                                     const sendData = await fetch("/contract-management/set-lock",{
@@ -424,7 +424,8 @@
                     @endif
 
                     <!--begin::Button-->
-                    @if ($contract->where("id_contract", "=", $contract->id_contract)->where("stages", "!=", 1)->get()->isNotEmpty())
+                    {{-- @if ($contract->where("id_contract", "=", $contract->id_contract)->where("stages", "!=", 1)->get()->isNotEmpty()) --}}
+                    @if ($contract->where("profit_center", "=", $contract->profit_center)->where("stages", "!=", 1)->get()->isNotEmpty())
                     <button type="submit" form="form-1" class="btn btn-sm btn-primary {{ empty($is_approved) || $is_approved->isEmpty() ? "" : "disabled" }}" id="kt_toolbar_primary_button"
                         style="background-color:#008CB4;margin-left:10px;">
                         Save</button>
@@ -591,7 +592,6 @@
                         <div class="card card-flush h-lg-100" id="kt_contacts_main">
 
                             <div class="card-body pt-5">
-
                                 <!--begin::Row-->
                                 <div class="d-flex align-items-center">
                                     <!--begin::Col-->
@@ -605,7 +605,11 @@
                                             </div>
                                             <div class="text-dark text-start">
                                                 {{-- <b>{{ urldecode(urldecode($contract->id_contract)) ?? '' }}</b> --}}
+                                                @if ($contract->stages == 1)
                                                 <b>{{ $contract->no_contract ?? '' }}</b>
+                                                @else
+                                                <b>{{ $contract->ProyekPISNew->contract_no ?? '' }}</b>
+                                                @endif
                                             </div>
                                         </div>
                                         <!--end::Input group Name-->
@@ -617,7 +621,13 @@
                                                 <span class="">Proyek: </span>
                                             </div>
                                             <div class="text-dark text-start">
-                                                <b>{{ $contract->project?->nama_proyek ?? '' }}</b>
+                                                @if ($contract->stages == 1)
+                                                <b>{{ $contract->project->nama_proyek ?? '' }}</b>
+                                                {{-- <b>{{ $contract->no_contract ?? '' }}</b> --}}
+                                                @else
+                                                <b>{{ $contract->ProyekPISNew->proyek_name ?? '' }}</b>
+                                                {{-- <b>{{ $contract->ProyekPISNew->contract_no ?? '' }}</b> --}}
+                                                @endif
                                             </div>
                                         </div>
                                         <!--begin::Input group Website-->
@@ -640,7 +650,13 @@
                                                     <span class="">Tanggal Mulai Kontrak: </span>
                                                 </div>
                                                 <div class="text-dark text-start">
+                                                    @if ($contract->stages == 1)
+                                                    {{-- <b>{{ $contract->no_contract ?? '' }}</b> --}}
                                                     <b>{{ Carbon\Carbon::parse($contract->contract_in)->translatedFormat('d F Y') }}</b>
+                                                    @else
+                                                    {{-- <b>{{ $contract->ProyekPISNew->contract_no ?? '' }}</b> --}}
+                                                    <b>{{ Carbon\Carbon::parse($contract->ProyekPISNew->start_date)->translatedFormat('d F Y') }}</b>
+                                                    @endif
                                                 </div>
                                             </div>
                                             <!--end::Input group Name-->
@@ -652,7 +668,13 @@
                                                     <span class="">Tanggal Berakhir Kontrak: </span>
                                                 </div>
                                                 <div class="text-dark text-start">
+                                                    @if ($contract->stages == 1)
+                                                    {{-- <b>{{ $contract->no_contract ?? '' }}</b> --}}
                                                     <b>{{ Carbon\Carbon::parse($contract->contract_out)->translatedFormat('d F Y') }}</b>
+                                                    @else
+                                                    {{-- <b>{{ $contract->ProyekPISNew->contract_no ?? '' }}</b> --}}
+                                                    <b>{{ Carbon\Carbon::parse($contract->ProyekPISNew->start_date)->translatedFormat('d F Y') }}</b>
+                                                    @endif
                                                 </div>
                                             </div>
                                             <!--begin::Input group Website-->
@@ -675,7 +697,13 @@
                                                     <span class="">No. SPK: </span>
                                                 </div>
                                                 <div class="text-dark text-start">
-                                                    <b>{{ $contract->project?->kode_spk ?? "-" }}</b>
+                                                    @if ($contract->stages == 1)
+                                                    {{-- <b>{{ $contract->no_contract ?? '' }}</b> --}}
+                                                    <b>{{ $contract->project->no_spk ?? "-" }}</b>
+                                                    @else
+                                                    {{-- <b>{{ $contract->ProyekPISNew->contract_no ?? '' }}</b> --}}
+                                                    <b>{{ $contract->ProyekPISNew->spk_intern_no ?? "-" }}</b>
+                                                    @endif
                                                 </div>
                                             </div>
                                             <!--end::Input group Name-->
@@ -687,7 +715,13 @@
                                                     <span class="">Nilai Kontrak Awal: </span>
                                                 </div>
                                                 <div class="text-dark text-start">
-                                                    <b>{{ number_format($contract->project?->nilai_rkap ?? 0, 0, '.', '.') }}</b>
+                                                    @if ($contract->stages == 1)
+                                                    {{-- <b>{{ $contract->no_contract ?? '' }}</b> --}}
+                                                    <b>{{ number_format($contract->project->nilai_rkap ?? 0, 0, '.', '.') }}</b>
+                                                    @else
+                                                    {{-- <b>{{ $contract->ProyekPISNew->contract_no ?? '' }}</b> --}}
+                                                    <b>{{ number_format($contract->ProyekPISNew->contract_value_idr ?? 0, 0, '.', '.') }}</b>
+                                                    @endif
                                                 </div>
                                             </div>
                                             <!--begin::Input group Website-->
@@ -710,7 +744,13 @@
                                                     <span class="">Unit Kerja: </span>
                                                 </div>
                                                 <div class="text-dark text-start">
-                                                    <b>{{ $contract->project?->UnitKerja?->unit_kerja }}</b>
+                                                    @if ($contract->stages == 1)
+                                                    {{-- <b>{{ $contract->no_contract ?? '' }}</b> --}}
+                                                    <b>{{ $contract->project->UnitKerja->unit_kerja }}</b>
+                                                    @else
+                                                    {{-- <b>{{ $contract->ProyekPISNew->contract_no ?? '' }}</b> --}}
+                                                    <b>{{ $contract->ProyekPISNew->UnitKerja->unit_kerja }}</b>
+                                                    @endif
                                                 </div>
                                             </div>
                                             <!--end::Input group Name-->
@@ -722,7 +762,13 @@
                                                     <span class="">Nilai Kontrak Review: </span>
                                                 </div>
                                                 <div class="text-dark text-start">
-                                                    <b>{{ number_format($contract->project?->nilaiok_review ?? 0, 0, '.', '.') }}</b>
+                                                    @if ($contract->stages == 1)
+                                                    {{-- <b>{{ $contract->no_contract ?? '' }}</b> --}}
+                                                    <b>{{ number_format($contract->project->nilaiok_review ?? 0, 0, '.', '.') }}</b>
+                                                    @else
+                                                    {{-- <b>{{ $contract->ProyekPISNew->contract_no ?? '' }}</b> --}}
+                                                    <b>{{ number_format($contract->ProyekPISNew?->ProyekProgress?->last()->ok_review ?? 0, 0, '.', '.') }}</b>
+                                                    @endif
                                                 </div>
                                             </div>
                                             <!--begin::Input group Website-->
@@ -755,7 +801,7 @@
                                                     <span class="">Nilai Kontrak Review: </span>
                                                 </div>
                                                 <div class="text-dark text-start">
-                                                    <b>{{ number_format($contract->project?->nilaiok_review ?? 0, 0, '.', '.') }}</b>
+                                                    <b>{{ number_format($contract->project->nilaiok_review ?? 0, 0, '.', '.') }}</b>
                                                 </div>
                                             </div>
                                             <!--begin::Input group Website-->
@@ -778,7 +824,7 @@
                                                 <span class="">Sumber Dana: </span>
                                             </div>
                                             <div class="text-dark text-start">
-                                                <b>{{ $contract->project?->sumber_dana ?? '-' }}</b>
+                                                <b>{{ $contract->project->sumber_dana ?? '-' }}</b>
                                             </div>
                                         </div>
                                     </div>
@@ -788,7 +834,7 @@
                                                 <span class="">Tipe Proyek: </span>
                                             </div>
                                             <div class="text-dark text-start">
-                                                <b>{{App\Models\JenisProyek::find($contract->project?->jenis_proyek)->jenis_proyek}}</b>
+                                                <b>{{App\Models\JenisProyek::find($contract->project->jenis_proyek)->jenis_proyek}}</b>
                                             </div>
                                         </div>
                                     </div>
@@ -1113,11 +1159,11 @@
                                 @php
                                     /*    
                                         {{-- @dump($contract->reviewProjects) --}}
-                                        @if ($contract->reviewProjects->isEmpty() && $contract->project?->DokumenTender->isNotEmpty())
+                                        @if ($contract->reviewProjects->isEmpty() && $contract->project->DokumenTender->isNotEmpty())
                                         {{-- @if (empty($is_approved) || $is_approved->isEmpty()) --}}
                                         <a href="/review-contract/view/{{ $contract->id_contract }}/1" target="_blank" Id="Plus">+</a>
                                         {{-- @endif --}}
-                                        @elseif ($contract->reviewProjects->isNotEmpty() && $contract->project?->DokumenTender->isNotEmpty())
+                                        @elseif ($contract->reviewProjects->isNotEmpty() && $contract->project->DokumenTender->isNotEmpty())
                                             <a class="btn btn-primary btn-sm p-2 gap-3" href="/review-contract/view/{{ $contract->id_contract }}/1" target="_blank">view</a>
                                             {{-- <a class="btn btn-primary btn-sm p-2 px-3 mx-3" data-kt-countup-tabs="true" data-bs-toggle="tab"
                                             href="#kt_user_view_overview_pelaksanaan">Lihat Pelaksanaan</a>     --}}
@@ -1136,6 +1182,7 @@
                                     data-bs-target="#kt_modal_upload_tinjauan_perolehan" class="btn btn-primary btn-sm p-2 text-end me-3">Upload</a>
                                 @endif
                             </h3>
+                            
                             <!--begin:Table: Review-->
                             <table class="table align-middle table-row-dashed fs-6 gy-5" id="data-aanwitjzing">
                                 <!--begin::Table head-->
@@ -1154,6 +1201,7 @@
                                 @php
                                     $dokumen_tinjauan_perolehan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Tinjauan Dokumen Kontrak - Perolehan")->where('status', '!=', 'Final');
                                 @endphp
+                                
                                 <tbody class="fw-bold text-gray-400">
                                     @if (!empty($dokumen_tinjauan_perolehan))
                                         @forelse ($dokumen_tinjauan_perolehan as $dc)
@@ -1200,6 +1248,7 @@
                                 <!--end::Table body-->
 
                             </table>
+                            
                             @php
                                 $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Tinjauan Dokumen Kontrak - Perolehan")->where('status', '=', "Final")->first();
                             @endphp
@@ -1530,7 +1579,7 @@
                                 data-bs-custom-class="custom-tooltip"
                                 data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
                                 data-bs-html="true"></i> --}}
-                                @if (!empty($contract->project?->DokumenNda?->toArray()))
+                                @if (!empty($contract->project?->DokumenNda->toArray()))
                                     <a href="#" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_nda" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
                                 @endif  
@@ -1546,7 +1595,6 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-125px">Nama</th>
                                         <th class="min-w-125px">Tanggal</th>
-                                        <th class="min-w-125px">Action</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -1593,11 +1641,6 @@
                                             </td>
                                         </tr>
                                     @endif --}}
-                                    @if ($contract->project?->DokumenNda->isNotEmpty())
-                                    <tr class="bg-primary">
-                                        <td colspan="3" class="text-white">File CRM</td>
-                                    </tr>
-                                    @endif
                                     @if (!empty($contract->project?->DokumenNda))
                                     @forelse ($contract->project?->DokumenNda as $nda)
                                         <tr>
@@ -1610,38 +1653,18 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="3" class="text-center"><b>There is no data</b></td>
+                                            <td colspan="2" class="text-center"><b>There is no data</b></td>
                                         </tr>
                                     @endforelse
+                                        
                                     @endif
-                                    @if ($contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen NDA")->isNotEmpty())
-                                    <tr class="bg-primary">
-                                        <td colspan="3" class="text-white">File CCM</td>
-                                    </tr>
-                                    @endif
-                                    @forelse ($contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen NDA") as $item)
-                                        <tr>
-                                            <td>
-                                                <a target="_blank" href="{{asset("/words/$item->id_document")}}" class="text-hover-primary">{{$item->nama_document}}</a>
-                                            </td>
-                                            <td>
-                                                {{Carbon\Carbon::createFromTimeString($item->created_at)->translatedFormat("d F Y")}}
-                                            </td>
-                                            <td class="text-center">
-                                                <a href="#" onclick="confirmDeleteFinalDokumen('{{ $item->id }}')" class="btn btn-sm btn-danger p-2 text-white">Delete</a>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                    <tr>
-                                        <td colspan="3" class="text-center"><b>There is no data</b></td>
-                                    </tr>
-                                    @endforelse
                                 </tbody>
                                 <!--end::Table body-->
+                                
 
                             </table>
                             <!--End:Table: Review-->
-                            {{-- @php
+                            @php
                             $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen NDA")->first();
                             @endphp
                             <!--End:Table: Review-->
@@ -1649,7 +1672,7 @@
                             <a target="_blank" href="{{ asset('words/'.$uploadFile->id_document) }}" class="text-hover-primary">
                             <small><b>Download File :</b> {{ $uploadFile->nama_document }}</small>
                             </a>
-                            @endif --}}
+                            @endif
                             <br>
                             <br>
 
@@ -1676,14 +1699,14 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-125px">Nama</th>
                                         <th class="min-w-125px">Tanggal</th>
-                                        <th class="min-w-125px">Action</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    {{-- @forelse ($contract->project?->DokumenMou as $nda)
+                                    @if (!empty($contract->project?->DokumenMou))
+                                    @forelse ($contract->project?->DokumenMou as $nda)
                                         <tr>
                                             <td>
                                                 <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
@@ -1698,48 +1721,8 @@
                                                 <b>There is no data</b>
                                             </td>
                                         </tr>
-                                    @endforelse --}}
-                                    @if ($contract->project?->DokumenMou->isNotEmpty())
-                                    <tr class="bg-primary">
-                                        <td colspan="3" class="text-white">File CRM</td>
-                                    </tr>
-                                    @endif
-                                    @if (!empty($contract->project?->DokumenMou))
-                                    @forelse ($contract->project?->DokumenMou as $mou)
-                                        <tr>
-                                            <td>
-                                                <a target="_blank" href="{{asset("/words/$mou->id_document.pdf")}}" class="text-hover-primary">{{$mou->nama_dokumen}}</a>
-                                            </td>
-                                            <td>
-                                                {{Carbon\Carbon::createFromTimeString($mou->created_at)->translatedFormat("d F Y")}}
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="3" class="text-center"><b>There is no data</b></td>
-                                        </tr>
                                     @endforelse
                                     @endif
-                                    @if ($contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen MOU")->isNotEmpty())
-                                    <tr class="bg-primary">
-                                        <td colspan="3" class="text-white">File CCM</td>
-                                    </tr>
-                                    @endif
-                                    @forelse ($contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen MOU") as $item)
-                                        <tr>
-                                            <td>
-                                                <a target="_blank" href="{{asset("/words/$item->id_document")}}" class="text-hover-primary">{{$item->nama_document}}</a>
-                                            </td>
-                                            <td>
-                                                {{Carbon\Carbon::createFromTimeString($item->created_at)->translatedFormat("d F Y")}}
-                                            </td>
-                                            <td class="text-center">
-                                                <a href="#" onclick="confirmDeleteFinalDokumen('{{ $item->id }}')" class="btn btn-sm btn-danger p-2 text-white">Delete</a>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        
-                                    @endforelse
                                 </tbody>
                                 <!--end::Table body-->
 
@@ -1786,8 +1769,8 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @if (!empty($contract->project?->DokumenEca))
-                                    @forelse ($contract->project?->DokumenEca as $nda)
+                                    @if (!empty($contract->project->DokumenEca))
+                                    @forelse ($contract->project->DokumenEca as $nda)
                                         <tr>
                                             <td>
                                                 <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
@@ -1867,7 +1850,7 @@
                                                 <b>There is no data</b>
                                             </td>
                                         </tr>
-                                    @endforelse
+                                    @endforelse   
                                     @endif
                                 </tbody>
                                 <!--end::Table body-->
@@ -2041,7 +2024,7 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @if (!empty($contract->project?->DokumenDraft))
+                                    @if ($contract->project?->DokumenDraft)
                                     @forelse ($contract->project?->DokumenDraft as $nda)
                                         <tr>
                                             <td>
@@ -2105,8 +2088,7 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-
-                                    @if (!empty($contract->project?->AttachmentMenang))
+                                    @if ($contract->project?->AttachmentMenang)
                                     @forelse ($contract->project?->AttachmentMenang as $nda)
                                         <tr>
                                             <td>
@@ -2509,7 +2491,7 @@
 
                             {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Klaim Kontrak
-                                <a href="/claim-management/{{ $contract->project?->kode_proyek }}/{{ urlencode(urlencode($contract->id_contract)) }}/new"
+                                <a href="/claim-management/{{ $contract->project->kode_proyek }}/{{ urlencode(urlencode($contract->id_contract)) }}/new"
                                     Id="Plus">+</a>
                             </h3>
                             <!--begin:Table: Claim Contract-->
@@ -2528,8 +2510,8 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @if (isset($contract->project?->ClaimManagements))
-                                        @forelse ($contract->project?->ClaimManagements as $claimManagement)
+                                    @if (isset($contract->project->ClaimManagements))
+                                        @forelse ($contract->project->ClaimManagements as $claimManagement)
                                             <tr>
                                                 <!--begin::Column-->
                                                 <td>
@@ -2974,7 +2956,10 @@
                                 </div>
                             </form> --}}
 
-                            @if ($contract->project?->jenis_proyek == "J" )
+                            
+                            {{-- @if ($contract->project->jenis_proyek == "J" ) --}}
+                            @if ($contract->stages > 1)
+                            @if ($contract->ProyekPISNew->type_code == "JO" )
                             <br>
                             <div class="row mt-7">
                                 <div class="col-6">
@@ -2999,6 +2984,7 @@
                                 </div>
                             </div>
                             <br>
+                            @endif
                             @endif
 
                             
@@ -3149,7 +3135,6 @@
                             </table>
                             <!--End:Table: Review-->
 
-                            <br>
                             @php
                                 $dokumen_tinjauan_pelaksanaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->whereIn('category', ["Tinjauan Dokumen Kontrak - Perolehan", "Tinjauan Dokumen Kontrak - Pelaksanaan"])->where('status', '!=', 'Final');
                             @endphp
@@ -3171,6 +3156,7 @@
                                     data-bs-target="#kt_modal_upload_tinjauan_pelaksanaan" class="btn btn-primary btn-sm p-2 text-end me-3">Upload</a>
                                 @endif
                             </h3>
+                            
                             <!--begin:Table: Review-->
                             <table class="table align-middle table-row-dashed fs-6 gy-5" id="data-aanwitjzing">
                                 <!--begin::Table head-->
@@ -3268,11 +3254,11 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-50px">No</th>
-                                        <th class="min-w-125px">Item</th>
+                                        <th class="min-w-auto">No</th>
+                                        <th class="min-w-500px">Item</th>
                                         <th class="min-w-125px">Pasal</th>
-                                        <th class="min-w-125px">Perpanjangan Waktu</th>
-                                        <th class="min-w-125px">Tambahan Biaya</th>
+                                        <th class="min-w-auto">Perpanjangan Waktu</th>
+                                        <th class="min-w-auto">Tambahan Biaya</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -3287,7 +3273,7 @@
                                                 </td>
                                                 <!--begin::Column-->
                                                 <td>
-                                                    <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins';">{!! $pk->item !!}</pre>
+                                                    <pre class="text-gray-600 mb-1 fw-normal" style="font-family: 'Poppins'; max-width:1080px">{!! $pk->item !!}</pre>
                                                 </td>
                                                 <!--end::Column-->
                                                 <!--begin::Column-->
@@ -3297,22 +3283,22 @@
                                                 <!--end::Column-->
                                                 <!--begin::Column-->
                                                 @if ($pk->is_perpanjangan_waktu == true)
-                                                <td>
+                                                <td class="text-center">
                                                     <p class="badge badge-light-success text-gray-600 mb-1 fw-normal text-center">Ya</p>
                                                 </td>
                                                 @else
-                                                <td>
+                                                <td class="text-center">
                                                     <p class="badge badge-light-danger text-gray-600 mb-1 fw-normal text-center">Tidak</p>
                                                 </td>
                                                 @endif
                                                 <!--end::Column-->
                                                 <!--begin::Column-->
                                                 @if ($pk->is_tambahan_biaya == true)
-                                                <td>
+                                                <td class="text-center">
                                                     <p class="badge badge-light-success text-gray-600 mb-1 fw-normal text-center">Ya</p>
                                                 </td>
                                                 @else
-                                                <td>
+                                                <td class="text-center">
                                                     <p class="badge badge-light-danger text-gray-600 mb-1 fw-normal text-center">Tidak</p>
                                                 </td>
                                                 @endif
@@ -3552,7 +3538,8 @@
                                         </td>
                                         <td class="text-center">
                                             <small>
-                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project?->kode_proyek }}/{{ $contract->id_contract }}?link=kt_user_view_claim_VO" target="_blank">Lihat Detail</a>
+                                                {{-- <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project->kode_proyek }}/{{ $contract->id_contract }}?link=kt_user_view_claim_VO" target="_blank">Lihat Detail</a> --}}
+                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->profit_center }}?link=kt_user_view_claim_VO" target="_blank">Lihat Detail</a>
                                             </small>
                                         </td>
                                     </tr>
@@ -3576,7 +3563,8 @@
                                         </td>
                                         <td class="text-center">
                                             <small>
-                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project?->kode_proyek }}/{{ $contract->id_contract }}?link=kt_user_view_claim" target="_blank">Lihat Detail</a>
+                                                {{-- <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project->kode_proyek }}/{{ $contract->id_contract }}?link=kt_user_view_claim" target="_blank">Lihat Detail</a> --}}
+                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->profit_center }}?link=kt_user_view_claim" target="_blank">Lihat Detail</a>
                                             </small>
                                         </td>
                                     </tr>
@@ -3600,7 +3588,8 @@
                                         </td>
                                         <td class="text-center">
                                             <small>
-                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project?->kode_proyek }}/{{ $contract->id_contract }}?link=kt_user_view_overview_anticlaim" target="_blank">Lihat Detail</a>
+                                                {{-- <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project->kode_proyek }}/{{ $contract->id_contract }}?link=kt_user_view_overview_anticlaim" target="_blank">Lihat Detail</a> --}}
+                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->profit_center }}?link=kt_user_view_overview_anticlaim" target="_blank">Lihat Detail</a>
                                             </small>
                                         </td>
                                     </tr>
@@ -3624,7 +3613,8 @@
                                         </td>
                                         <td class="text-center">
                                             <small>
-                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project?->kode_proyek }}/{{ $contract->id_contract }}?link=kt_user_view_overview_asuransi" target="_blank">Lihat Detail</a>
+                                                {{-- <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->project->kode_proyek }}/{{ $contract->id_contract }}?link=kt_user_view_overview_asuransi" target="_blank">Lihat Detail</a> --}}
+                                                <a class="badge badge-light-primary" href="/claim-management/proyek/{{ $contract->profit_center }}?link=kt_user_view_overview_asuransi" target="_blank">Lihat Detail</a>
                                             </small>
                                         </td>
                                     </tr>
@@ -3644,7 +3634,7 @@
 
                             <br>
                             <br>
-
+                    
                             <!--Begin::Klaim Jaminan-->
                             <h3 class="fw-bolder m-0 mb-3 " id="HeadDetail" style="font-size:14px;">
                                 Jaminan
@@ -3982,6 +3972,7 @@
                                         <th class="min-w-125px">Tanggal</th>
                                         <th class="min-w-125px">Uraian</th>
                                         <th class="min-w-125px">File</th>
+                                        <th class="min-w-125px">Action</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -4023,17 +4014,24 @@
                                                     </a>
                                                 </td>
                                                 <!--end::Nomor Dokumen-->
+                                                <!--begin::Nomor Dokumen-->
+                                                <td>
+                                                    <div class="d-flex flex-row align-items-center justify-content-center">
+                                                        <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-site-instruction/{{ $site_instruction->id_instruction }}/delete')">Delete</button>
+                                                    </div>
+                                                </td>
+                                                <!--end::Nomor Dokumen-->
                                             </tr>
                                             @empty
                                             <tr>
-                                                    <td colspan="4" class="text-center">
+                                                    <td colspan="5" class="text-center">
                                                         <h6><b>There is no data</b></h6>
                                                     </td>
                                                 </tr>
                                                 @endforelse
                                                 @else
                                                 <tr>
-                                                    <td colspan="4" class="text-center">
+                                                    <td colspan="5" class="text-center">
                                                         <h6><b>There is no data</b></h6>
                                                     </td>
                                                 </tr>
@@ -4065,6 +4063,7 @@
                                         <th class="min-w-125px">Tanggal</th>
                                         <th class="min-w-125px">Uraian</th>
                                         <th class="min-w-125px">File</th>
+                                        <th class="min-w-125px">Action</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -4105,17 +4104,24 @@
                                                 </a>
                                             </td>
                                             <!--end::Nomor Dokumen-->
+                                            <!--begin::Nomor Dokumen-->
+                                            <td>
+                                                <div class="d-flex flex-row align-items-center justify-content-center">
+                                                    <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-technical-form/{{ $technical_form->id_technical_form }}/delete')">Delete</button>
+                                                </div>
+                                            </td>
+                                            <!--end::Nomor Dokumen-->
                                         </tr>
                                         @empty
                                         <tr>
-                                            <td colspan="4" class="text-center">
+                                            <td colspan="5" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
                                         @endforelse
                                     @else
                                     <tr>
-                                        <td colspan="4" class="text-center">
+                                        <td colspan="5" class="text-center">
                                             <h6><b>There is no data</b></h6>
                                         </td>
                                     </tr>
@@ -4146,6 +4152,7 @@
                                         <th class="min-w-125px">Tanggal</th>
                                         <th class="min-w-125px">Uraian</th>
                                         <th class="min-w-125px">File</th>
+                                        <th class="min-w-125px">Action</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -4186,17 +4193,24 @@
                                                 </a>
                                             </td>
                                             <!--end::Nomor Dokumen-->
+                                            <!--begin::Nomor Dokumen-->
+                                            <td>
+                                                <div class="d-flex flex-row align-items-center justify-content-center">
+                                                    <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-technical-query/{{ $technical_query->technical_query }}/delete')">Delete</button>
+                                                </div>
+                                            </td>
+                                            <!--end::Nomor Dokumen-->
                                         </tr>
                                         @empty
                                         <tr>
-                                            <td colspan="4" class="text-center">
+                                            <td colspan="5" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
                                         @endforelse
                                     @else
                                     <tr>
-                                        <td colspan="4" class="text-center">
+                                        <td colspan="5" class="text-center">
                                             <h6><b>There is no data</b></h6>
                                         </td>
                                     </tr>
@@ -4228,6 +4242,7 @@
                                         <th class="min-w-125px">Tanggal</th>
                                         <th class="min-w-125px">Uraian</th>
                                         <th class="min-w-125px">File</th>
+                                        <th class="min-w-125px">Action</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -4268,17 +4283,24 @@
                                                 </a>
                                             </td>
                                             <!--end::Nomor Dokumen-->
+                                            <!--begin::Nomor Dokumen-->
+                                            <td>
+                                                <div class="d-flex flex-row align-items-center justify-content-center">
+                                                    <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-field-design-change/{{ $field_change->id_field_change }}/delete')">Delete</button>
+                                                </div>
+                                            </td>
+                                            <!--end::Nomor Dokumen-->
                                         </tr>
                                         @empty
                                         <tr>
-                                            <td colspan="4" class="text-center">
+                                            <td colspan="5" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
                                         @endforelse
                                     @else
                                     <tr>
-                                        <td colspan="4" class="text-center">
+                                        <td colspan="5" class="text-center">
                                             <h6><b>There is no data</b></h6>
                                         </td>
                                     </tr>
@@ -4309,6 +4331,7 @@
                                         <th class="min-w-125px">Tanggal</th>
                                         <th class="min-w-125px">Uraian</th>
                                         <th class="min-w-125px">File</th>
+                                        <th class="min-w-125px">Action</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -4349,17 +4372,24 @@
                                                 </a>
                                             </td>
                                             <!--end::Nomor Dokumen-->
+                                            <!--begin::Nomor Dokumen-->
+                                            <td>
+                                                <div class="d-flex flex-row align-items-center justify-content-center">
+                                                    <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-contract-change-notice/{{ $change_notice->id_change_notice }}/delete')">Delete</button>
+                                                </div>
+                                            </td>
+                                            <!--end::Nomor Dokumen-->
                                         </tr>
                                         @empty
                                         <tr>
-                                            <td colspan="4" class="text-center">
+                                            <td colspan="5" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
                                         @endforelse
                                     @else
                                     <tr>
-                                        <td colspan="4" class="text-center">
+                                        <td colspan="5" class="text-center">
                                             <h6><b>There is no data</b></h6>
                                         </td>
                                     </tr>
@@ -4390,6 +4420,7 @@
                                         <th class="min-w-125px">Tanggal</th>
                                         <th class="min-w-125px">Uraian</th>
                                         <th class="min-w-125px">File</th>
+                                        <th class="min-w-125px">Action</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -4430,17 +4461,24 @@
                                                 </a>
                                             </td>
                                             <!--end::Nomor Dokumen-->
+                                            <!--begin::Nomor Dokumen-->
+                                            <td>
+                                                <div class="d-flex flex-row align-items-center justify-content-center">
+                                                    <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-contract-change-proposal/{{ $change_proposal->id_change_proposal }}/delete')">Delete</button>
+                                                </div>
+                                            </td>
+                                            <!--end::Nomor Dokumen-->
                                         </tr>
                                         @empty
                                         <tr>
-                                            <td colspan="4" class="text-center">
+                                            <td colspan="5" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
                                         @endforelse
                                     @else
                                     <tr>
-                                        <td colspan="4" class="text-center">
+                                        <td colspan="5" class="text-center">
                                             <h6><b>There is no data</b></h6>
                                         </td>
                                     </tr>
@@ -4471,6 +4509,7 @@
                                         <th class="min-w-125px">Tanggal</th>
                                         <th class="min-w-125px">Uraian</th>
                                         <th class="min-w-125px">File</th>
+                                        <th class="min-w-125px">Action</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -4511,17 +4550,24 @@
                                                 </a>
                                             </td>
                                             <!--end::Nomor Dokumen-->
+                                            <!--begin::Nomor Dokumen-->
+                                            <td>
+                                                <div class="d-flex flex-row align-items-center justify-content-center">
+                                                    <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-contract-change-order/{{ $change_order->id_change_order }}/delete')">Delete</button>
+                                                </div>
+                                            </td>
+                                            <!--end::Nomor Dokumen-->
                                         </tr>
                                         @empty
                                         <tr>
-                                            <td colspan="4" class="text-center">
+                                            <td colspan="5" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
                                         @endforelse
                                     @else
                                     <tr>
-                                        <td colspan="4" class="text-center">
+                                        <td colspan="5" class="text-center">
                                             <h6><b>There is no data</b></h6>
                                         </td>
                                     </tr>
@@ -4553,6 +4599,7 @@
                                     <th class="w-auto">Jenis Dokumen</th>
                                     <th class="w-auto">File</th>
                                     <th class="w-auto">Tanggal</th>
+                                    <th class="w-auto">Status Dokumen</th>
                                     <th class="w-auto">Action</th>
                                 </tr>
                                 <!--end::Table row-->
@@ -4587,6 +4634,9 @@
                                         <td>
                                             {{ Carbon\Carbon::parse($dokumen->tanggal_dokumen)->translatedFormat("d F Y") }}
                                         </td>
+                                        <td class="text-center">
+                                            {{ $dokumen->status_dokumen }}
+                                        </td>
                                         <!--begin::Action-->
                                         <td class="text-center">
                                             <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
@@ -4603,7 +4653,7 @@
                                 @endforeach
                                 @if ($contract->ContractBast->where("bast", "=", 1)->isEmpty())
                                 <tr>
-                                    <td colspan="5" class="text-center">
+                                    <td colspan="4" class="text-center">
                                         <h6><b>There is no data</b></h6>
                                     </td>
                                 </tr>
@@ -5315,6 +5365,7 @@
                                                         <th class="w-auto">Jenis Dokumen</th>
                                                         <th class="w-auto">File</th>
                                                         <th class="w-auto">Tanggal</th>
+                                                        <th class="w-auto">Status Dokumen</th>
                                                         <th class="w-auto">Action</th>
                                                         {{-- <th class="w-auto text-center"></th> --}}
                                                     </tr>
@@ -5353,6 +5404,9 @@
                                                                 <td>
                                                                     {{ Carbon\Carbon::parse($dokumen->tanggal_dokumen)->translatedFormat("d F Y") }}
                                                                 </td>
+                                                                <td class="text-center">
+                                                                    {{ $dokumen->status_dokumen }}
+                                                                </td>
                                                                 <!--begin::Action-->
                                                                 <td class="text-center">
                                                                     <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
@@ -5388,7 +5442,6 @@
                                 {{-- <button type="submit" class="btn btn-sm btn-active-primary text-white"
                                     style="background-color: #008cb4;">Save Dokumen Bast</button> --}}
                             {{-- </form> --}}
-
                             <!--Begin::Leasson Learned-->
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Lesson Learned
@@ -5527,6 +5580,7 @@
                             <!--end::Table-->
                             <!--End::Lesson Learned-->
 
+                            <br>   
                             <br>    
 
                             <!--Begin:: Row Defact List-->
@@ -8530,10 +8584,10 @@
                                     data-control="select2" data-hide-search="true"
                                     data-placeholder="Jenis Dokumen">
                                     <option value=""></option>
-                                    <option value="Mechanical Completion" {{ $dokumen->jenis_bast == "Mechanical Completion" ? 'selected' : '' }}>Mechanical Completion</option>
-                                    <option value="Commisioning" {{ $dokumen->jenis_bast == "Commisioning" ? 'selected' : '' }}>Commisioning</option>
-                                    <option value="Performance Test" {{ $dokumen->jenis_bast == "Performance Test" ? 'selected' : '' }}>Performance Test</option>
-                                    <option value="BAST 1 / PHO" {{ $dokumen->jenis_bast == "BAST 1 / PHO" ? 'selected' : '' }}>BAST 1 / PHO</option>
+                                    <option value="Mechanical Completion" {{ $dokumen->jenis_dokumen == "Mechanical Completion" ? 'selected' : '' }}>Mechanical Completion</option>
+                                    <option value="Commisioning" {{ $dokumen->jenis_dokumen == "Commisioning" ? 'selected' : '' }}>Commisioning</option>
+                                    <option value="Performance Test" {{ $dokumen->jenis_dokumen == "Performance Test" ? 'selected' : '' }}>Performance Test</option>
+                                    <option value="BAST 1 / PHO" {{ $dokumen->jenis_dokumen == "BAST 1 / PHO" ? 'selected' : '' }}>BAST 1 / PHO</option>
                                 </select>
                                 <!--end::Input-->
                                 <br>
@@ -9782,6 +9836,8 @@
                             <!--begin::Input-->
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                 name="id-contract">
+                            <input type="hidden" value="{{ $contract->profit_center }}" id="profit-center"
+                                name="profit-center">
                             <input type="hidden" class="modal-name" name="modal-name">
                             <!--end::Input-->
         
@@ -9870,6 +9926,8 @@
                             <!--begin::Input-->
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                 name="id-contract">
+                            <input type="hidden" value="{{ $contract->profit_center }}" id="profit-center"
+                                name="profit-center">
                             <input type="hidden" class="modal-name" name="modal-name">
                             <!--end::Input-->
 
@@ -9960,6 +10018,8 @@
                             <!--begin::Input-->
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                 name="id-contract">
+                            <input type="hidden" value="{{ $contract->profit_center }}" id="profit-center"
+                            name="profit-center">
                             <input type="hidden" class="modal-name" name="modal-name">
                             <!--end::Input-->
 
@@ -10050,6 +10110,8 @@
                             <!--begin::Input-->
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                 name="id-contract">
+                            <input type="hidden" value="{{ $contract->profit_center }}" id="profit-center"
+                            name="profit-center">
                             <input type="hidden" class="modal-name" name="modal-name">
                             <!--end::Input-->
 
@@ -10138,6 +10200,8 @@
                             <!--begin::Input-->
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                 name="id-contract">
+                            <input type="hidden" value="{{ $contract->profit_center }}" id="profit-center"
+                            name="profit-center">
                             <input type="hidden" class="modal-name" name="modal-name">
                             <!--end::Input-->
 
@@ -10226,6 +10290,8 @@
                             <!--begin::Input-->
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                 name="id-contract">
+                            <input type="hidden" value="{{ $contract->profit_center }}" id="profit-center"
+                            name="profit-center">
                             <input type="hidden" class="modal-name" name="modal-name">
                             <!--end::Input-->
 
@@ -10314,6 +10380,8 @@
                             <!--begin::Input-->
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                 name="id-contract">
+                            <input type="hidden" value="{{ $contract->profit_center }}" id="profit-center"
+                            name="profit-center">
                             <input type="hidden" class="modal-name" name="modal-name">
                             <!--end::Input-->
 
@@ -10525,7 +10593,7 @@
         
                     <!--begin::Input group Website-->
                     <div class="fv-row mb-5">
-                        {{-- @dump($contract->project?->jenis_proyek) --}}
+                        {{-- @dump($contract->project->jenis_proyek) --}}
                         <form action="/jaminan-pelaksanaan/upload" method="POST" enctype="multipart/form-data">
                             @csrf
                             <!--begin::Input-->
@@ -10548,8 +10616,10 @@
                                 <option value="Advance Payment">Advance Payment</option>
                                 <option value="Performance">Performance</option>
                                 <option value="Warranty">Warranty</option>
-                                @if ($contract->project?->jenis_proyek == "J")
-                                <option value="Partner">Partner</option>
+                                @if ($contract->stages > 1)
+                                    @if ($contract->ProyekPISNew?->type_code == "JO")
+                                    <option value="Partner">Partner</option>
+                                    @endif
                                 @endif
                             </select>
                             <!--end::Input-->
@@ -15614,8 +15684,8 @@
 <!--end::Modal - Upload Dokumen Bill of Quality Pemeliharaan-->
 
 
-{{-- <!--begin::Modal - List Questions-->
-    <div class="modal fade" id="kt_modal_question_proyek" tabindex="-1" aria-hidden="true">
+<!--begin::Modal - List Questions-->
+    {{-- <div class="modal fade" id="kt_modal_question_proyek" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered mw-500px">
                 <!--begin::Modal content-->
@@ -15695,9 +15765,8 @@
                 <!--end::Modal content-->
         </div>
         <!--end::Modal dialog-->
-    </div>
-<!--end::Modal - List Questions--> --}}
-
+    </div> --}}
+<!--end::Modal - List Questions-->
 <!--begin::Modal - Upload Questions-->
 <div class="modal fade" id="kt_modal_create_aanwitjzing" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
@@ -15735,7 +15804,7 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen Aanwitjzing">
-                            {{-- <input type="hidden" name="status" value="Final"> --}}
+                            <input type="hidden" name="status" value="Final">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
@@ -15797,7 +15866,7 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="hidden" name="kategori" value="Dokumen Aanwitjzing">
-                                {{-- <input type="hidden" name="status" value="Final"> --}}
+                                <input type="hidden" name="status" value="Final">
                                 <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                                 <label for="file-document">
                                     <small class="fs-8 text-primary">
@@ -15829,6 +15898,7 @@
     @endforelse
 @endif
 <!--end::Modal - Edit Questions-->
+
 <!--begin::Modal - Upload Final Questions-->
 <div class="modal fade" id="kt_modal_upload_aanwitjzing" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
@@ -15949,6 +16019,7 @@
     <!--end::Modal dialog-->
 </div>
 <!--end::Modal - Upload Final Questions-->
+
 <!--begin::Modal - Upload Tinjauan Dokumen-->
 <div class="modal fade" id="kt_modal_create_tinjauan_dokumen_perolehan" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
@@ -16917,7 +16988,7 @@
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen NDA">
                             <input type="hidden" name="status" value="Final">
-                            <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
@@ -16978,7 +17049,7 @@
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen MOU">
                             <input type="hidden" name="status" value="Final">
-                            <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
@@ -17039,7 +17110,7 @@
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen ECA">
                             <input type="hidden" name="status" value="Final">
-                            <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
@@ -17100,7 +17171,7 @@
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen ICA">
                             <input type="hidden" name="status" value="Final">
-                            <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
@@ -17161,7 +17232,7 @@
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen ITB/TOR">
                             <input type="hidden" name="status" value="Final">
-                            <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
@@ -17222,7 +17293,7 @@
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen RKS / Project Spesification">
                             <input type="hidden" name="status" value="Final">
-                            <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
@@ -18025,6 +18096,7 @@ aria-hidden="true">
             confirmButtonText: 'Ya'
         }).then(async (result) => {
             if (result.isConfirmed) {
+                LOADING_BODY.block();
                 const formData = new FormData();
                 formData.append("_token", "{{ csrf_token() }}");
                 formData.append("id", id);
@@ -18034,10 +18106,51 @@ aria-hidden="true">
                     body: formData
                 }).then(res => res.json());
                 if (sendData.success) {
+                    LOADING_BODY.release();
                     Swal.fire({title: sendData.message, icon: 'success'}).then(()=>{
                         location.reload();
                     })
                 } else{
+                    LOADING_BODY.release();
+                    Swal.fire({title: sendData.message, icon: 'error'}).then(()=>{
+                        location.reload();
+                    })
+                }
+            }
+
+        })
+    }
+</script>
+
+<script>
+    async function deleteAction(url) {
+        Swal.fire({
+            title: '',
+            text: "Apakah anda yakin?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#008CB4',
+            cancelButtonColor: '#BABABA',
+            confirmButtonText: 'Ya'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                LOADING_BODY.block();
+                const formData = new FormData();
+                formData.append("_token", "{{ csrf_token() }}");
+                // formData.append("id", id);
+                // formData.append("id-contract", "{{ $contract->id_contract }}");
+                // formData.append("profit-center", "{{ $contract->profit_center }}");
+                const sendData = await fetch(`{{ url('${url}') }}`, {
+                    method: "POST",
+                    body: formData
+                }).then(res => res.json());
+                if (sendData.success) {
+                    LOADING_BODY.release();
+                    Swal.fire({title: sendData.message, icon: 'success'}).then(()=>{
+                        location.reload();
+                    })
+                } else{
+                    LOADING_BODY.release();
                     Swal.fire({title: sendData.message, icon: 'error'}).then(()=>{
                         location.reload();
                     })

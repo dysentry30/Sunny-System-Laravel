@@ -203,7 +203,8 @@ class ContractManagementsController extends Controller
             // dd($proyeks_all);
             $proyeks_perolehan = $proyeks_all->whereIn("stage", [2, 3, 4, 5, 6])->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
             $proyeks_pelaksanaan = $proyekPISNew;
-            $proyeks_pemeliharaan = $proyeks_all->where("is_cancel", "!=", true)->where("stages", "=", 3);
+            // $proyeks_pemeliharaan = $proyeks_all->where("is_cancel", "!=", true)->where("stages", "=", 3);
+            $proyeks_pemeliharaan = $proyekPISNew;
         } else {
             // $proyeks = Proyek::join()where("unit_kerja", "=", Auth::user()->unit_kerja)->where("stage", ">", 7)->where("nomor_terkontrak", "!=", "")->get()->sortBy("kode_proyek");
             // $proyeks = DB::table("proyeks as p")->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("p.unit_kerja", "=", Auth::user()->unit_kerja)->where("stage", ">", 7)->where("p.nomor_terkontrak", "!=", "")->where("c.stages", "<", 3)->get()->sortBy("kode_proyek");
@@ -284,16 +285,13 @@ class ContractManagementsController extends Controller
                 "contract_managements.profit_center",
                 "=",
                 "proyek_pis_new.profit_center"
-            )->whereIn("kd_divisi", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->where('contract_managements.profit_center', '!=', null)->where(
-                'start_year',
-                '<=',
-                $filterTahun
-            )->get();
+            )->whereIn("kd_divisi", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->where('contract_managements.profit_center', '!=', null)->where('start_year', '<=', $filterTahun)->get();
         }
         $proyeks_perolehan = $proyeks_all->whereIn("stage", [2, 3, 4, 5, 6])->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
         // $proyeks_pelaksanaan = $proyeks_all->where("stage", ">=", 8)->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
         $proyeks_pelaksanaan = $proyekPISNew;
-        $proyeks_pemeliharaan = $proyeks_all->where("is_cancel", "!=", true)->where("stages", "=", 3);
+        // $proyeks_pemeliharaan = $proyeks_all->where("is_cancel", "!=", true)->where("stages", "=", 3);
+        $proyeks_pemeliharaan = $proyekPISNew;
     // return view("4_Contract", compact(["proyeks"]));
         return view("4_Contract", compact(["proyeks_perolehan", "proyeks_pelaksanaan", "proyeks_pemeliharaan", "filterUnit", "filterJenis", "unitkerjas", "tahun_proyeks", "filterTahun", "month", "filterBulan", "unit_kerjas_select"]));
     }
@@ -1454,9 +1452,6 @@ class ContractManagementsController extends Controller
     public function siteInstruction(Request $request, SiteInstruction $siteInstruction)
     {
         $data = $request->all();
-        $file = $request->file("file-dokumen-instruction");
-        $id_document = date("His_") . $file->getClientOriginalName();
-        $nama_file = $file->getClientOriginalName();
 
         $messages = [
             "required" => "Field di atas wajib diisi",
@@ -1474,7 +1469,7 @@ class ContractManagementsController extends Controller
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
             $request->old("nomor-dokumen-instruction");
-            Alert::error('Error', "Review Contract gagal ditambahkan");
+            Alert::error('Error', "Dokumen Site Instruction gagal ditambahkan");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // return Redirect::back();
         }
@@ -1489,6 +1484,9 @@ class ContractManagementsController extends Controller
         //     return Redirect::back()->with("modal", $data["modal-name"]);
         //     // return Redirect::back();
         // }
+        $file = $request->file("file-dokumen-instruction");
+        $id_document = date("His_") . $file->getClientOriginalName();
+        $nama_file = $file->getClientOriginalName();
 
         if(isset($data['file-dokumen-instruction'])){
             $uploadFinal = new ContractUploadFinal();
@@ -1520,13 +1518,31 @@ class ContractManagementsController extends Controller
         return Redirect::back()->with("modal", $data["modal-name"]);
         // return redirect($_SERVER["HTTP_REFERER"]);
     }
+    public function deleteSiteInstruction(SiteInstruction $id)
+    {
+        $file = $id;
+        if (empty($file)) {
+            Alert::error('Error', 'Dokumen Tidak Ditemukan');
+            return redirect()->back();
+        }
+
+        $nama_file = $file->id_document;
+        if ($file->delete()) {
+            File::delete(public_path("words/$nama_file"));
+            return (object)[
+                'success' => true,
+                'message' => "Dokumen berhasil dihapus",
+            ];
+            return (object)[
+                'success' => false,
+                'message' => "Dokumen gagal dihapus",
+            ];
+        }
+    }
     // Upload Dokumen Technical Form to server or database
     public function technicalForm(Request $request, TechnicalForm $technicalForm)
     {
-        $file = $request->file("file-technical-form");
         $data = $request->all();
-        $nama_file = $file->getClientOriginalName();
-        $id_document = date("His_") . $file->getClientOriginalName();
 
         $messages = [
             "required" => "Field di atas wajib diisi",
@@ -1545,7 +1561,7 @@ class ContractManagementsController extends Controller
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
             $request->old("nomor-technical-form");
-            Alert::error('Error', "Review Contract gagal ditambahkan");
+            Alert::error('Error', "Dokumen Technical Form gagal ditambahkan");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // return Redirect::back();
         }
@@ -1560,6 +1576,9 @@ class ContractManagementsController extends Controller
         //     return Redirect::back()->with("modal", $data["modal-name"]);
         //     // return Redirect::back();
         // }
+        $file = $request->file("file-technical-form");
+        $nama_file = $file->getClientOriginalName();
+        $id_document = date("His_") . $file->getClientOriginalName();
 
         if(isset($data['file-technical-form'])){
             $uploadFinal = new ContractUploadFinal();
@@ -1590,13 +1609,32 @@ class ContractManagementsController extends Controller
         return Redirect::back()->with("modal", $data["modal-name"]);
         // return redirect($_SERVER["HTTP_REFERER"]);
     }
+    public function deleteTechnicalForm(TechnicalForm $id)
+    {
+        $file = $id;
+        if (empty($file)) {
+            Alert::error('Error', 'Dokumen Tidak Ditemukan');
+            return redirect()->back();
+        }
+
+        $nama_file = $file->id_document;
+        if ($file->delete()) {
+            File::delete(public_path("words/$nama_file"));
+            return (object)[
+                'success' => true,
+                'message' => "Dokumen berhasil dihapus",
+            ];
+            return (object)[
+                'success' => false,
+                'message' => "Dokumen gagal dihapus",
+            ];
+        }
+    }
     // Upload Dokumen Technical Query to server or database
     public function technicalQuery(Request $request, TechnicalQuery $technicalQuery)
     {
-        $file = $request->file("file-technical-query");
         $data = $request->all();
-        $nama_file = $file->getClientOriginalName();
-        $id_document = date("His_") . $file->getClientOriginalName();
+        
 
         $messages = [
             "required" => "Field di atas wajib diisi",
@@ -1615,7 +1653,7 @@ class ContractManagementsController extends Controller
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
             $request->old("nomor-technical-query");
-            Alert::error('Error', "Review Contract gagal ditambahkan");
+            Alert::error('Error', "Dokumen Technical Query gagal ditambahkan");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // return Redirect::back();
         }
@@ -1630,6 +1668,9 @@ class ContractManagementsController extends Controller
         //     return Redirect::back()->with("modal", $data["modal-name"]);
         //     // return Redirect::back();
         // }
+        $file = $request->file("file-technical-query");
+        $nama_file = $file->getClientOriginalName();
+        $id_document = date("His_") . $file->getClientOriginalName();
 
         if(isset($data['file-technical-query'])){
             $uploadFinal = new ContractUploadFinal();
@@ -1662,13 +1703,32 @@ class ContractManagementsController extends Controller
         return Redirect::back()->with("modal", $data["modal-name"]);
         // return redirect($_SERVER["HTTP_REFERER"]);
     }
+    public function deleteTechnicalQuery(TechnicalQuery $id)
+    {
+        $file = $id;
+        if (empty($file)) {
+            Alert::error('Error', 'Dokumen Tidak Ditemukan');
+            return redirect()->back();
+        }
+
+        $nama_file = $file->id_document;
+        if ($file->delete()) {
+            File::delete(public_path("words/$nama_file"));
+            return (object)[
+                'success' => true,
+                'message' => "Dokumen berhasil dihapus",
+            ];
+            return (object)[
+                'success' => false,
+                'message' => "Dokumen gagal dihapus",
+            ];
+        }
+    }
     // Upload Dokumen Field Design Change to server or database
     public function fieldChange(Request $request, FieldChange $fieldChange)
     {
-        $file = $request->file("file-field-design-change");
         $data = $request->all();
-        $nama_file = $file->getClientOriginalName();
-        $id_document = date("His_") . $file->getClientOriginalName();
+        
 
         $messages = [
             "required" => "Field di atas wajib diisi",
@@ -1687,7 +1747,7 @@ class ContractManagementsController extends Controller
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
             $request->old("nomor-field-design-change");
-            Alert::error('Error', "Review Contract gagal ditambahkan");
+            Alert::error('Error', "Dokumen Field Design Change gagal ditambahkan");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // return Redirect::back();
         }
@@ -1702,6 +1762,9 @@ class ContractManagementsController extends Controller
         //     return Redirect::back()->with("modal", $data["modal-name"]);
         //     // return Redirect::back();
         // }
+        $file = $request->file("file-field-design-change");
+        $nama_file = $file->getClientOriginalName();
+        $id_document = date("His_") . $file->getClientOriginalName();
         if(isset($data['file-field-design-change'])){
             $uploadFinal = new ContractUploadFinal();
             $uploadFinal->id_contract = $data["id-contract"];
@@ -1732,13 +1795,32 @@ class ContractManagementsController extends Controller
         return Redirect::back()->with("modal", $data["modal-name"]);
         // return redirect($_SERVER["HTTP_REFERER"]);
     }
+    public function deleteFieldChange(FieldChange $id)
+    {
+        $file = $id;
+        if (empty($file)) {
+            Alert::error('Error', 'Dokumen Tidak Ditemukan');
+            return redirect()->back();
+        }
+
+        $nama_file = $file->id_document;
+        if ($file->delete()) {
+            File::delete(public_path("words/$nama_file"));
+            return (object)[
+                'success' => true,
+                'message' => "Dokumen berhasil dihapus",
+            ];
+            return (object)[
+                'success' => false,
+                'message' => "Dokumen gagal dihapus",
+            ];
+        }
+    }
     // Upload Dokumen Contract Change Notice to server or database
     public function changeNotice(Request $request, ContractChangeNotice $changeNotice)
     {
-        $file = $request->file("file-contract-change-notice");
         $data = $request->all();
-        $nama_file = $file->getClientOriginalName();
-        $id_document = date("His_") . $file->getClientOriginalName();
+        
 
         $messages = [
             "required" => "Field di atas wajib diisi",
@@ -1756,7 +1838,7 @@ class ContractManagementsController extends Controller
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
-            Alert::error('Error', "Review Contract gagal ditambahkan");
+            Alert::error('Error', "Dokumen Contract Change Notice gagal ditambahkan");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // return Redirect::back();
         }
@@ -1771,6 +1853,9 @@ class ContractManagementsController extends Controller
         //     return Redirect::back()->with("modal", $data["modal-name"]);
         //     // return Redirect::back();
         // }
+        $file = $request->file("file-contract-change-notice");
+        $nama_file = $file->getClientOriginalName();
+        $id_document = date("His_") . $file->getClientOriginalName();
         if(isset($data['file-contract-change-notice'])){
             $uploadFinal = new ContractUploadFinal();
             $uploadFinal->id_contract = $data["id-contract"];
@@ -1802,13 +1887,32 @@ class ContractManagementsController extends Controller
         return Redirect::back()->with("modal", $data["modal-name"]);
         // return redirect($_SERVER["HTTP_REFERER"]);
     }
+    public function deleteChangeNotice(ContractChangeNotice $id)
+    {
+        $file = $id;
+        if (empty($file)) {
+            Alert::error('Error', 'Dokumen Tidak Ditemukan');
+            return redirect()->back();
+        }
+
+        $nama_file = $file->id_document;
+        if ($file->delete()) {
+            File::delete(public_path("words/$nama_file"));
+            return (object)[
+                'success' => true,
+                'message' => "Dokumen berhasil dihapus",
+            ];
+            return (object)[
+                'success' => false,
+                'message' => "Dokumen gagal dihapus",
+            ];
+        }
+    }
     // Upload Dokumen Contract Change Order to server or database
     public function changeOrder(Request $request, ContractChangeOrder $changeOrder)
     {
-        $file = $request->file("file-contract-change-order");
         $data = $request->all();
-        $nama_file = $file->getClientOriginalName();
-        $id_document = date("His_") . $file->getClientOriginalName();
+        
 
         $messages = [
             "required" => "Field di atas wajib diisi",
@@ -1826,7 +1930,7 @@ class ContractManagementsController extends Controller
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
-            Alert::error('Error', "Review Contract gagal ditambahkan");
+            Alert::error('Error', "Dokumen Contract Change Order gagal ditambahkan");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // return Redirect::back();
         }
@@ -1841,6 +1945,9 @@ class ContractManagementsController extends Controller
         //     return Redirect::back()->with("modal", $data["modal-name"]);
         //     // return Redirect::back();
         // }
+        $file = $request->file("file-contract-change-order");
+        $nama_file = $file->getClientOriginalName();
+        $id_document = date("His_") . $file->getClientOriginalName();
         if(isset($data['file-contract-change-order'])){
             $uploadFinal = new ContractUploadFinal();
             $uploadFinal->id_contract = $data["id-contract"];
@@ -1871,13 +1978,32 @@ class ContractManagementsController extends Controller
         return Redirect::back()->with("modal", $data["modal-name"]);
         // return redirect($_SERVER["HTTP_REFERER"]);
     }
+    public function deleteChangeOrder(ContractChangeOrder $id)
+    {
+        $file = $id;
+        if (empty($file)) {
+            Alert::error('Error', 'Dokumen Tidak Ditemukan');
+            return redirect()->back();
+        }
+
+        $nama_file = $file->id_document;
+        if ($file->delete()) {
+            File::delete(public_path("words/$nama_file"));
+            return (object)[
+                'success' => true,
+                'message' => "Dokumen berhasil dihapus",
+            ];
+            return (object)[
+                'success' => false,
+                'message' => "Dokumen gagal dihapus",
+            ];
+        }
+    }
     // Upload Dokumen Contract Change Proposal to server or database
     public function changeProposal(Request $request, ContractChangeProposal $changeProposal)
     {
-        $file = $request->file("file-contract-change-proposal");
         $data = $request->all();
-        $nama_file = $file->getClientOriginalName();
-        $id_document = date("His_") . $file->getClientOriginalName();
+        
 
         $messages = [
             "required" => "Field di atas wajib diisi",
@@ -1895,7 +2021,7 @@ class ContractManagementsController extends Controller
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
-            Alert::error('Error', "Review Contract gagal ditambahkan");
+            Alert::error('Error', "Dokumen Contract Change Proposal gagal ditambahkan");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // return Redirect::back();
         }
@@ -1910,6 +2036,9 @@ class ContractManagementsController extends Controller
         //     return Redirect::back()->with("modal", $data["modal-name"]);
         //     // return Redirect::back();
         // }
+        $file = $request->file("file-contract-change-proposal");
+        $nama_file = $file->getClientOriginalName();
+        $id_document = date("His_") . $file->getClientOriginalName();
 
         if(isset($data['file-contract-change-proposal'])){
             $uploadFinal = new ContractUploadFinal();
@@ -1940,6 +2069,27 @@ class ContractManagementsController extends Controller
         Alert::error('Error', "Dokumen Change Proposal gagal ditambahkan");
         return Redirect::back()->with("modal", $data["modal-name"]);
         // return redirect($_SERVER["HTTP_REFERER"]);
+    }
+    public function deleteChangeProposal(ContractChangeProposal $id)
+    {
+        $file = $id;
+        if (empty($file)) {
+            Alert::error('Error', 'Dokumen Tidak Ditemukan');
+            return redirect()->back();
+        }
+
+        $nama_file = $file->id_document;
+        if ($file->delete()) {
+            File::delete(public_path("words/$nama_file"));
+            return (object)[
+                'success' => true,
+                'message' => "Dokumen berhasil dihapus",
+            ];
+            return (object)[
+                'success' => false,
+                'message' => "Dokumen gagal dihapus",
+            ];
+        }
     }
 
 

@@ -713,6 +713,10 @@ class AddendumContractController extends Controller
 
     public function jenisDokumenUpload(Request $request) {
         $data = $request->all();
+        if (empty($request->list_instruksi_owner)) {
+            Alert::error("Error", "Pilih dokumen terlebih dahulu");
+            return Redirect::back();
+        }
         $jenis_dokumen = new JenisDokumen();
         $jenis_dokumen->id_perubahan_kontrak = $data["id-perubahan-kontrak"];
         $jenis_dokumen->jenis_dokumen = $data["jenis-dokumen"];

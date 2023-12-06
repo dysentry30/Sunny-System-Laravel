@@ -70,6 +70,9 @@ use App\Models\PerjanjianKso;
 use App\Models\KriteriaAssessment;
 use App\Models\KriteriaGreenLine;
 use App\Models\LegalitasPerusahaan;
+use App\Models\MasterFortuneRank;
+use App\Models\MasterLQRank;
+use App\Models\MasterPefindo;
 use App\Models\MataUang;
 use App\Models\MatriksApprovalRekomendasi;
 use App\Models\Pegawai;
@@ -651,8 +654,14 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $forecast = new Forecast();
             $forecast->kode_proyek = $data["kode-proyek"];
 
-            $forecast->nilai_forecast = (string) (str_replace(".", "", $data["nilaiforecast-" . $i] ?? 0));
-            $forecast->month_forecast = (int) $i;
+            if ($data["nilairealisasi-" . $i] != null && $periodePrognosa == $i) {
+                dd($data["nilairealisasi-" . $i]);
+                $forecast->nilai_forecast = (string) (str_replace(".", "", $data["nilairealisasi-" . $i] ?? 0));
+                $forecast->month_forecast = (int) $i;
+            } else {
+                $forecast->nilai_forecast = (string) (str_replace(".", "", $data["nilaiforecast-" . $i] ?? 0));
+                $forecast->month_forecast = (int) $i;
+            }
 
             $forecast->rkap_forecast = (string) (str_replace(".", "", $data["nilaiok-" . $i] ?? 0));
             $forecast->month_rkap = (int) $i;
@@ -671,11 +680,15 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             Alert::success('Success', "Forecast Berhasil Dibuat");
             return redirect()->back();
         } else {
-
             $findForecast->kode_proyek = $data["kode-proyek"];
 
-            $findForecast->nilai_forecast = (string) (str_replace(".", "", $data["nilaiforecast-" . $i] ?? 0));
-            $findForecast->month_forecast = (int) $i;
+            if ($data["nilairealisasi-" . $i] != null && $periodePrognosa == $i) {
+                $findForecast->nilai_forecast = (string) (str_replace(".", "", $data["nilairealisasi-" . $i] ?? 0));
+                $findForecast->month_forecast = (int) $i;
+            } else {
+                $findForecast->nilai_forecast = (string) (str_replace(".", "", $data["nilaiforecast-" . $i] ?? 0));
+                $findForecast->month_forecast = (int) $i;
+            }
 
             $findForecast->rkap_forecast = (string) (str_replace(".", "", $data["nilaiok-" . $i] ?? 0));
             $findForecast->month_rkap = (int) $i;
@@ -685,7 +698,6 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
             // $prognosa = (int) date('m');
             $findForecast->periode_prognosa = $periodePrognosa;
-            // $findForecast->tahun = $year;
 
             $findForecast->save();
 
@@ -1125,6 +1137,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // begin :: Set lock / unlock data month forecast
     Route::post('/forecast/set-lock', function (Request $request) {
         $data = $request->all();
+        // dd($data);
         $from_user = Auth::user();
         $bulan = (int) date("m");
         if ($bulan == 1 && (int) date("d") < 15) {
@@ -1189,8 +1202,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                         $history_forecast->nilai_forecast = $forecast->nilai_forecast ?? "0";
                         $history_forecast->realisasi_forecast = "0";
                     } else {
-                        $history_forecast->nilai_forecast = $forecast->nilai_forecast ?? "0";
-                        $history_forecast->realisasi_forecast = $forecast->realisasi_forecast ?? "0";
+                        if (($forecast->periode_prognosa == $forecast->month_realisasi)) {
+                            $history_forecast->nilai_forecast = $forecast->realisasi_forecast ?? "0";
+                            $history_forecast->realisasi_forecast = $forecast->realisasi_forecast ?? "0";
+                        } else {
+                            $history_forecast->nilai_forecast = $forecast->nilai_forecast ?? "0";
+                            $history_forecast->realisasi_forecast = $forecast->realisasi_forecast ?? "0";
+                        }
                     }
                     $history_forecast->month_forecast = $forecast->month_forecast;
                     // $history_forecast->rkap_forecast = str_replace(".", "", (int) $current_proyek->nilai_rkap ?? 0) ?? 0;
@@ -1205,6 +1223,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                     // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan;
                     $history_forecast->month_realisasi = $forecast->month_realisasi;
                     $history_forecast->periode_prognosa = $request->periode_prognosa;
+
+                    $history_forecast->stage = $current_proyek->stage;
 
                     if ($request->periode_prognosa == 12 && $bulan == 1) {
                         $history_forecast->tahun = (int) date("Y")-1;
@@ -1221,7 +1241,6 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 $history_forecast = new HistoryForecast();
 
                 foreach ($forecasts as $forecast) {
-
                     if ($forecast->month_forecast > $farestMonth) {
                         $farestMonth = $forecast->month_forecast;
                     }
@@ -1232,8 +1251,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                         $total_realisasi += (int) $forecast->realisasi_forecast;
                         $total_forecast += (int) $forecast->nilai_forecast ?? 0;
                     }
-
+                    
                     $total_rkap += (int) $forecast->rkap_forecast ?? 0;
+                    // if ($forecast->stage == 8) {
+                    //     dd($forecast, $total_realisasi, $total_forecast);
+                    // }
                 }
                 // RKAP, REALISASI
                 $history_forecast->kode_proyek = $kode_proyek;
@@ -1245,16 +1267,29 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 // $history_forecast->month_rkap = $current_proyek->bulan_pelaksa;
                 // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $current_proyek->nilai_kontrak_keseluruhan ?? 0);
                 if ($current_proyek->stage == 8) {
-                    $history_forecast->realisasi_forecast = $total_realisasi ?? "0";
+                    $history_forecast->realisasi_forecast = $total_realisasi;
                     // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan;
-                    $history_forecast->month_realisasi = $current_proyek->bulan_ri_perolehan ?? 0;
+                    // $history_forecast->month_realisasi = $current_proyek->bulan_ri_perolehan ?? 0;
+                    $history_forecast->month_realisasi = $forecast->month_realisasi ?? 0;
+                    // $history_forecast->month_realisasi = $current_proyek->bulan_ri_perolehan ?? 0;
                 }
                 $history_forecast->periode_prognosa = $request->periode_prognosa;
+
+                $history_forecast->stage = $current_proyek->stage;
+
                 if ($request->periode_prognosa == 12 && $bulan == 1 ) {
                     $history_forecast->tahun = (int) date("Y") - 1;
                 } else {
                     $history_forecast->tahun = (int) date("Y");
                 }
+
+                if (empty($history_forecast->month_realisasi)) {
+                    $history_forecast->realisasi_forecast = 0;
+                    $history_forecast->month_realisasi = 0;
+                }
+                // if ($current_proyek->kode_proyek == '5NPC437') {
+                //     dd($current_proyek->nilai_perolehan, $history_forecast->realisasi_forecast);
+                // }
                 $history_forecast->save();
                 // if ($index == $forecasts->count() - 1) {
                 // }
@@ -2619,18 +2654,25 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post("/jaminan-pelaksanaan/edit", [ContractManagementsController::class, "editJaminan"]);
 
     Route::post("/dokumen-site-instruction/upload", [ContractManagementsController::class, "siteInstruction"]);
+    Route::post("/dokumen-site-instruction/{id}/delete", [ContractManagementsController::class, "deleteSiteInstruction"]);
     
     Route::post("/dokumen-technical-form/upload", [ContractManagementsController::class, "technicalForm"]);
+    Route::post("/dokumen-technical-form/{id}/delete", [ContractManagementsController::class, "deleteTechnicalForm"]);
     
     Route::post("/dokumen-technical-query/upload", [ContractManagementsController::class, "technicalQuery"]);
+    Route::post("/dokumen-technical-query/{id}/delete", [ContractManagementsController::class, "deleteTechnicalQuery"]);
     
     Route::post("/dokumen-field-design-change/upload", [ContractManagementsController::class, "fieldChange"]);
+    Route::post("/dokumen-field-design-change/{id}", [ContractManagementsController::class, "deleteFieldChange"]);
     
     Route::post("/dokumen-contract-change-notice/upload", [ContractManagementsController::class, "changeNotice"]);
+    Route::post("/dokumen-contract-change-notice/{id}/delete", [ContractManagementsController::class, "deleteChangeNotice"]);
     
     Route::post("/dokumen-contract-change-order/upload", [ContractManagementsController::class, "changeOrder"]);
-    
-    Route::post("/dokumen-contract-change-proposal/upload", [ContractManagementsController::class, "changeProposal"]);    
+    Route::post("/dokumen-contract-change-order/{id}/delete", [ContractManagementsController::class, "deleteChangeOrder"]);
+
+    Route::post("/dokumen-contract-change-proposal/upload", [ContractManagementsController::class, "changeProposal"]);
+    Route::post("/dokumen-contract-change-proposal/{id}/delete", [ContractManagementsController::class, "deleteChangeProposal"]);    
     
     Route::get("/document/view/{id}/{id_document}", [DocumentController::class, "documentView"]);
 
@@ -2849,6 +2891,417 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         ]);
     });
     //End::Checklist Calon Mitra KSO
+
+    //Begin::Master Fortune Rank
+    Route::get('/master-fortune-rank', function (Request $request) {
+        return view('MasterData/FortuneRank', ['data' => MasterFortuneRank::all()]);
+    });
+    Route::post('/master-fortune-rank/save', function (Request $request) {
+        $data = $request->all();
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+        ];
+        $rules = [
+                "nama_pelanggan" => 'required|string',
+                "urutan" => 'required|integer|min:1|max:100',
+            ];
+        $validation = Validator::make(
+            $data,
+            $rules,
+            $messages
+        );
+
+        if ($validation->fails()) {
+            $error = collect($validation->errors());
+            if ($error->has("urutan")) {
+                Alert::error(
+                    'Error',
+                    "Urutan diisi nilai 1 - 100. Periksa Kembali!"
+                );
+                return redirect()->back();
+            } elseif ($error->has("nama_pelanggan")) {
+                Alert::error(
+                    'Error',
+                    "Nama Pelanggan wajib diisi. Periksa Kembali!"
+                );
+                return redirect()->back();
+            } else {
+                Alert::error(
+                    'Error',
+                    "Fortune Rank gagal ditambahkan. Periksa Kembali!"
+                );
+                return redirect()->back();
+            }
+        }
+
+        $validation->validate();
+        // dd($data);
+        $fortune = new MasterFortuneRank();
+        $fortune->nama_pelanggan = $data['nama_pelanggan'];
+        $fortune->urutan = (int)$data["urutan"];
+        $fortune->bulan = $data["bulan"];
+        $fortune->tahun = $data["tahun"];
+
+        if ($fortune->save()) {
+            Alert::success('Success', "Fortune Rank Berhasil Ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Fortune Rank Gagal Ditambahkan");
+        return redirect()->back();
+    });
+    Route::post('/master-fortune-rank/{id}/edit', function (Request $request, $id) {
+        $data = $request->all();
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+        ];
+        $rules = [
+                "nama_pelanggan" => 'required|string',
+                "urutan" => 'required|integer|min:1',
+            ];
+        $validation = Validator::make(
+            $data,
+            $rules,
+            $messages
+        );
+
+        if ($validation->fails()) {
+            $error = collect($validation->errors());
+            if ($error->has("urutan")) {
+                Alert::error(
+                    'Error',
+                    "Urutan diisi minimal nilai 1. Periksa Kembali!"
+                );
+                return redirect()->back();
+            } elseif ($error->has("nama_pelanggan")) {
+                Alert::error(
+                    'Error',
+                    "Nama Pelanggan wajib diisi. Periksa Kembali!"
+                );
+                return redirect()->back();
+            } else {
+                Alert::error(
+                    'Error',
+                    "Fortune Rank gagal ditambahkan. Periksa Kembali!"
+                );
+                return redirect()->back();
+            }
+        }
+
+        $validation->validate();
+        // dd($data);
+        $fortune = MasterFortuneRank::find($id);
+        $fortune->nama_pelanggan = $data['nama_pelanggan'];
+        $fortune->urutan = (int)$data["urutan"];
+        $fortune->bulan = $data["bulan"];
+        $fortune->tahun = $data["tahun"];
+
+        if ($fortune->save()) {
+            Alert::success('Success', "Fortune Rank Berhasil Diubah");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Fortune Rank Gagal Diubah");
+        return redirect()->back();
+    });
+    Route::post('/master-fortune-rank/{fortune}/delete', function (MasterFortuneRank $fortune) {
+        if (empty($fortune)) {
+            Alert::success("Error", "Fortune Rank Tidak Ditemukan");
+            return redirect()->back();
+        }
+
+        if ($fortune->delete()) {
+            // Alert::success('Success', "Checklist Calon Mitra KSO Berhasil Dihapus");
+            // return redirect()->back();
+
+            return response()->json([
+                "Success" => true,
+                "Message" => null
+            ]);
+        }
+
+        // Alert::error('Error', "Checklist Calon Mitra KSO Gagal Dihapus");
+        // return redirect()->back();
+        return response()->json([
+            "Success" => false,
+            "Message" => null
+        ]);
+    });
+    //End::Master Fortune Rank
+
+    //Begin::Master LQ Rank
+    Route::get('/master-lq-rank', function (Request $request) {
+        return view('MasterData/LQRank', ['data' => MasterLQRank::all()]);
+    });
+    Route::post('/master-lq-rank/save', function (Request $request) {
+        $data = $request->all();
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+        ];
+        $rules = [
+                "nama_pelanggan" => 'required|string',
+                "urutan" => 'required|integer|min:1',
+            ];
+        $validation = Validator::make(
+            $data,
+            $rules,
+            $messages
+        );
+
+        if ($validation->fails()) {
+            $error = collect($validation->errors());
+            if ($error->has("urutan")) {
+                Alert::error(
+                    'Error',
+                    "Urutan diisi nilai minimal 1. Periksa Kembali!"
+                );
+                return redirect()->back();
+            } elseif ($error->has("nama_pelanggan")) {
+                Alert::error(
+                    'Error',
+                    "Nama Pelanggan wajib diisi. Periksa Kembali!"
+                );
+                return redirect()->back();
+            } else {
+                Alert::error(
+                    'Error',
+                    "LQ Rank gagal ditambahkan. Periksa Kembali!"
+                );
+                return redirect()->back();
+            }
+        }
+
+        $validation->validate();
+        // dd($data);
+        $lqRank = new MasterLQRank();
+        $lqRank->nama_pelanggan = $data['nama_pelanggan'];
+        $lqRank->urutan = (int)$data["urutan"];
+        $lqRank->bulan = $data["bulan"];
+        $lqRank->tahun = $data["tahun"];
+
+        if ($lqRank->save()) {
+            Alert::success('Success', "LQ Rank Berhasil Ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error('Error', "LQ Rank Gagal Ditambahkan");
+        return redirect()->back();
+    });
+    Route::post('/master-lq-rank/{id}/edit', function (Request $request, $id) {
+        $data = $request->all();
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+        ];
+        $rules = [
+                "nama_pelanggan" => 'required|string',
+                "urutan" => 'required|integer|min:1',
+            ];
+        $validation = Validator::make(
+            $data,
+            $rules,
+            $messages
+        );
+
+        if ($validation->fails()) {
+            $error = collect($validation->errors());
+            if ($error->has("urutan")) {
+                Alert::error(
+                    'Error',
+                    "Urutan diisi nilai 1 - 100. Periksa Kembali!"
+                );
+                return redirect()->back();
+            } elseif ($error->has("nama_pelanggan")) {
+                Alert::error(
+                    'Error',
+                    "Nama Pelanggan wajib diisi. Periksa Kembali!"
+                );
+                return redirect()->back();
+            } else {
+                Alert::error(
+                    'Error',
+                    "Fortune Rank gagal ditambahkan. Periksa Kembali!"
+                );
+                return redirect()->back();
+            }
+        }
+
+        $validation->validate();
+        // dd($data);
+        $lq = MasterLQRank::find($id);
+        $lq->nama_pelanggan = $data['nama_pelanggan'];
+        $lq->urutan = (int)$data["urutan"];
+        $lq->bulan = $data["bulan"];
+        $lq->tahun = $data["tahun"];
+
+        if ($lq->save()) {
+            Alert::success('Success', "LQ Rank Berhasil Diubah");
+            return redirect()->back();
+        }
+        Alert::error('Error', "LQ Gagal Diubah");
+        return redirect()->back();
+    });
+    Route::post('/master-lq-rank/{lq}/delete', function (MasterLQRank $lq) {
+        if (empty($lq)) {
+            Alert::success("Error", "LQ Rank Tidak Ditemukan");
+            return redirect()->back();
+        }
+
+        if ($lq->delete()) {
+            // Alert::success('Success', "Checklist Calon Mitra KSO Berhasil Dihapus");
+            // return redirect()->back();
+
+            return response()->json([
+                "Success" => true,
+                "Message" => null
+            ]);
+        }
+
+        // Alert::error('Error', "Checklist Calon Mitra KSO Gagal Dihapus");
+        // return redirect()->back();
+        return response()->json([
+            "Success" => false,
+            "Message" => null
+        ]);
+    });
+    //End::Master LQ Rank
+
+    //Begin::Master LQ Rank
+    Route::get('/master-pefindo', function (Request $request) {
+        return view('MasterData/MasterPefindo', ['data' => MasterPefindo::all()]);
+    });
+    Route::post('/master-pefindo/save', function (Request $request) {
+        $data = $request->all();
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+        ];
+        $rules = [
+                "nama_pelanggan" => 'required|string',
+                "score" => 'required|integer|min:1',
+                "file" => 'file|mimes:pdf',
+            ];
+        $validation = Validator::make(
+            $data,
+            $rules,
+            $messages
+        );
+
+        if ($validation->fails()) {
+            $error = collect($validation->errors());
+            // dd($error);
+            if ($error->has("score")) {
+                Alert::error(
+                    'Error',
+                    "Score diisi nilai minimal 1. Periksa Kembali!"
+                );
+                return redirect()->back();
+            } elseif ($error->has("nama_pelanggan")) {
+                Alert::error(
+                    'Error',
+                    "Nama Pelanggan wajib diisi. Periksa Kembali!"
+                );
+                return redirect()->back();
+            } elseif ($error->has("file")) {
+                Alert::error(
+                    'Error',
+                    "Upload file format PDF. Periksa Kembali!"
+                );
+                return redirect()->back();
+            } else {
+                Alert::error(
+                    'Error',
+                    "Pefindo gagal ditambahkan. Periksa Kembali!"
+                );
+                return redirect()->back();
+            }
+        }
+
+        $validation->validate();
+        $file = $request->file("file");
+        $id_document = date("His_") . str_replace(' ', '_', $file->getClientOriginalName());
+
+        $pefindo = new MasterPefindo();
+        $pefindo->nama_pelanggan = $data['nama_pelanggan'];
+        $pefindo->score = (int)$data["score"];
+        $pefindo->id_document = $id_document;
+
+        if ($pefindo->save()) {
+            $file->move(public_path('pefindo'), $id_document);
+            Alert::success('Success', "Pefindo Berhasil Ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Pefindo Gagal Ditambahkan");
+        return redirect()->back();
+    });
+    // Route::post('/master-pefindo/{id}/edit', function (Request $request, $id) {
+    //     $data = $request->all();
+    //     $messages = [
+    //         "required" => "Field di atas wajib diisi",
+    //     ];
+    //     $rules = [
+    //             "nama_pelanggan" => 'required|string',
+    //             "urutan" => 'required|integer|min:1',
+    //         ];
+    //     $validation = Validator::make(
+    //         $data,
+    //         $rules,
+    //         $messages
+    //     );
+
+    //     if ($validation->fails()) {
+    //         $error = collect($validation->errors());
+    //         if ($error->has("urutan")) {
+    //             Alert::error(
+    //                 'Error',
+    //                 "Urutan diisi nilai 1 - 100. Periksa Kembali!"
+    //             );
+    //             return redirect()->back();
+    //         } elseif ($error->has("nama_pelanggan")) {
+    //             Alert::error(
+    //                 'Error',
+    //                 "Nama Pelanggan wajib diisi. Periksa Kembali!"
+    //             );
+    //             return redirect()->back();
+    //         } else {
+    //             Alert::error(
+    //                 'Error',
+    //                 "Fortune Rank gagal ditambahkan. Periksa Kembali!"
+    //             );
+    //             return redirect()->back();
+    //         }
+    //     }
+
+    //     $validation->validate();
+    //     // dd($data);
+    //     $lq = MasterPefindo::find($id);
+    //     $lq->nama_pelanggan = $data['nama_pelanggan'];
+    //     $lq->urutan = (int)$data["urutan"];
+    //     $lq->bulan = $data["bulan"];
+    //     $lq->tahun = $data["tahun"];
+
+    //     if ($lq->save()) {
+    //         Alert::success('Success', "LQ Rank Berhasil Diubah");
+    //         return redirect()->back();
+    //     }
+    //     Alert::error('Error', "LQ Gagal Diubah");
+    //     return redirect()->back();
+    // });
+    Route::post('/master-pefindo/{pefindo}/delete', function (MasterPefindo $pefindo) {
+        if (empty($pefindo)) {
+            Alert::success("Error", "LQ Rank Tidak Ditemukan");
+            return redirect()->back();
+        }
+        $nama_file = $pefindo->id_document;
+        if ($pefindo->delete()) {
+            File::delete(public_path("pefindo/$nama_file"));
+            return response()->json([
+                "Success" => true,
+                "Message" => "Data Berhasil Dihapus"
+            ]);
+        }
+
+        return response()->json([
+            "Success" => false,
+            "Message" => "Data Berhasil Dihapus"
+        ]);
+    });
+    //End::Master LQ Rank
 
     // begin RKAP
     Route::get('/rkap', function () {
@@ -3932,6 +4385,45 @@ Route::get('/get-jenis-dokumen/{jenis_dokumen}', function ($jenis_dokumen) {
         
         case "Contract Change Order":
             $data = ContractChangeOrder::all();
+            return response()->json($data);
+            break;
+    }
+});
+
+Route::get('/get-jenis-dokumen/{jenis_dokumen}/{profit_center}', function ($jenis_dokumen, $profit_center) {
+    switch ($jenis_dokumen) {
+        case "Site Instruction":
+            $data = SiteInstruction::where('profit_center', '=', $profit_center)->get();
+            return response()->json($data);
+            break;
+
+        case "Technical Form":
+            $data = TechnicalForm::where('profit_center', '=', $profit_center)->get();
+            return response()->json($data);
+            break;
+
+        case "Technical Query":
+            $data = TechnicalQuery::where('profit_center', '=', $profit_center)->get();
+            return response()->json($data);
+            break;
+
+        case "Field Design Change":
+            $data = FieldChange::where('profit_center', '=', $profit_center)->get();
+            return response()->json($data);
+            break;
+
+        case "Contract Change Notice":
+            $data = ContractChangeNotice::where('profit_center', '=', $profit_center)->get();
+            return response()->json($data);
+            break;
+
+        case "Contract Change Proposal":
+            $data = ContractChangeProposal::where('profit_center', '=', $profit_center)->get();
+            return response()->json($data);
+            break;
+
+        case "Contract Change Order":
+            $data = ContractChangeOrder::where('profit_center', '=', $profit_center)->get();
             return response()->json($data);
             break;
         

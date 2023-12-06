@@ -799,18 +799,18 @@
                                                         @else
                                                             <td>
                                                                 @if (($matriks_user->contains('kategori', 'Persetujuan') && $matriks_user->where('kategori', 'Persetujuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() && $proyek->is_recommended)  || ($matriks_user->contains('kategori', 'Rekomendasi') && $matriks_user->where('kategori', 'Rekomendasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() && $proyek->is_verifikasi_approved) || ($matriks_user->contains('kategori', 'Verifikasi') && $matriks_user->where('kategori', 'Verifikasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() && $proyek->is_penyusun_approved))
-                                                                    @if ($matriks_user->contains('kategori', 'Persetujuan') && $proyek->is_recommended)
+                                                                    @if ($matriks_user->contains('kategori', 'Persetujuan')  && $matriks_user->where('kategori', 'Persetujuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() && $proyek->is_recommended)
                                                                             <a href="#kt_modal_view_proyek_persetujuan_{{ $proyek->kode_proyek }}"
                                                                                 target="_blank" data-bs-toggle="modal"
                                                                                 class="btn btn-sm btn-primary text-white">{{ $proyek->is_disetujui ? "Lihat Detail" : "Submit" }}</a>
-                                                                    @elseif($matriks_user->contains('kategori', 'Rekomendasi') && $proyek->is_verifikasi_approved)
-                                                                        <a href="#kt_modal_view_proyek_persetujuan_{{ $proyek->kode_proyek }}"
+                                                                    @elseif($matriks_user->contains('kategori', 'Rekomendasi') && $matriks_user->where('kategori', 'Rekomendasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() && $proyek->is_verifikasi_approved)
+                                                                    <a href="#kt_modal_view_proyek_persetujuan_{{ $proyek->kode_proyek }}"
                                                                             target="_blank" data-bs-toggle="modal"
-                                                                            class="btn btn-sm btn-primary text-white">{{ $proyek->is_recommended || (collect(json_decode($proyek->approved_rekomendasi_final))?->first()?->user_id == auth()->user()->id && collect(json_decode($proyek->approved_rekomendasi_final))?->first()?->status) == 'approved' ? "Rincian" : "Submit" }}</a>
-                                                                    @elseif($matriks_user->contains('kategori', 'Verifikasi') && $proyek->is_penyusun_approved)
-                                                                        <a href="#kt_modal_view_proyek_persetujuan_{{ $proyek->kode_proyek }}"
-                                                                            target="_blank" data-bs-toggle="modal"
-                                                                            class="btn btn-sm btn-primary text-white">{{ $proyek->is_verifikasi_approved ? "Lihat Detail" : "Submit" }}</a>
+                                                                            class="btn btn-sm btn-primary text-white">{{ $proyek->is_recommended || (collect(json_decode($proyek->approved_rekomendasi_final))->contains('user_id', auth()->user()->id) && collect(json_decode($proyek->approved_rekomendasi_final))?->first()?->status == 'approved') ? "Rincian" : "Submit" }}</a>
+                                                                    @elseif($matriks_user->contains('kategori', 'Verifikasi') && $matriks_user->where('kategori', 'Verifikasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() && $proyek->is_penyusun_approved)
+                                                                    <a href="#kt_modal_view_proyek_persetujuan_{{ $proyek->kode_proyek }}"
+                                                                        target="_blank" data-bs-toggle="modal"
+                                                                        class="btn btn-sm btn-primary text-white">{{ $proyek->is_verifikasi_approved ? "Lihat Detail" : "Submit" }}</a>
                                                                     @endif
                                                                 @else
                                                                         @if ($is_user_exist_in_matriks_approval)
@@ -1128,8 +1128,8 @@
                                                                 {{ $text }}
                                                             </small>
                                                         </td>
-                                                        @if (($matriks_user->contains('kategori', 'Pengajuan') && $matriks_user->where('kategori', 'Pengajuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first()) || 
-                                                        ($matriks_user->contains('kategori', 'Penyusun') && $matriks_user->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '>', 1)?->first())
+                                                        @if (($matriks_user?->contains('kategori', 'Pengajuan') && $matriks_user?->where('kategori', 'Pengajuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first()) || 
+                                                        ($matriks_user?->contains('kategori', 'Penyusun') && $matriks_user?->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '>', 1)?->first())
                                                         )
                                                             <td></td>
                                                         @else
@@ -1201,8 +1201,8 @@
                                                             <small class="d-flex flex-row justify-content-between">
                                                                 <p class="badge {{ $style }}">{{ $status_rekomendasi }}</p>
                                                                 <br>
-                                                                @if (($matriks_user->contains('kategori', 'Pengajuan') && $matriks_user->where('kategori', 'Pengajuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first()) ||
-                                                                ($matriks_user->contains('kategori', 'Penyusun') && $matriks_user->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '>', 1)?->first())
+                                                                @if (($matriks_user?->contains('kategori', 'Pengajuan') && $matriks_user?->where('kategori', 'Pengajuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first()) ||
+                                                                ($matriks_user?->contains('kategori', 'Penyusun') && $matriks_user?->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '>', 1)?->first())
                                                                 )
                                                                     
                                                                 @else
@@ -1243,7 +1243,7 @@
     {{-- Begin::Tab Content Kriteria Pengguna Jasa --}}
     @foreach ($proyeks_proses_rekomendasi as $key => $proyek)
         <form action="/kriteria-pengguna-jasa/detail/save" method="POST" id="form-kriteria-{{ $proyek->kode_proyek }}"
-            enctype="multipart/form-data">
+            enctype="multipart/form-data" onsubmit="return validateFileSize(this)">
             @csrf
             <div class="modal fade" id="kt_user_view_kriteria_{{ $proyek->kode_proyek }}" tabindex="-1"
                 aria-hidden="true">
@@ -1312,9 +1312,10 @@
                                                     rows="10"></textarea>
                                             </td>
                                             <td>
-                                                <input type="file" name="dokumen_penilaian_0[]"
+                                                <input type="file" name="dokumen_penilaian_0[]" id="file-dokumen-{{ $proyek->kode_proyek }}-{{ $key }}" onchange="checkSizeFile(this, '{{ $proyek->kode_proyek }}', '0', 'save-{{ $proyek->kode_proyek }}-new')"
                                                     form="form-kriteria-{{ $proyek->kode_proyek }}" multiple id="dokumen_kriteria" accept=".pdf"
                                                     class="form-control form-control-sm form-control-solid">
+                                                <small class="text-danger d-none" id="alert-file-{{ $proyek->kode_proyek }}-0">Total ukuran file max 20MB. Periksa kembali!</small>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -1466,7 +1467,9 @@
                                                         id="dokumen_kriteria"
                                                         multiple
                                                         accept=".pdf"
+                                                        onchange="checkSizeFile(this, '{{ $proyek->kode_proyek }}', {{ $key+1 }}, 'save-{{ $proyek->kode_proyek }}-new')"
                                                         class="form-control form-control-sm form-control-solid">
+                                                        <small class="text-danger d-none" id="alert-file-{{ $proyek->kode_proyek }}-{{ $key+1 }}">Total ukuran file max 20MB. Periksa kembali!</small>
                                                 </td>
                                                 <td class="d-none">
                                                     <input type="hidden" name="index[]" value="{{ $key + 1 }}">
@@ -1484,7 +1487,7 @@
                                 data-bs-target="#kt_user_view_kriteria_{{ $proyek->kode_proyek }}" id="new_save">
                                 Back</button>
                             <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
-                                form="form-kriteria-{{ $proyek->kode_proyek }}" id="new_save"
+                                form="form-kriteria-{{ $proyek->kode_proyek }}" id="save-{{ $proyek->kode_proyek }}-new"
                                 style="background-color:#008CB4">Save</button>
 
                         </div>
@@ -1509,8 +1512,9 @@
     @foreach ($proyeks_proses_rekomendasi as $key => $proyek)
     @php
         $approved_penyusun_1 = collect(json_decode($proyek->approved_penyusun));
-        $is_edit = !$proyek->is_request_rekomendasi && is_null($proyek->is_verifikasi_approved) && ((!is_null($proyek->is_draft_recommend_note) && $proyek->is_draft_recommend_note) || is_null($proyek->is_draft_recommend_note) && $matriks_user?->contains('kategori', 'Penyusun')) && !$approved_penyusun_1->contains('status', 'approved');
-    @endphp
+        // $is_edit = !$proyek->is_request_rekomendasi && is_null($proyek->is_verifikasi_approved) && ((!is_null($proyek->is_draft_recommend_note) && $proyek->is_draft_recommend_note) || is_null($proyek->is_draft_recommend_note) && $matriks_user?->contains('kategori', 'Penyusun')) && !$approved_penyusun_1->contains('status', 'approved');
+        $is_edit = !$proyek->is_request_rekomendasi && is_null($proyek->is_penyusun_approved) && ((!is_null($proyek->is_draft_recommend_note) && $proyek->is_draft_recommend_note) || is_null($proyek->is_draft_recommend_note) && $matriks_user?->contains('kategori', 'Penyusun')) && !$approved_penyusun_1->contains('status', 'approved');
+    @endphp 
         @if ($is_edit)
             <form action="/kriteria-pengguna-jasa/detail/edit" method="POST"
                 id="form-edit-kriteria-{{ $proyek->kode_proyek }}" enctype="multipart/form-data">
@@ -2545,7 +2549,7 @@
                                         <td>10</td>
                                         <td>Catatan</td>
                                         <td>
-                                            @php
+                                            {{-- @php
                                                 $data_approved = collect(json_decode($proyek->approved_penyusun));
                                             @endphp
                                             @if (!empty($data_approved))
@@ -2553,8 +2557,8 @@
                                                     <p class="p-0">{!! nl2br($data->catatan) ?? '-' !!}</p>
                                                     <br>
                                                 @endforeach
-                                            @endif
-                                            {{-- <p class="0">{!! nl2br($proyek->penyusun_approved) !!}</p> --}}
+                                            @endif --}}
+                                            <p class="0">{!! nl2br($proyek->catatan_nota_rekomendasi) !!}</p>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -2587,7 +2591,10 @@
                             @endif
                         </div>
                         <div class="modal-footer row">
-
+                            <span><b>Hasil Kriteria Pengguna Jasa</b> <a
+                                href="#kt_user_edit_kriteria_{{ $proyek->kode_proyek }}"
+                                class="btn btn-sm btn-primary" data-bs-toggle="modal">Lihat</a></span>
+                            <br>
                             {{-- <label for="note-rekomendasi" class="text-start">Catatan Rekomendasi: </label>
                             <textarea class="form-control" id="note-rekomendasi" name="note-rekomendasi"></textarea>
                             <br> --}}
@@ -2604,6 +2611,7 @@
                             @if (!empty($matriks_user))
                                 @if (is_null($proyek->is_verifikasi_approved) &&
                                         $matriks_user->contains('kategori', 'Verifikasi') &&
+                                        $matriks_user->where('kategori', 'Verifikasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() &&
                                         !$is_user_exist_penyusun)
                                     <form action="" method="get">
                                         @csrf
@@ -2622,16 +2630,13 @@
                                     </form>
                                 @elseif (is_null($proyek->is_recommended) &&
                                         $matriks_user->contains('kategori', 'Rekomendasi') &&
+                                        $matriks_user->where('kategori', 'Rekomendasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() &&
                                         $proyek->is_verifikasi_approved &&
                                         !$is_user_exist_rekomendasi)
                                     <form action="" method="get">
                                         @csrf
                                         <input type="hidden" value="{{ $proyek->kode_proyek }}" name="kode-proyek"
                                             id="kode-proyek">
-                                        <span><b>Hasil Kriteria Pengguna Jasa</b> <a
-                                                href="#kt_user_edit_kriteria_{{ $proyek->kode_proyek }}"
-                                                class="btn btn-sm btn-primary" data-bs-toggle="modal">Lihat</a></span>
-                                        <br>
                                         <label class="text-start"><b>Catatan Rekomendasi:</b></label>
                                         {{-- @dump(json_decode($proyek->approved_rekomendasi_final)[0]->alasan) --}}
                                         @php
@@ -2672,6 +2677,7 @@
                                     </form>
                                 @elseif (is_null($proyek->is_disetujui) &&
                                         $matriks_user?->contains('kategori', 'Persetujuan') &&
+                                        $matriks_user->where('kategori', 'Persetujuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() &&
                                         $proyek->is_recommended &&
                                         !$is_user_exist_persetujuan)
                                     <form action="" method="get">
@@ -3415,6 +3421,57 @@
 
             let columnNilai = e.parentElement.parentElement.parentElement.querySelector(`#nilai_${key}`);
             return columnNilai.value = parseInt(total);
+        }
+    </script>
+
+    <script>
+        function checkSizeFile(elt, kodeProyek, index, buttonSaveId, isEdit = null) {
+            if (isEdit == null) {
+                if (elt.files.length < 1) {
+                    elt.nextElementSibling.classList.add('d-none');
+                    document.querySelector(`#${buttonSaveId}`).classList.remove('disabled');
+                    return;
+                }
+                // console.log(elt.files);
+                let sizeFileCollect = 0;
+                let fileOversize = [];
+                
+                elt.files.forEach(item => {
+                    sizeFileCollect += item.size
+                });
+
+                if (sizeFileCollect > 20971520) {
+                    elt.nextElementSibling.classList.remove('d-none');
+                    document.querySelector(`#${buttonSaveId}`).classList.add('disabled');
+                }else{
+                    elt.nextElementSibling.innerHTML = ""
+                    elt.nextElementSibling.classList.add('d-none');
+                    document.querySelector(`#${buttonSaveId}`).classList.remove('disabled');
+                }
+            }
+        }
+
+        function validateFileSize(e) {
+            const files = e.querySelectorAll("input[type='file']");
+            let totalSizeFile = 0
+
+            files.forEach(item => {
+                if (item.files.length > 0) {
+                    item.files.forEach(file=>{
+                        totalSizeFile += file.size;
+                    })
+                }
+            })
+            //Maximum file 40 MB => dibuat 42 MB
+            if (totalSizeFile > 44040192) {
+                Toast.fire({
+                    html: "Ukuran file lebih dari 40 MB. Periksa kembali!",
+                    icon: "error",
+                });
+                return false;
+            }else{
+                return true;
+            }
         }
     </script>
 @endsection
