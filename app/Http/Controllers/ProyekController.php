@@ -361,13 +361,14 @@ class ProyekController extends Controller
             Alert::warning('Warning', "Proyek Tidak Ditemukan");
             return redirect("/proyek");
         }
-        $historyForecast = HistoryForecast::where("periode_prognosa", "=", date("m"))->where("kode_proyek", "=", $kode_proyek)->get();
+        $historyForecastAll = HistoryForecast::where("kode_proyek", "=", $kode_proyek)->get();
+        $historyForecast = $historyForecastAll->where("periode_prognosa", "=", date("m"));
         $teamProyek = TeamProyek::where("kode_proyek", "=", $kode_proyek)->get();
         $kriteriaProyek = KriteriaPasarProyek::where("kode_proyek", "=", $kode_proyek)->get();
         $porsiJO = PorsiJO::where("kode_proyek", "=", $kode_proyek)->get();
         // $data_provinsi = json_decode(Storage::get("/public/data/provinsi.json"));
         $data_negara = json_decode(Storage::get("/public/data/country.json"));
-
+        $is_admin = Auth::user()->check_administrator || str_contains(Auth::user()->name, "PIC");
         $companies = Company::all();
         $sumberdanas = SumberDana::all();
         $dops = Dop::all();
@@ -414,8 +415,11 @@ class ProyekController extends Controller
             );
         } else {
             $periodePrognosa = $periodePrognosa == "" ? (int) date("m") : $periodePrognosa;
+            $historyForecastAll = $historyForecastAll->groupBy("periode_prognosa");
+            $listPeriodeExistInHistory = $historyForecastAll->keys()->sort()->values();
+            // dd($listPeriodeExistInHistory);
             $tabPane = "";
-            return view('Proyek/viewProyekRetail', ["proyek" => $proyek, "proyeks" => Proyek::all()], compact(["periodePrognosa", 'companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'tabPane', "provinsi"]));
+            return view('Proyek/viewProyekRetail', ["proyek" => $proyek, "proyeks" => Proyek::all()], compact(['is_admin', "periodePrognosa", 'companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'tabPane', "provinsi", "listPeriodeExistInHistory"]));
             // return redirect()->back();
         }
     }
@@ -524,6 +528,7 @@ class ProyekController extends Controller
             $matriks_approval = MatriksApprovalRekomendasi::where("unit_kerja", "=", $divisi)->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where("departemen", $departemen)->where("kategori", "=", "Pengajuan")->get();
             // dd($matriks_approval);
             $isnomorTargetActive = false;
+            // $nomorDefault = "6285376444701";
             $nomorDefault = "085881028391";
             foreach ($matriks_approval as $key => $user) {
                 // dd($user->Pegawai->nama_pegawai);
@@ -583,7 +588,7 @@ class ProyekController extends Controller
         $newProyek->hps_pagu = (int) str_replace('.', '', $dataProyek["hps-pagu"]);
         $newProyek->porsi_jo = $dataProyek["porsi-jo"];
         $newProyek->ketua_tender = $dataProyek["ketua-tender"];
-        $newProyek->score_pefindo = $dataProyek["score-pefindo"];
+        // $newProyek->score_pefindo = $dataProyek["score-pefindo"];
         // foreach($allProyek as $proyek) {
         //     if($proyek->ketua_tender == $dataProyek["ketua-tender"] && !($proyek->stage > 8)) {
         //         return redirect()->back()->with("failed", "Ketua Tender sudah terdaftar di proyek lain");

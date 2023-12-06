@@ -802,15 +802,15 @@
                                                                     @if ($matriks_user->contains('kategori', 'Persetujuan')  && $matriks_user->where('kategori', 'Persetujuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() && $proyek->is_recommended)
                                                                             <a href="#kt_modal_view_proyek_persetujuan_{{ $proyek->kode_proyek }}"
                                                                                 target="_blank" data-bs-toggle="modal"
-                                                                                class="btn btn-sm btn-primary text-white">{{ $proyek->is_disetujui ? "Lihat Detail" : "Submit" }}</a>
+                                                                                class="btn btn-sm btn-primary text-white">{{ $proyek->is_disetujui ? "Lihat Detail" : "Approve" }}</a>
                                                                     @elseif($matriks_user->contains('kategori', 'Rekomendasi') && $matriks_user->where('kategori', 'Rekomendasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() && $proyek->is_verifikasi_approved)
                                                                     <a href="#kt_modal_view_proyek_persetujuan_{{ $proyek->kode_proyek }}"
                                                                             target="_blank" data-bs-toggle="modal"
-                                                                            class="btn btn-sm btn-primary text-white">{{ $proyek->is_recommended || (collect(json_decode($proyek->approved_rekomendasi_final))->contains('user_id', auth()->user()->id) && collect(json_decode($proyek->approved_rekomendasi_final))?->first()?->status == 'approved') ? "Rincian" : "Submit" }}</a>
+                                                                            class="btn btn-sm btn-primary text-white">{{ $proyek->is_recommended || (collect(json_decode($proyek->approved_rekomendasi_final))->contains('user_id', auth()->user()->id) && collect(json_decode($proyek->approved_rekomendasi_final))?->first()?->status == 'approved') ? "Rincian" : "Rekomendasikan" }}</a>
                                                                     @elseif($matriks_user->contains('kategori', 'Verifikasi') && $matriks_user->where('kategori', 'Verifikasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() && $proyek->is_penyusun_approved)
                                                                     <a href="#kt_modal_view_proyek_persetujuan_{{ $proyek->kode_proyek }}"
                                                                         target="_blank" data-bs-toggle="modal"
-                                                                        class="btn btn-sm btn-primary text-white">{{ $proyek->is_verifikasi_approved ? "Lihat Detail" : "Submit" }}</a>
+                                                                        class="btn btn-sm btn-primary text-white">{{ $proyek->is_verifikasi_approved ? "Lihat Detail" : "Verifikasi" }}</a>
                                                                     @endif
                                                                 @else
                                                                         @if ($is_user_exist_in_matriks_approval)
@@ -822,7 +822,7 @@
                                                                                 @else
                                                                                     <a href="#kt_modal_view_proyek_{{ $proyek->kode_proyek }}"
                                                                                         data-bs-toggle="modal"
-                                                                                        class="btn btn-sm btn-primary text-white">Submit</a>
+                                                                                        class="btn btn-sm btn-primary text-white">Ajukan</a>
                                                                                 @endif
                                                                             @elseif ($matriks_user->contains('kategori', 'Penyusun') && $matriks_user->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first())
                                                                                 @if ($proyek->is_request_rekomendasi || (($matriks_user->filter(function($value)use($proyek){
@@ -839,7 +839,7 @@
                                                                                 @elseif ($proyek->review_assessment)
                                                                                     <a href="#kt_user_view_kriteria_{{ $proyek->kode_proyek }}"
                                                                                         target="_blank" data-bs-toggle="modal"
-                                                                                        class="btn btn-sm btn-primary text-white">Submit</a>
+                                                                                        class="btn btn-sm btn-primary text-white">Isi Kriteria Risiko</a>
                                                                                 @endif                                                                       
                                                                             @endif 
                                                                         @else
@@ -873,7 +873,7 @@
                                                 <th class="min-w-auto">Kategori Proyek</th>
                                                 <th class="min-w-auto" colspan="2">Status NR I</th>
                                                 <th class="min-w-auto">Level Risiko</th>
-                                                <th class="min-w-auto">File Penilaian Risiko</th>
+                                                {{-- <th class="min-w-auto">File Penilaian Risiko</th> --}}
                                                 <th class="min-w-auto">Hasil NR I</th>
                                                 <th class="min-w-auto">Is Cancel</th>
                                             </tr>
@@ -1128,7 +1128,7 @@
                                                                 {{ $text }}
                                                             </small>
                                                         </td>
-                                                        @if (($matriks_user?->contains('kategori', 'Pengajuan') && $matriks_user?->where('kategori', 'Pengajuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first()) || 
+                                                        {{-- @if (($matriks_user?->contains('kategori', 'Pengajuan') && $matriks_user?->where('kategori', 'Pengajuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first()) || 
                                                         ($matriks_user?->contains('kategori', 'Penyusun') && $matriks_user?->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '>', 1)?->first())
                                                         )
                                                             <td></td>
@@ -1138,7 +1138,7 @@
                                                                 <a href="{{ asset('file-profile-risiko' . '\\' . $proyek->file_penilaian_risiko) }}" class="btn btn-sm btn-primary text-white p-1">Download</a>
                                                             @endif
                                                         </td>
-                                                        @endif
+                                                        @endif --}}
                                                         <td>
                                                             @php
                                                                 // if (!empty($proyek->approved_persetujuan)) {
@@ -1206,9 +1206,18 @@
                                                                 )
                                                                     
                                                                 @else
-                                                                <button type="button" class="btn btn-primary p-2" data-bs-toggle="modal" data-bs-target="#kt_modal_view_dokumen_persetujuan_{{ $proyek->kode_proyek }}">
-                                                                    View
-                                                                </button>
+                                                                {{-- <button type="button" class="btn btn-primary p-2" onclick="generateFile('{{ $proyek->kode_proyek }}')">
+                                                                    Generate
+                                                                </button>   --}}
+                                                                    @if (empty($proyek->file_persetujuan))
+                                                                    <button type="button" class="btn btn-primary p-2" onclick="generateFile('{{ $proyek->kode_proyek }}')">
+                                                                        Generate
+                                                                    </button>  
+                                                                    @else
+                                                                    <button type="button" class="btn btn-primary p-2" data-bs-toggle="modal" data-bs-target="#kt_modal_view_dokumen_persetujuan_{{ $proyek->kode_proyek }}">
+                                                                        View
+                                                                    </button>
+                                                                    @endif
                                                                 @endif
                                                                 {{-- <a href="#kt_modal_view_dokumen_persetujuan_{{ $proyek->kode_proyek }}" class="btn btn-sm btn-primary text-white" data-bs-toggle="model">Download</a> --}}
                                                             </small>
@@ -2403,7 +2412,7 @@
                             <textarea class="form-control form-control-solid" id="note-rekomendasi" name="note-rekomendasi" rows="10"
                                 {{ !is_null($proyek->is_draft_recommend_note) && !$proyek->is_draft_recommend_note || empty($matriks_user) || collect(json_decode($proyek->approved_penyusun))->contains('status', 'approved')  ? 'disabled' : '' }}>{!! is_null($proyek->is_draft_recommend_note) && (empty(collect(json_decode($proyek->approved_penyusun))) || collect(json_decode($proyek->approved_penyusun))->isEmpty())
                                     ? 'Profile Risiko Pengguna Jasa = ' . $text . ' (Score : ' . $nilaiKriteriaPenggunaJasa . ")\n\n"
-                                    : collect(json_decode($proyek->approved_penyusun))->first()?->catatan !!}</textarea>
+                                    : nl2br($proyek->catatan_nota_rekomendasi) !!}</textarea>
                             <br>
                             @csrf
                             <input type="hidden" name="kode-proyek" value="{{ $proyek->kode_proyek }}">
@@ -2907,12 +2916,13 @@
                     <div class="modal-body">
                         @php
                             $approved_pengajuan = collect(json_decode($proyek->approved_rekomendasi));
-                            $approved_penyusun = collect(json_decode($proyek->approved_penyusun));
+                            // $approved_penyusun = collect(json_decode($proyek->approved_penyusun));
+                            $approved_verifikasi = collect(json_decode($proyek->approved_verifikasi));
                             $approved_rekomendasi = collect(json_decode($proyek->approved_rekomendasi_final));
                             $approved_persetujuan = collect(json_decode($proyek->approved_persetujuan));
                             $data_approved_merged = collect();
-                            if ($approved_pengajuan->isNotEmpty() || $approved_penyusun->isNotEmpty() || $approved_verifikasi->isNotEmpty() || $approved_rekomendasi->isNotEmpty() || $approved_persetujuan->isNotEmpty()) {
-                                $data_approved_merged = collect()->mergeRecursive(['Pengajuan' => $approved_pengajuan->flatten(), 'Penyusun' => $approved_penyusun->flatten(), 'Rekomendasi' => $approved_rekomendasi->flatten(), 'Persetujuan' => $approved_persetujuan->flatten()]);
+                            if ($approved_pengajuan->isNotEmpty() || $approved_verifikasi->isNotEmpty() || $approved_rekomendasi->isNotEmpty() || $approved_persetujuan->isNotEmpty()) {
+                                $data_approved_merged = collect()->mergeRecursive(['Pengajuan' => $approved_pengajuan->flatten(), 'Penyusun' => $approved_verifikasi->flatten(), 'Rekomendasi' => $approved_rekomendasi->flatten(), 'Persetujuan' => $approved_persetujuan->flatten()]);
                             }
                         @endphp
                         {{-- Begin :: History --}}
@@ -3291,6 +3301,45 @@
     <script src="/datatables/pdfmake.min.js"></script>
     <script src="/datatables/vfs_fonts.js"></script>
     <!--end::Data Tables-->
+
+    <script>
+        const LOADING_BODY = new KTBlockUI(document.querySelector('#kt_body'), {
+            message: '<div class="blockui-message"><span class="spinner-border text-primary"></span> Loading...</div>',
+        })
+        async function generateFile(kode_proyek) {
+            Swal.fire({
+                title: '',
+                text: "Apakah anda yakin?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: '#008CB4',
+                cancelButtonColor: '#BABABA',
+                confirmButtonText: 'Ya'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    LOADING_BODY.block();
+                    const formData = new FormData();
+                    formData.append("_token", "{{ csrf_token() }}");
+                    const sendData = await fetch(`{{ url('/rekomendasi/${kode_proyek}/generate') }}`, {
+                        method: "POST",
+                        body: formData
+                    }).then(res => res.json());
+                    if (sendData.success) {
+                        LOADING_BODY.release();
+                        Swal.fire({title: sendData.message, icon: 'success'}).then(()=>{
+                            location.reload();
+                        })
+                    } else{
+                        LOADING_BODY.release();
+                        Swal.fire({title: sendData.message, icon: 'error'}).then(()=>{
+                            location.reload();
+                        })
+                    }
+                }
+    
+            })
+        }
+    </script>
 
     <script>
         function openModalPersetujuan() {

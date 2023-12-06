@@ -1517,7 +1517,7 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $table_ttd = $section2->addTable('ttd_table',array('borderSize' => 1, 'borderColor' => '999999', 'afterSpacing' => 0, 'Spacing'=> 0, 'cellMargin'=>0  ));
     // $table_ttd->addRow();
     $table_ttd->addRow();
-
+    
     $header_cell = $table_ttd->addCell(3000, ["vMerge" => "restart", "gridSpan" => 2, "bgColor" => "F4B083"]);
     $header_cell->addText("Disusun oleh,", ["bold" => true], ["align" => "center"]);
     // $header_cell->addText(null, ["bold" => true]);
@@ -1551,7 +1551,7 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
                     }
                 }
             }
-
+            
 
             $tanggal_ttd = Carbon\Carbon::create($p->tanggal);
             // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
@@ -2000,7 +2000,7 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
         foreach ($penyetuju as $key => $p) {
             if (!empty($p->catatan) || $p->catatan != null) {
                 $table_comment_penyetuju->addRow();
-
+    
                 $cell_1_note = $table_comment_penyetuju->addCell(200);
                 $cell_2_note = $table_comment_penyetuju->addCell(200);
                 // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
@@ -2029,14 +2029,14 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     //     $cell_2_note->addText(preg_replace('/&(?!#?[a-z0-9]+;)/', '&amp;', nl2br($p->catatan)), $fontStyle);
     // }
     //end :: Catatan Rekomendasi
-
+    
     //Begin::Footer
     // $footerSection = $phpWord->addSection();
     // $footer = $footerSection->addFooter(\PhpOffice\PhpWord\Element\Footer::FIRST);
     // $footerSection->setFooterHeight(50);
     // $footerTextRun = $footer->addTextRun();
     // $footerTextRun->addText("*Dokumen ini dibuat oleh sistem CRM", ['size' => 10, 'bold' => true], ['align' => 'right']);
-
+    
     $section4->addTextBreak(1);
     $section4->addText("*Dokumen ini dibuat oleh sistem CRM", ['size' => 8, 'bold' => true], ['align' => 'right']);
     // $section4->addTextBreak(1);

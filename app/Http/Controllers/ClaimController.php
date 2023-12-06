@@ -19,6 +19,8 @@ use App\Models\PerubahanKontrak;
 use App\Models\ReviewContracts;
 use App\Models\UnitKerja;
 use App\Models\ProyekPISNew;
+use App\Models\JenisDokumen;
+use App\Models\DokumenPendukung;
 use Carbon\Carbon;
 use Google\Service\FactCheckTools\Resource\Claims;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +30,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\File;
 
 class ClaimController extends Controller
 {
@@ -867,7 +870,7 @@ class ClaimController extends Controller
     //     return view("claimManagement/viewClaim", ['proyekClaims' => $proyekClaim, 'proyek' => $proyek, "jenis_claim" => $jenis_claim]);
     // }
 
-    public function claimDelete(Request $request)
+    public function claimDeleteOld(Request $request)
     {
         $data = $request->all();
         $claim = ClaimManagements::find($data["id-claim"]);
@@ -881,6 +884,34 @@ class ClaimController extends Controller
         }
         Alert::error("Error", "Claim gagal dihapus");
         return redirect("/claim-management");
+    }
+
+    public function claimDelete(PerubahanKontrak $id)
+    {
+        if (empty($id)) {
+            Alert::error('Error', 'Claim gagal dihapus. Hubungi Admin');
+            return redirect()->back();
+        }
+        $profit_center = $id->profit_center;
+        JenisDokumen::where('id_perubahan_kontrak', $id->id_perubahan_kontrak)->get()?->each(function ($jd) {
+            $jd->delete();
+        });
+        DokumenPendukung::where('id_perubahan_kontrak', $id->id_perubahan_kontrak)->get()?->each(function ($dp) {
+            $nama_file = $dp->id_document;
+            File::delete(public_path("words/$nama_file"));
+            $dp->delete();
+        });
+
+        if ($id->delete()) {
+            return (object)[
+                'success' => true,
+                'message' => "Claim berhasil dihapus",
+            ];
+        }
+        return (object)[
+            'success' => false,
+            'message' => "Claim gagal dihapus",
+        ];
     }
 
     public function perubahanKontrakEdit(Request $request)

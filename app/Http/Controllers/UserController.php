@@ -705,15 +705,23 @@ class UserController extends Controller
 
         //Check Validate Token WZone
         try {
-            $validateLoginWZone = Http::get('https://' . env('WZONE_URL') . '/app/sso/valid', [
+            $validateLoginWZone = Http::withoutVerifying()->withOptions(["verify" => false])->get('http://' . env('WZONE_URL') . '/app/sso/valid', [
                 'app_secret' => env('WZONE_APP_SECRET'),
                 'token' => $token
             ]);
-
-            if ($validateLoginWZone->successfull()) {
+            // dd($validateLoginWZone->body());
+            if ($validateLoginWZone->successful()) {
                 //Get Data User From WZone
-                $user = $validateLoginWZone->collect($key = 'data')->first();
-                $nip = $user['NIP'];
+                $response = $validateLoginWZone->json();
+                // $user = $validateLoginWZone->collect($key = 'data')->first();
+
+                if ($response["responseStatus"] != 0) {
+                    dd($response["responseData"]);
+                    $nip = $response["responseData"]["nip"];
+                } else {
+                    dd($response);
+                }
+                // $nip = $user['NIP'];
             } else {
                 return redirect()->back();
             }
@@ -721,18 +729,23 @@ class UserController extends Controller
             if (!empty($nip)) {
                 //Check Pegawai yg login dari WZone ada di CRM atau tidak
                 $checkUserInCRM = User::where('nip', $nip)->first();
+                // dd($checkUserInCRM);
 
-                if ($checkUserInCRM->isNotEmpty() && $checkUserInCRM->is_active
+                if (
+                    !empty($checkUserInCRM) && $checkUserInCRM->is_active
                 ) {
-                    Auth::login(['nip' => $nip]);
+                    // Auth::login(['nip' => $nip]);
+                    Auth::login($checkUserInCRM);
                     if (Auth::check()) {
                         $request->session()->regenerate();
                         return redirect()->intended("/dashboard");
                     }
                 }
+            } else {
+                return redirect()->back(); 
             }
-        } catch (\Throwable $th) {
-            dd($th);
+        } catch (\Exception $e) {
+            dd($e);
         }
     }
 

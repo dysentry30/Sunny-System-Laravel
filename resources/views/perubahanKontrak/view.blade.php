@@ -51,11 +51,13 @@
                                 <!--begin::Button-->
                                 @if (isset($perubahan_kontrak->periode))
                                     @if ($perubahan_kontrak->is_locked != true)
+                                        <button class="btn btn-sm btn-danger" onclick="deleteAction('perubahan-kontrak/{{ $perubahan_kontrak->id_perubahan_kontrak }}/delete')">Delete</button>
                                         <a href="#" data-bs-toggle="modal" class="btn btn-sm btn-primary" id="editButton" data-bs-target="#kt_modal_edit_perubahan"
                                             style="margin-left:10px;">
                                             Edit</a>
                                     @endif
                                 @else
+                                <button class="btn btn-sm btn-danger" onclick="deleteAction('perubahan-kontrak/{{ $perubahan_kontrak->id_perubahan_kontrak }}/delete')">Delete</button>
                                 <a href="#" data-bs-toggle="modal" class="btn btn-sm btn-primary" id="editButton" data-bs-target="#kt_modal_edit_perubahan"
                                     style="margin-left:10px;">
                                     Edit</a>
@@ -439,6 +441,7 @@
                                                         <th class="min-w-125px">Jenis Dokumen</th>
                                                         <th class="min-w-125px">Nomor Dokumen</th>
                                                         <th class="min-w-125px">File</th>
+                                                        <th class="min-w-125px">Action</th>
                                                     </tr>
                                                     <!--end::Table row-->
                                                 </thead>
@@ -501,9 +504,14 @@
                                                                     {{$lio->nomor_dokumen}}
                                                                 </td>
                                                                 <td>
-                                                                    - <a target="blank" href="{{ asset("words/$lio->id_document"); }}">{{$lio->id_document}}</a> <br>
+                                                                    <a target="blank" href="{{ asset("words/$lio->id_document"); }}">{{$lio->id_document}}</a> <br>
                                                                 </td>
                                                             @endforeach
+                                                            <td>
+                                                                <div class="d-flex flex-row align-items-center justify-content-center">
+                                                                    <button class="btn btn-sm btn-danger" onclick="deleteAction('jenis-dokumen/{{ $jd->id_jenis_dokumen }}/delete')">Delete</button>
+                                                                </div>
+                                                            </td>
                                                         </tr>
                                                     @empty
                                                         <tr>
@@ -536,6 +544,7 @@
                                                             <th class="min-w-125px">Dibuat Tanggal</th>
                                                             <th class="min-w-125px">Catatan</th>
                                                             <th class="min-w-125px">File</th>
+                                                            <th class="min-w-125px">Action</th>
                                                         </tr>
                                                         <!--end::Table row-->
                                                     </thead>
@@ -582,17 +591,24 @@
                                                                         <a target="_blank" href="{{ asset("words/$dokumen_pendukung->id_document"); }}">{{$dokumen_pendukung->id_document}}</a>
                                                                     </td>
                                                                     <!--end::Unit-->
+                                                                    <!--begin::Unit-->
+                                                                    <td>
+                                                                        <div class="d-flex flex-row align-items-center justify-content-center">
+                                                                            <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-pendukung/{{ $dokumen_pendukung->id_dokumen_pendukung }}/delete')">Delete</button>
+                                                                        </div>
+                                                                    </td>
+                                                                    <!--end::Unit-->
                                                                 </tr>
                                                             @empty
                                                                 <tr>
-                                                                    <td colspan="4" class="text-center">
+                                                                    <td colspan="5" class="text-center">
                                                                         <h6><b>There is no data</b></h6>
                                                                     </td>
                                                                 </tr>
                                                             @endforelse
                                                         @else
                                                             <tr>
-                                                                <td colspan="4" class="text-center">
+                                                                <td colspan="5" class="text-center">
                                                                     <h6><b>There is no data</b></h6>
                                                                 </td>
                                                             </tr>
@@ -1015,6 +1031,11 @@
 @endsection
 
 @section('js-script')
+<script>
+    const LOADING_BODY = new KTBlockUI(document.querySelector('#kt_body'), {
+        message: '<div class="blockui-message"><span class="spinner-border text-primary"></span> Loading...</div>',
+    })
+</script>
     <script>
         const stages = document.querySelectorAll(".clicked-stage");
         let prevStep = Number("{{ $perubahan_kontrak->stage ?? 1 }}");
@@ -1084,6 +1105,44 @@
     </script>
     {{-- End :: Get Jenis Dokumen --}}
 
+    <script>
+        async function deleteAction(url) {
+            Swal.fire({
+                title: '',
+                text: "Apakah anda yakin?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: '#008CB4',
+                cancelButtonColor: '#BABABA',
+                confirmButtonText: 'Ya'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    LOADING_BODY.block();
+                    const formData = new FormData();
+                    formData.append("_token", "{{ csrf_token() }}");
+                    // formData.append("id", id);
+                    // formData.append("id-contract", "{{ $contract->id_contract }}");
+                    // formData.append("profit-center", "{{ $contract->profit_center }}");
+                    const sendData = await fetch(`{{ url('${url}') }}`, {
+                        method: "POST",
+                        body: formData
+                    }).then(res => res.json());
+                    if (sendData.success) {
+                        LOADING_BODY.release();
+                        Swal.fire({title: sendData.message, icon: 'success'}).then(()=>{
+                            window.location = "{{ url('claim-management') }}"
+                        })
+                    } else{
+                        LOADING_BODY.release();
+                        Swal.fire({title: sendData.message, icon: 'error'}).then(()=>{
+                            location.reload();
+                        })
+                    }
+                }
+    
+            })
+        }
+    </script>
 
 @endsection
 

@@ -113,7 +113,7 @@ use Termwind\Components\Dd;
 
 Route::get('/', [UserController::class, 'welcome'])->middleware("userNotAuth");
 Route::get('/ccm', [UserController::class, 'welcome'])->middleware("userNotAuth");
-
+Route::get('/crm-login', [UserController::class, 'authenticate'])->middleware("userNotAuth");
 
 // begin :: Login
 
@@ -487,6 +487,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // Begin Rekomendasi
     Route::get('/rekomendasi', [RekomendasiController::class, "index"])->name('rekomendasi');
+    Route::post('/rekomendasi/{kode_proyek}/generate', [RekomendasiController::class, "generateFileNotaRekomendasiFinal"]);
     Route::get("/green-lane", [RekomendasiController::class, "indexGreenLane"]);
     Route::get("/non-green-lane", [RekomendasiController::class, "indexNonGreenLane"]);
     // End Rekomendasi
@@ -2546,7 +2547,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $history_forecasts = $history_forecasts->where("jenis_proyek", "!=", "I");
         }
         // dd($history_forecasts->select(["proyeks.kode_proyek","proyeks.unit_kerja", "unit_kerjas.unit_kerja", "periode_prognosa", "history_forecast.created_at", "nilaiok_review", "nilaiok_awal", "nilai_forecast", "realisasi_forecast"])->get()->first());
-        $history_forecasts = $history_forecasts->select(["proyeks.kode_proyek", "proyeks.unit_kerja", "unit_kerjas.unit_kerja", "unit_kerjas.divcode", "periode_prognosa", "history_forecast.created_at", "nilaiok_review", "nilaiok_awal", "rkap_forecast", "nilai_forecast", "month_realisasi", "realisasi_forecast", "month_forecast", "is_approved_1", "stage", "is_rkap", "is_cancel"])->get()->groupBy("unit_kerja");
+        $history_forecasts = $history_forecasts->select(["proyeks.kode_proyek", "proyeks.unit_kerja", "unit_kerjas.unit_kerja", "unit_kerjas.divcode", "periode_prognosa", "history_forecast.created_at", "nilaiok_review", "nilaiok_awal", "rkap_forecast", "nilai_forecast", "month_realisasi", "realisasi_forecast", "month_forecast", "is_approved_1", "proyeks.stage", "is_rkap", "is_cancel"])->get()->groupBy("unit_kerja");
         // dump($history_forecasts->first()->first());
         // $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("stage", "!=", 7)->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja");
         // $history_forecasts = $history_forecasts->get()->groupBy("unit_kerja");
@@ -2559,18 +2560,28 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $periodeOtor = $request->query("periode-prognosa") ?? $bulan;
 
         // $periodeOtor = (int) date('m');
-        $history_forecasts = HistoryForecast::join(
-            "proyeks",
-            "proyeks.kode_proyek",
-            "=",
-            "history_forecast.kode_proyek"
-        )->where("tahun_perolehan", "=", $year)->where("periode_prognosa", "<=", $periodeOtor)->where("tahun", "=", $year)->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja");
-        // dump($history_forecasts);
+        $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("tahun_perolehan", "=", $year)->where("periode_prognosa", "<=", $periodeOtor)->where("tahun", "=", $year)->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja");
+        // dump($history_forecasts->get());
+        // $history_forecast_filter = $history_forecasts->get()->filter(function($history){
+        //     if (!empty($history->realisasi_forecast) && empty($history->month_realisasi)) {
+        //         return;
+        //     }
+        //     return $history;
+        // });
+        // dump($history_forecast_filter);
         if ($jenisProyek == "N") {
             $history_forecasts = $history_forecasts->where("jenis_proyek", "!=", "I");
         }
         // dd($history_forecasts->select(["proyeks.kode_proyek","proyeks.unit_kerja", "unit_kerjas.unit_kerja", "periode_prognosa", "history_forecast.created_at", "nilaiok_review", "nilaiok_awal", "nilai_forecast", "realisasi_forecast"])->get()->first());
-        $history_forecasts = $history_forecasts->select(["proyeks.nama_proyek", "proyeks.kode_proyek", "proyeks.unit_kerja", "unit_kerjas.unit_kerja", "unit_kerjas.divcode", "periode_prognosa", "history_forecast.created_at", "nilaiok_review", "nilaiok_awal", "rkap_forecast", "nilai_forecast", "month_realisasi", "realisasi_forecast", "is_approved_1", "stage", "is_rkap"])->get()->where("divcode", "=", $unit_kerja)->groupBy("nama_proyek");
+        // $history_forecasts = $history_forecasts->select(["proyeks.nama_proyek", "proyeks.kode_proyek", "proyeks.unit_kerja",  "proyeks.tipe_proyek", "unit_kerjas.unit_kerja", "unit_kerjas.divcode", "periode_prognosa", "history_forecast.created_at", "nilaiok_review", "nilaiok_awal", "rkap_forecast", "nilai_forecast", "month_realisasi", "realisasi_forecast", "is_approved_1", "stage", "is_rkap", "bulan_ri_perolehan"])->get()->where("divcode", "=", $unit_kerja)->sortBy('periode_prognosa')->groupBy("nama_proyek");
+        $history_forecasts = $history_forecasts->select(["proyeks.nama_proyek", "proyeks.kode_proyek", "proyeks.unit_kerja",  "proyeks.tipe_proyek", "unit_kerjas.unit_kerja", "unit_kerjas.divcode", "periode_prognosa", "history_forecast.created_at", "nilaiok_review", "nilaiok_awal", "rkap_forecast", "nilai_forecast", "month_realisasi", "realisasi_forecast", "is_approved_1", "proyeks.stage", "is_rkap", "bulan_ri_perolehan"])->get()->filter(function ($history) {
+            // if (!empty($history->realisasi_forecast) && empty($history->month_realisasi)) {
+            //     return;
+            // }
+
+            return $history;
+            // return $history->rkap_forecast != 0 && $history->nilai_forecast != 0 && $history->realisasi_forecast != 0;
+        })->where("divcode", "=", $unit_kerja)->sortBy('periode_prognosa')->groupBy("nama_proyek");
         // $tes = $history_forecasts->sum(function($his) {
         //     return (int) $his->realisasi_forecast;
         //     });
@@ -4396,32 +4407,32 @@ Route::get('/get-jenis-dokumen/{jenis_dokumen}/{profit_center}', function ($jeni
             $data = SiteInstruction::where('profit_center', '=', $profit_center)->get();
             return response()->json($data);
             break;
-
+        
         case "Technical Form":
             $data = TechnicalForm::where('profit_center', '=', $profit_center)->get();
             return response()->json($data);
             break;
-
+        
         case "Technical Query":
             $data = TechnicalQuery::where('profit_center', '=', $profit_center)->get();
             return response()->json($data);
             break;
-
+        
         case "Field Design Change":
             $data = FieldChange::where('profit_center', '=', $profit_center)->get();
             return response()->json($data);
             break;
-
+        
         case "Contract Change Notice":
             $data = ContractChangeNotice::where('profit_center', '=', $profit_center)->get();
             return response()->json($data);
             break;
-
+        
         case "Contract Change Proposal":
             $data = ContractChangeProposal::where('profit_center', '=', $profit_center)->get();
             return response()->json($data);
             break;
-
+        
         case "Contract Change Order":
             $data = ContractChangeOrder::where('profit_center', '=', $profit_center)->get();
             return response()->json($data);
@@ -4442,5 +4453,6 @@ Route::get('/php-info', function () {
 
 Route::get('/test-file', function () {
     // $proyek = Proyek::find('PNPC009');
-    return createWordProfileRisiko('PNPC009');
+    // return createWordProfileRisiko('PNPC009');
+    return mergeFileLampiranRisiko('PNPC001');
 });

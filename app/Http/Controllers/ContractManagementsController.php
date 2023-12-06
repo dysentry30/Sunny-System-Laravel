@@ -204,7 +204,7 @@ class ContractManagementsController extends Controller
             $proyeks_perolehan = $proyeks_all->whereIn("stage", [2, 3, 4, 5, 6])->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
             $proyeks_pelaksanaan = $proyekPISNew;
             // $proyeks_pemeliharaan = $proyeks_all->where("is_cancel", "!=", true)->where("stages", "=", 3);
-            $proyeks_pemeliharaan = $proyekPISNew;
+            $proyeks_pemeliharaan = $proyekPISNew->where("stages", "=", 3);
         } else {
             // $proyeks = Proyek::join()where("unit_kerja", "=", Auth::user()->unit_kerja)->where("stage", ">", 7)->where("nomor_terkontrak", "!=", "")->get()->sortBy("kode_proyek");
             // $proyeks = DB::table("proyeks as p")->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("p.unit_kerja", "=", Auth::user()->unit_kerja)->where("stage", ">", 7)->where("p.nomor_terkontrak", "!=", "")->where("c.stages", "<", 3)->get()->sortBy("kode_proyek");
@@ -285,13 +285,17 @@ class ContractManagementsController extends Controller
                 "contract_managements.profit_center",
                 "=",
                 "proyek_pis_new.profit_center"
-            )->whereIn("kd_divisi", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->where('contract_managements.profit_center', '!=', null)->where('start_year', '<=', $filterTahun)->get();
+            )->whereIn("kd_divisi", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->where('contract_managements.profit_center', '!=', null)->where(
+                'start_year',
+                '<=',
+                $filterTahun
+            )->get();
         }
         $proyeks_perolehan = $proyeks_all->whereIn("stage", [2, 3, 4, 5, 6])->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
         // $proyeks_pelaksanaan = $proyeks_all->where("stage", ">=", 8)->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
         $proyeks_pelaksanaan = $proyekPISNew;
         // $proyeks_pemeliharaan = $proyeks_all->where("is_cancel", "!=", true)->where("stages", "=", 3);
-        $proyeks_pemeliharaan = $proyekPISNew;
+        $proyeks_pemeliharaan = $proyekPISNew->where("stages", "=", 3);
     // return view("4_Contract", compact(["proyeks"]));
         return view("4_Contract", compact(["proyeks_perolehan", "proyeks_pelaksanaan", "proyeks_pemeliharaan", "filterUnit", "filterJenis", "unitkerjas", "tahun_proyeks", "filterTahun", "month", "filterBulan", "unit_kerjas_select"]));
     }
@@ -2367,7 +2371,7 @@ class ContractManagementsController extends Controller
         $model->id_perubahan_kontrak = $data["id-perubahan-kontrak"];
         $model->id_contract = $data["id_contract"];
         // $model->id_document = Str::uuid();
-        $id_document = date("His_") . $file->getClientOriginalName();
+        $id_document = date("His_") . str_replace(' ', '_', $file->getClientOriginalName());
         $model->id_document = $id_document;
         // $model->document_name = $data["document-name"];
         $model->created_by = auth()->user()->id;
@@ -2380,6 +2384,28 @@ class ContractManagementsController extends Controller
         Alert::error("Error", "Dokumen Pendukung gagal dibuat");
         return Redirect::back()->with("modal", $data["modal-name"]);
         // return redirect()->back();
+    }
+
+    public function dokumenPendukungDelete(DokumenPendukung $id)
+    {
+        $file = $id;
+        if (empty($file)) {
+            Alert::error('Error', 'Dokumen Tidak Ditemukan');
+            return redirect()->back();
+        }
+
+        $nama_file = $file->id_document;
+        if ($file->delete()) {
+            File::delete(public_path("words/$nama_file"));
+            return (object)[
+                'success' => true,
+                'message' => "Dokumen berhasil dihapus",
+            ];
+        }
+        return (object)[
+            'success' => false,
+            'message' => "Dokumen gagal dihapus",
+        ];
     }
 
     public function momMeeting(Request $request)

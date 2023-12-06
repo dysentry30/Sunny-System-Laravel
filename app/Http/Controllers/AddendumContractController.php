@@ -730,4 +730,25 @@ class AddendumContractController extends Controller
         Alert::error("Error", "Jenis Dokumen gagal ditambahkan");
         return Redirect::back();
     }
+
+    public function jenisDokumenDelete(JenisDokumen $id)
+    {
+        $file = $id;
+        if (empty($file)) {
+            Alert::error('Error', 'Dokumen Tidak Ditemukan');
+            return redirect()->back();
+        }
+
+        $nama_file = $file->id_document;
+        if ($file->delete()) {
+            return (object)[
+                'success' => true,
+                'message' => "Dokumen berhasil dihapus",
+            ];
+            return (object)[
+                'success' => false,
+                'message' => "Dokumen gagal dihapus",
+            ];
+        }
+    }
 }

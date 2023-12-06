@@ -18,6 +18,7 @@ use App\Models\KriteriaPenggunaJasaDetail;
 use App\Models\UnitKerja;
 use Illuminate\Support\Facades\URL;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Karriere\PdfMerge\PdfMerge;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class RekomendasiController extends Controller
@@ -271,7 +272,7 @@ class RekomendasiController extends Controller
                                 "message" => "Yth Bapak/Ibu *" . $target->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan hasil asesmen *" . $proyek->proyekBerjalan->customer->name . "* untuk permohonan pemberian rekomendasi tahap I pada proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
                                 // "url" => $url
                             ]);
-
+    
                             $send_msg_to_wa->onError(function ($error) {
                                 // dd($error);
                                 Alert::error(
@@ -296,7 +297,7 @@ class RekomendasiController extends Controller
                                 "message" => "Yth Bapak/Ibu *" . $target->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan hasil asesmen *" . $proyek->proyekBerjalan->customer->name . "* untuk permohonan pemberian rekomendasi tahap I pada proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
                                 // "url" => $url
                             ]);
-
+    
                             $send_msg_to_wa->onError(function ($error) {
                                 // dd($error);
                                 Alert::error(
@@ -312,7 +313,7 @@ class RekomendasiController extends Controller
                         // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
                         //     "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
                         //     "sender" => env("NO_WHATSAPP_BLAST"),
-                        // "sender" => "6281188827008",
+                            // "sender" => "6281188827008",
                         //     // "sender" => "62811881227",
                         //     "number" => $nomorTarget,
                         //     // "number" => "085881028391",
@@ -332,7 +333,7 @@ class RekomendasiController extends Controller
                                 "message" => "Yth Bapak/Ibu *" . $target->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan hasil asesmen *" . $proyek->proyekBerjalan->customer->name . "* untuk permohonan pemberian rekomendasi tahap I pada proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
                                 // "url" => $url
                             ]);
-
+    
                             $send_msg_to_wa->onError(function ($error) {
                                 // dd($error);
                                 Alert::error(
@@ -342,7 +343,7 @@ class RekomendasiController extends Controller
                                 return redirect()->back();
                             });
                         }
-
+    
                         $approved_verifikasi = collect(json_decode($proyek->approved_verifikasi));
                         $approved_verifikasi->push([
                             "user_id" => Auth::user()->id,
@@ -368,7 +369,7 @@ class RekomendasiController extends Controller
                                 "message" => "Yth Bapak/Ibu *" . $target->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan revisi asesmen *" . $proyek->proyekBerjalan->customer->name . "* untuk proses verifikasi penyusunan Nota Rekomendasi tahap I pada proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
                                 // "url" => $url
                             ]);
-
+    
                             $send_msg_to_wa->onError(function ($error) {
                                 // dd($error);
                                 Alert::error(
@@ -393,7 +394,7 @@ class RekomendasiController extends Controller
                                 "message" => "Yth Bapak/Ibu *" . $target->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan revisi asesmen *" . $proyek->proyekBerjalan->customer->name . "* untuk proses verifikasi penyusunan Nota Rekomendasi tahap I pada proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
                                 // "url" => $url
                             ]);
-
+    
                             $send_msg_to_wa->onError(function ($error) {
                                 // dd($error);
                                 Alert::error(
@@ -416,7 +417,21 @@ class RekomendasiController extends Controller
                 // }
 
                 $proyek->is_draft_recommend_note = false;
+                // createWordProfileRisiko($proyek->kode_proyek);
                 createWordProfileRisikoNew($proyek->kode_proyek);
+                $mergeLampiran = mergeFileLampiranRisiko($proyek->kode_proyek);
+                if (!empty($mergeLampiran)) {
+                    $pdfMerger = new PdfMerge();
+                    $pdfMerger->add(public_path('file-profile-risiko' . '/' . $proyek->file_penilaian_risiko));
+                    $pdfMerger->add(public_path('file-kriteria-pengguna-jasa' . '/' . $mergeLampiran));
+
+                    $now = \Carbon\Carbon::now();
+                    $file_name = $now->format("dmYHis") . "_profile-risiko_" . $proyek->kode_proyek;
+
+                    // File::delete(public_path('/file-profile-risiko//' . $proyek->file_penilaian_risiko));
+                    $pdfMerger->merge(public_path("file-profile-risiko" . "/" . $file_name . ".pdf"));
+                    $proyek->file_penilaian_risiko = $file_name . ".pdf";
+                }
             } else {
                 if (str_contains($proyek->klasifikasi_pasdin, "Mega")) {
                     $matriks_approval = self::getUserMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, "Penyusun");
@@ -641,7 +656,7 @@ class RekomendasiController extends Controller
             $proyek->revisi_note = $revisi_note;
             $proyek->is_revisi = true;
 
-            $get_nomor = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Verifikasi", 1);
+            $get_nomor = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Penyusun", 1);
 
             foreach ($get_nomor as $user) {
                 $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_persetujuan_$proyek->kode_proyek";
@@ -960,11 +975,11 @@ class RekomendasiController extends Controller
                 $is_proyek_besar = str_contains($proyek->klasifikasi_pasdin, "Besar") ? true : false;
                 $hasil_assessment = collect(json_decode($proyek->hasil_assessment));
 
-                URL::forceScheme("https");
-                $url = URL::temporarySignedRoute("rekomendasi", now()->addHours(3), ["open" => "kt_modal_view_proyek_persetujuan_" . $proyek->kode_proyek]);
+                // URL::forceScheme("https");
+                // $url = URL::temporarySignedRoute("rekomendasi", now()->addHours(3), ["open" => "kt_modal_view_proyek_persetujuan_" . $proyek->kode_proyek]);
                 // QrCode::size(50)->generate($url, public_path('/qr-code' . '/' . $proyek->kode_proyek . '.svg'));
-                createWordProfileRisiko($proyek->kode_proyek);
-                createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega, $request);
+                // createWordProfileRisiko($proyek->kode_proyek);
+                // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega, $request);
                 // dd("Tes");
                 $proyek->is_disetujui = true;
                 $proyek->persetujuan_note = $request["catatan-persetujuan"];
@@ -1314,6 +1329,48 @@ class RekomendasiController extends Controller
                     return $matriks_approval->where("unit_kerja", $id_divisi)->where("departemen", $departemen)->where('urutan', '=', $urutan)->get();
                 }
                 return $matriks_approval->where('urutan', '=', $urutan)->get();
+            }
+        }
+    }
+
+    public function generateFileNotaRekomendasiFinal(Request $request, $kode_proyek)
+    {
+        $proyek = Proyek::find($kode_proyek);
+
+        if (!empty($proyek)) {
+            $is_proyek_mega = str_contains($proyek->klasifikasi_pasdin, "Mega") ? true : false;
+            $is_proyek_besar = str_contains($proyek->klasifikasi_pasdin, "Besar") ? true : false;
+            $hasil_assessment = collect(json_decode($proyek->hasil_assessment));
+            try {
+                createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega, $request);
+                $file_persetujuan_old = $proyek->file_persetujuan;
+                $pdfMerger = new PdfMerge();
+                $pdfMerger->add(public_path('file-persetujuan' . '/' . $file_persetujuan_old));
+                $pdfMerger->add(public_path('file-profile-risiko' . '/' . $proyek->file_penilaian_risiko));
+
+                $now = \Carbon\Carbon::now();
+                $file_name = $now->format("dmYHis") . "_nota-persetujuan_" . $proyek->kode_proyek;
+                $pdfMerger->merge(public_path("file-persetujuan" . "/" . $file_name . ".pdf"));
+
+                // File::delete(public_path('file-persetujuan'.'/'.$file_persetujuan_old));
+                $proyek->file_persetujuan = $file_name . ".pdf";
+
+                if ($proyek->save()) {
+                    return response()->json([
+                        'success' => true,
+                        'message' => "File berhasil dibuat"
+                    ]);
+                }
+
+                return response()->json([
+                    'success' => false,
+                    'message' => "File gagal dibuat, Hubungi Admin"
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage()
+                ]);
             }
         }
     }
