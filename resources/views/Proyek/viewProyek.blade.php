@@ -3006,8 +3006,22 @@
                                                         <!--End begin::Col-->
                                                     </div>
                                                     <!--End begin::Row-->
+                                                    <!--Begin::Syarat Prakualifikasi-->
+                                                    <div class="row fv-row">
+                                                        <div class="col-6">
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                                    style="font-size:14px;">Syarat Prakualifikasi
+                                                                    <a href="/proyek/syarat-prakualifikasi/{{ $proyek->kode_proyek }}/view" Id="Plus">+</a>
+                                                                </h3>
+                                                                <!--end::Label-->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
                                                     <br>
-
+                                                    <!--End::Syarat Prakualifikasi-->
                                                     @if ($proyek->jenis_proyek == 'J')
                                                         <!--Begin::Title Biru Form: Partner JO-->
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
@@ -3037,6 +3051,9 @@
                                                                                 <th class="w-50px text-center">No.</th>
                                                                                 <th class="w-auto">Company</th>
                                                                                 <th class="w-auto">Porsi JO</th>
+                                                                                <th class="w-auto">Dokumen Consent & NPWP</th>
+                                                                                <th class="w-auto">Hasil Score Pefindo</th>
+                                                                                <th class="w-auto">Dokumen Pefindo</th>
                                                                                 <th class="w-100px"></th>
                                                                             </tr>
                                                                             <!--end::Table row-->
@@ -3070,6 +3087,27 @@
                                                                                             class="bi bi-percent text-dark"></i>
                                                                                     </td>
                                                                                     <!--end::Column-->
+                                                                                    <!--begin::Column-->
+                                                                                    <td>
+                                                                                        @php
+                                                                                            $files = json_decode($porsi->file_consent_npwp);
+                                                                                        @endphp
+                                                                                        @foreach ($files as $file)
+                                                                                        <a href="{{ asset('consent-npwp/').$file }}" class="text-hover-primary">{{ $file }}</a>
+                                                                                        <hr>
+                                                                                        @endforeach
+                                                                                    </td>
+                                                                                    <!--begin::Column-->
+                                                                                    <!--begin::Column-->
+                                                                                    <td>
+                                                                                        {{ $porsi->score_pefindo_jo }}
+                                                                                    </td>
+                                                                                    <!--begin::Column-->
+                                                                                    <!--begin::Column-->
+                                                                                    <td>
+                                                                                        <a href="{{ asset('pefindo/').$porsi->file_pefindo_jo }}" class="text-hover-primary">{{ $porsi->file_pefindo_jo }}</a>
+                                                                                    </td>
+                                                                                    <!--begin::Column-->
                                                                                     <!--begin::Action-->
                                                                                     <td class="text-center">
                                                                                         <small>
@@ -8696,10 +8734,10 @@
                                     <!--begin::Input-->
                                     <select id="company-jo" name="company-jo" class="form-select form-select-solid"
                                         data-control="select2" data-hide-search="false"
-                                        data-placeholder="Pilih Company JO">
+                                        data-placeholder="Pilih Company JO" onchange="getPefindo(this)">
                                         <option></option>
                                         @foreach ($customers as $customer)
-                                            <option value="{{ $customer->name }}">
+                                            <option value="{{ $customer->id_customer }}">
                                                 {{ $customer->name }}</option>
                                         @endforeach
                                     </select>
@@ -8717,8 +8755,8 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="number" step=0.01 min="1" max="{{ $proyek->porsi_jo }}"
-                                        onkeyup="getJO()" onchange="getJO()" class="form-control form-control-solid"
+                                    <input type="number" step=0.01 max="{{ $proyek->porsi_jo }}" value="0"
+                                        onkeyup="getJO()" onkeydown="getJO()" onchange="getJO()" class="form-control form-control-solid"
                                         id="porsijo-company" name="porsijo-company" placeholder="Porsi JO" />
                                     <!--end::Input-->
                                     <!--begin::Hidden Input-->
@@ -8730,6 +8768,27 @@
                             <!--End::Col-->
                         </div>
                         <!--End::Row Kanan+Kiri-->
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Upload Consent & NPWP</span>
+                                    </label>
+                                    <!--begin::Label-->
+                                    <input type="file" class="form-control form-control-solid" name="file-consent-npwp[]" id="file-consent-npwp" accept=".pdf" multiple>
+                                </div>
+                                <!--end::Input group Website-->
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Row Kanan+Kiri-->
+                        <input type="hidden" class="form-control form-control-solid" name="score_pefindo_jo" id="score_pefindo_jo" readonly>
+                        <input type="hidden" class="form-control form-control-solid" name="file_pefindo_jo" id="file_pefindo_jo">
+
                         <script>
                             function getJO() {
                                 let porsiJO = document.getElementById("porsijo-company");
@@ -8742,11 +8801,36 @@
                                 document.getElementById("sisa-input").value = sisaJO;
                             }
                         </script>
+                        <script>
+                            async function getPefindo(elt) {
+                                const namaPelanggan = elt.value
+                                const eltScorePefindo = document.querySelector('#score_pefindo_jo');
+                                const eltFilePefindo = document.querySelector('#file_pefindo_jo');
+                                const formData = new FormData();
+                                formData.append("_token", "{{ csrf_token() }}");
+                                formData.append("id_customer", namaPelanggan);
+                                const req = await fetch(`{{ url('/proyek/porsi-jo/get-pefindo') }}`, {
+                                    method: 'POST',
+                                    header: {
+                                        "content-type": "application/json",
+                                    },
+                                    body: formData
+                                }).then(res => res.json());
+                                console.log(req);
+                                if (req.success && req.data != null) {
+                                    eltScorePefindo.value = req.data.score
+                                    eltFilePefindo.value = req.data.file
+                                } else {
+                                    eltScorePefindo.value = ''
+                                    eltFilePefindo.value = ''
+                                }
+                            }
+                        </script>
 
                     </div>
                     <div class="modal-footer">
 
-                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                        <button type="submit"  class="btn btn-sm btn-light btn-active-primary text-white"
                             id="new_save" style="background-color:#008CB4">Save</button>
 
                     </div>

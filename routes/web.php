@@ -75,6 +75,7 @@ use App\Models\MasterFortuneRank;
 use App\Models\MasterLQRank;
 use App\Models\MasterPefindo;
 use App\Models\MasterGrupTierBUMN;
+use App\Models\MasterKriteriaGreenlanePartner;
 use App\Models\MataUang;
 use App\Models\MatriksApprovalRekomendasi;
 use App\Models\Pegawai;
@@ -824,11 +825,28 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // ADD Porsi-JO 
     Route::post('/proyek/porsi-jo', [ProyekController::class, "tambahJO"]);
 
+    // ADD Porsi-JO 
+    Route::post('/proyek/porsi-jo/get-pefindo', [ProyekController::class, "getDataPefindo"]);
+
     // EDIT Porsi-JO 
     Route::post('/proyek/porsi-jo/{id}/edit', [ProyekController::class, "editJO"]);
 
     // DELETE Porsi-JO 
     Route::delete('/proyek/porsi-delete/{id}', [ProyekController::class, "deleteJO"]);
+
+    //VIEW Syarat Prakualifikasi dari Owner
+    Route::get(
+        '/proyek/syarat-prakualifikasi/{proyek}/view',
+        [ProyekController::class, "viewSyaratPrakualifikasi"]
+    );
+
+    //ADD Syarat Prakualifikasi dari Owner
+    Route::post(
+        '/proyek/syarat-prakualifikasi/{proyek}/save',
+        [
+            ProyekController::class, "saveSyaratPrakualifikasi"
+        ]
+    );
 
     // ADD Team Proyek 
     Route::post('proyek/user/add', [ProyekController::class, 'assignTeam']);
@@ -2812,6 +2830,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $checklist->start_tahun = $data["tahun_start"];
         $checklist->start_bulan = $data["bulan_start"];
         $checklist->posisi = $data["posisi"];
+        $checklist->opsi = $data["opsi"];
         $checklist->is_active = isset($data["isActive"]) ? true : false;
         if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
             $checklist->finish_tahun = $data["tahun_finish"];
@@ -2866,6 +2885,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $checklist->start_tahun = $data["tahun_start"];
         $checklist->start_bulan = $data["bulan_start"];
         $checklist->posisi = $data["posisi"];
+        $checklist->opsi = $data["opsi"];
         $checklist->is_active = isset($data["isActive"]) ? true : false;
         if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
             $checklist->finish_tahun = $data["tahun_finish"];
@@ -3468,6 +3488,129 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         ]);
     });
     //End::Master Group Tier
+
+    //Begin::Kriteria Green Lane Partner
+    Route::get('/kriteria-greenlane-partner', function (Request $request) {
+        return view('MasterData/KriteriaGreenlanePartner', ['customer' => Customer::all(), 'data' => MasterKriteriaGreenlanePartner::all()]);
+    });
+    Route::post('/kriteria-greenlane-partner/save', function (Request $request) {
+        $data = $request->all();
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+        ];
+        $rules = [
+                "nama_pelanggan" => 'required|string',
+            ];
+        $validation = Validator::make(
+            $data,
+            $rules,
+            $messages
+        );
+
+        if ($validation->fails()) {
+            Alert::error(
+                'Error',
+                "Kriteria Green Lane Partner Gagal Ditambahkan. Periksa Kembali!"
+            );
+            return redirect()->back();
+        }
+
+        $validation->validate();
+        $pelanggan = Customer::find($data['nama_pelanggan']);
+        $kriteria = new MasterKriteriaGreenlanePartner();
+        $kriteria->id_pelanggan = $pelanggan->id_customer;
+        $kriteria->nama_pelanggan = $pelanggan->name;
+        $kriteria->start_tahun = $data["tahun_start"];
+        $kriteria->start_bulan = $data["bulan_start"];
+        $kriteria->is_active = isset($data["isActive"]) ? true : false;
+        if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
+            $kriteria->finish_tahun = $data["tahun_finish"];
+            $kriteria->finish_bulan = $data["bulan_finish"];
+        }
+
+        if ($kriteria->save()) {
+            Alert::success('Success', "Kriteria Green Lane Partner Berhasil Ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Kriteria Green Lane Partner Gagal Ditambahkan");
+        return redirect()->back();
+    });
+    Route::post('/kriteria-greenlane-partner/{id}/edit', function (Request $request, $id) {
+        $data = $request->all();
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+        ];
+        $rules = [
+                "nama_pelanggan" => 'required|string',
+            ];
+        $validation = Validator::make(
+            $data,
+            $rules,
+            $messages
+        );
+
+        if ($validation->fails()) {
+            Alert::error(
+                'Error',
+                "Kriteria Green Lane Partner Gagal Ditambahkan. Periksa Kembali!"
+            );
+            return redirect()->back();
+        }
+
+        $validation->validate();
+
+        $kriteria = MasterKriteriaGreenlanePartner::find($id);
+
+        if (empty($kriteria)) {
+            Alert::success("Error", "Kriteria Green Lane Partner Tidak Ditemukan");
+            return redirect()->back();
+        }
+
+        $pelanggan = Customer::find($data['nama_pelanggan']);
+
+        $kriteria->id_pelanggan = $pelanggan->id_customer;
+        $kriteria->nama_pelanggan = $pelanggan->name;
+        $kriteria->start_tahun = $data["tahun_start"];
+        $kriteria->start_bulan = $data["bulan_start"];
+        $kriteria->is_active = isset($data["isActive"]) ? true : false;
+        if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
+            $kriteria->finish_tahun = $data["tahun_finish"];
+            $kriteria->finish_bulan = $data["bulan_finish"];
+        }
+
+        if ($kriteria->save()) {
+            Alert::success('Success', "Kriteria Green Lane Partner Berhasil Diubah");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Kriteria Green Lane Partner Gagal Diubah");
+        return redirect()->back();
+    });
+    Route::post('/kriteria-greenlane-partner/{kriteria}/delete', function (MasterKriteriaGreenlanePartner $kriteria) {
+        if (empty($kriteria)) {
+            Alert::success("Error", "Kriteria Green Lane Partner Tidak Ditemukan");
+            return redirect()->back();
+        }
+
+        if ($kriteria->delete()) {
+            // Alert::success('Success', "Checklist Calon Mitra KSO Berhasil Dihapus");
+            // return redirect()->back();
+
+            return response()->json([
+                "Success" => true,
+                "Message" => null
+            ]);
+        }
+
+        // Alert::error('Error', "Checklist Calon Mitra KSO Gagal Dihapus");
+        // return redirect()->back();
+        return response()->json([
+            "Success" => false,
+            "Message" => null
+        ]);
+    });
+    //End::Kriteria Green Lane Partner
 
     // begin RKAP
     Route::get('/rkap', function () {

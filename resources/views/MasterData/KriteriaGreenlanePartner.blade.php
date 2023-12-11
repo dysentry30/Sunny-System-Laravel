@@ -3,7 +3,7 @@
 {{-- End::Extend Header --}}
 
 {{-- Begin::Title --}}
-@section('title', 'Checklist Calon Mitra KSO')
+@section('title', 'Kriteria Green Lane Partner')
 {{-- End::Title --}}
 
 <!--begin::Main-->
@@ -43,7 +43,7 @@
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">Checklist Calon Mitra KSO
+                                <h1 class="d-flex align-items-center fs-3 my-1">Kriteria Green Lane Partner
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -54,9 +54,9 @@
                                 <div class="d-flex align-items-center py-1">
 
                                     <!--begin::Button-->
-                                    <a  href="#" data-bs-target="#kt_modal_create_checklist" data-bs-toggle="modal" class="btn btn-sm btn-primary py-3"
+                                    <a  href="#" data-bs-target="#kt_modal_create_kriteria" data-bs-toggle="modal" class="btn btn-sm btn-primary py-3"
                                         style="background-color:#008CB4; padding: 6px">
-                                        Tambah Checklist Calon Mitra KSO</a>
+                                        Tambah Kriteria</a>
 
                                 </div>
                                 <!--end::Actions-->
@@ -96,9 +96,7 @@
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0 bg-primary">
                                         <th class="min-w-auto text-white">No.</th>
-                                        <th class="min-w-auto text-white">Aspek</th>
-                                        <th class="min-w-auto text-white">Kategori</th>
-                                        <th class="min-w-auto text-white">Isi</th>
+                                        <th class="min-w-auto text-white">Pelanggan</th>
                                         <th class="min-w-auto text-white">Start Periode</th>
                                         <th class="min-w-auto text-white">Finish Periode</th>
                                         <th class="min-w-auto text-white">Action</th>
@@ -197,16 +195,13 @@
                                     @endphp
                                         <tr>
                                             <td class="text-center align-middle">{{$no++}}</td>
-                                            <td class="align-middle">{!! $item->aspek ?? "-" !!}</td>
-                                            <td class="text-center">{{ $item->kategori ?? "-" }}</td>
-                                            <td class="text-start">{{ $item->isi }}</td>
+                                            <td class="align-middle">{{ $item->nama_pelanggan }}</td>
                                             <td class="text-center">{{$start_bulan}}</td>
                                             <td class="text-center">{{$finish_bulan}}</td>
                                             <td class="text-center align-middle">
                                                 <div class="d-flex justify-content-center">
-                                                    <a href="#" data-bs-target="#kt_modal_edit_checklist_{{$item->id }}" data-bs-toggle="modal" class="btn btn-sm btn-primary text-white" style="background-color: #008CB4;">Edit</a>
-                                                        <input type="hidden" name="id-otomasi" value="{{$item->id }}">
-                                                        <button type="button" class="btn btn-sm btn-danger text-white" onclick="deleteItem('{{ $item->id }}')">Delete</button>
+                                                    <button type="button" class="btn btn-sm btn-primary text-white" style="background-color: #008CB4;" onclick="showModal('{{ $item->id }}')">Edit</button>
+                                                    <button type="button" class="btn btn-sm btn-danger text-white" onclick="deleteItem('{{ $item->id }}')">Delete</button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -239,7 +234,7 @@
     <!--end::Root-->
     
     <!--begin::Modal Tambah Kriteria Selection Non Greenlane-->
-    <div class="modal fade" id="kt_modal_create_checklist" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="kt_modal_create_kriteria" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered mw-600px">
             <!--begin::Modal content-->
@@ -247,7 +242,7 @@
                 <!--begin::Modal header-->
                 <div class="modal-header">
                     <!--begin::Modal title-->
-                    <h2>Tambah Checklist Calon Mitra KSO</h2>
+                    <h2>Tambah Kriteria Greenlane Partner</h2>
                     <!--end::Modal title-->
                     <!--begin::Close-->
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -261,9 +256,9 @@
                 </div>
                 <!--end::Modal header-->
 
-                <form action="/checklist-calon-mitra-kso/save" method="POST">
+                <form action="/kriteria-greenlane-partner/save" method="POST">
                     @csrf
-                    <input type="hidden" name="modal" value="kt_modal_create_otomasi_approval">
+                    <input type="hidden" name="modal" value="kt_modal_create_kriteria">
                     <!--begin::Modal body-->
                     <div class="modal-body py-lg-6 px-lg-6">
     
@@ -324,69 +319,30 @@
                             </div>
                             <!--End begin::Col-->
 
-                            <div id="opsi-row" class="row mb-7">
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="required">Opsi</span>
-                                </label>
-                                <select id="opsi" name="opsi"
-                                    class="form-select form-select-solid select2-hidden-accessible"
-                                    data-control="select2" data-hide-search="true" data-placeholder="Pilih Opsi"
-                                    data-select2-id="select2_opsi" tabindex="-1" aria-hidden="true">
-                                    <option value="" selected></option>
-                                    <option value="pilihan">Pilihan</option>
-                                    <option value="isian">Isian</option>
-                                    <option value="kombinasi">Kombinasi</option>
-                                </select>
-                            </div>
-
-                            <!--begin::Col-->
-                            <div class="row mb-7">
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="required">Aspek</span>
-                                </label>
-                                <select id="aspek" name="aspek"
-                                    class="form-select form-select-solid select2-hidden-accessible"
-                                    data-control="select2" data-hide-search="true" data-placeholder="Pilih Aspek"
-                                    data-select2-id="select2_aspek" tabindex="-1" aria-hidden="true" onchange="setAspek(this)">
-                                    <option value="" selected></option>
-                                    <option value="Aspek Legal">Aspek Legal</option>
-                                    <option value="Aspek Teknikal">Aspek Teknikal</option>
-                                    <option value="Aspek Komersial">Aspek Komersial</option>
-                                </select>
+                             <!--begin::Col-->
+                             <div class="">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Nama Pelanggan</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <div class="d-flex flex-row gap-2">
+                                        <!--begin::Input-->
+                                        <select id="nama_pelanggan" name="nama_pelanggan"
+                                            class="form-select form-select-solid"data-hide-search="false" data-placeholder="Pilh Pelanggan" aria-hidden="true">
+                                            <option value="" selected></option>
+                                            @foreach ($customer as $pelanggan)
+                                            <option value="{{ $pelanggan->id_customer }}">{{ $pelanggan->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                </div>
+                                <!--end::Input group-->
                             </div>
                             <!--End begin::Col-->
-
-                            <div id="kategori-row" class="row mb-7 d-none">
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="required">Kategori</span>
-                                </label>
-                                <select id="kategori" name="kategori"
-                                    class="form-select form-select-solid select2-hidden-accessible"
-                                    data-control="select2" data-hide-search="true" data-placeholder="Pilih Kategori"
-                                    data-select2-id="select2_kategori" tabindex="-1" aria-hidden="true">
-                                    <option value="" selected></option>
-                                    <option value="Badan Usaha Lokal (Indonesia)">Badan Usaha Lokal (Indonesia)</option>
-                                    <option value="Badan Usaha Asing">Badan Usaha Asing</option>
-                                </select>
-                            </div>
-                            
-                            <div class="">
-                                <div class="row mb-7">
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Isi</span>
-                                    </label>
-                                    <input type="text" name="isi" id="isi" class="form-control form-control-solid">
-                                </div>
-                            </div>
-                            
-                            <div class="">
-                                <div class="row mb-7">
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Urutan</span>
-                                    </label>
-                                    <input type="number" min="1" name="posisi" id="posisi" class="form-control form-control-solid">
-                                </div>
-                            </div>
 
                             <!--begin::Input group Website-->
                             <div class="fv-row mb-7 d-none" id="finish-periode">
@@ -467,7 +423,7 @@
 
     <!--begin::Modal Edit Kriteria Selection Non Greenlane-->
     @foreach ($data as $item)
-        <div class="modal fade" id="kt_modal_edit_checklist_{{ $item->id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" id="kt_modal_edit_kriteria_{{ $item->id }}" tabindex="-1" aria-hidden="true">
             <!--begin::Modal dialog-->
             <div class="modal-dialog modal-dialog-centered mw-600px">
                 <!--begin::Modal content-->
@@ -475,7 +431,7 @@
                     <!--begin::Modal header-->
                     <div class="modal-header">
                         <!--begin::Modal title-->
-                        <h2>Edit Checklist Calon Mitra KSO</h2>
+                        <h2>Edit Kriteria Greenlane Partner</h2>
                         <!--end::Modal title-->
                         <!--begin::Close-->
                         <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -489,9 +445,9 @@
                     </div>
                     <!--end::Modal header-->
 
-                    <form action="/checklist-calon-mitra-kso/{{ $item->id }}/edit" method="POST">
+                    <form action="/kriteria-greenlane-partner/{{ $item->id }}/edit" method="POST">
                         @csrf
-                        <input type="hidden" name="modal" value="kt_modal_create_otomasi_approval">
+                        <input type="hidden" name="modal" value="kt_modal_edit_kriteria_{{ $item->id }}">
                         <!--begin::Modal body-->
                         <div class="modal-body py-lg-6 px-lg-6">
         
@@ -549,72 +505,34 @@
                                     <!--end::Input group-->
                                 </div>
                                 <!--End begin::Col-->
-                                
-                                <!--Begin::Opsi-->
-                                <div id="opsi-row" class="row mb-7">
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Opsi</span>
-                                    </label>
-                                    <select id="opsi" name="opsi"
-                                        class="form-select form-select-solid select2-hidden-accessible"
-                                        data-control="select2" data-hide-search="true" data-placeholder="Pilih Opsi"
-                                        data-select2-id="select2_opsi_{{ $item->id }}" tabindex="-1" aria-hidden="true">
-                                        <option value="" selected></option>
-                                        <option value="pilihan" {{ $item->opsi == "pilihan" ? 'selected' : '' }}>Pilihan</option>
-                                        <option value="isian" {{ $item->opsi == "isian" ? 'selected' : '' }}>Isian</option>
-                                        <option value="kombinasi" {{ $item->opsi == "kombinasi" ? 'selected' : '' }}>Kombinasi</option>
-                                    </select>
-                                </div>
-                                <!--End::Opsi-->
 
                                 <!--begin::Col-->
-                                <div class="row mb-7">
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Aspek</span>
-                                    </label>
-                                    <select id="aspek" name="aspek"
-                                        class="form-select form-select-solid select2-hidden-accessible"
-                                        data-control="select2" data-hide-search="true" data-placeholder="Pilih Aspek"
-                                        data-select2-id="select2_aspek_{{ $item->id }}" tabindex="-1" aria-hidden="true" onchange="setAspek(this, '{{ $item->id }}')">
-                                        <option value="" selected></option>
-                                        <option value="Aspek Legal" {{ $item->aspek == "Aspek Legal" ? "selected" : "" }}>Aspek Legal</option>
-                                        <option value="Aspek Teknikal" {{ $item->aspek == "Aspek Teknikal" ? "selected" : "" }}>Aspek Teknikal</option>
-                                        <option value="Aspek Komersial" {{ $item->aspek == "Aspek Komersial" ? "selected" : "" }}>Aspek Komersial</option>
-                                    </select>
+                                <div class="">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Nama Pelanggan</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <div class="d-flex flex-row gap-2">
+                                            <!--begin::Input-->
+                                            <select id="nama_pelanggan_{{ $item->id }}" name="nama_pelanggan"
+                                                class="form-select form-select-solid" data-hide-search="false" data-placeholder="Pilh Pelanggan..." aria-hidden="true">
+                                                <option value="" selected></option>
+                                                @foreach ($customer as $pelanggan)
+                                                    <option value="{{ $pelanggan->id_customer }}" {{ $pelanggan->id_customer == $item->id_pelanggan ? 'selected' : '' }}>{{ $pelanggan->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            {{-- <input type="text" name="nama_pelanggan"
+                                                class="form-control form-control-solid"
+                                                value="{{ $item->nama_pelanggan }}"> --}}
+                                            <!--end::Input-->
+                                        </div>
+                                    </div>
+                                    <!--end::Input group-->
                                 </div>
                                 <!--End begin::Col-->
-
-                                <div id="kategori-row-{{ $item->id }}" class="row mb-7 {{ empty($item->kategori) ? "d-none" : '' }}">
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Kategori</span>
-                                    </label>
-                                    <select id="kategori-{{ $item->id }}" name="kategori"
-                                        class="form-select form-select-solid select2-hidden-accessible"
-                                        data-control="select2" data-hide-search="true" data-placeholder="Pilih Kategori"
-                                        data-select2-id="select2_kategori_{{ $item->id }}" tabindex="-1" aria-hidden="true">
-                                        <option value="" selected></option>
-                                        <option value="Badan Usaha Lokal (Indonesia)" {{ $item->kategori == "Badan Usaha Lokal (Indonesia)" ? "selected" : "" }}>Badan Usaha Lokal (Indonesia)</option>
-                                        <option value="Badan Usaha Asing" {{ $item->kategori == "Badan Usaha Asing" ? "selected" : "" }}>Badan Usaha Asing</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="">
-                                    <div class="row mb-7">
-                                        <label class="fs-6 fw-bold form-label mt-3">
-                                            <span class="required">Isi</span>
-                                        </label>
-                                        <input type="text" name="isi" id="isi" class="form-control form-control-solid" value="{{ $item->isi }}">
-                                    </div>
-                                </div>
-                                
-                                <div class="">
-                                    <div class="row mb-7">
-                                        <label class="fs-6 fw-bold form-label mt-3">
-                                            <span class="required">Urutan</span>
-                                        </label>
-                                        <input type="number" min="1" name="posisi" id="posisi" class="form-control form-control-solid" value="{{ $item->posisi }}">
-                                    </div>
-                                </div>
                                     
                                 <!--begin::Input group Website-->
                                 <div class="fv-row mt-7 {{ (!empty($item->is_active) && $item->is_active) || is_null($item->is_active) ? 'd-none' : '' }}" id="finish-periode-edit-{{ $item->id }}">
@@ -732,7 +650,7 @@
                 try {
                     const formData = new FormData();
                     formData.append("_token", "{{ csrf_token() }}");
-                    const req = await fetch(`{{ url('/checklist-calon-mitra-kso/') }}/${id}/delete`, {
+                    const req = await fetch(`{{ url('/kriteria-greenlane-partner/') }}/${id}/delete`, {
                         method: 'POST',
                         header: {
                             "content-type": "application/json",
@@ -785,28 +703,24 @@
             }    
         }
     }
-
-    function setAspek(e, id = null) {
-        if (id == null) {
-            const elementKategori = document.querySelector('#kategori-row');
-            if (e.value == "Aspek Legal") {
-                elementKategori.classList.remove('d-none');
-                elementKategori.querySelector('select[name="kategori"]').removeAttribute('disabled');
-            }else{
-                elementKategori.classList.add('d-none');
-                elementKategori.querySelector('select[name="kategori"]').setAttribute('disabled', true);
-            }
-        } else {
-            const elementKategori = document.querySelector(`#kategori-row-${id}`);
-            if (e.value == "Aspek Legal") {
-                elementKategori.classList.remove('d-none');
-                elementKategori.querySelector('select[name="kategori"]').removeAttribute('disabled');
-            }else{
-                elementKategori.classList.add('d-none');
-                elementKategori.querySelector('select[name="kategori"]').setAttribute('disabled', true);
-            }
-        }
+</script>
+<script>
+    function showModal(id) {
+        let modal = document.getElementById('kt_modal_edit_kriteria_' + id);
+        $(modal).modal('show');
+        let select2 = document.getElementById('nama_pelanggan_' + id);
+        $(select2).select2({
+            dropdownParent: $(modal)
+        });
     }
+</script>
+
+<script>
+    $(document).ready(function(){
+        $("#nama_pelanggan").select2({
+            dropdownParent: $("#kt_modal_create_kriteria")
+        });
+    })
 </script>
 @endsection
 

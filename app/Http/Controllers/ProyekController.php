@@ -51,6 +51,7 @@ use App\Models\MatriksApprovalRekomendasi;
 use App\Models\Provinsi;
 use App\Models\ProyekKonsultanPerencana;
 use App\Models\TipeProyek;
+use App\Models\ChecklistCalonMitraKSO;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -2264,14 +2265,30 @@ class ProyekController extends Controller
             Alert::error('Error', "Partner JO Gagal Dibuat, Periksa Kembali !");
         }
         $validation->validate();
+        $customer = Customer::find($dataPorsiJO["company-jo"]);
+
+        $file = $request->file('file-consent-npwp');
 
         $newPorsiJO->kode_proyek = $dataPorsiJO["porsi-kode-proyek"];
-        $newPorsiJO->company_jo = $dataPorsiJO["company-jo"];
+        $newPorsiJO->company_jo = $customer->name;
+        $newPorsiJO->id_company_jo = $customer->id_customer;
         $newPorsiJO->porsi_jo = $dataPorsiJO["porsijo-company"];
+        $newPorsiJO->score_pefindo_jo = $dataPorsiJO["score_pefindo_jo"];
+        $newPorsiJO->file_pefindo_jo = $dataPorsiJO["file_pefindo_jo"];
         // $newPorsiJO->max_jo = $dataPorsiJO["max-porsi"];
+        $nama_file = collect([]);
+        foreach ($file as $f) {
+            $id_document = date("His_") . str_replace(' ', '_', $f->getClientOriginalName());
+            $nama_file->push($id_document);
+            $f->move(public_path('consent-npwp'), $id_document);
+        }
+        $newPorsiJO->file_consent_npwp = $nama_file;
+
+        
 
         $proyek = Proyek::find($dataPorsiJO["porsi-kode-proyek"]);
-        $proyek->porsi_jo = $dataPorsiJO["sisa-input"];
+        $proyek->porsi_jo = $dataPorsiJO["sisa-input"] ?? 100;
+        // dd($proyek->porsi_jo);
 
         if ($proyek->nilai_perolehan != null && $proyek->stage == 8) {
             $nilaiPerolehan = (int) str_replace('.', '', $proyek->nilai_perolehan);
@@ -2810,6 +2827,82 @@ class ProyekController extends Controller
         if ($newContractRFA->save()) {
             Alert::success("Success", "Request for Approval Berhasil");
             return redirect()->back();
+        }
+    }
+
+    public function viewSyaratPrakualifikasi(Proyek $proyek)
+    {
+
+        $aspek = ChecklistCalonMitraKSO::all()->groupBy('aspek');
+        $aspekLegal = $aspek["Aspek Legal"]->groupBy('kategori');
+        $aspekLegalLokal = $aspekLegal["Badan Usaha Lokal (Indonesia)"]->sortBy('posisi');
+        $aspekLegalAsing = $aspekLegal["Badan Usaha Asing"]->sortBy('posisi');
+
+        $aspekTeknikal = $aspek["Aspek Teknikal"]->sortBy('posisi');
+
+        $aspekKomersial = $aspek["Aspek Komersial"]->sortBy('posisi');
+        // dd($aspekTeknikal);
+
+        return view('SyaratPrakualifikasi.view', compact(['aspekLegalLokal', 'aspekLegalAsing', 'proyek', 'aspekTeknikal', 'aspekKomersial']));
+    }
+    public function saveSyaratPrakualifikasi(Request $request, Proyek $proyek)
+    {
+        $data = $request->all();
+        $collect = [];
+        foreach ($data["aspek"] as $key => $value) {
+            if ($value == "Badan Usaha Lokal (Indonesia)") {
+                $collect[]  = [
+                    "index" => $data["index"][$key],
+                    "kode_proyek" => $proyek->kode_proyek,
+                    "aspek" => $value,
+                    "syarat_prakualifikasi" => $data["aspek_legal_lokal"][$key],
+                ];
+            } elseif ($value == "Badan Usaha Asing") {
+                $collect[]  = [
+                    "index" => $data["index"][$key],
+                    "kode_proyek" => $proyek->kode_proyek,
+                    "aspek" => $value,
+                    "syarat_prakualifikasi" => $data["aspek_legal_asing"][(int)$data["index"][$key] - 1],
+                ];
+            } elseif ($value == "Aspek Teknikal") {
+                $collect[]  = [
+                    "index" => $data["index"][$key],
+                    "kode_proyek" => $proyek->kode_proyek,
+                    "aspek" => $value,
+                    "syarat_prakualifikasi" => $data["aspek_teknikal"][(int)$data["index"][$key] - 1],
+                    "syarat_prakualifikasi_isian" => $data["aspek_teknikal_isi"][(int)$data["index"][$key] - 1] ?? null,
+                ];
+            } elseif ($value == "Aspek Komersial") {
+                $collect[]  = [
+                    "index" => $data["index"][$key],
+                    "kode_proyek" => $proyek->kode_proyek,
+                    "aspek" => $value,
+                    "syarat_prakualifikasi" => $data["aspek_komersial"][(int)$data["index"][$key] - 1],
+                    "syarat_prakualifikasi_isian" => $data["aspek_komersial_isi"][(int)$data["index"][$key] - 1] ?? null,
+                ];
+            }
+        }
+        dd($collect);
+    }
+
+    public function getDataPefindo(Request $request)
+    {
+        $data = $request->all();
+        $pefindo = MasterPefindo::where('id_pelanggan', $data['id_customer'])->first();
+
+        if (!empty($pefindo)) {
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'score' => $pefindo->score,
+                    'file' => $pefindo->id_document,
+                ]
+            ]);
+        } else {
+            return response()->json([
+                'success' => true,
+                'data' => null
+            ]);
         }
     }
 }
