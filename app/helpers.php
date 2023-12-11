@@ -909,8 +909,8 @@ function createWordProfileRisikoNew($kode_proyek)
 
     $phpWord = new PhpWord();
     $section = $phpWord->addSection(['marginLeft' => 800, 'marginRight' => 800, 'marginTop' => 800, 'marginBottom' => 800]);
-    $footer = $section->createFooter();
-    $footer->addText("*Dokumen ini dibuat oleh sistem CRM", ['size' => 6, 'bold' => true], ['align' => 'right']);
+    // $footer = $section->createFooter();
+    // $footer->addText("*Dokumen ini dibuat oleh sistem CRM", ['size' => 6, 'bold' => true], ['align' => 'right']);
 
     $section->addText("Pengembangan Kriteria Untuk Pemilihan Pengguna Jasa", ['size' => 8, "bold" => true], ['align' => "center", 'spaceAfter' => 0]);
     $section->addText(htmlspecialchars($customer, ENT_QUOTES), ['size' => 12, "bold" => true], ['align' => "center", 'spaceAfter' => 0]);

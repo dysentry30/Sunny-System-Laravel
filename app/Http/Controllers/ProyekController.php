@@ -259,20 +259,27 @@ class ProyekController extends Controller
         // Kondisi kalau tahun lebih besar dari 2021 maka O Selain itu A
         // $kode_tahun = $tahun == 2021 ? "A" : "O";
         $kode_tahun = get_year_code($tahun);
-
+        
         // Menggabungkan semua kode beserta nomor urut
         $kode_proyek = $unit_kerja . $jenis_proyek . $tipe_proyek . $kode_tahun;
+        // $kode_proyek = $jenis_proyek . $tipe_proyek . $kode_tahun;
 
         // $no_urut = $generateProyek->count(function($p) use($kode_proyek) {
         //     return str_contains($p->kode_proyek, $kode_proyek);
         // }) + 1;
 
-        $lastProyek = Proyek::where("kode_proyek", "like", "%".$kode_proyek."%")->get()->sortBy("created_at")->last();
+        $lastProyek = Proyek::select(["kode_proyek", "nama_proyek"])->where("kode_proyek", "like", "%" . $kode_proyek . "%")->get()->sortBy("kode_proyek")->last();
         $no_urut = (int) preg_replace("/[^0-9]/", "",$lastProyek->kode_proyek) + 1;
         $len = strlen($no_urut);
-        $no_urut = substr($no_urut, ($len-3), 3);
-
-        // dd($no_urut, $lastProyek); 
+        // dd($no_urut);
+        if (empty($lastProyek)) {
+            $no_urut = 1;
+        } else {
+            // $no_urut = (int) trim($lastProyek->kode_proyek, $kode_proyek) + 1;
+            $no_urut = substr($no_urut, ($len - 3), 3);
+        }
+        
+        // dd($lastProyek, $no_urut, $len);
 
         // Untuk membuat 3 digit nomor urut terakhir
         $no_urut = str_pad(strval($no_urut), 3, 0, STR_PAD_LEFT);
@@ -287,7 +294,7 @@ class ProyekController extends Controller
         // for ($i= $no_urut; $i < $no_urut+100; $i++) { 
             //     # code...
             // }
-            
+        // $kode_proyek = $unit_kerja . $kode_proyek;
         $existProyek = Proyek::find($kode_proyek . $no_urut);
         if (!empty($existProyek)) {
             $number = (int) $no_urut+1;

@@ -24,6 +24,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class RekomendasiController extends Controller
 {
     public $isnomorTargetActive = false;
+    // public $isnomorTargetActive = true;
     // public $nomorDefault = "6285376444701";
     public $nomorDefault = "085881028391";
 
@@ -54,6 +55,7 @@ class RekomendasiController extends Controller
         // Begin Prosess Approval
         if (!empty($request->setuju)) {
             $proyek = Proyek::find($request->get("kode-proyek"));
+            $is_paralel = false;
             // $proyek->is_request_rekomendasi = false;
             $data = collect(json_decode($proyek->approved_rekomendasi));
             $data = $data->mergeRecursive([
@@ -118,30 +120,33 @@ class RekomendasiController extends Controller
                 $proyek->hasil_assessment = $hasil_assessment;
                 $proyek->approved_rekomendasi = $data->toJson();
             } else {
-                $matriks_approval = self::getUserMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, "Pengajuan");
-                $matriks_sekarang = MatriksApprovalRekomendasi::where('nama_pegawai', Auth::user()->nip)->first()->urutan;
-                $check_urutan_user = $matriks_approval->contains(function ($user) use ($matriks_sekarang) {
-                    return $user->urutan == $matriks_sekarang + 1;
-                });
+                if (!$is_paralel) {
+                    $matriks_approval = self::getUserMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Pengajuan");
+                    $matriks_sekarang = self::getUrutanUserMatriksApprovalSekarang(Auth::user()->nip, $proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Pengajuan");
+                    // $matriks_sekarang = MatriksApprovalRekomendasi::where('nama_pegawai', Auth::user()->nip)->first()->urutan;
+                    $check_urutan_user = $matriks_approval->contains(function ($user) use ($matriks_sekarang) {
+                        return $user->urutan == $matriks_sekarang + 1;
+                    });
 
-                if ($check_urutan_user) {
-                    $get_nomor = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Pengajuan", (int)$matriks_sekarang + 1);
-                    foreach ($get_nomor as $user) {
-                        $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyek->kode_proyek";
-                        $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-                            "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
-                            "sender" => env("NO_WHATSAPP_BLAST"),
-                            // "sender" => "6281188827008",
-                            "number" => !empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault,
-                            // "number" => "085881028391",
-                            "message" => "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi I, *" . $proyek->ProyekBerjalan->name_customer . "* untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
-                            // "url" => $url
-                        ]);
-                        $send_msg_to_wa->onError(function ($error) {
-                            // dd($error);
-                            Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                            return redirect()->back();
-                        });
+                    if ($check_urutan_user) {
+                        $get_nomor = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Pengajuan", (int)$matriks_sekarang + 1);
+                        foreach ($get_nomor as $user) {
+                            $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyek->kode_proyek";
+                            $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+                                "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
+                                "sender" => env("NO_WHATSAPP_BLAST"),
+                                // "sender" => "6281188827008",
+                                "number" => !empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault,
+                                // "number" => "085881028391",
+                                "message" => "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi I, *" . $proyek->ProyekBerjalan->name_customer . "* untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
+                                // "url" => $url
+                            ]);
+                            $send_msg_to_wa->onError(function ($error) {
+                                // dd($error);
+                                Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+                                return redirect()->back();
+                            });
+                        }
                     }
                 }
 
@@ -191,6 +196,7 @@ class RekomendasiController extends Controller
             return redirect()->back();
         } else if (!empty($request["input-rekomendasi-with-note"])) {
             $proyek = Proyek::find($request->get("kode-proyek"));
+            $is_paralel = false;
             // $data = $request->all();
             // dd($request->get("note-rekomendasi"));
 
@@ -418,103 +424,112 @@ class RekomendasiController extends Controller
 
                 $proyek->is_draft_recommend_note = false;
                 // createWordProfileRisiko($proyek->kode_proyek);
-                createWordProfileRisikoNew($proyek->kode_proyek);
                 $mergeLampiran = mergeFileLampiranRisiko($proyek->kode_proyek);
-                if (!empty($mergeLampiran)) {
-                    $pdfMerger = new PdfMerge();
-                    $pdfMerger->add(public_path('file-profile-risiko' . '/' . $proyek->file_penilaian_risiko));
-                    $pdfMerger->add(public_path('file-kriteria-pengguna-jasa' . '/' . $mergeLampiran));
+                $profileResiko = createWordProfileRisikoNew($proyek->kode_proyek);
+                // dd($profileResiko);
+                if (!empty($profileResiko)) {
+                    // dd($mergeLampiran);
+                    if (!empty($mergeLampiran)) {
+                        $pdfMerger = new PdfMerge();
+                        $pdfMerger->add(public_path('file-profile-risiko' . '/' . $profileResiko));
+                        $pdfMerger->add(public_path('file-kriteria-pengguna-jasa' . '/' . $mergeLampiran));
 
-                    $now = \Carbon\Carbon::now();
-                    $file_name = $now->format("dmYHis") . "_profile-risiko_" . $proyek->kode_proyek;
-
-                    // File::delete(public_path('/file-profile-risiko//' . $proyek->file_penilaian_risiko));
-                    $pdfMerger->merge(public_path("file-profile-risiko" . "/" . $file_name . ".pdf"));
-                    $proyek->file_penilaian_risiko = $file_name . ".pdf";
+                        $now = \Carbon\Carbon::now();
+                        $file_name = $now->format("dmYHis") . "_profile-risiko-final_" . $proyek->kode_proyek;
+                        sleep(10);
+                        // File::delete(public_path('/file-profile-risiko//' . $profileResiko));
+                        $pdfMerger->merge(public_path("file-profile-risiko" . "/" . $file_name . ".pdf"));
+                        // dd($pdfMerger);
+                        $proyek->file_penilaian_risiko = $file_name . ".pdf";
+                    }
                 }
+                
             } else {
-                if (str_contains($proyek->klasifikasi_pasdin, "Mega")) {
-                    $matriks_approval = self::getUserMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, "Penyusun");
-                    $matriks_sekarang = MatriksApprovalRekomendasi::where('nama_pegawai', Auth::user()->nip)->first()->urutan;
-                    $check_urutan_user = $matriks_approval->contains(function ($user) use ($matriks_sekarang) {
-                        return $user->urutan == $matriks_sekarang + 1;
-                    });
+                if (!$is_paralel) {
+                    if (str_contains($proyek->klasifikasi_pasdin, "Mega")) {
+                        $matriks_approval = self::getUserMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Penyusun");
+                        $matriks_sekarang = self::getUrutanUserMatriksApprovalSekarang(Auth::user()->nip, $proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Penyusun");
+                        $check_urutan_user = $matriks_approval->contains(function ($user) use ($matriks_sekarang) {
+                            return $user->urutan == $matriks_sekarang + 1;
+                        });
 
-                    if ($check_urutan_user) {
-                        $get_nomor = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Penyusun", (int)$matriks_sekarang + 1);
-                        foreach ($get_nomor as $user) {
-                            $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyek->kode_proyek";
-                            $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-                                "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
-                                "sender" => env("NO_WHATSAPP_BLAST"),
-                                // "sender" => "6281188827008",
-                                "number" => !empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault,
-                                // "number" => "085881028391",
-                                "message" => "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan Pengajuan Nota Rekomendasi I, *" . $proyek->ProyekBerjalan->name_customer . "* untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
-                                // "url" => $url
-                            ]);
-                            $send_msg_to_wa->onError(function ($error) {
-                                // dd($error);
-                                Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                                return redirect()->back();
-                            });
+                        if ($check_urutan_user) {
+                            $get_nomor = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Penyusun", (int)$matriks_sekarang + 1);
+                            foreach ($get_nomor as $user) {
+                                $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyek->kode_proyek";
+                                $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+                                    "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
+                                    "sender" => env("NO_WHATSAPP_BLAST"),
+                                    // "sender" => "6281188827008",
+                                    "number" => !empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault,
+                                    // "number" => "085881028391",
+                                    "message" => "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan Pengajuan Nota Rekomendasi I, *" . $proyek->ProyekBerjalan->name_customer . "* untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
+                                    // "url" => $url
+                                ]);
+                                $send_msg_to_wa->onError(function ($error) {
+                                    // dd($error);
+                                    Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+                                    return redirect()->back();
+                                });
+                            }
                         }
-                    }
-                } elseif (str_contains($proyek->klasifikasi_pasdin, "Besar")) {
-                    $matriks_approval = self::getUserMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, "Penyusun");
-                    $matriks_sekarang = MatriksApprovalRekomendasi::where('nama_pegawai', Auth::user()->nip)->where('klasifikasi_proyek', $proyek->klasifikasi_pasdin)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where('kategori', "Penyusun")?->first()->urutan;
-                    $check_urutan_user = $matriks_approval->contains(function ($user) use ($matriks_sekarang, $proyek) {
-                        return $user->urutan == $matriks_sekarang + 1;
-                    });
-                    // dd($matriks_sekarang);
+                    } elseif (str_contains($proyek->klasifikasi_pasdin, "Besar")) {
+                        $matriks_approval = self::getUserMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Penyusun");
+                        $matriks_sekarang = self::getUrutanUserMatriksApprovalSekarang(Auth::user()->nip, $proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Penyusun");
+                        $check_urutan_user = $matriks_approval->contains(function ($user) use ($matriks_sekarang, $proyek) {
+                            return $user->urutan == $matriks_sekarang + 1;
+                        });
+                        // dd($matriks_sekarang);
 
-                    if ($check_urutan_user) {
-                        $get_nomor = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Penyusun", (int)$matriks_sekarang + 1);
-                        // dd($get_nomor);
-                        foreach ($get_nomor as $user) {
-                            $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyek->kode_proyek";
-                            $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-                                "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
-                                "sender" => env("NO_WHATSAPP_BLAST"),
-                                // "sender" => "6281188827008",
-                                "number" => !empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault,
-                                // "number" => "085881028391",
-                                "message" => "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan Pengajuan Nota Rekomendasi I, *" . $proyek->ProyekBerjalan->name_customer . "* untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
-                                // "url" => $url
-                            ]);
-                            $send_msg_to_wa->onError(function ($error) {
-                                // dd($error);
-                                Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                                return redirect()->back();
-                            });
+                        if ($check_urutan_user) {
+                            $get_nomor = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Penyusun", (int)$matriks_sekarang + 1);
+                            // dd($get_nomor);
+                            foreach ($get_nomor as $user) {
+                                $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyek->kode_proyek";
+                                $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+                                    "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
+                                    "sender" => env("NO_WHATSAPP_BLAST"),
+                                    // "sender" => "6281188827008",
+                                    "number" => !empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault,
+                                    // "number" => "085881028391",
+                                    "message" => "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan Pengajuan Nota Rekomendasi I, *" . $proyek->ProyekBerjalan->name_customer . "* untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
+                                    // "url" => $url
+                                ]);
+                                $send_msg_to_wa->onError(function ($error) {
+                                    // dd($error);
+                                    Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+                                    return redirect()->back();
+                                });
+                            }
                         }
-                    }
-                } else {
-                    $matriks_approval = self::getUserMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, "Penyusun");
-                    $matriks_sekarang = MatriksApprovalRekomendasi::where('nama_pegawai', Auth::user()->nip)->where('klasifikasi_proyek', $proyek->klasifikasi_pasdin)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where('kategori', "Penyusun")?->first()->urutan;
-                    $check_urutan_user = $matriks_approval->contains(function ($user) use ($matriks_sekarang, $proyek) {
-                        return $user->urutan == $matriks_sekarang + 1;
-                    });
+                    } else {
+                        $matriks_approval = self::getUserMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Penyusun");
+                        $matriks_sekarang = self::getUrutanUserMatriksApprovalSekarang(Auth::user()->nip, $proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Penyusun");
+                        // $matriks_sekarang = MatriksApprovalRekomendasi::where('nama_pegawai', Auth::user()->nip)->where('klasifikasi_proyek', $proyek->klasifikasi_pasdin)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where('kategori', "Penyusun")?->first()->urutan;
+                        $check_urutan_user = $matriks_approval->contains(function ($user) use ($matriks_sekarang, $proyek) {
+                            return $user->urutan == $matriks_sekarang + 1;
+                        });
 
-                    if ($check_urutan_user) {
-                        $get_nomor = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Penyusun", (int)$matriks_sekarang + 1);
-                        // dd($get_nomor);
-                        foreach ($get_nomor as $user) {
-                            $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyek->kode_proyek";
-                            $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-                                "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
-                                "sender" => env("NO_WHATSAPP_BLAST"),
-                                // "sender" => "6281188827008",
-                                "number" => !empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault,
-                                // "number" => "085881028391",
-                                "message" => "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan Pengajuan Nota Rekomendasi I, *" . $proyek->ProyekBerjalan->name_customer . "* untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
-                                // "url" => $url
-                            ]);
-                            $send_msg_to_wa->onError(function ($error) {
-                                // dd($error);
-                                Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                                return redirect()->back();
-                            });
+                        if ($check_urutan_user) {
+                            $get_nomor = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Penyusun", (int)$matriks_sekarang + 1);
+                            // dd($get_nomor);
+                            foreach ($get_nomor as $user) {
+                                $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyek->kode_proyek";
+                                $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+                                    "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
+                                    "sender" => env("NO_WHATSAPP_BLAST"),
+                                    // "sender" => "6281188827008",
+                                    "number" => !empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault,
+                                    // "number" => "085881028391",
+                                    "message" => "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan Pengajuan Nota Rekomendasi I, *" . $proyek->ProyekBerjalan->name_customer . "* untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
+                                    // "url" => $url
+                                ]);
+                                $send_msg_to_wa->onError(function ($error) {
+                                    // dd($error);
+                                    Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+                                    return redirect()->back();
+                                });
+                            }
                         }
                     }
                 }
@@ -565,7 +580,7 @@ class RekomendasiController extends Controller
             }
         } else if (!empty($request["verifikasi-setujui"])) {
             $proyek = Proyek::find($request->get("kode-proyek"));
-
+            $is_paralel = false;
             $approved_verifikasi = collect(json_decode($proyek->approved_verifikasi));
             $approved_verifikasi->push([
                 "user_id" => Auth::user()->id,
@@ -577,8 +592,7 @@ class RekomendasiController extends Controller
             // dd($is_checked);
             // $nomorTarget = !empty($this->isnomorTargetActive) ? self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Rekomendasi")->Pegawai->handphone : $this->nomorDefault;
             if ($is_checked) {
-                $nomorTarget = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Rekomendasi")?->where('urutan', '=', 1);
-                // dd($nomorTarget);
+                $nomorTarget = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Rekomendasi");
                 foreach ($nomorTarget as $target) {
                     $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_user_view_persetujuan_" . $proyek->kode_proyek;
                     $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
@@ -600,30 +614,34 @@ class RekomendasiController extends Controller
                 }
                 $proyek->is_verifikasi_approved = true;
             } else {
-                $matriks_approval = self::getUserMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, "Verifikasi");
-                $matriks_sekarang = MatriksApprovalRekomendasi::where('nama_pegawai', Auth::user()->nip)->first()->urutan;
-                $check_urutan_user = $matriks_approval->contains(function ($user) use ($matriks_sekarang) {
-                    return $user->urutan == $matriks_sekarang + 1;
-                });
+                if (!$is_paralel) {
+                    $matriks_approval = self::getUserMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Verifikasi");
+                    // $matriks_sekarang = MatriksApprovalRekomendasi::where('nama_pegawai', Auth::user()->nip)->first()->urutan;
+                    $matriks_sekarang = self::getUrutanUserMatriksApprovalSekarang(Auth::user()->nip, $proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Verifikasi");
+                    $check_urutan_user = $matriks_approval->contains(function ($user) use ($matriks_sekarang) {
+                        return $user->urutan == $matriks_sekarang + 1;
+                    });
+                    // dd($check_urutan_user);
 
-                if ($check_urutan_user) {
-                    $get_nomor = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Verifikasi", (int)$matriks_sekarang + 1);
-                    foreach ($get_nomor as $user) {
-                        $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyek->kode_proyek";
-                        $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-                            "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
-                            "sender" => env("NO_WHATSAPP_BLAST"),
-                            // "sender" => "6281188827008",
-                            "number" => !empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault,
-                            // "number" => "085881028391",
-                            "message" => "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan hasil asesmen *" . $proyek->proyekBerjalan->customer->name . "* untuk proses tandatangan penyusun Nota Rekomendasi tahap I pada proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
-                            // "url" => $url
-                        ]);
-                        $send_msg_to_wa->onError(function ($error) {
-                            // dd($error);
-                            Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                            return redirect()->back();
-                        });
+                    if ($check_urutan_user) {
+                        $get_nomor = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Verifikasi", (int)$matriks_sekarang + 1);
+                        foreach ($get_nomor as $user) {
+                            $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyek->kode_proyek";
+                            $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+                                "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
+                                "sender" => env("NO_WHATSAPP_BLAST"),
+                                // "sender" => "6281188827008",
+                                "number" => !empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault,
+                                // "number" => "085881028391",
+                                "message" => "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan hasil asesmen *" . $proyek->proyekBerjalan->customer->name . "* untuk proses tandatangan penyusun Nota Rekomendasi tahap I pada proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
+                                // "url" => $url
+                            ]);
+                            $send_msg_to_wa->onError(function ($error) {
+                                // dd($error);
+                                Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+                                return redirect()->back();
+                            });
+                        }
                     }
                 }
 
@@ -735,6 +753,7 @@ class RekomendasiController extends Controller
             $is_proyek_mega = str_contains($proyek->klasifikasi_pasdin, "Mega") ? true : false;
             $is_proyek_besar = str_contains($proyek->klasifikasi_pasdin, "Besar") ? true : false;
             $hasil_assessment = collect(json_decode($proyek->hasil_assessment));
+            $is_paralel = true;
 
             if (!isset($data["kategori-rekomendasi"]) && is_null($data["kategori-rekomendasi"])) {
                 Alert::html("Failed", "<b>Kategori Rekomendasi</b> harap diisi!", "error");
@@ -784,33 +803,35 @@ class RekomendasiController extends Controller
                     $proyek->is_recommended_with_note = true;
                     $proyek->is_recommended = true;
                 } else {
-                    $matriks_approval = self::getUserMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, "Rekomendasi");
-                    $matriks_sekarang = MatriksApprovalRekomendasi::where('nama_pegawai', Auth::user()->nip)->first()->urutan;
-                    $check_urutan_user = $matriks_approval->contains(function ($user) use ($matriks_sekarang) {
-                        return $user->urutan == $matriks_sekarang + 1;
-                    });
+                    if (!$is_paralel) {
+                        $matriks_approval = self::getUserMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Rekomendasi");
+                        $matriks_sekarang = self::getUrutanUserMatriksApprovalSekarang(Auth::user()->nip, $proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Rekomendasi");
+                        $check_urutan_user = $matriks_approval->contains(function ($user) use ($matriks_sekarang) {
+                            return $user->urutan == $matriks_sekarang + 1;
+                        });
 
-                    if ($check_urutan_user) {
-                        $get_nomor = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Rekomendasi", (int)$matriks_sekarang + 1);
-                        foreach ($get_nomor as $user) {
-                            $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyek->kode_proyek";
-                            $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-                                "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
-                                "sender" => env("NO_WHATSAPP_BLAST"),
-                                // "sender" => "6281188827008",
-                                "number" => !empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault,
-                                // "number" => "085881028391",
-                                "message" => "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan Permohonan tanda tangan Persetujuan Nota Rekomendasi Tahap I untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
-                                // "url" => $url
-                            ]);
-                            $send_msg_to_wa->onError(function ($error) {
-                                // dd($error);
-                                Alert::error(
-                                    'Error',
-                                    "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !"
-                                );
-                                return redirect()->back();
-                            });
+                        if ($check_urutan_user) {
+                            $get_nomor = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Rekomendasi", (int)$matriks_sekarang + 1);
+                            foreach ($get_nomor as $user) {
+                                $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyek->kode_proyek";
+                                $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+                                    "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
+                                    "sender" => env("NO_WHATSAPP_BLAST"),
+                                    // "sender" => "6281188827008",
+                                    "number" => !empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault,
+                                    // "number" => "085881028391",
+                                    "message" => "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan Permohonan tanda tangan Persetujuan Nota Rekomendasi Tahap I untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
+                                    // "url" => $url
+                                ]);
+                                $send_msg_to_wa->onError(function ($error) {
+                                    // dd($error);
+                                    Alert::error(
+                                        'Error',
+                                        "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !"
+                                    );
+                                    return redirect()->back();
+                                });
+                            }
                         }
                     }
     
@@ -881,33 +902,36 @@ class RekomendasiController extends Controller
                     // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega);
                     $proyek->is_recommended = true;
                 } else {
-                    $matriks_approval = self::getUserMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, "Rekomendasi");
-                    $matriks_sekarang = MatriksApprovalRekomendasi::where('nama_pegawai', Auth::user()->nip)->first()->urutan;
-                    $check_urutan_user = $matriks_approval->contains(function ($user) use ($matriks_sekarang) {
-                        return $user->urutan == $matriks_sekarang + 1;
-                    });
+                    if (!$is_paralel) {
+                        $matriks_approval = self::getUserMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Rekomendasi");
+                        // $matriks_sekarang = MatriksApprovalRekomendasi::where('nama_pegawai', Auth::user()->nip)->first()->urutan;
+                        $matriks_sekarang = self::getUrutanUserMatriksApprovalSekarang(Auth::user()->nip, $proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Rekomendasi");
+                        $check_urutan_user = $matriks_approval->contains(function ($user) use ($matriks_sekarang) {
+                            return $user->urutan == $matriks_sekarang + 1;
+                        });
 
-                    if ($check_urutan_user) {
-                        $get_nomor = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Rekomendasi", (int)$matriks_sekarang + 1);
-                        foreach ($get_nomor as $user) {
-                            $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyek->kode_proyek";
-                            $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-                                "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
-                                "sender" => env("NO_WHATSAPP_BLAST"),
-                                // "sender" => "6281188827008",
-                                "number" => !empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault,
-                                // "number" => "085881028391",
-                                "message" => "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan Permohonan tanda tangan Persetujuan Nota Rekomendasi Tahap I untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
-                                // "url" => $url
-                            ]);
-                            $send_msg_to_wa->onError(function ($error) {
-                                // dd($error);
-                                Alert::error(
-                                    'Error',
-                                    "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !"
-                                );
-                                return redirect()->back();
-                            });
+                        if ($check_urutan_user) {
+                            $get_nomor = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Rekomendasi", (int)$matriks_sekarang + 1);
+                            foreach ($get_nomor as $user) {
+                                $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyek->kode_proyek";
+                                $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+                                    "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
+                                    "sender" => env("NO_WHATSAPP_BLAST"),
+                                    // "sender" => "6281188827008",
+                                    "number" => !empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault,
+                                    // "number" => "085881028391",
+                                    "message" => "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan Permohonan tanda tangan Persetujuan Nota Rekomendasi Tahap I untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
+                                    // "url" => $url
+                                ]);
+                                $send_msg_to_wa->onError(function ($error) {
+                                    // dd($error);
+                                    Alert::error(
+                                        'Error',
+                                        "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !"
+                                    );
+                                    return redirect()->back();
+                                });
+                            }
                         }
                     }
     
@@ -988,10 +1012,10 @@ class RekomendasiController extends Controller
             if ($proyek->save()) {
                 // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_mega);
                 Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> telah disetujui oleh tim Persetujuan melalui <b>Tahap Nota Rekomendasi 1</b>", "success");
-                return redirect("/");
+                return redirect()->back();
             }
             Alert::html("Failed", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> gagal disetujui oleh tim Persetujuan melalui <b>Tahap Nota Rekomendasi 1</b>", "error");
-            return redirect("/");
+            return redirect()->back();
         } else if (!empty($request["persetujuan-tolak"])) {
             $proyek = Proyek::find($request->get("kode-proyek"));
             $hasil_assessment = collect(json_decode($proyek->hasil_assessment));
@@ -1290,13 +1314,18 @@ class RekomendasiController extends Controller
         return $matriks_approval->where("unit_kerja", "=", $unit_kerja)->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where('departemen', $departemen)->where("kategori", "=", $kategori)->count() == $approved_data->count();
     }
 
-    private function getUserMatriksApproval($unit_kerja, $klasifikasi_pasdin, $kategori, $user_selected = null)
+    private function getUserMatriksApproval($unit_kerja, $klasifikasi_pasdin, $departemen, $kategori, $user_selected = null)
     {
         if (empty($user_selected)) {
-            return MatriksApprovalRekomendasi::where("unit_kerja", "=", $unit_kerja)->where("klasifikasi_proyek", "=", $klasifikasi_pasdin)->where("kategori", "=", $kategori)->get();
+            return MatriksApprovalRekomendasi::where("unit_kerja", "=", $unit_kerja)->where('departemen', $departemen)->where("klasifikasi_proyek", "=", $klasifikasi_pasdin)->where("kategori", "=", $kategori)->get();
         } else {
-            return MatriksApprovalRekomendasi::where("unit_kerja", "=", $unit_kerja)->where("klasifikasi_proyek", "=", $klasifikasi_pasdin)->where("kategori", "=", $kategori)->where('nama_pegawai', '=', $user_selected)->first();
+            return MatriksApprovalRekomendasi::where("unit_kerja", "=", $unit_kerja)->where('departemen', $departemen)->where("klasifikasi_proyek", "=", $klasifikasi_pasdin)->where("kategori", "=", $kategori)->where('nama_pegawai', '=', $user_selected)->first();
         }
+    }
+
+    private function getUrutanUserMatriksApprovalSekarang($nip, $unit_kerja, $klasifikasi_pasdin, $departemen, $kategori)
+    {
+        return MatriksApprovalRekomendasi::where("nama_pegawai", "=", $nip)->where("unit_kerja", "=", $unit_kerja)->where('departemen', $departemen)->where("klasifikasi_proyek", "=", $klasifikasi_pasdin)->where("kategori", "=", $kategori)->first()->urutan;
     }
 
     private function getNomorMatriksApproval($id_divisi, $klasifikasi_pasdin, $departemen, $kategori, $urutan = null)

@@ -117,6 +117,7 @@ use Termwind\Components\Dd;
 Route::get('/', [UserController::class, 'welcome'])->middleware("userNotAuth");
 Route::get('/ccm', [UserController::class, 'welcome'])->middleware("userNotAuth");
 Route::get('/crm-login', [UserController::class, 'authenticate'])->middleware("userNotAuth");
+Route::get('/csi-login', [UserController::class, 'welcome'])->middleware("userNotAuth");
 
 // begin :: Login
 
@@ -478,6 +479,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::get('/csi/customer-survey/{id}', [CSIController::class, "indexCustomer"]);
 
     Route::post('/csi/send/{id}', [CSIController::class, "sendCsi"]);
+
+    Route::post('/csi/send/new/{id}', [CSIController::class, "sendCsiNew"]);
 
     Route::post('/csi/get-progress/{kodeProyek}', [CSIController::class, "createCsi"]);
 
@@ -2982,7 +2985,15 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $fortune->bulan = $data["bulan"];
         $fortune->tahun = $data["tahun"];
 
-        if ($fortune->save()) {
+        if ((int) $data["urutan"] > 100) {
+            $pelanggan->forbes_rank = "Diluar Top 100";
+        } elseif ((int)$data["urutan"] <= 100 && (int)$data["urutan"] > 50) {
+            $pelanggan->forbes_rank = "Urutan 51-100";
+        } else {
+            $pelanggan->forbes_rank = "Urutan 1-50";
+        }
+
+        if ($fortune->save() && $pelanggan->save()) {
             Alert::success('Success', "Fortune Rank Berhasil Ditambahkan");
             return redirect()->back();
         }
@@ -3038,7 +3049,15 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $fortune->bulan = $data["bulan"];
         $fortune->tahun = $data["tahun"];
 
-        if ($fortune->save()) {
+        if ((int) $data["urutan"] > 100) {
+            $pelanggan->forbes_rank = "Diluar Top 100";
+        } elseif ((int)$data["urutan"] <= 100 && (int)$data["urutan"] > 50) {
+            $pelanggan->forbes_rank = "Urutan 51-100";
+        } else {
+            $pelanggan->forbes_rank = "Urutan 1-50";
+        }
+
+        if ($fortune->save() && $pelanggan->save()) {
             Alert::success('Success', "Fortune Rank Berhasil Diubah");
             return redirect()->back();
         }
@@ -3123,7 +3142,15 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $lqRank->bulan = $data["bulan"];
         $lqRank->tahun = $data["tahun"];
 
-        if ($lqRank->save()) {
+        if ((int) $data["urutan"] > 45) {
+            $pelanggan->lq_rank = "Diluar Top 45";
+        } elseif ((int)$data["urutan"] <= 45 && (int)$data["urutan"] > 20) {
+            $pelanggan->lq_rank = "Urutan 21-45";
+        } else {
+            $pelanggan->lq_rank = "Urutan 1-20";
+        }
+
+        if ($lqRank->save() && $pelanggan->save()) {
             Alert::success('Success', "LQ Rank Berhasil Ditambahkan");
             return redirect()->back();
         }
@@ -3178,7 +3205,15 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $lq->bulan = $data["bulan"];
         $lq->tahun = $data["tahun"];
 
-        if ($lq->save()) {
+        if ((int) $data["urutan"] > 45) {
+            $pelanggan->lq_rank = "Diluar Top 45";
+        } elseif ((int)$data["urutan"] <= 45 && (int)$data["urutan"] > 20) {
+            $pelanggan->lq_rank = "Urutan 21-45";
+        } else {
+            $pelanggan->lq_rank = "Urutan 1-20";
+        }
+
+        if ($lq->save() && $pelanggan->save()) {
             Alert::success('Success', "LQ Rank Berhasil Diubah");
             return redirect()->back();
         }
@@ -4749,8 +4784,11 @@ Route::get('/php-info', function () {
     return dd(phpinfo());
 });
 
-Route::get('/test-file', function () {
+Route::get('/test-file', function (Request $request) {
+    $proyek = Proyek::find('GNPC364');
+    $hasil_assessment = collect(json_decode($proyek->hasil_assessment));
+    return createWordPersetujuan($proyek, $hasil_assessment, true, false, $request);
     // $proyek = Proyek::find('PNPC009');
-    // return createWordProfileRisiko('PNPC009');
-    return mergeFileLampiranRisiko('PNPC001');
+    // return createWordProfileRisikoNew('GNPC364');
+    // return mergeFileLampiranRisiko('GNPC361');
 });

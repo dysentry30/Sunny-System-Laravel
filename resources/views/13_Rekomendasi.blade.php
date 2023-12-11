@@ -802,15 +802,26 @@
                                                                     @if ($matriks_user->contains('kategori', 'Persetujuan')  && $matriks_user->where('kategori', 'Persetujuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() && $proyek->is_recommended)
                                                                             <a href="#kt_modal_view_proyek_persetujuan_{{ $proyek->kode_proyek }}"
                                                                                 target="_blank" data-bs-toggle="modal"
-                                                                                class="btn btn-sm btn-primary text-white">{{ $proyek->is_disetujui ? "Lihat Detail" : "Approve" }}</a>
+                                                                                {{-- class="btn btn-sm btn-primary text-white">{{ $proyek->is_disetujui ? "Lihat Detail" : "Approve" }}</a> --}}
+                                                                                class="btn btn-sm btn-primary text-white">{{ $proyek->is_disetujui || (collect(json_decode($proyek->approved_persetujuan))->contains('user_id', auth()->user()->id) && collect(json_decode($proyek->approved_persetujuan))?->first()?->status == 'approved') ? "Rincian" : "Approve" }}</a>
                                                                     @elseif($matriks_user->contains('kategori', 'Rekomendasi') && $matriks_user->where('kategori', 'Rekomendasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() && $proyek->is_verifikasi_approved)
                                                                     <a href="#kt_modal_view_proyek_persetujuan_{{ $proyek->kode_proyek }}"
                                                                             target="_blank" data-bs-toggle="modal"
                                                                             class="btn btn-sm btn-primary text-white">{{ $proyek->is_recommended || (collect(json_decode($proyek->approved_rekomendasi_final))->contains('user_id', auth()->user()->id) && collect(json_decode($proyek->approved_rekomendasi_final))?->first()?->status == 'approved') ? "Rincian" : "Rekomendasikan" }}</a>
                                                                     @elseif($matriks_user->contains('kategori', 'Verifikasi') && $matriks_user->where('kategori', 'Verifikasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() && $proyek->is_penyusun_approved)
-                                                                    <a href="#kt_modal_view_proyek_persetujuan_{{ $proyek->kode_proyek }}"
-                                                                        target="_blank" data-bs-toggle="modal"
-                                                                        class="btn btn-sm btn-primary text-white">{{ $proyek->is_verifikasi_approved ? "Lihat Detail" : "Verifikasi" }}</a>
+                                                                        @if ($proyek->is_request_rekomendasi || (($matriks_user->filter(function($value)use($proyek){
+                                                                            return $value->unit_kerja == $proyek->UnitKerja->Divisi->id_divisi &&
+                                                                            $value->klasifikasi_proyek == $proyek->klasifikasi_pasdin &&
+                                                                            $value->departemen == $proyek->departemen_proyek &&
+                                                                            $value->urutan > 1;
+                                                                        })->count() > 0 && (collect(json_decode($proyek->approved_verifikasi))->isEmpty()))))
+
+                                                                        @else
+                                                                            <a href="#kt_modal_view_proyek_persetujuan_{{ $proyek->kode_proyek }}"
+                                                                                target="_blank" data-bs-toggle="modal"
+                                                                                {{-- class="btn btn-sm btn-primary text-white">{{ $proyek->is_verifikasi_approved ? "Lihat Detail" : "Verifikasi" }}</a> --}}
+                                                                                class="btn btn-sm btn-primary text-white">{{ $proyek->is_verifikasi_approved || (collect(json_decode($proyek->approved_verifikasi))->contains('user_id', auth()->user()->id) && collect(json_decode($proyek->approved_verifikasi))?->first()?->status == 'approved') ? "Rincian" : "Verifikasi" }}</a>
+                                                                        @endif
                                                                     @endif
                                                                 @else
                                                                         @if ($is_user_exist_in_matriks_approval)
@@ -1391,7 +1402,7 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                            $kriteriaPengguna = App\Models\KriteriaPenggunaJasa::where('nota_rekomendasi', '=', 'Nota Rekomendasi 1')->get()->sortBy('position');
+                                            $kriteriaPengguna = App\Models\KriteriaPenggunaJasa::where('nota_rekomendasi', '=', 'Nota Rekomendasi 1')->get()->sortBy('position')->values();
                                         @endphp
                                         @foreach ($kriteriaPengguna as $key => $item)
                                             <tr>
@@ -1976,7 +1987,9 @@
                             $matriks_user?->contains('kategori', 'Rekomendasi') &&
                                 (!is_null($proyek->is_draft_recommend_note) && !$proyek->is_draft_recommend_note) || $matriks_user?->contains('kategori', 'Pengajuan') || $approved_penyusun_1->contains('status', 'approved'))
                             <button type="button" class="btn btn-sm btn-light btn-active-primary text-white"
-                                data-bs-dismiss="modal" style="background-color:#008CB4">Close</button>
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_view_proyek_persetujuan_{{ $proyek->kode_proyek }}"
+                                 style="background-color:#008CB4">Close</button>
                         @else
                             <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
                                 form="form-edit-kriteria-{{ $proyek->kode_proyek }}" id="new_save"
@@ -2409,10 +2422,16 @@
                             @endphp --}}
                             @if (is_null($proyek->is_recommended))
                             <label for="note-rekomendasi" class="text-start">Catatan: </label>
-                            <textarea class="form-control form-control-solid" id="note-rekomendasi" name="note-rekomendasi" rows="10"
+                            {{-- <textarea class="form-control form-control-solid" id="note-rekomendasi" name="note-rekomendasi" rows="10"
                                 {{ !is_null($proyek->is_draft_recommend_note) && !$proyek->is_draft_recommend_note || empty($matriks_user) || collect(json_decode($proyek->approved_penyusun))->contains('status', 'approved')  ? 'disabled' : '' }}>{!! is_null($proyek->is_draft_recommend_note) && (empty(collect(json_decode($proyek->approved_penyusun))) || collect(json_decode($proyek->approved_penyusun))->isEmpty())
                                     ? 'Profile Risiko Pengguna Jasa = ' . $text . ' (Score : ' . $nilaiKriteriaPenggunaJasa . ")\n\n"
-                                    : nl2br($proyek->catatan_nota_rekomendasi) !!}</textarea>
+                                    : $proyek->catatan_nota_rekomendasi !!}</textarea> --}}
+                            <textarea class="form-control form-control-solid" id="note-rekomendasi" name="note-rekomendasi" rows="10"
+                                {{ !is_null($proyek->is_draft_recommend_note) && !$proyek->is_draft_recommend_note || empty($matriks_user) || collect(json_decode($proyek->approved_penyusun))->contains('status', 'approved')  ? 'disabled' : '' }}>
+                                {!! empty($proyek->catatan_nota_rekomendasi)
+                                    ? 'Profile Risiko Pengguna Jasa = ' . $text . ' (Score : ' . $nilaiKriteriaPenggunaJasa . ")\n\n"
+                                    : $proyek->catatan_nota_rekomendasi 
+                                !!}</textarea>
                             <br>
                             @csrf
                             <input type="hidden" name="kode-proyek" value="{{ $proyek->kode_proyek }}">
@@ -2482,7 +2501,7 @@
                     <form action="" method="GET">
                         <div class="modal-header">
                             <h5 class="modal-title">Detail Proyek</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"  onclick="deleteBackdrop()"
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -3346,7 +3365,7 @@
             const searchParams = new URLSearchParams(window.location.search);
             const getModalElt = searchParams.get("open");
             const modalElt = document.getElementById(getModalElt);
-            // console.log(modalElt);
+            //console.log(modalElt);
 
             if(modalElt) {
                 const modalBoots = new bootstrap.Modal(modalElt);
@@ -3355,50 +3374,47 @@
         }
 
         $(document).ready(function() {
-            $('#rekomendasi-proses').DataTable( {
-                    // dom: 'Bfrtip',
-                    dom: 'Bfrtip',
-                    pageLength : 20,
-                    order: [[0, 'desc']],
-                    // scrollY : "1000px",
-                    // scrollX : true,
-                    // scrollCollapse: true,
-                    // paging : false,
-                    // fixedColumns:   {
-                    //     left: 2,
-                    //     right: 0
-                    // },
-                    // bDestroy: true,
-                    buttons: [
-                        'excel'
-                        // 'copy', 'csv', 'excel', 'pdf', 'print'
-                    ]
-                } );
-                openModalPersetujuan();
-                // $("#rekomendasi-pengajuan").DataTable({
-                //     // dom: '<"float-start"f><"#example"t>rtip',
-                //     // dom: 'Brti',
-                //     dom: 'Bfrtip',
-                //     pageLength: 20,
-                //     buttons: [
-                //         'excel'
-                //     ],
-                // });
+            // console.log("TES");
+            
+                
+            openModalPersetujuan();
+            
+            const rekomendasiOpen = "{{ $rekomendasi_open ?? null }}";
+            if (rekomendasiOpen) {
+                const modalOpen = document.querySelector(`#${rekomendasiOpen}`);
+                const modalOpenBoots = new bootstrap.Modal(modalOpen, {});
+                modalOpenBoots.show();
+            }
 
-                setTimeout(() => {
-                    const exportBtn = document.querySelectorAll(".buttons-excel");
-                    exportBtn.forEach(item => {
-                        item.style.display = "none";
-                    });
-                }, 0);
+            // setTimeout(() => {
+            //     const exportBtn = document.querySelectorAll(".buttons-excel");
+            //     exportBtn.forEach(item => {
+            //         item.style.display = "none";
+            //     });
+            // }, 0);
 
-                const rekomendasiOpen = "{{ $rekomendasi_open ?? null }}";
-                if (rekomendasiOpen) {
-                    const modalOpen = document.querySelector(`#${rekomendasiOpen}`);
-                    const modalOpenBoots = new bootstrap.Modal(modalOpen, {});
-                    modalOpenBoots.show();
-                }
         });
+    </script>
+    <script>
+        $('#rekomendasi-proses').DataTable( {
+                // dom: 'Bfrtip',
+                dom: 'Bfrtip',
+                pageLength : 20,
+                order: [[0, 'desc']],
+                buttons: [
+                    'excel'
+                    // 'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            } );
+        $('#rekomendasi-finish').DataTable( {
+            dom: 'Bfrtip',
+            pageLength : 20,
+            // order: false,
+            buttons: [
+                'excel'
+                // 'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        } );
     </script>
 
 
@@ -3521,6 +3537,13 @@
             }else{
                 return true;
             }
+        }
+    </script>
+
+    <script>
+        function deleteBackdrop(){
+            let backdrop = document.querySelector('.modal-backdrop');
+            backdrop.remove();
         }
     </script>
 @endsection

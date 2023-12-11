@@ -1567,19 +1567,20 @@
 
                                                                     @if ((int) $now->format('m') != $submonth)
                                                                         <li class="nav-item">
-                                                                            <a class="nav-link text-active-primary {{ $item == $submonth - 1 ? 'active' : '' }}"
-                                                                                data-bs-toggle="tab"
-                                                                                href="#kt_user_view_forecasts_{{ (int) $now->format('m') }}_{{ $now->format('Y') }}"
-                                                                                style="font-size:14px;">{{ $now->translatedFormat('F Y') }}</a>
-                                                                        </li>
-                                                                    @endif
-                                                                    @if ((int) $now->format('m') == $submonth && $tgl > 5)
-                                                                        <li class="nav-item">
                                                                             <a class="nav-link text-active-primary {{ $item == $submonth ? 'active' : '' }}"
                                                                                 data-bs-toggle="tab"
                                                                                 href="#kt_user_view_forecasts_{{ (int) $now->format('m') }}_{{ $now->format('Y') }}"
                                                                                 style="font-size:14px;">{{ $now->translatedFormat('F Y') }}</a>
                                                                         </li>
+                                                                    @else
+                                                                        @if ((int) $now->format('m') == $submonth && $tgl > 5)
+                                                                            <li class="nav-item">
+                                                                                <a class="nav-link text-active-primary {{ $item == $submonth ? 'active' : '' }}"
+                                                                                    data-bs-toggle="tab"
+                                                                                    href="#kt_user_view_forecasts_{{ (int) $now->format('m') }}_{{ $now->format('Y') }}"
+                                                                                    style="font-size:14px;">{{ $now->translatedFormat('F Y') }}</a>
+                                                                            </li>
+                                                                        @endif
                                                                     @endif
                                                                     @php
                                                                         $now = $now->addMonths(1);
