@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('checklist_calon_mitra_kso', function (Blueprint $table) {
-            $table->enum('opsi', ['pilihan', 'isian', 'kombinasi']);
+            $table->enum('opsi', ['pilihan', 'isian', 'kombinasi'])->nullable();
         });
     }
 
