@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('porsi_jo_proyeks', function (Blueprint $table) {
-            $table->boolean('is_disetujui');
+            $table->boolean('is_disetujui')->nullable();
         });
     }
 
