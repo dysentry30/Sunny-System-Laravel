@@ -15,7 +15,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('dokumen_kelengkapan_partner_kso', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->string('kode_proyek');
             $table->string('id_partner');
             $table->string('kategori');
