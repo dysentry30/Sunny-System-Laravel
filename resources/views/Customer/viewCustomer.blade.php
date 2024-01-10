@@ -1263,7 +1263,7 @@
                                                                     </label>
                                                                     <!--Begin::Select-->
                                                                     <div id="div-forbes">
-                                                                        <select name="forbes_rank" id="forbes_rank" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                                                        <select name="forbes_rank" id="forbes_rank" class="form-select form-select-solid" data-control="select2" data-hide-search="true" readonly
                                                                             {{-- onchange="selectProvinsi(this)"  --}}
                                                                             data-placeholder="Pilih Rank Forbes">
                                                                             <option value=""></option>
@@ -1283,7 +1283,7 @@
                                                                     </label>
                                                                     <!--Begin::Select-->
                                                                     <div id="div-lq">
-                                                                        <select name="lq_rank" id="lq_rank" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                                                        <select name="lq_rank" id="lq_rank" class="form-select form-select-solid" data-control="select2" data-hide-search="true" readonly
                                                                             {{-- onchange="selectProvinsi(this)"  --}}
                                                                             data-placeholder="Pilih Rank LQ">
                                                                             <option value=""></option>

@@ -13,6 +13,6 @@ class StrukturCustomer extends Model
 
     public function customer()
     {
-        return $this->hasOne(customer::class, 'id_customer', 'id_customer');
+        return $this->hasOne(Customer::class, 'id_customer', 'id_customer');
     }
 }

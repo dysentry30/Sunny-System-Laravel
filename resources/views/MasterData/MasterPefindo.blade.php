@@ -3,7 +3,7 @@
 {{-- End::Extend Header --}}
 
 {{-- Begin::Title --}}
-@section('title', 'Master Pefindo')
+@section('title', 'Hasil Pefindo')
 {{-- End::Title --}}
 
 <!--begin::Main-->
@@ -43,7 +43,7 @@
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">Master Pefindo
+                                <h1 class="d-flex align-items-center fs-3 my-1">Hasil Pefindo
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -98,7 +98,11 @@
                                         <th class="min-w-auto text-white">No.</th>
                                         <th class="min-w-auto text-white">Nama Pelanggan</th>
                                         <th class="min-w-auto text-white">Score</th>
+                                        <th class="min-w-auto text-white">Grade</th>
+                                        <th class="min-w-auto text-white">Keterangan</th>
                                         <th class="min-w-auto text-white">File</th>
+                                        <th class="min-w-auto text-white">Periode</th>
+                                        <th class="min-w-auto text-white">Active</th>
                                         <th class="min-w-auto text-white">Action</th>
                                     </tr>
                                     <!--end::Table row-->
@@ -112,7 +116,7 @@
                                 <tbody class="fw-bold text-gray-600">
                                     @foreach ($data as $item)
                                         @php
-                                            switch ($item->bulan) {
+                                            switch ($item->bulan_start) {
                                                 case 1:
                                                     $periode = 'Januari';
                                                     break;
@@ -159,9 +163,15 @@
                                             <td class="text-center align-middle">{{ $no++ }}</td>
                                             <td class="align-middle">{{ $item->nama_pelanggan }}</td>
                                             <td class="text-center align-middle">{{ $item->score }}</td>
-                                            <td class="text-center align-middle"><a target="_blank"
+                                            <td class="text-center align-middle">{{ $item->grade }}</td>
+                                            <td class="text-center align-middle">{{ $item->keterangan }}</td>
+                                            <td class="align-middle"><a target="_blank"
                                                     href="{{ asset('pefindo/' . $item->id_document) }}"
                                                     class="text-hover-primary">{{ $item->id_document }}</a></td>
+                                            <td class="text-center align-middle">{{ !empty($item->bulan_start) ? $periode . '-' . $item->tahun_start : '-' }}</td>
+                                            <td class="text-center align-middle">
+                                                <p class="m-0 badge rounded-pill {{ $item->is_active ? 'text-bg-success' : 'text-bg-danger' }}">{{ $item->is_active ? 'Active' : 'Expired' }}</p>
+                                            </td>
                                             <td class="text-center align-middle">
                                                 <div class="d-flex justify-content-center">
                                                     {{-- <a href="#"
@@ -239,16 +249,72 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Periode Berakhir</span>
+                                    </label>
+                                    @php
+                                        $tahun = (int) date('Y');
+                                    @endphp
+                                    <!--end::Label-->
+                                    <div class="d-flex flex-row gap-2">
+                                        <!--begin::Input-->
+                                        <select id="bulan" name="bulan"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Bulan..."
+                                            data-select2-id="select2-bulan" tabindex="-1" aria-hidden="true">
+                                            <option value=""></option>
+                                            <option value="1">Januari</option>
+                                            <option value="2">Februari</option>
+                                            <option value="3">Maret</option>
+                                            <option value="4">April</option>
+                                            <option value="5">Mei</option>
+                                            <option value="6">Juni</option>
+                                            <option value="7">Juli</option>
+                                            <option value="8">Agustus</option>
+                                            <option value="9">September</option>
+                                            <option value="10">Oktober</option>
+                                            <option value="11">November</option>
+                                            <option value="12">Desember</option>
+                                        </select>
+                                        <!--end::Input-->
+                                        <!--begin::Input-->
+                                        <select id="tahun" name="tahun"
+                                            class="form-select form-select-solid select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="true"
+                                            data-placeholder="Pilh Tahun..."
+                                            data-select2-id="select2_tahun" tabindex="-1"
+                                            aria-hidden="true">
+                                            <option value="" selected></option>
+                                            @foreach (range(1, 2) as $thn)
+                                                <option value="{{ $tahun }}">{{ $tahun }}</option>
+                                                @php
+                                                    $tahun++;
+                                                @endphp
+                                            @endforeach
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <!--begin::Col-->
+                            <div class="">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
                                         <span class="required">Nama Pelanggan</span>
                                     </label>
                                     <!--end::Label-->
                                     <div class="d-flex flex-row gap-2">
                                         <!--begin::Input-->
                                         <select id="nama_pelanggan" name="nama_pelanggan"
-                                            class="form-select form-select-solid" data-hide-search="false" data-placeholder="Pilh Pelanggan..." aria-hidden="true">
+                                            class="form-select form-select-solid" data-hide-search="false"
+                                            data-placeholder="Pilh Pelanggan..." aria-hidden="true">
                                             <option value="" selected></option>
                                             @foreach ($customer as $pelanggan)
-                                                <option value="{{ $pelanggan->id_customer }}">{{ $pelanggan->name }}</option>
+                                                <option value="{{ $pelanggan->id_customer }}">{{ $pelanggan->name }}
+                                                </option>
                                             @endforeach
                                         </select>
                                         {{-- <input type="text" name="nama_pelanggan" class="form-control form-control-solid"> --}}
@@ -274,6 +340,16 @@
                             </div>
                         </div>
                         <!--End::Row Kanan+Kiri-->
+                        <div class="row ms-1 mt-5">
+                            <!--Begin::Input Checkbox-->
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="create" name="isActive" id="active-periode" checked>
+                                <label class="form-check-label" for="active-periode">
+                                    Active
+                                </label>
+                            </div>
+                            <!--End::Input Checkbox-->
+                        </div>
 
                     </div>
                     <div class="modal-footer">
@@ -530,7 +606,7 @@
         }
     </script>
     <script>
-        $(document).ready(function(){
+        $(document).ready(function() {
             $("#nama_pelanggan").select2({
                 dropdownParent: $("#kt_modal_create_pefindo")
             });

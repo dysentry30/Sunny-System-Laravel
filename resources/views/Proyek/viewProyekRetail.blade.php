@@ -1554,7 +1554,7 @@
                                                             @php
                                                                 $now = Carbon\Carbon::now();
                                                                 $submonth = ((int) date('m'));
-                                                                $now = $now->setDays(1)->subMonths($submonth - 1);
+                                                                $now = $now->setDays(1)->subMonths($submonth);
                                                                 $tgl = (int) date('d');
                                                             @endphp
 

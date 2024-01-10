@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Models\Customer;
 use App\Models\Forecast;
 use App\Models\HistoryForecast;
+use App\Models\HistoryRKAP;
 use App\Models\IndustryOwner;
 use App\Models\Proyek;
 use App\Models\ProyekBerjalans;
@@ -422,6 +423,19 @@ Route::middleware(["web"])->group(function () {
         $month = (int) date("m");
         $year = (int) date("Y");
 
+        //CHECK JIKA RKAP SUDAH DI LOCK
+        $history_rkap = HistoryRKAP::where('tahun_pelaksanaan', $data["UsrTahunPelaksanaan"])->where('profit_center', $data["UsrUnitKerja"])->first();
+
+        if (!empty($history_rkap) && $history_rkap->is_locked) {
+            return response()->json([
+                "InsertGroupRKAPResult" => [
+                    "Success" => true,
+                    "StatusCode" => 2,
+                    "Message" => "Insert Data RKAP Unit Kerja $unit_kerja->unit_kerja sudah terkunci"
+                ]
+            ], 200);
+        }
+
         // CHECK JIKA UNIT KERJA SUDAH OTOR
         $check_is_history_exist = HistoryForecast::all()->filter(function($hf) use($unit_kerja, $month, $year) {
             return $hf->tahun == $year && $hf->periode_prognosa == $month && $hf->Proyek->unit_kerja == $unit_kerja->divcode;
@@ -544,7 +558,19 @@ Route::middleware(["web"])->group(function () {
                 $is_data_inserted = true;
             }
         });
+
         if ($is_data_inserted) {
+            if (empty($history_rkap)) {
+                $history_rkap = new HistoryRKAP();
+            }
+
+            $history_rkap->unit_kerja = $unit_kerja->unit_kerja;
+            $history_rkap->profit_center = $data["UsrUnitKerja"];
+            $history_rkap->tahun_pelaksanaan = $data["UsrTahunPelaksanaan"];
+            $history_rkap->is_locked = true;
+
+            $history_rkap->save();
+
             return response()->json([
                 "InsertGroupRKAPResult" => [
                     "Success"=> true,

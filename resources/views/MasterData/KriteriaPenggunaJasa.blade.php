@@ -3,7 +3,7 @@
 {{-- End::Extend Header --}}
 
 {{-- Begin::Title --}}
-@section('title', 'Kriteria Pengguna Jasa')
+@section('title', 'Kriteria Profile Risiko')
 {{-- End::Title --}}
 
 <!--begin::Main-->
@@ -32,7 +32,7 @@
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">Kriteria Pengguna Jasa
+                                <h1 class="d-flex align-items-center fs-3 my-1">Kriteria Profile Risiko
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -45,7 +45,7 @@
                                     <!--begin::Button-->
                                     <a  href="#" data-bs-target="#kt_modal_create_otomasi_approval" data-bs-toggle="modal" class="btn btn-sm btn-primary py-3"
                                         style="background-color:#008CB4; padding: 6px">
-                                        Tambah Kriteria Pengguna Jasa</a>
+                                        Tambah Kriteria Profile Risiko</a>
 
                                 </div>
                                 <!--end::Actions-->
@@ -246,7 +246,7 @@
                 <!--begin::Modal header-->
                 <div class="modal-header">
                     <!--begin::Modal title-->
-                    <h2>Tambah Kriteria Pengguna Jasa</h2>
+                    <h2>Tambah Kriteria Profile Risiko</h2>
                     <!--end::Modal title-->
                     <!--begin::Close-->
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -323,6 +323,26 @@
                             </div>
                             <!--End begin::Col-->
 
+                            <div class="row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Nota Rekomendasi</span>
+                                </label>
+                                <!--end::Label-->
+                                <div class="d-flex flex-row gap-2">
+                                    <!--begin::Input-->
+                                    <select id="nota_rekomendasi" name="nota_rekomendasi"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Nota Rekomendasi..."
+                                        data-select2-id="select2-feature" tabindex="-1" aria-hidden="true" onchange="setKategori(this)">
+                                        <option value="" selected></option>
+                                        <option value="Nota Rekomendasi 1">Nota Rekomendasi 1</option>
+                                        <option value="Nota Rekomendasi 2">Nota Rekomendasi 2</option>
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                           </div>
+
                             <!--begin::Col-->
                             <div class="">
                                 <!--begin::Input group Website-->
@@ -340,8 +360,8 @@
                                             data-select2-id="select2-feature-kategori" tabindex="-1" aria-hidden="true" onchange="setItem(this)">
                                             <option value="" selected></option>
                                             {{-- <option value="Legalitas Perusahaan">Legalitas Perusahaan</option> --}}
-                                            <option value="Reputasi Pemberi Kerja">Reputasi Pemberi Kerja</option>
-                                            <option value="Financial">Financial</option>
+                                            {{-- <option value="Reputasi Pemberi Kerja">Reputasi Pemberi Kerja</option>
+                                            <option value="Financial">Financial</option> --}}
                                         </select>
                                         <!--end::Input-->
                                     </div>
@@ -378,7 +398,7 @@
                                 <label class="fs-6 fw-bold form-label mt-3">
                                     <span class="required">Bobot</span>
                                 </label>
-                                <input type="number" name="bobot" class="form-control form-control-solid">
+                                <input type="number" name="bobot" step="0.1" class="form-control form-control-solid">
                             </div>
 
                             <div class="row mb-7">
@@ -409,25 +429,6 @@
                                 <textarea name="kriteria_4" id="kriteria_4" cols="30" rows="10"></textarea>
                             </div>
 
-                            <div class="row mb-7">
-                                 <!--begin::Label-->
-                                 <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="required">Nota Rekomendasi</span>
-                                </label>
-                                <!--end::Label-->
-                                <div class="d-flex flex-row gap-2">
-                                    <!--begin::Input-->
-                                    <select id="nota_rekomendasi" name="nota_rekomendasi"
-                                        class="form-select form-select-solid select2-hidden-accessible"
-                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Nota Rekomendasi..."
-                                        data-select2-id="select2-feature" tabindex="-1" aria-hidden="true">
-                                        <option value="" selected></option>
-                                        <option value="Nota Rekomendasi 1">Nota Rekomendasi 1</option>
-                                        <option value="Nota Rekomendasi 2">Nota Rekomendasi 2</option>
-                                    </select>
-                                    <!--end::Input-->
-                                </div>
-                            </div>
 
                             <!--begin::Input group Website-->
                             <div class="fv-row mb-7 d-none" id="finish-periode">
@@ -516,7 +517,7 @@
                     <!--begin::Modal header-->
                     <div class="modal-header">
                         <!--begin::Modal title-->
-                        <h2>Edit Kriteria Pengguna Jasa</h2>
+                        <h2>Edit Kriteria Profile Risiko</h2>
                         <!--end::Modal title-->
                         <!--begin::Close-->
                         <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -590,6 +591,27 @@
                                     <!--end::Input group-->
                                 </div>
                                 <!--End begin::Col-->
+                                    
+                                <div class="row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                       <span class="required">Nota Rekomendasi</span>
+                                   </label>
+                                   <!--end::Label-->
+                                   <div class="d-flex flex-row gap-2">
+                                       <!--begin::Input-->
+                                       <select id="nota_rekomendasi" name="nota_rekomendasi"
+                                           class="form-select form-select-solid select2-hidden-accessible"
+                                           data-control="select2" data-hide-search="true" data-placeholder="Pilh Nota Rekomendasi..."
+                                           data-select2-id="select2-feature-{{ $item->id }}-{{ $no++ }}" tabindex="-1" aria-hidden="true" onchange="setKategori(this, '{{ $item->id }}')">
+                                           <option value="" selected></option>
+                                           <option value="Nota Rekomendasi 1" {{ $item->nota_rekomendasi == "Nota Rekomendasi 1" ? "selected" : ""}}>Nota Rekomendasi 1</option>
+                                           <option value="Nota Rekomendasi 2" {{ $item->nota_rekomendasi == "Nota Rekomendasi 2" ? "selected" : ""}}>Nota Rekomendasi 2</option>
+                                       </select>
+                                       <!--end::Input-->
+                                   </div>
+                               </div>
+
                                 <!--begin::Col-->
                                 <div class="">
                                     <!--begin::Input group Website-->
@@ -601,7 +623,7 @@
                                         <!--end::Label-->
                                         <div class="d-flex flex-row gap-2">
                                             <!--begin::Input-->
-                                            <select id="kategori" name="kategori"
+                                            <select id="kategori-{{ $item->id }}" name="kategori"
                                                 class="form-select form-select-solid select2-hidden-accessible"
                                                 data-control="select2" data-hide-search="true" data-placeholder="Pilh Nota Rekomendasi..."
                                                 data-select2-id="select2-feature-edit-{{ $item->id }}" tabindex="-1" aria-hidden="true" onchange="setItem(this, '{{ $item->id }}')">
@@ -683,27 +705,6 @@
                                     </label>
                                     <textarea name="kriteria_4" id="kriteria_4" cols="30" rows="10">{!! $item->kriteria_4 !!}</textarea>
                                 </div>
-    
-                                <div class="row mb-7">
-                                     <!--begin::Label-->
-                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Nota Rekomendasi</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <div class="d-flex flex-row gap-2">
-                                        <!--begin::Input-->
-                                        <select id="nota_rekomendasi" name="nota_rekomendasi"
-                                            class="form-select form-select-solid select2-hidden-accessible"
-                                            data-control="select2" data-hide-search="true" data-placeholder="Pilh Nota Rekomendasi..."
-                                            data-select2-id="select2-feature-{{ $item->id }}-{{ $no++ }}" tabindex="-1" aria-hidden="true">
-                                            <option value="" selected></option>
-                                            <option value="Nota Rekomendasi 1" {{ $item->nota_rekomendasi == "Nota Rekomendasi 1" ? "selected" : ""}}>Nota Rekomendasi 1</option>
-                                            <option value="Nota Rekomendasi 2" {{ $item->nota_rekomendasi == "Nota Rekomendasi 2" ? "selected" : ""}}>Nota Rekomendasi 2</option>
-                                        </select>
-                                        <!--end::Input-->
-                                    </div>
-                                </div>
-
                                 
                                 <!--begin::Input group Website-->
                                 <div class="fv-row mt-7 {{ (!empty($item->is_active) && $item->is_active) || is_null($item->is_active) ? 'd-none' : '' }}" id="finish-periode-edit-{{ $item->id }}">
@@ -848,50 +849,36 @@
         })
     }
 
-    function setItem(elt, id=null, text=null) {
-        // if (elt.value == "Legalitas Perusahaan") {
-        //     let data = [
-        //         {
-        //             id: "Legalitas Institusi / Perusahaan",
-        //             text: 'Legalitas Institusi / Perusahaan'
-        //         }
-        //     ]
-        //     if (id != null) {
-        //         $(`#item-${id}`).empty() 
-        //         $(`#item-${id}`)
-        //         $(`#item-${id}`).select2({
-        //             minimumResultsForSearch: -1,
-        //             data: data
-        //         })
-        //     } else {
-        //         $(`#item`).empty() 
-        //         $(`#item`).select2({
-        //             minimumResultsForSearch: -1,
-        //             data: data
-        //         }) 
-        //     }
-        // } else 
-        if(elt.value == "Reputasi Pemberi Kerja") {
+    function setKategori(elt, id=null, text=null) {
+        if(elt.value == "Nota Rekomendasi 2") {
             let data = [
                 {
                     id: "",
                     text: ''
                 },
                 {
-                    id: "Reputasi Pemberi Kerja Dalam Pemenuhan Kontrak (Historical)",
-                    text: 'Reputasi Pemberi Kerja Dalam Pemenuhan Kontrak (Historical)'
+                    id: "Referensi",
+                    text: 'Referensi'
+                },
+                {
+                    id: "Reputasi",
+                    text: 'Reputasi'
+                },
+                {
+                    id: "Financial",
+                    text: 'Financial'
                 }
             ]
             if (id != null) {
-                $(`#item-${id}`).empty() 
-                $(`#item-${id}`)
-                $(`#item-${id}`).select2({
+                $(`#kategori-${id}`).empty() 
+                $(`#kategori-${id}`)
+                $(`#kategori-${id}`).select2({
                     minimumResultsForSearch: -1,
                     data: data
                 })
             } else {
-                $(`#item`).empty() 
-                $(`#item`).select2({
+                $(`#kategori`).empty() 
+                $(`#kategori`).select2({
                     minimumResultsForSearch: -1,
                     data: data
                 }) 
@@ -903,36 +890,205 @@
                     text: ''
                 },
                 {
-                    id: 'Current Ratio',
-                    text: 'Current Ratio'
+                    id: "Reputasi Pemberi Kerja",
+                    text: 'Reputasi Pemberi Kerja'
                 },
                 {
-                    id: 'Cash Ratio',
-                    text: 'Cash Ratio'
-                },
-                {
-                    id: 'Debt to Equity Ratio',
-                    text: 'Debt to Equity Ratio'
-                },
-                {
-                    id: 'Kepatuhan Pembayaran Pajak',
-                    text: 'Kepatuhan Pembayaran Pajak'
+                    id: "Financial",
+                    text: 'Financial'
                 }
             ]
             if (id != null) {
-                $(`#item-${id}`).empty() 
-                $(`#item-${id}`).select2({
+                $(`#kategori-${id}`).empty() 
+                $(`#kategori-${id}`).select2({
                     minimumResultsForSearch: -1,
                     data: data
                 })
-                $(`#item-${id}`).val()
+                $(`#kategori-${id}`).val()
             } else {
-                $(`#item`).empty() 
-                $(`#item`).select2({
+                $(`#kategori`).empty() 
+                $(`#kategori`).select2({
                     minimumResultsForSearch: -1,
                     data: data
                 }) 
             }
+        }
+    }
+
+
+    function setItem(elt, id=null, text=null) {
+        let notaRekomendasiSelectValue;
+
+        if (id != null) {
+            notaRekomendasiSelectValue = document.querySelector(`#nota_rekomendasi-${id}`);
+        }else{
+            notaRekomendasiSelectValue = document.querySelector(`#nota_rekomendasi`);
+        }
+
+        if (notaRekomendasiSelectValue.value == '') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Kategori Nota Rekomendasi tidak boleh kosong'
+            })
+        }
+
+        if (notaRekomendasiSelectValue.value == "Nota Rekomendasi 1") {
+            if(elt.value == "Reputasi Pemberi Kerja") {
+                let data = [
+                    {
+                        id: "",
+                        text: ''
+                    },
+                    {
+                        id: "Reputasi Pemberi Kerja Dalam Pemenuhan Kontrak (Historical)",
+                        text: 'Reputasi Pemberi Kerja Dalam Pemenuhan Kontrak (Historical)'
+                    }
+                ]
+                if (id != null) {
+                    $(`#item-${id}`).empty() 
+                    $(`#item-${id}`)
+                    $(`#item-${id}`).select2({
+                        minimumResultsForSearch: -1,
+                        data: data
+                    })
+                } else {
+                    $(`#item`).empty() 
+                    $(`#item`).select2({
+                        minimumResultsForSearch: -1,
+                        data: data
+                    }) 
+                }
+            } else {
+                let data = [
+                    {
+                        id: "",
+                        text: ''
+                    },
+                    {
+                        id: 'Current Ratio',
+                        text: 'Current Ratio'
+                    },
+                    {
+                        id: 'Cash Ratio',
+                        text: 'Cash Ratio'
+                    },
+                    {
+                        id: 'Debt to Equity Ratio',
+                        text: 'Debt to Equity Ratio'
+                    },
+                    {
+                        id: 'Kepatuhan Pembayaran Pajak',
+                        text: 'Kepatuhan Pembayaran Pajak'
+                    }
+                ]
+                if (id != null) {
+                    $(`#item-${id}`).empty() 
+                    $(`#item-${id}`).select2({
+                        minimumResultsForSearch: -1,
+                        data: data
+                    })
+                    $(`#item-${id}`).val()
+                } else {
+                    $(`#item`).empty() 
+                    $(`#item`).select2({
+                        minimumResultsForSearch: -1,
+                        data: data
+                    }) 
+                }
+            }
+        } else {
+            if(elt.value == "Reputasi") {
+                let data = [
+                    {
+                        id: "",
+                        text: ''
+                    },
+                    {
+                        id: "Reputasi Partner Dalam Pemenuhan Kontrak (Historical)",
+                        text: 'Reputasi Partner Dalam Pemenuhan Kontrak (Historical)'
+                    }
+                ]
+                if (id != null) {
+                    $(`#item-${id}`).empty() 
+                    $(`#item-${id}`)
+                    $(`#item-${id}`).select2({
+                        minimumResultsForSearch: -1,
+                        data: data
+                    })
+                } else {
+                    $(`#item`).empty() 
+                    $(`#item`).select2({
+                        minimumResultsForSearch: -1,
+                        data: data
+                    }) 
+                }
+            } else if(elt.value == "Referensi"){
+                let data = [
+                    {
+                        id: "",
+                        text: ''
+                    },
+                    {
+                        id: "Terdapat pengalaman proyek sejenis",
+                        text: 'Terdapat pengalaman proyek sejenis'
+                    },
+                    {
+                        id: "Pengalaman KSO",
+                        text: 'Pengalaman KSO'
+                    },
+                ]
+                if (id != null) {
+                    $(`#item-${id}`).empty() 
+                    $(`#item-${id}`)
+                    $(`#item-${id}`).select2({
+                        minimumResultsForSearch: -1,
+                        data: data
+                    })
+                } else {
+                    $(`#item`).empty() 
+                    $(`#item`).select2({
+                        minimumResultsForSearch: -1,
+                        data: data
+                    }) 
+                }
+            }else {
+                let data = [
+                    {
+                        id: "",
+                        text: ''
+                    },
+                    {
+                        id: 'Current Ratio',
+                        text: 'Current Ratio'
+                    },
+                    {
+                        id: 'Cash Ratio',
+                        text: 'Cash Ratio'
+                    },
+                    {
+                        id: 'Kepatuhan Pembayaran Pajak',
+                        text: 'Kepatuhan Pembayaran Pajak'
+                    },
+                    {
+                        id: 'Jaminan Penawaran',
+                        text: 'Jaminan Penawaran'
+                    },
+                ]
+                if (id != null) {
+                    $(`#item-${id}`).empty() 
+                    $(`#item-${id}`).select2({
+                        minimumResultsForSearch: -1,
+                        data: data
+                    })
+                    $(`#item-${id}`).val()
+                } else {
+                    $(`#item`).empty() 
+                    $(`#item`).select2({
+                        minimumResultsForSearch: -1,
+                        data: data
+                    }) 
+                }
+            }   
         }
     }
 

@@ -52,6 +52,16 @@ use App\Models\Provinsi;
 use App\Models\ProyekKonsultanPerencana;
 use App\Models\TipeProyek;
 use App\Models\ChecklistCalonMitraKSO;
+use App\Models\KriteriaPenilaianPefindo;
+use App\Models\MasterKriteriaGreenlanePartner;
+use App\Models\TimTender;
+use App\Models\MatriksApprovalNotaRekomendasi2;
+use App\Models\NotaRekomendasi2;
+use App\Models\DokumenPenentuanKSO;
+use App\Models\DokumenPenentuanProjectGreenlane;
+use App\Models\MasterKlasifikasiOmsetProyek;
+use App\Models\MasterKlasifikasiProduksiProyek;
+use App\Models\DokumenKelengkapanPartnerKSO;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -269,12 +279,12 @@ class ProyekController extends Controller
         // }) + 1;
 
         $lastProyek = Proyek::select(["kode_proyek", "nama_proyek"])->where("kode_proyek", "like", "%" . $kode_proyek . "%")->get()->sortBy("kode_proyek")->last();
-        $no_urut = (int) preg_replace("/[^0-9]/", "",$lastProyek->kode_proyek) + 1;
-        $len = strlen($no_urut);
         // dd($no_urut);
         if (empty($lastProyek)) {
             $no_urut = 1;
         } else {
+            $no_urut = (int) preg_replace("/[^0-9]/", "", $lastProyek->kode_proyek) + 1;
+            $len = strlen($no_urut);
             // $no_urut = (int) trim($lastProyek->kode_proyek, $kode_proyek) + 1;
             $no_urut = substr($no_urut, ($len - 3), 3);
         }
@@ -413,6 +423,33 @@ class ProyekController extends Controller
         // dd($proyek); //tes log hasil 
         if ($proyek->tipe_proyek == "P") {
             // dd($teamProyek, $kriteriaProyek, $porsiJO, $pesertatender, $proyekberjalans, $departemen);
+            $isExistPorsiJO = PorsiJO::where('kode_proyek', $proyek->kode_proyek)->get();
+            if (!empty($isExistPorsiJO)) {
+                $isExistPorsiJO->each(function ($porsi) {
+                    if (empty($porsi->score_pefindo_jo)) {
+                        $checkPefindo = MasterPefindo::where('id_pelanggan', $porsi->id_company_jo)->last();
+                        if (!empty($checkPefindo)) {
+                            $porsi->score_pefindo_jo = $checkPefindo->score;
+                            $porsi->file_pefindo_jo = $checkPefindo->id_document;
+                            $porsi->grade = $checkPefindo->grade;
+                            $porsi->keterangan = $checkPefindo->keterangan;
+
+                            if (str_contains($checkPefindo->grade, 'E')) {
+                                $porsi->is_disetujui = false;
+                            } else {
+                                $porsi->is_disetujui = true;
+                            }
+                        }
+                    }
+                    $kriteria_partner = MasterKriteriaGreenlanePartner::where('id_pelanggan', $porsi->id_company_jo)->first();
+                    if (!empty($kriteria_partner)) {
+                        $porsi->is_greenlane = true;
+                    } else {
+                        $porsi->is_greenlane = false;
+                    }
+                    $porsi->save();
+                });
+            }
             return view(
                 'Proyek/viewProyek',
                 ["proyek" => $proyek, "proyeks" => Proyek::all()],
@@ -538,11 +575,13 @@ class ProyekController extends Controller
         $newProyek->info_asal_proyek  = $dataProyek["info-proyek"];
         $newProyek->laporan_kualitatif_pasdin = $dataProyek["laporan-kualitatif-pasdin"];
         $newProyek->klasifikasi_pasdin = $dataProyek["ra-klasifikasi-proyek"];
+        $newProyek->negara = $dataProyek["negara"];
+        $newProyek->provinsi = $dataProyek["provinsi"];
         // if ($newProyek->jenis_proyek == "J") {
         //     $newProyek->jenis_jo = $dataProyek["jo-category"];
         // } else {
         //     $newProyek->jenis_jo = null;
-        // }
+        // }        //Begin :: Nota Rekomendasi 1
         if (isset($dataProyek["proyek-rekomendasi"]) && isset($dataProyek["confirm-send-wa"]) && isset($dataProyek["ra-klasifikasi-proyek"])&& isset($dataProyek["sumber-dana"]) ) {
             $divisi = $newProyek->UnitKerja->Divisi->id_divisi;
             $departemen = $newProyek->departemen_proyek;
@@ -591,12 +630,59 @@ class ProyekController extends Controller
 
             Alert::success('Success', "Proyek Berhasil Diajukan");
         }
+        //End :: Nota Rekomendasi 1
+
+        //Begin :: Nota Rekomendasi 2
+        if (isset($dataProyek["proyek-rekomendasi-2"]) && isset($dataProyek["confirm-send-wa"]) && isset($dataProyek["uang-muka"]) && isset($dataProyek["jenis-terkontrak-new"]) && isset($dataProyek["sistem-bayar-new"])) {
+            $divisi = $newProyek->UnitKerja->Divisi->id_divisi;
+            $departemen = $newProyek->departemen_proyek;
+            $klasifikasi_proyek = $newProyek->klasifikasi_pasdin;
+            $matriks_approval2 = MatriksApprovalNotaRekomendasi2::where("divisi_id", "=", $divisi)->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where("departemen_code", $departemen)->where("kategori", "=", "Pengajuan")->where('is_active', true)->get();
+
+            $isnomorTargetActive = false;
+            // $nomorDefault = "6285376444701";
+            $nomorDefault = "085881028391";
+            // foreach ($matriks_approval2 as $key => $user) {
+            //     $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$newProyek->kode_proyek";
+            //     $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+            //         "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
+            //         // "sender" => "6281188827008",
+            //         "sender" => env("NO_WHATSAPP_BLAST"),
+            //         "number" => $isnomorTargetActive ? $user->Pegawai->handphone : $nomorDefault,
+            //         // "number" => "085881028391",
+            //         "message" => "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi II, *" . $newProyek->ProyekBerjalan->name_customer . "* untuk Proyek *$newProyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
+            //         // "url" => $url
+            //     ]);
+            //     $send_msg_to_wa->onError(function ($error) {
+            //         // dd($error);
+            //         Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+            //         return redirect()->back();
+            //     });
+            // }
+
+            // dd($newProyek);
+
+            $newProyek->is_request_rekomendasi_2  = true;
+
+            $newNotaRekomendasi2 = new NotaRekomendasi2();
+            $newNotaRekomendasi2->kode_proyek = $dataProyek['kode-proyek'];
+            $newNotaRekomendasi2->unit_kerja = $newProyek->unit_kerja;
+            $newNotaRekomendasi2->is_request_rekomendasi = true;
+
+            if ($newNotaRekomendasi2->save()) {
+                Alert::success('Success', "Proyek Berhasil Diajukan");
+            } else {
+                Alert::error('Error', "Proyek Gagal Diajukan");
+            }
+        }
+        //End :: Nota Rekomendasi 2
+
+
+
         // $newProyek->nama_pendek_proyek = $dataProyek["short-name"];
         // dd($dataProyek['negara']);
         // form PASAR POTENSIAL
-        $newProyek->negara = $dataProyek["negara"];
         $newProyek->sbu = $dataProyek["sbu"];
-        $newProyek->provinsi = $dataProyek["provinsi"];
         $newProyek->klasifikasi = $dataProyek["klasifikasi"];
         $newProyek->status_pasar = $dataProyek["status-pasar"];
         $newProyek->sub_klasifikasi = $dataProyek["sub-klasifikasi"];
@@ -611,6 +697,77 @@ class ProyekController extends Controller
         $newProyek->hps_pagu = (int) str_replace('.', '', $dataProyek["hps-pagu"]);
         $newProyek->porsi_jo = $dataProyek["porsi-jo"];
         $newProyek->ketua_tender = $dataProyek["ketua-tender"];
+
+        $isExistPorsiJO = PorsiJO::where('kode_proyek', $dataProyek["kode-proyek"])->get();
+        if (!empty($isExistPorsiJO)) {
+            $isExistPorsiJO->each(function ($porsi) {
+                if (empty($porsi->score_pefindo_jo)) {
+                    $checkPefindo = MasterPefindo::where('id_pelanggan', $porsi->id_company_jo)->first();
+                    if (!empty($checkPefindo)) {
+                        $porsi->score_pefindo_jo = $checkPefindo->score;
+                        $porsi->file_pefindo_jo = $checkPefindo->id_document;
+                        $porsi->grade = $checkPefindo->grade;
+                        $porsi->keterangan = $checkPefindo->keterangan;
+
+                        if (str_contains($checkPefindo->grade, 'E')) {
+                            $porsi->is_disetujui = false;
+                        } else {
+                            $porsi->is_disetujui = true;
+                        }
+                    }
+                }
+                $kriteria_partner = MasterKriteriaGreenlanePartner::where('id_pelanggan', $porsi->id_company_jo)->first();
+                if (!empty($kriteria_partner)) {
+                    $porsi->is_greenlane = true;
+                } else {
+                    $porsi->is_greenlane = false;
+                }
+                $porsi->save();
+            });
+        }
+
+        if (!empty($dataProyek["hps-pagu"]) && !empty($dataProyek["waktu_pelaksanaan"])) {
+
+            $nilaiOmzetProyek = (int)str_replace('.', '', $dataProyek["hps-pagu"]) * ((int)$dataProyek["porsi-jo"] / 100);
+            $waktuPelaksanaanConvertBulan = (int)$dataProyek["waktu_pelaksanaan"] / 30; //Hari dijadikan bulan
+            $nilai_klasifikasi_nota_2 = $nilaiOmzetProyek / $waktuPelaksanaanConvertBulan;
+
+
+            $newProyek->nilai_klasifikasi_nota_2 = $nilai_klasifikasi_nota_2;
+
+            //Jika Pakai Omset Saja
+            $klasifikasiOmzetSelected = MasterKlasifikasiOmsetProyek::all()?->filter(function ($item) use ($nilai_klasifikasi_nota_2) {
+                return (float)$item->dari_nilai <= (int)$nilai_klasifikasi_nota_2 && (float)$item->sampai_nilai > (int)$nilai_klasifikasi_nota_2;
+            })->first()?->keterangan;
+            $newProyek->klasifikasi_proyek_nota_2 = $klasifikasiOmzetSelected;
+
+            //Jika Pakai Produksi Perbulan
+            // $klasifikasiOmzetSelected = MasterKlasifikasiOmsetProyek::all()?->filter(function ($item) use ($nilaiOmzetProyek) {
+            //     return (float)$item->dari_nilai <= (int)$nilaiOmzetProyek && (float)$item->sampai_nilai > (int)$nilaiOmzetProyek;
+            // })->first()?->keterangan;
+
+
+            // $klasifikasiProyekArray = collect(["Proyek Kecil", "Proyek Menengah", "Proyek Besar", "Proyek Mega"]);
+
+            // $klasifikasiWaktuPelaksanaanSelected = MasterKlasifikasiProduksiProyek::all()?->filter(function ($item) use ($nilai_klasifikasi_nota_2) {
+            //     return (float)$item->dari_nilai <= (int)$nilai_klasifikasi_nota_2 && (float)$item->sampai_nilai > (int)$nilai_klasifikasi_nota_2;
+            // })->first()?->keterangan;
+
+            // if (!empty($klasifikasiWaktuPelaksanaanSelected) && !empty($klasifikasiOmzetSelected)) {
+            //     $keyKlasifikasiOmzet =  $klasifikasiProyekArray->search($klasifikasiOmzetSelected);
+            //     $keyKlasifikasiProduksi =  $klasifikasiProyekArray->search($klasifikasiWaktuPelaksanaanSelected);
+
+            //     if ($keyKlasifikasiProduksi < $keyKlasifikasiOmzet) {
+            //         $klasifikasiReal = $klasifikasiProyekArray[$keyKlasifikasiProduksi];
+            //         $newProyek->klasifikasi_proyek_nota_2 = $klasifikasiReal;
+            //     } else {
+            //         $klasifikasiReal = $klasifikasiProyekArray[$keyKlasifikasiOmzet];
+            //         $newProyek->klasifikasi_proyek_nota_2 = $klasifikasiReal;
+            //     }
+            // }
+        }
+
+        $newProyek->keterangan_greenlane = $dataProyek["keterangan-greenlane"];
         // $newProyek->score_pefindo = $dataProyek["score-pefindo"];
         // foreach($allProyek as $proyek) {
         //     if($proyek->ketua_tender == $dataProyek["ketua-tender"] && !($proyek->stage > 8)) {
@@ -698,11 +855,22 @@ class ProyekController extends Controller
         $newProyek->klasifikasi_terkontrak = $dataProyek["klasifikasi-terkontrak"];
         $newProyek->tanggal_selesai_pho = $dataProyek["tanggal-selesai-kontrak-pho"];
         $newProyek->tanggal_selesai_fho = $dataProyek["tanggal-selesai-kontrak-fho"];
-        $newProyek->jenis_terkontrak = $dataProyek["jenis-terkontrak"];
-        $newProyek->sistem_bayar = $dataProyek["sistem-bayar"];
+        // dd($dataProyek);
+        $newProyek->jenis_terkontrak = $dataProyek["jenis-terkontrak-new"];
+        $newProyek->sistem_bayar = $dataProyek["sistem-bayar-new"];
+
+        if (!empty($dataProyek["is-uang-muka"])) {
+            if ($dataProyek["is-uang-muka"] == "Ya") {
+                $newProyek->is_uang_muka = true;
+                $newProyek->uang_muka = (int)$dataProyek["uang-muka"];
+            } else {
+                $newProyek->is_uang_muka = false;
+            }
+        }
         // $newProyek->nilai_sisa_risiko = $dataProyek["nilai-sisa-risiko"];
         // $newProyek->cadangan_risiko = $dataProyek["cadangan-risiko"];
         // $newProyek->nilai_disetujui = $dataProyek["nilai-disetujui"];
+        $newProyek->pekerjaan_utama = $dataProyek["pekerjaan-utama"];
         $newProyek->laporan_terkontrak = $dataProyek["laporan-terkontrak"];
         // form table performance
         $newProyek->piutang = str_replace('.', '', $dataProyek["piutang-performance"]);
@@ -711,10 +879,104 @@ class ProyekController extends Controller
         $newProyek->latitude = $dataProyek["latitude"];
         $newProyek->longitude = $dataProyek["longitude"];
 
+        //Begin::Waktu Pelaksanaan
+        $newProyek->waktu_pelaksanaan = $dataProyek["waktu_pelaksanaan"];
+        //End::Waktu Pelaksanaan
+
         $idCustomer = $dataProyek["customer"];
 
         // Form update Customer dan auto Proyek Berjalan
         // $newProyek->customer= $dataProyek["customer"];
+        // $newProyek->waktu_pemasukan_tender = $dataProyek["waktu-pemasukkan-tender"];
+        $newProyek->waktu_jaminan_penawaran = $dataProyek["waktu-jaminan-penawaran"];
+        // $newProyek->waktu_prakualifikasi = $dataProyek["waktu-prakualifikasi"];
+
+        //Begin::Alasan KSO
+        if (Auth::user()->check_administrator) {
+            $alasan_kso = collect([]);
+            if (isset($dataProyek["checklist-alasan-kso-1"])) {
+                $alasan_kso->push([
+                    "index" => 1,
+                    "value" => $dataProyek["checklist-alasan-kso-1"],
+                    "keterangan" => null
+                ]);
+            }
+            if (isset($dataProyek["checklist-alasan-kso-2"])) {
+                $alasan_kso->push([
+                    "index" => 2,
+                    "value" => $dataProyek["checklist-alasan-kso-2"],
+                    "keterangan" => null
+                ]);
+            }
+            if (isset($dataProyek["checklist-alasan-kso-3"])) {
+                $alasan_kso->push([
+                    "index" => 3,
+                    "value" => $dataProyek["checklist-alasan-kso-3"],
+                    "keterangan" => null
+                ]);
+            }
+            if (isset($dataProyek["checklist-alasan-kso-4"])) {
+                $alasan_kso->push([
+                    "index" => 4,
+                    "value" => $dataProyek["checklist-alasan-kso-4"],
+                    "keterangan" => null
+                ]);
+            }
+            if (isset($dataProyek["checklist-alasan-kso-5"])) {
+                $alasan_kso->push([
+                    "index" => 5,
+                    "value" => $dataProyek["checklist-alasan-kso-5"],
+                    "keterangan" => $dataProyek["alasan-kso-text"] ?? null
+                ]);
+            }
+
+            // dd($alasan_kso);
+            $newProyek->alasan_kso = $alasan_kso->toArray() ?? null;
+        }
+        //End::Alasan KSO
+
+        //Begin::Tujuan KSO
+        if (Auth::user()->check_administrator) {
+            $tujuan_kso = collect([]);
+            if (isset($dataProyek["checklist-tujuan-kso-1"])) {
+                $tujuan_kso->push([
+                    "index" => 1,
+                    "value" => $dataProyek["checklist-tujuan-kso-1"],
+                    "keterangan" => null
+                ]);
+            }
+            if (isset($dataProyek["checklist-tujuan-kso-2"])) {
+                $tujuan_kso->push([
+                    "index" => 2,
+                    "value" => $dataProyek["checklist-tujuan-kso-2"],
+                    "keterangan" => null
+                ]);
+            }
+            if (isset($dataProyek["checklist-tujuan-kso-3"])) {
+                $tujuan_kso->push([
+                    "index" => 3,
+                    "value" => $dataProyek["checklist-tujuan-kso-3"],
+                    "keterangan" => null
+                ]);
+            }
+            if (isset($dataProyek["checklist-tujuan-kso-4"])) {
+                $tujuan_kso->push([
+                    "index" => 4,
+                    "value" => $dataProyek["checklist-tujuan-kso-4"],
+                    "keterangan" => $dataProyek["tujuan-kso-text"] ?? null
+                ]);
+            }
+
+            // dd($tujuan_kso);
+            $newProyek->tujuan_kso = $tujuan_kso->toArray() ?? null;
+        }
+        //End::Tujuan KSO
+
+        //Begin::Persetujuan Fasilitan NCL
+        if (Auth::user()->check_administrator) {
+            $newProyek->fasilitas_ncl = $dataProyek["fasilitas-ncl"] ?? null;
+        }
+        //End::Persetujuan Fasilitan NCL
 
         // dd(isset($dataProyek["jenis-proyek"]));
 
@@ -854,12 +1116,20 @@ class ProyekController extends Controller
             }
 
             if ($newProyek->save()) {
+                if (isset($dataProyek["dokumen-penentuan-kso"])) {
+                    self::uploadDokumenPenentuanKSO($dataProyek["dokumen-penentuan-kso"], $kode_proyek);
+                }
+
+                if (isset($dataProyek["dokumen-penentuan-project-greenlane"])) {
+                    self::uploadDokumenPenentuanProjectGreenlane($dataProyek["dokumen-penentuan-project-greenlane"], $kode_proyek);
+                }
+
                 if (isset($dataProyek["dokumen-nota-rekomendasi-1"])) {
                     self::uploadDokumenNotaRekomendasi1($dataProyek["dokumen-nota-rekomendasi-1"], $kode_proyek);
                 }
-                if (isset($dataProyek["dokumen-consent-npwp"])) {
-                    self::uploadDokumenConsentNPWP($dataProyek["dokumen-consent-npwp"], $kode_proyek);
-                }
+                // if (isset($dataProyek["dokumen-consent-npwp"])) {
+                //     self::uploadDokumenConsentNPWP($dataProyek["dokumen-consent-npwp"], $kode_proyek);
+                // }
                 if (isset($dataProyek["dokumen-pefindo"])) {
                     self::uploadDokumenPefindo($dataProyek["dokumen-pefindo"], $kode_proyek);
                 }
@@ -901,8 +1171,20 @@ class ProyekController extends Controller
             return redirect("/proyek/view/" . $kode_proyek);
         } else {
             if ($newProyek->save()) {
+                if (isset($dataProyek["dokumen-penentuan-kso"])) {
+                    self::uploadDokumenPenentuanKSO($dataProyek["dokumen-penentuan-kso"], $kode_proyek);
+                }
+
+                if (isset($dataProyek["dokumen-penentuan-project-greenlane"])) {
+                    self::uploadDokumenPenentuanProjectGreenlane($dataProyek["dokumen-penentuan-project-greenlane"], $kode_proyek);
+                }
+
+                if (isset($dataProyek["dokumen-nota-rekomendasi-1"])) {
+                    self::uploadDokumenNotaRekomendasi1($dataProyek["dokumen-nota-rekomendasi-1"], $kode_proyek);
+                }
+
                 if (isset($dataProyek["dokumen-pefindo"])) {
-                    self::uploadDokumenPrakualifikasi($dataProyek["dokumen-pefindo"], $kode_proyek);
+                    self::uploadDokumenPefindo($dataProyek["dokumen-pefindo"], $kode_proyek);
                 }
                 if (isset($dataProyek["dokumen-prakualifikasi"])) {
                     self::uploadDokumenPrakualifikasi($dataProyek["dokumen-prakualifikasi"], $kode_proyek);
@@ -1194,6 +1476,86 @@ class ProyekController extends Controller
         return redirect()->back();
     }
 
+    private function uploadDokumenPenentuanKSO(UploadedFile $uploadedFile, $kode_proyek)
+    {
+        // $faker = new Uuid();
+        $dokumen = new DokumenPenentuanKSO();
+        $file_name = $uploadedFile->getClientOriginalName();
+        $id_document = date("dmYHis_") . str_replace(" ", "-", $file_name);
+        $nama_document = $file_name;
+        // dd($uploadedFile);
+        // $nama_document = date("His_") . substr($uploadedFile->getClientOriginalName(), 0, strlen($uploadedFile->getClientOriginalName()) - 5);
+        // moveFileTemp($uploadedFile, $id_document);
+        $dokumen->nama_document = $nama_document;
+        $dokumen->id_document = $id_document;
+        $dokumen->kode_proyek = $kode_proyek;
+        // dd($dokumen);
+        $uploadedFile->move(public_path('dokumen-penentuan-kso'), $id_document);
+        $dokumen->save();
+    }
+
+    public function downloadDokumenPenentuanKSO($id_document)
+    {
+        $file = DokumenPenentuanKSO::where('id_document', $id_document)->first();
+        try {
+            $checkFileFromStorage = public_path('dokumen-penentuan-kso/' . $file->id_document);
+            return response()->download($checkFileFromStorage, 'Dokumen Penentuan KSO - ' . $file->Proyek->kode_proyek . '.pdf');
+        } catch (\Exception $e) {
+            Alert::error('Error', $e->getMessage());
+            return redirect()->back();
+        }
+    }
+
+    public function deleteDokumenPenentuanKSO($id)
+    {
+        $delete = DokumenPenentuanKSO::find($id);
+        File::delete(public_path("/dokumen-penentuan-kso/$delete->id_document"));
+        $delete->delete();
+        Alert::success("Success", "Dokumen Penentuan KSO Berhasil Dihapus");
+        return redirect()->back();
+    }
+
+    private function uploadDokumenPenentuanProjectGreenlane(UploadedFile $uploadedFile, $kode_proyek)
+    {
+        // $faker = new Uuid();
+        $dokumen = new DokumenPenentuanProjectGreenlane();
+        $file_name = $uploadedFile->getClientOriginalName();
+        $id_document = date("dmYHis_") . str_replace(" ", "-", $file_name);
+        $nama_document = $file_name;
+        // dd($uploadedFile);
+        // $nama_document = date("His_") . substr($uploadedFile->getClientOriginalName(), 0, strlen($uploadedFile->getClientOriginalName()) - 5);
+        // moveFileTemp($uploadedFile, $id_document);
+        $dokumen->nama_document = $nama_document;
+        $dokumen->id_document = $id_document;
+        $dokumen->kode_proyek = $kode_proyek;
+        // dd($dokumen);
+        $uploadedFile->move(public_path('dokumen-penentuan-project-greenlane'), $id_document);
+        $dokumen->save();
+    }
+
+    public function downloadDokumenPenentuanProjectGreenlane($id_document)
+    {
+        $file = DokumenPenentuanProjectGreenlane::where('id_document', $id_document)->first();
+        try {
+            $checkFileFromStorage = public_path('dokumen-penentuan-project-greenlane/' . $file->id_document);
+            return response()->download($checkFileFromStorage, 'Dokumen Penentuan Project Greenlane atau Non Greenlane - ' . $file->Proyek->kode_proyek . '.pdf');
+        } catch (\Exception $e) {
+            Alert::error('Error', $e->getMessage());
+            return redirect()->back();
+        }
+    }
+
+    public function deleteDokumenPenentuanProjectGreenlane($id)
+    {
+        $delete = DokumenPenentuanProjectGreenlane::find($id);
+        File::delete(public_path("/dokumen-penentuan-project-greenlane/$delete->id_document"));
+        $delete->delete();
+        Alert::success("Success", "Dokumen Penentuan Project Greenlane/Non Greenlane Berhasil Dihapus");
+        return redirect()->back();
+    }
+
+
+
     private function uploadDokumenPefindo(UploadedFile $uploadedFile, $kode_proyek)
     {
         $faker = new Uuid();
@@ -1210,21 +1572,21 @@ class ProyekController extends Controller
         $dokumen_pefindo->save();
     }
 
-    private function uploadDokumenConsentNPWP(UploadedFile $uploadedFile, $kode_proyek)
-    {
-        $faker = new Uuid();
-        $dokumen = new DokumenConsentNPWP();
-        $id_document = $faker->uuid3();
-        $file_name = $uploadedFile->getClientOriginalName();
-        $nama_document = date("His_") . $file_name;
-        // $nama_document = date("His_") . substr($uploadedFile->getClientOriginalName(), 0, strlen($uploadedFile->getClientOriginalName()) - 5);
-        moveFileTemp($uploadedFile, $id_document);
-        $dokumen->nama_dokumen = $nama_document;
-        $dokumen->id_document = $id_document;
-        $dokumen->kode_proyek = $kode_proyek;
-        // dd($dokumen);
-        $dokumen->save();
-    }
+    // private function uploadDokumenConsentNPWP(UploadedFile $uploadedFile, $kode_proyek)
+    // {
+    //     $faker = new Uuid();
+    //     $dokumen = new DokumenConsentNPWP();
+    //     $id_document = $faker->uuid3();
+    //     $file_name = $uploadedFile->getClientOriginalName();
+    //     $nama_document = date("His_") . $file_name;
+    //     // $nama_document = date("His_") . substr($uploadedFile->getClientOriginalName(), 0, strlen($uploadedFile->getClientOriginalName()) - 5);
+    //     moveFileTemp($uploadedFile, $id_document);
+    //     $dokumen->nama_dokumen = $nama_document;
+    //     $dokumen->id_document = $id_document;
+    //     $dokumen->kode_proyek = $kode_proyek;
+    //     // dd($dokumen);
+    //     $dokumen->save();
+    // }
 
     public function deleteDokumenPefindo($id)
     {
@@ -2280,10 +2642,37 @@ class ProyekController extends Controller
         $newPorsiJO->company_jo = $customer->name;
         $newPorsiJO->id_company_jo = $customer->id_customer;
         $newPorsiJO->porsi_jo = $dataPorsiJO["porsijo-company"];
-        $newPorsiJO->score_pefindo_jo = $dataPorsiJO["score_pefindo_jo"];
-        $newPorsiJO->file_pefindo_jo = $dataPorsiJO["file_pefindo_jo"];
+
+        //Check Partner di Pefindo
+        $checkPefindo = MasterPefindo::where('id_pelanggan', $dataPorsiJO['company-jo'])->first();
+
+        if (!empty($checkPefindo)) {
+            $newPorsiJO->score_pefindo_jo = $checkPefindo->score;
+            $newPorsiJO->file_pefindo_jo = $checkPefindo->id_document;
+            $newPorsiJO->grade = $checkPefindo->grade;
+            $newPorsiJO->keterangan = $checkPefindo->keterangan;
+
+            if (str_contains($checkPefindo->grade, 'E')) {
+                $newPorsiJO->is_disetujui = false;
+            } else {
+                $newPorsiJO->is_disetujui = true;
+            }
+        }
+
+        $kriteria_partner = MasterKriteriaGreenlanePartner::where('id_pelanggan', $customer->id_customer)->first();
+
+        if (!empty($kriteria_partner)) {
+            $newPorsiJO->is_greenlane = true;
+        } else {
+            $newPorsiJO->is_greenlane = false;
+        }
+
         // $newPorsiJO->max_jo = $dataPorsiJO["max-porsi"];
         $nama_file = collect([]);
+        if (count($file) < 1) {
+            Alert::error('Error', 'Silahkan upload Dokumen terlebih dahulu!');
+            return redirect()->back();
+        }
         foreach ($file as $f) {
             $id_document = date("His_") . str_replace(' ', '_', $f->getClientOriginalName());
             $nama_file->push($id_document);
@@ -2310,7 +2699,7 @@ class ProyekController extends Controller
 
         if (($dataPorsiJO["sisa-input"] + $dataPorsiJO["porsijo-company"]) > 100) {
             // dd($dataPorsiJO["sisa-input"], $dataPorsiJO["porsijo-company"]); 
-            Alert::error('Error', "Partner JO Gagal Dihapus, Hubungi Admin !");
+            Alert::error('Error', "Partner JO Gagal Ditambahkan, Hubungi Admin !");
             return redirect()->back();
         }
         // dd($dataPorsiJO);
@@ -2366,23 +2755,163 @@ class ProyekController extends Controller
     {
         $deleteJO = PorsiJO::find($id);
         $proyek = Proyek::find($deleteJO->kode_proyek);
+        $dokumenKelengkapanPartner = DokumenKelengkapanPartnerKSO::where('kode_proyek', $deleteJO->kode_proyek)->where('id_partner', $deleteJO->id)->get();
         // dd($deleteJO->porsi_jo, $deleteJO->kode_proyek);
+        $filesKelengkapan = $dokumenKelengkapanPartner->mapWithKeys(function ($item, $key) {
+            return [$item->kategori => $item->id_document];
+        });
         $maxPorsiJo = $proyek->porsi_jo + $deleteJO->porsi_jo;
+        $files = collect(json_decode($deleteJO->file_consent_npwp));
         if ($maxPorsiJo > 100) {
             // dd($maxPorsiJo);
             $proyek->porsi_jo = 100;
             $proyek->save();
             $deleteJO->delete();
-
+            
             Alert::warning('Error', "Partner JO Berhasil Dihapus, Hubungi Admin !");
             return redirect()->back();
         }
         $proyek->porsi_jo = $maxPorsiJo;
-
+        
         $proyek->save();
         $deleteJO->delete();
-        Alert::success("Success", "Partner JO Berhasil Dihapus");
-        return redirect()->back();
+        $dokumenKelengkapanPartner->each(function ($item) {
+            return $item->delete();
+        });
+        try {
+            if ($filesKelengkapan->isNotEmpty()) {
+                $filesKelengkapan->each(function ($file, $key) {
+                    $formatKeyToFolder = strtolower(str_replace(' ', '-', $key));
+                    File::delete(public_path(public_path("dokumen-kelengkapan-partner/$formatKeyToFolder/$file")));
+                });
+            }
+            if ($files->isNotEmpty()) {
+                $files->each(function ($file) {
+                    File::delete(public_path(public_path("consent-npwp/$file")));
+                });
+            }
+            Alert::success("Success", "Partner JO Berhasil Dihapus");
+            return redirect()->back();
+        } catch (\Exception $e) {
+            Alert::error("Error", $e->getMessage());
+            return redirect()->back();
+        }
+    }
+
+    public function uploadDokumenKelengkapanPartner(Request $request, $id_partner)
+    {
+        $partnerJO = PorsiJO::find($id_partner);
+
+        if (empty($partnerJO)) {
+            Alert::error("Error", "Partner Tidak Ditemukan. Hubungi Admin!");
+            return redirect()->back();
+        }
+
+        $data = $request->all();
+        $collectData = collect([]);
+
+        if (isset($data["dokumen-ahu-partner"])) {
+            $nama_file = $data["dokumen-ahu-partner"]->getClientOriginalName();
+            $id_document = date("His_") . str_replace(' ', '_', $nama_file);
+            $data["dokumen-ahu-partner"]->move(public_path('dokumen-kelengkapan-partner/dokumen-ahu'), $id_document);
+
+            $collectData->push([
+                "kategori" => "Dokumen AHU",
+                "id_partner" => $id_partner,
+                "kode_proyek" => $partnerJO->kode_proyek,
+                "id_document" => $id_document,
+                "nama_document" => $nama_file,
+            ]);
+        }
+
+        if (isset($data["dokumen-keuangan-partner"])) {
+            $nama_file = $data["dokumen-keuangan-partner"]->getClientOriginalName();
+            $id_document = date("His_") . str_replace(' ', '_', $nama_file);
+            $data["dokumen-keuangan-partner"]->move(public_path('dokumen-kelengkapan-partner/dokumen-laporan-keuangan'), $id_document);
+
+            $collectData->push([
+                "kategori" => "Dokumen Laporan Keuangan",
+                "id_partner" => $id_partner,
+                "kode_proyek" => $partnerJO->kode_proyek,
+                "id_document" => $id_document,
+                "nama_document" => $nama_file,
+            ]);
+        }
+
+        if (isset($data["dokumen-pengalaman-partner"])) {
+            $nama_file = $data["dokumen-pengalaman-partner"]->getClientOriginalName();
+            $id_document = date("His_") . str_replace(' ', '_', $nama_file);
+            $data["dokumen-pengalaman-partner"]->move(public_path('dokumen-kelengkapan-partner/dokumen-pengalaman'), $id_document);
+
+            $collectData->push([
+                "kategori" => "Dokumen Pengalaman",
+                "id_partner" => $id_partner,
+                "kode_proyek" => $partnerJO->kode_proyek,
+                "id_document" => $id_document,
+                "nama_document" => $nama_file,
+            ]);
+        }
+
+        if (isset($data["dokumen-spt-partner"])) {
+            $nama_file = $data["dokumen-spt-partner"]->getClientOriginalName();
+            $id_document = date("His_") . str_replace(' ', '_', $nama_file);
+            $data["dokumen-spt-partner"]->move(public_path('dokumen-kelengkapan-partner/dokumen-laporan-spt'), $id_document);
+
+            $collectData->push([
+                "kategori" => "Dokumen Laporan SPT",
+                "id_partner" => $id_partner,
+                "kode_proyek" => $partnerJO->kode_proyek,
+                "id_document" => $id_document,
+                "nama_document" => $nama_file,
+            ]);
+        }
+
+        try {
+            DokumenKelengkapanPartnerKSO::insert($collectData->toArray());
+            Alert::success('Success', "Dokumen berhasil diupload");
+            return redirect()->back();
+        } catch (\Exception $e) {
+            Alert::error('Error', $e->getMessage());
+            return redirect()->back();
+        }
+    }
+
+    public function downloadDokumenKelengkapanPartner($id_kelengkapan)
+    {
+        $getDokumen = DokumenKelengkapanPartnerKSO::find($id_kelengkapan);
+        if (empty($getDokumen)) {
+            Alert::error('Error', "Dokumen tidak ditemukan. Hubungi Admin!");
+            return redirect()->back();
+        }
+        $kategori = strtolower(str_replace(' ', '-', $getDokumen->kategori));
+        $id_document = $getDokumen->id_document;
+
+        return response()->download(public_path("dokumen-kelengkapan-partner/$kategori/$id_document"), $getDokumen->nama_document);
+    }
+
+    public function deleteDokumenKelengkapanPartner(Request $request, $id)
+    {
+        $getDokumen = DokumenKelengkapanPartnerKSO::find($id);
+
+        if (empty($getDokumen)) {
+            Alert::error('Error', "Dokumen tidak ditemukan. Hubungi Admin!");
+            return redirect()->back();
+        }
+
+        if ($getDokumen->delete()) {
+            try {
+                File::delete(public_path(public_path("consent-npwp/$getDokumen->id_document")));
+                return response()->json([
+                    "Success" => true,
+                    "Message" => null
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    "Success" => false,
+                    "Message" => $e->getMessage()
+                ]);
+            }
+        }
     }
 
     public function assignTeam(Request $request, TeamProyek $newTeam)
@@ -2522,6 +3051,67 @@ class ProyekController extends Controller
         $deleteTender = PesertaTender::find($id);
         $deleteTender->delete();
         Alert::success("Success", "Peserta Tender Berhasil Dihapus");
+        return redirect()->back();
+    }
+
+    public function tambahTimTender(Request $request,  TimTender $newTimTender)
+    {
+        $data = $request->all();
+        $messages = [
+            "required" => "*Kolom Ini Harus Diisi !",
+        ];
+        $rules = [
+            "nama_pegawai" => "required",
+            "posisi" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Tim Tender Gagal Ditambahkan, Periksa Kembali !");
+        }
+
+        $validation->validate();
+        $newTimTender->nip_pegawai = $data["nama_pegawai"];
+        $newTimTender->posisi = $data["posisi"];
+        $newTimTender->kode_proyek = $data["kode-proyek"];
+
+        $newTimTender->save();
+        Alert::success("Success", "Tim Tender Berhasil Ditambahkan");
+        return redirect()->back();
+    }
+
+    public function editTimTender(Request $request, $id)
+    {
+        $data = $request->all();
+        // dd($data);
+        $messages = [
+            "required" => "*Kolom Ini Harus Diisi !",
+        ];
+        $rules = [
+            "nama_pegawai" => "required",
+            "posisi" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Tim Tender Gagal Diubah, Periksa Kembali !");
+        }
+
+        $validation->validate();
+
+        $editTim = TimTender::find($id);
+        $editTim->nip_pegawai = $data["nama_pegawai"];
+        $editTim->posisi = $data["posisi"];
+        $editTim->kode_proyek = $data["kode-proyek"];
+
+        $editTim->save();
+        Alert::success("Success", "Tim Tender Berhasil Diubah");
+        return redirect()->back();
+    }
+
+    public function deleteTimTender($id)
+    {
+        $deleteTender = TimTender::find($id);
+        $deleteTender->delete();
+        Alert::success("Success", "Tim Tender Berhasil Dihapus");
         return redirect()->back();
     }
 

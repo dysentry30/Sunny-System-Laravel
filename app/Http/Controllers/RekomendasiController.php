@@ -112,8 +112,8 @@ class RekomendasiController extends Controller
                 }
 
                 // QrCode::size(50)->generate($request->schemeAndHttpHost() . "?redirectTo=/rekomendasi?open=kt_modal_view_proyek_rekomendasi_", public_path('/qr-code' . '/' . $proyek->kode_proyek . '.svg'));
-                $fileQrCode = generateQrCode($proyek->kode_proyek, Auth::user()->nip, $request->schemeAndHttpHost() . "?nip=" . Auth::user()->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyek->kode_proyek");
-                createWordPengajuan($proyek, $hasil_assessment, $is_proyek_mega, $fileQrCode);
+                // $fileQrCode = generateQrCode($proyek->kode_proyek, Auth::user()->nip, $request->schemeAndHttpHost() . "?nip=" . Auth::user()->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyek->kode_proyek");
+                createWordPengajuan($proyek, $hasil_assessment, $is_proyek_mega, null);
                 createWordRekomendasi($proyek, $hasil_assessment, $is_proyek_mega);
                 $proyek->review_assessment = true;
                 $proyek->is_request_rekomendasi = false;

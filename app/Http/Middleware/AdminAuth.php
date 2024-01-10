@@ -124,7 +124,8 @@ class AdminAuth
             "laporan-keuangan",
             "green-lane",
             "non-green-lane",
-            "AHU"
+            "AHU",
+            "nota-rekomendasi-2"
         ]);
         $allowed_url_team_proyek = join(" ", ["dashboard", "proyek", "contract-management", "review-contract", "draft-contract", "issue-project", "question", "input-risk", "laporan-bulanan", "serah-terima", "claim-management", "approval-claim", "detail-claim", "claim", "document", "user"]);
         $concat_allowed_url = "";

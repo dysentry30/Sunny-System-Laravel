@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "barryvdh/laravel-dompdf": "^2.0",
         "beyondcode/laravel-websockets": "^1.13",
         "dompdf/dompdf": "^2.0",
         "google/apiclient": "2.12.1",
@@ -21,6 +22,7 @@
         "laravel/tinker": "^2.7",
         "league/flysystem-aws-s3-v3": "^3.0",
         "mpdf/mpdf": "^6.1",
+        "ncjoes/office-converter": "^1.0",
         "phpoffice/phpspreadsheet": "^1.18",
         "phpoffice/phpword": "^0.18.3",
         "realrashid/sweet-alert": "^5.1",

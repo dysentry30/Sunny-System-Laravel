@@ -30,6 +30,14 @@
         opacity: 1;
         /* Firefox */
     }
+    #kt_assessment_table::-webkit-scrollbar {
+        height: 5px;
+        width: 5px;
+    }
+    #kt_assessment_table::-webkit-scrollbar-thumb {
+        background: rgb(185, 185, 185);
+        border-radius: 10px;
+    }
 </style>
 
 <!--begin::Main-->
@@ -64,6 +72,7 @@
 
                     @php
                         $check_green_line = checkGreenLine($proyek);
+                        $check_non_green_line_nota_2 = checkNonGreenLaneNota2($proyek);
                     @endphp
 
                     <!--begin::Toolbar-->
@@ -111,7 +120,10 @@
                                     @if (is_null($proyek->is_request_rekomendasi) && !$check_green_line && $proyek->stage == 1 && is_null($proyek->is_disetujui))
                                         <input type="button" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan"
                                             style="background-color:#00b48d">
-                                    @elseif($proyek->stage > 1 && $proyek->is_disetujui == true &&  $proyek->is_recommended_with_note)
+                                    @elseif ($proyek->stage == 4 && $check_non_green_line_nota_2 && is_null($proyek->is_request_rekomendasi_2) && is_null($proyek->is_disetujui_rekomendasi_2))
+                                        <input type="button" name="proyek-rekomendasi-2" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi-2" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan-nota-2"
+                                            style="background-color:#00b48d">
+                                    {{-- @elseif($proyek->stage > 1 && $proyek->is_disetujui == true &&  $proyek->is_recommended_with_note)
                                         <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="<b>Rekomendasi Aproved</b><br>Silahkan Lanjut Stage Selanjutnya">
                                             <p class="mt-4 btn btn-sm btn-success ms-2">
                                                 Direkomendasikan dengan catatan
@@ -148,7 +160,7 @@
                                     @else 
                                         <div class="" data-bs-toggle="tooltip" data-bs-title="Sedang Dalam Proses Pengajuan Rekomendasi">
                                             <input type="submit" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-secondary ms-2" id="proyek-rekomendasi" disabled >
-                                        </div>
+                                        </div> --}}
                                     @endif
                                 @endif
                                 <!--end::Button-->
@@ -294,6 +306,73 @@
                     <!-- end::modal confirm send wa-->
                     @endif
 
+                    @if ($proyek->is_request_rekomendasi_2 == false && $check_non_green_line_nota_2 && $proyek->stage == 4)
+                    <!-- begin::modal confirm send wa-->
+                    <div class="modal fade w-100" style="margin-top: 120px" id="modal-send-pengajuan-nota-2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog mw-600px">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Ajukan Rekomendasi 2 Proyek ?</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="hidden"  name="proyek-rekomendasi-2" value="Pengajuan Rekomendasi 2"/>
+                                    @php
+                                        $name_customer = $proyek->proyekBerjalan->name_customer ?? null;
+                                    @endphp
+                                    <p>Nama Proyek : <b>{{ $proyek->nama_proyek }}</b></p>
+                                    <p>Nama Pengguna Jasa : <b class="{{ $name_customer ?? "text-danger" }}">{{ $name_customer ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>KSO / Non KSO  : <b class="">{{ $proyek->PorsiJO->isNotEmpty() ? "KSO" : "Non KSO" }}</b></p>
+                                    <p>Negara Proyek  : <b class="{{ $proyek->negara ?? "text-danger" }}">{{ $proyek->negara ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>Provinsi Proyek  : <b class="{{ $proyek->Provinsi->province_name ?? "text-danger" }}">{{ $proyek->Provinsi->province_name ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>Nilai Penawaran : <b class="{{ $proyek->nilaiok_awal ?? "text-danger" }}">{{ !empty($proyek->nilaiok_awal) ? "Rp. " . number_format($proyek->nilaiok_awal, 0, '', '.') : "*Belum Ditentukan" }}</b></p>
+                                    <p>Jenis Kontrak : <b class="{{ $proyek->jenis_terkontrak ?? "text-danger" }}">{{ $proyek->jenis_terkontrak ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>Cara Pembayaran : <b class="{{ $proyek->sistem_bayar ?? "text-danger" }}">{{ $proyek->sistem_bayar ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>Uang Muka : <b class="{{ $proyek->is_uang_muka ?? "text-danger" }}">{{ $proyek->is_uang_muka ? "Ya" : "Tidak" }}</b></p>
+                                    <p>Waktu Pelaksanaan Pekerjaan : <b class="{{ $proyek->waktu_pelaksanaan ?? "text-danger" }}">{{ $proyek->waktu_pelaksanaan ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>RA Klasifikasi Proyek  : <b class="{{ $proyek->klasifikasi_pasdin ?? "text-danger" }}">{{ $proyek->klasifikasi_pasdin ?? "*Belum Ditentukan" }}</b></p>
+                                    <br>
+
+                                    
+                                    @if (
+                                    !empty($name_customer) && 
+                                    !empty($proyek->klasifikasi_pasdin) &&
+                                    !empty($proyek->nilaiok_awal) &&
+                                    !empty($proyek->jenis_terkontrak) &&
+                                    !empty($proyek->sistem_bayar) &&
+                                    !empty($proyek->uang_muka) &&
+                                    !empty($proyek->waktu_pelaksanaan)
+                                    )
+                                        <input class="form-check-input" onclick="sendWa2(this)" id="confirm-send-wa" name="confirm-send-wa" type="checkbox">
+                                        <i class="fs-6 text-primary">
+                                            Saya Setuju Melakukan Pengajuan dan Data Sudah Sudah Terisi Dengan Benar
+                                        </i>
+                                    @else
+                                        <i class="fs-6 text-danger">*Pastikan Data Sudah Sudah Terisi Dengan Benar Sebelum Melakukan Pegajuan</i>
+                                    @endif
+                                </div>
+                                    
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-success btn-sm" id="button-send-wa" style="display: none">Send <i class="bi bi-send"></i></button>
+                                </div>
+
+                                <script>
+                                    function sendWa2(e) {
+                                        const sendWa = e.checked;
+                                        if (sendWa == true) {
+                                            document.getElementById("button-send-wa").style.display = "";
+                                        } else {
+                                            document.getElementById("button-send-wa").style.display = "none";
+                                        }
+                                    }
+                                </script>
+                            
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end::modal confirm send wa-->
+                    @endif
+
 
 
 
@@ -343,7 +422,7 @@
                                                                 Pasar Potensial
                                                             </a>
                                                         @else
-                                                            <div class="stage-button color-is-default stage-is-not-active" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="Tidak bisa lanjut ke <b>Pasar Potensial</b>, karena Proyek <b>Non Green Line</b>. Silahkan ajukan Rekomendasi dengan tekan button <b>Pengajuan Rekomendasi</b>.">
+                                                            <div class="stage-button color-is-default stage-is-not-active" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="Tidak bisa lanjut ke <b>Pasar Potensial</b>, karena Proyek <b>Non Green Lane</b>. Silahkan ajukan Rekomendasi dengan tekan button <b>Pengajuan Rekomendasi</b>.">
                                                                 <a href="#"
                                                                     class="text-white stage-action"
                                                                     style="outline: 0px; pointer-events: none;" stage="2">
@@ -465,11 +544,21 @@
                                                                 Perolehan
                                                             </a>
                                                         @else
-                                                            <a href="#"
-                                                                class="stage-button stage-action stage-is-not-active color-is-default"
-                                                                style="outline: 0px; cursor: pointer;" stage="5">
-                                                                Perolehan
-                                                            </a>
+                                                            @if ($proyek->is_disetujui_nota_2 || (!is_null($check_non_green_line_nota_2) && !$check_non_green_line_nota_2) || $proyek->UnitKerja?->dop == "EA")
+                                                                <a href="#"
+                                                                    class="stage-button stage-action stage-is-not-active color-is-default"
+                                                                    style="outline: 0px; cursor: pointer;" stage="5">
+                                                                    Perolehan
+                                                                </a>
+                                                            @else
+                                                                <div class="stage-button color-is-default stage-is-not-active" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="Tidak bisa lanjut ke <b>Perolehan</b>, karena Proyek <b>Non Green Lane</b>. Silahkan ajukan Rekomendasi dengan tekan button <b>Pengajuan Rekomendasi</b>.">
+                                                                    <a href="#"
+                                                                        class="text-white stage-action"
+                                                                        style="outline: 0px; pointer-events: none;" stage="5">
+                                                                        Perolehan
+                                                                    </a>
+                                                                </div>
+                                                            @endif
                                                         @endif
                                                     @endif
 
@@ -1167,7 +1256,7 @@
                                                     <!--End::Row Kanan+Kiri-->
 
                                                     <!--begin::Row Kanan+Kiri-->
-                                                    <div class="row fv-row">
+                                                    <div class="row fv-row align-items-center">
                                                         <!--begin::Col-->
                                                         <div class="col-4">
                                                             <!--begin::Input group Website-->
@@ -1232,6 +1321,27 @@
                                                             </div>
                                                         @endif
                                                         <!--End::Col-->
+                                                        <div class="col-6">
+                                                            @php
+                                                                if (!empty($proyek->approved_rekomendasi_final)) {
+                                                                    $check_data = collect(json_decode($proyek->approved_rekomendasi_final));
+                                                                    if (!is_null($proyek->is_recommended) && !$proyek->is_recommended) {
+                                                                        $status_rekomendasi = "Tidak Direkomendasikan";
+                                                                        $style = "badge-danger";
+                                                                    }elseif ($check_data->where('catatan', '!=', null)->count() > 0) {
+                                                                        $status_rekomendasi = "Direkomendasikan dengan catatan";
+                                                                        $style = "badge-warning";
+                                                                    }else {
+                                                                        $status_rekomendasi = "Direkomendasikan";
+                                                                        $style = "badge-light-success";
+                                                                    }
+                                                                }else{
+                                                                    $status_rekomendasi = "";
+                                                                    $style = "";
+                                                                }
+                                                            @endphp
+                                                            <span class="px-4 ms-6 fs-4 {{ $style }}"><b>{{ $status_rekomendasi }}</b></span>
+                                                        </div>
                                                     </div>
                                                     <!--End::Row Kanan+Kiri-->
 
@@ -3006,338 +3116,474 @@
                                                         <!--End begin::Col-->
                                                     </div>
                                                     <!--End begin::Row-->
-                                                    <!--Begin::Syarat Prakualifikasi-->
-                                                    <div class="row fv-row">
-                                                        <div class="col-6">
-                                                            <div class="fv-row mb-7">
-                                                                <!--begin::Label-->
-                                                                <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                    style="font-size:14px;">Syarat Prakualifikasi
-                                                                    <a href="/proyek/syarat-prakualifikasi/{{ $proyek->kode_proyek }}/view" Id="Plus">+</a>
-                                                                </h3>
-                                                                <!--end::Label-->
+                                                    <br>
+                                                    @if ($proyek->jenis_proyek == 'J')
+                                                        {{-- @can('super-admin') --}}
+                                                            <!--Begin::Title Biru Form: Alasan KSO-->
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                                style="font-size:14px;">Pertimbangan Pembentukan KSO
+                                                            </h3>
+                                                            <br>
+                                                            <!--begin::Row-->
+                                                            @php
+                                                                $alasan_kso = null;
+                                                                if (!empty($proyek->alasan_kso)) {
+                                                                    $alasan_kso = collect(json_decode($proyek->alasan_kso));
+                                                                }
+                                                            @endphp
+                                                            <div class="row fv-row">
+                                                                <div class="col">
+                                                                    <div class="form-check mb-4">
+                                                                        <input class="form-check-input" type="checkbox" name="checklist-alasan-kso-1" value="Belum memiliki Kemampuan Dasar" id="alasan-1" {{ $alasan_kso?->contains('index', 1) ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="alasan-1">
+                                                                        Belum memiliki Kemampuan Dasar
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check mb-4">
+                                                                        <input class="form-check-input" type="checkbox" name="checklist-alasan-kso-2" value="Tidak memiliki personil yang dipersyaratkan" id="alasan-2" {{ $alasan_kso?->contains('index', 2) ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="alasan-2">
+                                                                        Tidak memiliki personil yang dipersyaratkan 
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check mb-4">
+                                                                        <input class="form-check-input" type="checkbox" name="checklist-alasan-kso-3" value="Tidak memiliki peralatan yang dipersyaratkan" id="alasan-3" {{ $alasan_kso?->contains('index', 3) ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="alasan-3">
+                                                                        Tidak memiliki peralatan yang dipersyaratkan 
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check mb-4">
+                                                                        <input class="form-check-input" type="checkbox" name="checklist-alasan-kso-4" value="Meningkatkan peluang memenangkan lelang" id="alasan-4" {{ $alasan_kso?->contains('index', 4) ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="alasan-4">
+                                                                        Meningkatkan peluang memenangkan lelang 
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check mb-4">
+                                                                        <input class="form-check-input" type="checkbox" name="checklist-alasan-kso-5" value="Alasan Lainnya" id="alasan-5" onclick="showTextArea(this)" {{ $alasan_kso?->contains('index', 5) ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="alasan-4">
+                                                                        Alasan Lainnya 
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="mb-4 {{ empty($alasan_kso) || !$alasan_kso?->contains('index', 5) ? 'd-none' : '' }}">
+                                                                        <textarea name="alasan-kso-text" id="alasan-kso-text" class="form-control form-control-solid" {{ empty($alasan_kso) || !$alasan_kso?->contains('index', 5) ? 'disabled' : '' }}>{!! $alasan_kso?->contains('index', 5) ? $alasan_kso->where('index', 5)->first()->keterangan : '' !!}</textarea>
+                                                                    </div>
+
+                                                                    <script>
+                                                                        function showTextArea(elt){
+                                                                            if (elt.checked) {
+                                                                                document.querySelector('#alasan-kso-text').parentElement.classList.remove('d-none');
+                                                                                document.querySelector('#alasan-kso-text').focus();
+                                                                                document.querySelector('#alasan-kso-text').removeAttribute('disabled');
+                                                                            }else{
+                                                                                document.querySelector('#alasan-kso-text').parentElement.classList.add('d-none');
+                                                                                document.querySelector('#alasan-kso-text').setAttribute('disabled', true);
+                                                                            }
+                                                                        }
+                                                                    </script>
+                                                                </div>
+                                                            </div>
+                                                            <!--end::Row-->
+                                                            <!--End::Title Biru Form: Alasan KSO-->
+                                                            <br>
+                                                            <!--Begin::Syarat Prakualifikasi-->
+                                                            <div class="row fv-row">
+                                                                <div class="col-6">
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                                            style="font-size:14px;">Syarat Prakualifikasi
+                                                                            <a href="/proyek/syarat-prakualifikasi/{{ $proyek->kode_proyek }}/view" Id="Plus">+</a>
+                                                                        </h3>
+                                                                        <!--end::Label-->
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <!--Begin::Title Biru Form: Alasan KSO-->
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                                style="font-size:14px;">Tujuan Pembentukan KSO
+                                                            </h3>
+                                                            <br>
+                                                            <!--begin::Row-->
+                                                            @php
+                                                                $tujuan_kso = null;
+                                                                if (!empty($proyek->alasan_kso)) {
+                                                                    $tujuan_kso = collect(json_decode($proyek->tujuan_kso));
+                                                                }
+                                                            @endphp
+                                                            <div class="row fv-row">
+                                                                <div class="col">
+                                                                    <div class="form-check mb-4">
+                                                                        <input class="form-check-input" type="checkbox" name="checklist-tujuan-kso-1" value="Meningkatkan Kompetensi" id="tujuan-1" {{ $tujuan_kso?->contains('index', 1) ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="tujuan-1">
+                                                                        Meningkatkan Kompetensi
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check mb-4">
+                                                                        <input class="form-check-input" type="checkbox" name="checklist-tujuan-kso-2" value="Mengurangi Pesaing" id="tujuan-2" {{ $tujuan_kso?->contains('index', 2) ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="tujuan-2">
+                                                                        Mengurangi Pesaing 
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check mb-4">
+                                                                        <input class="form-check-input" type="checkbox" name="checklist-tujuan-kso-3" value="Penetrasi / pengembangan pasar" id="tujuan-3" {{ $tujuan_kso?->contains('index', 3) ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="tujuan-3">
+                                                                        Penetrasi / pengembangan pasar 
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check mb-4">
+                                                                        <input class="form-check-input" type="checkbox" name="checklist-tujuan-kso-4" value="Lain-lain" id="tujuan-4" onclick="showTextAreaTujuan(this)" {{ $tujuan_kso?->contains('index', 4) ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="tujuan-4">
+                                                                        Lain - lain 
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="mb-4 {{ empty($tujuan_kso) || !$tujuan_kso?->contains('index', 5) ? 'd-none' : '' }}">
+                                                                        <textarea name="tujuan-kso-text" id="tujuan-kso-text" class="form-control form-control-solid" {{ empty($tujuan_kso) || !$tujuan_kso?->contains('index', 5) ? 'disabled' : '' }}>{!! $tujuan_kso?->contains('index', 5) ? $tujuan_kso->where('index', 5)->first()->keterangan : '' !!}</textarea>
+                                                                    </div>
+
+                                                                    <script>
+                                                                        function showTextAreaTujuan(elt){
+                                                                            if (elt.checked) {
+                                                                                document.querySelector('#tujuan-kso-text').parentElement.classList.remove('d-none');
+                                                                                document.querySelector('#tujuan-kso-text').focus();
+                                                                                document.querySelector('#tujuan-kso-text').removeAttribute('disabled');
+                                                                            }else{
+                                                                                document.querySelector('#tujuan-kso-text').parentElement.classList.add('d-none');
+                                                                                document.querySelector('#tujuan-kso-text').setAttribute('disabled', true);
+                                                                            }
+                                                                        }
+                                                                    </script>
+                                                                </div>
+                                                            </div>
+                                                            <!--end::Row-->
+                                                            <!--End::Title Biru Form: Alasan KSO-->
+                                                            <!--Begin::Title Biru Form: Fasilitas NCL-->
+                                                            <br>
+                                                        {{-- @endcan --}}
+                                                        <div class="row fv-row">
+                                                            <div class="col-6">
+                                                                <div class="fv-row mb-7">
+                                                                    <div class="d-flex flex-row align-items-center gap-2">
+                                                                        <!--begin::Label-->
+                                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                                            style="font-size:14px;">Generate Form Penentuan KSO
+                                                                            &nbsp;<a href="/proyek/{{ $proyek->kode_proyek }}/kso/generate" class="btn btn-sm btn-primary"><b>Generate</b></a>
+                                                                        </h3>
+                                                                        <!--end::Label-->
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <hr>
-                                                    <br>
-                                                    <!--End::Syarat Prakualifikasi-->
-                                                    @if ($proyek->jenis_proyek == 'J')
-                                                        <!--Begin::Title Biru Form: Partner JO-->
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">Partner JO
-                                                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                data-bs-target="#kt_modal_porsijo">+</a>
+                                                        <br>
+                                                        <!--Begin::Dokumen Penentuan KSO-->
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                            Dokumen Form Penentuan KSO
                                                         </h3>
                                                         <br>
-                                                        <!--End::Title Biru Form: Partner JO-->
-
-                                                        <!--begin::Row-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <!--begin::Table-->
-                                                                    <table
-                                                                        class="table align-middle table-row-dashed fs-6 gy-2"
-                                                                        id="kt_customers_table">
-                                                                        <!--begin::Table head-->
-                                                                        <thead>
-                                                                            <!--begin::Table row-->
-                                                                            <tr
-                                                                                class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                                <th class="w-50px text-center">No.</th>
-                                                                                <th class="w-auto">Company</th>
-                                                                                <th class="w-auto">Porsi JO</th>
-                                                                                <th class="w-auto">Dokumen Consent & NPWP</th>
-                                                                                <th class="w-auto">Hasil Score Pefindo</th>
-                                                                                <th class="w-auto">Dokumen Pefindo</th>
-                                                                                <th class="w-100px"></th>
-                                                                            </tr>
-                                                                            <!--end::Table row-->
-                                                                        </thead>
-                                                                        <!--end::Table head-->
-                                                                        <!--begin::Table body-->
-                                                                        @php
-                                                                            $no = 1;
-                                                                        @endphp
-                                                                        @foreach ($porsiJO as $porsi)
-                                                                            <tbody class="fw-bold text-gray-600">
-
-                                                                                <tr>
-                                                                                    <!--begin::Name-->
-                                                                                    <td class="text-center">
-                                                                                        {{ $no++ }}
-                                                                                    </td>
-                                                                                    <!--end::Name-->
-                                                                                    <!--begin::Column-->
-                                                                                    <td>
-                                                                                        <a href=# data-bs-toggle="modal"
-                                                                                            data-bs-target="#kt_porsi_edit_{{ $porsi->id }}"
-                                                                                            class="text-hover-primary">
-                                                                                            {{ $porsi->company_jo }}
-                                                                                        </a>
-                                                                                    </td>
-                                                                                    <!--end::Column-->
-                                                                                    <!--begin::Column-->
-                                                                                    <td>
-                                                                                        {{ $porsi->porsi_jo }}<i
-                                                                                            class="bi bi-percent text-dark"></i>
-                                                                                    </td>
-                                                                                    <!--end::Column-->
-                                                                                    <!--begin::Column-->
-                                                                                    <td>
-                                                                                        @php
-                                                                                            $files = json_decode($porsi->file_consent_npwp);
-                                                                                        @endphp
-                                                                                        @foreach ($files as $file)
-                                                                                        <a href="{{ asset('consent-npwp/').$file }}" class="text-hover-primary">{{ $file }}</a>
-                                                                                        <hr>
-                                                                                        @endforeach
-                                                                                    </td>
-                                                                                    <!--begin::Column-->
-                                                                                    <!--begin::Column-->
-                                                                                    <td>
-                                                                                        {{ $porsi->score_pefindo_jo }}
-                                                                                    </td>
-                                                                                    <!--begin::Column-->
-                                                                                    <!--begin::Column-->
-                                                                                    <td>
-                                                                                        <a href="{{ asset('pefindo/').$porsi->file_pefindo_jo }}" class="text-hover-primary">{{ $porsi->file_pefindo_jo }}</a>
-                                                                                    </td>
-                                                                                    <!--begin::Column-->
-                                                                                    <!--begin::Action-->
-                                                                                    <td class="text-center">
-                                                                                        <small>
-                                                                                            <p data-bs-toggle="modal"
-                                                                                                data-bs-target="#kt_porsi_delete_{{ $porsi->id }}"
-                                                                                                class="btn btn-sm btn-light btn-active-primary">
-                                                                                                Delete
-                                                                                            </p>
-                                                                                        </small>
-                                                                                    </td>
-                                                                                    <!--end::Action-->
-                                                                            </tbody>
-                                                                        @endforeach
-                                                                        <!--end::Table body-->
-                                                                    </table>
-                                                                    <!--end::Table-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
+                                                        @if (empty($proyek->DokumenPenentuanKSO))
+                                                        <div class="w-50">
+                                                            <input type="file"
+                                                                class="form-control form-control-sm form-input-solid"
+                                                                name="dokumen-penentuan-kso" accept=".pdf">
                                                         </div>
-                                                        <!--End begin::Row-->
+                                                        @endif
+                                                        <h6 id="error-dokumen-penentuan-kso" class="text-danger fw-normal"
+                                                            style="display: none">*File
+                                                            terlalu besar ! Max Size 50Mb</h6>
                                                         <br>
+                                                        <table class="table align-middle table-row-dashed fs-6 gy-2 w-50"
+                                                        id="kt_customers_table">
+                                                            <thead>
+                                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th class="min-w-auto">Nama Dokumen</th>
+                                                                    <th class="min-w-auto"></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody class="fw-bold text-gray-600">
+                                                                @if (!empty($proyek->DokumenPenentuanKSO))
+                                                                <tr>
+                                                                    <td><a href="/proyek/dokumen-penentuan-kso/{{ $proyek->DokumenPenentuanKSO->id_document }}/download" class="text-gray-800 text-hover-primary">{{ $proyek->DokumenPenentuanKSO->nama_document }}</a></td>
+                                                                    <td>
+                                                                        <a href="#" data-bs-toggle="modal"
+                                                                            data-bs-target="#kt_dokumen_penentuan_kso_delete_{{ $proyek->DokumenPenentuanKSO->id }}" class="btn btn-danger btn-sm text-white">Delete</a>
+                                                                    </td>
+                                                                </tr>
+                                                                @endif
+                                                            </tbody>
+                                                        </table>
+                                                        <hr>
+                                                        <br>
+                                                        <!--End::Dokumen Penentuan KSO-->
+                                                        @can('super-admin')
+                                                            
+                                                            <!--Begin::Title Biru Form: Alasan KSO-->
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                                style="font-size:14px;">Persetujuan Penggunaan Fasilitas Non - Cash Loan
+                                                            </h3>
+                                                            <br>
+                                                            <!--begin::Row-->
+                                                            <div class="form-check mb-4">
+                                                                <input class="form-check-input" type="radio" name="fasilitas-ncl" 
+                                                                value="Diajukan untuk porsi masing-masing ke Pengguna Jasa"
+                                                                {{ $proyek->fasilitas_ncl == "Diajukan untuk porsi masing-masing ke Pengguna Jasa" ? 'checked' : '' }} 
+                                                                id="fasilitas-1">
+                                                                <label class="form-check-label" for="fasilitas-1">
+                                                                    Diajukan untuk porsi masing-masing ke Pengguna Jasa
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check mb-4">
+                                                                <input class="form-check-input" type="radio" name="fasilitas-ncl" 
+                                                                value="Diajukan untuk porsi masing-masing sesuai porsi ke Pengguna Jasa"
+                                                                {{ $proyek->fasilitas_ncl == "Diajukan untuk porsi masing-masing sesuai porsi ke Pengguna Jasa" ? 'checked' : '' }} 
+                                                                id="fasilitas-2">
+                                                                <label class="form-check-label" for="fasilitas-2">
+                                                                    Diajukan untuk porsi masing-masing sesuai porsi ke Pengguna Jasa
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check mb-4">
+                                                                <input class="form-check-input" type="radio" name="fasilitas-ncl" 
+                                                                value="Diajukan untuk counter sesuai porsi ke salah satu member KSO (khusus NCL yang diterbitkan oleh Bank)"
+                                                                {{ $proyek->fasilitas_ncl == "Diajukan untuk counter sesuai porsi ke salah satu member KSO (khusus NCL yang diterbitkan oleh Bank)" ? 'checked' : '' }} 
+                                                                id="fasilitas-3">
+                                                                <label class="form-check-label" for="fasilitas-3">
+                                                                    Diajukan untuk <i>counter</i> sesuai porsi ke salah satu member KSO (khusus NCL yang diterbitkan oleh Bank)
+                                                                </label>
+                                                            </div>
+                                                            <!--end::Row-->
+                                                            <br>
+                                                            <!--End::Title Biru Form: Fasilitas NCL-->
+                                                            <!--Begin::Title Biru Form: Partner JO-->
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                                style="font-size:14px;">Partner JO
+                                                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                                    data-bs-target="#kt_modal_porsijo">+</a>
+                                                            </h3>
+                                                            <br>
+                                                            <!--End::Title Biru Form: Partner JO-->
+
+                                                            <!--begin::Row-->
+                                                            <div class="row fv-row">
+                                                                <!--begin::Col-->
+                                                                <div class="col">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <!--begin::Table-->
+                                                                        <table
+                                                                            class="table align-middle table-row-dashed fs-6 gy-2"
+                                                                            id="kt_assessment_table" style="display: block; overflow-x: auto; white-space: nowrap;">
+                                                                            <!--begin::Table head-->
+                                                                            <thead>
+                                                                                <!--begin::Table row-->
+                                                                                <tr
+                                                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                                    <th class="w-50px text-center">No.</th>
+                                                                                    <th class="w-auto">Company</th>
+                                                                                    <th class="w-auto">Porsi JO</th>
+                                                                                    <th class="w-auto">Dokumen Consent & NPWP</th>
+                                                                                    <th class="w-auto">Status Green Lane</th>
+                                                                                    <th class="w-auto">Score Eksternal</th>
+                                                                                    <th class="w-auto">Risk Grades</th>
+                                                                                    <th class="w-auto">Risk Kategori</th>
+                                                                                    <th class="w-auto">Hasil Assessment Eksternal</th>
+                                                                                    <th class="w-auto">Dokumen Eksternal</th>
+                                                                                    <th class="w-auto">Hasil Profile Risiko</th>
+                                                                                    <th class="w-auto">Hasil Assessment Internal</th>
+                                                                                    <th class="w-100px"></th>
+                                                                                </tr>
+                                                                                <!--end::Table row-->
+                                                                            </thead>
+                                                                            <!--end::Table head-->
+                                                                            <!--begin::Table body-->
+                                                                            @php
+                                                                                $no = 1;
+                                                                            @endphp
+                                                                            @foreach ($porsiJO as $porsi)
+                                                                                <tbody class="fw-bold text-gray-600">
+
+                                                                                    <tr>
+                                                                                        <!--begin::Name-->
+                                                                                        <td class="text-center">
+                                                                                            {{ $no++ }}
+                                                                                        </td>
+                                                                                        <!--end::Name-->
+                                                                                        <!--begin::Column-->
+                                                                                        <td>
+                                                                                            <a href=# data-bs-toggle="modal"
+                                                                                                data-bs-target="#kt_porsi_edit_{{ $porsi->id }}"
+                                                                                                class="text-hover-primary">
+                                                                                                {{ $porsi->company_jo }}
+                                                                                            </a>
+                                                                                        </td>
+                                                                                        <!--end::Column-->
+                                                                                        <!--begin::Column-->
+                                                                                        <td class="text-center">
+                                                                                            {{ $porsi->porsi_jo }}<i
+                                                                                                class="bi bi-percent text-dark"></i>
+                                                                                        </td>
+                                                                                        <!--end::Column-->
+                                                                                        <!--begin::Column-->
+                                                                                        <td>
+                                                                                            @php
+                                                                                                $files = json_decode($porsi->file_consent_npwp);
+                                                                                            @endphp
+                                                                                            @foreach ($files as $file)
+                                                                                            <a href="{{ asset('consent-npwp/').$file }}" class="text-hover-primary">{{ $file }}</a>
+                                                                                            <hr>
+                                                                                            @endforeach
+                                                                                        </td>
+                                                                                        <!--begin::Column-->
+                                                                                        <!--begin::Column-->
+                                                                                        <td class="text-center">
+                                                                                            <p class="badge rounded-pill {{ $porsi->is_greenlane ? 'badge-light-success' : 'badge-light-danger' }} m-0">{{ $porsi->is_greenlane ? 'Green Lane' : 'Non Green Lane' }}</p>
+                                                                                        </td>
+                                                                                        <!--begin::Column-->
+                                                                                        <!--begin::Column-->
+                                                                                        <td class="text-center">
+                                                                                            {{ $porsi->score_pefindo_jo }}
+                                                                                        </td>
+                                                                                        <!--begin::Column-->
+                                                                                        <!--begin::Column-->
+                                                                                        <td class="text-center">
+                                                                                            {{ $porsi->grade }}
+                                                                                        </td>
+                                                                                        <!--begin::Column-->
+                                                                                        <!--begin::Column-->
+                                                                                        @php
+                                                                                            switch ($porsi->keterangan) {
+                                                                                                case 'Very Low Risk':
+                                                                                                    $style = 'text-bg-success';
+                                                                                                    break;
+                                                                                                case 'Low Risk':
+                                                                                                    $style = 'badge-success';
+                                                                                                    break;
+                                                                                                case 'Average Risk':
+                                                                                                    $style = 'badge-warning';
+                                                                                                    break;
+                                                                                                case 'High Risk':
+                                                                                                    $style = 'badge-danger';
+                                                                                                    break;
+                                                                                                case 'Very High Risk':
+                                                                                                    $style = 'text-bg-danger';
+                                                                                                    break;
+                                                                                                
+                                                                                                default:
+                                                                                                    $style = "";
+                                                                                                    break;
+                                                                                            }
+                                                                                        @endphp
+                                                                                        <td class="text-center">
+                                                                                            <p class="badge rounded-pill {{ $style }} m-0">{{ $porsi->keterangan }}</p>
+                                                                                        </td>
+                                                                                        <!--end::Column-->
+                                                                                        <!--begin::Column-->
+                                                                                        <td class="text-center">
+                                                                                            @php
+                                                                                                $getAssessmentEksternal = App\Models\MasterPefindo::where('id_pelanggan', $porsi->id_company_jo)->latest()->first();
+                                                                                                if ($getAssessmentEksternal->id_document == $porsi->file_pefindo_jo) {
+                                                                                                    $isActiveAssessment = $getAssessmentEksternal->is_active;
+                                                                                                }else{
+                                                                                                    $isActiveAssessment = null;
+                                                                                                }
+                                                                                            @endphp
+                                                                                            @if (!is_null($isActiveAssessment) && $isActiveAssessment == true)
+                                                                                                <p class="badge rounded-pill {{ $porsi->is_disetujui ? 'badge-success' : 'badge-danger' }} m-0">{{ is_null($porsi->is_disetujui) ? 'Belum dilakukan Assessment Eksternal' : ($porsi->is_disetujui ? 'Disetujui' : 'Ditolak')  }}</p>
+                                                                                            @elseif (!is_null($isActiveAssessment) && $isActiveAssessment == false)
+                                                                                                <p class="badge rounded-pill badge-danger m-0">Expired</p>
+                                                                                            @else
+                                                                                                <p class="badge rounded-pill badge-danger m-0">Expired</p>
+                                                                                            @endif
+                                                                                        </td>
+                                                                                        <!--end::Column-->
+                                                                                        <!--begin::Column-->
+                                                                                        <td>
+                                                                                            <a href="{{ asset('pefindo/').$porsi->file_pefindo_jo }}" class="text-hover-primary">{{ $porsi->file_pefindo_jo }}</a>
+                                                                                        </td>
+                                                                                        <!--begin::Column-->
+                                                                                        <!--begin::Column-->
+                                                                                        <td class="text-center">
+                                                                                            @php
+                                                                                                $nilaiRisk = $porsi->PartnerSelection?->where('kode_proyek', $proyek->kode_proyek)->sum('nilai');
+                                                                                                if (empty($nilaiRisk)) {
+                                                                                                    $kategoriRiskPartner = null;
+                                                                                                }else{
+                                                                                                    $kategoriRiskPartner = App\Models\PenilaianPartnerSelection::all()?->filter(function ($item) use ($nilaiRisk) {
+                                                                                                        return (float)$item->dari_nilai <= (int)$nilaiRisk && (float)$item->sampai_nilai >= (int)$nilaiRisk;
+                                                                                                    })->first()?->nama;
+                                                                                                }
+                                                                                                if (!empty($kategoriRiskPartner)) {
+                                                                                                    switch ($kategoriRiskPartner) {
+                                                                                                        case 'Risiko Rendah':
+                                                                                                            $style_2 = 'badge-success';
+                                                                                                            break;
+                                                                                                        case 'Risiko Moderat':
+                                                                                                            $style_2 = 'badge-warning';
+                                                                                                            break;
+                                                                                                        case 'Risiko Tinggi':
+                                                                                                            $style_2 = 'badge-danger';
+                                                                                                            break;
+                                                                                                        case 'Risiko Ekstrem':
+                                                                                                            $style_2 = 'text-bg-danger';
+                                                                                                            break;
+
+                                                                                                        default:
+                                                                                                            $style_2 = '';
+                                                                                                            break;
+                                                                                                    }
+                                                                                                }else {
+                                                                                                    $style_2 = 'badge-danger';
+                                                                                                }
+                                                                                            @endphp
+                                                                                            <p class="badge rounded-pill {{ $style_2 }} m-0">{{ $kategoriRiskPartner ?? 'Belum dilakukan Assessment Internal' }}</p>
+                                                                                        </td>
+                                                                                        <!--end::Column-->
+                                                                                        <!--begin::Column-->
+                                                                                        <td class="text-center">
+                                                                                            <p class="m-0">{{ empty($nilaiRisk) ? '' : $nilaiRisk }}</p>
+                                                                                        </td>
+                                                                                        <!--end::Column-->
+                                                                                        <!--begin::Action-->
+                                                                                        <td class="text-center">
+                                                                                            <div class="d-flex flex-row align-items-center justify-content-center gap-2">
+                                                                                                @if (is_null($isActiveAssessment))
+                                                                                                <small>
+                                                                                                    <button type="button" class="btn btn-sm btn-success">
+                                                                                                        Update
+                                                                                                    </button>
+                                                                                                </small>
+                                                                                                @endif
+                                                                                                <small>
+                                                                                                    <p data-bs-toggle="modal"
+                                                                                                        data-bs-target="#kt_porsi_upload_dokumen_{{ $porsi->id }}"
+                                                                                                        class="btn btn-sm btn-light btn-primary m-0">
+                                                                                                        {{ \App\Models\DokumenKelengkapanPartnerKSO::where('kode_proyek', $proyek->kode_proyek)->where('id_partner', $porsi->id)->get()?->count() == 4 ? "Lihat" : "Upload" }}
+                                                                                                    </p>
+                                                                                                </small>
+                                                                                                <small>
+                                                                                                    <p data-bs-toggle="modal"
+                                                                                                        data-bs-target="#kt_porsi_delete_{{ $porsi->id }}"
+                                                                                                        class="btn btn-sm btn-light btn-active-danger m-0">
+                                                                                                        Delete
+                                                                                                    </p>
+                                                                                                </small>
+                                                                                            </div>
+                                                                                        </td>
+                                                                                        <!--end::Action-->
+                                                                                </tbody>
+                                                                            @endforeach
+                                                                            <!--end::Table body-->
+                                                                        </table>
+                                                                        <!--end::Table-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                            </div>
+                                                            <!--End begin::Row-->
+                                                            <br>
+                                                        @endcan
                                                     @endif
 
-                                                    <br>
-                                                    
-                                                    @can('super-admin')
-                                                    
-                                                    <!--Begin::Title Biru Form: Document Consent NPWP-->
-                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                                        Document Consent & NPWP
-                                                    </h3>
-                                                    <br>
-                                                    <div class="w-50">
-                                                        <input type="file"
-                                                            class="form-control form-control-sm form-input-solid"
-                                                            name="dokumen-consent-npwp" accept=".pdf">
-                                                    </div>
-                                                    <h6 id="error-dokumen-consent-npwp" class="text-danger fw-normal"
-                                                        style="display: none">*File
-                                                        terlalu besar ! Max Size 50Mb</h6>
-                                                    <br>
-                                                    <!--begin::Table-->
-                                                    <table class="table align-middle table-row-dashed w-50 fs-6 gy-2"
-                                                        id="kt_customers_table">
-                                                        <!--begin::Table head-->
-                                                        <thead>
-                                                            <!--begin::Table row-->
-                                                            <tr
-                                                                class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                <th class="w-50px text-center">No.</th>
-                                                                <th class="w-auto">Nama Document</th>
-                                                                <th class="w-auto">Modified On</th>
-                                                                <th class="w-auto text-center"></th>
-                                                            </tr>
-                                                            <!--end::Table row-->
-                                                        </thead>
-                                                        <!--end::Table head-->
-                                                        @php
-                                                            $no = 1;
-                                                        @endphp
-                                                        <!--begin::Table body-->
-                                                        <tbody class="fw-bold text-gray-600">
-                                                            @foreach ($proyek->DokumenConsentNPWP as $item)
-                                                                <tr>
-                                                                    <!--begin::Nomor-->
-                                                                    <td class="text-center">
-                                                                        {{ $no++ }}
-                                                                    </td>
-                                                                    <!--end::Nomor-->
-                                                                    <!--begin::Name-->
-                                                                    <td>
-                                                                        @if (str_contains("$item->nama_dokumen", '.doc'))
-                                                                            <a href="/document/view/{{ $item->id_dokumen_consent_npwp }}/{{ $item->id_document }}"
-                                                                                class="text-hover-primary">{{ $item->nama_dokumen }}</a>
-                                                                        @else
-                                                                            <a target="_blank"
-                                                                                href="{{ asset('words/' . $item->id_document . '.pdf') }}"
-                                                                                class="text-hover-primary">{{ $item->nama_dokumen }}</a>
-                                                                        @endif
-                                                                    </td>
-                                                                    <!--end::Name-->
-                                                                    <!--begin::Column-->
-                                                                    <td>
-                                                                        {{ Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y') }}
-                                                                    </td>
-                                                                    <!--end::Column-->
-                                                                    <!--begin::Action-->
-                                                                    @if ($proyek->stage < 4)
-                                                                    <td class="text-center">
-                                                                        <small>
-                                                                            <p data-bs-toggle="modal"
-                                                                                data-bs-target="#kt_consent_npwp_delete_{{ $item->id_dokumen_consent_npwp }}"
-                                                                                id="modal-delete"
-                                                                                class="btn btn-sm btn-light btn-active-primary">
-                                                                                Delete
-                                                                            </p>
-                                                                        </small>
-                                                                    </td>
-                                                                    @endif
-                                                                    <!--end::Action-->
-                                                                </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                        <!--end::Table body-->
-                                                    </table>
-                                                    <!--end::Table-->
-                                                    <!--End::Title Biru Form: Document Consent NPWP-->
-                                                    <br>
 
-                                                    <div class="row">
-                                                        <div class="col-3">
-                                                            <!--begin::Input group Website-->
-                                                            <div class="fv-row mb-7">
-                                                                <!--begin::Label-->
-                                                                <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span class="">Hasil Score Pefindo<i
-                                                                        class="bi bi-lock"></i></span>
-                                                                </label>
-                                                                <!--end::Label-->
-                                                                <!--begin::Input-->
-                                                                <input type="number" min="1"
-                                                                    class="form-control form-control-solid" id="porsi-jo"
-                                                                    name="score-pefindo" value="{{ !empty($pefindo) ? $pefindo->score : '' }}"
-                                                                    placeholder="Hasil Score Pefindo" disabled/>
-                                                                <!--end::Input-->
-                                                            </div>
-                                                            <!--end::Input group-->
-                                                        </div>
-                                                    </div>
                                                     <br>
-
-                                                    <!--Begin::Title Biru Form: Document Pefindo-->
-                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                                        Document Pefindo
-                                                    </h3>
-                                                    {{-- <br> --}}
-                                                    {{-- <div class="w-50">
-                                                        <input type="file"
-                                                            class="form-control form-control-sm form-input-solid"
-                                                            name="dokumen-pefindo" accept=".pdf">
-                                                    </div> --}}
-                                                    <h6 id="error-dokumen-pefindo" class="text-danger fw-normal"
-                                                        style="display: none">*File
-                                                        terlalu besar ! Max Size 50Mb</h6>
-                                                    <br>
-                                                    <!--begin::Table-->
-                                                    <table class="table align-middle table-row-dashed w-50 fs-6 gy-2"
-                                                        id="kt_customers_table">
-                                                        <!--begin::Table head-->
-                                                        <thead>
-                                                            <!--begin::Table row-->
-                                                            <tr
-                                                                class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                <th class="w-50px text-center">No.</th>
-                                                                <th class="w-auto">Nama Document</th>
-                                                                <th class="w-auto">Modified On</th>
-                                                                {{-- <th class="w-auto text-center"></th> --}}
-                                                            </tr>
-                                                            <!--end::Table row-->
-                                                        </thead>
-                                                        <!--end::Table head-->
-                                                        @php
-                                                            $no = 1;
-                                                        @endphp
-                                                        <!--begin::Table body-->
-                                                        <tbody class="fw-bold text-gray-600">
-                                                            @if (!empty($pefindo))
-                                                                <td class="text-center">
-                                                                    {{ $no }}
-                                                                </td>
-                                                                <td>
-                                                                    <a target="_blank"
-                                                                        href="{{ asset('pefindo/' . $pefindo->id_document) }}"
-                                                                        class="text-hover-primary">{{ $pefindo->id_document }}</a>
-                                                                </td>
-                                                                <!--begin::Column-->
-                                                                <td>
-                                                                    {{ Carbon\Carbon::parse($pefindo->created_at)->translatedFormat('d F Y') }}
-                                                                </td>
-                                                                <!--end::Column-->
-                                                            @endif
-                                                            {{-- @foreach ($proyek->DokumenPefindo as $item)
-                                                                <tr>
-                                                                    <!--begin::Nomor-->
-                                                                    <td class="text-center">
-                                                                        {{ $no++ }}
-                                                                    </td>
-                                                                    <!--end::Nomor-->
-                                                                    <!--begin::Name-->
-                                                                    <td>
-                                                                        @if (str_contains("$item->nama_dokumen", '.doc'))
-                                                                            <a href="/document/view/{{ $item->id_dokumen_pefindo }}/{{ $item->id_document }}"
-                                                                                class="text-hover-primary">{{ $item->nama_dokumen }}</a>
-                                                                        @else
-                                                                            <a target="_blank"
-                                                                                href="{{ asset('words/' . $item->id_document . '.pdf') }}"
-                                                                                class="text-hover-primary">{{ $item->nama_dokumen }}</a>
-                                                                        @endif
-                                                                    </td>
-                                                                    <!--end::Name-->
-                                                                    <!--begin::Column-->
-                                                                    <td>
-                                                                        {{ Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y') }}
-                                                                    </td>
-                                                                    <!--end::Column-->
-                                                                    <!--begin::Action-->
-                                                                    @if ($proyek->stage < 4)
-                                                                    <td class="text-center">
-                                                                        <small>
-                                                                            <p data-bs-toggle="modal"
-                                                                                data-bs-target="#kt_pefindo_delete_{{ $item->id_dokumen_pefindo }}"
-                                                                                id="modal-delete"
-                                                                                class="btn btn-sm btn-light btn-active-primary">
-                                                                                Delete
-                                                                            </p>
-                                                                        </small>
-                                                                    </td>
-                                                                    @endif
-                                                                    <!--end::Action-->
-                                                                </tr>
-                                                            @endforeach --}}
-                                                        </tbody>
-                                                        <!--end::Table body-->
-                                                    </table>
-                                                    <!--end::Table-->
-                                                    <!--End::Title Biru Form: Document Pefindo-->
-                                                    <br>
-                                                        
-                                                    @endcan
 
 
                                                     <!--Begin::Title Biru Form: Document Prakualifikasi-->
@@ -4052,6 +4298,94 @@
                                                     </div>
                                                     <!--End begin::Row-->
 
+                                                    <br>
+                                                    <!--Begin::Inputan Waktu Pemasukan Tender & Jaminan Penawaran-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        {{-- <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Waktu Pemasukan Tender</span>
+                                                                </label>
+                                                                <a href="#" class="btn"
+                                                                    style="background: transparent;" id="start-date-modal"
+                                                                    onclick="showCalendarModal(this)">
+                                                                    <i class="bi bi-calendar2-plus-fill"
+                                                                        style="color: #008CB4"></i>
+                                                                </a>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="Date"
+                                                                    class="form-control form-control-solid"
+                                                                    name="waktu-pemasukkan-tender" value="{{ $proyek->waktu_pemasukan_tender }}"
+                                                                    placeholder="Date" />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div> --}}
+                                                        <!--End begin::Col-->
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Waktu Jaminan Penawaran</span>
+                                                                </label>
+                                                                <a href="#" class="btn"
+                                                                    style="background: transparent;" id="start-date-modal"
+                                                                    onclick="showCalendarModal(this)">
+                                                                    <i class="bi bi-calendar2-plus-fill"
+                                                                        style="color: #008CB4"></i>
+                                                                </a>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="Date"
+                                                                    class="form-control form-control-solid"
+                                                                    name="waktu-jaminan-penawaran" value="{{ $proyek->waktu_jaminan_penawaran }}"
+                                                                    placeholder="Date" />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                    </div>
+                                                    <!--End::Inputan Waktu Pemasukan Tender & Jaminan Penawaran-->
+
+                                                    <br>
+                                                    <!--Begin::Inputan Waktu Prakualifikasi-->
+                                                    {{-- <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Waktu Prakualifikasi</span>
+                                                                </label>
+                                                                <a href="#" class="btn"
+                                                                    style="background: transparent;" id="start-date-modal"
+                                                                    onclick="showCalendarModal(this)">
+                                                                    <i class="bi bi-calendar2-plus-fill"
+                                                                        style="color: #008CB4"></i>
+                                                                </a>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="Date"
+                                                                    class="form-control form-control-solid"
+                                                                    name="waktu-prakualifikasi" value="{{ $proyek->waktu_prakualifikasi }}"
+                                                                    placeholder="Date" />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                    </div> --}}
+                                                    <!--End::Inputan Waktu Prakualifikasi-->
+
+
 
                                                     <!--Begin::Title Biru Form: SKT Personil-->
                                                     <br>
@@ -4256,6 +4590,323 @@
                                                         <!--End begin::Col-->
                                                     </div>
                                                     <!--End begin::Row-->
+
+                                                    <!--begin::Row-->
+                                                    {{-- @can('super-admin') --}}
+                                                    <div class="row fv-row">
+                                                        <!--Begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Jenis Kontrak</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <select id="jenis-terkontrak-{{ $proyek->kode_proyek }}" name="jenis-terkontrak-new"
+                                                                    class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="true"
+                                                                    data-placeholder="Jenis Kontrak">
+                                                                    <option></option>
+                                                                    <option value="Cost-Plus/Provisional Sum"
+                                                                        {{ $proyek->jenis_terkontrak == 'Cost-Plus/Provisional Sum' ? 'selected' : '' }}>
+                                                                        Cost-Plus/Provisional Sum</option>
+                                                                    {{-- <option value="Design & Build"
+                                                                            {{ $proyek->jenis_terkontrak == 'Design & Build' ? 'selected' : '' }}>
+                                                                            Design & Build</option> --}}
+                                                                    <option value="Lumpsum"
+                                                                        {{ $proyek->jenis_terkontrak == 'Lumpsum' || $proyek->jenis_terkontrak == 'Design & Build' ? 'selected' : '' }}>
+                                                                        Lumpsum</option>
+                                                                    {{-- <option value="OM"
+                                                                            {{ $proyek->jenis_terkontrak == 'OM' ? 'selected' : '' }}>
+                                                                            OM</option> --}}
+                                                                    <option value="Turnkey"
+                                                                        {{ $proyek->jenis_terkontrak == 'Turnkey' ? 'selected' : '' }}>
+                                                                        Turnkey</option>
+                                                                    <option value="Unit Price"
+                                                                        {{ $proyek->jenis_terkontrak == 'Unit Price' || $proyek->jenis_terkontrak == 'OM' ? 'selected' : '' }}>
+                                                                        Unit Price</option>
+                                                                    <option value="Fixed Price"
+                                                                        {{ $proyek->jenis_terkontrak == 'Fixed Price' ? 'selected' : '' }}>
+                                                                        Fixed Price</option>
+                                                                    <option value="Lumsump+Unit Price"
+                                                                        {{ $proyek->jenis_terkontrak == 'Lumsump+Unit Price' ? 'selected' : '' }}>
+                                                                        Lumsump+Unit Price</option>
+                                                                </select>
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End::Col-->
+                                                        <!--Begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Sistem Pembayaran</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <select id="sistem-bayar-{{ $proyek->kode_proyek }}" name="sistem-bayar-new"
+                                                                    class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="true"
+                                                                    data-placeholder="Sistem Pembayaran">
+                                                                    <option></option>
+                                                                    <option value="CPF (Turn Key)"
+                                                                        {{ $proyek->sistem_bayar == 'CPF (Turn Key)' ? 'selected' : '' }}>
+                                                                        CPF (Turn Key)</option>
+                                                                    <option value="Milestone"
+                                                                        {{ $proyek->sistem_bayar == 'Milestone' ? 'selected' : '' }}>
+                                                                        Milestone</option>
+                                                                    <option value="Monthly"
+                                                                        {{ $proyek->sistem_bayar == 'Monthly' ? 'selected' : '' }}>
+                                                                        Monthly</option>
+                                                                </select>
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End::Col-->
+                                                    </div>
+                                                    <div class="row fv-row">
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Uang Muka (%)</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <select id="is-uang-muka" name="is-uang-muka"
+                                                                    class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="true"
+                                                                    data-placeholder="Uang Muka" onchange="showUangMuka(this)">
+                                                                    <option value="" selected></option>
+                                                                    <option value="Ya" {{ !is_null($proyek->is_uang_muka) && $proyek->is_uang_muka == true ? 'selected' : '' }}>Ya</option>
+                                                                    <option value="Tidak" {{ !is_null($proyek->is_uang_muka) && $proyek->is_uang_muka == false ? 'selected' : '' }}>Tidak</option>
+                                                                </select>
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                            <div class="row fv-row mb-7 {{ $proyek->is_uang_muka == false ? 'd-none' : '' }}">
+                                                                <div class="col-4">
+                                                                    <input type="number" name="uang-muka" class="form-control form-control-solid" min="0" max="100" value="{{ $proyek->uang_muka }}" {{ $proyek->is_uang_muka == false ? 'disabled' : '' }}>
+                                                                </div>
+                                                                <div class="col-2">
+                                                                    <p class="mt-7"><i class="bi bi-percent text-dark"></i></p>
+                                                                </div>
+                                                            </div>
+
+                                                            <script>
+                                                                function showUangMuka(elt) {
+                                                                    const eltUangMuka = elt.parentElement.nextElementSibling
+                                                                    if (elt.value == "Ya") {
+                                                                        eltUangMuka.classList.remove('d-none');
+                                                                        eltUangMuka.firstElementChild.removeAttribute('disabled');
+                                                                    }else{
+                                                                        eltUangMuka.classList.add('d-none');
+                                                                        eltUangMuka.firstElementChild.setAttribute('disabled', true);
+                                                                    }
+                                                                }
+                                                            </script>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            @if (!is_null($check_non_green_line_nota_2) && $check_non_green_line_nota_2)
+                                                                <span class="px-4 fs-4 badge badge-danger">
+                                                                    Non Green Lane
+                                                                </span>
+                                                            @elseif (!is_null($check_non_green_line_nota_2) && $check_non_green_line_nota_2 == false)
+                                                                <span class="px-4 fs-4 badge badge-success">
+                                                                    Green Lane
+                                                                </span>
+                                                            @else
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                    <div class="row fv-row">
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Waktu Pelaksanaan Proyek (Hari)</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--Begin::Input-->
+                                                                <div class="row">
+                                                                    <div class="col-10">
+                                                                        <input type="number" name="waktu_pelaksanaan" class="form-control form-control-solid" min="0" value="{{ $proyek->waktu_pelaksanaan }}" placeholder="Waktu Pelaksanaan Proyek">
+                                                                    </div>
+                                                                    <div class="col-2">
+                                                                        <p class="mt-7">Hari</p>
+                                                                    </div>
+                                                                </div>
+                                                                <!--End::Input-->
+
+                                                            </div>
+                                                            <!--begin::Input group Website-->
+                                                        </div>
+                                                    </div>
+                                                    <div class="row fv-row">
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Pekerjaan Utama</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--Begin::Input-->
+                                                                <textarea name="pekerjaan-utama" id="pekerjaan-utama" class="form-control form-control-solid">{!! $proyek->pekerjaan_utama !!}</textarea>
+                                                                <!--End::Input-->
+
+                                                            </div>
+                                                            <!--begin::Input group Website-->
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row fv-row">
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Keterangan</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--Begin::Input-->
+                                                                <textarea name="keterangan-greenlane" id="keterangan-greenlane" class="form-control form-control-solid">{!! $proyek->keterangan_greenlane !!}</textarea>
+                                                                <!--End::Input-->
+
+                                                            </div>
+                                                            <!--begin::Input group Website-->
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row fv-row">
+                                                        <div class="col-6">
+                                                            <div class="fv-row mb-7">
+                                                                <div class="d-flex flex-row align-items-center gap-2">
+                                                                    <!--begin::Label-->
+                                                                    <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                                        style="font-size:14px;">Generate Verifikasi Internal Penentuan Proyek Green Lane / Non Green lane
+                                                                        &nbsp;<a href="/proyek/{{ $proyek->kode_proyek }}/project-greenlane/generate" class="btn btn-sm btn-primary"><b>Generate</b></a>
+                                                                    </h3>
+                                                                    <!--end::Label-->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                        Dokumen Form Penentuan Project Green Lane / Non Green Lane
+                                                    </h3>
+                                                    <br>
+                                                    @if (empty($proyek->DokumenPenentuanProjectGreenlane))
+                                                    <div class="w-50">
+                                                        <input type="file"
+                                                            class="form-control form-control-sm form-input-solid"
+                                                            name="dokumen-penentuan-project-greenlane" accept=".pdf">
+                                                    </div>
+                                                    @endif
+                                                    <h6 id="error-dokumen-penentuan-project-greenlane" class="text-danger fw-normal"
+                                                        style="display: none">*File
+                                                        terlalu besar ! Max Size 50Mb</h6>
+                                                    <br>
+                                                    <div class="w-50">
+                                                        <table class="table align-middle table-row-dashed fs-6 gy-2"
+                                                        id="kt_customers_table">
+                                                            <thead>
+                                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th class="min-w-auto">Nama Dokumen</th>
+                                                                    <th class="min-w-auto"></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody class="fw-bold text-gray-600">
+                                                                @if (!empty($proyek->DokumenPenentuanProjectGreenlane))
+                                                                <tr>
+                                                                    <td><a href="/proyek/dokumen-penentuan-project-greenlane/{{ $proyek->DokumenPenentuanProjectGreenlane->id_document }}/download" class="text-gray-800 text-hover-primary">{{ $proyek->DokumenPenentuanProjectGreenlane->nama_document }}</a></td>
+                                                                    <td>
+                                                                        <a href="#" data-bs-toggle="modal"
+                                                                            data-bs-target="#kt_dokumen_penentuan_project_greenlane_delete_{{ $proyek->DokumenPenentuanProjectGreenlane->id }}" class="btn btn-danger btn-sm text-white">Delete</a>
+                                                                    </td>
+                                                                </tr>
+                                                                @endif
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row fv-row">
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                            style="font-size:14px;">Tim Tender
+                                                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                                data-bs-target="#kt_modal_tim_tender">+</a>
+                                                        </h3>
+                                                        <!--begin::Col-->
+                                                        <div class="col-6 mt-7">
+                                                            <!--begin::Table Tim Tender-->
+                                                            <table class="table align-middle table-row-dashed fs-6 gy-2"
+                                                                id="kt_customers_table">
+                                                                <!--begin::Table head-->
+                                                                <thead>
+                                                                    <!--begin::Table row-->
+                                                                    <tr
+                                                                        class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                        <th class="w-50px text-center">No.</th>
+                                                                        <th class="w-auto">Nama Pegawai</th>
+                                                                        <th class="w-auto">Posisi</th>
+                                                                        <th class="w-100px"></th>
+                                                                    </tr>
+                                                                    <!--end::Table row-->
+                                                                </thead>
+                                                                <!--end::Table head-->
+                                                                <!--begin::Table body-->
+                                                                @php
+                                                                    $no = 1;
+                                                                @endphp
+                                                                <tbody class="fw-bold text-gray-600">
+                                                                    @if (!empty($proyek->TimTender))
+                                                                    @foreach ($proyek->TimTender as $timTender)
+                                                                        <tr>
+                                                                            <!--begin::Name-->
+                                                                            <td class="text-center">
+                                                                                {{ $no++ }}
+                                                                            </td>
+                                                                            <!--end::Name-->
+                                                                            <!--begin::Column-->
+                                                                            <td>
+                                                                                <a href="#"
+                                                                                    class="text-gray-800 text-hover-primary"
+                                                                                    onclick="showModal('{{ $timTender->id }}', '{{ $timTender->nip_pegawai }}', '{{ $timTender->Pegawai?->nama_pegawai }}')">
+                                                                                    {{ $timTender->Pegawai?->nama_pegawai }}
+                                                                                </a>
+                                                                            </td>
+                                                                            <td class="text-center">{{ $timTender->posisi }}</td>
+                                                                            <td class="text-center">
+                                                                                <small>
+                                                                                    <p data-bs-toggle="modal"
+                                                                                        data-bs-target="#kt_tim_tender_delete_{{ $timTender->id }}"
+                                                                                        id="modal-delete"
+                                                                                        class="btn btn-sm btn-light btn-active-primary">
+                                                                                        Delete
+                                                                                    </p>
+                                                                                </small>
+                                                                            </td>
+                                                                            <!--end::Action-->
+                                                                        </tr>
+                                                                    @endforeach
+                                                                    @endif
+                                                                </tbody>
+                                                                <!--end::Table body-->
+                                                            </table>
+                                                            <!--begin::Table Tim Tender-->
+                                                        </div>
+                                                    </div>
+                                                    {{-- @endcan --}}
+                                                    <!--end::Row-->
 
                                                     <!--Begin::Konsultan Perencana-->
                                                     <br>
@@ -4500,7 +5151,7 @@
                                                     {{-- <h6 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">
                                                         </h6> --}}
-                                                    <br>
+                                                    
                                                     <h3 class="fw-bolder m-0 required" id="HeadDetail"
                                                         style="font-size:14px;">
                                                         Risk Tender
@@ -5884,14 +6535,14 @@
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span>Jenis Kontrak</span>
+                                                                    <span>Jenis Kontrak {!! auth()->user()->check_administrator ? '<i class="bi bi-lock"></i>' : '' !!}</span>
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
                                                                 <select id="jenis-terkontrak" name="jenis-terkontrak"
                                                                     class="form-select form-select-solid"
                                                                     data-control="select2" data-hide-search="true"
-                                                                    data-placeholder="Jenis Kontrak">
+                                                                    data-placeholder="Jenis Kontrak" {{ auth()->user()->check_administrator ? 'readonly' : '' }}>
                                                                     <option></option>
                                                                     <option value="Cost-Plus/Provisional Sum"
                                                                         {{ $proyek->jenis_terkontrak == 'Cost-Plus/Provisional Sum' ? 'selected' : '' }}>
@@ -5961,14 +6612,14 @@
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span>Sistem Pembayaran</span>
+                                                                    <span>Sistem Pembayaran {!! auth()->user()->check_administrator ? '<i class="bi bi-lock"></i>' : '' !!}</span>
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
                                                                 <select id="sistem-bayar" name="sistem-bayar"
                                                                     class="form-select form-select-solid"
                                                                     data-control="select2" data-hide-search="true"
-                                                                    data-placeholder="Sistem Pembayaran">
+                                                                    data-placeholder="Sistem Pembayaran" {{ auth()->user()->check_administrator ? 'readonly' : '' }}>
                                                                     <option></option>
                                                                     <option value="CPF (Turn Key)"
                                                                         {{ $proyek->sistem_bayar == 'CPF (Turn Key)' ? 'selected' : '' }}>
@@ -7563,13 +8214,101 @@
             @endforeach
             <!--end::modal EDIT KONSULTAN PERENCANA-->
 
-            <!--begin::DELETE KONSULTAN PERENCANA-->
-            @foreach ($proyek->ProyekKonsultanPerencana as $konsultan)
-                <form action="/proyek/konsultan-perencana/{{ $konsultan->id }}/delete" method="post"
+            <!--begin::modal ADD KONSULTAN PERENCANA-->
+            <form onsubmit="disabledSubmitButton(this)" action="/proyek/tim-tender/add" method="post"
+                enctype="multipart/form-data">
+                @csrf
+                <div class="modal fade" id="kt_modal_tim_tender" tabindex="-1" aria-hidden="true">
+                    <!--begin::Modal dialog-->
+                    <div class="modal-dialog modal-dialog-centered mw-600px">
+                        <!--begin::Modal content-->
+                        <div class="modal-content">
+                            <!--begin::Modal header-->
+                            <div class="modal-header">
+                                <!--begin::Modal title-->
+                                <h2>Tambah Tim Tender :</h2>
+                                <input type="hidden" name="kode-proyek" value="{{ $proyek->kode_proyek }}">
+                                <!--end::Modal title-->
+                                <!--begin::Close-->
+                                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                    <span class="svg-icon svg-icon-1">
+                                        <i class="bi bi-x-lg"></i>
+                                    </span>
+                                    <!--end::Svg Icon-->
+                                </div>
+                                <!--end::Close-->
+                            </div>
+                            <!--end::Modal header-->
+
+                            <!--begin::Modal body-->
+                            <div class="modal-body py-lg-6 px-lg-6">
+
+                                <!--begin::Row-->
+                                <div class="row fv-row">
+                                    <!--begin::Col-->
+                                    <div class="col">
+                                        <!--begin::Input group Website-->
+                                        <div class="fv-row mb-7">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                <span class="required">Nama Pegawai</span>
+                                            </label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <select id="nama_pegawai" name="nama_pegawai"
+                                                class="form-select form-select-solid" data-control="select2"
+                                                data-hide-search="false" data-placeholder="Pilih Pegawai">
+                                                <option></option>
+                                            </select>
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Input group-->
+                                        <!--begin::Input group Website-->
+                                        <div class="fv-row mb-7">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                <span class="required">Posisi</span>
+                                            </label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <select id="posisi" name="posisi"
+                                                class="form-select form-select-solid" data-control="select2"
+                                                data-hide-search="true" data-placeholder="Pilih Posisi">
+                                                <option></option>
+                                                <option value="Leader">Leader</option>
+                                                <option value="Member">Member</option>
+                                            </select>
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Input group-->
+                                    </div>
+                                </div>
+                                <!--End begin::Row-->
+
+                            </div>
+                            <div class="modal-footer">
+
+                                <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                                    id="new_save" style="background-color:#008CB4">Save</button>
+
+                            </div>
+                            <!--end::Modal body-->
+                        </div>
+                        <!--end::Modal content-->
+                    </div>
+                    <!--end::Modal dialog-->
+                </div>
+            </form>
+            <!--end::modal ADD KONSULTAN PERENCANA-->
+
+            <!--begin::modal EDIT KONSULTAN PERENCANA-->
+            @foreach ($proyek->TimTender as $timTender)
+                <form action="/proyek/tim-tender/{{ $timTender->id }}/edit" method="post"
                     enctype="multipart/form-data">
-                    @method('delete')
                     @csrf
-                    <div class="modal fade" id="kt_konsultan_delete_{{ $konsultan->id }}" tabindex="-1"
+                    <input type="hidden" name="kode-proyek" value="{{ $proyek->kode_proyek }}">
+                    <div class="modal fade" id="kt_modal_edit_tim_tender_{{ $timTender->id }}" tabindex="-1"
                         aria-hidden="true">
                         <!--begin::Modal dialog-->
                         <div class="modal-dialog modal-dialog-centered mw-800px">
@@ -7578,7 +8317,98 @@
                                 <!--begin::Modal header-->
                                 <div class="modal-header">
                                     <!--begin::Modal title-->
-                                    <h2>Hapus Konsultan Perencana : {{ $konsultan->nama_konsultan }}
+                                    <h2>Edit Konsultan Perencana :</h2>
+                                    <!--end::Modal title-->
+                                    <!--begin::Close-->
+                                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                        <span class="svg-icon svg-icon-1">
+                                            <i class="bi bi-x-lg"></i>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </div>
+                                    <!--end::Close-->
+                                </div>
+                                <!--end::Modal header-->
+
+                                <!--begin::Modal body-->
+                                <div class="modal-body py-lg-6 px-lg-6">
+
+                                    <!--begin::Row-->
+                                    <div class="row fv-row">
+                                        <!--begin::Col-->
+                                        <div class="col">
+                                            <!--begin::Input group Website-->
+                                            <div class="fv-row mb-7">
+                                                <!--begin::Label-->
+                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                    <span class="required">Nama Pegawai</span>
+                                                </label>
+                                                <!--end::Label-->
+                                                <!--begin::Input-->
+                                                <select id="nama_pegawai-{{ $timTender->id }}" name="nama_pegawai"
+                                                    class="form-select form-select-solid" data-control="select2"
+                                                    data-hide-search="false" data-placeholder="Pilih Pegawai">
+                                                    <option></option>
+                                                </select>
+                                                <!--end::Input-->
+                                            </div>
+                                            <!--end::Input group-->
+                                            <!--begin::Input group Website-->
+                                            <div class="fv-row mb-7">
+                                                <!--begin::Label-->
+                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                    <span class="required">Posisi</span>
+                                                </label>
+                                                <!--end::Label-->
+                                                <!--begin::Input-->
+                                                <select id="posisi-{{ $timTender->id }}" name="posisi"
+                                                    class="form-select form-select-solid" data-control="select2"
+                                                    data-hide-search="true" data-placeholder="Pilih Posisi">
+                                                    <option></option>
+                                                    <option value="Ketua" {{ $timTender->posisi == "Ketua" ? 'selected' : '' }}>Ketua</option>
+                                                    <option value="Anggota" {{ $timTender->posisi == "Anggota" ? 'selected' : '' }}>Anggota</option>
+                                                </select>
+                                                <!--end::Input-->
+                                            </div>
+                                            <!--end::Input group-->
+                                        </div>
+                                    </div>
+                                    <!--End begin::Row-->
+
+                                </div>
+                                <div class="modal-footer">
+
+                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                                        id="new_save" style="background-color:#008CB4">Save</button>
+
+                                </div>
+                                <!--end::Modal body-->
+                            </div>
+                            <!--end::Modal content-->
+                        </div>
+                        <!--end::Modal dialog-->
+                    </div>
+                </form>
+            @endforeach
+            <!--end::modal EDIT TIM TENDER-->
+
+            <!--begin::DELETE TIM TENDER-->
+            @foreach ($proyek->TimTender as $timTender)
+                <form action="/proyek/tim-tender/{{ $timTender->id }}/delete" method="post"
+                    enctype="multipart/form-data">
+                    @method('delete')
+                    @csrf
+                    <div class="modal fade" id="kt_tim_tender_delete_{{ $timTender->id }}" tabindex="-1"
+                        aria-hidden="true">
+                        <!--begin::Modal dialog-->
+                        <div class="modal-dialog modal-dialog-centered mw-800px">
+                            <!--begin::Modal content-->
+                            <div class="modal-content">
+                                <!--begin::Modal header-->
+                                <div class="modal-header">
+                                    <!--begin::Modal title-->
+                                    <h2>Hapus Konsultan Perencana : {{ $timTender->Pegawai?->nama_pegawai }}
                                     </h2>
                                     <!--end::Modal title-->
                                     <!--begin::Close-->
@@ -8734,7 +9564,7 @@
                                     <!--begin::Input-->
                                     <select id="company-jo" name="company-jo" class="form-select form-select-solid"
                                         data-control="select2" data-hide-search="false"
-                                        data-placeholder="Pilih Company JO" onchange="getPefindo(this)">
+                                        data-placeholder="Pilih Company JO">
                                         <option></option>
                                         @foreach ($customers as $customer)
                                             <option value="{{ $customer->id_customer }}">
@@ -8755,7 +9585,7 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="number" step=0.01 max="{{ $proyek->porsi_jo }}" value="0"
+                                    <input type="number" step=0.01 max="{{ $proyek->porsi_jo }}"    
                                         onkeyup="getJO()" onkeydown="getJO()" onchange="getJO()" class="form-control form-control-solid"
                                         id="porsijo-company" name="porsijo-company" placeholder="Porsi JO" />
                                     <!--end::Input-->
@@ -8786,8 +9616,8 @@
                             <!--end::Col-->
                         </div>
                         <!--end::Row Kanan+Kiri-->
-                        <input type="hidden" class="form-control form-control-solid" name="score_pefindo_jo" id="score_pefindo_jo" readonly>
-                        <input type="hidden" class="form-control form-control-solid" name="file_pefindo_jo" id="file_pefindo_jo">
+                        {{-- <input type="hidden" class="form-control form-control-solid" name="score_pefindo_jo" id="score_pefindo_jo" readonly>
+                        <input type="hidden" class="form-control form-control-solid" name="file_pefindo_jo" id="file_pefindo_jo"> --}}
 
                         <script>
                             function getJO() {
@@ -8801,7 +9631,7 @@
                                 document.getElementById("sisa-input").value = sisaJO;
                             }
                         </script>
-                        <script>
+                        {{-- <script>
                             async function getPefindo(elt) {
                                 const namaPelanggan = elt.value
                                 const eltScorePefindo = document.querySelector('#score_pefindo_jo');
@@ -8816,16 +9646,21 @@
                                     },
                                     body: formData
                                 }).then(res => res.json());
-                                console.log(req);
+                                
                                 if (req.success && req.data != null) {
                                     eltScorePefindo.value = req.data.score
                                     eltFilePefindo.value = req.data.file
                                 } else {
                                     eltScorePefindo.value = ''
                                     eltFilePefindo.value = ''
+
+                                    return Swal.fire({
+                                        icon: 'error',
+                                        title: 'Partner belum ada di Master Data Pefindo!'
+                                    }).then(res => {});
                                 }
                             }
-                        </script>
+                        </script> --}}
 
                     </div>
                     <div class="modal-footer">
@@ -9055,8 +9890,8 @@
     @endforeach
     <!--end::edit PORSI JO-->
 
-    <!--begin::DELETE PORSI JO-->
     @foreach ($porsiJO as $porsi)
+    <!--begin::DELETE PORSI JO-->
         <form action="/proyek/porsi-delete/{{ $porsi->id }}" method="post" enctype="multipart/form-data">
             @method('delete')
             @csrf
@@ -9100,8 +9935,292 @@
             <!--end::Modal dialog-->
             </div>
         </form>
+        <!--end::DELETE PORSI JO-->
+        
+        <!--begin::UPLOAD DOKUMEN PARTNER JO-->
+        <form action="/proyek/porsi-jo/upload/{{ $porsi->id }}" method="post" enctype="multipart/form-data">
+            @csrf
+            <input type="hidden" value="{{ $porsi->kode_proyek }}">
+            <div class="modal fade" id="kt_porsi_upload_dokumen_{{ $porsi->id }}" tabindex="-1" aria-hidden="true">
+                <!--begin::Modal dialog-->
+                <div class="modal-dialog modal-dialog-centered mw-900px">
+                    <!--begin::Modal content-->
+                    <div class="modal-content">
+                        <!--begin::Modal header-->
+                        <div class="modal-header">
+                            <!--begin::Modal title-->
+                            <h2>Upload Dokumen Kelengkapan Partner KSO : {{ $porsi->company_jo }}</h2>
+                            <!--end::Modal title-->
+                            <!--begin::Close-->
+                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                <span class="svg-icon svg-icon-1">
+                                    <i class="bi bi-x-lg"></i>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </div>
+                            <!--end::Close-->
+                        </div>
+                        <!--end::Modal header-->
+                        <!--begin::Modal body-->
+                        <div class="modal-body py-lg-6 px-lg-6">
+                            <table class="table align-middle table-row-dashed fs-6 gy-2"
+                            id="kt_customers_table">
+                                <thead>
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-auto">Kategori</th>
+                                        <th class="min-w-auto">Nama Dokumen</th>
+                                        <th class="min-w-auto"></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="fw-bold text-gray-600">
+                                    @php
+                                        $collectDokumenKelengkapanPartner = $proyek->DokumenKelengkapanPartnerKSO;
+                                    @endphp
+                                    <tr>
+                                        <td>Dokumen AHU</td>
+                                        <td class="text-center">
+                                            @if ($collectDokumenKelengkapanPartner?->contains('kategori', 'Dokumen AHU'))
+                                                @php
+                                                    $getDokumenAHU = $collectDokumenKelengkapanPartner->where('kategori', 'Dokumen AHU')->first();
+                                                @endphp
+                                                <a href="/proyek/porsi-jo/download/{{ $getDokumenAHU->id }}" class="text-gray-800 text-hover-primary">{{ $getDokumenAHU->nama_document }}</a>
+                                            @else
+                                                <p class="m-0 badge rounded-pill text-bg-danger">Belum Upload Dokumen</p>
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            @if ($collectDokumenKelengkapanPartner?->contains('kategori', 'Dokumen AHU'))
+                                                <button type="button" onclick="deleteDocument('{{ $getDokumenAHU->id }}')" class="btn btn-danger btn-sm text-white">Delete</button>
+                                            @else
+                                                <input type="file" name="dokumen-ahu-partner" id="dokumen-ahu-partner" class="form-control form-control-solid" accept="pdf">
+                                            @endif
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dokumen Laporan Keuangan</td>
+                                        <td class="text-center">
+                                            @if ($collectDokumenKelengkapanPartner?->contains('kategori', 'Dokumen Laporan Keuangan'))
+                                                @php
+                                                    $getDokumenLaporanKeuangan = $collectDokumenKelengkapanPartner->where('kategori', 'Dokumen Laporan Keuangan')->first();
+                                                @endphp
+                                                <a href="/proyek/porsi-jo/download/{{ $getDokumenLaporanKeuangan->id }}" class="text-gray-800 text-hover-primary">{{ $getDokumenLaporanKeuangan->nama_document }}</a>
+                                            @else
+                                                <p class="m-0 badge rounded-pill text-bg-danger">Belum Upload Dokumen</p>
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            @if ($collectDokumenKelengkapanPartner?->contains('kategori', 'Dokumen Laporan Keuangan'))
+                                                <button type="button" onclick="deleteDocument('{{ $getDokumenLaporanKeuangan->id }}')" class="btn btn-danger btn-sm text-white">Delete</button>
+                                            @else
+                                                <input type="file" name="dokumen-keuangan-partner" id="dokumen-keuangan-partner" class="form-control form-control-solid" accept="pdf">
+                                            @endif
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dokumen Pengalaman</td>
+                                        <td class="text-center">
+                                            @if ($collectDokumenKelengkapanPartner?->contains('kategori', 'Dokumen Pengalaman'))
+                                                @php
+                                                    $getDokumenPengalaman = $collectDokumenKelengkapanPartner->where('kategori', 'Dokumen Pengalaman')->first();
+                                                @endphp
+                                                <a href="/proyek/porsi-jo/download/{{ $getDokumenPengalaman->id }}" class="text-gray-800 text-hover-primary">{{ $getDokumenPengalaman->nama_document }}</a>
+                                            @else
+                                                <p class="m-0 badge rounded-pill text-bg-danger">Belum Upload Dokumen</p>
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            @if ($collectDokumenKelengkapanPartner?->contains('kategori', 'Dokumen Pengalaman'))
+                                                <button type="button" onclick="deleteDocument('{{ $getDokumenPengalaman->id }}')" class="btn btn-danger btn-sm text-white">Delete</button>
+                                            @else
+                                                <input type="file" name="dokumen-pengalaman-partner" id="dokumen-pengalaman-partner" class="form-control form-control-solid" accept="pdf">
+                                            @endif
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dokumen Laporan SPT Terakhir</td>
+                                        <td class="text-center">
+                                            @if ($collectDokumenKelengkapanPartner?->contains('kategori', 'Dokumen Laporan SPT'))
+                                                @php
+                                                    $getDokumenSPT = $collectDokumenKelengkapanPartner->where('kategori', 'Dokumen Laporan SPT')->first();
+                                                @endphp
+                                                <a href="/proyek/porsi-jo/download/{{ $getDokumenSPT->id }}" class="text-gray-800 text-hover-primary">{{ $getDokumenSPT->nama_document }}</a>
+                                            @else
+                                                <p class="m-0 badge rounded-pill text-bg-danger">Belum Upload Dokumen</p>
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            @if ($collectDokumenKelengkapanPartner?->contains('kategori', 'Dokumen Laporan SPT'))
+                                                <button type="button" onclick="deleteDocument('{{ $getDokumenSPT->id }}')" class="btn btn-danger btn-sm text-white">Delete</button>
+                                            @else
+                                                <input type="file" name="dokumen-spt-partner" id="dokumen-spt-partner" class="form-control form-control-solid" accept="pdf">
+                                            @endif
+
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer text-end">
+                            <button class="btn btn-sm btn-primary">Submit</button>
+                        </div>
+                        <!--end::Input group-->
+
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+            </div>
+        </form>
+        <!--end::UPLOAD DOKUMEN PARTNER JO-->
     @endforeach
-    <!--end::DELETE PORSI JO-->
+    <script>
+        function deleteDocument(id) {
+            console.log(id);
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Delete'
+            }).then(async (result)=>{
+                if(result.isConfirmed){
+                    try {
+                        const formData = new FormData();
+                        formData.append("_token", "{{ csrf_token() }}");
+                        const req = await fetch(`{{ url('/proyek/porsi-jo/delete/') }}/${id}`, {
+                            method: 'POST',
+                            header: {
+                                "content-type": "application/json",
+                            },
+                            body:formData
+                        }).then(res => res.json());
+                        if (req.Success != true) {
+                            return Swal.fire({
+                                icon: 'error',
+                                title: req.Message
+                            }).then(res=>window.location.reload())
+                        }
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Data berhasil dihapus!'
+                        }).then(res=>window.location.reload())
+                    } catch (error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: error
+                        }).then(res=>window.location.reload())
+                    }
+                }
+            })
+        }
+    </script>
+
+    <!--begin::DELETE DOKUMEN PENENTUAN KSO-->
+    @if (!empty($proyek->DokumenPenentuanProjectGreenlane))
+        <form action="/proyek/dokumen-penentuan-project-greenlane/{{ $proyek->DokumenPenentuanProjectGreenlane->id }}/delete"
+            method="post">
+            @method('delete')
+            @csrf
+            <div class="modal fade"
+                id="kt_dokumen_penentuan_project_greenlane_delete_{{ $proyek->DokumenPenentuanProjectGreenlane->id }}"
+                tabindex="-1" aria-hidden="true">
+                <!--begin::Modal dialog-->
+                <div class="modal-dialog modal-dialog-centered mw-800px">
+                    <!--begin::Modal content-->
+                    <div class="modal-content">
+                        <!--begin::Modal header-->
+                        <div class="modal-header">
+                            <!--begin::Modal title-->
+                            <h2>Hapus : {{ $proyek->DokumenPenentuanProjectGreenlane->nama_document }}</h2>
+                            <!--end::Modal title-->
+                            <!--begin::Close-->
+                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                <span class="svg-icon svg-icon-1">
+                                    <i class="bi bi-x-lg"></i>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </div>
+                            <!--end::Close-->
+                        </div>
+                        <!--end::Modal header-->
+                        <!--begin::Modal body-->
+                        <div class="modal-body py-lg-6 px-lg-6">
+                            Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                            <br>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                        </div>
+                        <!--end::Input group-->
+
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+            </div>
+        </form>
+    @endif
+    <!--end::DELETE DOKUMEN PENENTUAN KSO-->
+
+    <!--begin::DELETE DOKUMEN PENENTUAN KSO-->
+    @if (!empty($proyek->DokumenPenentuanKSO))
+        <form action="/proyek/dokumen-penentuan-kso/{{ $proyek->DokumenPenentuanKSO->id }}/delete"
+            method="post">
+            @method('delete')
+            @csrf
+            <div class="modal fade"
+                id="kt_dokumen_penentuan_kso_delete_{{ $proyek->DokumenPenentuanKSO->id }}"
+                tabindex="-1" aria-hidden="true">
+                <!--begin::Modal dialog-->
+                <div class="modal-dialog modal-dialog-centered mw-800px">
+                    <!--begin::Modal content-->
+                    <div class="modal-content">
+                        <!--begin::Modal header-->
+                        <div class="modal-header">
+                            <!--begin::Modal title-->
+                            <h2>Hapus : {{ $proyek->DokumenPenentuanKSO->nama_document }}</h2>
+                            <!--end::Modal title-->
+                            <!--begin::Close-->
+                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                <span class="svg-icon svg-icon-1">
+                                    <i class="bi bi-x-lg"></i>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </div>
+                            <!--end::Close-->
+                        </div>
+                        <!--end::Modal header-->
+                        <!--begin::Modal body-->
+                        <div class="modal-body py-lg-6 px-lg-6">
+                            Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                            <br>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                        </div>
+                        <!--end::Input group-->
+
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+            </div>
+        </form>
+    @endif
+    <!--end::DELETE DOKUMEN PENENTUAN KSO-->
 
     <!--begin::DELETE DOKUMEN PRAKUALIFIKASI-->
     @foreach ($proyek->DokumenPrakualifikasi as $dokumen_prakualifikasi)
@@ -10091,7 +11210,7 @@
                         document.getElementById("error-" + this.name).style.display = "";
                         this.value = "";
                     } else {
-                        this.form.submit()
+                        // this.form.submit()
                     };
                 }
             }
@@ -10247,5 +11366,112 @@
     </script>
     {{-- End::Set RA Klasifikasi Proyek --}}
 
+    {{-- Begin::Select 2 Tim Tender --}}
+    <script>
+        const perPage = 10;
+        $(document).ready(function() {
+            $("#nama_pegawai").select2({
+                ajax: {
+                    url: '/get-data-pegawai',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term,
+                            perPage: perPage,
+                            page: params.page || 1
+                        };
+                    },
+                    processResults: function (data, params) {
+
+                        params.page = params.page || 1
+
+                        const isPagination = data.hasOwnProperty('data') && Array.isArray(data.data) ? true : false
+                        const optionData = isPagination ? data.data : data;
+                        const options = optionData.map(item => {
+                            return {
+                                id: item.nip, 
+                                text: item.nama_pegawai
+                            }
+                        })
+                        return {
+                            results: options,
+                            pagination: {
+                                more: isPagination ? (params.page * (perPage || 10)) < data.total : false
+                            }
+                        }
+                    },
+                    cache: true,
+                    minimumResultsForSearch: 0
+                },
+                dropdownParent: $('#kt_modal_tim_tender'),
+            });
+        });
+
+        function showModal(id, nip, namaPegawai) {
+            let modal = document.getElementById('kt_modal_edit_tim_tender_' + id);
+
+            $(modal).modal('show');
+
+            let select2 = document.getElementById('nama_pegawai-' + id);
+
+            $(select2).select2({
+                ajax: {
+                    url: '/get-data-pegawai',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term,
+                            perPage: perPage,
+                            page: params.page || 1
+                        };
+                    },
+                    processResults: function (data, params) {
+
+                        params.page = params.page || 1
+
+                        const isPagination = data.hasOwnProperty('data') && Array.isArray(data.data) ? true : false
+                        const optionData = isPagination ? data.data : data;
+                        const options = optionData.map(item => {
+                            return {
+                                id: item.nip, 
+                                text: item.nama_pegawai
+                            }
+                        })
+                        return {
+                            results: options,
+                            pagination: {
+                                more: isPagination ? (params.page * (perPage || 10)) < data.total : false
+                            }
+                        }
+                    },
+                    cache: true,
+                    minimumResultsForSearch: 0
+                },
+                dropdownParent: $(modal)
+            });
+
+            const newOption = new Option(
+                namaPegawai, 
+                nip, 
+                true, 
+                true
+            )
+            $(select2).append(newOption).trigger('change')
+            $(select2).trigger({
+                type: 'select2:select',
+                params: {
+                    data: nip
+                }
+            })
+
+            $(`#unit-kerja-${id}`).select2({
+                dropdownParent: $(modal)
+            });
+            
+        }
+    </script>
+    {{-- End::Select 2 Tim Tender --}}
 
 @endsection

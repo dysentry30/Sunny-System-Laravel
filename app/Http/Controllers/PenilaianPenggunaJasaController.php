@@ -30,7 +30,7 @@ class PenilaianPenggunaJasaController extends Controller
 
         $penilaianPenggunaJasa = new PenilaianPenggunaJasa();
         $penilaianPenggunaJasa->nama = $data["nama"];
-        $penilaianPenggunaJasa->nota_rekomendasi = $data["nota_rekomendasi"];
+        // $penilaianPenggunaJasa->nota_rekomendasi = $data["nota_rekomendasi"];
         $penilaianPenggunaJasa->dari_nilai = $data["dari_nilai"];
         $penilaianPenggunaJasa->sampai_nilai = $data["sampai_nilai"];
         $penilaianPenggunaJasa->start_tahun = $data["tahun_start"];
@@ -47,10 +47,10 @@ class PenilaianPenggunaJasaController extends Controller
         }
 
         if ($penilaianPenggunaJasa->save()) {
-            Alert::success("Success", "Kriteria Pengguna Jasa Berhasil Ditambahkan");
+            Alert::success("Success", "Penilaian Pengguna Jasa Berhasil Ditambahkan");
             return redirect()->back();
         }
-        Alert::success("Error", "Kriteria Pengguna Jasa Gagal Ditambahkan");
+        Alert::success("Error", "Penilaian Pengguna Jasa Gagal Ditambahkan");
         return redirect()->back();
     }
 
@@ -81,11 +81,11 @@ class PenilaianPenggunaJasaController extends Controller
         // dd($data, $penilaianPenggunaJasa);
 
         if (empty($penilaianPenggunaJasa)) {
-            Alert::success("Error", "Kriteria Pengguna Jasa Tidak Ditemukan");
+            Alert::success("Error", "Penilaian Pengguna Jasa Tidak Ditemukan");
             return redirect()->back();
         }
 
-        $penilaianPenggunaJasa->nota_rekomendasi = $data["nota_rekomendasi"];
+        // $penilaianPenggunaJasa->nota_rekomendasi = $data["nota_rekomendasi"];
         $penilaianPenggunaJasa->nama = $data["nama"];
         $penilaianPenggunaJasa->dari_nilai = $data["dari_nilai"];
         $penilaianPenggunaJasa->sampai_nilai = $data["sampai_nilai"];
@@ -103,10 +103,10 @@ class PenilaianPenggunaJasaController extends Controller
         }
 
         if ($penilaianPenggunaJasa->save()) {
-            Alert::success("Success", "Kriteria Pengguna Jasa Berhasil Diubah");
+            Alert::success("Success", "Penilaian Pengguna Jasa Berhasil Diubah");
             return redirect()->back();
         }
-        Alert::success("Error", "Kriteria Pengguna Jasa Gagal Diubah");
+        Alert::success("Error", "Penilaian Pengguna Jasa Gagal Diubah");
         return redirect()->back();
     }
 

@@ -186,7 +186,7 @@
                                     @endphp
                                         <tr>
                                             <td class="text-center align-middle">{{$no++}}</td>
-                                            <td class="align-middle">{!! $item->parameter ?? "-" !!}</td>
+                                            <td class="align-middle">{!! nl2br($item->parameter) ?? "-" !!}</td>
                                             <td class="text-center align-middle">{{ $item->bobot }}</td>
                                             <td class="text-center">{{$start_bulan}}</td>
                                             <td class="text-center">{{$finish_bulan}}</td>

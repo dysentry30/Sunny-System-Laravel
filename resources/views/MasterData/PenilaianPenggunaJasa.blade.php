@@ -312,7 +312,7 @@
                             </div>
                             <!--End begin::Col-->
                             <!--Begin::Col-->
-                            <div class="row mb-7">
+                            {{-- <div class="row mb-7">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label mt-3">
                                    <span class="required">Nota Rekomendasi</span>
@@ -330,7 +330,7 @@
                                    </select>
                                    <!--end::Input-->
                                </div>
-                           </div>
+                           </div> --}}
                             <!--End::Col-->
                             <!--begin::Col-->
                             <div class="">
@@ -539,25 +539,25 @@
                                 </div>
                                 <!--End begin::Col-->
                                 <!--Begin::Col-->
-                                <div class="row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                       <span class="required">Nota Rekomendasi</span>
-                                   </label>
-                                   <!--end::Label-->
-                                   <div class="d-flex flex-row gap-2">
-                                       <!--begin::Input-->
-                                       <select id="nota_rekomendasi" name="nota_rekomendasi"
-                                           class="form-select form-select-solid select2-hidden-accessible"
-                                           data-control="select2" data-hide-search="true" data-placeholder="Pilh Nota Rekomendasi..."
-                                           data-select2-id="select2-feature-{{ $item->id }}-{{ $no++ }}" tabindex="-1" aria-hidden="true">
-                                           <option value="" selected></option>
-                                           <option value="Nota Rekomendasi 1" {{ $item->nota_rekomendasi == "Nota Rekomendasi 1" ? "selected" : ""}}>Nota Rekomendasi 1</option>
-                                           <option value="Nota Rekomendasi 2" {{ $item->nota_rekomendasi == "Nota Rekomendasi 2" ? "selected" : ""}}>Nota Rekomendasi 2</option>
-                                       </select>
-                                       <!--end::Input-->
-                                   </div>
-                               </div>
+                            {{-- <div class="row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Nota Rekomendasi</span>
+                                </label>
+                                <!--end::Label-->
+                                <div class="d-flex flex-row gap-2">
+                                    <!--begin::Input-->
+                                    <select id="nota_rekomendasi" name="nota_rekomendasi"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Pilh Nota Rekomendasi..."
+                                        data-select2-id="select2-feature-{{ $item->id }}-{{ $no++ }}" tabindex="-1" aria-hidden="true">
+                                        <option value="" selected></option>
+                                        <option value="Nota Rekomendasi 1" {{ $item->nota_rekomendasi == "Nota Rekomendasi 1" ? "selected" : ""}}>Nota Rekomendasi 1</option>
+                                        <option value="Nota Rekomendasi 2" {{ $item->nota_rekomendasi == "Nota Rekomendasi 2" ? "selected" : ""}}>Nota Rekomendasi 2</option>
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                            </div> --}}
                                 <!--End::Col-->
                                 <!--begin::Col-->
                                 <div class="">
@@ -696,8 +696,7 @@
     
     <script>
         $('#example').DataTable({
-            stateSave: true,
-            ordering: false
+            dom: "lfrti"
         });
     </script>
     <!--end::Javascript-->

@@ -157,7 +157,8 @@
                                                 @endif
                                             @endif --}}
                                                 @php
-                                                    $proyekProgress = $proyek->Progress?->where('periode', date('Ym'))->first();
+                                                    // $proyekProgress = $proyek->Progress?->where('periode', date('Ym'))->first();
+                                                    $proyekProgress = $proyek->Progress?->last();
                                                     // dump($proyekProgress);
                                                     $progress = 0;
                                                     if (!empty($proyekProgress)) {
@@ -297,7 +298,7 @@
                                         @endif --}}
                                         {{-- @if ($proyek->Csi) --}}
                                         @php
-                                            $proyekProgress = $proyek->ProyekPIS->Progress->where('periode', date('Ym'))->first();
+                                            $proyekProgress = $proyek->ProyekPIS?->Progress?->where('periode', date('Ym'))->first();
                                             // dump($proyekProgress);
                                             $progress = 0;
                                             if (!empty($proyekProgress)) {

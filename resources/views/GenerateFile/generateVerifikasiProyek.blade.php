@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document Verifikasi Internal Penentuan Proyek Green Lane atau Non Green lane</title>
+</head>
+
+<body>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        #alasan_lainnya {
+            border-top-width: 0;
+            border-right-width: 0;
+            border-bottom-width: 1px;
+            border-left-width: 0;
+            border-style: solid;
+            border-color: black;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 0.8rem;
+            width: 700px;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0cm;
+            left: 0cm;
+            right: 0cm;
+            height: 0.5cm;
+            font-size: 0.8rem;
+            color: black;
+            text-align: end;
+            line-height: 1.5cm;
+        }
+    </style>
+    <h5>Lampiran 11.1. Verifikasi Internal Penentuan Proyek Green Lane atau Non Green lane</h5>
+
+    <table style="width: 100%;">
+        <tr style="margin: 0; padding:0">
+            <td style="width: 8%;">
+                <h4 style="margin: 0; padding:0">Nama Proyek</h4>
+            </td>
+            <td style="width: 2%">
+                <h4 style="margin: 0; padding:0">:</h4>
+            </td>
+            <td style="width: 50%">
+                <h4 style="margin: 0; padding:0">{{ $proyek->nama_proyek }}</h4>
+            </td>
+        </tr>
+        <tr style="margin: 0; padding:0">
+            <td style="width: 8%">
+                <h4 style="margin: 0; padding:0">Nilai Pagu/HPS</h4>
+            </td>
+            <td style="width: 2%">
+                <h4 style="margin: 0; padding:0">:</h4>
+            </td>
+            <td style="width: 50%">
+                <h4 style="margin: 0; padding:0">Rp.{{ number_format((int) str_replace('.', '', $proyek->hps_pagu), 0, '.', '.')     }}</h4>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table style="width: 100%">
+        <tr>
+            <td>1.</td>
+            <td><label style="font-size: 0.8rem">Jenis Kontrak</label> <label style="font-size: 0.6rem">**)</label></td>
+            <td>
+                <input class="form-check-input" style="height:0px" type="checkbox" id="inlineCheckbox1" value="option1">
+                <br>
+                <input class="form-check-input" style="height:0px" type="checkbox" id="inlineCheckbox2" value="option2" checked>
+            </td>
+            <td>
+                <label class="form-check-label" for="inlineCheckbox1"
+                    style="font-size: 0.8rem; margin-top: 0px;"><i>Unit Price</i></label>
+                <br>
+                <label class="form-check-label" for="inlineCheckbox1"
+                    style="font-size: 0.8rem; margin-top: 0px;"><i>Lumpsum</i></label>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <label style="font-size: 0.6rem">*Note: Jika Proyek terdiri dari 2 (dua) jenis Kontrak, maka dipilih yang paling dominan</label>
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>2.</td>
+            <td><label style="font-size: 0.8rem">Uang Muka</label> <label style="font-size: 0.6rem">**)</label></td>
+            <td>
+                <input class="form-check-input" style="height:0px" type="checkbox" id="inlineCheckbox1" value="option3" checked>
+                <br>
+                <input class="form-check-input" style="height:0px" type="checkbox" id="inlineCheckbox2" value="option4">
+            </td>
+            <td>
+                <label class="form-check-label" for="inlineCheckbox1"
+                    style="font-size: 0.8rem; margin-top: 0px;">Ada</label>
+                <br>
+                <label class="form-check-label" for="inlineCheckbox1"
+                    style="font-size: 0.8rem; margin-top: 0px;">Tidak Ada</label>
+            </td>
+        </tr>
+        <br>
+        <tr>
+            <td>3.</td>
+            <td><label style="font-size: 0.8rem">Metode Pembayaran</label> <label style="font-size: 0.6rem">**)</label></td>
+            <td>
+                <input class="form-check-input" style="height:0px" type="checkbox" id="inlineCheckbox1" value="option5" checked>
+                <br>
+                <input class="form-check-input" style="height:0px" type="checkbox" id="inlineCheckbox2" value="option6">
+                <br>
+                <input class="form-check-input" style="height:0px" type="checkbox" id="inlineCheckbox2" value="option7">
+                <br>
+                <input class="form-check-input" style="height:0px" type="checkbox" id="inlineCheckbox2" value="option8">
+            </td>
+            <td>
+                <label class="form-check-label" for="inlineCheckbox1"
+                    style="font-size: 0.8rem; margin-top: 0px;"><i>Monthly</i></label>
+                <br>
+                <label class="form-check-label" for="inlineCheckbox1"
+                    style="font-size: 0.8rem; margin-top: 0px;"><i>Milestone</i></label>
+                <br>
+                <label class="form-check-label" for="inlineCheckbox1"
+                    style="font-size: 0.8rem; margin-top: 0px;"><i>Pre Financing</i></label>
+                <br>
+                <label class="form-check-label" for="inlineCheckbox1"
+                    style="font-size: 0.8rem; margin-top: 0px;"><i>Others : _____________________________</i></label>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <label style="font-size: 0.6rem">**) Pilih salah satu, diisi oleh pembuat</label>
+    <br>
+    <table style="width: 100%">
+        <tr>
+            <td><h5 style="margin: 0; padding:0">Keputusan **) :</h5></td>
+            <td></td>
+            <td><h5 style="margin: 0; padding:0">Keterangan :</h5></td>
+        </tr>
+        <tr>
+            <td style="width: 5%"><h5 style="margin: 0; padding:0"><i>Project Green Lane</i></h5></td>
+            <td style="width: 3%">
+                <input class="form-check-input" style="height:-10px; font-size:20pt" type="checkbox" id="inlineCheckbox2" value="option9">
+            </td>
+            <td style="width: 10%; vertical-align: text-top" rowspan="2">
+                <p style="font-size: 0.8rem; margin:0; padding:0px">Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis repellendus quibusdam similique impedit in nostrum enim quaerat iure omnis debitis suscipit dolor porro, sit, eum libero iste maxime earum tempora?</p>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 5%"><h5 style="margin: 0; padding:0"><i>Project Non Green Lane</i></h5></td>
+            <td style="width: 3%">
+                <input class="form-check-input" style="height:-10px; font-size:20pt" type="checkbox" id="inlineCheckbox2" value="option10" checked>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <br>
+    <br>
+    <p style="font-size: 0.8rem; margin-top: 0px;; margin:0px; padding:0px;">Tanggal, ...........................</p>
+    <table style="width:100%; margin:0px; padding-top:0px;">
+        <tr>
+            <td style="text-align:center">
+                <div class="" style="margin:0px; padding-top:5px;">
+                    <b>
+                        <h5 style="margin:0px; padding-top:0px;">Dibuat Oleh,</h5>
+                    </b>
+                    <br><br><br>
+                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">(....................................)</p>
+                    {{-- <p style="font-size:0.8rem; margin:0px; padding-top:0px;">SubPJFs Key Account</p> --}}
+                </div>
+            </td>
+            <td style="text-align:center">
+                <div class="" style="margin:0px; padding-top:5px;">
+                    <b>
+                        <h5 style="margin:0px; padding-top:0px;">Direkomendasikan Oleh,</h5>
+                    </b>
+                    <br><br><br>
+                    <table style="width:100%">
+                        <tr>
+                            <td style="width:100%; text-align:center">
+                                <p style="font-size:0.8rem; margin:0px; padding-top:0px;">
+                                    (....................................)</p>
+                                {{-- <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PJFs Marketing</p> --}}
+                            </td>
+                            <td style="width:100%; text-align:center">
+                                <p style="font-size:0.8rem; margin:0px; padding-top:0px;">
+                                    (....................................)</p>
+                                {{-- <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PJFs Operasi</p> --}}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+            <td style="text-align:center">
+                <div class="" style="margin:0px; padding-top:5px;">
+                    <b>
+                        <h5 style="margin:0px; padding-top:0px;">Disetujui Oleh,</h5>
+                    </b>
+                    <br><br><br>
+                    <table style="width:100%">
+                        <tr>
+                            <td style="width:100%; text-align:center">
+                                <p style="font-size:0.8rem; margin:0px; padding-top:0px;">
+                                    (....................................)</p>
+                                {{-- <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PJFK Corporate Marketing</p> --}}
+                            </td>
+                            <td style="width:100%; text-align:center">
+                                <p style="font-size:0.8rem; margin:0px; padding-top:0px;">
+                                    (....................................)</p>
+                                {{-- <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PJPU Operasi</p> --}}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <footer>*Dokumen ini dibuat oleh sistem CRM</footer>
+
+</body>
+
+</html>

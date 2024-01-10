@@ -296,6 +296,23 @@
                             @endif
                         @endif
 
+                        @can('crm')                        
+                        <div class="menu-item">
+                            <a class="menu-link " href="/nota-rekomendasi-2"
+                                style="color:white; padding-left:20px; {{ str_contains(Request::url(), 'nota-rekomendasi-2') ? 'background-color:#008CB4' : '' }}">
+                                <span class="menu-icon">
+                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                    <span class="svg-icon svg-icon-2">
+                                        <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
+                                            class="h-30px logo" />
+                                    </span>
+                                    <!--end::Svg Icon-->
+                                </span>
+                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Nota Rekomendasi 2</span>
+                            </a>
+                        </div>
+                        @endcan
+
                         @if (auth()->user()->check_administrator || $adminPIC)
                             <!--Begin::Master Data Expand-->
                             {{-- <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#008CB4;margin-top:8px;"> --}}
@@ -319,15 +336,16 @@
                             str_contains(Request::Path(), 'direktorat') ||
                             str_contains(Request::Path(), 'departemen') ||
                             str_contains(Request::Path(), 'matriks-approval-rekomendasi') ||
+                            str_contains(Request::Path(), 'matriks-approval-rekomendasi-2') ||
+                            str_contains(Request::Path(), 'matriks-approval-partner') ||
                             str_contains(Request::Path(), 'provinsi') ||
                             str_contains(Request::Path(), 'otomasi-approval') ||
                             str_contains(Request::Path(), 'kriteria-pengguna-jasa') ||
                             str_contains(Request::Path(), 'konsultan-perencana') ||
                             str_contains(Request::Path(), 'checklist-calon-mitra-kso') ||
-                            str_contains(Request::Path(), 'master-fortune-rank') ||
-                            str_contains(Request::Path(), 'master-lq-rank') ||
-                            str_contains(Request::Path(), 'master-pefindo') ||
-                            str_contains(Request::Path(), 'master-group-tier') ||
+                            str_contains(Request::Path(), 'penilaian-pengguna-jasa') ||
+                            str_contains(Request::Path(), 'penilaian-partner-selection') ||
+                            str_contains(Request::Path(), 'penilaian-checklist-project-selection') ||
                             // str_contains(Request::Path(), 'instansi') ||
                             str_contains(Request::Path(), 'team-proyek') ? 'background-color:#008CB4' : '' }}">
 
@@ -655,6 +673,38 @@
                                     </div>
                                     <!--end::Menu Colapse-->
                                     @endif
+                                    @if (auth()->user()->check_administrator)
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'matriks-approval-rekomendasi-2' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/matriks-approval-rekomendasi-2" style="color:white; padding-left:20px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                {{-- <i class="bi bi-buildings text-white"></i> --}}
+                                                <i class="bi bi-person-fill-lock text-white"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Matriks Approval Rekomendasi 2</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    @endif
+                                    @if (auth()->user()->check_administrator)
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'matriks-approval-partner' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/matriks-approval-partner" style="color:white; padding-left:20px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                {{-- <i class="bi bi-buildings text-white"></i> --}}
+                                                <i class="bi bi-person-fill-lock text-white"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Matriks Approval Partner</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    @endif
 
                                     @if (auth()->user()->check_administrator)
                                     <!--begin::Menu Colapse-->
@@ -873,70 +923,70 @@
                                     </div>
                                     <!--end::Menu Colapse-->
                                     @endif
-                                    
+
                                     @if (auth()->user()->check_administrator)
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
-                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'master-fortune-rank' ? 'background-color:#008CB4' : '' }}">
-                                        <a class="menu-link " href="/master-fortune-rank" style="color:white; padding-left:20px;">
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'kriteria-penilaian-pefindo' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/kriteria-penilaian-pefindo" style="color:white; padding-left:20px;">
                                             <span class="menu-icon">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                                {{-- <i class="bi bi-buildings text-white"></i> --}}
-                                                <i class="bi bi-fingerprint text-white" style="font-size: 20px"></i>
+                                                {{-- <i class="bi bi-buildings text-white"></i>                                                     --}}
+                                                <i class="bi bi-calculator-fill text-white" style="font-size: 20px"></i>
                                                 <!--end::Svg Icon-->
                                             </span>
-                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Fortune Rank</span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Kriteria Penilaian Pefindo</span>
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
                                     @endif
-                                    
+
                                     @if (auth()->user()->check_administrator)
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
-                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'master-lq-rank' ? 'background-color:#008CB4' : '' }}">
-                                        <a class="menu-link " href="/master-lq-rank" style="color:white; padding-left:20px;">
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'kriteria-greenlane-partner' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/kriteria-greenlane-partner" style="color:white; padding-left:20px;">
                                             <span class="menu-icon">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                                {{-- <i class="bi bi-buildings text-white"></i> --}}
-                                                <i class="bi bi-fingerprint text-white" style="font-size: 20px"></i>
+                                                {{-- <i class="bi bi-buildings text-white"></i>                                                     --}}
+                                                <i class="bi bi-person-fill-add text-white" style="font-size: 20px"></i>
                                                 <!--end::Svg Icon-->
                                             </span>
-                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">LQ Rank</span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Kriteria Green Lane Partner</span>
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
                                     @endif
-                                    
+
                                     @if (auth()->user()->check_administrator)
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
-                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'master-pefindo' ? 'background-color:#008CB4' : '' }}">
-                                        <a class="menu-link " href="/master-pefindo" style="color:white; padding-left:20px;">
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'penilaian-partner-selection' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/penilaian-partner-selection" style="color:white; padding-left:20px;">
                                             <span class="menu-icon">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                                {{-- <i class="bi bi-buildings text-white"></i> --}}
-                                                <i class="bi bi-fingerprint text-white" style="font-size: 20px"></i>
+                                                {{-- <i class="bi bi-buildings text-white"></i>                                                     --}}
+                                                <i class="bi bi-calculator-fill text-white" style="font-size: 20px"></i>
                                                 <!--end::Svg Icon-->
                                             </span>
-                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Master Pefindo</span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Penilaian Risiko Partner Selection</span>
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
                                     @endif
-                                    
+
                                     @if (auth()->user()->check_administrator)
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
-                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'master-group-tier' ? 'background-color:#008CB4' : '' }}">
-                                        <a class="menu-link " href="/master-group-tier" style="color:white; padding-left:20px;">
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'penilaian-checklist-project-selection' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/penilaian-checklist-project-selection" style="color:white; padding-left:20px;">
                                             <span class="menu-icon">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                                {{-- <i class="bi bi-buildings text-white"></i> --}}
-                                                <i class="bi bi-collection-fill text-white" style="font-size: 20px"></i>
+                                                {{-- <i class="bi bi-buildings text-white"></i>                                                     --}}
+                                                <i class="bi bi-calculator-fill text-white" style="font-size: 20px"></i>
                                                 <!--end::Svg Icon-->
                                             </span>
-                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Group Tier BUMN</span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Penilaian Risiko Partner Selection</span>
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
@@ -1102,6 +1152,87 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">CSI</span>
                                 </a>
                             </div>
+                        @endif
+
+                        @can('super-admin')
+                        <div class="menu-item">
+                            <a class="menu-link " href="/assessment-partner-selection"
+                                style="color:white; padding-left:20px; {{ str_contains(Request::url(), 'assessment-partner-selection') ? 'background-color:#008CB4' : '' }}">
+                                <span class="menu-icon">
+                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                    <span class="svg-icon svg-icon-2">
+                                        <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
+                                            class="h-30px logo" />
+                                    </span>
+                                    <!--end::Svg Icon-->
+                                </span>
+                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Partner Selection</span>
+                            </a>
+                        </div>
+                        @endcan
+
+                        @if (auth()->user()->check_administrator)
+                            <!--begin::Menu Colapse-->
+                            <div class="menu-item">
+                                <a class="menu-link " href="/master-fortune-rank" style="color:white; padding-left:20px; {{ Request::Path() == 'master-fortune-rank' ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        {{-- <i class="bi bi-buildings text-white"></i> --}}
+                                        <i class="bi bi-trophy-fill text-white" style="font-size: 20px"></i>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Fortune Rank</span>
+                                </a>
+                            </div>
+                            <!--end::Menu Colapse-->
+                        @endif
+                                    
+                        @if (auth()->user()->check_administrator)
+                        <!--begin::Menu Colapse-->
+                        <div class="menu-item">
+                            <a class="menu-link " href="/master-lq-rank" style="color:white; padding-left:20px; {{ Request::Path() == 'master-lq-rank' ? 'background-color:#008CB4' : '' }}">
+                                <span class="menu-icon">
+                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                    {{-- <i class="bi bi-buildings text-white"></i> --}}
+                                    <i class="bi bi-trophy-fill text-white" style="font-size: 20px"></i>
+                                    <!--end::Svg Icon-->
+                                </span>
+                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">LQ Rank</span>
+                            </a>
+                        </div>
+                        <!--end::Menu Colapse-->
+                        @endif
+                                    
+                        @if (auth()->user()->check_administrator)
+                        <!--begin::Menu Colapse-->
+                        <div class="menu-item">
+                            <a class="menu-link " href="/master-pefindo" style="color:white; padding-left:20px; {{ Request::Path() == 'master-pefindo' ? 'background-color:#008CB4' : '' }}">
+                                <span class="menu-icon">
+                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                    {{-- <i class="bi bi-buildings text-white"></i> --}}
+                                    <i class="bi bi-fingerprint text-white" style="font-size: 20px"></i>
+                                    <!--end::Svg Icon-->
+                                </span>
+                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Hasil Pefindo</span>
+                            </a>
+                        </div>
+                        <!--end::Menu Colapse-->
+                        @endif
+                                    
+                        @if (auth()->user()->check_administrator)
+                        <!--begin::Menu Colapse-->
+                        <div class="menu-item">
+                            <a class="menu-link " href="/master-group-tier" style="color:white; padding-left:20px; {{ Request::Path() == 'master-group-tier' ? 'background-color:#008CB4' : '' }}">
+                                <span class="menu-icon">
+                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                    {{-- <i class="bi bi-buildings text-white"></i> --}}
+                                    <i class="bi bi-collection-fill text-white" style="font-size: 20px"></i>
+                                    <!--end::Svg Icon-->
+                                </span>
+                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Group Tier BUMN</span>
+                            </a>
+                        </div>
+                        <!--end::Menu Colapse-->
                         @endif
 
                         <br><br><br>

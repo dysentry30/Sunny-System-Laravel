@@ -24,4 +24,9 @@ class Pegawai extends Model
     public function MatriksApproval() {
         return $this->hasMany(MatriksApprovalRekomendasi::class, "nama_pegawai", "nip");
     }
+
+    public function MatriksApproval2()
+    {
+        return $this->hasMany(MatriksApprovalNotaRekomendasi2::class, "nama_pegawai", "nip");
+    }
 }

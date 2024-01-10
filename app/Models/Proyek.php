@@ -214,4 +214,24 @@ class Proyek extends Model
     {
         return $this->hasMany(DokumenNotaRekomendasi1::class, 'kode_proyek');
     }
+
+    public function TimTender()
+    {
+        return $this->hasMany(TimTender::class, 'kode_proyek');
+    }
+
+    public function DokumenPenentuanKSO()
+    {
+        return $this->hasOne(DokumenPenentuanKSO::class, 'kode_proyek');
+    }
+
+    public function DokumenPenentuanProjectGreenlane()
+    {
+        return $this->hasOne(DokumenPenentuanProjectGreenlane::class, 'kode_proyek');
+    }
+
+    public function DokumenKelengkapanPartnerKSO()
+    {
+        return $this->hasMany(DokumenKelengkapanPartnerKSO::class, 'kode_proyek');
+    }
 }

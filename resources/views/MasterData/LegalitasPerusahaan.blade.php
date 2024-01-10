@@ -87,6 +87,7 @@
                                         <th class="min-w-auto text-white">No.</th>
                                         <th class="min-w-auto text-white">Kategori</th>
                                         <th class="min-w-auto text-white">Item</th>
+                                        <th class="min-w-auto text-white">Item 2</th>
                                         {{-- <th class="min-w-auto text-white">Bobot</th> --}}
                                         <th class="min-w-auto text-white">Start Periode</th>
                                         <th class="min-w-auto text-white">Finish Periode</th>
@@ -189,6 +190,7 @@
                                             <td class="text-center align-middle">{{$no++}}</td>
                                             <td class="align-middle">{!! $item->kategori ?? "-" !!}</td>
                                             <td class="align-middle">{!! nl2br($item->item) !!}</td>
+                                            <td class="align-middle">{!! nl2br($item->item_2) !!}</td>
                                             {{-- <td class="text-center align-middle">{{ $item->bobot }}</td> --}}
                                             <td class="text-center">{{$start_bulan}}</td>
                                             <td class="text-center">{{$finish_bulan}}</td>
@@ -365,11 +367,20 @@
                             <!--End begin::Col-->
 
                             <!--begin::Col-->
-                            <div class="row mb-7">
+                            <div class="row mb-7" id="item-1">
                                 <label class="fs-6 fw-bold form-label mt-3">
                                     <span class="required">Item</span>
                                 </label>
                                 <textarea name="item" id="item" cols="30" rows="10"></textarea>
+                            </div>
+                            <!--End begin::Col-->
+
+                            <!--begin::Col-->
+                            <div class="row mb-7 d-none" id="item-2">
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Item 2</span>
+                                </label>
+                                <textarea name="item_2" id="item_2" cols="30" rows="10"></textarea>
                             </div>
                             <!--End begin::Col-->
 
@@ -591,11 +602,20 @@
                                 <!--End begin::Col-->
 
                                 <!--begin::Col-->
-                                <div class="row mb-7">
+                                <div class="row mb-7" id="item-1">
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span class="required">Item</span>
                                     </label>
                                     <textarea name="item" id="item" cols="30" rows="10">{!! $item->item !!}</textarea>
+                                </div>
+                                <!--End begin::Col-->
+
+                                <!--begin::Col-->
+                                <div class="row mb-7 {{ $item->nota_rekomendasi == 'Nota Rekomendasi 2' ? '' : 'd-none' }}" id="item-2-{{ $item->id }}">
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Item 2</span>
+                                    </label>
+                                    <textarea name="item_2" id="item_2" cols="30" rows="10">{!! $item->item !!}</textarea>
                                 </div>
                                 <!--End begin::Col-->
     
@@ -752,15 +772,19 @@
     function showKategori(elt, id = null){
         if (id != null) {
             if (elt.value == "Nota Rekomendasi 2") {
-                document.querySelector(`#kategori-elt-${id}`).className = "";
+                document.querySelector(`#kategori-elt-${id}`).classList.remove('d-none');
+                document.querySelector(`#item-2-${id}`).classList.remove('d-none');
             }else{
-                document.querySelector(`#kategori-elt-${id}`).className = "d-none";
+                document.querySelector(`#kategori-elt-${id}`).classList.add('d-none');
+                document.querySelector(`#item-2-${id}`).classList.add('d-none');
             }
         }else{
             if (elt.value == "Nota Rekomendasi 2") {
-                document.querySelector("#kategori-elt").className = "";
+                document.querySelector("#kategori-elt").classList.remove('d-none');
+                document.querySelector("#item-2").classList.remove('d-none');
             }else{
-                document.querySelector("#kategori-elt").className = "d-none";
+                document.querySelector("#kategori-elt").classList.add('d-none');
+                document.querySelector("#item-2").classList.add('d-none');
             }
         }
     }

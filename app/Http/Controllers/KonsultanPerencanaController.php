@@ -147,12 +147,18 @@ class KonsultanPerencanaController extends Controller
         $konsultanPerencana = $id;
 
         if (empty($konsultanPerencana)) {
-            Alert::error('Error', "Konsultan Perencana tidak ditemukan");
-            return redirect()->back();
+            // Alert::error('Error', "Konsultan Perencana tidak ditemukan");
+            return response()->json([
+                "Success" => true,
+                "Message" => null
+            ]);
         }
 
         $konsultanPerencana->delete();
-        Alert::success('Success', "Konsultan Perencana Berhasil Dihapus");
-        return redirect()->back();
+        // Alert::success('Success', "Konsultan Perencana Berhasil Dihapus");
+        return response()->json([
+            "Success" => true,
+            "Message" => null
+        ]);
     }
 }
