@@ -427,7 +427,7 @@ class ProyekController extends Controller
             if (!empty($isExistPorsiJO)) {
                 $isExistPorsiJO->each(function ($porsi) {
                     if (empty($porsi->score_pefindo_jo)) {
-                        $checkPefindo = MasterPefindo::where('id_pelanggan', $porsi->id_company_jo)->last();
+                        $checkPefindo = MasterPefindo::where('id_pelanggan', $porsi->id_company_jo)?->last();
                         if (!empty($checkPefindo)) {
                             $porsi->score_pefindo_jo = $checkPefindo->score;
                             $porsi->file_pefindo_jo = $checkPefindo->id_document;
