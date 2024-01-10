@@ -21,8 +21,7 @@ return new class extends Migration
             $table->string('kategori');
             $table->string('id_document');
             $table->string('nama_document');
-            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
+            $table->timestamps();
         });
     }
 
