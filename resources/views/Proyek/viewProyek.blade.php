@@ -4702,13 +4702,13 @@
 
                                                             <script>
                                                                 function showUangMuka(elt) {
-                                                                    const eltUangMuka = elt.parentElement.nextElementSibling.firstElementChild
+                                                                    const eltUangMuka = elt.parentElement.nextElementSibling
                                                                     if (elt.value == "Ya") {
                                                                         eltUangMuka.classList.remove('d-none');
-                                                                        eltUangMuka.firstElementChild.removeAttribute('disabled');
+                                                                        eltUangMuka.firstElementChild.firstElementChild.removeAttribute('disabled');
                                                                     }else{
                                                                         eltUangMuka.classList.add('d-none');
-                                                                        eltUangMuka.firstElementChild.setAttribute('disabled', true);
+                                                                        eltUangMuka.firstElementChild.firstElementChild.setAttribute('disabled', true);
                                                                     }
                                                                 }
                                                             </script>
