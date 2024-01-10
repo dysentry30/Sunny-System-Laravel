@@ -4693,7 +4693,7 @@
                                                             <!--end::Input group-->
                                                             <div class="row fv-row mb-7 {{ $proyek->is_uang_muka == false ? 'd-none' : '' }}">
                                                                 <div class="col-4">
-                                                                    <input type="number" name="uang-muka" class="form-control form-control-solid" min="0" max="100" value="{{ $proyek->uang_muka }}" disabled>
+                                                                    <input type="number" name="uang-muka" class="form-control form-control-solid" min="0" max="100" value="{{ $proyek->uang_muka }}" {{ $proyek->is_uang_muka == false ? 'disabled' : '' }}>
                                                                 </div>
                                                                 <div class="col-2">
                                                                     <p class="mt-7"><i class="bi bi-percent text-dark"></i></p>
@@ -4702,7 +4702,7 @@
 
                                                             <script>
                                                                 function showUangMuka(elt) {
-                                                                    const eltUangMuka = elt.parentElement.nextElementSibling
+                                                                    const eltUangMuka = elt.parentElement.nextElementSibling.firstElementChild
                                                                     if (elt.value == "Ya") {
                                                                         eltUangMuka.classList.remove('d-none');
                                                                         eltUangMuka.firstElementChild.removeAttribute('disabled');
