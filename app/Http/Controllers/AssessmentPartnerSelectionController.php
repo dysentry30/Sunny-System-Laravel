@@ -24,7 +24,7 @@ class AssessmentPartnerSelectionController extends Controller
     {
         $customers = PorsiJO::where('id_company_jo', '!=', null)
             ->where('is_greenlane', '!=', null)
-            ->where('is_greenlane', '==', false)
+            ->where('is_greenlane', '!=', false)
             ->get();
         $partnerDetail = PartnerSelectionDetail::all();
         $kriteriaPenilaian = PenilaianPartnerSelection::where('is_active', true)->get();
