@@ -3151,7 +3151,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $maxResults = 10;
 
         $dataPegawai = Pegawai::when(!empty($search), function ($query) use ($search) {
-            $query->where('nama_pegawai', 'like', '%' . $search . '%');
+            $query->where('nama_pegawai', 'like', '%' . strtoupper($search) . '%');
         });
         $data = $dataPegawai->paginate($perPage, ['*'], 'page', $page);
 
