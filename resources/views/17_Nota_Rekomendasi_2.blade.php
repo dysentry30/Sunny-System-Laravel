@@ -1771,12 +1771,18 @@
                                                 <td class="text-center align-middle">{{ $kategori->urutan }}</td>
                                                 <td class="text-start align-middle">{{ $kategori->kategori }}</td>
                                                 <td class="text-center align-middle">
-                                                    {{-- <input class="form-check-input" type="checkbox" value="{{ $kategori->urutan }}" name="master_selected_{{ $kategori->urutan }}" id="master_selected_{{ $kategori->urutan }}" onchange="disabledTextArea(this)" {{ !empty($catatan_master) && $catatan_master[$key]->checked ? 'checked' : '' }} {{ $is_edit_penyusun ? '' : 'disabled' }}> --}}
-                                                    <input class="form-check-input" type="checkbox" value="{{ $kategori->urutan }}" name="master_selected_{{ $kategori->urutan }}" id="master_selected_{{ $kategori->urutan }}" onchange="disabledTextArea(this)" {{ $is_edit_penyusun ? '' : 'disabled' }}>
+                                                    @if ($catatan_master->isNotEmpty())
+                                                        <input class="form-check-input" type="checkbox" value="{{ $kategori->urutan }}" name="master_selected_{{ $kategori->urutan }}" id="master_selected_{{ $kategori->urutan }}" onchange="disabledTextArea(this)" {{ !empty($catatan_master) && $catatan_master[$key]->checked ? 'checked' : '' }} {{ $is_edit_penyusun ? '' : 'disabled' }}>
+                                                    @else
+                                                        <input class="form-check-input" type="checkbox" value="{{ $kategori->urutan }}" name="master_selected_{{ $kategori->urutan }}" id="master_selected_{{ $kategori->urutan }}" onchange="disabledTextArea(this)" {{ $is_edit_penyusun ? '' : 'disabled' }}>
+                                                    @endif
                                                 </td>
                                                 <td>
-                                                    {{-- <textarea name="catatan_nota_rekomendasi_master[]" id="catatan_nota_rekomendasi_master" class="form-control form-control-solid" readonly>{!! $catatan_master[$key]->checked ? $catatan_master[$key]->uraian : '' !!}</textarea> --}}
-                                                    <textarea name="catatan_nota_rekomendasi_master[]" id="catatan_nota_rekomendasi_master" class="form-control form-control-solid" readonly>{!! '' !!}</textarea>
+                                                    @if ($catatan_master->isNotEmpty())
+                                                        <textarea name="catatan_nota_rekomendasi_master[]" id="catatan_nota_rekomendasi_master" class="form-control form-control-solid" readonly>{!! $catatan_master[$key]->checked ? $catatan_master[$key]->uraian : '' !!}</textarea>
+                                                    @else
+                                                        <textarea name="catatan_nota_rekomendasi_master[]" id="catatan_nota_rekomendasi_master" class="form-control form-control-solid" readonly>{!! '' !!}</textarea>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
