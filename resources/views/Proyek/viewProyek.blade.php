@@ -121,8 +121,12 @@
                                         <input type="button" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan"
                                             style="background-color:#00b48d">
                                     @elseif ($proyek->stage == 4 && $check_non_green_line_nota_2 && is_null($proyek->is_request_rekomendasi_2) && is_null($proyek->is_disetujui_rekomendasi_2))
-                                        <input type="button" name="proyek-rekomendasi-2" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi-2" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan-nota-2"
-                                            style="background-color:#00b48d">
+                                        @if ($proyek->DokumenPenentuanProjectGreenlane->isEmpty() || $proyek->DokumenTender->isEmpty())
+                                            <button type="button" class="btn btn-sm btn-success ms-2" data-bs-toggle="modal"data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="<b>Dokumen Form Penentuan Project Green Lane / Non Green Lane & Dokumen Tender</b> Wajib Diisi" disabled>Pengajuan Rekomendasi</button>
+                                        @else
+                                            <input type="button" name="proyek-rekomendasi-2" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi-2" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan-nota-2"
+                                                    style="background-color:#00b48d">
+                                        @endif    
                                     {{-- @elseif($proyek->stage > 1 && $proyek->is_disetujui == true &&  $proyek->is_recommended_with_note)
                                         <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="<b>Rekomendasi Aproved</b><br>Silahkan Lanjut Stage Selanjutnya">
                                             <p class="mt-4 btn btn-sm btn-success ms-2">
@@ -3592,7 +3596,7 @@
 
 
                                                     <!--Begin::Title Biru Form: Document Prakualifikasi-->
-                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                    <h3 class="fw-bolder m-0 required" id="HeadDetail" style="font-size:14px;">
                                                         Document Prakualifikasi
                                                     </h3>
                                                     <br>
