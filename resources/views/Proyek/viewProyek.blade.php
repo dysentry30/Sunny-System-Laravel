@@ -3479,7 +3479,7 @@
                                                                                         <td class="text-center">
                                                                                             @php
                                                                                                 $getAssessmentEksternal = App\Models\MasterPefindo::where('id_pelanggan', $porsi->id_company_jo)?->latest()?->first();
-                                                                                                $isActiveAssessment = null;
+                                                                                                $isActiveAssessment = "Belum ada pefindo";
                                                                                                 if (!empty($getAssessmentEksternal)) {
                                                                                                     if ($getAssessmentEksternal->id_document == $porsi->file_pefindo_jo) {
                                                                                                         $isActiveAssessment = $getAssessmentEksternal->is_active;
@@ -3492,7 +3492,7 @@
                                                                                                 <p class="badge rounded-pill {{ $porsi->is_disetujui ? 'badge-success' : 'badge-danger' }} m-0">{{ is_null($porsi->is_disetujui) ? 'Belum dilakukan Assessment Eksternal' : ($porsi->is_disetujui ? 'Disetujui' : 'Ditolak')  }}</p>
                                                                                             @elseif (!is_null($isActiveAssessment) && $isActiveAssessment == false)
                                                                                                 <p class="badge rounded-pill badge-danger m-0">Expired</p>
-                                                                                            @elseif(empty($isActiveAssessment))
+                                                                                            @elseif($isActiveAssessment == "Belum ada pefindo")
                                                                                             
                                                                                             @else
                                                                                                 <p class="badge rounded-pill badge-danger m-0">Expired</p>
