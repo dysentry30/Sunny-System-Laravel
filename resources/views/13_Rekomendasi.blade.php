@@ -840,6 +840,7 @@
                                                                                     return $value->unit_kerja == $proyek->UnitKerja->Divisi->id_divisi &&
                                                                                     $value->klasifikasi_proyek == $proyek->klasifikasi_pasdin &&
                                                                                     $value->departemen == $proyek->departemen_proyek &&
+                                                                                    $value->kategori == "Penyusun" &&
                                                                                     $value->urutan > 1;
                                                                                 })->count() > 0 && (collect(json_decode($proyek->approved_penyusun))->isEmpty() ||collect(json_decode($proyek->approved_penyusun))->contains('status', 'draft')))))
                                                                                 
