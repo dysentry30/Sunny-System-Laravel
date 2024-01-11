@@ -442,7 +442,7 @@ class ProyekController extends Controller
                             }
                         }
                     }
-                    $kriteria_partner = MasterKriteriaGreenlanePartner::where('id_pelanggan', $porsi->id_company_jo)->first();
+                    $kriteria_partner = MasterGrupTierBUMN::where('id_pelanggan', $porsi->id_company_jo)->first();
                     if (!empty($kriteria_partner)) {
                         $porsi->is_greenlane = true;
                     } else {
@@ -717,7 +717,7 @@ class ProyekController extends Controller
                         }
                     }
                 }
-                $kriteria_partner = MasterKriteriaGreenlanePartner::where('id_pelanggan', $porsi->id_company_jo)->first();
+                $kriteria_partner = MasterGrupTierBUMN::where('id_pelanggan', $porsi->id_company_jo)->first();
                 if (!empty($kriteria_partner)) {
                     $porsi->is_greenlane = true;
                 } else {
