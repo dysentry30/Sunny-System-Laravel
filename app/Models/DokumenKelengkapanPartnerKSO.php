@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Ramsey\Uuid\Uuid;
 
 class DokumenKelengkapanPartnerKSO extends Model
 {
@@ -12,4 +13,13 @@ class DokumenKelengkapanPartnerKSO extends Model
     protected $casts = [
         'id' => 'string'
     ];
+
+    public static function create(array $attributes = [])
+    {
+        $model = new static($attributes);
+        $model->uuid = Uuid::uuid4()->toString();
+        $model->save();
+
+        return $model;
+    }
 }
