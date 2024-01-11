@@ -4723,6 +4723,16 @@
                                                                 <span class="px-4 fs-4 badge badge-danger">
                                                                     Non Green Lane
                                                                 </span>
+                                                                @if (is_null($proyek->NotaRekomendasi2->is_disetujui))
+                                                                @elseif ($proyek->NotaRekomendasi2->is_disetujui)
+                                                                <span class="px-4 fs-4 badge badge-success">
+                                                                    Nota Rekomendasi II Disetujui
+                                                                </span>
+                                                                @elseif (!$proyek->NotaRekomendasi2->is_disetujui)
+                                                                <span class="px-4 fs-4 badge badge-danger">
+                                                                    Nota Rekomendasi II Ditolak
+                                                                </span>
+                                                                @endif
                                                             @elseif (!is_null($check_non_green_line_nota_2) && $check_non_green_line_nota_2 == false)
                                                                 <span class="px-4 fs-4 badge badge-success">
                                                                     Green Lane
