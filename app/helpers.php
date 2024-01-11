@@ -2892,7 +2892,7 @@ function createWordPengajuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekomen
     $phpWord = new \PhpOffice\PhpWord\PhpWord();
     $proyek = $proyekNotaRekomendasi->Proyek;
     $customer = $proyek->proyekBerjalan->Customer;
-    $target_path = "file-nota-rekomendasi-2\\file-pengajuan";
+    $target_path = "file-nota-rekomendasi-2/file-pengajuan";
     $now = Carbon\Carbon::now();
     $file_name = $now->format("dmYHis") . "_nota-pengajuan_$proyek->kode_proyek";
 
@@ -3038,7 +3038,7 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
     $phpWord = new \PhpOffice\PhpWord\PhpWord();
     $proyek = $proyekNotaRekomendasi->Proyek;
     $customer = $proyek->proyekBerjalan->Customer;
-    $target_path = "file-nota-rekomendasi-2\\file-persetujuan";
+    $target_path = "file-nota-rekomendasi-2/file-persetujuan";
     $now = Carbon\Carbon::now();
     $file_name = $now->format("dmYHis") . "_nota-persetujuan_$proyek->kode_proyek";
 
