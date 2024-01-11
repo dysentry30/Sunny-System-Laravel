@@ -668,6 +668,8 @@ class ProyekController extends Controller
             $newNotaRekomendasi2 = new NotaRekomendasi2();
             $newNotaRekomendasi2->kode_proyek = $dataProyek['kode-proyek'];
             $newNotaRekomendasi2->unit_kerja = $newProyek->unit_kerja;
+            $newNotaRekomendasi2->divisi_id = $newProyek->unit_kerja->Divisi->id_divisi;
+            $newNotaRekomendasi2->departemen_proyek = $newProyek->departemen_proyek;
             $newNotaRekomendasi2->is_request_rekomendasi = true;
 
             if ($newNotaRekomendasi2->save()) {
