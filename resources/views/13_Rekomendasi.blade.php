@@ -813,6 +813,7 @@
                                                                             return $value->unit_kerja == $proyek->UnitKerja->Divisi->id_divisi &&
                                                                             $value->klasifikasi_proyek == $proyek->klasifikasi_pasdin &&
                                                                             $value->departemen == $proyek->departemen_proyek &&
+                                                                            $value->kategori == "Verifikasi" &&
                                                                             $value->urutan > 1;
                                                                         })->count() > 0 && (collect(json_decode($proyek->approved_verifikasi))->isEmpty()))))
 
