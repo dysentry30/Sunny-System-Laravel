@@ -544,7 +544,7 @@
                                                                 Perolehan
                                                             </a>
                                                         @else
-                                                            @if ($proyek->is_disetujui_nota_2 || (!is_null($check_non_green_line_nota_2) && !$check_non_green_line_nota_2) || $proyek->UnitKerja?->dop == "EA")
+                                                            @if ($proyek->NotaRekomendasi2->is_disetujui || (!is_null($check_non_green_line_nota_2) && !$check_non_green_line_nota_2) || $proyek->UnitKerja?->dop == "EA")
                                                                 <a href="#"
                                                                     class="stage-button stage-action stage-is-not-active color-is-default"
                                                                     style="outline: 0px; cursor: pointer;" stage="5">

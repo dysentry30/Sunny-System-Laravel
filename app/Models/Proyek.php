@@ -234,4 +234,9 @@ class Proyek extends Model
     {
         return $this->hasMany(DokumenKelengkapanPartnerKSO::class, 'kode_proyek');
     }
+
+    public function NotaRekomendasi2()
+    {
+        return $this->belongsTo(NotaRekomendasi2::class, 'kode_proyek', 'kode_proyek');
+    }
 }
