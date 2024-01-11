@@ -50,9 +50,13 @@ class Rekomendasi2Controller extends Controller
         });
         $matriks_category = [];
 
+        $collectKlasifikasi = $matriks_user->unique('klasifikasi_proyek')->map(function ($item) {
+            return $item->klasifikasi_proyek;
+        })->toArray();
+
         $proyeks = NotaRekomendasi2::all();
-        $proyeks_proses_rekomendasi = $proyeks->whereIn("unit_kerja", $unit_kerjas)->whereNull('is_disetujui');
-        $proyeks_rekomendasi_final = $proyeks->whereIn("unit_kerja", $unit_kerjas)->whereNotNull('is_disetujui');
+        $proyeks_proses_rekomendasi = $proyeks->whereIn("unit_kerja", $unit_kerjas)->whereIn('klasifikasi_proyek_nota_2', $collectKlasifikasi)->whereNull('is_disetujui');
+        $proyeks_rekomendasi_final = $proyeks->whereIn("unit_kerja", $unit_kerjas)->whereIn('klasifikasi_proyek_nota_2', $collectKlasifikasi)->whereNotNull('is_disetujui');
 
         $matriks_category = MatriksApprovalNotaRekomendasi2::all()->groupBy(['klasifikasi_proyek', 'kategori', 'departemen_code']);
 
