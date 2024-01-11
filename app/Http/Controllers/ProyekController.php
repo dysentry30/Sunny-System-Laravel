@@ -62,6 +62,7 @@ use App\Models\DokumenPenentuanProjectGreenlane;
 use App\Models\MasterKlasifikasiOmsetProyek;
 use App\Models\MasterKlasifikasiProduksiProyek;
 use App\Models\DokumenKelengkapanPartnerKSO;
+use App\Models\MasterGrupTierBUMN;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -2659,7 +2660,7 @@ class ProyekController extends Controller
             }
         }
 
-        $kriteria_partner = MasterKriteriaGreenlanePartner::where('id_pelanggan', $customer->id_customer)->first();
+        $kriteria_partner = MasterGrupTierBUMN::where('id_pelanggan', $customer->id_customer)->first();
 
         if (!empty($kriteria_partner)) {
             $newPorsiJO->is_greenlane = true;
