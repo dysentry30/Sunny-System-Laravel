@@ -2072,6 +2072,13 @@ class ProyekController extends Controller
         $forecasts = Forecast::where("kode_proyek", "=", $kodeProyek)->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years)->first();
         // $forecasts = $proyekStage->Forecasts->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years)->first();
         if ($request->stage == 4) {
+            if (empty($proyekStage->DokumenPrakualifikasi)) {
+                Alert::error("Error", "Dokumen Prakualifikasi wajib diisi !");
+                $request->stage = 3;
+            } else {
+                $request->stage = 4;
+            }
+
             if ($proyekStage->hps_pagu == 0) {
                 Alert::error("Error", "HPS Pagu Belum Diisi !");
                 $request->stage = 3;
