@@ -296,7 +296,7 @@
                             @endif
                         @endif
 
-                        @can('crm')                        
+                        @canany(['crm', 'super-admin'])                        
                         <div class="menu-item">
                             <a class="menu-link " href="/nota-rekomendasi-2"
                                 style="color:white; padding-left:20px; {{ str_contains(Request::url(), 'nota-rekomendasi-2') ? 'background-color:#008CB4' : '' }}">
@@ -311,7 +311,7 @@
                                 <span class="menu-title" style="font-size: 16px; padding-left: 10px">Nota Rekomendasi 2</span>
                             </a>
                         </div>
-                        @endcan
+                        @endcanany
 
                         @if (auth()->user()->check_administrator || $adminPIC)
                             <!--Begin::Master Data Expand-->
@@ -346,6 +346,9 @@
                             str_contains(Request::Path(), 'penilaian-pengguna-jasa') ||
                             str_contains(Request::Path(), 'penilaian-partner-selection') ||
                             str_contains(Request::Path(), 'penilaian-checklist-project-selection') ||
+                            str_contains(Request::Path(), 'master-klasifikasi-proyek') ||
+                            str_contains(Request::Path(), 'master-klasifikasi-omzet') ||
+                            str_contains(Request::Path(), 'master-klasifikasi-produksi') ||
                             // str_contains(Request::Path(), 'instansi') ||
                             str_contains(Request::Path(), 'team-proyek') ? 'background-color:#008CB4' : '' }}">
 
@@ -987,6 +990,57 @@
                                                 <!--end::Svg Icon-->
                                             </span>
                                             <span class="menu-title" style="font-size: 16px; padding-left: 10px">Penilaian Risiko Partner Selection</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    @endif
+
+                                    @if (auth()->user()->check_administrator)
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'master-klasifikasi-proyek' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/master-klasifikasi-proyek" style="color:white; padding-left:20px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                {{-- <i class="bi bi-buildings text-white"></i>                                                     --}}
+                                                <i class="bi bi-calculator-fill text-white" style="font-size: 20px"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Klasifikasi Proyek</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    @endif
+
+                                    @if (auth()->user()->check_administrator)
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'master-klasifikasi-omzet' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/master-klasifikasi-omzet" style="color:white; padding-left:20px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                {{-- <i class="bi bi-buildings text-white"></i>                                                     --}}
+                                                <i class="bi bi-calculator-fill text-white" style="font-size: 20px"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Klasifikasi Omzet</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    @endif
+
+                                    @if (auth()->user()->check_administrator)
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'master-klasifikasi-produksi' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/master-klasifikasi-produksi" style="color:white; padding-left:20px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                {{-- <i class="bi bi-buildings text-white"></i>                                                     --}}
+                                                <i class="bi bi-calculator-fill text-white" style="font-size: 20px"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Klasifikasi Produksi</span>
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
