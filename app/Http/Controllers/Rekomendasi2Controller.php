@@ -124,12 +124,12 @@ class Rekomendasi2Controller extends Controller
                     $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_rekomendasi_" . $proyekSelected->kode_proyek;
                     $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan Pengajuan Nota Rekomendasi I, *" . $proyekSelected->ProyekBerjalan->name_customer . "* untuk Proyek *$proyekSelected->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
 
-                    $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
+                    // $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
 
-                    $send_msg_to_wa->onError(function ($error) {
-                        Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                        return redirect()->back();
-                    });
+                    // $send_msg_to_wa->onError(function ($error) {
+                    //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+                    //     return redirect()->back();
+                    // });
                 }
 
                 createWordPengajuanNota2($proyekPengajuan);
@@ -272,15 +272,15 @@ class Rekomendasi2Controller extends Controller
                         foreach ($nomorTarget as $target) {
                             $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_user_view_persetujuan_" . $proyekPenyusun->kode_proyek;
                             $message = "Yth Bapak/Ibu *" . $target->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan hasil asesmen proyek *" . $proyekSelected->nama_proyek . "* untuk permohonan pemberian rekomendasi tahap II.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                            $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
-                            $response->onError(function ($error) {
-                                // dd($error);
-                                Alert::error(
-                                    'Error',
-                                    "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !"
-                                );
-                                return redirect()->back();
-                            });
+                            // $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
+                            // $response->onError(function ($error) {
+                            //     // dd($error);
+                            //     Alert::error(
+                            //         'Error',
+                            //         "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !"
+                            //     );
+                            //     return redirect()->back();
+                            // });
                         }
                     } elseif (str_contains($proyekSelected->klasifikasi_pasdin, "Besar")) {
 
@@ -288,16 +288,16 @@ class Rekomendasi2Controller extends Controller
                         foreach ($nomorTarget as $target) {
                             $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_user_view_persetujuan_" . $proyekPenyusun->kode_proyek;
                             $message = "Yth Bapak/Ibu *" . $target->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan hasil asesmen proyek *" . $proyekSelected->nama_proyek . "* untuk permohonan pemberian rekomendasi tahap II.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                            $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
+                            // $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
 
-                            $response->onError(function ($error) {
-                                // dd($error);
-                                Alert::error(
-                                    'Error',
-                                    "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !"
-                                );
-                                return redirect()->back();
-                            });
+                            // $response->onError(function ($error) {
+                            //     // dd($error);
+                            //     Alert::error(
+                            //         'Error',
+                            //         "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !"
+                            //     );
+                            //     return redirect()->back();
+                            // });
                         }
                     } else {
 
@@ -305,16 +305,16 @@ class Rekomendasi2Controller extends Controller
                         foreach ($nomorTarget as $target) {
                             $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_rekomendasi_" . $proyekPenyusun->kode_proyek;
                             $message = "Yth Bapak/Ibu *" . $target->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan hasil asesmen proyek *" . $proyekSelected->nama_proyek . "* untuk permohonan pemberian rekomendasi tahap II.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                            $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
+                            // $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
 
-                            $response->onError(function ($error) {
-                                // dd($error);
-                                Alert::error(
-                                    'Error',
-                                    "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !"
-                                );
-                                return redirect()->back();
-                            });
+                            // $response->onError(function ($error) {
+                            //     // dd($error);
+                            //     Alert::error(
+                            //         'Error',
+                            //         "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !"
+                            //     );
+                            //     return redirect()->back();
+                            // });
                         }
 
                         $approved_verifikasi = collect(json_decode($proyekPenyusun->approved_verifikasi));
@@ -333,15 +333,15 @@ class Rekomendasi2Controller extends Controller
                         foreach ($nomorTarget as $target) {
                             $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_user_view_persetujuan_" . $proyekPenyusun->kode_proyek;
                             $message = "Yth Bapak/Ibu *" . $target->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan revisi asesmen untuk proses verifikasi penyusunan Nota Rekomendasi tahap II pada proyek *$proyekPenyusun->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                            $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
+                            // $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
 
-                            $response->onError(function ($error) {
-                                Alert::error(
-                                    'Error',
-                                    "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !"
-                                );
-                                return redirect()->back();
-                            });
+                            // $response->onError(function ($error) {
+                            //     Alert::error(
+                            //         'Error',
+                            //         "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !"
+                            //     );
+                            //     return redirect()->back();
+                            // });
                         }
                     } elseif (str_contains($proyekSelected->klasifikasi_pasdin, "Besar")) {
                         // $nomorTarget = !empty($this->isnomorTargetActive) ? self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Rekomendasi")->Pegawai->handphone : $this->nomorDefault;
@@ -349,15 +349,15 @@ class Rekomendasi2Controller extends Controller
                         foreach ($nomorTarget as $target) {
                             $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_user_view_persetujuan_" . $proyekPenyusun->kode_proyek;
                             $message = "Yth Bapak/Ibu *" . $target->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan revisi asesmen untuk proses verifikasi penyusunan Nota Rekomendasi tahap II pada proyek *$proyekPenyusun->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                            $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
+                            // $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
 
-                            $response->onError(function ($error) {
-                                Alert::error(
-                                    'Error',
-                                    "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !"
-                                );
-                                return redirect()->back();
-                            });
+                            // $response->onError(function ($error) {
+                            //     Alert::error(
+                            //         'Error',
+                            //         "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !"
+                            //     );
+                            //     return redirect()->back();
+                            // });
                         }
                     }
 
@@ -396,12 +396,12 @@ class Rekomendasi2Controller extends Controller
                             foreach ($get_nomor as $user) {
                                 $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyekPenyusun->kode_proyek";
                                 $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan Pengajuan Nota Rekomendasi I, *" . $proyekPenyusun->ProyekBerjalan->name_customer . "* untuk Proyek *$proyekPenyusun->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                                $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
+                                // $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
 
-                                $response->onError(function ($error) {
-                                    Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                                    return redirect()->back();
-                                });
+                                // $response->onError(function ($error) {
+                                //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+                                //     return redirect()->back();
+                                // });
                             }
                         }
                     } elseif (str_contains($proyekSelected->klasifikasi_pasdin, "Besar")) {
@@ -416,12 +416,12 @@ class Rekomendasi2Controller extends Controller
                             foreach ($get_nomor as $user) {
                                 $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyekPenyusun->kode_proyek";
                                 $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan Pengajuan Nota Rekomendasi I, *" . $proyekPenyusun->ProyekBerjalan->name_customer . "* untuk Proyek *$proyekPenyusun->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                                $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
+                                // $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
 
-                                $response->onError(function ($error) {
-                                    Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                                    return redirect()->back();
-                                });
+                                // $response->onError(function ($error) {
+                                //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+                                //     return redirect()->back();
+                                // });
                             }
                         }
                     } else {
@@ -438,13 +438,13 @@ class Rekomendasi2Controller extends Controller
                             foreach ($get_nomor as $user) {
                                 $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyekPenyusun->kode_proyek";
                                 $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan Pengajuan Nota Rekomendasi I, *" . $proyekPenyusun->ProyekBerjalan->name_customer . "* untuk Proyek *$proyekPenyusun->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                                $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
+                                // $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
 
-                                $response->onError(function ($error) {
+                                // $response->onError(function ($error) {
 
-                                    Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                                    return redirect()->back();
-                                });
+                                //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+                                //     return redirect()->back();
+                                // });
                             }
                         }
                     }
@@ -487,13 +487,13 @@ class Rekomendasi2Controller extends Controller
                 foreach ($nomorTarget as $target) {
                     $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_user_view_persetujuan_" . $proyekVerifikasi->kode_proyek;
                     $message = "Yth Bapak/Ibu *" . $target->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan hasil asesmen untuk proyek *" . $proyekSelected->nama_proyek . "* untuk permohonan pemberian rekomendasi tahap II.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                    $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
+                    // $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
 
-                    $send_msg_to_wa->onError(function ($error) {
-                        // dd($error);
-                        Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                        return redirect()->back();
-                    });
+                    // $send_msg_to_wa->onError(function ($error) {
+                    //     // dd($error);
+                    //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+                    //     return redirect()->back();
+                    // });
                 }
                 $proyekVerifikasi->is_verifikasi_approved = true;
             } else {
@@ -510,13 +510,13 @@ class Rekomendasi2Controller extends Controller
                         foreach ($get_nomor as $user) {
                             $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyekVerifikasi->kode_proyek";
                             $message = "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan hasil asesmen untuk proyek *" . $proyekSelected->nama_proyek . "* untuk proses tandatangan penyusun Nota Rekomendasi tahap II.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                            $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
+                            // $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
 
-                            $send_msg_to_wa->onError(function ($error) {
-                                // dd($error);
-                                Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                                return redirect()->back();
-                            });
+                            // $send_msg_to_wa->onError(function ($error) {
+                            //     // dd($error);
+                            //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+                            //     return redirect()->back();
+                            // });
                         }
                     }
                 }
@@ -550,12 +550,12 @@ class Rekomendasi2Controller extends Controller
             foreach ($get_nomor as $user) {
                 $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_persetujuan_$proyekSelected->kode_proyek";
                 $message = "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan permintaan revisi asesmen untuk perbaikan Nota Rekomendasi tahap I pada proyek *$proyekSelected->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
+                // $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
 
-                $send_msg_to_wa->onError(function ($error) {
-                    Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                    return redirect()->back();
-                });
+                // $send_msg_to_wa->onError(function ($error) {
+                //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+                //     return redirect()->back();
+                // });
             }
 
             $proyekVerifikasi->is_penyusun_approved = null;
@@ -628,12 +628,12 @@ class Rekomendasi2Controller extends Controller
                     $user = $user->Pegawai->User;
                     $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_user_view_rekomendasi_" . $proyekSelected->kode_proyek;
                     $message = "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan Permohonan tanda tangan Persetujuan Nota Rekomendasi Tahap II untuk Proyek *$proyekSelected->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                    $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
+                    // $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
 
-                    $send_msg_to_wa->onError(function ($error) {
-                        Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                        return redirect()->back();
-                    });
+                    // $send_msg_to_wa->onError(function ($error) {
+                    //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+                    //     return redirect()->back();
+                    // });
                 }
                 // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega);
                 $proyekRekomendasi->is_recommended_with_note = true;
@@ -651,16 +651,16 @@ class Rekomendasi2Controller extends Controller
                         foreach ($get_nomor as $user) {
                             $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_user_view_rekomendasi_" . $proyekSelected->kode_proyek;
                             $message = "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan Permohonan tanda tangan Persetujuan Nota Rekomendasi Tahap II untuk Proyek *$proyekSelected->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                            $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
+                            // $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
 
-                            $send_msg_to_wa->onError(function ($error) {
-                                // dd($error);
-                                Alert::error(
-                                    'Error',
-                                    "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !"
-                                );
-                                return redirect()->back();
-                            });
+                            // $send_msg_to_wa->onError(function ($error) {
+                            //     // dd($error);
+                            //     Alert::error(
+                            //         'Error',
+                            //         "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !"
+                            //     );
+                            //     return redirect()->back();
+                            // });
                         }
                     }
                 }
@@ -707,13 +707,13 @@ class Rekomendasi2Controller extends Controller
                     $user = $user->Pegawai->User;
                     $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_user_view_rekomendasi_" . $proyekSelected->kode_proyek;
                     $message = "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan permohonan persetujuan Nota Rekomendasi Tahap I untuk *" . $proyekSelected->proyekBerjalan->customer->name . "* pada proyek *$proyekSelected->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                    $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
+                    // $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
 
-                    $send_msg_to_wa->onError(function ($error) {
-                        // dd($error);
-                        Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                        return redirect()->back();
-                    });
+                    // $send_msg_to_wa->onError(function ($error) {
+                    //     // dd($error);
+                    //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+                    //     return redirect()->back();
+                    // });
                 }
                 // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega);
                 $proyekRekomendasi->is_rekomendasi_approved = true;
@@ -731,16 +731,16 @@ class Rekomendasi2Controller extends Controller
                         foreach ($get_nomor as $user) {
                             $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_user_view_rekomendasi_" . $proyekSelected->kode_proyek;
                             $message = "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan Permohonan tanda tangan Persetujuan Nota Rekomendasi Tahap I untuk Proyek *$proyekSelected->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                            $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
+                            // $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
 
-                            $send_msg_to_wa->onError(function ($error) {
-                                // dd($error);
-                                Alert::error(
-                                    'Error',
-                                    "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !"
-                                );
-                                return redirect()->back();
-                            });
+                            // $send_msg_to_wa->onError(function ($error) {
+                            //     // dd($error);
+                            //     Alert::error(
+                            //         'Error',
+                            //         "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !"
+                            //     );
+                            //     return redirect()->back();
+                            // });
                         }
                     }
                 }

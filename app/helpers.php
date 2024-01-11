@@ -3092,8 +3092,9 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
     if ($proyek->PorsiJO->isNotEmpty()) {
         $kso_table = $table->addCell(6000, $styleCell);
         foreach ($proyek->PorsiJO as $partner) {
+            $statusWIKA = (int)$partner->porsi_jo < (int)$proyek->porsi_jo ? "Leader" : "Member";
             $kso_table->addText("Nama Partner : " . $partner->company_jo, $fontStyle);
-            $kso_table->addText("WIKA : " . $proyek->TimTender->first()->posisi, $fontStyle);
+            $kso_table->addText("WIKA : " . $statusWIKA, $fontStyle);
             if ($proyek->PorsiJO->count() > 1) {
                 $kso_table->addTextBreak(1);
             }
