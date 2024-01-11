@@ -13,13 +13,4 @@ class DokumenKelengkapanPartnerKSO extends Model
     protected $casts = [
         'id' => 'string'
     ];
-
-    public static function create(array $attributes = [])
-    {
-        $model = new static($attributes);
-        $model->uuid = Uuid::uuid4()->toString();
-        $model->save();
-
-        return $model;
-    }
 }
