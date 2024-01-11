@@ -3121,7 +3121,7 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
     $table->addRow();
     $table->addCell(500, $styleCell)->addText('8', $fontStyle);
     $table->addCell(2500, $styleCell)->addText("Uang Muka", $fontStyle);
-    $table->addCell(6000, $styleCell)->addText($proyek->is_uang_muka ? "Ya" . "|" . $proyek->Proyek->uang_muka . "%" : 'Tidak', $fontStyle);
+    $table->addCell(6000, $styleCell)->addText($proyek->is_uang_muka ? "Ya" . "|" . $proyek->uang_muka . "%" : 'Tidak', $fontStyle);
     $table->addRow();
     $table->addCell(500, $styleCell)->addText('9', $fontStyle);
     $table->addCell(2500, $styleCell)->addText("Waktu Pelaksanaan Pekerjaan", $fontStyle);
