@@ -48,7 +48,18 @@
                                 <!--end::Title-->
                             </div>
                             <!--end::Page title-->
-                            @canany(['super-admin', 'admin'])
+                            @if (auth()->user()->check_administrator)
+                                <div class="d-flex align-items-center py-1">
+
+                                    <!--begin::Button-->
+                                    <a href="#" data-bs-target="#kt_modal_create_alat"
+                                        data-bs-toggle="modal" class="btn btn-sm btn-primary py-3"
+                                        style="background-color:#008CB4; padding: 6px">
+                                        Tambah Alat</a>
+
+                                </div>
+                            @endif
+                            {{-- @canany(['super-admin', 'admin'])
                             <!--begin::Actions-->
                             <div class="d-flex align-items-center py-1">
 
@@ -60,7 +71,7 @@
 
                             </div>
                             <!--end::Actions-->
-                            @endcanany
+                            @endcanany --}}
                         </div>
                         <!--end::Container-->
                     </div>

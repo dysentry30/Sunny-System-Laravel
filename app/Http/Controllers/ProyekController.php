@@ -411,7 +411,7 @@ class ProyekController extends Controller
         if ($proyek->tipe_proyek == "P") {
             $konsultan_perencana = KonsultanPerencana::all();
             $pefindo = null;
-            if (!empty($proyek->proyekBerjalan?->customer) || $proyek->proyekBerjalan?->customer->isNotEmpty()) {
+            if (!empty($proyek->proyekBerjalan?->customer)) {
                 $customer = $proyek->proyekBerjalan->customer;
                 $findPefindo = MasterPefindo::where('id_pelanggan', $customer->id_customer)->first();
                 if (!empty($findPefindo)) {
@@ -3143,9 +3143,18 @@ class ProyekController extends Controller
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
             Alert::error('Error', "Personel Tender Gagal Ditambahkan, Periksa Kembali !");
+            return redirect()->back();
         }
 
+        $proyek = Proyek::find($data["kode-proyek"]);
+        $pelanggan = $proyek->proyekBerjalan->customer;
         $validation->validate();
+
+        if (empty($pelanggan)) {
+            Alert::error('Error', "Pelanggan Belum ditentukan. Mohon isi terlebih dahulu !");
+            return redirect()->back();
+        }
+
         $personel->nip = $data["nama_pegawai"];
         $personel->kategori = $data["kategori_personel"];
         $personel->kode_proyek = $data["kode-proyek"];
@@ -3172,6 +3181,13 @@ class ProyekController extends Controller
         }
 
         $validation->validate();
+
+        $proyek = Proyek::find($data["kode-proyek"]);
+        $pelanggan = $proyek->proyekBerjalan->customer;
+        if (empty($pelanggan)) {
+            Alert::error('Error', "Pelanggan Belum ditentukan. Mohon isi terlebih dahulu !");
+            return redirect()->back();
+        }
 
         $editPersonel = PersonelTenderProyek::find($id);
         $editPersonel->nip = $data["nama_pegawai"];

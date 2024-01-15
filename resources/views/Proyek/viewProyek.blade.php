@@ -8547,7 +8547,7 @@
                             <div class="modal-footer">
 
                                 <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
-                                    id="new_save" style="background-color:#008CB4">Save</button>
+                                    id="new_save_alat" style="background-color:#008CB4">Save</button>
 
                             </div>
                             <!--end::Modal body-->
@@ -8695,7 +8695,7 @@
                                 <div class="modal-footer">
 
                                     <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
-                                        id="new_save" style="background-color:#008CB4">Save</button>
+                                        id="edit_save_alat" style="background-color:#008CB4">Save</button>
 
                                 </div>
                                 <!--end::Modal body-->
@@ -8790,7 +8790,7 @@
                             <div class="modal-footer">
 
                                 <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
-                                    id="new_save" style="background-color:#008CB4">Save</button>
+                                    id="new_save_personel" style="background-color:#008CB4">Save</button>
 
                             </div>
                             <!--end::Modal body-->
@@ -8866,7 +8866,7 @@
                                                 <select id="kategori_personel" name="kategori_personel"
                                                     class="form-select form-select-solid select2-hidden-accessible"
                                                     data-control="select2" data-hide-search="false" data-placeholder="Input Kategori Personel"
-                                                    data-select2-id="select2-kategori_personel" tabindex="-1" aria-hidden="true">
+                                                    data-select2-id="select2-kategori_personel_{{ $personel->id }}" tabindex="-1" aria-hidden="true">
                                                     <option value="" selected></option>
                                                     <option value="Manager Proyek" {{ $personel->kategori == "Manager Proyek" ? "selected" : "" }}>Manager Proyek</option>
                                                     <option value="Pelaksana Utama" {{ $personel->kategori == "Pelaksana Utama" ? "selected" : "" }}>Pelaksana Utama</option>
@@ -8884,7 +8884,7 @@
                                 <div class="modal-footer">
 
                                     <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
-                                        id="new_save" style="background-color:#008CB4">Save</button>
+                                        id="edit_save_personel" style="background-color:#008CB4">Save</button>
 
                                 </div>
                                 <!--end::Modal body-->
@@ -12101,7 +12101,7 @@
         $(document).ready(function() {
             $("#nama_pegawai").select2({
                 ajax: {
-                    url: '/get-data-pegawai',
+                    url: '/proyek/get-data-pegawai',
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -12137,7 +12137,7 @@
             });
             $("#nomor_rangka").select2({
                 ajax: {
-                    url: '/get-data-alat',
+                    url: '/proyek/get-data-alat',
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -12182,7 +12182,7 @@
                     minimumResultsForSearch: 0
                 },
                 dropdownParent: $('#kt_modal_create_alat'),
-            }).on('select2:select', function (e) {
+            }).on('select2:select', async function (e) {
                 let data = e.params.data;
                 const eltInfoAlat = document.querySelector('#info-alat');
                 const eltNamaAlat = document.querySelector('#nama-alat-disabled');
@@ -12193,10 +12193,44 @@
                 eltKategori.value = data.cat ?? "";
                 eltSpesifikasi.innerHTML = data.spec ?? "";
 
+                const modal = document.querySelector('#kt_modal_create_alat');
+                const buttonSave = modal.querySelector('#new_save_alat')
+                if (typeof(data) == "object") {
+                    const nomor_rangka = data.id;
+                    const formData = new FormData();
+                    formData.append("_token", "{{ csrf_token() }}");
+                    formData.append("nomor_rangka", nomor_rangka);
+                    const response = await fetch(`/proyek/check-alat-select/get`, {
+                        method: 'POST',
+                        header: {
+                            "content-type": "application/json",
+                        },
+                        body: formData
+                    }).then(res=> {
+                        return res.json()
+                    }).then(data => {
+                        if (data.Success && data.Message != null) {
+                            buttonSave.setAttribute('disabled', true);
+                            return Swal.fire({
+                                icon: 'error',
+                                title: data.Message
+                            })
+                        } else if(!data.Success && data.Message != null){
+                            return Swal.fire({
+                                icon: 'error',
+                                title: data.Message
+                            })
+                        }else{
+                            buttonSave.removeAttribute('disabled');
+                        }
+                    });
+                    
+                }
+
             });
             $("#nama_pegawai_personel").select2({
                 ajax: {
-                    url: '/get-data-pegawai',
+                    url: '/proyek/get-data-pegawai',
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -12229,6 +12263,35 @@
                     minimumResultsForSearch: 0
                 },
                 dropdownParent: $('#kt_modal_create_personel'),
+            }).on('select2:select', async function (e) {
+                let data = e.params.data;
+                const modal = document.querySelector('#kt_modal_create_personel');
+                const buttonSave = modal.querySelector('#new_save_personel')
+                if (typeof(data) == "object") {
+                    const nip = data.id;
+                    const response = await fetch(`/check-pegawai-pupr/${nip}`, {
+                        method: 'GET'
+                    }).then(res=> {
+                        return res.json()
+                    }).then(data => {
+                        if (data.Success && data.Message != null) {
+                            buttonSave.setAttribute('disabled', true);
+                            return Swal.fire({
+                                icon: 'error',
+                                title: data.Message
+                            })
+                        } else if(!data.Success && data.Message != null){
+                            return Swal.fire({
+                                icon: 'error',
+                                title: data.Message
+                            })
+                        }else{
+                            buttonSave.removeAttribute('disabled');
+                        }
+                    });
+                    
+                }
+
             });
         });
 
@@ -12241,7 +12304,7 @@
 
             $(select2).select2({
                 ajax: {
-                    url: '/get-data-pegawai',
+                    url: '/proyek/get-data-pegawai',
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -12290,9 +12353,42 @@
                 }
             })
 
-            $(`#unit-kerja-${id}`).select2({
-                dropdownParent: $(modal)
+            if (modal_name == "kt_modal_edit_personel_") {
+                $(select2).on('select2:select', async function (e) {
+                let data = e.params.data;
+                const buttonSave = modal.querySelector('#edit_save_personel');
+                if (typeof(data) == "object") {
+                    const nip = data.id;
+                    const response = await fetch(`/proyek/check-pegawai-pupr/${nip}`, {
+                        method: 'GET'
+                    }).then(res=> {
+                        return res.json()
+                    }).then(data => {
+                        if (data.Success && data.Message != null) {
+                            buttonSave.setAttribute('disabled', true);
+                            return Swal.fire({
+                                icon: 'error',
+                                title: data.Message
+                            })
+                        } else if(!data.Success && data.Message != null){
+                            return Swal.fire({
+                                icon: 'error',
+                                title: data.Message
+                            })
+                        }else{
+                            buttonSave.removeAttribute('disabled');
+                        }
+                    });
+                    
+                }
+
             });
+            }else{
+                $(`#unit-kerja-${id}`).select2({
+                    dropdownParent: $(modal)
+                });
+            }
+
             
         }
 

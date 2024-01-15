@@ -13,4 +13,9 @@ class PersonelTenderProyek extends Model
     {
         return $this->hasOne(Pegawai::class, 'nip', 'nip');
     }
+
+    public function Proyek()
+    {
+        return $this->belongsTo(Proyek::class, 'kode_proyek', 'kode_proyek');
+    }
 }

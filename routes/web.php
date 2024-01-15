@@ -98,6 +98,8 @@ use App\Models\SiteInstruction;
 use App\Models\SumberDana;
 use App\Models\TechnicalForm;
 use App\Models\TechnicalQuery;
+use App\Models\PersonelTenderProyek;
+use App\Models\AlatProyek;
 use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
 use Carbon\Carbon;
 use Illuminate\Routing\RouteGroup;
@@ -608,6 +610,22 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         }
     });
     //End::Nota Rekomendasi 2
+
+    //Begin::Tender
+
+    //Begin::Personel Utama
+    Route::get('/personel-utama', function () {
+        return response()->view('Tender/personelTender', ["data" => PersonelTenderProyek::all()]);
+    });
+    //End::Personel Utama
+
+    //Begin::Alat
+    Route::get('/alat', function () {
+        return response()->view('Tender/alatTender', ["data" => AlatProyek::all()]);
+    });
+    //End::Alat
+
+    //End::Tender
 
 
     // DELETE data customer pada dasboard customer by ID 
@@ -3181,7 +3199,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     });
     //End::Klasifikasi Omzet Proyek
 
-    Route::get('/get-data-alat', function (Request $request) {
+    Route::get('/proyek/get-data-alat', function (Request $request) {
         $search = $request->input('search');
         $page = $request->input(
             'page',
@@ -3202,8 +3220,61 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         return response()->json($data);
     });
 
+    Route::post('/proyek/check-alat-select/get', function (Request $request) {
+        $alatProyekFilter = AlatProyek::where('nomor_rangka', $request->get('nomor_rangka'))->get();
+
+        try {
+            if ($alatProyekFilter->count() > 0) {
+                $checkAlatInProyek = $alatProyekFilter->map(function ($personel) {
+                    return $personel->Proyek;
+                })->unique('kode_proyek')->values()->all();
+
+                $filterStageProyek = collect($checkAlatInProyek)->filter(function ($proyek) {
+                    return $proyek->is_cancel != true && $proyek->stage >= 4 && $proyek->stage != 7;
+                });
+
+                if ($filterStageProyek->count() > 0) {
+                    $checkProyekCustomer = $filterStageProyek->map(function ($proyek) {
+                        return $proyek->proyekBerjalan->customer;
+                    });
+
+                    $checkCustomerPUPR = $checkProyekCustomer->filter(function ($customer) {
+                        return $customer->kode_pelanggan == "A10021";
+                    });
+
+                    if ($checkCustomerPUPR->count() > 3) {
+                        return response()->json([
+                            "Success" => true,
+                            "Message" => "Alat sedang mengikuti proses 3 Tender"
+                        ]);
+                    } else {
+                        return response()->json([
+                            "Success" => true,
+                            "Message" => null
+                        ]);
+                    }
+                } else {
+                    return response()->json([
+                        "Success" => true,
+                        "Message" => null
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    "Success" => true,
+                    "Message" => null
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                "Success" => false,
+                "Message" => $e->getMessage()
+            ]);
+        }
+    });
+
     //Begin::Master Matriks Approval Partner Selection
-    Route::get('/get-data-pegawai', function (Request $request) {
+    Route::get('/proyek/get-data-pegawai', function (Request $request) {
         $search = $request->input('search');
         $page = $request->input(
             'page',
@@ -3221,6 +3292,59 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         // $data->pagination['more'] = ($page * $perPage) < $maxResults;
 
         return response()->json($data);
+    });
+
+    Route::get('/proyek/check-pegawai-pupr/{nip}', function ($nip) {
+        $personelFilter = PersonelTenderProyek::where('nip', $nip)->get();
+
+        try {
+            if ($personelFilter->count() > 0) {
+                $checkPersonelInProyek = $personelFilter->map(function ($personel) {
+                    return $personel->Proyek;
+                })->unique('kode_proyek')->values()->all();
+
+                $filterStageProyek = collect($checkPersonelInProyek)->filter(function ($proyek) {
+                    return $proyek->is_cancel != true && $proyek->stage >= 4 && $proyek->stage != 7;
+                });
+
+                if ($filterStageProyek->count() > 0) {
+                    $checkProyekCustomer = $filterStageProyek->map(function ($proyek) {
+                        return $proyek->proyekBerjalan->customer;
+                    });
+
+                    $checkCustomerPUPR = $checkProyekCustomer->filter(function ($customer) {
+                        return $customer->kode_pelanggan == "A10021";
+                    });
+
+                    if ($checkCustomerPUPR->count() > 3) {
+                        return response()->json([
+                            "Success" => true,
+                            "Message" => "Personel sedang mengikuti proses 3 Tender PUPR"
+                        ]);
+                    } else {
+                        return response()->json([
+                            "Success" => true,
+                            "Message" => null
+                        ]);
+                    }
+                } else {
+                    return response()->json([
+                        "Success" => true,
+                        "Message" => null
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    "Success" => true,
+                    "Message" => null
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                "Success" => false,
+                "Message" => $e->getMessage()
+            ]);
+        }
     });
 
     Route::get('/get-data-divisi/{divisi_id}', function (Request $request, $divisi_id) {
