@@ -2293,13 +2293,15 @@
 
     <!--begin::Competitive Index-->
     @php
-    $indexJumlahAll = $jumlahMenang + $jumlahKalah;
+    $indexJumlahAll = $jumlahMenang + $jumlahKalah + $jumlahTerkontrakCompetitive;
     if ($indexJumlahAll != 0) {
         $presentaseMenang = round($jumlahMenang / $indexJumlahAll * 100);
+        $presentaseTerkontrak = round($jumlahTerkontrakCompetitive / $indexJumlahAll * 100);
         $presentaseKalah = round($jumlahKalah / $indexJumlahAll * 100);
     } else {
         $presentaseMenang = 0;
         $presentaseKalah = 0;
+        $presentaseTerkontrak = 0;
     }
     @endphp
     <script>
@@ -2317,7 +2319,7 @@
             },
             subtitle: {
                 align: 'center',
-                text: '<b>Berdasarkan Jumlah</b>'
+                text: '<b>Berdasarkan Jumlah |  Win Rate : {{ round($winRateJumlahCompetitive) }}%</b>'
             },
             accessibility: {
                 announceNewData: {
@@ -2333,7 +2335,7 @@
                 }
                 
             },
-            colors: ["#61CB65", "#ED6D3F"],
+            colors: ["#61CB65", "#ED6D3F", "#F7C13E"],
             plotOptions: {
                 pie: {
                     innerSize: 75,
@@ -2368,6 +2370,11 @@
                         x: "Menang : " + {{ $presentaseMenang }},
                     },
                     {
+                        name: "Proyek Terkontrak Tender : " + {{ $jumlahTerkontrakCompetitive }},
+                        y: {{ $jumlahTerkontrakCompetitive }},
+                        x: "Terkontrak : " + {{ $presentaseTerkontrak }},
+                    },
+                    {
                         name: "Proyek Kalah Tender : " + {{ $jumlahKalah }},
                         y: {{ $jumlahKalah }},
                         x: "Kalah : " + {{ $presentaseKalah }},
@@ -2383,9 +2390,11 @@
         $indexNilaiAll = $nilaiMenang + $nilaiKalah;
     if ($indexNilaiAll != 0) {
         $presentaseNilaiMenang = round($nilaiMenang / $indexNilaiAll * 100);
+        $presentaseNilaiTerkontrak = round($nilaiTerkontrakCompetitive / $indexNilaiAll * 100);
         $presentaseNilaiKalah = round($nilaiKalah / $indexNilaiAll * 100);
     } else {
         $presentaseNilaiMenang = 0;
+        $presentaseNilaiTerkontrak = 0;
         $presentaseNilaiKalah = 0;
     }
     @endphp
@@ -2404,7 +2413,7 @@
             },
             subtitle: {
                 align: 'center',
-                text: '<b>Berdasarkan Nilai</b>'
+                text: '<b>Berdasarkan Nilai |  Win Rate : {{ round($winRateNilaiCompetitive) }}%</b>'
             },
             accessibility: {
                 announceNewData: {
@@ -2420,7 +2429,7 @@
                 }
                 
             },
-            colors: ["#61CB65", "#ED6D3F"],
+            colors: ["#61CB65", "#ED6D3F", "#F7C13E"],
             plotOptions: {
                 pie: {
                     innerSize: 75,
@@ -2453,6 +2462,11 @@
                         name: "Nilai Menang Tender : " + "{{ number_format( ((int) $nilaiMenang / 1000000 ), 0, '.' , '.' ) }}",
                         y: {{ $nilaiMenang }},
                         x: "Menang : " + {{ $presentaseNilaiMenang }},
+                    },
+                    {
+                        name: "Proyek Terkontrak Tender : " + "{{ number_format( ((int) $nilaiTerkontrakCompetitive / 1000000 ), 0, '.' , '.' ) }}",
+                        y: {{ $nilaiTerkontrakCompetitive }},
+                        x: "Terkontrak : " + {{ $presentaseNilaiTerkontrak }},
                     },
                     {
                         name: "Nilai Kalah Tender : " + "{{ number_format( ((int) $nilaiKalah / 1000000 ), 0, '.' , '.' ) }}",
@@ -3675,7 +3689,7 @@
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
-            } else if(type == "Proyek Menang Tender" || type == "Proyek Kalah Tender" ) {
+            } else if(type == "Proyek Menang Tender" || type == "Proyek Terkontrak Tender" ||type == "Proyek Kalah Tender" ) {
                 let tbodyHTML = ``;
                 let totalNilaiLainnya = 0;
 
@@ -3694,6 +3708,8 @@
                     filter = filtering[filter];
                     let stage = "";
                     if(type == "Proyek Menang Tender") {
+                        totalNilaiLainnya += Number(filter.nilai_perolehan);
+                    }if(type == "Proyek Terkontrak Tender") {
                         totalNilaiLainnya += Number(filter.nilai_perolehan);
                     } else {
                         totalNilaiLainnya += Number(filter.hps_pagu);
@@ -3748,6 +3764,8 @@
                     let bulan = "";
                     if(type == "Proyek Menang Tender") {
                         getMonth = filter.bulan_ri_perolehan;
+                    }if(type == "Proyek Terkontrak Tender") {
+                        getMonth = filter.bulan_ri_perolehan;
                     } else {
                         getMonth = filter.bulan_pelaksanaan;
                     }
@@ -3795,6 +3813,8 @@
                     }
                     let nilai = 0;
                     if(type == "Proyek Menang Tender") {
+                        nilai = filter.nilai_perolehan;
+                    } else if(type == "Proyek Terkontrak Tender"){
                         nilai = filter.nilai_perolehan;
                     } else {
                         nilai = filter.hps_pagu;
@@ -3847,7 +3867,7 @@
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
-            } else if(type == "Nilai Menang Tender" || type == "Nilai Kalah Tender" ) {
+            } else if(type == "Nilai Menang Tender" || type == "Nilai Terkontrak Tender" || type == "Nilai Kalah Tender" ) {
                 let tbodyHTML = ``;
                 let totalNilaiLainnya = 0;
 
@@ -3866,6 +3886,8 @@
                     filter = filtering[filter];
                     let stage = "";
                     if(type == "Nilai Menang Tender") {
+                        totalNilaiLainnya += Number(filter.nilai_perolehan);
+                    }else if(type == "Nilai Terkontrak Tender") {
                         totalNilaiLainnya += Number(filter.nilai_perolehan);
                     } else {
                         totalNilaiLainnya += Number(filter.hps_pagu);
@@ -3919,6 +3941,8 @@
                     let bulan = "";
                     if(type == "Nilai Menang Tender") {
                         getMonth = filter.bulan_ri_perolehan;
+                    }else if(type == "Nilai Terkontrak Tender"){
+                        getMonth = filter.bulan_ri_perolehan;
                     } else {
                         getMonth = filter.bulan_pelaksanaan;
                     }
@@ -3966,6 +3990,8 @@
                     }
                     let nilai = 0;
                     if(type == "Nilai Menang Tender") {
+                        nilai = filter.nilai_perolehan;
+                    } if(type == "Nilai Terkontrak Tender") {
                         nilai = filter.nilai_perolehan;
                     } else {
                         nilai = filter.hps_pagu;
@@ -4638,11 +4664,12 @@
         competitiveIndex.forEach(point => {
             point.addEventListener("click", async e => {
                 const tipe = point.parentElement.getAttribute("aria-label").replaceAll(/[^a-z][^A-Z]|proyek stage|\./gi, "");
+                const filters = !filterGet ? false : filterGet
                 // console.log(filterGet);
                 if(filterGet) {
-                    getDataTable("#datatable-index-jumlah", "#index-jumlah", `/dashboard/index-jumlah/${tipe}/${filterGet}`, tipe, 9);
+                    getDataTable("#datatable-index-jumlah", "#index-jumlah", `/dashboard/index-jumlah/${tipe}/${filters}/{{ $year }}`, tipe, 9);
                 } else {
-                    getDataTable("#datatable-index-jumlah", "#index-jumlah", `/dashboard/index-jumlah/${tipe}`, tipe, 9);
+                    getDataTable("#datatable-index-jumlah", "#index-jumlah", `/dashboard/index-jumlah/${tipe}/${filters}/{{ $year }}`, tipe, 9);
                 }
                 
             })
@@ -4657,11 +4684,17 @@
         competitiveIndexNilai.forEach(point => {
             point.addEventListener("click", async e => {
                 const tipe = point.parentElement.getAttribute("aria-label").replaceAll(/[^a-z][^A-Z]|proyek stage|\./gi, "");
+                const filters = !filterGet ? false : filterGet
                 if(filterGet) {
-                    getDataTable("#datatable-index-nilai", "#index-nilai", `/dashboard/index-nilai/${tipe}/${filterGet}`, tipe, 9);
+                    getDataTable("#datatable-index-nilai", "#index-nilai", `/dashboard/index-nilai/${tipe}/${filters}/{{ $year }}`, tipe, 9);
                 } else {
-                    getDataTable("#datatable-index-nilai", "#index-nilai", `/dashboard/index-nilai/${tipe}`, tipe, 9);
+                    getDataTable("#datatable-index-nilai", "#index-nilai", `/dashboard/index-nilai/${tipe}/${filters}/{{ $year }}`, tipe, 9);
                 }
+                // if(filterGet) {
+                //     getDataTable("#datatable-index-nilai", "#index-nilai", `/dashboard/index-nilai/${tipe}/${filterGet}`, tipe, 9);
+                // } else {
+                //     getDataTable("#datatable-index-nilai", "#index-nilai", `/dashboard/index-nilai/${tipe}`, tipe, 9);
+                // }
                 
             })
         })

@@ -279,13 +279,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('/dashboard/terendah-terkontrak/{tipe}/{filter}', [DashboardController::class, "getDataTerendahTerkontrak"]);
 
-    Route::get('/dashboard/index-jumlah/{tipe}', [DashboardController::class, "getDataCompetitive"]);
+    // Route::get('/dashboard/index-jumlah/{tipe}/{year}', [DashboardController::class, "getDataCompetitive"]);
 
-    Route::get('/dashboard/index-jumlah/{tipe}/{filter}', [DashboardController::class, "getDataCompetitive"]);
+    Route::get('/dashboard/index-jumlah/{tipe}/{filter}/{year}', [DashboardController::class, "getDataCompetitive"]);
 
-    Route::get('/dashboard/index-nilai/{tipe}', [DashboardController::class, "getDataCompetitiveNilai"]);
+    // Route::get('/dashboard/index-nilai/{tipe}', [DashboardController::class, "getDataCompetitiveNilai"]);
 
-    Route::get('/dashboard/index-nilai/{tipe}/{filter}', [DashboardController::class, "getDataCompetitiveNilai"]);
+    Route::get('/dashboard/index-nilai/{tipe}/{filter}/{year}', [DashboardController::class, "getDataCompetitiveNilai"]);
 
     Route::get('/dashboard/sumber-dana-rkap/{tipe}', [DashboardController::class, "getDataSumberDanaRKAP"]);
 

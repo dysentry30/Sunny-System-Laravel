@@ -377,24 +377,54 @@ class DashboardController extends Controller
 
         //Begin::Competitive Index
         $jumlahMenang = 0;
+        $jumlahTerkontrakCompetitive = 0;
         $jumlahKalah = 0;
         $nilaiMenang = 0;
+        $nilaiTerkontrakCompetitive = 0;
         $nilaiKalah = 0;
-        foreach ($proyeks as $proyek) {
+        foreach ($proyeks->where('is_cancel', '!=', true) as $proyek) {
             $stg = $proyek->stage;
-            if ($stg == 6 || $stg == 8) {
-                if ($proyek->tipe_proyek == "P") {
+            if ($stg == 6) {
+                if ($proyek->tipe_proyek == "P" && $proyek->nilai_perolehan != 0 && $proyek->jenis_proyek != "I") {
                     $jumlahMenang++;
                     $nilaiMenang += (int) str_replace(".", "", $proyek->nilai_perolehan);
                 }
             } else if ($stg == 7) {
-                if ($proyek->tipe_proyek == "P") {
+                if ($proyek->tipe_proyek == "P" && $proyek->hps_pagu != 0 && $proyek->jenis_proyek != "I") {
                     $jumlahKalah++;
                     $nilaiKalah += (int) str_replace(".", "", $proyek->hps_pagu);
                 }
+            } else if ($stg == 8) {
+                if ($proyek->tipe_proyek == "P" && $proyek->nilai_perolehan != 0 && $proyek->jenis_proyek != "I") {
+                    $jumlahTerkontrakCompetitive++;
+                    $nilaiTerkontrakCompetitive += (int) str_replace(".", "", $proyek->nilai_perolehan);
+                }
             };
-            // dump($nilaiTerendah, $nilaiTerkontrak);
         };
+        $sumProyekCompetitive = $proyeks->where(
+                'is_cancel',
+                '!=',
+                true
+            )->where(
+                "nilai_perolehan",
+                '!=',
+                0
+            )->where(
+                'jenis_proyek',
+                '!=',
+                "I"
+            )->count();
+        $sumNilaiProyekCompetitive = $proyeks->where('is_cancel', '!=', true)->where("nilai_perolehan", '!=', 0)->where('jenis_proyek', '!=', "I")->sum('nilai_perolehan');
+        if ($sumProyekCompetitive > 0) {
+            $winRateJumlahCompetitive = ($jumlahMenang + $jumlahTerkontrakCompetitive) / $sumProyekCompetitive;
+        } else {
+            $winRateJumlahCompetitive = 0;
+        }
+        if ($sumNilaiProyekCompetitive > 0) {
+            $winRateNilaiCompetitive = ($nilaiMenang + $nilaiTerkontrakCompetitive) / $sumNilaiProyekCompetitive;
+        } else {
+            $winRateNilaiCompetitive = 0;
+        }
         //End::Competitive Index
 
         //begin::Marketing PipeLine
@@ -643,7 +673,7 @@ class DashboardController extends Controller
         });
         // dump($month);
         // End :: SUMBER DANA REALISASI
-        return view('1_Dashboard', compact(["totalNilaiSisaPareto", "totalNilaiRealisasiPareto", "realisasiForecast", "sisaForecast", "pasarDini", "pasarPotensial", "stagePrakualifikasi", "stageTender", "stagePerolehan", "stageMenang", "stageKalah", "stageTerkontrak", "top_proyeks_close_this_month", "proyek_kalah_cancel_tidak_lulus_pq", "totalRealisasiSumberDana", "totalRKAPSumberDana", "claim_status_array", "anti_claim_status_array", "claim_asuransi_status_array", "nilaiForecastArray", "nilaiRkapArray", "nilaiRealisasiArray", "nilaiForecastTriwunalArray", "year", "month", "proses", "menang", "kalah", "prakualifikasi", "prosesTender", "terkontrak", "pelaksanaan", "serahTerima", "closing", "proyeks", "paretoClaim", "paretoAntiClaim", "paretoAsuransi", "kategoriunitKerja", "nilaiOkKumulatif", "nilaiRealisasiKumulatif", "nilaiTerkontrak", "nilaiTerendah", "jumlahMenang", "jumlahKalah", "nilaiMenang", "nilaiKalah", "unitKerja", "unit_kerja_get", "dop_get", "dops"]));
+        return view('1_Dashboard', compact(["totalNilaiSisaPareto", "totalNilaiRealisasiPareto", "realisasiForecast", "sisaForecast", "pasarDini", "pasarPotensial", "stagePrakualifikasi", "stageTender", "stagePerolehan", "stageMenang", "stageKalah", "stageTerkontrak", "top_proyeks_close_this_month", "proyek_kalah_cancel_tidak_lulus_pq", "totalRealisasiSumberDana", "totalRKAPSumberDana", "claim_status_array", "anti_claim_status_array", "claim_asuransi_status_array", "nilaiForecastArray", "nilaiRkapArray", "nilaiRealisasiArray", "nilaiForecastTriwunalArray", "year", "month", "proses", "menang", "kalah", "prakualifikasi", "prosesTender", "terkontrak", "pelaksanaan", "serahTerima", "closing", "proyeks", "paretoClaim", "paretoAntiClaim", "paretoAsuransi", "kategoriunitKerja", "nilaiOkKumulatif", "nilaiRealisasiKumulatif", "nilaiTerkontrak", "nilaiTerendah", "jumlahMenang", "jumlahKalah", "nilaiMenang", "nilaiKalah", "unitKerja", "unit_kerja_get", "dop_get", "dops", "nilaiTerkontrakCompetitive", "jumlahTerkontrakCompetitive", "winRateJumlahCompetitive", "winRateNilaiCompetitive"]));
     }
 
     public function dashboard_perolehan_kontrak(Request $request)
@@ -3952,8 +3982,13 @@ class DashboardController extends Controller
     }
 
 
-    public function getDataCompetitive($tipe, $filter = false)
+    public function getDataCompetitive($tipe, $filter = false, $year)
     {
+        $year = (int) $year;
+        if ($filter == "false") {
+            $filter = false;
+        }
+        
         $spreadsheet = new Spreadsheet();
         // nama proyek, status pasar, stage, unit kerja, bulan, nilai forecast
         $sheet = $spreadsheet->getActiveSheet();
@@ -3968,7 +4003,7 @@ class DashboardController extends Controller
         $sheet->setCellValue('F1', "Nilai Perolehan");
 
         // dd($tipe);
-        $year = (int) date("Y");
+        // $year = (int) date("Y");
         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
         if (!Auth::user()->check_administrator || str_contains(Auth::user()->name, "(PIC)")) {
             if ($filter != false) {
@@ -4000,8 +4035,13 @@ class DashboardController extends Controller
         }
         $proyeks = $proyeks->where("is_cancel", "=", false)->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year);
         switch ($tipe) {
+            case "Proyek Terkontrak Tender":
+                $proyeks = $proyeks->where("stage", 8)->sortBy([
+                    ["bulan_pelaksanaan", "asc"],
+                ])->values()->where("nilai_perolehan", "!=", 0);
+                break;
             case "Proyek Menang Tender":
-                $proyeks = $proyeks->whereIn("stage", [6, 8])->sortBy([
+                $proyeks = $proyeks->where("stage", 6)->sortBy([
                     ["bulan_pelaksanaan", "asc"],
                 ])->values()->where("nilai_perolehan", "!=", 0);
                 break;
@@ -4020,6 +4060,9 @@ class DashboardController extends Controller
             if ($tipe == "Proyek Menang Tender") {
                 $sheet->setCellValue('E' . $row, $p->bulan_ri_perolehan);
                 $sheet->setCellValue('F' . $row, $p->nilai_perolehan);
+            } elseif ($tipe == "Proyek Terkontrak Tender") {
+                $sheet->setCellValue('E' . $row, $p->bulan_ri_perolehan);
+                $sheet->setCellValue('F' . $row, $p->nilai_perolehan);
             } else {
                 $sheet->setCellValue('E' . $row, $p->bulan_pelaksanaan);
                 $sheet->setCellValue('F' . $row, $p->hps_pagu);
@@ -4034,9 +4077,12 @@ class DashboardController extends Controller
         return response()->json(["tipe" => $tipe, "href" => $file_name, "data" => $proyeks]);
     }
 
-    public function getDataCompetitiveNilai($tipe, $filter = false)
+    public function getDataCompetitiveNilai($tipe, $filter = false, $year)
     {
-
+        $year = (int) $year;
+        if ($filter == "false") {
+            $filter = false;
+        }
         $spreadsheet = new Spreadsheet();
         // nama proyek, status pasar, stage, unit kerja, bulan, nilai forecast
         $sheet = $spreadsheet->getActiveSheet();
@@ -4051,7 +4097,7 @@ class DashboardController extends Controller
         $sheet->setCellValue('F1', "Nilai Penawaran");
 
         // dd($tipe);    
-        $year = (int) date("Y");
+        // $year = (int) date("Y");
         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
         if (!Auth::user()->check_administrator || str_contains(Auth::user()->name, "(PIC)")) {
             if ($filter != false) {
@@ -4082,8 +4128,11 @@ class DashboardController extends Controller
         $proyeks = $proyeks->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year);
         $stage = null;
         switch ($tipe) {
+            case "Proyek Terkontrak Tender":
+                $proyeks = $proyeks->where("stage", 8)->sortBy("bulan_pelaksanaan", SORT_NUMERIC)->values()->where("nilai_perolehan", "!=", 0);
+                break;
             case "Nilai Menang Tender":
-                $proyeks = $proyeks->whereIn("stage", [6, 8])->sortBy("bulan_pelaksanaan", SORT_NUMERIC)->values()->where("nilai_perolehan", "!=", 0);
+                $proyeks = $proyeks->where("stage", 6)->sortBy("bulan_pelaksanaan", SORT_NUMERIC)->values()->where("nilai_perolehan", "!=", 0);
                 break;
             case "Nilai Kalah Tender":
                 $stage = 7;
@@ -4099,6 +4148,9 @@ class DashboardController extends Controller
             $sheet->setCellValue('D' . $row, $this->getUnitKerjaProyek($p->unit_kerja));
             $sheet->setCellValue('E' . $row, $p->bulan_pelaksanaan);
             switch ($tipe) {
+                case "Nilai Terkontrak Tender":
+                    $sheet->setCellValue('F' . $row, $p->nilai_perolehan);
+                    break;
                 case "Nilai Menang Tender":
                     $sheet->setCellValue('F' . $row, $p->nilai_perolehan);
                     break;
