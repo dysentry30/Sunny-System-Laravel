@@ -12269,7 +12269,7 @@
                 const buttonSave = modal.querySelector('#new_save_personel')
                 if (typeof(data) == "object") {
                     const nip = data.id;
-                    const response = await fetch(`/check-pegawai-pupr/${nip}`, {
+                    const response = await fetch(`/proyek/check-pegawai-pupr/${nip}`, {
                         method: 'GET'
                     }).then(res=> {
                         return res.json()
