@@ -3348,6 +3348,23 @@ class ProyekController extends Controller
         ]);
     }
 
+    public function downloadFilePerjanjianAlat($id, $id_document)
+    {
+        $getAlat = AlatProyek::find($id);
+        if (empty($getAlat)) {
+            Alert::error('Error', 'Data Alat tidak ditemukan. Hubungi Admin!');
+            return redirect()->back();
+        }
+        $collectDokumen = collect(json_decode($getAlat->id_document));
+        $filterDokumen = $collectDokumen->where('id_document', $id_document)->first();
+        if (File::exists(public_path("dokumen-perjanjian-alat/$id_document")) && !empty($filterDokumen)) {
+            return response()->download(public_path("dokumen-perjanjian-alat/$id_document"), $filterDokumen->nama_file);
+        } else {
+            Alert::error('Error', 'File tidak ditemukan. Hubungi Admin!');
+            return redirect()->back();
+        }
+    }
+
     public function deleteFileAlatProyek(Request $request)
     {
         $data = $request->all();

@@ -1106,6 +1106,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/proyek/alat-proyek/delete', [
         ProyekController::class, 'deleteFileAlatProyek'
     ]);
+    //DOWNLOAD FILE PERJANJIAN
+    Route::get('/proyek/alat-proyek/{id}/{id_document}/download', [ProyekController::class, 'downloadFilePerjanjianAlat']);
 
     //End :: Project
 

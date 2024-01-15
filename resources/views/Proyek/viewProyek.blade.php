@@ -8673,7 +8673,9 @@
                                                         <tbody>
                                                             @foreach ($files as $file)
                                                                 <tr>
-                                                                    <td class="text-start">{{ $file->nama_file }}</td>
+                                                                    <td class="text-start">
+                                                                        <a href="/proyek/alat-proyek/{{ $alat->id }}/{{ $file->id_document }}/download" class="text-hover-primary">{{ $file->nama_file }}</a>
+                                                                    </td>
                                                                     <td class="text-center">
                                                                         <button type="button" class="btn btn-sm btn-delete btn-danger" onclick="deleteFileAlat('{{ $alat->id }}', '{{ $file->id_document }}')"><i class="bi bi-trash3-fill text-white"></i></button>
                                                                     </td>
