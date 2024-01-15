@@ -87,6 +87,7 @@ use App\Models\MasterCatatanNotaRekomendasi2;
 use App\Models\MasterKlasifikasiProyek;
 use App\Models\MasterKlasifikasiOmsetProyek;
 use App\Models\MasterKlasifikasiProduksiProyek;
+use App\Models\MasterAlatProyek;
 use App\Models\MataUang;
 use App\Models\MatriksApprovalRekomendasi;
 use App\Models\Pegawai;
@@ -564,7 +565,24 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $pdf->setPaper('A4', 'landscape');
             return $pdf->download('Form Verifikasi Internal KSO atau Non KSO - ' . $proyek->kode_proyek . '.pdf');
         } catch (Exception $e) {
-            dd($e->getMessage());
+            Alert::error('Error', $e->getMessage());
+            return redirect()->back();
+        }
+    });
+
+    Route::get('/proyek/{proyek}/kso/setuju/generate', function (Proyek $proyek) {
+        if (empty($proyek)) {
+            Alert::error('Error', 'Proyek tidak ditemukan!');
+            return redirect()->back();
+        }
+
+        try {
+            $pdf = Pdf::loadView('GenerateFile.generatePermohonanKSO', ["proyek" => $proyek]);
+            $pdf->setPaper('A4', 'potrait');
+            return $pdf->download('Form Persetujuan Pembentukan KSO - ' . $proyek->kode_proyek . '.pdf');
+        } catch (Exception $e) {
+            Alert::error('Error', $e->getMessage());
+            return redirect()->back();
         }
     });
 
@@ -993,6 +1011,16 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // DELETE Tim Tender 
     Route::delete('proyek/tim-tender/{id}/delete', [ProyekController::class, 'deleteTimTender']);
 
+    // ADD Personel Tender 
+    Route::post('proyek/personel-tender/add', [ProyekController::class, 'tambahPersonelTender']);
+
+    // EDIT Personel Tender 
+    Route::post('/proyek/personel-tender/{id}/edit', [ProyekController::class, 'editPersonelTender'
+    ]);
+
+    // DELETE Personel Tender 
+    Route::delete('proyek/personel-tender/{id}/delete', [ProyekController::class, 'deletePersonelTender']);
+
     // DELETE Dokumen Nota Rekomendasi 1 
     Route::delete('proyek/dokumen-nota-rekomendasi-1/{id}/delete', [ProyekController::class, 'deleteNotaRekomendasi1']);
 
@@ -1067,6 +1095,17 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     //RFA Dokumen To CCM
     // Route::get('/proyek/{kode_proyek}/{kategori}', [ProyekController::class, 'updateRfaDocument']);
     Route::post('/proyek/{kode_proyek}/rfa', [ProyekController::class, 'updateRfaDocument']);
+
+    //ADD ALAT PROYEK
+    Route::post('/proyek/alat-proyek/add', [ProyekController::class, 'tambahAlatProyek']);
+    //EDIT ALAT PROYEK
+    Route::post('/proyek/alat-proyek/{alat}/edit', [ProyekController::class, 'editAlatProyek']);
+    //DELETE ALAT PROYEK
+    Route::post('/proyek/alat-proyek/{alat}/delete', [ProyekController::class, 'deleteAlatProyek']);
+    //DELETE FILE ALAT PROYEK
+    Route::post('/proyek/alat-proyek/delete', [
+        ProyekController::class, 'deleteFileAlatProyek'
+    ]);
 
     //End :: Project
 
@@ -3140,6 +3179,27 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     });
     //End::Klasifikasi Omzet Proyek
 
+    Route::get('/get-data-alat', function (Request $request) {
+        $search = $request->input('search');
+        $page = $request->input(
+            'page',
+            1
+        );
+        $perPage = 10;
+        $maxResults = 10;
+
+        $dataPegawai = MasterAlatProyek::when(!empty($search), function ($query) use ($search) {
+            // $query->where('nomor_rangka', 'like', '%' . strtoupper($search) . '%')
+            $query->where('nomor_rangka', 'like', '%' . $search . '%')
+            ->orWhere('nama_alat', 'like', '%' . $search . '%');
+        });
+        $data = $dataPegawai->paginate($perPage, ['*'], 'page', $page);
+
+        // $data->pagination['more'] = ($page * $perPage) < $maxResults;
+
+        return response()->json($data);
+    });
+
     //Begin::Master Matriks Approval Partner Selection
     Route::get('/get-data-pegawai', function (Request $request) {
         $search = $request->input('search');
@@ -3151,7 +3211,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $maxResults = 10;
 
         $dataPegawai = Pegawai::when(!empty($search), function ($query) use ($search) {
-            $query->where('nama_pegawai', 'like', '%' . strtoupper($search) . '%');
+            $query->where('nama_pegawai', 'like', '%' . strtoupper($search) . '%')
+                ->orWhere('nip', 'like', '%' . strtoupper($search) . '%');
         });
         $data = $dataPegawai->paginate($perPage, ['*'], 'page', $page);
 
@@ -4471,6 +4532,128 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         ]);
     });
     //End::Master Group Tier
+
+    //Begin::Master Alat Proyek
+    Route::get('/master-alat-proyek', function (Request $request) {
+        return view('MasterData/MasterAlatProyek', ['data' => MasterAlatProyek::all()]);
+    });
+    Route::post('/master-alat-proyek/save', function (Request $request) {
+        $data = $request->all();
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+        ];
+        $rules = [
+                "nomor_rangka" => 'required|string',
+                "nama_alat" => 'required|string',
+            ];
+        $validation = Validator::make(
+            $data,
+            $rules,
+            $messages
+        );
+
+        if ($validation->fails()) {
+            $error = collect($validation->errors());
+            if ($error->has("nomor_rangka")) {
+                Alert::error(
+                    'Error',
+                    "Nomor Rangka wajib diisi. Periksa Kembali!"
+                );
+                return redirect()->back();
+            } elseif ($error->has("nama_alat")) {
+                Alert::error(
+                    'Error',
+                    "Nama Alat wajib diisi. Periksa Kembali!"
+                );
+                return redirect()->back();
+            }
+        }
+
+        $validation->validate();
+
+        $dataNew = new MasterAlatProyek();
+        $dataNew->nomor_rangka = $data['nomor_rangka'];
+        $dataNew->nama_alat = $data['nama_alat'];
+        $dataNew->spesifikasi = $data['spesifikasi'];
+        $dataNew->kategori = $data['kategori'];
+
+        if ($dataNew->save()) {
+            Alert::success('Success', "Master Alat Berhasil Ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Master Alat Gagal Ditambahkan");
+        return redirect()->back();
+    });
+    Route::post('/master-alat-proyek/{id}/edit', function (Request $request, $id) {
+        $data = $request->all();
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+        ];
+        $rules = [
+                "nomor_rangka" => 'required|string',
+                "nama_alat" => 'required|string',
+            ];
+        $validation = Validator::make(
+            $data,
+            $rules,
+            $messages
+        );
+
+        if ($validation->fails()) {
+            $error = collect($validation->errors());
+            if ($error->has("nomor_rangka")) {
+                Alert::error(
+                    'Error',
+                    "Nomor Rangka wajib diisi. Periksa Kembali!"
+                );
+                return redirect()->back();
+            } elseif ($error->has("nama_alat")) {
+                Alert::error(
+                    'Error',
+                    "Nama Alat wajib diisi. Periksa Kembali!"
+                );
+                return redirect()->back();
+            }
+        }
+
+        $validation->validate();
+        $dataNew = MasterAlatProyek::find($id);
+        $dataNew->nomor_rangka = $data['nomor_rangka'];
+        $dataNew->nama_alat = $data['nama_alat'];
+        $dataNew->spesifikasi = $data['spesifikasi'];
+        $dataNew->kategori = $data['kategori'];
+
+        if ($dataNew->save()) {
+            Alert::success('Success', "Master Alat Berhasil Diubah");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Master Alat Diubah");
+        return redirect()->back();
+    });
+    Route::post('/master-alat-proyek/{alat}/delete', function (MasterAlatProyek $alat) {
+        if (empty($alat)) {
+            Alert::success("Error", "Master Alat Tidak Ditemukan");
+            return redirect()->back();
+        }
+
+        if ($alat->delete()) {
+            // Alert::success('Success', "Checklist Calon Mitra KSO Berhasil Dihapus");
+            // return redirect()->back();
+
+            return response()->json([
+                "Success" => true,
+                "Message" => "Master Alat Berhasil Dihapus"
+            ]);
+        }
+
+        // Alert::error('Error', "Checklist Calon Mitra KSO Gagal Dihapus");
+        // return redirect()->back();
+        return response()->json([
+            "Success" => false,
+            "Message" => "Master Alat Gagal Dihapus"
+        ]);
+    });
+    //End::Master Alat Proyek
 
     //Begin::Kriteria Green Lane Partner
     Route::get('/kriteria-greenlane-partner', function (Request $request) {

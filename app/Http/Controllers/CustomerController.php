@@ -31,6 +31,7 @@ use App\Models\Tax;
 use App\Models\AHU;
 use App\Models\CompanyProfile;
 use App\Models\LaporanKeuangan;
+use App\Models\Negara;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
@@ -151,7 +152,8 @@ class CustomerController extends Controller
         $data_provinsi = json_decode(Storage::get("/public/data/provinsi.json"));
         // $id_kabupaten = $customer->provinsi; 
         // $data_kabupaten = json_decode(Storage::get("/public/data/$id_kabupaten.json"));
-        $data_negara = json_decode(Storage::get("/public/data/country.json"));
+        // $data_negara = json_decode(Storage::get("/public/data/country.json"));
+        $data_negara = Negara::all();
         return view('Customer/newCustomer', compact(["data_provinsi", "data_negara"]));
     }
 

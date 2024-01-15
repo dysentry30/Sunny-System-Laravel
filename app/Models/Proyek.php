@@ -239,4 +239,14 @@ class Proyek extends Model
     {
         return $this->belongsTo(NotaRekomendasi2::class, 'kode_proyek', 'kode_proyek');
     }
+
+    public function AlatProyek()
+    {
+        return $this->hasMany(AlatProyek::class, 'kode_proyek', 'kode_proyek');
+    }
+
+    public function PersonelTender()
+    {
+        return $this->hasMany(PersonelTenderProyek::class, 'kode_proyek', 'kode_proyek');
+    }
 }

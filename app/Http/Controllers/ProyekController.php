@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AlatProyek;
 use App\Models\Dop;
 use App\Models\Sbu;
 use App\Models\User;
@@ -63,6 +64,8 @@ use App\Models\MasterKlasifikasiOmsetProyek;
 use App\Models\MasterKlasifikasiProduksiProyek;
 use App\Models\DokumenKelengkapanPartnerKSO;
 use App\Models\MasterGrupTierBUMN;
+use App\Models\Negara;
+use App\Models\PersonelTenderProyek;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -388,7 +391,8 @@ class ProyekController extends Controller
         $kriteriaProyek = KriteriaPasarProyek::where("kode_proyek", "=", $kode_proyek)->get();
         $porsiJO = PorsiJO::where("kode_proyek", "=", $kode_proyek)->get();
         // $data_provinsi = json_decode(Storage::get("/public/data/provinsi.json"));
-        $data_negara = json_decode(Storage::get("/public/data/country.json"));
+        // $data_negara = json_decode(Storage::get("/public/data/country.json"));
+        $data_negara = Negara::all();
         $is_admin = Auth::user()->check_administrator || str_contains(Auth::user()->name, "PIC");
         $companies = Company::all();
         $sumberdanas = SumberDana::all();
@@ -2911,7 +2915,7 @@ class ProyekController extends Controller
 
         if ($getDokumen->delete()) {
             try {
-                File::delete(public_path(public_path("consent-npwp/$getDokumen->id_document")));
+                File::delete(public_path("consent-npwp/$getDokumen->id_document"));
                 return response()->json([
                     "Success" => true,
                     "Message" => null
@@ -3126,6 +3130,67 @@ class ProyekController extends Controller
         return redirect()->back();
     }
 
+    public function tambahPersonelTender(Request $request,  PersonelTenderProyek $personel)
+    {
+        $data = $request->all();
+        $messages = [
+            "required" => "*Kolom Ini Harus Diisi !",
+        ];
+        $rules = [
+            "nama_pegawai" => "required",
+            "kategori_personel" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Personel Tender Gagal Ditambahkan, Periksa Kembali !");
+        }
+
+        $validation->validate();
+        $personel->nip = $data["nama_pegawai"];
+        $personel->kategori = $data["kategori_personel"];
+        $personel->kode_proyek = $data["kode-proyek"];
+
+        $personel->save();
+        Alert::success("Success", "Personel Tender Berhasil Ditambahkan");
+        return redirect()->back();
+    }
+
+    public function editPersonelTender(Request $request, $id)
+    {
+        $data = $request->all();
+        // dd($data);
+        $messages = [
+            "required" => "*Kolom Ini Harus Diisi !",
+        ];
+        $rules = [
+            "nama_pegawai" => "required",
+            "kategori_personel" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Personel Tender Gagal Diubah, Periksa Kembali !");
+        }
+
+        $validation->validate();
+
+        $editPersonel = PersonelTenderProyek::find($id);
+        $editPersonel->nip = $data["nama_pegawai"];
+        $editPersonel->kategori = $data["kategori_personel"];
+        $editPersonel->kode_proyek = $data["kode-proyek"];
+
+        $editPersonel->save();
+        Alert::success("Success", "Personel Tender Berhasil Diubah");
+        return redirect()->back();
+    }
+
+    public function deletePersonelTender($id)
+    {
+        $deletePersonel = PersonelTenderProyek::find($id);
+        $deletePersonel->delete();
+        Alert::success("Success", "Personel Tender Berhasil Dihapus");
+        return redirect()->back();
+    }
+
     public function tambahKonsultan(Request $request,  ProyekKonsultanPerencana $newKonsultan)
     {
         $data = $request->all();
@@ -3181,6 +3246,140 @@ class ProyekController extends Controller
         $deleteTender->delete();
         Alert::success("Success", "Konsultan Perencana Berhasil Dihapus");
         return redirect()->back();
+    }
+
+    public function tambahAlatProyek(Request $request)
+    {
+        $data = $request->all();
+        $collectFile = collect([]);
+
+        $newAlat = new AlatProyek();
+        $newAlat->kode_proyek = $data["kode-proyek"];
+        $newAlat->nomor_rangka = $data["nomor_rangka"];
+        $newAlat->kategori = $data["nomor_rangka"];
+
+        if (isset($data["file_perjanjian"])) {
+            $files = $data["file_perjanjian"];
+
+            foreach ($files as $file) {
+                $nama_file = $file->getClientOriginalName();
+                $id_document = date("His_") . str_replace(' ', '_', $nama_file);
+                $file->move(public_path('dokumen-perjanjian-alat'), $id_document);
+                $collectFile->push([
+                    "id_document" => $id_document,
+                    "nama_file" => $nama_file,
+                ]);
+            }
+        }
+        $newAlat->id_document = json_encode($collectFile->toArray());
+
+
+        if ($newAlat->save()) {
+            Alert::success('Success', "Alat Berhasil Ditambahkan!");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Alat Gagal Ditambahkan!");
+        return redirect()->back();
+    }
+
+    public function editAlatProyek(Request $request, AlatProyek $alat)
+    {
+        $data = $request->all();
+        if (empty($alat)) {
+            Alert::error('Error', "Data Alat Tidak Dapat Ditemukan, Hubungi Admin!");
+            return redirect()->back();
+        };
+        $collectFile = collect(json_decode($alat->id_document));
+
+        if (isset($data["file_perjanjian"])) {
+            $files = $data["file_perjanjian"];
+
+            foreach ($files as $file) {
+                $nama_file = $file->getClientOriginalName();
+                $id_document = date("His_") . str_replace(' ', '_', $nama_file);
+                $file->move(public_path('dokumen-perjanjian-alat'), $id_document);
+                $collectFile->push([
+                    "id_document" => $id_document,
+                    "nama_file" => $nama_file,
+                ]);
+            }
+        }
+
+        $alat->id_document = $collectFile;
+
+        if ($alat->save()) {
+            Alert::success('Success', "Alat Berhasil Diubah!");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Alat Gagal Diubah!");
+        return redirect()->back();
+    }
+
+    public function deleteAlatProyek(AlatProyek $alat)
+    {
+        if (empty($alat)) {
+            return response()->json([
+                "Success" => false,
+                "Message" => "Data Alat Tidak Dapat Ditemukan, Hubungi Admin!"
+            ]);
+        }
+
+        $collectFile = collect(json_decode($alat->id_document));
+        if ($alat->delete()) {
+            try {
+                $collectFile->each(function ($file) {
+                    File::delete(public_path("dokumen-perjanjian-alat/$file->id_document"));
+                });
+                return response()->json([
+                    "Success" => true,
+                    "Message" => "Data Alat Berhasil Dihapus"
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    "Success" => false,
+                    "Message" => $e->getMessage()
+                ]);
+            }
+        }
+
+        return response()->json([
+            "Success" => false,
+            "Message" => "Data tidak dapat dihapus. Hubungi Admin!"
+        ]);
+    }
+
+    public function deleteFileAlatProyek(Request $request)
+    {
+        $data = $request->all();
+        $getAlat = AlatProyek::find($data["id"]);
+
+        if (empty($getAlat)) {
+            return response()->json([
+                "Success" => false,
+                "Message" => "Data Alat Tidak Dapat Ditemukan, Hubungi Admin!"
+            ]);
+        }
+
+        $collectFile = collect(json_decode($getAlat->id_document));
+
+        try {
+            $finishCollectFile = $collectFile->reject(function ($file) use ($data) {
+                return $file->id_document == $data["id_document"];
+            });
+            $getAlat->id_document = $finishCollectFile;
+            if ($getAlat->save()) {
+                File::delete(public_path("dokumen-perjanjian-alat/" . $data['id_document']));
+                return response()->json([
+                    "Success" => true,
+                    "Message" => "Dokumen berhasil dihapus"
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                "Success" => false,
+                "Message" => $e->getMessage()
+            ]);
+        }
     }
 
     public function tambahAdendum(Request $request, ProyekAdendum $newAdendum)
