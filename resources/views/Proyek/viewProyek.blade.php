@@ -548,7 +548,7 @@
                                                                 Perolehan
                                                             </a>
                                                         @else
-                                                            @if ($proyek->NotaRekomendasi2->is_disetujui || (!is_null($check_non_green_line_nota_2) && !$check_non_green_line_nota_2) || $proyek->UnitKerja?->dop == "EA")
+                                                            @if ($proyek->NotaRekomendasi2?->is_disetujui || (!is_null($check_non_green_line_nota_2) && !$check_non_green_line_nota_2) || $proyek->UnitKerja?->dop == "EA")
                                                                 <a href="#"
                                                                     class="stage-button stage-action stage-is-not-active color-is-default"
                                                                     style="outline: 0px; cursor: pointer;" stage="5">
@@ -4742,12 +4742,12 @@
                                                                 <span class="px-4 fs-4 badge badge-danger">
                                                                     Non Green Lane
                                                                 </span>
-                                                                @if (is_null($proyek->NotaRekomendasi2->is_disetujui))
-                                                                @elseif ($proyek->NotaRekomendasi2->is_disetujui)
+                                                                @if (is_null($proyek->NotaRekomendasi2?->is_disetujui))
+                                                                @elseif ($proyek->NotaRekomendasi2?->is_disetujui)
                                                                 <span class="px-4 fs-4 badge badge-success">
                                                                     Nota Rekomendasi II Disetujui
                                                                 </span>
-                                                                @elseif (!$proyek->NotaRekomendasi2->is_disetujui)
+                                                                @elseif (!$proyek->NotaRekomendasi2?->is_disetujui)
                                                                 <span class="px-4 fs-4 badge badge-danger">
                                                                     Nota Rekomendasi II Ditolak
                                                                 </span>
