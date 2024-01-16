@@ -155,7 +155,7 @@
                                                 <td>{{ $item->created_at }}</td>
                                                 <td>
                                                     <a target="_blank" class="btn btn-primary btn-sm text-white" href="{{ asset('template/'.$item->id_dokumen) }}">Download</a>&nbsp;
-                                                    @if (auth()->user()->check_admin_kontrak)
+                                                    @if (Auth::user()->canany(['ccm']))
                                                     <button type="button" class="btn btn-secondary btn-sm text-hover-danger" onclick="confirmDelete('{{ $item->id }}')">Delete</button>
                                                     @endif
                                                 </td>

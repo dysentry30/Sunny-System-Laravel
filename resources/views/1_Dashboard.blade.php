@@ -111,7 +111,7 @@
                                     <div class="col">
                                         <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold">
                                             <!--begin:::Tab item Forecast Bulanan-->
-                                            @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
+                                            @if (Auth::user()->can('super-admin') || auth()->user()->check_user_sales)
                                                 <li class="nav-item">
                                                     <a onclick="showCRM()" class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
                                                         href="#kt_view_dashboard_crm" style="font-size:14px;">Dashboard CRM</a>
@@ -120,17 +120,17 @@
                                             <!--end:::Tab item Forecast Bulanan-->
 
                                             <!--begin:::Tab item Forecast Internal-->
-                                            @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
+                                            {{-- @if (Auth::user()->can('super-admin') || auth()->user()->check_user_sales)
                                                 <li class="nav-item">
                                                     <a onclick="showSummary()" class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
                                                         data-bs-toggle="tab" href="#kt_view_summary_dashboard"
                                                         style="font-size:14px;">Summary Dashboard</a>
                                                 </li>
-                                            @endif
+                                            @endif --}}
                                             <!--end:::Tab item Forecast Internal-->
 
                                             <!--begin:::Tab item Forecast Internal-->
-                                            @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                                            @if (Auth::user()->can('super-admin') || Auth::user()->can('ccm'))
                                                 <li class="nav-item">
                                                     <a onclick="showCCM()" class="nav-link text-active-primary pb-4"  href="/dashboard-ccm/perolehan-kontrak"
                                                         style="font-size:14px;">Dashboard CCM</a>
@@ -150,15 +150,15 @@
                                                 document.querySelector("#kt_view_dashboard_crm").style.display = "none";
                                                 document.querySelector("#kt_view_summary_dashboard").style.display = "none";
                                             }
-                                            function showSummary() {
-                                                document.querySelector("#kt_view_summary_dashboard").style.display = "";
-                                                document.querySelector("#kt_view_dashboard_crm").style.display = "none";
-                                                document.querySelector("#kt_view_dashboard_ccm").style.display = "none";
-                                                document.querySelector("#summary-pipeline").style.display = "";
-                                                document.querySelector("#proyek-kalah-cancel-proyek-close").style.display = "";
-                                                document.querySelector("#summary-pipeline").style.display = "";
-                                                document.querySelector("#summary-nilai").style.display = "";
-                                            }
+                                            // function showSummary() {
+                                            //     document.querySelector("#kt_view_summary_dashboard").style.display = "";
+                                            //     document.querySelector("#kt_view_dashboard_crm").style.display = "none";
+                                            //     document.querySelector("#kt_view_dashboard_ccm").style.display = "none";
+                                            //     document.querySelector("#summary-pipeline").style.display = "";
+                                            //     document.querySelector("#proyek-kalah-cancel-proyek-close").style.display = "";
+                                            //     document.querySelector("#summary-pipeline").style.display = "";
+                                            //     document.querySelector("#summary-nilai").style.display = "";
+                                            // }
                                         </script>
                                     </div>
                                 </div>
@@ -190,7 +190,8 @@
                     <div class="card" Id="List-vv" style="position: relative; overflow: hidden;">
 
                         @php
-                            $adminPIC = str_contains(auth()->user()->name, "(PIC)");
+                            // $adminPIC = str_contains(auth()->user()->name, "(PIC)");
+                            $adminPIC = Auth::user()->can('admin-crm');
                         @endphp
 
                         <!--begin::Card header-->
@@ -198,7 +199,7 @@
                             <!--begin::Card title-->
                             <div class="card-title">
                                 <form action="/dashboard" class="d-flex flex-row " method="get">
-                                    @if (Auth::user()->check_administrator || $adminPIC )                                        
+                                    @if (Auth::user()->check_administrator || Auth::user()->can('admin-crm') )                                        
                                         <!-- Begin :: Select Options Unit Kerja -->
                                         <select onchange="selectDOP(this)" id="dop" name="dop"
                                             class="form-select form-select-solid w-auto"
@@ -239,7 +240,7 @@
                                             }
                                             </script>
                                             @endif
-                                            @if (Auth::user()->check_administrator || $adminPIC)
+                                            @if (Auth::user()->check_administrator || Auth::user()->can('admin-crm'))
                                             <script>
                                                 function selectUnitKerja(e) {
                                                 document.getElementById("dop").value = "";
@@ -337,8 +338,8 @@
 
                         <!--begin::Card body-->
                         <div class="card-body pt-0">
-                            <div class="tab-pane fade" id="kt_view_summary_dashboard" role="tabpanel">
-                                @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
+                            {{-- <div class="tab-pane fade" id="kt_view_summary_dashboard" role="tabpanel">
+                                @if (Auth::user()->can('super-admin') || auth()->user()->check_user_sales)
                                     <br>
                                     <div class="row">
                                         <div class="col-5" id="summary-nilai" style="display: none">
@@ -446,19 +447,17 @@
                                                         <button class="btn btn-sm btn-light btn-active-danger fs-6"
                                                             onclick="toggleFullscreen()" id="exit-fullscreen"><i
                                                                 class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
-                                                        {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
+                                                        
                                                     </div>
                                                     <br>
                                                     <div class="" style="max-height: 500px; overflow-y:scroll">
                                                         <table class="table align-middle table-row-dashed fs-6 gy-2">
                                                             <!--begin::Table head-->
-                                                            <thead class="bg-white" id="table-line-head" style="position: sticky; top: 0">
-                                                                {{-- THead Here --}}
+                                                            <thead class="bg-white" id="table-line-head" style="position: sticky; top: 0">\
                                                             </thead>
                                                             <!--end::Table head-->
                                                             <!--begin::Table body-->
-                                                            <tbody class="fw-bold" id="table-line-body">
-                                                                {{-- Data Here --}}
+                                                            <tbody class="fw-bold" id="table-line-body">\
                                                             </tbody>
                                                             <!--end::Table body-->
                                                         </table>
@@ -469,9 +468,9 @@
                                         </div>
                                     </div>
                                 @endif
-                            </div>      
-                            <div class="tab-pane fade {{ auth()->user()->check_admin_kontrak ? '' : 'show active' }}" id="kt_view_dashboard_crm" role="tabpanel">
-                                @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
+                            </div>       --}}
+                            <div class="tab-pane fade {{ Auth::user()->can('ccm') ? '' : 'show active' }}" id="kt_view_dashboard_crm" role="tabpanel">
+                                @if (Auth::user()->canany(['super-admin', 'crm']))
                                     <!--begin::FORECAST LINE CHART-->
                                     <figure class="highcharts-figure py-12">
                                         <div id="forecast-line" style="display:">
@@ -1358,8 +1357,8 @@
                                 @endif
                             </div> 
 
-                            <div class="tab-pane fade {{ auth()->user()->check_admin_kontrak ? 'show active' : '' }}" id="kt_view_dashboard_ccm" role="tabpanel" style="{{ auth()->user()->check_administrator ? 'display : none' : '' }}">
-                                @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                            <div class="tab-pane fade {{ Auth::user()->can('ccm') ? 'show active' : '' }}" id="kt_view_dashboard_ccm" role="tabpanel" style="{{ Auth::user()->can('super-admin') ? 'display : none' : '' }}">
+                                @if (Auth::user()->can('super-admin') || Auth::user()->can('ccm'))
                                     <div class="py-12" id="marketing-pipeline">
                                         <!--begin::MARKETING PIPELINE-->
                                         <!--end::MARKETING PIPELINE-->

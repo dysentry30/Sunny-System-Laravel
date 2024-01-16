@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\UnitKerja;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 
@@ -25,7 +26,7 @@ class UnitKerjaController extends Controller
         $dops = Dop::all();
         $companies = Company::all();
 
-        $adminPIC = str_contains(auth()->user()->name, "(PIC)");
+        $adminPIC = Gate::allows('admin-crm');
 
         if(Auth::user()->check_administrator || $adminPIC) {
             if (!empty($column)){

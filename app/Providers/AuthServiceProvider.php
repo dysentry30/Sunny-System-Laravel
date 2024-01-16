@@ -57,6 +57,18 @@ class AuthServiceProvider extends ServiceProvider
             return $user->risk == true;
         });
 
+        Gate::define('admin-crm', function (User $user) {
+            return  $user->check_user_sales == true && $user->role_admin == true;
+        });
+
+        Gate::define('user-crm', function (User $user) {
+            return $user->check_user_sales == true && $user->role_user == true;
+        });
+
+        Gate::define('approver-crm', function (User $user) {
+            return $user->check_user_sales == true && $user->approver == true;
+        });
+
         //
     }
 }

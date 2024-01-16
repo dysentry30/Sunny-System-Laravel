@@ -191,8 +191,8 @@ class UserController extends Controller
         }
         return response()->json("Gagal");
     }
-    
-    public function logout(Request $request)
+
+    public function logoutOld(Request $request)
     {
         // auth()->user()->forceFill([
         //     "remember_token" => null,
@@ -716,10 +716,10 @@ class UserController extends Controller
                 // $user = $validateLoginWZone->collect($key = 'data')->first();
 
                 if ($response["responseStatus"] != 0) {
-                    dd($response["responseData"]);
+                    // dd($response["responseData"]);
                     $nip = $response["responseData"]["nip"];
                 } else {
-                    dd($response);
+                    return redirect()->back();
                 }
                 // $nip = $user['NIP'];
             } else {
@@ -729,24 +729,75 @@ class UserController extends Controller
             if (!empty($nip)) {
                 //Check Pegawai yg login dari WZone ada di CRM atau tidak
                 $checkUserInCRM = User::where('nip', $nip)->first();
-                // dd($checkUserInCRM);
 
-                if (
-                    !empty($checkUserInCRM) && $checkUserInCRM->is_active
-                ) {
-                    // Auth::login(['nip' => $nip]);
-                    Auth::login($checkUserInCRM);
-                    if (Auth::check()) {
-                        $request->session()->regenerate();
-                        return redirect()->intended("/dashboard");
+                if (!empty($checkUserInCRM) && $checkUserInCRM->is_active) {
+                    $dataPegawai = Pegawai::where('nip', $nip)->first();
+                    $dataPegawai->nama_pegawai = $response["responseData"]["full_name"];
+                    $dataPegawai->email = $response["responseData"]["email"];
+                    $dataPegawai->handphone = $response["responseData"]["handphone"];
+                    $dataPegawai->kode_jabatan = $response["responseData"]["kd_jabatan"];
+                    $dataPegawai->nama_fungsi_bidang = $response["responseData"]["nm_fungsi_bidang"];
+                    $dataPegawai->kode_kantor_sap = $response["responseData"]["cmp_id"];
+                    $dataPegawai->nama_kantor = $response["responseData"]["nm_kantor"];
+
+                    $checkUserInCRM->name = $response["responseData"]["full_name"];
+                    $checkUserInCRM->email = $response["responseData"]["email"];
+                    $checkUserInCRM->no_hp = $response["responseData"]["handphone"];
+
+                    // dd($dataPegawai);
+                    if ($dataPegawai->save() && $checkUserInCRM->save()
+                    ) {
+                        // Auth::login(['nip' => $nip]);
+                        Auth::login($checkUserInCRM);
+                        if (Auth::check()) {
+                            $request->session()->regenerate();
+                            return redirect()->intended("/dashboard");
+                        }
+                    } else {
+                        Alert::error('Error', "Terjadi kesalahan sistem. Silahkan hubungi Admin!");
+                        return redirect()->back();
                     }
                 }
             } else {
                 return redirect()->back(); 
             }
         } catch (\Exception $e) {
-            dd($e);
+            dd($e->getMessage());
+            Alert::error('Error', $e->getMessage());
+            return redirect()->back();
         }
+    }
+
+    public function logout(Request $request)
+    {
+        // auth()->user()->forceFill([
+        //     "remember_token" => null,
+        // ])->save();
+
+
+        Request()->session()->invalidate();
+
+        Request()->session()->regenerateToken();
+
+
+        if (str_contains($request->url(), "api")) {
+
+            return response()->json([
+                "status" => "success",
+                "msg" => "Logged out",
+            ]);
+        }
+
+        Auth::logout();
+        return redirect('http://' . env("WZONE_URL"));
+
+        // if (auth()->user()->check_admin_kontrak) {
+        //     Auth::logout();
+        //     return redirect('/ccm');
+        // } else {
+        //     Auth::logout();
+        //     return redirect('/');
+        // }
     }
 
 }

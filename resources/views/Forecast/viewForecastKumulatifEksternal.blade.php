@@ -156,7 +156,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                 {{-- <script>
                                                     const historyForecast = "{{ count($historyForecast) }}";
                                                 </script> --}}
-                                                @if (Auth::user()->check_administrator)
+                                                @if (Auth::user()->can('super-admin'))
                                                     <button type="button" style="background-color: #008CB4;" id="lock-forecast"
                                                         onclick="lockMonthForecastBulanan(this)"
                                                         class="btn btn-sm btn-active-primary mt-4">

@@ -49,7 +49,7 @@
                                         id="kt_toolbar_primary_button" style="background-color:#008CB4; padding: 6px">
                                         New</button>
 
-                                        @if (auth()->user()->check_administrator)
+                                        @if (Auth::user()->can('super-admin'))
 
                                         <!--begin::Wrapper-->
                                         <div class="me-4" style="margin-left:10px;">
@@ -195,7 +195,7 @@
                                             {{-- <th class="min-w-auto">Partner</th> --}}
                                             {{-- <th class="min-w-auto">Competitor</th> --}}
                                             <th class="min-w-auto">Kode Nasabah</th>
-                                            @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
+                                            @if (Auth::user()->canany(['super-admin', 'admin-crm']))
                                             <th class="min-w-auto text-center">Action</th>
                                             @endif
                                             {{-- <th class="max-w-120px"><center>Action</center></th> --}}
@@ -281,7 +281,7 @@
                                                     </td>
                                                     <!--end::Kode Nasabah-->
                                                     <!--begin::Action-->
-                                                    @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
+                                                    @if (Auth::user()->canany(['super-admin', 'admin-crm']))
                                                         <td class="text-center">
                                                             <button data-bs-toggle="modal"
                                                                 data-bs-target="#kt_modal_delete{{ $customers->id_customer }}"

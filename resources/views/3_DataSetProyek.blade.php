@@ -167,7 +167,7 @@
                             </div>
 
                             <!--end::Page title-->
-                            @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
+                            @if (Auth::user()->canany(['super-admin', 'crm']))
                                 <!--begin::Actions-->
                                 <div class="d-flex align-items-center py-1">
 
