@@ -1248,4 +1248,60 @@ function performAssessment(App\Models\Customer $customer, App\Models\Proyek $pro
 function errorPage($status_code = 404, $title, $headline, $sub_headline = "", $is_add_link = false, $action_form = "", $button_value = "", $user = null) {
     return view("errorPage/error", compact(["status_code", "title", "headline", "sub_headline", "is_add_link", "action_form", "button_value", "user"]));
 }
+
+// get data pis
+function loginApiPis()
+{
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL            => "https://pis.wika.co.id/wpapi/auth/token",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING       => "",
+        CURLOPT_MAXREDIRS      => 10,
+        CURLOPT_TIMEOUT        => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST  => "POST",
+        CURLOPT_POSTFIELDS     => "{\n    \"grant_type\": \"client_credentials\",\n    \"client_id\": \"app-she\",\n    \"secret_key\": \"y7sdyf7sdhfuerwe7ry383rwriwu3894u2\"\n}",
+        CURLOPT_HTTPHEADER     => array(
+            "Content-Type: application/json",
+            "Content-Type: text/plain",
+        ),
+    ));
+
+    $response = curl_exec($curl);
+
+    curl_close($curl);
+    $data = json_decode($response);
+    return $data;
+}
+
+function getDataProyek($spk, $waktu, $token)
+{
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL            => "https://pis.wika.co.id/wpapi/proyek/getProyekResume",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING       => "",
+        CURLOPT_MAXREDIRS      => 10,
+        CURLOPT_TIMEOUT        => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST  => "POST",
+        CURLOPT_POSTFIELDS     => "{\n  \"no_spk\" : \"$spk\",\n  \"period\" : $waktu\n}",
+        CURLOPT_HTTPHEADER     => array(
+            "Content-Type: application/json",
+            "x-access-token: $token",
+            "Content-Type: text/plain",
+        ),
+    ));
+
+    $response = curl_exec($curl);
+
+    curl_close($curl);
+    $data = json_decode($response);
+    return $data;
+}
 ?>

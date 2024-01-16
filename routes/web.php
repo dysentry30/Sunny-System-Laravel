@@ -105,6 +105,15 @@ use Termwind\Components\Dd;
 Route::get('/', [UserController::class, 'welcome'])->middleware("userNotAuth");
 Route::get('/ccm', [UserController::class, 'welcome'])->middleware("userNotAuth");
 
+Route::get("get-data-proyek", function(Request $request) {
+    $token = loginApiPis();
+    $month = date('m');
+    $year = date('Y');
+    $waktu = $year . $month;
+    $getProyek = getDataProyek("PJPC004", "$waktu", $token->access_token);
+    dd($getProyek);
+});
+
 
 // begin :: Login
 
@@ -2256,6 +2265,49 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         return redirect()->back();
     });
 
+    Route::get('/get-jabatans', function () {
+        $jabatans = HTTP::get("https://hcis.wika.co.id/services/rest/?format=json&wsc_id=WSC-000010&method=jabportal&pin=p0rt4lJ&is_active=1");
+        $status = 0;
+        $reason = "";
+        $jabatans->onError(function($item) use(&$status, &$reason) {
+            // dd($item->status(), $item->reason());
+            $status = $item->status();
+            $reason = $item->reason();
+        });
+
+        if($status != 0 && !empty($reason)) {
+            return response()->json([
+                "status" => $status,
+                "msg" => $reason
+            ]);
+        }
+        $jabatans_data = collect($jabatans->json()["data"]);
+        $jabatans_data->each(function($jabatan) {
+            $is_jabatan_exist = Jabatan::find($jabatan["kd_jabatan_str"]);
+            if(!empty($is_jabatan_exist)) {
+                $is_jabatan_exist->kode_jabatan = (int) $jabatan["kd_jabatan_str"];
+                $is_jabatan_exist->kode_jabatan_sap = (int) $jabatan["kd_jabatan_str_sap"];
+                $is_jabatan_exist->nama_jabatan = $jabatan["nm_jabatan_str"];
+                $is_jabatan_exist->tahun = (int) date("Y");
+                $is_jabatan_exist->save();
+            } else {
+                $new_jabatan = new Jabatan();
+                $new_jabatan->kode_jabatan = (int) $jabatan["kd_jabatan_str"];
+                $new_jabatan->kode_jabatan_sap = (int) $jabatan["kd_jabatan_str_sap"];
+                $new_jabatan->nama_jabatan = $jabatan["nm_jabatan_str"];
+                $new_jabatan->tahun = (int) date("Y");
+                $new_jabatan->save();
+            }
+        });
+
+        // return response()->json([
+        //     "status" => 400,
+        //     "msg" => "Gagal menambahkan Jabatan"
+        // ]);
+        return response()->json($jabatans->json());
+    });
+    // End :: Master Data Jabatan
+
 
     // Begin :: Master Data Pegawai
     Route::get("/pegawai", [
@@ -3495,6 +3547,27 @@ Route::get('/get-jenis-dokumen/{jenis_dokumen}', function ($jenis_dokumen) {
     }
 });
 // End Get Jenis Dokumen
+
+Route::get("/get-pegawai/hcms", function (Request $request) {
+    // $test_debug = "";
+    // $fp = fopen(storage_path('/logs/api-get-pegawai.log'), 'w+');
+    $data = Http::withOptions([
+        "verify" => false
+        // "debug" => $test_debug
+        ])->get("https://hcms.wika.co.id/apiwika/?method=get_pegawai&key=93hDk1L&client=crm");
+    setLogging("api", "GET DATA PEGAWAI => ", $data->json());
+    $response = json_decode($data->body(), true);
+    if($data->ok() && !empty($data->body()) && $response["status"] == 200) {
+        return response()->json([
+            "success" => true,
+        ]);
+    }
+    $error = $data->reason();
+    return response()->json([
+        "success" => false,
+        "message" => $error
+    ]);
+});
 
 Route::get('/abort/{code}/{msg}', function ($code, $msg) {
     return abort($code, $msg);

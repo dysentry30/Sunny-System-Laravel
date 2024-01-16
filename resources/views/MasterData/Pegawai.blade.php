@@ -1,4 +1,4 @@
-a{{-- Begin::Extend Header --}}
+{{-- Begin::Extend Header --}}
 @extends('template.main')
 {{-- End::Extend Header --}}
 
@@ -39,9 +39,9 @@ a{{-- Begin::Extend Header --}}
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">Pegawai
-                                </h1>
+                                <h1 class="d-flex align-items-center fs-3 my-1">Pegawai</h1>
                                 <!--end::Title-->
+                                <button class="btn btn-sm btn-primary" onclick="getDataPegawai()">Get Pegawai From HCMS</button>
                             </div>
                             <!--end::Page title-->
 
@@ -135,9 +135,16 @@ a{{-- Begin::Extend Header --}}
 
                         <!--begin::Card body-->
                         <div class="card-body pt-3 ">
+                            <div class="loading-div bg-dark bg-opacity-75 position-absolute w-100 h-100 translate-middle d-flex flex-row align-items-center justify-content-center" style="top: 50%;left: 50%;z-index: 10;display:none !important;">
+                                <div class="d-flex flex-column align-items-center text-white justify-content-center">
+                                    <div class="spinner-border" role="status">
+                                    </div>
+                                    <span class="">Getting Data Pegawai from HCMS...</span>
+                                </div>
+                            </div>
 
                             <!--begin::Table-->
-                            <table class="table table-hover align-middle table-row-dashed fs-6 gy-2" id="user_table">
+                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="user_table">
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
@@ -267,13 +274,36 @@ a{{-- Begin::Extend Header --}}
             $('#user_table').DataTable( {
                 dom: '<"float-start"f><"#user_table"t>rtip',
                 // dom: 'frtip',
-                pageLength : 50,
+                pageLength : 10,
                 // ordering : false,
                 // buttons: [
                 //     'copy', 'csv', 'excel', 'pdf', 'print'
                 // ]
             } );
         } );
+
+        const loadingDiv = document.querySelector(".loading-div");
+
+        async function getDataPegawai() {
+            loadingDiv.setAttribute("style", "top: 50%;left: 50%;z-index: 10");
+            const getData = await fetch("/get-pegawai/hcms")
+            .then(res => res.json());
+            if(getData.success) {
+                loadingDiv.setAttribute("style", "top: 50%;left: 50%;z-index: 10;display:none !important");
+                Toast.fire({
+                    "icon": "success",
+                    "title": "Data pegawai berhasil didapatkan."
+                })
+                return;
+                // console.log("done");
+            }
+            loadingDiv.setAttribute("style", "top: 50%;left: 50%;z-index: 10;display:none !important");
+            Toast.fire({
+                "icon": "error",
+                "html": `Terjadi error ketika melakukan proses.<br><small>${getData.message}</small>`,
+            })
+            return;
+        }
     </script>
     <!--end::Data Tables-->
 
