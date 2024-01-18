@@ -6306,6 +6306,40 @@ Route::get('/php-info', function () {
     return dd(phpinfo());
 });
 
+Route::post('/user/get-proyek-datatable', function (Request $request) {
+    $draw = $request->has('draw') ? intval($request->input('draw')) : 0;
+    $start = (int)$request->input('start');
+    $length = (int)$request->input('length');
+    $page = ceil(($start + 1) / $length);
+    $search = !empty($request->input('search')) ? $request->input('search')["value"] : null;
+
+
+    $data = ProyekPISNew::addSelect(array_map(function ($item) {
+        return 'proyek_pis_new.' . $item;
+    }, ['proyek_name', 'profit_center', 'kd_divisi']))
+        ->with('UnitKerja')
+        ->whereIn('kd_divisi', json_decode($request->query('divcode')))
+        ->where('profit_center', '!=', null)
+        ->when(!empty($search), function ($query) use ($search) {
+            $query->where('proyek_name', 'like', '%' . $search . '%')
+                ->orWhere('profit_center', 'like', '%' . $search . '%');
+        })
+        ->orderBy('proyek_name', 'ASC');
+
+    if ($length > 0) {
+        $data = $data->paginate($length, ['*'], 'page', $page);
+    } else {
+        $data = $data->get();
+    }
+
+    return response()->json([
+        'draw' => $draw,
+        'recordsTotal' => $length > 0 ? $data->total() : $data->count(),
+        'recordsFiltered' => $length > 0 ? $data->total() : $data->count(),
+        'data' => $length > 0 ? $data->items() : $data
+    ]);
+});
+
 Route::get('/test-file', function (Request $request) {
     // $proyek = Proyek::find('HNPC003');
     // $hasil_assessment = collect(json_decode($proyek->hasil_assessment));
@@ -6319,7 +6353,7 @@ Route::get('/test-file', function (Request $request) {
     } catch (Exception $e) {
         dd($e->getMessage());
     }
-
+ 
     // $proyek = NotaRekomendasi2::where('kode_proyek', 'HNPC003')->first();
     // return createWordPersetujuanNota2($proyek, true);
     // $proyek = Proyek::find('PNPC009');

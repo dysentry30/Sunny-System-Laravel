@@ -17,6 +17,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 use App\Events\NotificationPasswordReset;
 use App\Models\Dop;
 use App\Models\Pegawai;
+use App\Models\ProyekPISNew;
 use App\Models\RoleManagements;
 use Exception;
 use Illuminate\Http\UploadedFile;
@@ -351,6 +352,14 @@ class UserController extends Controller
     public function view($user)
     {
         $user = User::find($user);
+        // $proyeks = ProyekPISNew::addSelect(array_map(function ($item) {
+        //     return 'proyek_pis_new.' . $item;
+        // }, ['proyek_name', 'profit_center', 'kd_divisi']))
+        // ->with('UnitKerja')
+        // ->whereIn('kd_divisi', json_decode($request->query('divcode')))
+        // ->where('profit_center', '!=', null)
+        // ->orderBy('proyek_name')
+        // ->get();
         if (empty($user)) {
             Alert::error("Error", "User tidak ditemukan");
             return redirect("user");
@@ -467,6 +476,37 @@ class UserController extends Controller
         $user->role_user = $role_user;
         $user->role_approver = $role_approver;
         $user->role_risk = $role_risk;
+
+        // if (isset($data['proyeks'])) {
+        //     $proyekSelectedCollect = collect($data['proyeks']);
+        //     if (empty($user->proyeks_selected)) {
+        //         $user->proyeks_selected = $proyekSelectedCollect->toJson();
+        //     } else {
+        //         $collectProyekExist = collect(json_decode($user->proyeks_selected));
+        //         $proyekCancel = $collectProyekExist->diff($data["proyeks"]);
+
+        //         if ($proyekCancel->count() < 1) { //Jika tidak ada yg di cancel maka gunakan yg sebelumnya
+        //             $arrayTemp = $collectProyekExist;
+        //         } else { //Jika ada di proyekCancel maka hapus si proyeknya
+        //             $arrayTemp = $collectProyekExist->reject(function ($proyek) use ($proyekCancel) {
+        //                 return in_array($proyek, $proyekCancel->toArray());
+        //             });
+        //         }
+
+        //         $proyekNew = $proyekSelectedCollect->diff($arrayTemp);
+        //         $finalProyek = $arrayTemp->push($proyekNew->flatten()->toArray());
+
+        //         $user->proyeks_selected = $finalProyek->flatten()->toJson();
+        //     }
+        // } else {
+        //     $user->proyeks_selected = null;
+        // }
+
+        if (isset($data['proyeks'])) {
+            $user->proyeks_selected = $data['list-proyek'];
+        } else {
+            $user->proyeks_selected = null;
+        }
         // $user->alamat = $data["alamat"];
         
         if ($user->save()) {
