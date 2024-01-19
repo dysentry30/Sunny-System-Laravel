@@ -93,7 +93,7 @@
                         <!--end::Card header-->
                         <!--begin::Card body-->
                         <div class="card-body pt-0 ">
-                            <form action="/proyek/syarat-prakualifikasi/{{ $proyek->kode_proyek }}/save" method="POST" id="syarat-prakualifikasi">
+                            <form action="/proyek/syarat-prakualifikasi/{{ $proyek->kode_proyek }}/edit" method="POST" id="syarat-prakualifikasi">
                                 @csrf
                                 <!--begin::Table-->
                                 <table class="table align-middle table-bordered border-dark fs-6 gy-2" id="example">
@@ -120,7 +120,7 @@
                                             <td class="text-center"><b>A1</b></td>
                                             <td colspan="2"><b><u>Badan Usaha Lokal (Indonesia)</u></b></td>
                                         </tr>
-                                        @foreach ($aspekLegalLokal as $itemLokal)
+                                        @foreach ($aspekLegalLokal as $key => $itemLokal)
                                             <tr>
                                                 <td class="text-end">{{ $itemLokal->posisi }}</td>
                                                 <td>{{ $itemLokal->isi }}</td>
@@ -132,10 +132,10 @@
                                                         class="form-select form-select-solid select2-hidden-accessible"
                                                         data-control="select2" data-hide-search="true" data-placeholder="Perlu / Tidak Perlu"
                                                         data-select2-id="select2-aspek_legal_lokal_wika_{{ $itemLokal->id }}">
-                                                            <option value="" selected></option>
-                                                            <option value="Perlu">Perlu</option>
-                                                            <option value="Tidak Perlu">Tidak Perlu</option>
-                                                            <option value="-">-</option>
+                                                            <option value=""></option>
+                                                            <option value="Perlu" {{ $dataAspekLegalLokalWika[$key]->syarat_prakualifikasi == "Perlu" ? 'selected' : '' }}>Perlu</option>
+                                                            <option value="Tidak Perlu" {{ $dataAspekLegalLokalWika[$key]->syarat_prakualifikasi == "Tidak Perlu" ? 'selected' : '' }}>Tidak Perlu</option>
+                                                            <option value="-" {{ $dataAspekLegalLokalWika[$key]->syarat_prakualifikasi == "-" ? 'selected' : '' }}>-</option>
                                                         </select>
                                                     </div>
                                                 </td>
@@ -149,7 +149,7 @@
                                             <td colspan="2"><b><u>Badan Usaha Asing</u></b></td>
                                             {{-- <td></td> --}}
                                         </tr>
-                                        @foreach ($aspekLegalAsing as $itemAsing)
+                                        @foreach ($aspekLegalAsing as $key => $itemAsing)
                                             <tr>
                                                 <td class="text-end">{{ $itemAsing->posisi }}</td>
                                                 <td>{{ $itemAsing->isi }}</td>
@@ -161,10 +161,10 @@
                                                         class="form-select form-select-solid select2-hidden-accessible"
                                                         data-control="select2" data-hide-search="true" data-placeholder="Perlu / Tidak Perlu"
                                                         data-select2-id="select2-aspek_legal_asing_wika_{{ $itemAsing->id }}">
-                                                            <option value="" selected></option>
-                                                            <option value="Perlu">Perlu</option>
-                                                            <option value="Tidak Perlu">Tidak Perlu</option>
-                                                            <option value="-">-</option>
+                                                            <option value=""></option>
+                                                            <option value="Perlu" {{ $dataAspekLegalAsingWika[$key]->syarat_prakualifikasi == "Perlu" ? 'selected' : '' }}>Perlu</option>
+                                                            <option value="Tidak Perlu" {{ $dataAspekLegalAsingWika[$key]->syarat_prakualifikasi == "Tidak Perlu" ? 'selected' : '' }}>Tidak Perlu</option>
+                                                            <option value="-" {{ $dataAspekLegalAsingWika[$key]->syarat_prakualifikasi == "-" ? 'selected' : '' }}>-</option>
                                                         </select>
                                                     </div>
                                                 </td>
@@ -178,7 +178,7 @@
                                             <td class="text-center"><b>B</b></td>
                                             <td colspan="2"><b><u>Aspek Teknikal:</u></b></td>
                                         </tr>
-                                        @foreach ($aspekTeknikal as $itemTeknikal)
+                                        @foreach ($aspekTeknikal as $key => $itemTeknikal)
                                             <tr>
                                                 <td class="text-end">{{ $itemTeknikal->posisi }}</td>
                                                 <td>{{ $itemTeknikal->isi }}</td>
@@ -191,25 +191,25 @@
                                                         class="form-select form-select-solid select2-hidden-accessible"
                                                         data-control="select2" data-hide-search="true" data-placeholder="Perlu / Tidak Perlu"
                                                         data-select2-id="select2-aspek_teknikal_wika_{{ $itemTeknikal->id }}">
-                                                            <option value="" selected></option>
-                                                            <option value="Perlu">Perlu</option>
-                                                            <option value="Tidak Perlu">Tidak Perlu</option>
-                                                            <option value="-">-</option>
+                                                            <option value=""></option>
+                                                            <option value="Perlu" {{ $dataAspekTeknikalWika[$key]->syarat_prakualifikasi == "Perlu" ? 'selected' : '' }}>Perlu</option>
+                                                            <option value="Tidak Perlu" {{ $dataAspekTeknikalWika[$key]->syarat_prakualifikasi == "Tidak Perlu" ? 'selected' : '' }}>Tidak Perlu</option>
+                                                            <option value="-" {{ $dataAspekTeknikalWika[$key]->syarat_prakualifikasi == "-" ? 'selected' : '' }}>-</option>
                                                         </select>
                                                         @elseif ($itemTeknikal->opsi == 'kombinasi')
                                                         <select name="aspek_teknikal_wika[]" id="aspek_teknikal" 
                                                         class="form-select form-select-solid select2-hidden-accessible"
                                                         data-control="select2" data-hide-search="true" data-placeholder="Perlu / Tidak Perlu"
                                                         data-select2-id="select2-aspek_teknikal_wika_{{ $itemTeknikal->id }}">
-                                                            <option value="" selected></option>
-                                                            <option value="Perlu">Perlu</option>
-                                                            <option value="Tidak Perlu">Tidak Perlu</option>
-                                                            <option value="-">-</option>
+                                                            <option value=""></option>
+                                                            <option value="Perlu" {{ $dataAspekTeknikalWika[$key]->syarat_prakualifikasi == "Perlu" ? 'selected' : '' }}>Perlu</option>
+                                                            <option value="Tidak Perlu" {{ $dataAspekTeknikalWika[$key]->syarat_prakualifikasi == "Tidak Perlu" ? 'selected' : '' }}>Tidak Perlu</option>
+                                                            <option value="-" {{ $dataAspekTeknikalWika[$key]->syarat_prakualifikasi == "-" ? 'selected' : '' }}>-</option>
                                                         </select>
                                                         <br>
-                                                        <input type="text" class="form-control form-control-solid" name="aspek_teknikal_isi_wika[]" id="aspek_teknikal" placeholder="Isi">
+                                                        <input type="text" class="form-control form-control-solid" name="aspek_teknikal_isi_wika[]" value="{{ $dataAspekTeknikalWika[$key]->syarat_prakualifikasi_isian }}" id="aspek_teknikal" placeholder="Isi">
                                                         @else
-                                                        <input type="text" class="form-control form-control-solid" name="aspek_teknikal_wika[]" id="aspek_teknikal" placeholder="Isi">
+                                                        <input type="text" class="form-control form-control-solid" name="aspek_teknikal_wika[]" value="{{ $dataAspekTeknikalWika[$key]->syarat_prakualifikasi }}" id="aspek_teknikal" placeholder="Isi">
                                                         @endif
                                                     </div>
                                                 </td>
@@ -223,7 +223,7 @@
                                             <td class="text-center"><b>C</b></td>
                                             <td colspan="2"><b><u>Aspek Komersial:</u></b></td>
                                         </tr>
-                                        @foreach ($aspekKomersial as $itemKomersial)
+                                        @foreach ($aspekKomersial as $key => $itemKomersial)
                                             <tr>
                                                 <td class="text-end">{{ $itemKomersial->posisi }}</td>
                                                 <td>{{ $itemKomersial->isi }}</td>
@@ -236,25 +236,25 @@
                                                         class="form-select form-select-solid select2-hidden-accessible"
                                                         data-control="select2" data-hide-search="true" data-placeholder="Perlu / Tidak Perlu"
                                                         data-select2-id="select2-aspek_komersial_wika_{{ $itemKomersial->id }}">
-                                                            <option value="" selected></option>
-                                                            <option value="Perlu">Perlu</option>
-                                                            <option value="Tidak Perlu">Tidak Perlu</option>
-                                                            <option value="-">-</option>
+                                                            <option value=""></option>
+                                                            <option value="Perlu" {{ $dataAspekKomersialWika[$key]->syarat_prakualifikasi == "Perlu" ? 'selected' : '' }}>Perlu</option>
+                                                            <option value="Tidak Perlu" {{ $dataAspekKomersialWika[$key]->syarat_prakualifikasi == "Tidak Perlu" ? 'selected' : '' }}>Tidak Perlu</option>
+                                                            <option value="-" {{ $dataAspekKomersialWika[$key]->syarat_prakualifikasi == "-" ? 'selected' : '' }}>-</option>
                                                         </select>
                                                         @elseif ($itemKomersial->opsi == 'kombinasi')
                                                         <select name="aspek_komersial_wika[]" id="aspek_komersial" 
                                                         class="form-select form-select-solid select2-hidden-accessible"
                                                         data-control="select2" data-hide-search="true" data-placeholder="Perlu / Tidak Perlu"
                                                         data-select2-id="select2-aspek_komersial_wika_{{ $itemKomersial->id }}">
-                                                            <option value="" selected></option>
-                                                            <option value="Perlu">Perlu</option>
-                                                            <option value="Tidak Perlu">Tidak Perlu</option>
-                                                            <option value="-">-</option>
+                                                            <option value=""></option>
+                                                            <option value="Perlu" {{ $dataAspekKomersialWika[$key]->syarat_prakualifikasi == "Perlu" ? 'selected' : '' }}>Perlu</option>
+                                                            <option value="Tidak Perlu" {{ $dataAspekKomersialWika[$key]->syarat_prakualifikasi == "Tidak Perlu" ? 'selected' : '' }}>Tidak Perlu</option>
+                                                            <option value="-" {{ $dataAspekKomersialWika[$key]->syarat_prakualifikasi == "-" ? 'selected' : '' }}>-</option>
                                                         </select>
                                                         <br>
-                                                        <input type="text" class="form-control form-control-solid" name="aspek_komersial_isi_wika[]" id="aspek_komersial" placeholder="Isi">
+                                                        <input type="text" class="form-control form-control-solid" name="aspek_komersial_isi_wika[]" value="{{ $dataAspekKomersialWika[$key]->syarat_prakualifikasi_isian }}" id="aspek_komersial" placeholder="Isi">
                                                         @else
-                                                        <input type="text" class="form-control form-control-solid" name="aspek_komersial_wika[]" id="aspek_komersial" placeholder="Isi">
+                                                        <input type="text" class="form-control form-control-solid" name="aspek_komersial_wika[]" value="{{ $dataAspekKomersialWika[$key]->syarat_prakualifikasi }}" id="aspek_komersial" placeholder="Isi">
                                                         @endif
                                                     </div>
                                                 </td>

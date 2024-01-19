@@ -3195,7 +3195,16 @@
                                                                         <!--begin::Label-->
                                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                                             style="font-size:14px;">Syarat Prakualifikasi
-                                                                            <a href="/proyek/syarat-prakualifikasi/{{ $proyek->kode_proyek }}/view" Id="Plus">+</a>
+                                                                            @php
+                                                                                $dataSyaratProyek = \App\Models\SyaratPrakualifikasi::where('kode_proyek', $proyek->kode_proyek)->first();
+                                                                            @endphp
+                                                                            @canany(['super-admin', 'user_crm'])
+                                                                                @if (empty($dataSyaratProyek))
+                                                                                    <a href="/proyek/syarat-prakualifikasi/{{ $proyek->kode_proyek }}/view" Id="Plus">+</a>
+                                                                                @else
+                                                                                    <a href="/proyek/syarat-prakualifikasi/{{ $proyek->kode_proyek }}/list" class="btn bt-sm btn-primary p-2">Edit</a>
+                                                                                @endif
+                                                                            @endcanany
                                                                         </h3>
                                                                         <!--end::Label-->
                                                                     </div>

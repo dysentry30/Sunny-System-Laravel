@@ -122,8 +122,11 @@ class Rekomendasi2Controller extends Controller
                 $nomorTarget = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Penyusun")->where('urutan', '=', 1);
                 foreach ($nomorTarget as $target) {
                     $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_rekomendasi_" . $proyekSelected->kode_proyek;
-                    $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan Pengajuan Nota Rekomendasi I, *" . $proyekSelected->ProyekBerjalan->name_customer . "* untuk Proyek *$proyekSelected->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-
+                    $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan Pengajuan Nota Rekomendasi I, " . $proyekSelected->ProyekBerjalan->name_customer . " untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                    $sendEmailUser = sendNotifEmail($target->Pegawai, "Permohonan Pengajuan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                    if (!$sendEmailUser) {
+                        return redirect()->back();
+                    }
                     // $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
 
                     // $send_msg_to_wa->onError(function ($error) {
@@ -271,7 +274,11 @@ class Rekomendasi2Controller extends Controller
                         $nomorTarget = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Verifikasi")?->where('urutan', '=', 1);
                         foreach ($nomorTarget as $target) {
                             $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_user_view_persetujuan_" . $proyekPenyusun->kode_proyek;
-                            $message = "Yth Bapak/Ibu *" . $target->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan hasil asesmen proyek *" . $proyekSelected->nama_proyek . "* untuk permohonan pemberian rekomendasi tahap II.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                            $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan hasil asesmen proyek " . $proyekSelected->nama_proyek . " untuk permohonan pemberian rekomendasi tahap II.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                            $sendEmailUser = sendNotifEmail($target->Pegawai, "Pemberitahuan Hasil Assessment Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                            if (!$sendEmailUser) {
+                                return redirect()->back();
+                            }
                             // $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
                             // $response->onError(function ($error) {
                             //     // dd($error);
@@ -287,7 +294,11 @@ class Rekomendasi2Controller extends Controller
                         $nomorTarget = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Verifikasi")?->where('urutan', '=', 1);
                         foreach ($nomorTarget as $target) {
                             $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_user_view_persetujuan_" . $proyekPenyusun->kode_proyek;
-                            $message = "Yth Bapak/Ibu *" . $target->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan hasil asesmen proyek *" . $proyekSelected->nama_proyek . "* untuk permohonan pemberian rekomendasi tahap II.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                            $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan hasil asesmen proyek " . $proyekSelected->nama_proyek . " untuk permohonan pemberian rekomendasi tahap II.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                            $sendEmailUser = sendNotifEmail($target->Pegawai, "Pemberitahuan Hasil Assessment Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                            if (!$sendEmailUser) {
+                                return redirect()->back();
+                            }
                             // $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
 
                             // $response->onError(function ($error) {
@@ -304,7 +315,11 @@ class Rekomendasi2Controller extends Controller
                         $nomorTarget = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Rekomendasi");
                         foreach ($nomorTarget as $target) {
                             $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_rekomendasi_" . $proyekPenyusun->kode_proyek;
-                            $message = "Yth Bapak/Ibu *" . $target->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan hasil asesmen proyek *" . $proyekSelected->nama_proyek . "* untuk permohonan pemberian rekomendasi tahap II.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                            $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan hasil asesmen proyek " . $proyekSelected->nama_proyek . " untuk permohonan pemberian rekomendasi tahap II.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                            $sendEmailUser = sendNotifEmail($target->Pegawai, "Pemberitahuan Hasil Assessment Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                            if (!$sendEmailUser) {
+                                return redirect()->back();
+                            }
                             // $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
 
                             // $response->onError(function ($error) {
@@ -332,7 +347,11 @@ class Rekomendasi2Controller extends Controller
                         $nomorTarget = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Verifikasi")?->where('urutan', '=', 1);
                         foreach ($nomorTarget as $target) {
                             $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_user_view_persetujuan_" . $proyekPenyusun->kode_proyek;
-                            $message = "Yth Bapak/Ibu *" . $target->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan revisi asesmen untuk proses verifikasi penyusunan Nota Rekomendasi tahap II pada proyek *$proyekPenyusun->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                            $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan revisi asesmen untuk proses verifikasi penyusunan Nota Rekomendasi tahap II pada proyek $proyekPenyusun->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                            $sendEmailUser = sendNotifEmail($target->Pegawai, "Pemberitahuan Hasil Revisi Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                            if (!$sendEmailUser) {
+                                return redirect()->back();
+                            }
                             // $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
 
                             // $response->onError(function ($error) {
@@ -348,7 +367,11 @@ class Rekomendasi2Controller extends Controller
                         $nomorTarget = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Verifikasi")?->where('urutan', '=', 1);
                         foreach ($nomorTarget as $target) {
                             $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_user_view_persetujuan_" . $proyekPenyusun->kode_proyek;
-                            $message = "Yth Bapak/Ibu *" . $target->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan revisi asesmen untuk proses verifikasi penyusunan Nota Rekomendasi tahap II pada proyek *$proyekPenyusun->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                            $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan revisi asesmen untuk proses verifikasi penyusunan Nota Rekomendasi tahap II pada proyek $proyekPenyusun->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                            $sendEmailUser = sendNotifEmail($target->Pegawai, "Pemberitahuan Hasil Revisi Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                            if (!$sendEmailUser) {
+                                return redirect()->back();
+                            }
                             // $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
 
                             // $response->onError(function ($error) {
@@ -395,7 +418,11 @@ class Rekomendasi2Controller extends Controller
                             $get_nomor = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Penyusun", (int)$matriks_sekarang + 1);
                             foreach ($get_nomor as $user) {
                                 $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyekPenyusun->kode_proyek";
-                                $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan Pengajuan Nota Rekomendasi I, *" . $proyekPenyusun->ProyekBerjalan->name_customer . "* untuk Proyek *$proyekPenyusun->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                                $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan Pengajuan Nota Rekomendasi II, " . $proyekPenyusun->ProyekBerjalan->name_customer . " untuk Proyek $proyekPenyusun->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                                $sendEmailUser = sendNotifEmail($user->Pegawai, "Pemberitahuan Hasil Revisi Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                                if (!$sendEmailUser) {
+                                    return redirect()->back();
+                                }
                                 // $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
 
                                 // $response->onError(function ($error) {
@@ -415,7 +442,11 @@ class Rekomendasi2Controller extends Controller
                             $get_nomor = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Penyusun", (int)$matriks_sekarang + 1);
                             foreach ($get_nomor as $user) {
                                 $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyekPenyusun->kode_proyek";
-                                $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan Pengajuan Nota Rekomendasi I, *" . $proyekPenyusun->ProyekBerjalan->name_customer . "* untuk Proyek *$proyekPenyusun->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                                $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan Pengajuan Nota Rekomendasi II, " . $proyekPenyusun->ProyekBerjalan->name_customer . " untuk Proyek $proyekPenyusun->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                                $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Pengajuan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                                if (!$sendEmailUser) {
+                                    return redirect()->back();
+                                }
                                 // $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
 
                                 // $response->onError(function ($error) {
@@ -437,7 +468,11 @@ class Rekomendasi2Controller extends Controller
 
                             foreach ($get_nomor as $user) {
                                 $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyekPenyusun->kode_proyek";
-                                $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan Pengajuan Nota Rekomendasi I, *" . $proyekPenyusun->ProyekBerjalan->name_customer . "* untuk Proyek *$proyekPenyusun->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                                $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan Pengajuan Nota Rekomendasi I, " . $proyekPenyusun->ProyekBerjalan->name_customer . " untuk Proyek $proyekPenyusun->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                                $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Pengajuan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                                if (!$sendEmailUser) {
+                                    return redirect()->back();
+                                }
                                 // $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
 
                                 // $response->onError(function ($error) {
@@ -486,7 +521,11 @@ class Rekomendasi2Controller extends Controller
                 $nomorTarget = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Rekomendasi");
                 foreach ($nomorTarget as $target) {
                     $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_user_view_persetujuan_" . $proyekVerifikasi->kode_proyek;
-                    $message = "Yth Bapak/Ibu *" . $target->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan hasil asesmen untuk proyek *" . $proyekSelected->nama_proyek . "* untuk permohonan pemberian rekomendasi tahap II.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                    $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan hasil asesmen untuk proyek " . $proyekSelected->nama_proyek . " untuk permohonan pemberian rekomendasi tahap II.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                    $sendEmailUser = sendNotifEmail($target->Pegawai, "Pemberitahuan Hasil Assessment Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                    if (!$sendEmailUser) {
+                        return redirect()->back();
+                    }
                     // $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
 
                     // $send_msg_to_wa->onError(function ($error) {
@@ -509,7 +548,11 @@ class Rekomendasi2Controller extends Controller
                         $get_nomor = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Verifikasi", (int)$matriks_sekarang + 1);
                         foreach ($get_nomor as $user) {
                             $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyekVerifikasi->kode_proyek";
-                            $message = "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan hasil asesmen untuk proyek *" . $proyekSelected->nama_proyek . "* untuk proses tandatangan penyusun Nota Rekomendasi tahap II.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                            $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan hasil asesmen untuk proyek " . $proyekSelected->nama_proyek . " untuk proses tandatangan penyusun Nota Rekomendasi tahap II.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                            $sendEmailUser = sendNotifEmail($user->Pegawai, "Pemberitahuan Hasil Assessment Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                            if (!$sendEmailUser) {
+                                return redirect()->back();
+                            }
                             // $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
 
                             // $send_msg_to_wa->onError(function ($error) {
@@ -549,7 +592,11 @@ class Rekomendasi2Controller extends Controller
 
             foreach ($get_nomor as $user) {
                 $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_persetujuan_$proyekSelected->kode_proyek";
-                $message = "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan permintaan revisi asesmen untuk perbaikan Nota Rekomendasi tahap I pada proyek *$proyekSelected->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permintaan revisi asesmen untuk perbaikan Nota Rekomendasi tahap I pada proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Revisi Assessment Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                if (!$sendEmailUser) {
+                    return redirect()->back();
+                }
                 // $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
 
                 // $send_msg_to_wa->onError(function ($error) {
@@ -627,7 +674,11 @@ class Rekomendasi2Controller extends Controller
                 foreach ($matriks_approval as $key => $user) {
                     $user = $user->Pegawai->User;
                     $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_user_view_rekomendasi_" . $proyekSelected->kode_proyek;
-                    $message = "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan Permohonan tanda tangan Persetujuan Nota Rekomendasi Tahap II untuk Proyek *$proyekSelected->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                    $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan Permohonan tanda tangan Persetujuan Nota Rekomendasi Tahap II untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                    $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Tanda Tangan Persetujuan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                    if (!$sendEmailUser) {
+                        return redirect()->back();
+                    }
                     // $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
 
                     // $send_msg_to_wa->onError(function ($error) {
@@ -650,7 +701,11 @@ class Rekomendasi2Controller extends Controller
                         $get_nomor = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Rekomendasi", (int)$matriks_sekarang + 1);
                         foreach ($get_nomor as $user) {
                             $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_user_view_rekomendasi_" . $proyekSelected->kode_proyek;
-                            $message = "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan Permohonan tanda tangan Persetujuan Nota Rekomendasi Tahap II untuk Proyek *$proyekSelected->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                            $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan Permohonan tanda tangan Persetujuan Nota Rekomendasi Tahap II untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                            $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Tanda Tangan Persetujuan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                            if (!$sendEmailUser) {
+                                return redirect()->back();
+                            }
                             // $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
 
                             // $send_msg_to_wa->onError(function ($error) {
@@ -706,7 +761,11 @@ class Rekomendasi2Controller extends Controller
                 foreach ($matriks_approval as $key => $user) {
                     $user = $user->Pegawai->User;
                     $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_user_view_rekomendasi_" . $proyekSelected->kode_proyek;
-                    $message = "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan permohonan persetujuan Nota Rekomendasi Tahap I untuk *" . $proyekSelected->proyekBerjalan->customer->name . "* pada proyek *$proyekSelected->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                    $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan persetujuan Nota Rekomendasi Tahap II untuk " . $proyekSelected->proyekBerjalan->customer->name . " pada proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                    $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Tanda Tangan Persetujuan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                    if (!$sendEmailUser) {
+                        return redirect()->back();
+                    }
                     // $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
 
                     // $send_msg_to_wa->onError(function ($error) {
@@ -730,7 +789,11 @@ class Rekomendasi2Controller extends Controller
                         $get_nomor = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Rekomendasi", (int)$matriks_sekarang + 1);
                         foreach ($get_nomor as $user) {
                             $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_user_view_rekomendasi_" . $proyekSelected->kode_proyek;
-                            $message = "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan Permohonan tanda tangan Persetujuan Nota Rekomendasi Tahap I untuk Proyek *$proyekSelected->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                            $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan Permohonan tanda tangan Persetujuan Nota Rekomendasi Tahap II untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                            $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Tanda Tangan Persetujuan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                            if (!$sendEmailUser) {
+                                return redirect()->back();
+                            }
                             // $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
 
                             // $send_msg_to_wa->onError(function ($error) {

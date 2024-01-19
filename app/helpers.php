@@ -24,6 +24,7 @@ use PhpOffice\PhpWord\TemplateProcessor;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Http;
 
 function url_encode($url) {
     return urlencode(urlencode($url));
@@ -3355,7 +3356,34 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
     return $proyekNotaRekomendasi->save();
 }
 
+function sendNotifEmail($user, $subject, $message, $activatedEmailToUser = false): bool
+{
+    try {
+        $response = Http::withBasicAuth(env("EMAIL_USERNAME_AUTH"), env("EMAIL_PASSWORD_AUTH"))->post(env("EMAIL_URL_AUTH"), [
+            "subject" => $subject,
+            "to" => $activatedEmailToUser ? $user->Pegawai->email : env("EMAIL_DEFAULT"),
+            "cc" => "",
+            "bcc" => "",
+            "message" => $message
+        ]);
 
+        if ($response->successful()) {
+            $data = $response->collect();
+            if (!$data["status"]) {
+                Alert::error('Error', $data["message"]);
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            Alert::error('Error', "Tidak dapat mengirim Email saat ini. Mohon hubungi Admin!");
+            return false;
+        }
+    } catch (\Exception $e) {
+        Alert::error('Error', $e->getMessage());
+        return false;
+    }
+}
 
 
 /**

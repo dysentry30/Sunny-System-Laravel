@@ -42,6 +42,7 @@ use App\Models\DokumenPefindo;
 use App\Models\MasterPefindo;
 use App\Models\DokumenNotaRekomendasi1;
 use App\Models\KriteriaPasarProyek;
+use App\Models\SyaratPrakualifikasi;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DokumenPrakualifikasi;
@@ -600,20 +601,25 @@ class ProyekController extends Controller
             foreach ($matriks_approval as $key => $user) {
                 // dd($user->Pegawai->nama_pegawai);
                 $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$newProyek->kode_proyek";
-                $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-                    "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
-                    // "sender" => "6281188827008",
-                    "sender" => env("NO_WHATSAPP_BLAST"),
-                    "number" => $isnomorTargetActive ? $user->Pegawai->handphone : $nomorDefault,
-                    // "number" => "085881028391",
-                    "message" => "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi I, *" . $newProyek->ProyekBerjalan->name_customer . "* untuk Proyek *$newProyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
-                    // "url" => $url
-                ]);
-                $send_msg_to_wa->onError(function ($error) {
-                    // dd($error);
-                    Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+                // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+                //     "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
+                //     // "sender" => "6281188827008",
+                //     "sender" => env("NO_WHATSAPP_BLAST"),
+                //     "number" => $isnomorTargetActive ? $user->Pegawai->handphone : $nomorDefault,
+                //     // "number" => "085881028391",
+                //     "message" => "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi I, *" . $newProyek->ProyekBerjalan->name_customer . "* untuk Proyek *$newProyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
+                //     // "url" => $url
+                // ]);
+                // $send_msg_to_wa->onError(function ($error) {
+                //     // dd($error);
+                //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+                //     return redirect()->back();
+                // });
+                $message = nl2br("Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi I, " . $newProyek->ProyekBerjalan->name_customer . " untuk Proyek $newProyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
+                $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Tanda Tangan Pengajuan Nota Rekomendasi I", $message, $isnomorTargetActive);
+                if (!$sendEmailUser) {
                     return redirect()->back();
-                });
+                }
             }
             // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
             //     "api_key" => "c15978155a6b4656c4c0276c5adbb5917eb033d5",
@@ -647,23 +653,28 @@ class ProyekController extends Controller
             $isnomorTargetActive = false;
             // $nomorDefault = "6285376444701";
             $nomorDefault = "085881028391";
-            // foreach ($matriks_approval2 as $key => $user) {
-            //     $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$newProyek->kode_proyek";
-            //     $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-            //         "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
-            //         // "sender" => "6281188827008",
-            //         "sender" => env("NO_WHATSAPP_BLAST"),
-            //         "number" => $isnomorTargetActive ? $user->Pegawai->handphone : $nomorDefault,
-            //         // "number" => "085881028391",
-            //         "message" => "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi II, *" . $newProyek->ProyekBerjalan->name_customer . "* untuk Proyek *$newProyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
-            //         // "url" => $url
-            //     ]);
-            //     $send_msg_to_wa->onError(function ($error) {
-            //         // dd($error);
-            //         Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-            //         return redirect()->back();
-            //     });
-            // }
+            foreach ($matriks_approval2 as $key => $user) {
+                $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$newProyek->kode_proyek";
+                $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+                    "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
+                    // "sender" => "6281188827008",
+                    "sender" => env("NO_WHATSAPP_BLAST"),
+                    "number" => $isnomorTargetActive ? $user->Pegawai->handphone : $nomorDefault,
+                    // "number" => "085881028391",
+                    "message" => "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi II, *" . $newProyek->ProyekBerjalan->name_customer . "* untuk Proyek *$newProyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
+                    // "url" => $url
+                ]);
+                $send_msg_to_wa->onError(function ($error) {
+                    // dd($error);
+                    Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+                    return redirect()->back();
+                });
+                $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi II, " . $newProyek->ProyekBerjalan->name_customer . " untuk Proyek $newProyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Tanda Tangan Pengajuan Nota Rekomendasi II", nl2br($message), $isnomorTargetActive);
+                if (!$sendEmailUser) {
+                    return redirect()->back();
+                }
+            }
 
             // dd($newProyek);
 
@@ -3685,44 +3696,151 @@ class ProyekController extends Controller
 
         return view('SyaratPrakualifikasi.view', compact(['aspekLegalLokal', 'aspekLegalAsing', 'proyek', 'aspekTeknikal', 'aspekKomersial']));
     }
+
+    public function viewEditSyaratPrakualifikasi(Proyek $proyek)
+    {
+
+        $aspek = ChecklistCalonMitraKSO::all()->groupBy('aspek');
+        $aspekLegal = $aspek["Aspek Legal"]->groupBy('kategori');
+        $aspekLegalLokal = $aspekLegal["Badan Usaha Lokal (Indonesia)"]->sortBy('posisi');
+        $aspekLegalAsing = $aspekLegal["Badan Usaha Asing"]->sortBy('posisi');
+
+        $aspekTeknikal = $aspek["Aspek Teknikal"]->sortBy('posisi');
+
+        $aspekKomersial = $aspek["Aspek Komersial"]->sortBy('posisi');
+
+        $syaratProyek = SyaratPrakualifikasi::where('kode_proyek', $proyek->kode_proyek)->first();
+
+        if (empty($syaratProyek)) {
+            Alert::error('Error', "Data tidak ditemukan");
+            return redirect()->back();
+        }
+
+        $collectData = collect(json_decode($syaratProyek->data));
+
+        $dataAspekLegalLokalWika = $collectData->filter(function ($data) {
+            return $data->code == 0 && $data->aspek == "Badan Usaha Lokal (Indonesia)";
+        })->values();
+        $dataAspekLegalAsingWika = $collectData->filter(function ($data) {
+            return $data->code == 0 && $data->aspek == "Badan Usaha Asing";
+        })->values();
+        $dataAspekTeknikalWika = $collectData->filter(function ($data) {
+            return $data->code == 0 && $data->aspek == "Aspek Teknikal";
+        })->values();
+        $dataAspekKomersialWika = $collectData->filter(function ($data) {
+            return $data->code == 0 && $data->aspek == "Aspek Komersial";
+        })->values();
+        // dd($dataAspekLegalLokalWika, $dataAspekLegalAsingWika, $dataAspekTeknikalWika, $dataAspekKomersialWika);
+
+        return view('SyaratPrakualifikasi.edit', compact(['aspekLegalLokal', 'aspekLegalAsing', 'proyek', 'aspekTeknikal', 'aspekKomersial', 'dataAspekLegalLokalWika', 'dataAspekLegalAsingWika', 'dataAspekTeknikalWika', 'dataAspekKomersialWika']));
+    }
+
     public function saveSyaratPrakualifikasi(Request $request, Proyek $proyek)
     {
         $data = $request->all();
+        $newSyarat = new SyaratPrakualifikasi();
         $collect = [];
-        foreach ($data["aspek"] as $key => $value) {
+        foreach ($data["aspek_wika"] as $key => $value) {
             if ($value == "Badan Usaha Lokal (Indonesia)") {
                 $collect[]  = [
-                    "index" => $data["index"][$key],
+                    "code" => 0,
+                    "index" => $data["index_wika"][$key],
                     "kode_proyek" => $proyek->kode_proyek,
                     "aspek" => $value,
-                    "syarat_prakualifikasi" => $data["aspek_legal_lokal"][$key],
+                    "syarat_prakualifikasi" => $data["aspek_legal_lokal_wika"][$key],
+                    "syarat_prakualifikasi_isian" => null,
                 ];
             } elseif ($value == "Badan Usaha Asing") {
                 $collect[]  = [
-                    "index" => $data["index"][$key],
+                    "code" => 0,
+                    "index" => $data["index_wika"][$key],
                     "kode_proyek" => $proyek->kode_proyek,
                     "aspek" => $value,
-                    "syarat_prakualifikasi" => $data["aspek_legal_asing"][(int)$data["index"][$key] - 1],
+                    "syarat_prakualifikasi" => $data["aspek_legal_asing_wika"][(int)$data["index_wika"][$key] - 1],
+                    "syarat_prakualifikasi_isian" => null,
                 ];
             } elseif ($value == "Aspek Teknikal") {
                 $collect[]  = [
-                    "index" => $data["index"][$key],
+                    "code" => 0,
+                    "index" => $data["index_wika"][$key],
                     "kode_proyek" => $proyek->kode_proyek,
                     "aspek" => $value,
-                    "syarat_prakualifikasi" => $data["aspek_teknikal"][(int)$data["index"][$key] - 1],
-                    "syarat_prakualifikasi_isian" => $data["aspek_teknikal_isi"][(int)$data["index"][$key] - 1] ?? null,
+                    "syarat_prakualifikasi" => $data["aspek_teknikal_wika"][(int)$data["index_wika"][$key] - 1],
+                    "syarat_prakualifikasi_isian" => $data["aspek_teknikal_isi_wika"][(int)$data["index_wika"][$key] - 1] ?? null,
                 ];
             } elseif ($value == "Aspek Komersial") {
                 $collect[]  = [
-                    "index" => $data["index"][$key],
+                    "code" => 0,
+                    "index" => $data["index_wika"][$key],
                     "kode_proyek" => $proyek->kode_proyek,
                     "aspek" => $value,
-                    "syarat_prakualifikasi" => $data["aspek_komersial"][(int)$data["index"][$key] - 1],
-                    "syarat_prakualifikasi_isian" => $data["aspek_komersial_isi"][(int)$data["index"][$key] - 1] ?? null,
+                    "syarat_prakualifikasi" => $data["aspek_komersial_wika"][(int)$data["index_wika"][$key] - 1],
+                    "syarat_prakualifikasi_isian" => $data["aspek_komersial_isi_wika"][(int)$data["index_wika"][$key] - 1] ?? null,
                 ];
             }
         }
-        dd($collect);
+        $newSyarat->kode_proyek = $proyek->kode_proyek;
+        $newSyarat->data = json_encode($collect);
+        if ($newSyarat->save()) {
+            Alert::success('Success', "Syarat Prakualifikasi berhasil disimpan!");
+            return redirect()->back();
+        }
+    }
+
+    public function editSyaratPrakualifikasi(Request $request, Proyek $proyek)
+    {
+        $data = $request->all();
+        $newSyarat = SyaratPrakualifikasi::where('kode_proyek', $proyek->kode_proyek)->first();
+        if (empty($newSyarat)) {
+            Alert::error('Error', 'Syarat Prakualifikasi gagal diperbaharui');
+            return redirect()->back();
+        }
+        $collect = [];
+        foreach ($data["aspek_wika"] as $key => $value) {
+            if ($value == "Badan Usaha Lokal (Indonesia)") {
+                $collect[]  = [
+                    "code" => 0,
+                    "index" => $data["index_wika"][$key],
+                    "kode_proyek" => $proyek->kode_proyek,
+                    "aspek" => $value,
+                    "syarat_prakualifikasi" => $data["aspek_legal_lokal_wika"][$key],
+                    "syarat_prakualifikasi_isian" => null,
+                ];
+            } elseif ($value == "Badan Usaha Asing") {
+                $collect[]  = [
+                    "code" => 0,
+                    "index" => $data["index_wika"][$key],
+                    "kode_proyek" => $proyek->kode_proyek,
+                    "aspek" => $value,
+                    "syarat_prakualifikasi" => $data["aspek_legal_asing_wika"][(int)$data["index_wika"][$key] - 1],
+                    "syarat_prakualifikasi_isian" => null,
+                ];
+            } elseif ($value == "Aspek Teknikal") {
+                $collect[]  = [
+                    "code" => 0,
+                    "index" => $data["index_wika"][$key],
+                    "kode_proyek" => $proyek->kode_proyek,
+                    "aspek" => $value,
+                    "syarat_prakualifikasi" => $data["aspek_teknikal_wika"][(int)$data["index_wika"][$key] - 1],
+                    "syarat_prakualifikasi_isian" => $data["aspek_teknikal_isi_wika"][(int)$data["index_wika"][$key] - 1] ?? null,
+                ];
+            } elseif ($value == "Aspek Komersial") {
+                $collect[]  = [
+                    "code" => 0,
+                    "index" => $data["index_wika"][$key],
+                    "kode_proyek" => $proyek->kode_proyek,
+                    "aspek" => $value,
+                    "syarat_prakualifikasi" => $data["aspek_komersial_wika"][(int)$data["index_wika"][$key] - 1],
+                    "syarat_prakualifikasi_isian" => $data["aspek_komersial_isi_wika"][(int)$data["index_wika"][$key] - 1] ?? null,
+                ];
+            }
+        }
+        $newSyarat->kode_proyek = $proyek->kode_proyek;
+        $newSyarat->data = json_encode($collect);
+        if ($newSyarat->save()) {
+            Alert::success('Success', "Syarat Prakualifikasi berhasil diperbaharui");
+            return redirect()->back();
+        }
     }
 
     public function getDataPefindo(Request $request)

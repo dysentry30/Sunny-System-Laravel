@@ -979,17 +979,21 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/proyek/porsi-jo/delete/{id}', [ProyekController::class, "deleteDokumenKelengkapanPartner"]);
 
     //VIEW Syarat Prakualifikasi dari Owner
-    Route::get(
-        '/proyek/syarat-prakualifikasi/{proyek}/view',
+    Route::get('/proyek/syarat-prakualifikasi/{proyek}/view',
         [ProyekController::class, "viewSyaratPrakualifikasi"]
     );
 
+    //VIEW EDIT Syarat Prakualifikasi dari Owner
+    Route::get('/proyek/syarat-prakualifikasi/{proyek}/list', [ProyekController::class, "viewEditSyaratPrakualifikasi"]);
+
     //ADD Syarat Prakualifikasi dari Owner
-    Route::post(
-        '/proyek/syarat-prakualifikasi/{proyek}/save',
-        [
-            ProyekController::class, "saveSyaratPrakualifikasi"
-        ]
+    Route::post('/proyek/syarat-prakualifikasi/{proyek}/save',
+        [ProyekController::class, "saveSyaratPrakualifikasi"]
+    );
+
+    //Edit Syarat Prakualifikasi dari Owner
+    Route::post('/proyek/syarat-prakualifikasi/{proyek}/edit',
+        [ProyekController::class, "editSyaratPrakualifikasi"]
     );
 
     // ADD Team Proyek 
@@ -3273,7 +3277,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         }
     });
 
-    //Begin::Master Matriks Approval Partner Selection
+    //Begin::Master get data pegawai
     Route::get('/proyek/get-data-pegawai', function (Request $request) {
         $search = $request->input('search');
         $page = $request->input(
