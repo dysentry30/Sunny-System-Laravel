@@ -152,9 +152,19 @@ class Proyek extends Model
         return $this->hasMany(RiskTenderProyek::class, "kode_proyek");
     }
 
+    public function ProyekProgress()
+    {
+        return $this->hasMany(ProyekProgress::class, "kode_proyek");
+    }
+
     public function Provinsi()
     {
         return $this->hasOne(Provinsi::class, "province_id", "provinsi");
+    }
+
+    public function ContractApproval()
+    {
+        return $this->hasMany(ContractApproval::class, "kode_proyek");
     }
 
     public function PerubahanKontrak()
@@ -162,21 +172,18 @@ class Proyek extends Model
         return $this->hasMany(PerubahanKontrak::class, "kode_proyek");
     }
 
-    public function Piutang() {
-        return $this->hasMany(Piutang::class, "profit_center", "profit_center");
-    }
-
-    public function ProyekProgress(){
-        return $this->hasMany(ProyekProgress::class, "kode_proyek");
-    }
-
-    public function Departemen()
+    public function ProyekKonsultanPerencana()
     {
-        return $this->hasOne(Departemen::class, "kode_departemen", "departemen_proyek");
+        return $this->hasMany(ProyekKonsultanPerencana::class, 'kode_proyek');
     }
 
-    public function Csi()
+    public function AlatProyek()
     {
-        return $this->hasOne(Csi::class, "no_spk", "kode_proyek");
+        return $this->hasMany(AlatProyek::class, 'kode_proyek', 'kode_proyek');
+    }
+
+    public function PersonelTender()
+    {
+        return $this->hasMany(PersonelTenderProyek::class, 'kode_proyek', 'kode_proyek');
     }
 }

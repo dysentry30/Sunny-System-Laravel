@@ -2655,12 +2655,14 @@
                                                                     <tbody class="fw-bold text-gray-600">                                                                            
                                                                         <!--begin::Nama Proyek-->
                                                                         @foreach ($customer->Csi as $item)
+                                                                            {{-- @dump($item, $item->proyekPis) --}}
                                                                             @if ($item->status == "Done")
                                                                                 <tr>                                                                                    
                                                                                     <td>
-                                                                                        <a target="_blank" href="/proyek/view/{{ $item->Proyek->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
-                                                                                            {{ $item->Proyek->nama_proyek }}                                                                                                
-                                                                                        </a>
+                                                                                        {{ $item->ProyekPIS?->proyek_name }}                                                                                                
+                                                                                        {{-- <a target="_blank" href="/proyek/view/{{ $item->Proyek?->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
+                                                                                            {{ $item->Proyek?->nama_proyek }}                                                                                                
+                                                                                        </a> --}}
                                                                                     </td>
                                                                                     <!--end::Name-->
                                                                                     <!--begin::Tanggal CSI-->
@@ -4902,7 +4904,7 @@
                                 </label>
                                 <!--Begin::Select-->
                                 <div id="div-namaProyek">
-                                    <label class="fw-bold fs-6">{{ $item->Proyek->nama_proyek }}</label>
+                                    <label class="fw-bold fs-6">{{ $item->Proyek?->nama_proyek }}</label>
                                     <input type="hidden" class="form-control form-control-solid" name="kode-proyek-csi" value="{{ $item->kode_proyek }}" readonly>
                                 </div>
 
@@ -7216,6 +7218,13 @@
                     ktgrd = "Z4";
                     cust_akont = "";
                     witht = "";
+                } else {
+                    // lainnya
+                    kdgrp = "05";
+                    grouping = "ZN02";
+                    ktgrd = "Z2";
+                    cust_akont = "1104211000";
+                    witht = "J7";
                 }
             const data = {
                 nmnasabah: "{{$customer->name}}",
@@ -7258,7 +7267,7 @@
                                         "POSTL_COD1": "{{$customer->kode_pos}}",
                                         "CITY": "",
                                         "ADDR_COUNTRY": "ID",
-                                        "REGION": "",
+                                        "REGION": "-",
                                         "PO_BOX": "",
                                         "POSTL_COD3": "",
                                         "LANGU": "E",
@@ -7272,14 +7281,14 @@
                                         "VALIDTODATE": now.getYear()+ "-" + (now.getMonth() + 1) + "-" + now.getDate(),
                                         "IDENTIFICATION": [
                                         {
-                                            "TAXTYPE": "",
+                                            "TAXTYPE": "-",
                                             "TAXNUMBER": "{{$customer->npwp_company ?? ""}}"
                                         }],
                                         "BANK": [
                                         {
                                             "BANK_DET_ID": "",
                                             "BANK_CTRY": "",
-                                            "BANK_KEY": "",
+                                            "BANK_KEY": "-",
                                             "BANK_ACCT": "",
                                             "BK_CTRL_KEY": "",
                                             "BANK_REF": "",

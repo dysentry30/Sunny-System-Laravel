@@ -74,6 +74,19 @@
             transition: width 1s ease-in-out;
         }
 
+        
+        .buttons-html5 {
+            border-radius: 5px !important;
+            border: none !important;
+            font-weight: normal !important;
+            padding: 8px 20px 8px 20px !important;
+            margin-top: 10px !important;
+        }
+        .buttons-colvis {
+            border: none !important;
+            border-radius: 5px !important;
+        }
+
     </style>
 
     <div class="background-blur"></div>
@@ -250,18 +263,17 @@
                     
                     <!--begin::Content-->
                     <!--begin::Body Dashboard-->
-                    <div id="dashboard-body" class="mt-3">
+                    <div id="dashboard-body" style="overflow-x: hidden" class="mt-3">
 
                         <!--Begin :: Filter-->
-                        <div class="card">
+                        {{-- <div class="card">
                             <div class="card-body">
                                 <div class="row">
                                     <form action="" class="row" method="GET">
                                         <div class="col-2">
-                                            <select id="dop" onchange="filterUnitKerja(this)" name="dop"
-                                                    class="form-select form-select-solid w-auto"
-                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
-                                                    data-placeholder="Direktorat" data-select2-id="select2-data-dop" tabindex="-1"
+                                            <select id="dop-perolehan" onchange="filterUnitKerja(this)" name="dop"
+                                                    class="form-select form-select-solid w-auto" data-control="select2" data-hide-search="true"
+                                                    data-placeholder="Direktorat" data-select2-id="select2-data-dop-perolehan" tabindex="-1"
                                                     aria-hidden="true">
                                                     <option value="" selected></option>
                                                     @foreach ($dops as $dop)
@@ -271,10 +283,9 @@
                                         </div>
     
                                         <div class="col-2">
-                                            <select id="unit-kerja" name="unit-kerja"
-                                                    class="form-select form-select-solid w-auto"
-                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
-                                                    data-placeholder="Unit Kerja" data-select2-id="select2-data-unit-kerja" tabindex="-1"
+                                            <select id="unit-kerja-perolehan" name="unit-kerja"
+                                                    class="form-select form-select-solid w-auto" data-control="select2" data-hide-search="false"
+                                                    data-placeholder="Unit Kerja" data-select2-id="select2-data-unit-kerja-perolehan" tabindex="-1"
                                                     aria-hidden="true">
                                                     <option value="" selected></option>
                                                     @foreach ($unit_kerjas as $unit_kerja)
@@ -284,12 +295,11 @@
                                         </div>
 
                                         <div class="col-2">
-                                            <select id="tahun" name="tahun"
-                                                    class="form-select form-select-solid w-auto"
-                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
-                                                    data-placeholder="Tahun" data-select2-id="select2-data-tahun" tabindex="-1"
+                                            <select id="tahun-perolehan" name="tahun"
+                                                    class="form-select form-select-solid w-auto" data-control="select2" data-hide-search="true"
+                                                    data-placeholder="Tahun" data-select2-id="select2-data-tahun-perolehan" tabindex="-1"
                                                     aria-hidden="true">
-                                                    <option value="" selected></option>
+                                                    <option value="" selected>{{ date("Y") }}</option>
                                                     @foreach ($tahun as $t)
                                                         <option value="{{$t}}" {{ $tahun_get == $t ? 'selected' : '' }}>{{$t}}</option>
                                                     @endforeach
@@ -298,9 +308,8 @@
 
                                         <div class="col-2">
                                             <select id="bulan" name="bulan"
-                                                    class="form-select form-select-solid w-auto"
-                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
-                                                    data-placeholder="Tahun" data-select2-id="select2-data-bulan" tabindex="-1"
+                                                    class="form-select form-select-solid w-auto" data-control="select2" data-hide-search="false"
+                                                    data-placeholder="Bulan" data-select2-id="select2-data-bulan" tabindex="-1"
                                                     aria-hidden="true">
                                                     <option value="" selected></option>
                                                     @foreach (range(1, 12) as $m)
@@ -316,14 +325,99 @@
                                             <button type="submit" class="btn btn-primary">Filter</button>
                                         </div>
                                         <div class="col">
-                                            <form action=""></form>
-                                            <form action="" method="GET">
                                                 <button type="submit" class="btn btn-secondary">Reset</button>
-                                            </form>
                                         </div>
                                     </form>
 
                                 </div>
+                            </div>
+                        </div> --}}
+                        <!--End :: Filter-->
+
+                        <!--Begin :: Filter-->
+                        <div class="card">
+                            <div class="card-body">
+                                <form action="" method="GET">
+                                <div class="row">
+                                        <div class="col-2" id="filterDOP">
+                                            <select onchange="this.form.submit()" id="dop" name="dop"
+                                                    style="margin-right: 2rem;"
+                                                    class="form-select form-select-solid w-auto" data-control="select2" data-hide-search="true"
+                                                    data-placeholder="Direktorat" data-select2-id="select2-data-dop" tabindex="-1"
+                                                    aria-hidden="true">
+                                                    <option></option>
+                                                    @foreach ($dops as $dop)
+                                                        <option value="{{ $dop->dop }}" {{ $dop_select == $dop->dop ? 'selected' : '' }} >{{ $dop->dop }}</option>
+                                                    @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="col-3" id="filterUK">
+                                            <select onchange="this.form.submit()" id="unit-kerja" name="unit-kerja"
+                                                    class="form-select form-select-solid w-auto"
+                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                                    data-placeholder="Unit Kerja" data-select2-id="select2-data-unit-kerja" tabindex="-1"
+                                                    aria-hidden="true">
+                                                    <option></option>
+                                                    @foreach ($unit_kerjas as $unit_kerjas)
+                                                        <option value="{{ $unit_kerjas->divcode }}" {{ $unit_kerja_select == $unit_kerjas->divcode ? 'selected' : '' }} >{{ $unit_kerjas->unit_kerja }}</option>
+                                                    @endforeach
+                                            </select>
+                                        </div>
+
+                                        {{-- <div class="col-3">
+                                            <select onchange="selectFilter(this)" id="proyek" name="proyek"
+                                                    class="form-select form-select-solid w-auto"
+                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
+                                                    data-placeholder="Proyek" data-select2-id="select2-data-proyek" tabindex="-1"
+                                                    aria-hidden="true">
+                                                    <option value="" selected></option>
+                                                    @foreach ($proyeks as $proyek)
+                                                        <option value="{{ $proyek->divcode }}" {{ $proyek_get == $proyek->divcode ? 'selected' : '' }} >{{ $proyek->unit_kerja }}</option>
+                                                        <option value="{{ $proyek->kode_proyek }}" >{{ $proyek->nama_proyek }} ({{$proyek->kode_proyek}})</option>
+                                                    @endforeach
+                                            </select>
+                                        </div> --}}
+
+                                        <div class="col-2" id="filterTahun">
+                                            <select id="tahun" name="tahun"
+                                                    class="form-select form-select-solid w-auto"
+                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                                    data-placeholder="Tahun" data-select2-id="select2-data-tahun" tabindex="-1"
+                                                    aria-hidden="true">
+                                                    <option></option>
+                                                    @foreach ($tahun as $t)
+                                                        <option value="{{$t}}" {{ $tahun_get == $t ? 'selected' : '' }}>{{$t}}</option>
+                                                    @endforeach 
+                                            </select>
+                                        </div>
+
+                                        <div class="col-2">
+                                            <select id="bulan" name="bulan"
+                                                    class="form-select form-select-solid w-auto" data-control="select2" data-hide-search="true"
+                                                    data-placeholder="Bulan" data-select2-id="select2-data-bulan" tabindex="-1"
+                                                    aria-hidden="true">
+                                                    <option value="" selected></option>
+                                                    @foreach (range(1, 12) as $m)
+                                                        @php
+                                                            $full_month = Carbon\Carbon::createFromFormat("m", $m)->translatedFormat("F");
+                                                        @endphp
+                                                        <option value="{{$m}}" {{ $bulan_get == $m ? 'selected' : '' }}>{{$full_month}}</option>
+                                                    @endforeach
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="col-2">
+                                            <button type="submit" class="btn btn-secondary">Filter</button>
+                                            <button type="button" onclick="resetFilter()" class="btn btn-secondary">Reset</button>
+                                            <script>
+                                                function resetFilter() {
+                                                    window.location.href = "/dashboard-ccm/perolehan-kontrak";
+                                                }
+                                            </script>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <!--End :: Filter-->
@@ -409,7 +503,7 @@
                             <div class="col-2 ms-10 me-0">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 5px;" class="card-body bg-secondary">
-                                    <h2 class="m-0 ms-8 text-center">Classification</h2>
+                                    <h2 class="m-0 text-center">Classification</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -435,11 +529,11 @@
                                             <!--begin::Card column-->
                                             <div class="row">
                                                 <!--begin::Card body-->
-                                                <div class="">
+                                                <div class="pt-0">
                                                     <!--begin::Card widget 20-->
                                                     <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
-                                                        <div class="card-header py-3">
+                                                        <div class="card-header">
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
@@ -464,7 +558,7 @@
                                                     <!--begin::Card widget 20-->
                                                     <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
-                                                        <div class="card-header py-3">
+                                                        <div class="card-header">
                                                             <!--begin Items::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
@@ -489,7 +583,7 @@
                                                     <!--begin::Card widget 20-->
                                                     <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
-                                                        <div class="card-header py-3">
+                                                        <div class="card-header">
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
@@ -510,11 +604,36 @@
                                             <!--end-begin::Card column-->
                                             <div class="row">
                                                 <!--begin::Card body-->
-                                                <div class="mb-6 pt-0">
+                                                <div class="mb-0 pt-0">
                                                     <!--begin::Card widget 20-->
                                                     <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #28B3AC;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
                                                         <!--begin::Header-->
-                                                        <div class="card-header py-3">
+                                                        <div class="card-header">
+                                                            <!--begin::Title-->
+                                                            <div class="card-title d-flex flex-column">
+                                                                <!--begin::Amount-->
+                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="data-items">{{ $naTender }}</span>
+                                                                <!--end::Amount-->
+                                                                <!--begin::Subtitle-->
+                                                                <span class="text-white opacity-75 pt-1 fw-semibold fs-3">N/A</span>
+                                                                <!--end::Subtitle-->
+                                                            </div>
+                                                            <!--end::Title-->
+                                                        </div>
+                                                        <!--end::Header-->
+                                                    </div>
+                                                    <!--end::Card widget 20-->
+                                                </div>
+                                                <!--end::Card body-->
+                                            </div>
+                                            <!--end-begin::Card column-->
+                                            <div class="row">
+                                                <!--begin::Card body-->
+                                                <div class="mb-6 pt-0">
+                                                    <!--begin::Card widget 20-->
+                                                    <div class="rounded-0 card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90" style="background-color: #F7AD1A ;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                        <!--begin::Header-->
+                                                        <div class="card-header">
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
@@ -556,10 +675,10 @@
                                                                         }
                                                                     }
                                                                 @endphp --}}
-                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2 tender-review-text" id="id-tender-review">0</span>
+                                                                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="id-tender-review">{{ $tender_review }}</span>
                                                                 <!--end::Amount-->
                                                                 <!--begin::Subtitle-->
-                                                                <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Tender Review</span>
+                                                                <span class="text-white opacity-75 pt-1 fw-semibold fs-3">Tender Status</span>
                                                                 <!--end::Subtitle-->
                                                             </div>
                                                             <!--end::Title-->
@@ -845,7 +964,7 @@
                     <!--begin::Card body-->
                         <div class="card-body pt-0 px-2">
                             <!--begin::Table-->
-                            <table class="table align-middle table-bordered fs-6 gy-2" style="max-width: 100%">
+                            <table class="table align-middle table-bordered fs-6 gy-2" style="max-width: 100%" id="example">
                                 <!--begin::Table head-->
                                 <thead style="border: white 1px solid; background-color: #F7AD1A">
                                     <!--begin::Table row-->
@@ -882,10 +1001,10 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-600 fs-8">
-                                    <tr>
+                                    {{-- <tr>
                                         <td colspan="19" class="ps-3" style="border: white 1px solid; background-color: #F7DFAE">Sasaran</td>
-                                    </tr>
-                                    @foreach ($proyeks as $proyek)
+                                    </tr> --}}
+                                    @foreach ($contract_proyeks as $proyek)
                                     <tr>
                                             <!--begin::NIP-->
                                             <td>
@@ -916,7 +1035,7 @@
                                             <!--begin::Ketua tender-->
                                             <td>
                                                 <small>
-                                                    {{ $proyek->tipe_proyek == "J" ? "JO" : "NON JO"}}
+                                                    {{ $proyek->jenis_proyek == "J" ? "JO" : "NON JO"}}
                                                 </small>
                                             </td>
                                             <!--end::Ketua tender-->
@@ -947,137 +1066,483 @@
                                             <!--end::Role-->
                                             
                                             <!--begin::NDA-->
+                                            @php
+                                                // $dokumenCRM_NDA = $proyek->is_rfa_nda;
+                                                $dokumenNDA = $contract->UploadFinal->where('category', '=', 'Dokumen NDA')->first();
+                                                if(!empty($dokumenNDA) && $proyek->is_rfa_nda == true){
+                                                    $statusWaktuUpload = new DateTime($dokumenNDA->created_at);
+                                                    $currentDate = new DateTime($proyek->tgl_rfa_nda);
+                                                    $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
+                                                    // dump($limitWaktu);
+                                                }
+                                            @endphp
                                             <td class="text-center">
-                                                <small class="{{ $proyek->DokumenNda->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($proyek->DokumenNda->isNotEmpty())
-                                                    Yes
+                                                <small class="{{ $proyek->is_rfa_nda == true ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->is_rfa_nda == true)
+                                                    RFA <br>
+                                                    {{ Carbon\Carbon::create($proyek->tgl_rfa_nda)->format('d/m/Y') }}
                                                     @else
-                                                    No
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenNDA) ? 'badge badge-light-warning' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenNDA))
+                                                    Approved <br>
+                                                    {{ Carbon\Carbon::create($dokumenNDA->created_at)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenNDA) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenNDA) && ($proyek->is_rfa_nda == true && $limitWaktu > 14))
+                                                        Late
+                                                    @elseif (!empty($dokumenNDA) && ($proyek->is_rfa_nda == true && $limitWaktu <= 14))
+                                                        On Time
+                                                    @elseif (!empty($proyek->tgl_rfa_nda))
+                                                        On Going
+                                                    @else
+                                                        Open
                                                     @endif
                                                 </small>
                                             </td>
                                             <!--end::NDA-->
                                             <!--begin::LOI-->
+                                            @php
+                                                $dokumenCRM_LOI = $proyek->AttachmentMenang->first();
+                                                $dokumenLOI = $contract->UploadFinal->where('category', '=', 'Dokumen LOI')->first();
+                                                if(!empty($dokumenLOI) && !empty($dokumenCRM_LOI)){
+                                                    $statusWaktuUpload = new DateTime($dokumenLOI->created_at);
+                                                    $currentDate = new DateTime($dokumenCRM_LOI->created_at);
+                                                    $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
+                                                }
+                                            @endphp
+                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                <small class="{{ $proyek->AttachmentMenang->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($proyek->AttachmentMenang->isNotEmpty())
-                                                    Yes
+                                                <small class="{{ !empty($dokumenCRM_LOI) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if (!empty($dokumenCRM_LOI))
+                                                    RFA <br>
+                                                    {{ Carbon\Carbon::create($dokumenCRM_LOI->created_at)->format('d/m/Y') }}
                                                     @else
-                                                    No
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenLOI) ? 'badge badge-light-warning' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenLOI))
+                                                    Approved <br>
+                                                    {{ Carbon\Carbon::create($dokumenLOI->created_at)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenLOI) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenLOI) && (!empty($dokumenCRM_LOI) && $limitWaktu > 14))
+                                                        Late
+                                                    @elseif (!empty($dokumenLOI) && (!empty($dokumenCRM_LOI) && $limitWaktu <= 14))
+                                                        On Time
+                                                    @elseif (!empty($dokumenCRM_LOI))
+                                                        On Going
+                                                    @else
+                                                        Open
                                                     @endif
                                                 </small>
                                             </td>
                                             <!--end::LOI-->
                                             <!--begin::MOU-->
+                                            @php
+                                                // $dokumenCRM_MOU = $proyek->DokumenMou->first();
+                                                $dokumenMOU = $contract->UploadFinal->where('category', '=', 'Dokumen MOU')->first();
+                                                if(!empty($dokumenMOU) && $proyek->is_rfa_mou == true){
+                                                    $statusWaktuUpload = new DateTime($dokumenMOU->created_at);
+                                                    $currentDate = new DateTime($proyek->tgl_rfa_mou);
+                                                    $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
+                                                }
+                                            @endphp
+                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                <small class="{{ $proyek->DokumenMou->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($proyek->DokumenMou->isNotEmpty())
-                                                    Yes
+                                                <small class="{{ $proyek->is_rfa_mou == true ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->is_rfa_mou == true)
+                                                    RFA <br>
+                                                    {{ Carbon\Carbon::create($proyek->tgl_rfa_mou)->format('d/m/Y') }}
                                                     @else
-                                                    No
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenMOU) ? 'badge badge-light-warning' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenMOU))
+                                                    Approved <br>
+                                                    {{ Carbon\Carbon::create($dokumenMOU->created_at)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenMOU) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenMOU) && ($proyek->is_rfa_mou == true && $limitWaktu > 14))
+                                                        Late
+                                                    @elseif (!empty($dokumenMOU) && ($proyek->is_rfa_mou == true && $limitWaktu <= 14))
+                                                        On Time
+                                                    @elseif (!empty($proyek->tgl_rfa_mou))
+                                                        On Going
+                                                    @else
+                                                        Open
                                                     @endif
                                                 </small>
                                             </td>
                                             <!--end::MOU-->
                                             <!--begin::ECA-->
+                                            @php
+                                                // $dokumenCRM_ECA = $proyek->DokumenEca->first();
+                                                $dokumenECA = $contract->UploadFinal->where('category', '=', 'Dokumen ECA')->first();
+                                                if(!empty($dokumenECA) && $proyek->is_rfa_eca == true){
+                                                    $statusWaktuUpload = new DateTime($dokumenECA->created_at);
+                                                    $currentDate = new DateTime($proyek->tgl_rfa_eca);
+                                                    $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
+                                                }
+                                            @endphp
+                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                <small class="{{ $proyek->DokumenEca->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($proyek->DokumenEca->isNotEmpty())
-                                                    Yes
+                                                <small class="{{ $proyek->is_rfa_eca == true ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->is_rfa_eca == true)
+                                                    RFA <br>
+                                                    {{ Carbon\Carbon::create($proyek->tgl_rfa_eca)->format('d/m/Y') }}
                                                     @else
-                                                    No
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenECA) ? 'badge badge-light-warning' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenECA))
+                                                    Approved <br>
+                                                    {{ Carbon\Carbon::create($dokumenECA->created_at)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenECA) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenECA) && ($proyek->is_rfa_eca == true && $limitWaktu > 14))
+                                                        Late
+                                                    @elseif (!empty($dokumenECA) && ($proyek->is_rfa_eca == true && $limitWaktu <= 14))
+                                                        On Time
+                                                    @elseif (!empty($proyek->tgl_rfa_eca))
+                                                        On Going
+                                                    @else
+                                                        Open
                                                     @endif
                                                 </small>
                                             </td>
                                             <!--end::ECA-->
                                             <!--begin::ICA-->
+                                            @php
+                                                // $dokumenCRM_ICA = $proyek->DokumenIca->first();
+                                                $dokumenICA = $contract->UploadFinal->where('category', '=', 'Dokumen ICA')->first();
+                                                if(!empty($dokumenICA) && $proyek->is_rfa_ica == true){
+                                                    $statusWaktuUpload = new DateTime($dokumenICA->created_at);
+                                                    $currentDate = new DateTime($proyek->tgl_rfa_ica);
+                                                    $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
+                                                }
+                                            @endphp
+                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                <small class="{{ $proyek->DokumenIca->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($proyek->DokumenIca->isNotEmpty())
-                                                    Yes
+                                                <small class="{{ $proyek->is_rfa_ica == true ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->is_rfa_ica == true)
+                                                    RFA <br>
+                                                    {{ Carbon\Carbon::create($proyek->tgl_rfa_ica)->format('d/m/Y') }}
                                                     @else
-                                                    No
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenICA) ? 'badge badge-light-warning' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenICA))
+                                                    Approved <br>
+                                                    {{ Carbon\Carbon::create($dokumenICA->created_at)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenICA) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenICA) && ($proyek->is_rfa_ica == true && $limitWaktu > 14))
+                                                        Late
+                                                    @elseif (!empty($dokumenICA) && ($proyek->is_rfa_ica == true && $limitWaktu <= 14))
+                                                        On Time
+                                                    @elseif (!empty($proyek->tgl_rfa_ica))
+                                                        On Going
+                                                    @else
+                                                        Open
                                                     @endif
                                                 </small>
                                             </td>
                                             <!--end::ICA-->
                                             <!--begin::DRAFT-->
+                                            @php
+                                            $dokumenCRM_Draft = $proyek->DokumenDraft->first();
+                                            $dokumenDraft = $contract->UploadFinal->where('category', '=', 'Dokumen Draft Kontrak')->first();
+                                            if(!empty($dokumenDraft) && !empty($dokumenCRM_Draft)){
+                                                $statusWaktuUpload = new DateTime($dokumenDraft->created_at);
+                                                $currentDate = new DateTime($dokumenCRM_Draft->created_at);
+                                                $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
+                                            }
+                                            @endphp
+                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                <small class="{{ $proyek->DokumenDraft->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($proyek->DokumenDraft->isNotEmpty())
-                                                    Yes
+                                                <small class="{{ !empty($dokumenCRM_Draft) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if (!empty($dokumenCRM_Draft))
+                                                    RFA <br>
+                                                    {{ Carbon\Carbon::create($dokumenCRM_Draft->created_at)->format('d/m/Y') }}
                                                     @else
-                                                    No
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenDraft) ? 'badge badge-light-warning' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenDraft))
+                                                    Approved <br>
+                                                    {{ Carbon\Carbon::create($dokumenDraft->created_at)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenDraft) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenDraft) && (!empty($dokumenCRM_Draft) && $limitWaktu > 14))
+                                                        Late
+                                                    @elseif (!empty($dokumenDraft) && (!empty($dokumenCRM_Draft) && $limitWaktu <= 14))
+                                                        On Time
+                                                    @elseif (!empty($dokumenCRM_Draft))
+                                                        On Going
+                                                    @else
+                                                        Open
                                                     @endif
                                                 </small>
                                             </td>
                                             <!--end::DRAFT-->
-                                            <!--begin::DEVIATION-->
+                                            <!--begin::RKS-->
+                                            @php
+                                                // $dokumenCRM_RKS = $proyek->DokumenRks->first();
+                                                $dokumenRKS = $contract->UploadFinal->where('category', '=', 'Dokumen RKS / Project Spesification')->first();
+                                                if(!empty($dokumenRKS) && $proyek->is_rfa_rks == true){
+                                                    $statusWaktuUpload = new DateTime($dokumenRKS->created_at);
+                                                    $currentDate = new DateTime($proyek->tgl_rfa_rks);
+                                                    $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
+                                                }
+                                            @endphp
+                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                {{-- <small class="{{ $proyek->AttachmentMenang->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($proyek->AttachmentMenang->isNotEmpty())
-                                                    Yes
+                                                <small class="{{ $proyek->is_rfa_rks == true ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->is_rfa_rks == true)
+                                                    RFA <br>
+                                                    {{ Carbon\Carbon::create($proyek->tgl_rfa_rks)->format('d/m/Y') }}
                                                     @else
-                                                    No
+                                                    Open
                                                     @endif
-                                                </small> --}}
-                                                -
-                                            </td>
-                                            <!--end::DEVIATION-->
-                                            <!--begin::ITB-->
-                                            <td class="text-center">
-                                                <small class="{{ $proyek->DokumenItbTor->isNotEmpty() ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if ($proyek->DokumenItbTor->isNotEmpty())
-                                                    Yes
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenRKS) ? 'badge badge-light-warning' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenRKS))
+                                                    Approved <br>
+                                                    {{ Carbon\Carbon::create($dokumenRKS->created_at)->format('d/m/Y') }}
                                                     @else
-                                                    No
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenRKS) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenRKS) && ($proyek->is_rfa_rks == true && $limitWaktu > 14))
+                                                        Late
+                                                    @elseif (!empty($dokumenRKS) && ($proyek->is_rfa_rks == true && $limitWaktu <= 14))
+                                                        On Time
+                                                    @elseif (!empty($$proyek->tgl_rfa_rks))
+                                                        On Going
+                                                    @else
+                                                        Open
+                                                    @endif
+                                                </small>
+                                            </td>
+                                            <!--end::RKS-->
+                                            <!--begin::ITB-->
+                                            @php
+                                                // $dokumenCRM_ITB = $proyek->DokumenItbTor->first();
+                                                $dokumenITB = $contract->UploadFinal->where('category', '=', 'Dokumen ITB/TOR')->first();
+                                                if(!empty($dokumenITB) && $proyek->is_rfa_itb_tor == true){
+                                                    $statusWaktuUpload = new DateTime($dokumenITB->created_at);
+                                                    $currentDate = new DateTime($proyek->tgl_rfa_itb_tor);
+                                                    $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
+                                                }
+                                            @endphp
+                                            {{-- @dump($statusWaktuUpload) --}}
+                                            <td class="text-center">
+                                                <small class="{{ $proyek->is_rfa_itb_tor == true ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->is_rfa_itb_tor == true)
+                                                    RFA <br>
+                                                    {{ Carbon\Carbon::create($proyek->tgl_rfa_itb_tor)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenITB) ? 'badge badge-light-warning' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenITB))
+                                                    Approved <br>
+                                                    {{ Carbon\Carbon::create($dokumenITB->created_at)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenITB) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenITB) && ($proyek->is_rfa_itb_tor == true && $limitWaktu > 14))
+                                                        Late
+                                                    @elseif (!empty($dokumenITB) && ($proyek->is_rfa_itb_tor == true && $limitWaktu <= 14))
+                                                        On Time
+                                                    @elseif (!empty($proyek->tgl_rfa_itb_tor))
+                                                        On Going
+                                                    @else
+                                                        Open
                                                     @endif
                                                 </small>
                                             </td>
                                             <!--end::ITB-->
                                             <!--begin::TENDER-->
+                                            @php
+                                                $dokumenCRM_Tender = $proyek->DokumenTender->first();
+                                                $dokumenTender = $contract->UploadFinal->where('category', '=', 'Tinjauan Dokumen Kontrak - Perolehan')->first();
+                                                if(!empty($dokumenTender) && !empty($dokumenCRM_Tender)){
+                                                    $statusWaktuUpload = new DateTime($dokumenTender->created_at);
+                                                    $currentDate = new DateTime($dokumenCRM_Tender->created_at);
+                                                    $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
+                                                }
+                                            @endphp
+                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                @if (!empty($contract))
-                                                    @if ($contract->reviewProjects->isNotEmpty())
-                                                        <small class="badge badge-light-success">
-                                                            Yes
-                                                        </small>
+                                                <small class="{{ !empty($dokumenCRM_Tender) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if (!empty($dokumenCRM_Tender))
+                                                    RFA <br>
+                                                    {{ Carbon\Carbon::create($dokumenCRM_Tender->created_at)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
                                                     @endif
-                                                @else
-                                                    <small class="badge badge-light-danger">
-                                                        No
-                                                    </small>
-                                                @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenTender) ? 'badge badge-light-warning' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenTender))
+                                                    Approved <br>
+                                                    {{ Carbon\Carbon::create($dokumenTender->created_at)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenTender) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenTender) && (!empty($dokumenCRM_Tender) && $limitWaktu > 14))
+                                                        Late
+                                                    @elseif (!empty($dokumenTender) && (!empty($dokumenCRM_Tender) && $limitWaktu <= 14))
+                                                        On Time
+                                                    @elseif (!empty($dokumenCRM_Tender))
+                                                        On Going
+                                                    @else
+                                                        Open
+                                                    @endif
+                                                </small>
                                             </td>
                                             <!--end::TENDER-->
                                             <!--begin::RISK-->
+                                            @php
+                                                // $dokumenCRM_Risk = $proyek->RiskTenderProyek->first();
+                                                $dokumenRisk = $contract->UploadFinal->where('category', '=', 'Dokumen Resiko - Perolehan')->first();
+                                                if(!empty($dokumenRisk) && !empty($dokumenCRM_Risk)){
+                                                    $statusWaktuUpload = new DateTime($dokumenRisk->created_at);
+                                                    $currentDate = new DateTime($proyek->tgl_rfa_risk);
+                                                    $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
+                                                }
+                                            @endphp
+                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                @if (!empty($contract))
-                                                    @if ($contract->inputRisks->isNotEmpty())
-                                                        <small class="badge badge-light-success">
-                                                            Yes
-                                                        </small>
+                                                <small class="{{ $proyek->is_rfa_risk == true ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if ($proyek->is_rfa_risk == true)
+                                                    RFA <br>
+                                                    {{ Carbon\Carbon::create($proyek->tgl_rfa_risk)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
                                                     @endif
-                                                @else
-                                                    <small class="badge badge-light-danger">
-                                                        No
-                                                    </small>
-                                                @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenRisk) ? 'badge badge-light-warning' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenRisk))
+                                                    Approved <br>
+                                                    {{ Carbon\Carbon::create($dokumenRisk->created_at)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ $proyek->is_rfa_risk == true ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenRisk) && ($proyek->is_rfa_risk == true && $limitWaktu > 14))
+                                                        Late
+                                                    @elseif (!empty($dokumenRisk) && ($proyek->is_rfa_risk == true && $limitWaktu <= 14))
+                                                        On Time
+                                                    @elseif (!empty($proyek->tgl_rfa_risk))
+                                                        On Going
+                                                    @else
+                                                        Open
+                                                    @endif
+                                                </small>
                                             </td>
                                             <!--end::RISK-->
                                             <!--begin::DAFTAR-->
+                                            @php
+                                                // $dokumenCRM_Aanwitjzing = $proyek->AanwitjzingTenderProyek->first();
+                                                $dokumenAanwitjzing = $contract->UploadFinal->where('category', '=', 'Dokumen Aanwitjzing')->first();
+                                                if(!empty($dokumenAanwitjzing)){
+                                                    $statusWaktuUpload = new DateTime($dokumenAanwitjzing->created_at);
+                                                    $currentDate = new DateTime();
+                                                    $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
+                                                }
+                                            @endphp
+                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                @if (!empty($contract))
-                                                    @if ($contract->questionsProjects->isNotEmpty())
-                                                        <small class="badge badge-light-success">
-                                                            Yes
-                                                        </small>
+                                                {{-- <small class="{{ !empty($dokumenCRM_Aanwitjzing) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
+                                                    @if (!empty($dokumenCRM_Aanwitjzing))
+                                                    RFA <br>
+                                                    {{ Carbon\Carbon::create($dokumenCRM_Aanwitjzing->created_at)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
                                                     @endif
-                                                @else
-                                                    <small class="badge badge-light-danger">
-                                                        No
-                                                    </small>
-                                                @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenAanwitjzing) ? 'badge badge-light-warning' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenAanwitjzing))
+                                                    Approved <br>
+                                                    {{ Carbon\Carbon::create($dokumenAanwitjzing->created_at)->format('d/m/Y') }}
+                                                    @else
+                                                    Open
+                                                    @endif
+                                                </small>
+                                                <br>
+                                                <small class="{{ !empty($dokumenAanwitjzing) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
+                                                    @if (!empty($dokumenAanwitjzing) && $limitWaktu > 14)
+                                                        Late
+                                                    @elseif (!empty($dokumenAanwitjzing) && $limitWaktu <= 14)
+                                                        On Time
+                                                    @elseif (!empty($dokumenCRM_Aanwitjzing))
+                                                        On Going
+                                                    @else
+                                                        Open
+                                                    @endif
+                                                </small> --}}
+                                                <small class="badge {{!empty($dokumenAanwitjzing) ? "badge-light-success" : "badge-light-danger"}}">
+                                                    @if (!empty($dokumenAanwitjzing))
+                                                        Approved
+                                                    @else
+                                                        Open
+                                                    @endif
+                                                </small>
                                             </td>
                                             <!--end::DAFTAR-->
                                             
@@ -1091,13 +1556,14 @@
                                             <td class="text-center">
                                                 @php
                                                 if (!empty($contract)) {
-                                                    $status = $proyek->ContractManagements->reviewProjects->isNotEmpty() && $proyek->ContractManagements->inputRisks->isNotEmpty() && $proyek->ContractManagements->questionsProjects->isNotEmpty();
+                                                    $status = !empty($dokumenNDA) && !empty($dokumenLOI) && !empty($dokumenMOU) && !empty($dokumenECA) && !empty($dokumenICA) && !empty($dokumenRKS) && !empty($dokumenITB) && !empty($dokumenTender) && !empty($dokumenRisk) && !empty($dokumenAanwitjzing);
+                                                    // $status = $proyek->ContractManagements->reviewProjects->isNotEmpty() && $proyek->ContractManagements->inputRisks->isNotEmpty() && $proyek->ContractManagements->questionsProjects->isNotEmpty();
                                                     // $status = $proyek->DokumenNda->isNotEmpty() && $proyek->DokumenMou->isNotEmpty() && $proyek->AttachmentMenang->isNotEmpty() && $proyek->RiskTenderProyek->isNotEmpty() && $proyek->DokumenEca->isNotEmpty() && $proyek->DokumenIca->isNotEmpty();
                                                 } else {
                                                     $status = false;
                                                 }
                                                 @endphp
-                                                <P class="badge {{$status ? "badge-light-success" : "badge-light-danger"}} tender-review">{{$status ? "Closed" : "Open"}}</P>
+                                                <p class="badge {{$status ? "badge-light-success" : "badge-light-danger"}} tender-review">{{$status ? "Closed" : "Open"}}</p>
                                             </td>
                                             <!--end::STATUS-->
                                         </tr>
@@ -1406,7 +1872,7 @@
     <script>
         const nilaiTender = JSON.parse('{!! $nilai_tender_proyeks->toJson() !!}');
         const sumTender = nilaiTender.reduce((a, b) => a + Number(b.y), 0);
-        // console.log(nilaiTender, sumTender);
+        console.log(nilaiTender, sumTender);
 
         Highcharts.chart('chart-line', {
             chart: {
@@ -1604,6 +2070,25 @@
 
     <!-- Begin :: Select Filter Dropdown -->
     <script>
+        function selectFilter(e) {
+            const value = e.value;
+            const type = e.getAttribute("id");
+            let url = "";
+            if(type == "dop") {
+                url = `/dashboard-ccm/perolehan-kontrak?dop=${value}`;
+            } else if(type == "unit-kerja") {
+                url = `/dashboard-ccm/perolehan-kontrak?unit-kerja=${value}`;
+            } else {
+                url = `/dashboard-ccm/perolehan-kontrak?kode-proyek=${value}`;
+            }
+            window.location.href = url;
+            return;
+        }
+    </script>
+    <!-- End :: Select Filter Dropdown -->
+
+    <!-- Begin :: Select Filter Dropdown -->
+    <script>
         // function selectFilter(e) {
         //     const value = e.value;
         //     const type = e.getAttribute("id");
@@ -1634,7 +2119,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const counterTenderReview = document.querySelectorAll(".tender-review");
-            // console.log(document.querySelector(".tender-review-text"));
+            console.log(document.querySelector(".tender-review-text"));
             let tenderCount = 0;
             counterTenderReview.forEach(tender => {
                 if(tender.innerHTML == "Closed") {
@@ -1654,5 +2139,38 @@
             document.querySelector("#review-persen").innerHTML = review.toFixed(2)+' '+'<i class="bi bi-percent text-white fs-1">';
         });
     </script>
+
+    <!--begin::Data Tables-->
+    {{-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> --}}
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script> 
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script> 
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script> 
+    
+    <script>
+        $(document).ready(function() {
+            $('#example').DataTable( {
+                dom: 'Bfrtip',
+                // dom: '<"float-start"f><"#example"t>rtip',
+                pageLength : 25,
+                scrollY : "1000px",
+                scrollX : true,
+                scrollCollapse: true,
+                // paging : false,
+                fixedColumns:   {
+                    left: 2,
+                    right: 0
+                },
+                buttons: [
+                    // 'excel', 'print'
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            } );
+        } );
+    </script>
+    <!--end::Data Tables-->
 
 @endsection

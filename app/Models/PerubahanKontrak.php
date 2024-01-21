@@ -26,4 +26,9 @@ class PerubahanKontrak extends Model
     public function Proyek() {
         return $this->belongsTo(Proyek::class, "kode_proyek");
     }
+
+    public function ProyekPISNew()
+    {
+        return $this->belongsTo(ProyekPISNew::class, "profit_center", "profit_center");
+    }
 }

@@ -90,7 +90,7 @@
                             <!--begin::Card title-->
                             <div class="card-title">
                                 <!--Begin:: BUTTON FILTER-->
-                                <form action="" class="d-flex flex-row w-auto" method="get">
+                                <form action="" class="d-flex flex-row w-auto mt-6" method="get">
                                     <!--Begin:: Select Options-->
                                     {{-- <select style="display: none !important" id="column" name="column" onchange="changes(this)"
                                         class="form-select form-select-solid select2-hidden-accessible"
@@ -105,7 +105,7 @@
 
                                      <!--begin::Select Options-->
                                      <div style="" id="filterTahun" class="d-flex align-items-center position-relative me-3">
-                                        <select id="tahun-proyek" name="tahun-proyek" onchange="this.form.submit()"
+                                        <select id="tahun-proyek" name="tahun-proyek"
                                             class="form-select form-select-solid select2-hidden-accessible mx-3"
                                             data-control="select2" data-hide-search="true" data-placeholder="Tahun"
                                             tabindex="-1" aria-hidden="true">
@@ -116,13 +116,36 @@
                                         </select>
                                     </div>
                                     <!--end::Select Options-->
+                                     
+                                    <!--begin::Select Options-->
+                                     <div style="" id="filterBulan" class="d-flex align-items-center position-relative me-3">
+                                        <select id="bulan-proyek" name="bulan-proyek"
+                                            class="form-select form-select-solid select2-hidden-accessible mx-3"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Bulan"
+                                            tabindex="-1" aria-hidden="true">
+                                            <option {{ $month == '' ? 'selected' : '' }}></option>
+                                            <option value="1" {{ $filterBulan == 1 ? 'selected' : '' }}>Januari</option>
+                                            <option value="2" {{ $filterBulan == 2 ? 'selected' : '' }}>Februari</option>
+                                            <option value="3" {{ $filterBulan == 3 ? 'selected' : '' }}>Maret</option>
+                                            <option value="4" {{ $filterBulan == 4 ? 'selected' : '' }}>April</option>
+                                            <option value="5" {{ $filterBulan == 5 ? 'selected' : '' }}>Mei</option>
+                                            <option value="6" {{ $filterBulan == 6 ? 'selected' : '' }}>Juni</option>
+                                            <option value="7" {{ $filterBulan == 7 ? 'selected' : '' }}>Juli</option>
+                                            <option value="8" {{ $filterBulan == 8 ? 'selected' : '' }}>Agustus</option>
+                                            <option value="9" {{ $filterBulan == 9 ? 'selected' : '' }}>September</option>
+                                            <option value="10" {{ $filterBulan == 10 ? 'selected' : '' }}>Oktober</option>
+                                            <option value="11" {{ $filterBulan == 11 ? 'selected' : '' }}>November</option>
+                                            <option value="12" {{ $filterBulan == 12 ? 'selected' : '' }}>Desember</option>
+                                        </select>
+                                    </div>
+                                    <!--end::Select Options-->
 
                                     <!--begin:: Input Filter-->
                                     <div id="filterUnit" class="d-flex align-items-center position-relative">
-                                        <select onchange="this.form.submit()" name="filter-unit" class="form-select form-select-solid w-200px ms-2"
+                                        <select id="unit-kerja" onchange="this.form.submit()" name="filter-unit" class="form-select form-select-solid w-200px ms-2"
                                             data-control="select2" data-hide-search="true" data-placeholder="Unit Kerja">
                                             <option></option>
-                                            @foreach ($unitkerjas as $unitkerja)
+                                            @foreach ($unit_kerjas_select as $unitkerja)
                                                 <option value="{{ $unitkerja->divcode }}"
                                                     {{ $filterUnit == $unitkerja->divcode ? 'selected' : '' }}>
                                                     {{ $unitkerja->unit_kerja }}</option>
@@ -131,7 +154,7 @@
                                     </div>
 
                                     <div id="filterJenis" class="d-flex align-items-center position-relative">
-                                        <select onchange="this.form.submit()" name="filter-jenis"
+                                        <select id="jenis-proyek" onchange="this.form.submit()" name="filter-jenis"
                                             class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
                                             data-control="select2" data-hide-search="true" data-placeholder="Jenis Proyek"
                                             tabindex="-1" aria-hidden="true">
@@ -223,6 +246,7 @@
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-auto">Kode Proyek</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
                                                 <th class="min-w-auto">Stage</th>
@@ -251,6 +275,18 @@
                                                     }
                                                 @endphp
                                                 <tr>
+                                                    @if (!empty($proyek))
+                                                        <td>
+                                                            <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->id_contract) }}" id="click-name"
+                                                                class="text-hover-primary">{{ $proyek->kode_proyek }}</a>
+                                                        </td>
+                                                    @else
+                                                        <td>
+                                                            <a href="#" id="click-name" class="text-hover-primary"><small class="badge badge-light-danger">
+                                                                    Belum Ditentukan
+                                                                </small></a>
+                                                        </td>
+                                                    @endif
                                                     <!--begin::Name=-->
                                                     @if (!empty($proyek))
                                                         <td>
@@ -377,6 +413,7 @@
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-auto">Kode Proyek</th>
                                                 <th class="min-w-auto">Nomor Kontrak</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
@@ -391,9 +428,79 @@
                                         <!--end::Table head-->
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600 fs-6">
-                                            @forelse ($proyeks_pelaksanaan as $proyek)
+                                            @forelse ($proyeks_pelaksanaan->where("stages", 2) as $proyek)
                                                 <tr>
                                                     <!--begin::Name=-->
+                                                    <td>
+                                                        <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->profit_center) }}" id="click-name"
+                                                            class="text-hover-primary">{{ $proyek->profit_center }}</a>
+                                                    </td>
+                                                    @if ($proyek->contract_no != null)
+                                                        <td>
+                                                            <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->profit_center) }}" id="click-name"
+                                                                class="text-hover-primary">{{ $proyek->contract_no }}</a>
+                                                        </td>
+                                                    @else
+                                                        <td>
+                                                            <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->profit_center) }}" id="click-name" class="text-hover-primary"><small class="badge badge-light-danger">
+                                                                Belum Ditentukan</small></a>
+                                                        </td>
+                                                    @endif
+                                                    <!--end::Name=-->
+                                                    <!--begin::Name=-->
+                                                    <td>
+                                                        <p>{{ $proyek->proyek_name }}</p>
+                                                    </td>
+                                                    <!--end::Name=-->
+                                                    <!--begin::Email-->
+                                                    <td>
+                                                        {{ $proyek->UnitKerja->unit_kerja }}
+                                                    </td>
+                                                    <!--end::Email-->
+
+                                                    <!--begin::Email-->
+                                                    <td>
+                                                        @switch($proyek->jenis_proyek)
+                                                            @case('INTERN')
+                                                                Internal
+                                                            @break
+
+                                                            @case('EXTERN')
+                                                                Eksternal
+                                                            @break
+
+                                                            @case('JO')
+                                                                JO
+                                                            @break
+
+                                                        @endswitch
+                                                    </td>
+                                                    <!--end::Email-->
+
+                                                    <!--begin::Email-->
+                                                    <td>
+                                                        {{ number_format((int) $proyek->contract_value_idr, 0, ".", ".") }}
+                                                    </td>
+                                                    <!--end::Email-->
+
+                                                    <!--begin::Email-->
+                                                    <td>
+                                                        {{ Carbon\Carbon::create($proyek->start_date)->translatedFormat("d F Y") ?? "-" }}
+                                                    </td>
+                                                    <!--end::Email-->
+
+                                                    <!--begin::Email-->
+                                                    <td>
+                                                        {{ Carbon\Carbon::create($proyek->finish_date)->translatedFormat("d F Y") ?? "-" }}
+                                                    </td>
+                                                    <!--end::Email-->
+                                                </tr>
+                                                {{-- <tr>
+                                                    <!--begin::Name=-->
+                                                    <td>
+                                                        <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->ContractManagements->id_contract) }}" id="click-name"
+                                                            class="text-hover-primary">{{ $proyek->kode_proyek }}</a>
+                                                    </td>
                                                     @if ($proyek->ContractManagements->no_contract != null)
                                                         <td>
                                                             <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->ContractManagements->id_contract) }}" id="click-name"
@@ -453,7 +560,7 @@
                                                         {{ Carbon\Carbon::create($proyek->tanggal_akhir_terkontrak)->translatedFormat("d F Y") ?? "-" }}
                                                     </td>
                                                     <!--end::Email-->
-                                                </tr>
+                                                </tr> --}}
                                             @empty
                                             @endforelse
                                         </tbody>
@@ -470,6 +577,7 @@
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-auto">Kode Proyek</th>
                                                 <th class="min-w-auto">Nomor Kontrak</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
@@ -484,9 +592,13 @@
                                         <!--end::Table head-->
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600 fs-6">
-                                            @forelse ($proyeks_pemeliharaan as $proyek)
-                                                <tr>
+                                            @forelse ($proyeks_pelaksanaan->where("stages", 3) as $proyek)
+                                                {{-- <tr>
                                                     <!--begin::Name=-->
+                                                    <td>
+                                                        <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->ContractManagements->id_contract) }}" id="click-name"
+                                                            class="text-hover-primary">{{ $proyek->kode_proyek }}</a>
+                                                    </td>
                                                     @if ($proyek->ContractManagements->no_contract != null)
                                                         <td>
                                                             <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->ContractManagements->id_contract) }}" id="click-name"
@@ -535,14 +647,80 @@
                                                     <!--end::Nilai OK=-->
                                                     <!--begin::Tanggal Mulai=-->
                                                     <td>
-                                                        {{ $proyek->tanggal_mulai_terkontrak }}
+                                                        {{ Carbon\Carbon::create($proyek->tanggal_mulai_terkontrak)->translatedFormat("d F Y") ?? "-" }}
                                                     </td>
                                                     <!--end::Tanggal Mulai=-->
                                                     <!--begin::Tanggal Selesai=-->
                                                     <td>
-                                                        {{ $proyek->tanggal_akhir_terkontrak }}
+                                                        {{ Carbon\Carbon::create($proyek->tanggal_akhir_terkontrak)->translatedFormat("d F Y") ?? "-" }}
                                                     </td>
                                                     <!--end::Tanggal Selesai=-->
+                                                </tr> --}}
+                                                <tr>
+                                                    <!--begin::Name=-->
+                                                    <td>
+                                                        <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->profit_center) }}" id="click-name"
+                                                            class="text-hover-primary">{{ $proyek->profit_center }}</a>
+                                                    </td>
+                                                    @if ($proyek->contract_no != null)
+                                                        <td>
+                                                            <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->profit_center) }}" id="click-name"
+                                                                class="text-hover-primary">{{ $proyek->contract_no }}</a>
+                                                        </td>
+                                                    @else
+                                                        <td>
+                                                            <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->profit_center) }}" id="click-name" class="text-hover-primary"><small class="badge badge-light-danger">
+                                                                Belum Ditentukan</small></a>
+                                                        </td>
+                                                    @endif
+                                                    <!--end::Name=-->
+                                                    <!--begin::Name=-->
+                                                    <td>
+                                                        <p>{{ $proyek->proyek_name }}</p>
+                                                    </td>
+                                                    <!--end::Name=-->
+                                                    <!--begin::Email-->
+                                                    <td>
+                                                        {{ $proyek->UnitKerja->unit_kerja }}
+                                                    </td>
+                                                    <!--end::Email-->
+
+                                                    <!--begin::Email-->
+                                                    <td>
+                                                        @switch($proyek->jenis_proyek)
+                                                            @case('INTERN')
+                                                                Internal
+                                                            @break
+
+                                                            @case('EXTERN')
+                                                                Eksternal
+                                                            @break
+
+                                                            @case('JO')
+                                                                JO
+                                                            @break
+
+                                                        @endswitch
+                                                    </td>
+                                                    <!--end::Email-->
+
+                                                    <!--begin::Email-->
+                                                    <td>
+                                                        {{ number_format((int) $proyek->contract_value_idr, 0, ".", ".") }}
+                                                    </td>
+                                                    <!--end::Email-->
+
+                                                    <!--begin::Email-->
+                                                    <td>
+                                                        {{ Carbon\Carbon::create($proyek->start_date)->translatedFormat("d F Y") ?? "-" }}
+                                                    </td>
+                                                    <!--end::Email-->
+
+                                                    <!--begin::Email-->
+                                                    <td>
+                                                        {{ Carbon\Carbon::create($proyek->finish_date)->translatedFormat("d F Y") ?? "-" }}
+                                                    </td>
+                                                    <!--end::Email-->
                                                 </tr>
                                             @empty
                                             @endforelse
@@ -575,6 +753,23 @@
 @endsection
 
 @section('js-script')
+
+<script>
+    function selectFilter(e) {
+        const value = e.value;
+        const type = e.getAttribute("id");
+        let url = "";
+        if(type == "tahun-proyek") {
+            url = `/contract-management?tahun-proyek=${value}`;
+        } else if(type == "unit-kerja") {
+            url = `/contract-management?unit-kerja=${value}`;
+        } else {
+            url = `/contract-management?jenis-proyek=${value}`;
+        }
+        window.location.href = url;
+        return;
+    }
+</script>
     <!--begin::Data Tables-->
     <script src="/datatables/jquery.dataTables.min.js"></script>
     <script src="/datatables/dataTables.buttons.min.js"></script>

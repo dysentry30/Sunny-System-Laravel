@@ -38,10 +38,14 @@ use App\Http\Controllers\DraftContractController;
 use App\Http\Controllers\KriteriaPasarController;
 use App\Http\Controllers\AddendumContractController;
 use App\Http\Controllers\ContractManagementsController;
+use App\Http\Controllers\ContractApprovalController;
+use App\Http\Controllers\CSIController;
 use App\Http\Controllers\JenisProyekController;
 use App\Http\Controllers\MataUangController;
 use App\Http\Controllers\RekomendasiController;
 use App\Http\Controllers\TipeProyekController;
+use App\Http\Controllers\KonsultanPerencanaController;
+use App\Models\AlatProyek;
 use App\Models\ContractChangeNotice;
 use App\Models\ContractChangeOrder;
 use App\Models\ContractChangeProposal;
@@ -51,6 +55,9 @@ use App\Models\JenisProyek;
 use App\Models\KriteriaAssessment;
 use App\Models\KriteriaGreenLine;
 use App\Models\MataUang;
+use App\Models\MasterAlatProyek;
+use App\Models\PersonelTenderProyek;
+use App\Models\Pegawai;
 use App\Models\Provinsi;
 use App\Models\ProyekBerjalans;
 use App\Models\Sbu;
@@ -58,6 +65,7 @@ use App\Models\SiteInstruction;
 use App\Models\SumberDana;
 use App\Models\TechnicalForm;
 use App\Models\TechnicalQuery;
+use App\Models\PerjanjianKso;
 use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
 use Carbon\Carbon;
 use Illuminate\Routing\RouteGroup;
@@ -85,6 +93,7 @@ use Termwind\Components\Dd;
 
 Route::get('/', [UserController::class, 'welcome'])->middleware("userNotAuth");
 Route::get('/ccm', [UserController::class, 'welcome'])->middleware("userNotAuth");
+Route::get('/csi-login', [UserController::class, 'welcome'])->middleware("userNotAuth");
 
 
 // begin :: Login
@@ -234,13 +243,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('/dashboard/terendah-terkontrak/{tipe}/{filter}', [DashboardController::class, "getDataTerendahTerkontrak"]);
 
-    Route::get('/dashboard/index-jumlah/{tipe}', [DashboardController::class, "getDataCompetitive"]);
+    // Route::get('/dashboard/index-jumlah/{tipe}', [DashboardController::class, "getDataCompetitive"]);
 
-    Route::get('/dashboard/index-jumlah/{tipe}/{filter}', [DashboardController::class, "getDataCompetitive"]);
+    Route::get('/dashboard/index-jumlah/{tipe}/{filter}/{year}', [DashboardController::class, "getDataCompetitive"]);
 
-    Route::get('/dashboard/index-nilai/{tipe}', [DashboardController::class, "getDataCompetitiveNilai"]);
+    // Route::get('/dashboard/index-nilai/{tipe}', [DashboardController::class, "getDataCompetitiveNilai"]);
 
-    Route::get('/dashboard/index-nilai/{tipe}/{filter}', [DashboardController::class, "getDataCompetitiveNilai"]);
+    Route::get('/dashboard/index-nilai/{tipe}/{filter}/{year}', [DashboardController::class, "getDataCompetitiveNilai"]);
 
     Route::get('/dashboard/sumber-dana-rkap/{tipe}', [DashboardController::class, "getDataSumberDanaRKAP"]);
 
@@ -263,6 +272,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post('/contract-management/final-dokumen/upload', [ContractManagementsController::class, 'uploadDokumenFinal']);
 
+    Route::post('/contract-management/final-dokumen/{id}/edit', [ContractManagementsController::class, 'editDokumenFinal']);
+
+    Route::post('/contract-management/final-dokumen/{id}/delete', [ContractManagementsController::class, 'deleteDokumenFinal']);
+
     Route::get('/contract-management/view', [ContractManagementsController::class, 'new']);
 
     Route::post('/contract-management/save', [ContractManagementsController::class, 'save']);
@@ -270,6 +283,14 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/contract-management/update', [ContractManagementsController::class, 'update']);
 
     Route::post('/contract-management/document-bast/upload', [ContractManagementsController::class, 'documentBastContractUpload']);
+
+    Route::post('/contract-management/bast-2/{id_document}/delete', [ContractManagementsController::class, 'deleteBast'
+    ]); //Update 14-09-2023
+
+    // Route::post('/contract-management/bast-2/{id_document}/delete', [ContractManagementsController::class, 'deleteBast']);
+
+    Route::post('/contract-management/document-bast/{id_bast}/edit', [ContractManagementsController::class, 'documentBastContractEdit'
+    ]); //Update 14-09-2023
 
     Route::post('/contract-management/ba-defect/upload', [ContractManagementsController::class, 'baDefectContractUpload']);
 
@@ -301,7 +322,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('/contract-management/view/{id_contract}/draft-contract/{draftContracts}', [ContractManagementsController::class, 'draftContractView']);
 
-    Route::get('/contract-management/view/{id_contract}/perubahan-kontrak/{perubahan_kontrak}', [ContractManagementsController::class, 'perubahanKontrakView']);
+    // Route::get('/contract-management/view/{id_contract}/perubahan-kontrak/{perubahan_kontrak}', [ContractManagementsController::class, 'perubahanKontrakView']);
+    Route::get('/contract-management/view/{profit_center}/perubahan-kontrak/{perubahan_kontrak}', [ContractManagementsController::class, 'perubahanKontrakView']);
 
     Route::get('/review-contract/view/{id_contract}/{stage}', [ContractManagementsController::class, 'reviewKontrakView']);
     
@@ -327,11 +349,32 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post("/addendum-contract/amandemen/upload", [AddendumContractController::class, "draftAmandemenUpload"]);
 
     Route::post("/jenis-dokumen/upload", [AddendumContractController::class, "jenisDokumenUpload"]);
+    Route::post("/jenis-dokumen/upload", [AddendumContractController::class, "jenisDokumenDelete"]);
 
     Route::post("/addendum-contract/draft/update", [AddendumContractController::class, "draftUpdate"]);
 
     Route::get('change-request', [AddendumContractController::class, 'changeRequest']);
+
+    Route::post("/contract-management/set-lock", [ContractApprovalController::class, "lockApprovalRev"]);
+
+    Route::get("/contract-management/download/kso/{id_document}", function (string $id) {
+        $document_kso = PerjanjianKso::select(['id_document', 'document_name'])->where('id_document', '=', $id)->first();
+        $path = public_path('words/' . $document_kso->id_document . '.docx');
+        return response()->download($path, $document_kso->document_name . '.docx');
+    });
     // end :: contract management
+
+    //begin :: History Approval CCM
+
+    Route::get("/history-approval", [ContractApprovalController::class, "index"]);
+
+    Route::post("/history-approval/set-approve/{id_contract}", [ContractApprovalController::class, "setApprove"]);
+
+    Route::post("/history-approval/set-unlock", [ContractApprovalController::class, "setUnlock"]);
+
+    Route::post("/history-approval/request-unlock", [ContractApprovalController::class, "requestUnlock"]);
+    
+        //end :: History Approval CCM
 
 
 
@@ -354,6 +397,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // Route::get('claim-management/proyek/{kode_proyek}/{jenis_claim}', [ClaimController::class, 'viewClaim']);
     Route::get('claim-management/proyek/{kode_proyek}/{id_contract}', [ClaimController::class, 'view']);
 
+    Route::get('claim-management/proyek/{profit_center}', [ClaimController::class, 'viewClaimNew']);
+    
     // Route::get('claim-management/view/{kode_proyek}', [ClaimController::class, 'viewClaim']);
 
     Route::get('/claim-management/{proyek}/{contract}/new',  [ClaimController::class, 'new']);
@@ -386,7 +431,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
 
     // Begin :: Menu Document
-    Route::get('/document', [DocumentController::class, "documentIndex"]);
+    // Route::get('/document', [DocumentController::class, "documentIndex"]);
+    Route::get('/document', [DocumentController::class, "documentDatabaseView"]);
+    Route::get('/document-template', [DocumentController::class, "documentTemplateView"]);
+    Route::post('/document-template/new', [DocumentController::class, "documentTemplateNew"]);
+    Route::post('/document-template/delete/{id}', [DocumentController::class, "documentTemplateDelete"]);
     // End :: Menu Document
 
 
@@ -401,6 +450,22 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // Begin Rekomendasi
     Route::get('/rekomendasi', [RekomendasiController::class, "index"]);
     // End Rekomendasi
+
+    //Begin::Tender
+
+    //Begin::Personel Utama
+    Route::get('/personel-utama', function () {
+        return response()->view('Tender/personelTender', ["data" => PersonelTenderProyek::all()]);
+    });
+    //End::Personel Utama
+
+    //Begin::Alat
+    Route::get('/alat', function () {
+        return response()->view('Tender/alatTender', ["data" => AlatProyek::all()]);
+    });
+    //End::Alat
+
+    //End::Tender
 
 
     // DELETE data customer pada dasboard customer by ID 
@@ -549,6 +614,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $forecast = new Forecast();
             $forecast->kode_proyek = $data["kode-proyek"];
 
+            // if (isset($data["nilairealisasi-".$i]) && $data["nilairealisasi-".$i] != null && ($data["nilairealisasi-".$i] != 0 || $data["nilairealisasi-".$i] != "0") && $periodePrognosa == $i) {
+            //     $forecast->nilai_forecast = (string) (str_replace(".", "", $data["nilairealisasi-" . $i] ?? 0));
+            //     $forecast->month_forecast = (int) $i;
+            // }else{
+            //     $forecast->nilai_forecast = (string) (str_replace(".", "", $data["nilaiforecast-" . $i] ?? 0));
+            //     $forecast->month_forecast = (int) $i;
+            // }
             $forecast->nilai_forecast = (string) (str_replace(".", "", $data["nilaiforecast-" . $i] ?? 0));
             $forecast->month_forecast = (int) $i;
 
@@ -569,9 +641,15 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             Alert::success('Success', "Forecast Berhasil Dibuat");
             return redirect()->back();
         } else {
-
             $findForecast->kode_proyek = $data["kode-proyek"];
-
+            
+            // if (isset($data["nilairealisasi-".$i]) && $data["nilairealisasi-".$i] != null && ($data["nilairealisasi-".$i] != 0 || $data["nilairealisasi-".$i] != "0") && $periodePrognosa == $i) {
+            //     $findForecast->nilai_forecast = (string) (str_replace(".", "", $data["nilairealisasi-" . $i] ?? 0));
+            //     $findForecast->month_forecast = (int) $i;
+            // }else{
+            //     $findForecast->nilai_forecast = (string) (str_replace(".", "", $data["nilaiforecast-" . $i] ?? 0));
+            //     $findForecast->month_forecast = (int) $i;
+            // }
             $findForecast->nilai_forecast = (string) (str_replace(".", "", $data["nilaiforecast-" . $i] ?? 0));
             $findForecast->month_forecast = (int) $i;
 
@@ -583,7 +661,6 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
             // $prognosa = (int) date('m');
             $findForecast->periode_prognosa = $periodePrognosa;
-            // $findForecast->tahun = $year;
 
             $findForecast->save();
 
@@ -727,6 +804,17 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // DELETE Peserta Tender 
     Route::delete('proyek/peserta-tender/{id}/delete', [ProyekController::class, 'deleteTender']);
+
+    // ADD KONSULTAN PERENCANA 
+    Route::post('proyek/konsultan-perencana/add', [
+        ProyekController::class, 'tambahKonsultan'
+    ]);
+
+    // EDIT KONSULTAN PERENCANA 
+    Route::post('/proyek/konsultan-perencana/{id}/edit', [ProyekController::class, 'editKonsultan']);
+
+    // DELETE KONSULTAN PERENCANA 
+    Route::delete('proyek/konsultan-perencana/{id}/delete', [ProyekController::class, 'deleteKonsultan']);
 
     // DELETE Dokumen Prakualifikasi
     Route::delete('proyek/dokumen-prakualifikasi/{id}/delete', [ProyekController::class, 'deleteDokumenPrakualifikasi']);
@@ -999,8 +1087,224 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     });
 
     // begin :: Set lock / unlock data month forecast
+    // Route::post('/forecast/set-lock', function (Request $request) {
+    //     $data = $request->all();
+    //     // dd($data);
+    //     $from_user = Auth::user();
+    //     $bulan = (int) date("m");
+    //     if ($bulan == 1 && (int) date("d") < 15) {
+    //         $tahun = (int) date("Y") - 1;
+    //     } else {
+    //         $tahun = (int) date("Y");
+    //     }
+        
+
+    //     // $history_forecast = HistoryForecast::where("periode_prognosa", "=", $request->periode_prognosa);
+    //     // if (!empty($history_forecast->get()->all())) {
+    //     //     $history_forecast->delete();
+    //     // }
+
+    //     $farestMonth = 0;
+    //     $total_forecast = 0;
+    //     $total_realisasi = 0;
+    //     $total_rkap = 0;
+    //     // check new year condition
+    //     // $date = Carbon::now();
+    //     // $year = $date->year;
+    //     // $day = $date->day;
+    //     // $month = $date->month;
+    //     // if($month == 1 && $day < 15) {
+    //     //     $year -= 1;
+    //     // }
+    //     $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
+    //     if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
+    //         $proyeks = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.tahun_perolehan", "=", $tahun)->where("forecasts.tahun", "=", $tahun)->where("periode_prognosa", "=", $data["periode_prognosa"])->get()->whereIn("unit_kerja", $unit_kerja_user->toArray())->groupBy("kode_proyek");
+    //     } else {
+    //         $proyeks = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.tahun_perolehan", "=", $tahun)->where("forecasts.tahun", "=", $tahun)->where("periode_prognosa", "=", $data["periode_prognosa"])->where("proyeks.unit_kerja", $unit_kerja_user)->get()->groupBy("kode_proyek");
+    //     }
+    //     // $proyeks = Proyek::where("unit_kerja", $from_user->unit_kerja)->get()->sortBy("kode_proyek");
+    //     foreach ($proyeks as $kode_proyek => $proyek) {
+    //         // dump();
+    //         // $total_realisasi += $proyek->sum("realisasi_forecast");
+    //         $current_proyek = Proyek::find($kode_proyek);
+    //         // dd($proyek);
+    //         $forecasts = $proyek;
+    //         // $forecasts = $proyek->filter(function ($p) {
+    //         //     // return str_contains($p->created_at->format("m"), date("m")) && $p->nilai_forecast != 0 && $p->unit_kerja == Auth::user()->unit_kerja;
+    //         //     // return str_contains($p->created_at->format("m"), date("m")) && $p->nilai_forecast != 0;
+    //         //     return $p->nilai_forecast != 0;
+    //         // });
+    //         if ($current_proyek->tipe_proyek == "R") {
+    //             $history_forecast_count = HistoryForecast::where("kode_proyek", "=", $kode_proyek)->where("periode_prognosa", "=", $data["periode_prognosa"])->where("tahun" , "=", $tahun)->get();
+    //             if ($history_forecast_count->count() > 0) continue;
+    //             // dd($current_proyek);
+    //             foreach ($forecasts as $forecast) {
+    //                 $history_forecast = new HistoryForecast();
+    //                 // if ($forecast->month_forecast > $farestMonth) {
+    //                 //     $farestMonth = $forecast->month_forecast;
+    //                 // }
+    //                 // $total_forecast += (int) $forecast->nilai_forecast;
+    //                 // $total_realisasi += (int) $forecast->realisasi_forecast;
+    //                 // $total_rkap += (int) $forecast->rkap_forecast;
+    //                 $history_forecast->kode_proyek = $kode_proyek;
+    //                 if ($forecast->is_cancel == true) {
+    //                     $history_forecast->nilai_forecast = "0";
+    //                     $history_forecast->realisasi_forecast = "0";
+    //                 }else if($current_proyek->stage < 8) {
+    //                     $history_forecast->nilai_forecast = $forecast->nilai_forecast ?? "0";
+    //                     $history_forecast->realisasi_forecast = "0";
+    //                 } else {
+    //                     $history_forecast->nilai_forecast = $forecast->nilai_forecast ?? "0";
+    //                     $history_forecast->realisasi_forecast = $forecast->realisasi_forecast ?? "0";
+    //                 }
+    //                 $history_forecast->month_forecast = $forecast->month_forecast;
+    //                 // $history_forecast->rkap_forecast = str_replace(".", "", (int) $current_proyek->nilai_rkap ?? 0) ?? 0;
+    //                 if (!empty($forecast->rkap_forecast)) {
+    //                     $history_forecast->rkap_forecast = $forecast->rkap_forecast ?? "0";
+    //                 } else {
+    //                     $history_forecast->rkap_forecast = "0";
+    //                 }
+    //                 $history_forecast->month_rkap = (int) $forecast->month_rkap;
+    //                 // $history_forecast->month_rkap = $forecast->month_rkap;
+    //                 // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $current_proyek->nilai_kontrak_keseluruhan ?? 0);
+    //                 // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan;
+    //                 $history_forecast->month_realisasi = $forecast->month_realisasi;
+    //                 $history_forecast->periode_prognosa = $request->periode_prognosa;
+
+    //                 $history_forecast->stage = $current_proyek->stage;
+
+    //                 if ($request->periode_prognosa == 12 && $bulan == 1) {
+    //                     $history_forecast->tahun = (int) date("Y")-1;
+    //                 } else {
+    //                     $history_forecast->tahun = (int) date("Y");
+    //                 }
+                    
+    //                 $history_forecast->save();
+    //             }
+    //         } else {
+
+    //             $history_forecast_count = HistoryForecast::where("kode_proyek", "=", $kode_proyek)->where("periode_prognosa", "=", $data["periode_prognosa"])->where("tahun" , "=", $tahun)->get();
+    //             if ($history_forecast_count->count() > 0) continue;
+    //             $history_forecast = new HistoryForecast();
+
+    //             foreach ($forecasts as $forecast) {
+    //                 if ($forecast->month_forecast > $farestMonth) {
+    //                     $farestMonth = $forecast->month_forecast;
+    //                 }
+    //                 if ($forecast->is_cancel == true) {
+    //                     $total_forecast += (int) 0;
+    //                     $total_realisasi += (int) 0;
+    //                 } else {
+    //                     $total_realisasi += (int) $forecast->realisasi_forecast;
+    //                     $total_forecast += (int) $forecast->nilai_forecast ?? 0;
+    //                 }
+                    
+    //                 $total_rkap += (int) $forecast->rkap_forecast ?? 0;
+    //                 // if ($forecast->stage == 8) {
+    //                 //     dd($forecast, $total_realisasi, $total_forecast);
+    //                 // }
+    //             }
+    //             // RKAP, REALISASI
+    //             $history_forecast->kode_proyek = $kode_proyek;
+    //             $history_forecast->nilai_forecast = (string) $total_forecast;
+    //             $history_forecast->month_forecast = $farestMonth;
+    //             // $history_forecast->rkap_forecast = str_replace(".", "", (int) $current_proyek->nilai_rkap ?? 0) ?? 0;
+    //             $history_forecast->rkap_forecast = (string) $total_rkap;
+    //             $history_forecast->month_rkap = (int) $current_proyek->bulan_pelaksanaan ?? 1;
+    //             // $history_forecast->month_rkap = $current_proyek->bulan_pelaksa;
+    //             // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $current_proyek->nilai_kontrak_keseluruhan ?? 0);
+    //             if ($current_proyek->stage == 8) {
+    //                 $history_forecast->realisasi_forecast = $total_realisasi;
+    //                 // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan;
+    //                 // $history_forecast->month_realisasi = $current_proyek->bulan_ri_perolehan ?? 0;
+    //                 $history_forecast->month_realisasi = $forecast->month_realisasi ?? 0;
+    //                 // $history_forecast->month_realisasi = $current_proyek->bulan_ri_perolehan ?? 0;
+    //             }
+    //             $history_forecast->periode_prognosa = $request->periode_prognosa;
+
+    //             $history_forecast->stage = $current_proyek->stage;
+
+    //             if ($request->periode_prognosa == 12 && $bulan == 1 ) {
+    //                 $history_forecast->tahun = (int) date("Y") - 1;
+    //             } else {
+    //                 $history_forecast->tahun = (int) date("Y");
+    //             }
+
+    //             if(empty($history_forecast->month_realisasi)) {
+    //                 $history_forecast->realisasi_forecast = 0;
+    //                 $history_forecast->month_realisasi = 0;
+    //             }
+    //             // if ($current_proyek->kode_proyek == '5NPC437') {
+    //             //     dd($current_proyek->nilai_perolehan, $history_forecast->realisasi_forecast);
+    //             // }
+    //             $history_forecast->save();
+    //             // if ($index == $forecasts->count() - 1) {
+    //             // }
+    //         }
+    //         $farestMonth = 0;
+    //         $total_forecast = 0;
+    //         $total_realisasi = 0;
+    //         $total_rkap = 0;
+    //     }
+    //     return response()->json([
+    //         "status" => "success",
+    //         "msg" => "Forecast berhasil dikunci",
+    //     ]);
+
+    //     // dump($total_forecast);
+    //     // if ($total_forecast != 0) {
+
+    //     // }
+    //     // $proyeks = Proyek::all()->groupBy("kode_proyek");
+    //     // foreach ($proyeks as $proyek) {
+
+    //     // }
+    //     // return response()->json([
+    //     //     "status" => "success",
+    //     //     "msg" => "Forecast berhasil dikunci",
+    //     // ]);
+    //     // if (isset($data["set-lock"])) {
+
+    //     // }
+
+    //     // // $unit_kerjas = UnitKerja::where("divcode", Auth::user()->unit_kerja);
+    //     // $unit_kerjas = UnitKerja::find(1);
+    //     // // dd($unit_kerjas);
+    //     // if (auth()->user()->check_administrator) {
+    //     //     if ($unit_kerjas->metode_approval == "Sequence") {
+    //     //         $next_user = [];
+    //     //         $to_user = $unit_kerjas->User_1;
+    //     //         if(!empty($unit_kerjas->User_2)) {
+    //     //             array_push($next_user, $unit_kerjas->User_2->id);
+    //     //         }
+
+    //     //         if(!empty($unit_kerjas->User_3)) {
+    //     //             array_push($next_user, $unit_kerjas->User_3->id);
+    //     //         }
+    //     //         // $next_user = $unit_kerjas->user_2;
+    //     //         LockForeacastEvent::dispatch($from_user, $to_user, "Request Lock Forecast", $next_user, 0, 0);
+    //     //         // Alert::success("Success", "Forecast has been locked");
+    //     //         return response()->json([
+    //     //             "status" => "success",
+    //     //             "msg" => "Silahkan tunggu sampai approval selesai. Cek notifikasi anda secara berkala!",
+    //     //         ]);
+    //     //     } else {
+    //     //         // $unit_kerjas->each(function ($unit_kerja) {
+    //     //         // });
+    //     //     }
+    //     //     // return response()->json([
+    //     //     //     "status" => "success",
+    //     //     //     "msg" => "OKe",
+    //     //     // ]);
+    //     // }
+    //     // return response()->json([
+    //     //     "status" => "failed",
+    //     //     "msg" => "Maaf, anda bukan admin",
+    //     // ]);
+    // });
     Route::post('/forecast/set-lock', function (Request $request) {
         $data = $request->all();
+        // dd($data);
         $from_user = Auth::user();
         $bulan = (int) date("m");
         if ($bulan == 1 && (int) date("d") < 15) {
@@ -1046,7 +1350,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             //     return $p->nilai_forecast != 0;
             // });
             if ($current_proyek->tipe_proyek == "R") {
-                $history_forecast_count = HistoryForecast::where("kode_proyek", "=", $kode_proyek)->where("periode_prognosa", "=", $data["periode_prognosa"])->where("tahun" , "=", $tahun)->get();
+                $history_forecast_count = HistoryForecast::where("kode_proyek", "=", $kode_proyek)->where("periode_prognosa", "=", $data["periode_prognosa"])->where("tahun", "=", $tahun)->get();
                 if ($history_forecast_count->count() > 0) continue;
                 // dd($current_proyek);
                 foreach ($forecasts as $forecast) {
@@ -1061,12 +1365,17 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                     if ($forecast->is_cancel == true) {
                         $history_forecast->nilai_forecast = "0";
                         $history_forecast->realisasi_forecast = "0";
-                    }else if($current_proyek->stage < 8) {
+                    } else if ($current_proyek->stage < 8) {
                         $history_forecast->nilai_forecast = $forecast->nilai_forecast ?? "0";
                         $history_forecast->realisasi_forecast = "0";
                     } else {
-                        $history_forecast->nilai_forecast = $forecast->nilai_forecast ?? "0";
-                        $history_forecast->realisasi_forecast = $forecast->realisasi_forecast ?? "0";
+                        if (($forecast->periode_prognosa == $forecast->month_realisasi)) {
+                            $history_forecast->nilai_forecast = $forecast->realisasi_forecast ?? "0";
+                            $history_forecast->realisasi_forecast = $forecast->realisasi_forecast ?? "0";
+                        } else {
+                            $history_forecast->nilai_forecast = $forecast->nilai_forecast ?? "0";
+                            $history_forecast->realisasi_forecast = $forecast->realisasi_forecast ?? "0";
+                        }
                     }
                     $history_forecast->month_forecast = $forecast->month_forecast;
                     // $history_forecast->rkap_forecast = str_replace(".", "", (int) $current_proyek->nilai_rkap ?? 0) ?? 0;
@@ -1082,6 +1391,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                     $history_forecast->month_realisasi = $forecast->month_realisasi;
                     $history_forecast->periode_prognosa = $request->periode_prognosa;
 
+                    $history_forecast->stage = $current_proyek->stage;
+
                     if ($request->periode_prognosa == 12 && $bulan == 1) {
                         $history_forecast->tahun = (int) date("Y")-1;
                     } else {
@@ -1092,12 +1403,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 }
             } else {
 
-                $history_forecast_count = HistoryForecast::where("kode_proyek", "=", $kode_proyek)->where("periode_prognosa", "=", $data["periode_prognosa"])->where("tahun" , "=", $tahun)->get();
+                $history_forecast_count = HistoryForecast::where("kode_proyek", "=", $kode_proyek)->where("periode_prognosa", "=", $data["periode_prognosa"])->where("tahun", "=", $tahun)->get();
                 if ($history_forecast_count->count() > 0) continue;
                 $history_forecast = new HistoryForecast();
 
                 foreach ($forecasts as $forecast) {
-
                     if ($forecast->month_forecast > $farestMonth) {
                         $farestMonth = $forecast->month_forecast;
                     }
@@ -1108,8 +1418,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                         $total_realisasi += (int) $forecast->realisasi_forecast;
                         $total_forecast += (int) $forecast->nilai_forecast ?? 0;
                     }
-
+                    
                     $total_rkap += (int) $forecast->rkap_forecast ?? 0;
+                    // if ($forecast->stage == 8) {
+                    //     dd($forecast, $total_realisasi, $total_forecast);
+                    // }
                 }
                 // RKAP, REALISASI
                 $history_forecast->kode_proyek = $kode_proyek;
@@ -1121,16 +1434,29 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 // $history_forecast->month_rkap = $current_proyek->bulan_pelaksa;
                 // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $current_proyek->nilai_kontrak_keseluruhan ?? 0);
                 if ($current_proyek->stage == 8) {
-                    $history_forecast->realisasi_forecast = $total_realisasi ?? "0";
+                    $history_forecast->realisasi_forecast = $total_realisasi;
                     // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan;
-                    $history_forecast->month_realisasi = $current_proyek->bulan_ri_perolehan ?? 0;
+                    // $history_forecast->month_realisasi = $current_proyek->bulan_ri_perolehan ?? 0;
+                    $history_forecast->month_realisasi = $forecast->month_realisasi ?? 0;
+                    // $history_forecast->month_realisasi = $current_proyek->bulan_ri_perolehan ?? 0;
                 }
                 $history_forecast->periode_prognosa = $request->periode_prognosa;
+
+                $history_forecast->stage = $current_proyek->stage;
+
                 if ($request->periode_prognosa == 12 && $bulan == 1 ) {
                     $history_forecast->tahun = (int) date("Y") - 1;
                 } else {
                     $history_forecast->tahun = (int) date("Y");
                 }
+
+                if (empty($history_forecast->month_realisasi)) {
+                    $history_forecast->realisasi_forecast = 0;
+                    $history_forecast->month_realisasi = 0;
+                }
+                // if ($current_proyek->kode_proyek == '5NPC437') {
+                //     dd($current_proyek->nilai_perolehan, $history_forecast->realisasi_forecast);
+                // }
                 $history_forecast->save();
                 // if ($index == $forecasts->count() - 1) {
                 // }
@@ -1819,7 +2145,273 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         return view("MasterData/KriteriaAssessment", compact(["kriteria_assessments"]));
     });
 
+    Route::get('/proyek/get-data-alat', function (Request $request) {
+        $search = $request->input('search');
+        $page = $request->input(
+            'page',
+            1
+        );
+        $perPage = 10;
+        $maxResults = 10;
 
+        $dataPegawai = MasterAlatProyek::when(!empty($search), function ($query) use ($search) {
+            // $query->where('nomor_rangka', 'like', '%' . strtoupper($search) . '%')
+            $query->where('nomor_rangka', 'like', '%' . $search . '%')
+            ->orWhere('nama_alat', 'like', '%' . $search . '%');
+        });
+        $data = $dataPegawai->paginate($perPage, ['*'], 'page', $page);
+
+        // $data->pagination['more'] = ($page * $perPage) < $maxResults;
+
+        return response()->json($data);
+    });
+
+    Route::post('/proyek/check-alat-select/get', function (Request $request) {
+        $alatProyekFilter = AlatProyek::where('nomor_rangka', $request->get('nomor_rangka'))->get();
+
+        try {
+            if ($alatProyekFilter->count() > 0) {
+                $checkAlatInProyek = $alatProyekFilter->map(function ($personel) {
+                    return $personel->Proyek;
+                })->unique('kode_proyek')->values()->all();
+
+                $filterStageProyek = collect($checkAlatInProyek)->filter(function ($proyek) {
+                    return $proyek->is_cancel != true && $proyek->stage >= 4 && $proyek->stage != 7;
+                });
+
+                if ($filterStageProyek->count() > 0) {
+                    $checkProyekCustomer = $filterStageProyek->map(function ($proyek) {
+                        return $proyek->proyekBerjalan->customer;
+                    });
+
+                    $checkCustomerPUPR = $checkProyekCustomer->filter(function ($customer) {
+                        return $customer->kode_pelanggan == "A10021";
+                    });
+
+                    if ($checkCustomerPUPR->count() > 3) {
+                        return response()->json([
+                            "Success" => true,
+                            "Message" => "Alat sedang mengikuti proses 3 Tender"
+                        ]);
+                    } else {
+                        return response()->json([
+                            "Success" => true,
+                            "Message" => null
+                        ]);
+                    }
+                } else {
+                    return response()->json([
+                        "Success" => true,
+                        "Message" => null
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    "Success" => true,
+                    "Message" => null
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                "Success" => false,
+                "Message" => $e->getMessage()
+            ]);
+        }
+    });
+
+    //Begin::Master get data pegawai
+    Route::get('/proyek/get-data-pegawai', function (Request $request) {
+        $search = $request->input('search');
+        $page = $request->input(
+            'page',
+            1
+        );
+        $perPage = 10;
+        $maxResults = 10;
+
+        $dataPegawai = Pegawai::when(!empty($search), function ($query) use ($search) {
+            $query->where('nama_pegawai', 'like', '%' . strtoupper($search) . '%')
+            ->orWhere('nip', 'like', '%' . strtoupper($search) . '%');
+        });
+        $data = $dataPegawai->paginate($perPage, ['*'], 'page', $page);
+
+        // $data->pagination['more'] = ($page * $perPage) < $maxResults;
+
+        return response()->json($data);
+    });
+
+    Route::get('/proyek/check-pegawai-pupr/{nip}', function ($nip) {
+        $personelFilter = PersonelTenderProyek::where('nip', $nip)->get();
+
+        try {
+            if ($personelFilter->count() > 0) {
+                $checkPersonelInProyek = $personelFilter->map(function ($personel) {
+                    return $personel->Proyek;
+                })->unique('kode_proyek')->values()->all();
+
+                $filterStageProyek = collect($checkPersonelInProyek)->filter(function ($proyek) {
+                    return $proyek->is_cancel != true && $proyek->stage >= 4 && $proyek->stage != 7;
+                });
+
+                if ($filterStageProyek->count() > 0) {
+                    $checkProyekCustomer = $filterStageProyek->map(function ($proyek) {
+                        return $proyek->proyekBerjalan->customer;
+                    });
+
+                    $checkCustomerPUPR = $checkProyekCustomer->filter(function ($customer) {
+                        return $customer->kode_pelanggan == "A10021";
+                    });
+
+                    if ($checkCustomerPUPR->count() > 3) {
+                        return response()->json([
+                            "Success" => true,
+                            "Message" => "Personel sedang mengikuti proses 3 Tender PUPR"
+                        ]);
+                    } else {
+                        return response()->json([
+                            "Success" => true,
+                            "Message" => null
+                        ]);
+                    }
+                } else {
+                    return response()->json([
+                        "Success" => true,
+                        "Message" => null
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    "Success" => true,
+                    "Message" => null
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                "Success" => false,
+                "Message" => $e->getMessage()
+            ]);
+        }
+    });
+
+    Route::get('/master-alat-proyek', function (Request $request) {
+        return view('MasterData/MasterAlatProyek', ['data' => MasterAlatProyek::all()]);
+    });
+    Route::post('/master-alat-proyek/save', function (Request $request) {
+        $data = $request->all();
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+        ];
+        $rules = [
+                "nomor_rangka" => 'required|string',
+                "nama_alat" => 'required|string',
+            ];
+        $validation = Validator::make(
+            $data,
+            $rules,
+            $messages
+        );
+
+        if ($validation->fails()) {
+            $error = collect($validation->errors());
+            if ($error->has("nomor_rangka")) {
+                Alert::error(
+                    'Error',
+                    "Nomor Rangka wajib diisi. Periksa Kembali!"
+                );
+                return redirect()->back();
+            } elseif ($error->has("nama_alat")) {
+                Alert::error(
+                    'Error',
+                    "Nama Alat wajib diisi. Periksa Kembali!"
+                );
+                return redirect()->back();
+            }
+        }
+
+        $validation->validate();
+
+        $dataNew = new MasterAlatProyek();
+        $dataNew->nomor_rangka = $data['nomor_rangka'];
+        $dataNew->nama_alat = $data['nama_alat'];
+        $dataNew->spesifikasi = $data['spesifikasi'];
+        $dataNew->kategori = $data['kategori'];
+
+        if ($dataNew->save()) {
+            Alert::success('Success', "Master Alat Berhasil Ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Master Alat Gagal Ditambahkan");
+        return redirect()->back();
+    });
+    Route::post('/master-alat-proyek/{id}/edit', function (Request $request, $id) {
+        $data = $request->all();
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+        ];
+        $rules = [
+                "nomor_rangka" => 'required|string',
+                "nama_alat" => 'required|string',
+            ];
+        $validation = Validator::make(
+            $data,
+            $rules,
+            $messages
+        );
+
+        if ($validation->fails()) {
+            $error = collect($validation->errors());
+            if ($error->has("nomor_rangka")) {
+                Alert::error(
+                    'Error',
+                    "Nomor Rangka wajib diisi. Periksa Kembali!"
+                );
+                return redirect()->back();
+            } elseif ($error->has("nama_alat")) {
+                Alert::error(
+                    'Error',
+                    "Nama Alat wajib diisi. Periksa Kembali!"
+                );
+                return redirect()->back();
+            }
+        }
+
+        $validation->validate();
+        $dataNew = MasterAlatProyek::find($id);
+        $dataNew->nomor_rangka = $data['nomor_rangka'];
+        $dataNew->nama_alat = $data['nama_alat'];
+        $dataNew->spesifikasi = $data['spesifikasi'];
+        $dataNew->kategori = $data['kategori'];
+
+        if ($dataNew->save()) {
+            Alert::success('Success', "Master Alat Berhasil Diubah");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Master Alat Diubah");
+        return redirect()->back();
+    });
+    Route::post('/master-alat-proyek/{alat}/delete', function (MasterAlatProyek $alat) {
+        if (empty($alat)) {
+            Alert::success("Error", "Master Alat Tidak Ditemukan");
+            return redirect()->back();
+        }
+
+        if ($alat->delete()) {
+            // Alert::success('Success', "Checklist Calon Mitra KSO Berhasil Dihapus");
+            // return redirect()->back();
+
+            return response()->json([
+                "Success" => true,
+                "Message" => "Master Alat Berhasil Dihapus"
+            ]);
+        }
+
+        // Alert::error('Error', "Checklist Calon Mitra KSO Gagal Dihapus");
+        // return redirect()->back();
+        return response()->json([
+            "Success" => false,
+            "Message" => "Master Alat Gagal Dihapus"
+        ]);
+    });
 
     
     //End :: Master Data
@@ -1840,12 +2432,23 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::get('/history-autorisasi', function (Request $request) {
         $bulan = (int) date('m');
         $year = (int) date('Y');
+        $filterTahun = $request->query("tahun-prognosa"); 
         if ($bulan == 1) {
-            $periodeOtor = 12;
+            $periodeOtor = $request->query("periode-prognosa") ?? 12;
+            $year = $filterTahun ?? $year - 1;
+            if (empty($filterTahun)) {
+                $filterTahun = (int) date('Y') - 1;
+            }
+            $jenisProyek = $request->query("jenis-proyek") ?? "All";
         } else {
             $periodeOtor = $request->query("periode-prognosa") ?? $bulan - 1;
             $jenisProyek = $request->query("jenis-proyek") ?? "All";
+            $year = $filterTahun ?? $year;
         }
+
+        // if (auth()->user()->check_administrator) {
+        //     dd($year);
+        // }
         
         // $periodeOtor = (int) date('m');
         if ($periodeOtor == 1) {
@@ -1858,32 +2461,63 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $history_forecasts = $history_forecasts->where("jenis_proyek", "!=", "I");
         }
         // dd($history_forecasts->select(["proyeks.kode_proyek","proyeks.unit_kerja", "unit_kerjas.unit_kerja", "periode_prognosa", "history_forecast.created_at", "nilaiok_review", "nilaiok_awal", "nilai_forecast", "realisasi_forecast"])->get()->first());
-        $history_forecasts = $history_forecasts->select(["proyeks.kode_proyek", "proyeks.unit_kerja", "unit_kerjas.unit_kerja", "unit_kerjas.divcode", "periode_prognosa", "history_forecast.created_at", "nilaiok_review", "nilaiok_awal", "rkap_forecast", "nilai_forecast", "month_realisasi", "realisasi_forecast", "month_forecast", "is_approved_1", "stage", "is_rkap", "is_cancel"])->get()->groupBy("unit_kerja");
+        $history_forecasts = $history_forecasts->select(["proyeks.kode_proyek", "proyeks.unit_kerja", "unit_kerjas.unit_kerja", "unit_kerjas.divcode", "periode_prognosa", "history_forecast.created_at", "nilaiok_review", "nilaiok_awal", "rkap_forecast", "nilai_forecast", "month_realisasi", "realisasi_forecast", "month_forecast", "is_approved_1", "proyeks.stage", "is_rkap", "is_cancel"])->get()->groupBy("unit_kerja");
         // dump($history_forecasts->first()->first());
         // $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("stage", "!=", 7)->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja");
         // $history_forecasts = $history_forecasts->get()->groupBy("unit_kerja");
-        return view("/12_Autorisasi", compact("history_forecasts", "periodeOtor", "jenisProyek"));
+        return view("/12_Autorisasi", compact("history_forecasts", "periodeOtor", "jenisProyek", "filterTahun"));
     });
 
-    Route::get('/history-autorisasi/{unit_kerja}/{jenisProyek}/{periode}/detail', function (Request $request, $unit_kerja, $jenisProyek, $periode) {
+    Route::get('/history-autorisasi/{unit_kerja}/{jenisProyek}/{periode}/{year}/detail', function (Request $request, $unit_kerja, $jenisProyek, $periode, $year) {
         $bulan = $periode;
-        $year = (int) date('Y');
+        // $year = (int) date('Y');
         $periodeOtor = $request->query("periode-prognosa") ?? $bulan;
+        $filterTahun = $request->query("tahun-prognosa") ?? $year;
+        // if ($bulan == 1) {
+        //     $periodeOtor = $request->query("periode-prognosa") ?? 12;
+        //     $year = $filterTahun ?? $year;
+        //     if (empty($filterTahun)) {
+        //         $filterTahun = (int) date('Y') - 1;
+        //     }
+        //     $jenisProyek = $request->query("jenis-proyek") ?? "All";
+        // } else {
+        //     $periodeOtor = $request->query("periode-prognosa") ?? $bulan - 1;
+        //     $jenisProyek = $request->query("jenis-proyek") ?? "All";
+        //     $year = $filterTahun ?? $year;
+        // }
+        $periodeOtor = $request->query("periode-prognosa") ?? $bulan;
+        $jenisProyek = $request->query("jenis-proyek") ?? "All";
+        $year = $filterTahun ?? $year;
         
         // $periodeOtor = (int) date('m');
         $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("tahun_perolehan", "=", $year)->where("periode_prognosa", "<=", $periodeOtor)->where("tahun", "=", $year)->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja");
-        // dump($history_forecasts);
+        // dump($history_forecasts->get());
+        // $history_forecast_filter = $history_forecasts->get()->filter(function($history){
+        //     if (!empty($history->realisasi_forecast) && empty($history->month_realisasi)) {
+        //         return;
+        //     }
+        //     return $history;
+        // });
+        // dump($history_forecast_filter);
         if($jenisProyek == "N") {
             $history_forecasts = $history_forecasts->where("jenis_proyek", "!=", "I");
         }
         // dd($history_forecasts->select(["proyeks.kode_proyek","proyeks.unit_kerja", "unit_kerjas.unit_kerja", "periode_prognosa", "history_forecast.created_at", "nilaiok_review", "nilaiok_awal", "nilai_forecast", "realisasi_forecast"])->get()->first());
-        $history_forecasts = $history_forecasts->select(["proyeks.nama_proyek", "proyeks.kode_proyek", "proyeks.unit_kerja", "unit_kerjas.unit_kerja", "unit_kerjas.divcode", "periode_prognosa", "history_forecast.created_at", "nilaiok_review", "nilaiok_awal", "rkap_forecast", "nilai_forecast", "month_realisasi", "realisasi_forecast", "is_approved_1", "stage", "is_rkap"])->get()->where("divcode", "=", $unit_kerja)->groupBy("nama_proyek");
+        // $history_forecasts = $history_forecasts->select(["proyeks.nama_proyek", "proyeks.kode_proyek", "proyeks.unit_kerja",  "proyeks.tipe_proyek", "unit_kerjas.unit_kerja", "unit_kerjas.divcode", "periode_prognosa", "history_forecast.created_at", "nilaiok_review", "nilaiok_awal", "rkap_forecast", "nilai_forecast", "month_realisasi", "realisasi_forecast", "is_approved_1", "stage", "is_rkap", "bulan_ri_perolehan"])->get()->where("divcode", "=", $unit_kerja)->sortBy('periode_prognosa')->groupBy("nama_proyek");
+        $history_forecasts = $history_forecasts->select(["proyeks.nama_proyek", "proyeks.kode_proyek", "proyeks.unit_kerja",  "proyeks.tipe_proyek", "unit_kerjas.unit_kerja", "unit_kerjas.divcode", "periode_prognosa", "history_forecast.created_at", "nilaiok_review", "nilaiok_awal", "rkap_forecast", "nilai_forecast", "month_realisasi", "realisasi_forecast", "is_approved_1", "proyeks.stage", "is_rkap", "bulan_ri_perolehan"])->get()->filter(function ($history) {
+            // if (!empty($history->realisasi_forecast) && empty($history->month_realisasi)) {
+            //     return;
+            // }
+
+            return $history;
+            // return $history->rkap_forecast != 0 && $history->nilai_forecast != 0 && $history->realisasi_forecast != 0;
+        })->where("divcode", "=", $unit_kerja)->sortBy('periode_prognosa')->groupBy("nama_proyek");
         // $tes = $history_forecasts->sum(function($his) {
         //     return (int) $his->realisasi_forecast;
         //     });
         // $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("stage", "!=", 7)->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja");
         // $history_forecasts = $history_forecasts->get()->groupBy("unit_kerja");
-        return view("/12_Autorisasi_Detail", compact("history_forecasts", "periodeOtor", "jenisProyek", "unit_kerja"));
+        return view("/12_Autorisasi_Detail", compact("history_forecasts", "periodeOtor", "jenisProyek", "unit_kerja", "filterTahun"));
     });
     //End :: History Autorisasi
 
@@ -1935,12 +2569,19 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post("/kontrak-tanda-tangan/upload", [ContractManagementsController::class, "kontrakTandaTanganUpload"]);
 
     Route::post("/dokumen-pendukung/upload", [ContractManagementsController::class, "dokumenPendukungUpload"]);
+    Route::post("/dokumen-pendukung/{id}/delete", [ContractManagementsController::class, "dokumenPendukungDelete"]);
 
     Route::post("/perjanjian-kso/upload", [ContractManagementsController::class, "perjanjianKSO"]);
 
     Route::post("/mom-meeting/upload", [ContractManagementsController::class, "momMeeting"]);
 
     Route::post("/perubahan-kontrak/upload", [ClaimController::class, "newClaim"]);
+
+    Route::post("/perubahan-kontrak/edit", [ClaimController::class, "perubahanKontrakEdit"]);
+
+    Route::post("/perubahan-kontrak/{id}/delete", [ClaimController::class, "claimDelete"]);
+
+    Route::post("/perubahan-kontrak/update/{id}", [ClaimController::class, "editClaim"]);
 
     Route::post("/perubahan-kontrak/update", [ContractManagementsController::class, "uploadPerubahanKontrak"]);
 
@@ -1959,18 +2600,25 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post("/jaminan-pelaksanaan/edit", [ContractManagementsController::class, "editJaminan"]);
 
     Route::post("/dokumen-site-instruction/upload", [ContractManagementsController::class, "siteInstruction"]);
+    Route::post("/dokumen-site-instruction/{id}/delete", [ContractManagementsController::class, "deleteSiteInstruction"]);
     
     Route::post("/dokumen-technical-form/upload", [ContractManagementsController::class, "technicalForm"]);
+    Route::post("/dokumen-technical-form/{id}/delete", [ContractManagementsController::class, "deleteTechnicalForm"]);
     
     Route::post("/dokumen-technical-query/upload", [ContractManagementsController::class, "technicalQuery"]);
+    Route::post("/dokumen-technical-query/{id}/delete", [ContractManagementsController::class, "deleteTechnicalQuery"]);
     
     Route::post("/dokumen-field-design-change/upload", [ContractManagementsController::class, "fieldChange"]);
+    Route::post("/dokumen-field-design-change/{id}", [ContractManagementsController::class, "deleteFieldChange"]);
     
     Route::post("/dokumen-contract-change-notice/upload", [ContractManagementsController::class, "changeNotice"]);
+    Route::post("/dokumen-contract-change-notice/{id}/delete", [ContractManagementsController::class, "deleteChangeNotice"]);
     
     Route::post("/dokumen-contract-change-order/upload", [ContractManagementsController::class, "changeOrder"]);
-    
-    Route::post("/dokumen-contract-change-proposal/upload", [ContractManagementsController::class, "changeProposal"]);    
+    Route::post("/dokumen-contract-change-order/{id}/delete", [ContractManagementsController::class, "deleteChangeOrder"]);
+
+    Route::post("/dokumen-contract-change-proposal/upload", [ContractManagementsController::class, "changeProposal"]);
+    Route::post("/dokumen-contract-change-proposal/{id}/delete", [ContractManagementsController::class, "deleteChangeProposal"]);
     
     Route::get("/document/view/{id}/{id_document}", [DocumentController::class, "documentView"]);
 
@@ -2037,6 +2685,32 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('/team-proyek', [TeamProyekController::class, "index"]);
     // end :: USERS
+
+    //Begin::Konsultan Perencana
+    Route::get('/konsultan-perencana', [KonsultanPerencanaController::class, 'index']);
+    Route::post('/konsultan-perencana/save', [KonsultanPerencanaController::class, 'store']);
+    Route::get('/konsultan-perencana/{id}/show', [KonsultanPerencanaController::class, 'show']);
+    Route::post('/konsultan-perencana/{id}/edit', [KonsultanPerencanaController::class, 'update']);
+    Route::post('/konsultan-perencana/{id}/delete', [KonsultanPerencanaController::class, 'destroy']);
+    //End::Konsultan Perencana
+
+    // Begin CSI
+
+    Route::get('/csi', [CSIController::class, "index"]);
+
+    Route::get('/csi/customer-survey', [CSIController::class, "indexCustomer"]);
+
+    Route::get('/csi/customer-survey/{id}', [CSIController::class, "indexCustomer"]);
+
+    Route::post('/csi/send/new/{id}', [CSIController::class, "sendCsiNew"]);
+
+    Route::post('/csi/send/{id}', [CSIController::class, "sendCsi"]);
+
+    Route::post('/csi/get-progress/{kodeProyek}', [CSIController::class, "createCsi"]);
+
+    Route::post('/csi/customer-survey-save', [CSIController::class, "saveSurvey"]);
+
+    // End CSI
 
     // begin RKAP
     Route::get('/rkap', function () {
@@ -2417,7 +3091,15 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
 Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Request $request, $unitKerjaPis) {
     // dd($request, $unitKerjaPis);
-    $periode = getPeriode(date("Y") . date("m"));
+    $month = date("m");
+
+    if ($month == 1) {
+        $periode = getPeriode((date("Y") - 1) . 12);
+    } else {
+        $periode = getPeriode(date("Y") . $month);
+    }
+
+
     // $forecasts = Forecast::with(["Proyek"])->get(["*"])->unique("kode_proyek");
     // $forecasts = Proyek::where("periode_prognosa", '=', (int) $prognosa)->whereYear("created_at", "=", $tahun)->get();
     // $proyeks = Proyek::where("tahun_perolehan", "=", $periode[0])->where("stage", "=", 8)->get(["id", "tanggal_selesai_pho", "tanggal_selesai_fho", "jenis_proyek", "kode_proyek", "nama_proyek", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak", "nospk_external", "porsi_jo", "nilai_kontrak_keseluruhan", "nomor_terkontrak", "nilai_valas_review", "tglspk_internal", "tanggal_terkontrak", "nilai_perolehan", "kurs_review", "klasifikasi_terkontrak"])->filter(function ($p) use ($periode) {
@@ -2663,13 +3345,13 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
             } else if ($p->klasifikasi_terkontrak == "Proyek Kecil" && $kategori == "Sipil") {
                 $kode_sap = "Z4 - Proyek Kecil K. Sipil";
             } else if ($p->klasifikasi_terkontrak == "Mega Proyek" && $kategori == "EPC") {
-                $kode_sap = "Z5 - Proyek Mega K. EPC";
+                $kode_sap = "Z5 - Proyek Mega EPC";
             } else if ($p->klasifikasi_terkontrak == "Proyek Besar" && $kategori == "EPC") {
-                $kode_sap = "Z6 - Proyek Besar K. EPC";
+                $kode_sap = "Z6 - Proyek Besar EPC";
             } else if ($p->klasifikasi_terkontrak == "Proyek Menengah" && $kategori == "EPC") {
-                $kode_sap = "Z7 - Proyek Menengah K. EPC";
+                $kode_sap = "Z7 - Proyek Menengah EPC";
             } else if ($p->klasifikasi_terkontrak == "Proyek Kecil" && $kategori == "EPC") {
-                $kode_sap = "Z8 - Proyek Kecil K. EPC";
+                $kode_sap = "Z8 - Proyek Kecil EPC";
             }
         }
 
@@ -2835,14 +3517,8 @@ Route::get('/send-data-industry-attractivness', function (Request $request) {
 // End Send Data Industry Attractivness ke SAP
 
 // Begin Get Jenis Dokumen
-Route::get('/get-jenis-dokumen/{jenis_dokumen}', function ($jenis_dokumen) {
-    // <option  value="Site Instruction">Site Instruction</option>
-    //                                             <option  value="Technical Form">Technical Form</option>
-    //                                             <option  value="Technical Query">Technical Query</option>
-    //                                             <option  value="Field Design Change">Field Design Change</option>
-    //                                             <option  value="Contract Change Notice">Contract Change Notice</option>
-    //                                             <option  value="Contract Change Proposal">Contract Change Proposal</option>
-    //                                             <option  value="Contract Change Order">Contract Change Order</option>
+Route::get('/get-jenis-dokumen/{jenis_dokumen}',
+    function ($jenis_dokumen) {
     switch($jenis_dokumen) {
         case "Site Instruction":
             $data = SiteInstruction::all();
@@ -2876,6 +3552,44 @@ Route::get('/get-jenis-dokumen/{jenis_dokumen}', function ($jenis_dokumen) {
         
         case "Contract Change Order":
             $data = ContractChangeOrder::all();
+            return response()->json($data);
+            break;
+    }
+});
+Route::get('/get-jenis-dokumen/{jenis_dokumen}/{profit_center}', function ($jenis_dokumen, $profit_center) {
+    switch ($jenis_dokumen) {
+        case "Site Instruction":
+            $data = SiteInstruction::where('profit_center', '=', $profit_center)->get();
+            return response()->json($data);
+            break;
+
+        case "Technical Form":
+            $data = TechnicalForm::where('profit_center', '=', $profit_center)->get();
+            return response()->json($data);
+            break;
+
+        case "Technical Query":
+            $data = TechnicalQuery::where('profit_center', '=', $profit_center)->get();
+            return response()->json($data);
+            break;
+
+        case "Field Design Change":
+            $data = FieldChange::where('profit_center', '=', $profit_center)->get();
+            return response()->json($data);
+            break;
+
+        case "Contract Change Notice":
+            $data = ContractChangeNotice::where('profit_center', '=', $profit_center)->get();
+            return response()->json($data);
+            break;
+
+        case "Contract Change Proposal":
+            $data = ContractChangeProposal::where('profit_center', '=', $profit_center)->get();
+            return response()->json($data);
+            break;
+
+        case "Contract Change Order":
+            $data = ContractChangeOrder::where('profit_center', '=', $profit_center)->get();
             return response()->json($data);
             break;
         

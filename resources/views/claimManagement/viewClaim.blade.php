@@ -524,7 +524,7 @@
     $(document).ready(function() {
         $('#kt_proyek_table').DataTable( {
             // dom: 'Bfrtip',
-            dom: 'Brti',
+            dom: 'Brtip',
             pageLength : 50,
             buttons: [
                 {

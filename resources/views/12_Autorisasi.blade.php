@@ -123,7 +123,7 @@
                                             </div>
                                             <div class="col-3">
                                                 <!--begin::Select Options-->
-                                                <select onchange="this.form.submit()" id="periode-prognosa" name="periode-prognosa"
+                                                <select id="periode-prognosa" name="periode-prognosa"
                                                     class="form-select form-select-solid w-100 ms-2 "
                                                     style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                                     data-placeholder="Bulan" data-select2-id="select2-data-bulan" tabindex="-1"
@@ -144,10 +144,35 @@
                                                 </select>
                                                 <!--end::Select Options-->
                                             </div>
+                                            
+                                            <div class="col-3">
+                                                <!--begin::Select Options-->
+                                                <select id="tahun-prognosa" name="tahun-prognosa"
+                                                    class="form-select form-select-solid w-100 ms-2 "
+                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                                    data-placeholder="Tahun" data-select2-id="select2-data-tahun" tabindex="-1"
+                                                    aria-hidden="true">
+                                                    @php
+                                                    $startYear = 2023;
+                                                    $currentYear = date('Y');
+                                                    $diffYear = $currentYear - $startYear;
+                                                    @endphp
+                                                    <option value=""></option>
+                                                    @foreach (range(1,$diffYear+1) as $thn)
+                                                        <option value="{{ $startYear }}"
+                                                            {{ $filterTahun == $startYear ? 'selected' : '' }}>{{ $startYear }}
+                                                        </option>
+                                                    @php
+                                                        $startYear++;
+                                                    @endphp
+                                                    @endforeach
+                                                </select>
+                                                <!--end::Select Options-->
+                                            </div>
 
                                             <div class="col">
                                                 <!--begin::Select Options-->
-                                                <select onchange="this.form.submit()" id="jenis-proyek" name="jenis-proyek"
+                                                <select id="jenis-proyek" name="jenis-proyek"
                                                     class="form-select form-select-solid w-100 ms-2 "
                                                     style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                                     data-placeholder="Jenis Proyek" data-select2-id="select2-jenis-proyek" tabindex="-1"
@@ -160,10 +185,10 @@
                                             </div>
                                                 
                                             <div class="col">
-                                                <form action=""></form>
-                                                <form action="" method="GET">
-                                                    <button type="submit" class="btn btn-light">Reset</button>
-                                                </form>
+                                                <div class="d-flex flex-row gap-3">
+                                                    <button type="submit" class="btn btn-primary">Search</button>
+                                                    <a href="/history-autorisasi" class="btn btn-light">Reset</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
@@ -206,7 +231,7 @@
                                     @foreach ($history_forecasts as $unit_kerja => $history)
                                         <tr>
                                             <td class="">
-                                                <a href="/history-autorisasi/{{$history->first()->divcode}}/{{$jenisProyek}}/{{$periodeOtor}}/detail" id="click-name"
+                                                <a target="_blank" href="/history-autorisasi/{{$history->first()->divcode}}/{{$jenisProyek}}/{{$periodeOtor}}/{{ $filterTahun }}/detail" id="click-name"
                                                     class="text-hover-primary mb-1">{{ $unit_kerja }}</a>
                                             </td>
                                             {{-- <td class="text-center">
@@ -267,7 +292,8 @@
                                                 @endswitch
                                             </td>
                                             <td class="text-center">
-                                                {{ Carbon\Carbon::create($history->first()->created_at)->translatedFormat("Y")}}
+                                                {{-- {{ Carbon\Carbon::create($history->first()->created_at)->translatedFormat("Y")}} --}}
+                                                {{ $filterTahun }}
                                                 {{-- 2022 --}}
                                             </td>
                                             {{-- <td class="text-center">
@@ -276,7 +302,7 @@
                                                 }), 0, ".", ".") }}
                                             </td> --}}
                                             <td class="text-end">
-                                                {{number_format((int) $history->sum(function($f) {
+                                                {{number_format((int) $history->where("is_rkap", "=", True)->sum(function($f) {
                                                     return (int) $f->rkap_forecast;
                                                 }), 0, ".", ".")}}
                                                 {{-- {{number_format((int) $history->sum(function($f) {
@@ -335,7 +361,7 @@
                                             });
                                         });
                                         $total_realisasi = $history_forecasts->sum(function ($f) use($periodeOtor) {
-                                            return $f->sum(function($f) use($periodeOtor) {
+                                            return $f->where("stage", "=", 8)->sum(function($f) use($periodeOtor) {
                                                 if($f->month_realisasi <= $periodeOtor) {
                                                     return (int) $f->realisasi_forecast;
                                                 }

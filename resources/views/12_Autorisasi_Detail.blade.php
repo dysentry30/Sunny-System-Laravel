@@ -123,7 +123,8 @@
                                             </div>
                                             <div class="col-3">
                                                 <!--begin::Select Options-->
-                                                <select onchange="window.location.href=`/history-autorisasi/{{$unit_kerja}}/{{$jenisProyek}}/${this.value}/detail`" id="periode-prognosa" name="periode-prognosa"
+                                                <select id="periode-prognosa" name="periode-prognosa"
+                                                {{-- <select onchange="window.location.href=`/history-autorisasi/{{$unit_kerja}}/{{$jenisProyek}}/${this.value}/detail`" id="periode-prognosa" name="periode-prognosa" --}}
                                                     class="form-select form-select-solid w-100 ms-2 "
                                                     style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                                     data-placeholder="Bulan" data-select2-id="select2-data-bulan" tabindex="-1"
@@ -144,10 +145,35 @@
                                                 </select>
                                                 <!--end::Select Options-->
                                             </div>
+                                            <div class="col-3">
+                                                <!--begin::Select Options-->
+                                                <select id="tahun-prognosa" name="tahun-prognosa"
+                                                    class="form-select form-select-solid w-100 ms-2 "
+                                                    style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                                    data-placeholder="Tahun" data-select2-id="select2-data-tahun" tabindex="-1"
+                                                    aria-hidden="true">
+                                                    @php
+                                                    $startYear = 2023;
+                                                    $currentYear = date('Y');
+                                                    $diffYear = $currentYear - $startYear;
+                                                    @endphp
+                                                    <option value=""></option>
+                                                    @foreach (range(1,$diffYear+1) as $thn)
+                                                        <option value="{{ $startYear }}"
+                                                            {{ $filterTahun == $startYear ? 'selected' : '' }}>{{ $startYear }}
+                                                        </option>
+                                                    @php
+                                                        $startYear++;
+                                                    @endphp
+                                                    @endforeach
+                                                </select>
+                                                <!--end::Select Options-->
+                                            </div>
 
                                             <div class="col">
                                                 <!--begin::Select Options-->
-                                                <select onchange="window.location.href=`/history-autorisasi/{{$unit_kerja}}/${this.value}/{{$periodeOtor}}/detail`" id="jenis-proyek" name="jenis-proyek"
+                                                <select id="jenis-proyek" name="jenis-proyek"
+                                                {{-- <select onchange="window.location.href=`/history-autorisasi/{{$unit_kerja}}/${this.value}/{{$periodeOtor}}/detail`" id="jenis-proyek" name="jenis-proyek" --}}
                                                     class="form-select form-select-solid w-100 ms-2 "
                                                     style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                                     data-placeholder="Jenis Proyek" data-select2-id="select2-jenis-proyek" tabindex="-1"
@@ -160,10 +186,10 @@
                                             </div>
                                                 
                                             <div class="col">
-                                                <form action=""></form>
-                                                <form action="" method="GET">
-                                                    <button type="submit" class="btn btn-light">Reset</button>
-                                                </form>
+                                                <div class="d-flex flex-row gap-3">
+                                                    <button type="submit" class="btn btn-primary">Search</button>
+                                                    <a onclick="window.location.href=`/history-autorisasi/{{$unit_kerja}}/${this.value}/{{$periodeOtor}}/detail" class="btn btn-light">Reset</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
@@ -178,16 +204,18 @@
                         <div class="card-body pt-0">
 
                             <!--begin::Table-->
-                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="example">
+                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="example2">
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-auto">Kode Proyek</th>
+                                        {{-- <th class="min-w-auto">@sortablelink('unit_kerja','Unit Kerja')</th> --}}
                                         <th class="min-w-auto">@sortablelink('unit_kerja','Unit Kerja')</th>
                                         {{-- <th class="min-w-auto text-center">DOP</th> --}}
                                         <th class="min-w-auto text-center">Bulan Pelaporan</th>
-                                        <th class="min-w-auto text-center">Tahun Pelaporan</th>
+                                        <th class="min-w-auto text-center">Bulan Realisasi</th>
+                                        {{-- <th class="min-w-auto text-center">Tahun Pelaporan</th> --}}
                                         {{-- <th class="min-w-auto text-center">Total OK Review</th> --}}
                                         <th class="min-w-auto text-center">Total OK Awal</th>
                                         <th class="min-w-auto text-center">Total Forecast</th>
@@ -203,9 +231,13 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-600">
+                                    @php
+                                        $total = 0;
+                                    @endphp
                                     {{-- @dd($history_forecasts) --}}
                                     @foreach ($history_forecasts as $nama_proyek => $history)
-                                        <tr>
+                                        {{-- @dump($history) --}}
+                                        <tr id="rowHistory">
                                             <td class="">
                                                 {{ $history->first()->kode_proyek }}
                                             </td>
@@ -218,7 +250,8 @@
                                             </td> --}}
                                             <td class="text-center">
                                                 @php
-                                                    $periode_prognosa = $history->first()->periode_prognosa;
+                                                    $periode_prognosa = $history->last()->periode_prognosa;
+                                                    // $periode_prognosa = $history->last()->month_realisasi ?? $history->last()->periode_prognosa ;
                                                 @endphp
                                                 @switch($periode_prognosa)
                                                     @case('1')
@@ -242,7 +275,7 @@
                                                     @break
 
                                                     @case('6')
-                                                        Juni
+                                                    Juni
                                                     @break
 
                                                     @case('7')
@@ -271,31 +304,107 @@
                                                 @endswitch
                                             </td>
                                             <td class="text-center">
-                                                {{ Carbon\Carbon::create($history->first()->created_at)->translatedFormat("Y")}}
+                                                @php
+                                                    // $periode_prognosa = $history->first()->periode_prognosa;
+                                                    if ($history->last()->Proyek->tipe_proyek != "R" && !empty($history->last()->realisasi_forecast)) {
+                                                        $periode_realisasi = (!empty($history->last()->month_realisasi) && $history->last()->month_realisasi < $periodeOtor) ? $history->last()->month_realisasi : $history->last()->periode_prognosa;
+                                                    } else {
+                                                        $periode_realisasi = $history->last()->periode_prognosa ?? "-" ;
+                                                    }
+                                                @endphp
+                                                @switch($periode_realisasi)
+                                                    @case('1')
+                                                    Januari
+                                                    @break
+                                                    
+                                                    @case('2')
+                                                    Februari
+                                                    @break
+                                                    
+                                                    @case('3')
+                                                    Maret
+                                                    @break
+                                                    
+                                                    @case('4')
+                                                    April
+                                                    @break
+
+                                                    @case('5')
+                                                    Mei
+                                                    @break
+
+                                                    @case('6')
+                                                    Juni
+                                                    @break
+
+                                                    @case('7')
+                                                    Juli
+                                                    @break
+                                                    
+                                                    @case('8')
+                                                    Agustus
+                                                    @break
+                                                    
+                                                    @case('9')
+                                                    September
+                                                    @break
+                                                    
+                                                    @case('10')
+                                                    Oktober
+                                                    @break
+                                                    
+                                                    @case('11')
+                                                    November
+                                                    @break
+                                                    
+                                                    @case('12')
+                                                    Desember
+                                                    @break
+
+                                                    @case('-')
+                                                    -
+                                                    @break
+                                                @endswitch
                                             </td>
+                                            {{-- <td class="text-center">
+                                                {{ Carbon\Carbon::create($history->first()->created_at)->translatedFormat("Y")}}
+                                            </td> --}}
                                             {{-- <td class="text-center">
                                                 {{ number_format((int) $history->sum(function($f) {
                                                     return (int) $f->nilaiok_review;
                                                 }), 0, ".", ".") }}
                                             </td> --}}
                                             <td class="text-end">
-                                                {{number_format((int) $history->sum(function($f) {
-                                                    return (int) $f->rkap_forecast;
+                                                {{number_format((int) $history->where("is_rkap", "=", True)->sum(function($f) use($periodeOtor) {
+                                                    if($f->periode_prognosa == $periodeOtor) {
+                                                        return (int) $f->rkap_forecast;
+                                                    }
                                                 }), 0, ".", ".")}}
                                                 {{-- {{number_format((int) $history->sum(function($f) {
                                                     return (int) $f->nilaiok_awal;
                                                 }), 0, ".", ".")}} --}}
                                             </td>
                                             <td class="text-end">
-                                                {{number_format((int) $history->sum(function($f) {
-                                                    return (int) $f->nilai_forecast;
+                                                {{number_format((int) $history->sum(function($f) use($periodeOtor) {
+                                                    if($f->periode_prognosa == $periodeOtor) {
+                                                        return (int) $f->nilai_forecast;
+                                                    }
                                                 }), 0, ".", ".")}}
                                             </td>
-                                            <td class="text-end">
-                                                {{number_format((int) $history->where("stage", "=", 8)->sum(function($f) use($periodeOtor) {
-                                                    if($f->month_realisasi <= $periodeOtor) {
+                                            {{-- <td class="text-end">
+                                                {{!empty($history->last()->Proyek->bulan_ri_perolehan) && $history->last()->Proyek->bulan_ri_perolehan <= $periodeOtor  ? number_format((int) $history->where("stage", "=", 8)->sum(function($f) use($periodeOtor) {
+                                                    if($f->periode_prognosa == $periodeOtor) {
                                                         return (int) $f->realisasi_forecast;
                                                     }
+                                                    // return (int) $f->realisasi_forecast;
+                                                }), 0, ".", ".") : 0}}
+                                            </td> --}}
+                                            <td class="text-end">
+                                                {{number_format((int) $history->where("stage", "=", 8)->sum(function($f) use($periodeOtor) {
+                                                    if($f->periode_prognosa == $periodeOtor && !empty($f->month_realisasi) && $f->month_realisasi <= $periodeOtor) {
+                                                        return (int) $f->realisasi_forecast;
+                                                    }
+                                                    // return (int) $f->realisasi_forecast;
                                                 }), 0, ".", ".")}}
                                             </td>
                                             {{-- <td class="text-center">
@@ -306,7 +415,7 @@
                                     @endforeach
                                     @php
                                         $total_rkap = $history_forecasts->sum(function ($f) use($periodeOtor) {
-                                            return $f->sum(function($f) use($periodeOtor) {
+                                            return $f->where("is_rkap", "=", True)->sum(function($f) use($periodeOtor) {
                                                 if($f->periode_prognosa == $periodeOtor) {
                                                     return (int) $f->rkap_forecast;
                                                 }
@@ -320,8 +429,8 @@
                                             });
                                         });
                                         $total_realisasi = $history_forecasts->sum(function ($f) use($periodeOtor) {
-                                            return $f->sum(function($f) use($periodeOtor) {
-                                                if($f->stage == 8 && $f->month_realisasi <= $periodeOtor) {
+                                            return $f->where("stage", "=", 8)->sum(function($f) use($periodeOtor) {
+                                                if($f->month_realisasi <= $periodeOtor && $f->periode_prognosa == $periodeOtor) {
                                                     return (int) $f->realisasi_forecast;
                                                 }
                                             });
@@ -337,10 +446,10 @@
                                     @endphp
                                     <tr class="bg-dark">
                                         <td class="text-white">Total</td>
-                                        <td colspan="3" class="text-dark">{{$total_realisasi."x".$total_realisasi_before}}</td>
+                                        <td colspan="3" class="text-dark">{{$total_realisasi."x".$total_realisasi_before."x".$selisih_realisasi}}</td>
                                         <td class="text-end text-white">{{ number_format($total_rkap, 0, ".", "."); }}</td>
                                         <td class="text-end text-white">{{ number_format($total_forecast, 0, ".", "."); }}</td>
-                                        <td class="text-end text-white">{{ number_format(($selisih_realisasi), 0, ".", "."); }}</td>
+                                        <td class="text-end text-white">{{ number_format(($total_realisasi), 0, ".", "."); }}</td>
                                     </tr>
                                     {{-- @foreach ($proyeks as $proyekArray)
                                         @foreach ($proyekArray as $proyek)
@@ -417,24 +526,35 @@
 @section('js-script')
 
     <!--begin::Data Tables-->
-    <script src="/datatables/jquery.dataTables.min.js"></script>
+    {{-- <script src="/datatables/jquery.dataTables.min.js"></script>
     <script src="/datatables/dataTables.buttons.min.js"></script>
     <script src="/datatables/buttons.html5.min.js"></script>
     <script src="/datatables/buttons.colVis.min.js"></script>
     <script src="/datatables/jszip.min.js"></script>
     <script src="/datatables/pdfmake.min.js"></script>
-    <script src="/datatables/vfs_fonts.js"></script>
+    <script src="/datatables/vfs_fonts.js"></script> --}}
     
     <script>
+        function hideRowNilaiZero() {
+            let rowTable = document.querySelectorAll('#rowHistory');
+            rowTable.forEach((item)=>{
+                if (item.children[4].innerText == 0 && item.children[5].innerText == 0 && item.children[6].innerText == 0) {
+                    item.style.display = 'none';
+                }
+            })
+        }
+    </script>
+    <script>
         $(document).ready(function() {
-            $('#example').DataTable( {
-                dom: 'Bfrtip',
-                pageLength : 20,
-                buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
-                ]
-            } );
-        } );
+            // $('#example2').DataTable( {
+            //     dom: 'Bfrtip',
+            //     pageLength : 20,
+            //     buttons: [
+            //         'copy', 'csv', 'excel', 'pdf', 'print'
+            //     ]
+            // });
+            hideRowNilaiZero()
+        });
     </script>
     <!--end::Data Tables-->
 

@@ -100,6 +100,44 @@
             pointer-events: none;
             touch-action: none;
         }
+
+        table thead tr th{
+            background-color: #0DB0D9 !important;
+            color: white !important;
+            padding: 5px !important;
+            text-align: center !important;
+            vertical-align: middle !important;
+        }
+        th.min-w-auto.text-end{
+            text-align: center !important;
+        }
+        th.text-end{
+            text-align: center !important;
+        }
+        table tbody tr td{
+            padding: 5px !important;
+        }
+        table.dataTable{
+            border-collapse: collapse !important;
+        }
+        
+        .content-table table {
+            border-collapse: collapse !important;
+        }
+
+        table, th, td, tr {
+            border: 0.5px solid #333333 !important;
+        }
+        th a {
+            color: white !important;
+        }
+        .accordion-button{
+            background-color: white !important;
+            box-shadow: inset 0 0px 0 #eff2f5;
+        }
+        .fa.fa-sort {
+            color: white !important;
+        }
     </style>
     {{-- end:: Disable Native Date Browser --}}
 </head>

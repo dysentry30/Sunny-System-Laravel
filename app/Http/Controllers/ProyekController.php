@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AlatProyek;
 use App\Models\Dop;
 use App\Models\Sbu;
 use App\Models\User;
@@ -34,6 +35,8 @@ use App\Models\DokumenIca;
 use App\Models\DokumenItbTor;
 use App\Models\DokumenMou;
 use App\Models\DokumenNda;
+use App\Models\KonsultanPerencana;
+use App\Models\ProyekKonsultanPerencana;
 use App\Models\KriteriaPasarProyek;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
@@ -43,6 +46,7 @@ use App\Models\JenisProyek;
 use App\Models\Provinsi;
 use App\Models\TipeProyek;
 use App\Models\Departemen;
+use App\Models\PersonelTenderProyek;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -242,13 +246,13 @@ class ProyekController extends Controller
         //     return str_contains($p->kode_proyek, $kode_proyek);
         // }) + 1;
 
-        $lastProyek = Proyek::select(["kode_proyek", "nama_proyek"])->where("kode_proyek", "like", "%".$kode_proyek."%")->get()->sortBy("kode_proyek")->last();
-        $no_urut = (int) preg_replace("/[^0-9]/", "",$lastProyek->kode_proyek) + 1;
-        $len = strlen($no_urut);
+        $lastProyek = Proyek::select(["kode_proyek", "nama_proyek"])->where("kode_proyek", "like", "%" . $kode_proyek . "%")->get()->sortBy("kode_proyek")->last();
         // dd($no_urut);
         if(empty($lastProyek)){
             $no_urut = 1;
         }else{
+            $no_urut = (int) preg_replace("/[^0-9]/", "", $lastProyek->kode_proyek) + 1;
+            $len = strlen($no_urut);
             // $no_urut = (int) trim($lastProyek->kode_proyek, $kode_proyek) + 1;
             $no_urut = substr($no_urut, ($len-3), 3);
         }
@@ -367,6 +371,9 @@ class ProyekController extends Controller
         $pesertatender = PesertaTender::where("kode_proyek", "=", $kode_proyek)->get();
         $proyekberjalans = ProyekBerjalans::where("kode_proyek", "=", $kode_proyek)->get()->first();
         $departemen = Departemen::where("kode_divisi", "=", $proyek->UnitKerja->kode_sap)->get();
+        if ($proyek->tipe_proyek == "P") {
+            $konsultan_perencana = KonsultanPerencana::all();
+        }
         // $historyForecast = $historyForecast;
         // $porsiJO = $porsiJO;
         // $data_negara = $data_negara;
@@ -375,7 +382,7 @@ class ProyekController extends Controller
             return view(
                 'Proyek/viewProyek',
                 ["proyek" => $proyek, "proyeks" => Proyek::all()],
-                compact(['companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'mataUang', "provinsi", "departemen"])
+                compact(['companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'mataUang', "provinsi", "departemen", "konsultan_perencana"])
                 // [
                 //     'companies' => Company::all(),
                 //     'sumberdanas' => SumberDana::all(),
@@ -399,6 +406,7 @@ class ProyekController extends Controller
             $periodePrognosa = $periodePrognosa == "" ? (int) date("m") : $periodePrognosa;
             $historyForecastAll = $historyForecastAll->groupBy("periode_prognosa");
             $listPeriodeExistInHistory = $historyForecastAll->keys()->sort()->values();
+            // dd($listPeriodeExistInHistory);
             $tabPane = "";
             return view('Proyek/viewProyekRetail', ["proyek" => $proyek, "proyeks" => Proyek::all()], compact(['is_admin', "periodePrognosa", 'companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'tabPane', "provinsi", "listPeriodeExistInHistory"]));
             // return redirect()->back();
@@ -587,8 +595,20 @@ class ProyekController extends Controller
         $newProyek->klasifikasi_terkontrak = $dataProyek["klasifikasi-terkontrak"];
         $newProyek->tanggal_selesai_pho = $dataProyek["tanggal-selesai-kontrak-pho"];
         $newProyek->tanggal_selesai_fho = $dataProyek["tanggal-selesai-kontrak-fho"];
-        $newProyek->jenis_terkontrak = $dataProyek["jenis-terkontrak"];
-        $newProyek->sistem_bayar = $dataProyek["sistem-bayar"];
+        // $newProyek->jenis_terkontrak = $dataProyek["jenis-terkontrak"];
+        // $newProyek->sistem_bayar = $dataProyek["sistem-bayar"];
+        $newProyek->jenis_terkontrak = $dataProyek["jenis-terkontrak-new"];
+        $newProyek->sistem_bayar = $dataProyek["sistem-bayar-new"];
+
+        if (!empty($dataProyek["is-uang-muka"])) {
+            if ($dataProyek["is-uang-muka"] == "Ya") {
+                $newProyek->is_uang_muka = true;
+                $newProyek->uang_muka = (int)$dataProyek["uang-muka"];
+            } else {
+                $newProyek->is_uang_muka = false;
+                $newProyek->uang_muka = null;
+            }
+        }
         // $newProyek->nilai_sisa_risiko = $dataProyek["nilai-sisa-risiko"];
         // $newProyek->cadangan_risiko = $dataProyek["cadangan-risiko"];
         // $newProyek->nilai_disetujui = $dataProyek["nilai-disetujui"];
@@ -720,7 +740,6 @@ class ProyekController extends Controller
         if ($idCustomer != null) {
             // $customer = Customer::where('name', "=", $dataProyek["customer"])->get()->first();
             // $customer = Customer::find($idCustomer);
-
             $customerHistory = ProyekBerjalans::where('kode_proyek', "=", $newProyek->kode_proyek)->get()->first();
 
             if ($customerHistory == null) {
@@ -1578,7 +1597,7 @@ class ProyekController extends Controller
                 $customer = $proyekStage->ProyekBerjalan->Customer ?? null;
                 if (!empty($customer)) {
                     $error_msg = collect();
-                    if (empty($customer->kode_nasabah)) {
+                    if (empty($customer->kode_nasabah) && $proyekStage->UnitKerja->dop != 'EA') {
                         $error_msg->push("Kode Nasabah");
                     }
                     if (empty($customer->email)) {
@@ -1694,199 +1713,202 @@ class ProyekController extends Controller
                     $cust_akont = "";
                     $witht = "";
                 }
-                $data_nasabah_online = collect([
-                    "nmnasabah" => "$customer->name",
-                    "alamat" => "$customer->address_1",
-                    "kota" => "$customer->kota_kabupaten",
-                    "email" => "$customer->email",
-                    "ext" => "-",
-                    "telepon" => "$customer->phone_number",
-                    "fax" => "$customer->fax",
-                    "npwp" => "$customer->npwp_company",
-                    "nama_kontak" => $pic->nama_pic ?? "",
-                    "jenisperusahaan" => "$customer->jenis_instansi",
-                    "jabatan" => $pic->jabatan_pic ?? "",
-                    "email1" => $pic->email_pic ?? "",
-                    "telpon1" => $pic->phone_pic ?? "",
-                    "handphone" => $pic->phone_pic ?? "",
-                    "tipe_perusahaan" => "$customer->jenis_perusahaan",
-                    "tipe_lain_perusahaan" => "-",
-                    "cotid" => "11",
-                    "dtsap" => [
-                        [
-                            "devid" => "YMMI002",
-                            "packageid" => $this->GUID(),
-                            "cocode" => "A000",
-                            "prctr" => "",
-                            // "timestamp" => "20221013100000",
-                            "timestamp" => date("y") . date("m") . date("d") . "10000",
-                            "data" => [
-                                [
-                                    "BPARTNER" => "$customer->kode_nasabah",
-        
-                                    "GROUPING" => "$grouping",
-        
-                                    "LVORM" => "",
-        
-                                    "TITLE" => "Z001",
-        
-                                    "NAME" => "$customer->name",
-        
-                                    "TITLELETTER" => "",
-        
-                                    "SEARCHTERM1" => substr($customer->name, 0, 40) ?? "",
-        
-                                    "SEARCHTERM2" => substr($customer->name, 0, 40) ?? "",
-        
-                                    "STREET" => $sap->street ?? "",
-        
-                                    "HOUSE_NO" => "",
-        
-                                    "POSTL_COD1" => "$customer->kode_pos",
-        
-                                    "CITY" => explode("-", $provinsi->province_id)[1],
-        
-                                    // "ADDR_COUNTRY" => $provinsi->country_id ?? "ID",
-                                    "ADDR_COUNTRY" => "ID",
-        
-                                    "REGION" => explode("-", $provinsi->province_id)[1],
-        
-                                    "PO_BOX" => "",
-        
-                                    "POSTL_COD3" => "",
-        
-                                    "LANGU" => "E",
-        
-                                    "TELEPHONE" => "$customer->phone_number",
-        
-                                    "PHONE_EXTENSION" => "",
-        
-                                    "MOBPHONE" => "$customer->handphone",
-        
-                                    "FAX" => "$customer->fax",
-        
-                                    "FAX_EXTENSION" => "",
-        
-                                    "E_MAIL" => "$customer->email",
-        
-                                    "VALIDFROMDATE" => now()->translatedFormat("d-m-Y"),
-        
-                                    "VALIDTODATE" => now()->addMonths(5)->translatedFormat("d-m-Y"),
-        
-                                    "IDENTIFICATION" => [
-                                        [
-        
-                                            // "TAXTYPE" => "$sap->tax_number_category",
-                                            "TAXTYPE" => $provinsi->country_id == "ID" ? "ID1" : "ID2",
-            
-                                            "TAXNUMBER" => "$customer->npwp_company"
-                                        ]
-                                    ],
-        
-                                    "BANK" => [
-                                        [
-                                            "BANK_DET_ID" => "",
-            
-                                            "BANK_CTRY" => "",
-            
-                                            "BANK_KEY" => "CRM",
-            
-                                            "BANK_ACCT" => "",
-            
-                                            "BK_CTRL_KEY" => "",
-            
-                                            "BANK_REF" => "",
-            
-                                            "EXTERNALBANKID" => "",
-            
-                                            "ACCOUNTHOLDER" => "",
-            
-                                            "BANKACCOUNTNAME" => ""
-                                        ]
-                                    ],
-        
-                                    "CUST_BUKRS" => "",
-        
-                                    "KUNNR" => "",
-        
-                                    "CUST_AKONT" => "$cust_akont",
-        
-                                    "CUST_C_ZTERM" => "$customer->syarat_pembayaran",
-        
-                                    "CUST_WTAX" => [
-                                        [
-        
-                                            "WITHT" => "$witht",
-            
-                                            "WT_AGENT" => "",
-            
-                                            "WT_AGTDF" => "",
-            
-                                            "WT_AGTDT" => ""
-                                        ]
-                                    ],
-        
-                                    "VKORG" => "",
-        
-                                    "VTWEG" => "",
-        
-                                    "SPART" => "",
-        
-                                    "KDGRP" => $kdgrp,
-        
-                                    "CUST_WAERS" => "IDR",
-        
-                                    "KALKS" => "",
-        
-                                    "VERSG" => "",
-        
-                                    "VSBED" => "",
-        
-                                    "INCO1" => "",
-        
-                                    "INCO2_L" => "",
-        
-                                    "CUST_S_ZTERM" => "$customer->syarat_pembayaran",
-        
-                                    "KTGRD" => "$ktgrd",
-        
-                                    "TAXKD" => "$customer->tax",
-        
-                                    "VEND_BUKRS" => "",
-        
-                                    "LIFNR" => "",
-        
-                                    "VEND_AKONT" => "",
-        
-                                    "VEND_C_ZTERM" => "",
-        
-                                    "REPRF" => "X",
-        
-                                    "VEND_WTAX" => [[]],
-                                    // "VEND_WTAX" => [
-        
-                                    //     "WITHT" => "J3",
-        
-                                    //     "WT_SUBJCT" => "X"
-        
-                                    // ],
-        
-                                    "EKORG" => "",
-        
-                                    "VEND_P_ZTERM" => "",
-        
-                                    "WEBRE" => "",
-        
-                                    "VEND_WAERS" => "",
-        
-                                    "LEBRE" => "",
 
-                                    "BRAN2" => $customer->IndustrySector->id_industry_sector,
+                if ($proyekStage->UnitKerja->dop != 'EA') {
+                    $data_nasabah_online = collect([
+                        "nmnasabah" => "$customer->name",
+                        "alamat" => "$customer->address_1",
+                        "kota" => "$customer->kota_kabupaten",
+                        "email" => "$customer->email",
+                        "ext" => "-",
+                        "telepon" => "$customer->phone_number",
+                        "fax" => "$customer->fax",
+                        "npwp" => "$customer->npwp_company",
+                        "nama_kontak" => $pic->nama_pic ?? "",
+                        "jenisperusahaan" => "$customer->jenis_instansi",
+                        "jabatan" => $pic->jabatan_pic ?? "",
+                        "email1" => $pic->email_pic ?? "",
+                        "telpon1" => $pic->phone_pic ?? "",
+                        "handphone" => $pic->phone_pic ?? "",
+                        "tipe_perusahaan" => "$customer->jenis_perusahaan",
+                        "tipe_lain_perusahaan" => "-",
+                        "cotid" => "11",
+                        "dtsap" => [
+                            [
+                                "devid" => "YMMI002",
+                                "packageid" => $this->GUID(),
+                                "cocode" => "A000",
+                                "prctr" => "",
+                                // "timestamp" => "20221013100000",
+                                "timestamp" => date("y") . date("m") . date("d") . "10000",
+                                "data" => [
+                                    [
+                                        "BPARTNER" => "$customer->kode_nasabah",
+
+                                        "GROUPING" => "$grouping",
+
+                                        "LVORM" => "",
+
+                                        "TITLE" => "Z001",
+
+                                        "NAME" => "$customer->name",
+
+                                        "TITLELETTER" => "",
+
+                                        "SEARCHTERM1" => substr($customer->name, 0, 40) ?? "",
+
+                                        "SEARCHTERM2" => substr($customer->name, 0, 40) ?? "",
+
+                                        "STREET" => $sap->street ?? "",
+
+                                        "HOUSE_NO" => "",
+
+                                        "POSTL_COD1" => "$customer->kode_pos",
+
+                                        "CITY" => explode("-", $provinsi->province_id)[1],
+
+                                        // "ADDR_COUNTRY" => $provinsi->country_id ?? "ID",
+                                        "ADDR_COUNTRY" => "ID",
+
+                                        "REGION" => explode("-", $provinsi->province_id)[1],
+
+                                        "PO_BOX" => "",
+
+                                        "POSTL_COD3" => "",
+
+                                        "LANGU" => "E",
+
+                                        "TELEPHONE" => "$customer->phone_number",
+
+                                        "PHONE_EXTENSION" => "",
+
+                                        "MOBPHONE" => "$customer->handphone",
+
+                                        "FAX" => "$customer->fax",
+
+                                        "FAX_EXTENSION" => "",
+
+                                        "E_MAIL" => "$customer->email",
+
+                                        "VALIDFROMDATE" => now()->translatedFormat("d-m-Y"),
+
+                                        "VALIDTODATE" => now()->addMonths(5)->translatedFormat("d-m-Y"),
+
+                                        "IDENTIFICATION" => [
+                                            [
+
+                                                // "TAXTYPE" => "$sap->tax_number_category",
+                                                "TAXTYPE" => $provinsi->country_id == "ID" ? "ID1" : "ID2",
+
+                                                "TAXNUMBER" => "$customer->npwp_company"
+                                            ]
+                                        ],
+
+                                        "BANK" => [
+                                            [
+                                                "BANK_DET_ID" => "",
+
+                                                "BANK_CTRY" => "",
+
+                                                "BANK_KEY" => "CRM",
+
+                                                "BANK_ACCT" => "",
+
+                                                "BK_CTRL_KEY" => "",
+
+                                                "BANK_REF" => "",
+
+                                                "EXTERNALBANKID" => "",
+
+                                                "ACCOUNTHOLDER" => "",
+
+                                                "BANKACCOUNTNAME" => ""
+                                            ]
+                                        ],
+
+                                        "CUST_BUKRS" => "",
+
+                                        "KUNNR" => "",
+
+                                        "CUST_AKONT" => "$cust_akont",
+
+                                        "CUST_C_ZTERM" => "$customer->syarat_pembayaran",
+
+                                        "CUST_WTAX" => [
+                                            [
+
+                                                "WITHT" => "$witht",
+
+                                                "WT_AGENT" => "",
+
+                                                "WT_AGTDF" => "",
+
+                                                "WT_AGTDT" => ""
+                                            ]
+                                        ],
+
+                                        "VKORG" => "",
+
+                                        "VTWEG" => "",
+
+                                        "SPART" => "",
+
+                                        "KDGRP" => $kdgrp,
+
+                                        "CUST_WAERS" => "IDR",
+
+                                        "KALKS" => "",
+
+                                        "VERSG" => "",
+
+                                        "VSBED" => "",
+
+                                        "INCO1" => "",
+
+                                        "INCO2_L" => "",
+
+                                        "CUST_S_ZTERM" => "$customer->syarat_pembayaran",
+
+                                        "KTGRD" => "$ktgrd",
+
+                                        "TAXKD" => "$customer->tax",
+
+                                        "VEND_BUKRS" => "",
+
+                                        "LIFNR" => "",
+
+                                        "VEND_AKONT" => "",
+
+                                        "VEND_C_ZTERM" => "",
+
+                                        "REPRF" => "X",
+
+                                        "VEND_WTAX" => [[]],
+                                        // "VEND_WTAX" => [
+
+                                        //     "WITHT" => "J3",
+
+                                        //     "WT_SUBJCT" => "X"
+
+                                        // ],
+
+                                        "EKORG" => "",
+
+                                        "VEND_P_ZTERM" => "",
+
+                                        "WEBRE" => "",
+
+                                        "VEND_WAERS" => "",
+
+                                        "LEBRE" => "",
+
+                                        "BRAN2" => $customer->IndustrySector->id_industry_sector,
+                                    ]
                                 ]
                             ]
                         ]
-                    ]
-                ]);
+                    ]);
+                }
                 // dd($data_nasabah_online);
                 // End :: Ngirim data ke nasabah online WIKA
 
@@ -1905,13 +1927,15 @@ class ProyekController extends Controller
                     $contractManagements = ContractManagements::get()->where("project_id", "=", $proyekStage->kode_proyek)->first();
                     if (str_contains(URL::full() , 'crm.wika.co.id')) {
                         // setLogging();
-                        $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm", $data_nasabah_online)->json();
-                        // dd($nasabah_online_response);
-                        if (!$nasabah_online_response["status"] && !str_contains($nasabah_online_response["msg"], "sudah ada dalam nasabah online")) {
-                            Alert::error("Error", $nasabah_online_response["msg"]);
-                            return redirect()->back();
+                        if ($proyekStage->UnitKerja->dop != 'EA') {
+                            $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm", $data_nasabah_online)->json();
+                            // dd($nasabah_online_response);
+                            if (!$nasabah_online_response["status"] && !str_contains($nasabah_online_response["msg"], "sudah ada dalam nasabah online")) {
+                                Alert::error("Error", $nasabah_online_response["msg"]);
+                                return redirect()->back();
+                            }
+                            // $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev", $data_nasabah_online)->json();
                         }
-                        // $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev", $data_nasabah_online)->json();
                         $request->stage = 8;
                         if (!empty($contractManagements)) {
                                 $contractManagements->stages = (int) 2;
@@ -2295,6 +2319,291 @@ class ProyekController extends Controller
         $deleteTender->delete();
         Alert::success("Success", "Peserta Tender Berhasil Dihapus");
         return redirect()->back();
+    }
+
+    public function tambahPersonelTender(Request $request,  PersonelTenderProyek $personel)
+    {
+        $data = $request->all();
+        $messages = [
+            "required" => "*Kolom Ini Harus Diisi !",
+        ];
+        $rules = [
+            "nama_pegawai" => "required",
+            "kategori_personel" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Personel Tender Gagal Ditambahkan, Periksa Kembali !");
+            return redirect()->back();
+        }
+
+        $proyek = Proyek::find($data["kode-proyek"]);
+        $pelanggan = $proyek->proyekBerjalan->customer;
+        $validation->validate();
+
+        if (empty($pelanggan)) {
+            Alert::error('Error', "Pelanggan Belum ditentukan. Mohon isi terlebih dahulu !");
+            return redirect()->back();
+        }
+
+        $personel->nip = $data["nama_pegawai"];
+        $personel->kategori = $data["kategori_personel"];
+        $personel->kode_proyek = $data["kode-proyek"];
+
+        $personel->save();
+        Alert::success("Success", "Personel Tender Berhasil Ditambahkan");
+        return redirect()->back();
+    }
+
+    public function editPersonelTender(Request $request, $id)
+    {
+        $data = $request->all();
+        // dd($data);
+        $messages = [
+            "required" => "*Kolom Ini Harus Diisi !",
+        ];
+        $rules = [
+            "nama_pegawai" => "required",
+            "kategori_personel" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Personel Tender Gagal Diubah, Periksa Kembali !");
+        }
+
+        $validation->validate();
+
+        $proyek = Proyek::find($data["kode-proyek"]);
+        $pelanggan = $proyek->proyekBerjalan->customer;
+        if (empty($pelanggan)) {
+            Alert::error('Error', "Pelanggan Belum ditentukan. Mohon isi terlebih dahulu !");
+            return redirect()->back();
+        }
+
+        $editPersonel = PersonelTenderProyek::find($id);
+        $editPersonel->nip = $data["nama_pegawai"];
+        $editPersonel->kategori = $data["kategori_personel"];
+        $editPersonel->kode_proyek = $data["kode-proyek"];
+
+        $editPersonel->save();
+        Alert::success("Success", "Personel Tender Berhasil Diubah");
+        return redirect()->back();
+    }
+
+    public function deletePersonelTender($id)
+    {
+        $deletePersonel = PersonelTenderProyek::find($id);
+        $deletePersonel->delete();
+        Alert::success("Success", "Personel Tender Berhasil Dihapus");
+        return redirect()->back();
+    }
+
+    public function tambahKonsultan(Request $request,  ProyekKonsultanPerencana $newKonsultan)
+    {
+        $data = $request->all();
+        $messages = [
+            "required" => "*Kolom Ini Harus Diisi !",
+        ];
+        $rules = [
+            "konsultan-perencana" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Konsultan Perencana Gagal Ditambahkan, Periksa Kembali !");
+        }
+
+        $validation->validate();
+        $newKonsultan->nama_konsultan = $data["konsultan-perencana"];
+        $newKonsultan->kode_proyek = $data["kode-proyek"];
+
+        $newKonsultan->save();
+        Alert::success("Success", "Konsultan Perencana Berhasil Ditambahkan");
+        return redirect()->back();
+    }
+
+    public function editKonsultan(Request $request, $id)
+    {
+        $data = $request->all();
+        // dd($data);
+        $messages = [
+            "required" => "*Kolom Ini Harus Diisi !",
+        ];
+        $rules = [
+            "konsultan-perencana" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Konsultan Perencana Gagal Diubah, Periksa Kembali !");
+        }
+
+        $validation->validate();
+
+        $editKonsultan = ProyekKonsultanPerencana::find($id);
+        $editKonsultan->nama_konsultan = $data["konsultan-perencana"];
+        $editKonsultan->kode_proyek = $data["kode-proyek"];
+
+        $editKonsultan->save();
+        Alert::success("Success", "Konsultan Perencana Berhasil Diubah");
+        return redirect()->back();
+    }
+
+    public function deleteKonsultan($id)
+    {
+        $deleteTender = ProyekKonsultanPerencana::find($id);
+        $deleteTender->delete();
+        Alert::success("Success", "Konsultan Perencana Berhasil Dihapus");
+        return redirect()->back();
+    }
+
+    public function tambahAlatProyek(Request $request)
+    {
+        $data = $request->all();
+        $collectFile = collect([]);
+
+        $newAlat = new AlatProyek();
+        $newAlat->kode_proyek = $data["kode-proyek"];
+        $newAlat->nomor_rangka = $data["nomor_rangka"];
+        $newAlat->kategori = $data["nomor_rangka"];
+
+        if (isset($data["file_perjanjian"])) {
+            $files = $data["file_perjanjian"];
+
+            foreach ($files as $file) {
+                $nama_file = $file->getClientOriginalName();
+                $id_document = date("His_") . str_replace(' ', '_', $nama_file);
+                $file->move(public_path('dokumen-perjanjian-alat'), $id_document);
+                $collectFile->push([
+                    "id_document" => $id_document,
+                    "nama_file" => $nama_file,
+                ]);
+            }
+        }
+        $newAlat->id_document = json_encode($collectFile->toArray());
+
+
+        if ($newAlat->save()) {
+            Alert::success('Success', "Alat Berhasil Ditambahkan!");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Alat Gagal Ditambahkan!");
+        return redirect()->back();
+    }
+
+    public function editAlatProyek(Request $request, AlatProyek $alat)
+    {
+        $data = $request->all();
+        if (empty($alat)) {
+            Alert::error('Error', "Data Alat Tidak Dapat Ditemukan, Hubungi Admin!");
+            return redirect()->back();
+        };
+        $collectFile = collect(json_decode($alat->id_document));
+
+        if (isset($data["file_perjanjian"])) {
+            $files = $data["file_perjanjian"];
+
+            foreach ($files as $file) {
+                $nama_file = $file->getClientOriginalName();
+                $id_document = date("His_") . str_replace(' ', '_', $nama_file);
+                $file->move(public_path('dokumen-perjanjian-alat'), $id_document);
+                $collectFile->push([
+                    "id_document" => $id_document,
+                    "nama_file" => $nama_file,
+                ]);
+            }
+        }
+
+        $alat->id_document = $collectFile;
+
+        if ($alat->save()) {
+            Alert::success('Success', "Alat Berhasil Diubah!");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Alat Gagal Diubah!");
+        return redirect()->back();
+    }
+
+    public function deleteAlatProyek(AlatProyek $alat)
+    {
+        if (empty($alat)) {
+            return response()->json([
+                "Success" => false,
+                "Message" => "Data Alat Tidak Dapat Ditemukan, Hubungi Admin!"
+            ]);
+        }
+
+        $collectFile = collect(json_decode($alat->id_document));
+        if ($alat->delete()) {
+            try {
+                $collectFile->each(function ($file) {
+                    File::delete(public_path("dokumen-perjanjian-alat/$file->id_document"));
+                });
+                return response()->json([
+                    "Success" => true,
+                    "Message" => "Data Alat Berhasil Dihapus"
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    "Success" => false,
+                    "Message" => $e->getMessage()
+                ]);
+            }
+        }
+
+        return response()->json([
+            "Success" => false,
+            "Message" => "Data tidak dapat dihapus. Hubungi Admin!"
+        ]);
+    }
+
+    public function downloadFilePerjanjianAlat($id, $id_document)
+    {
+        $getAlat = AlatProyek::find($id);
+        if (empty($getAlat)) {
+            Alert::error('Error', 'Data Alat tidak ditemukan. Hubungi Admin!');
+            return redirect()->back();
+        }
+        $collectDokumen = collect(json_decode($getAlat->id_document));
+        $filterDokumen = $collectDokumen->where('id_document', $id_document)->first();
+        if (File::exists(public_path("dokumen-perjanjian-alat/$id_document")) && !empty($filterDokumen)) {
+            return response()->download(public_path("dokumen-perjanjian-alat/$id_document"), $filterDokumen->nama_file);
+        } else {
+            Alert::error('Error', 'File tidak ditemukan. Hubungi Admin!');
+            return redirect()->back();
+        }
+    }
+
+    public function deleteFileAlatProyek(Request $request)
+    {
+        $data = $request->all();
+        $getAlat = AlatProyek::find($data["id"]);
+
+        if (empty($getAlat)) {
+            return response()->json([
+                "Success" => false,
+                "Message" => "Data Alat Tidak Dapat Ditemukan, Hubungi Admin!"
+            ]);
+        }
+
+        $collectFile = collect(json_decode($getAlat->id_document));
+
+        try {
+            $finishCollectFile = $collectFile->reject(function ($file) use ($data) {
+                return $file->id_document == $data["id_document"];
+            });
+            $getAlat->id_document = $finishCollectFile;
+            if ($getAlat->save()) {
+                File::delete(public_path("dokumen-perjanjian-alat/" . $data['id_document']));
+                return response()->json([
+                    "Success" => true,
+                    "Message" => "Dokumen berhasil dihapus"
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                "Success" => false,
+                "Message" => $e->getMessage()
+            ]);
+        }
     }
 
     public function tambahAdendum(Request $request, ProyekAdendum $newAdendum)
