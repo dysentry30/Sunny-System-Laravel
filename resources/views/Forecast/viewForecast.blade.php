@@ -188,7 +188,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                         $unit_kerja_count = collect($unit_kerja)->count();
                                                     @endphp
                                                 @endif
-                                                @if (!str_contains(Auth::user()->name, "(PIC)"))
+                                                @if (!str_contains(Auth::user()->name, "(PIC)") || !Auth::user()->can('admin-crm'))
                                                     <div class="col-2" style="width: 11% !important">
                                                         @if ($historyForecast->count() == $unit_kerja_count)
                                                             <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="Untuk Request Unlock, silahkan buka tab <b>Request Approval History</b>." data-bs-placement="top">

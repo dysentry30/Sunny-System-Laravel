@@ -575,7 +575,7 @@
                                                                 <!--begin::Col-->
                                                                 @php
                                                                     $is_instansi_BUMN = $customer->jenis_instansi == "BUMN";
-                                                                    $is_user_pic = str_contains(Auth::user()->name, "PIC") || Auth::user()->check_administrator;
+                                                                    $is_user_pic = str_contains(Auth::user()->name, "PIC") || Auth::user()->check_administrator || Auth::user()->can('admin-crm');
                                                                     // $title_tooltip = collect('Hanya bisa diinput');
                                                                     // if(!$is_user_pic) {
                                                                     //     $title_tooltip->push("oleh <b>DMROP</b>");
