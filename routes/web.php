@@ -66,12 +66,14 @@ use App\Models\SumberDana;
 use App\Models\TechnicalForm;
 use App\Models\TechnicalQuery;
 use App\Models\PerjanjianKso;
+use App\Models\ProyekPISNew;
 use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
 use Carbon\Carbon;
 use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -93,6 +95,7 @@ use Termwind\Components\Dd;
 
 Route::get('/', [UserController::class, 'welcome'])->middleware("userNotAuth");
 Route::get('/ccm', [UserController::class, 'welcome'])->middleware("userNotAuth");
+Route::get('/crm-login', [UserController::class, 'authen'])->middleware("userNotAuth");
 Route::get('/csi-login', [UserController::class, 'welcome'])->middleware("userNotAuth");
 
 
@@ -2652,7 +2655,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         } else {
             $users = User::join("unit_kerjas", "unit_kerjas.divcode", "=", "users.unit_kerja")->where("unit_kerjas.divcode", "=", Auth::user()->unit_kerja)->get();
         }
-        return view("/MasterData/User", ["users" => $users, "unit_kerjas" => UnitKerja::all()]);
+
+        $pegawai_all = Pegawai::select(['id_pegawai', 'nip', 'nama_pegawai'])->get();
+        return view("/MasterData/User", ["users" => $users, "unit_kerjas" => UnitKerja::all(), "pegawai_all" => $pegawai_all]);
         // return view("/MasterData/User", ["users" => User::all()->reverse()]);
     });
     // Route::get('/user', [UserController::class, 'index']);
@@ -2662,6 +2667,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     });
 
     Route::post('/user/save', [UserController::class, "save"]);
+
+    Route::post('/user/role/save', [UserController::class, "saveRole"]);
 
     Route::post('/user/update', [UserController::class, "update"]);
 
@@ -3600,4 +3607,57 @@ Route::get('/get-jenis-dokumen/{jenis_dokumen}/{profit_center}', function ($jeni
 
 Route::get('/abort/{code}/{msg}', function ($code, $msg) {
     return abort($code, $msg);
+});
+
+
+Route::get('/user/get-proyek-datatable', function (Request $request) {
+    // $divisi = null;
+    $draw = $request->has('draw') ? intval($request->input('draw')) : 0;
+    $start = (int)$request->input('start');
+    $length = (int)$request->input('length');
+    $page = ceil(($start + 1) / $length);
+    // dd(json_decode($request->query('divcode')));
+    // if (!empty($request->query('divcode'))) {
+    // }
+    $divisi = is_array(json_decode($request->query('divcode'))) ? json_decode($request->query('divcode')) : [json_decode($request->query('divcode'))];
+    $search = !empty($request->input('search')) ? $request->input('search')["value"] : null;
+
+    if (!empty($divisi)) {
+        $data = ProyekPISNew::addSelect(array_map(function ($item) {
+            return 'proyek_pis_new.' . $item;
+        }, ['proyek_name', 'profit_center', 'kd_divisi']))
+            ->with('UnitKerja')
+            ->whereIn('kd_divisi', $divisi)
+            ->where('profit_center', '!=', null)
+            ->when(!empty($search), function ($query) use ($search) {
+                $query->where('proyek_name', 'like', '%' . $search . '%')
+                    ->orWhere('profit_center', 'like', '%' . $search . '%');
+            })
+            ->orderBy('proyek_name', 'ASC');
+    } else {
+        $data = ProyekPISNew::addSelect(array_map(function ($item) {
+            return 'proyek_pis_new.' . $item;
+        }, ['proyek_name', 'profit_center', 'kd_divisi']))
+            ->with('UnitKerja')
+            ->where('kd_divisi', '!=', null)
+            ->where('profit_center', '!=', null)
+            ->when(!empty($search), function ($query) use ($search) {
+                $query->where('proyek_name', 'like', '%' . $search . '%')
+                    ->orWhere('profit_center', 'like', '%' . $search . '%');
+            })
+            ->orderBy('proyek_name', 'ASC');
+    }
+
+    if ($length > 0) {
+        $data = $data->paginate($length, ['*'], 'page', $page);
+    } else {
+        $data = $data->get();
+    }
+
+    return response()->json([
+        'draw' => $draw,
+        'recordsTotal' => $length > 0 ? $data->total() : $data->count(),
+        'recordsFiltered' => $length > 0 ? $data->total() : $data->count(),
+        'data' => $length > 0 ? $data->items() : $data
+    ]);
 });

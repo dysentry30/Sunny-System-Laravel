@@ -217,7 +217,7 @@
                                                     @if ($proyek->stage >= 1)
                                                         <a href="#"
                                                             class="stage-button stage-action color-is-default stage-is-done"
-                                                            style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || str_contains(auth()->user()->name, '(PIC)') ? '' : 'pointer-events: none;' }}"
+                                                            style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || Auth::user()->can('admin-crm') ? '' : 'pointer-events: none;' }}"
                                                             stage="1">
                                                             Pasar Dini
                                                         </a>
@@ -232,7 +232,7 @@
                                                     @if ($proyek->stage > 1)
                                                         <a href="#"
                                                             class="stage-button stage-action color-is-default stage-is-done"
-                                                            style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || str_contains(auth()->user()->name, '(PIC)') ? '' : 'pointer-events: none;' }}"
+                                                            style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || Auth::user()->can('admin-crm') ? '' : 'pointer-events: none;' }}"
                                                             stage="2">
                                                             Pasar Potensial
                                                         </a>
@@ -272,7 +272,7 @@
                                                                 id="tidak-lulus-pq" aria-expanded="false"
                                                                 aria-controls="#tidak-lulus-pq"
                                                                 class="stage-button d-flex align-items-center stage-is-done color-is-default"
-                                                                style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || str_contains(auth()->user()->name, '(PIC)') ? '' : 'pointer-events: none;' }}"
+                                                                style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || Auth::user()->can('admin-crm') ? '' : 'pointer-events: none;' }}"
                                                                 stage="3">
                                                                 <span>Prakualifikasi</span>
                                                                 <i class="bi bi-caret-down-fill text-white ms-3"></i>
@@ -328,7 +328,7 @@
                                                     @if ($proyek->stage > 3)
                                                         <a href="#"
                                                             class="stage-button stage-action stage-is-done color-is-default"
-                                                            style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || str_contains(auth()->user()->name, '(PIC)') ? '' : 'pointer-events: none;' }}"
+                                                            style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || Auth::user()->can('admin-crm') ? '' : 'pointer-events: none;' }}"
                                                             stage="4">
                                                             Tender Diikuti
                                                         </a>
@@ -353,7 +353,7 @@
                                                     @if ($proyek->stage > 4)
                                                         <a href="#"
                                                             class="stage-button stage-action stage-is-done color-is-default"
-                                                            style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || str_contains(auth()->user()->name, '(PIC)') ? '' : 'pointer-events: none;' }}"
+                                                            style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || Auth::user()->can('admin-crm') ? '' : 'pointer-events: none;' }}"
                                                             stage="5">
                                                             Perolehan
                                                         </a>
@@ -380,7 +380,7 @@
                                                                 class="stage-button stage-is-done color-is-default"
                                                                 data-bs-toggle="dropdown" role="button" id="menang"
                                                                 aria-expanded="false"
-                                                                style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || str_contains(auth()->user()->name, '(PIC)') ? '' : 'pointer-events: none;' }}"
+                                                                style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || Auth::user()->can('admin-crm') ? '' : 'pointer-events: none;' }}"
                                                                 stage="1">
                                                                 <div class="d-flex flex-row">
                                                                     <span class="text-white">Menang</span>&nbsp;&nbsp;

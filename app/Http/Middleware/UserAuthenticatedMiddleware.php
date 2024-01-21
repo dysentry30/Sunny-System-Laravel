@@ -30,6 +30,7 @@ class UserAuthenticatedMiddleware
         if(auth()->user() != null) {
             return $next($request);
         }
-        return redirect("/");
+        // return redirect("/");
+        return redirect(env('WZONE_URL'));
     }
 }

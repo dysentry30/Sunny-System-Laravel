@@ -40,7 +40,8 @@
                             <!--end::Page title-->
 
                             @php
-                            $adminPIC = str_contains(auth()->user()->name, "(PIC)");
+                            // $adminPIC = str_contains(auth()->user()->name, "(PIC)");
+                            $adminPIC = Gate::allows('admin-crm') || Gate::allows('admin-ccm');
                             @endphp
 
                             @if (auth()->user()->check_administrator || $adminPIC)
