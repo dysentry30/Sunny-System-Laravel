@@ -29,24 +29,24 @@ class UserController extends Controller
 {
     public function welcome(Request $request)
     {
-        // $data = $request->all();
-        // // dd($data);
-        // if (!empty($data["redirectTo"]) && !empty($data["nip"])) {
-        //     try {
-        //         // $credentials = (array) json_decode(decrypt($data["token"]));
-        //         $user = User::where("nip", $data["nip"])->first();
-        //         if (Auth::loginUsingId($user->id)) {
-        //             return redirect($data["redirectTo"]);
-        //         }
-        //         Alert::error("Error", "User Tidak Ditemukan!");
-        //         return redirect("/");
-        //     } catch (Exception $e) {
-        //         Alert::error("Error", "User Tidak Ditemukan!");
-        //         return redirect("/");
-        //     }
-        // }
-        // return view('0_Welcome');
-        return redirect(env('WZONE_URL'));
+        $data = $request->all();
+        // dd($data);
+        if (!empty($data["redirectTo"]) && !empty($data["nip"])) {
+            try {
+                // $credentials = (array) json_decode(decrypt($data["token"]));
+                $user = User::where("nip", $data["nip"])->first();
+                if (Auth::loginUsingId($user->id)) {
+                    return redirect($data["redirectTo"]);
+                }
+                Alert::error("Error", "User Tidak Ditemukan!");
+                return redirect("/");
+            } catch (Exception $e) {
+                Alert::error("Error", "User Tidak Ditemukan!");
+                return redirect("/");
+            }
+        }
+        return view('0_Welcome');
+        // return redirect(env('WZONE_URL'));
     }
 
     public function delete($id)
