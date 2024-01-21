@@ -2,7 +2,8 @@
 @if (auth()->user())
     @if (!str_contains(Request::path(), "document/view"))
     @php
-    $adminPIC = str_contains(auth()->user()->name, "(PIC)");
+    // $adminPIC = str_contains(auth()->user()->name, "(PIC)");
+    $adminPIC = Gate::allows('admin-crm') || Gate::allows('admin-ccm');
     @endphp
 
 

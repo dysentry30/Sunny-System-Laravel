@@ -37,11 +37,11 @@ class ProyekPISNew extends Model
 
     public function ContractApproval()
     {
-        return $this->hasMany(ContractApproval::class, "profit_center", 'profit_center');
+        return $this->hasMany(ContractApproval::class, "profit_center", "profit_center");
     }
 
     public function PerubahanKontrak()
     {
-        return $this->hasMany(PerubahanKontrak::class, "profit_center", 'profit_center');
+        return $this->hasMany(PerubahanKontrak::class, "profit_center", "profit_center");
     }
 }

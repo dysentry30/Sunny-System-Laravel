@@ -159,7 +159,8 @@ class AdminAuth
         if (!auth()->user()->is_active) {
             Auth::logout();
             Alert::error("USER NON ACTIVE", "Hubungi Admin (PIC)");
-            return redirect("/");
+            // return redirect("/");
+            return redirect(env('WZONE_URL'));
         }
         if ($request->segment(1) == "user" && Gate::denies('admin-crm')) {
             if (str_contains($concat_allowed_url, $request->segment(1)) && ($request->segment(2) == "view" || $request->segment(2) == "password" || $request->segment(2) == "update")) {

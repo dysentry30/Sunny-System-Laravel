@@ -48,6 +48,7 @@ use App\Models\TipeProyek;
 use App\Models\Departemen;
 use App\Models\PersonelTenderProyek;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
@@ -356,7 +357,7 @@ class ProyekController extends Controller
         $porsiJO = PorsiJO::where("kode_proyek", "=", $kode_proyek)->get();
         // $data_provinsi = json_decode(Storage::get("/public/data/provinsi.json"));
         $data_negara = json_decode(Storage::get("/public/data/country.json"));
-        $is_admin = Auth::user()->check_administrator || str_contains(Auth::user()->name, "PIC");
+        $is_admin = Auth::user()->check_administrator || str_contains(Auth::user()->name, "PIC") || Gate::allows('admin-crm');
         $companies = Company::all();
         $sumberdanas = SumberDana::all();
         $dops = Dop::all();

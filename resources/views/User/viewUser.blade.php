@@ -5,7 +5,8 @@
 {{-- Begin::Title --}}
 @section('title', 'Lihat User')
 {{-- End::Title --}}
-
+<link rel="stylesheet" href="{{ asset('datatables/jquery.dataTables.min.css') }}" />
+<link rel="stylesheet" href="{{ asset('datatables/buttons.dataTables.min.css') }}" />
 <!--begin::Main-->
 @section('content')
 
@@ -45,7 +46,7 @@
                                 <div class="d-flex align-items-center py-1">
 
                                     <!--begin::Button-->
-                                    <button type="submit" class="btn btn-sm btn-primary" id="customer_new_save"
+                                    <button type="button" onclick="onSave(this)" class="btn btn-sm btn-primary" id="customer_new_save"
                                         style="background-color:#008CB4;">
                                         Save</button>
                                     <!--end::Button-->
@@ -57,7 +58,7 @@
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
-                                    @if (Auth::user()->check_administrator || str_contains(auth()->user()->name, '(PIC)'))
+                                    @if (Auth::user()->can('super-admin') || Auth::user()->can('admin-crm'))
                                         <a href="/user" class="btn btn-sm btn-light btn-active-primary ms-3"
                                             id="customer_new_close">
                                             Close</a>
@@ -125,7 +126,7 @@
                                                         <!--begin::Input-->
                                                         <input type="text" id="name-user" name="name-user"
                                                             class="form-control form-control-solid"
-                                                            value="{{ $user->name }}" placeholder="Name" readonly/>
+                                                            value="{{ $user->name }}" placeholder="Name" readonly />
                                                         @error('name-user')
                                                             <h6 class="text-danger">{{ $message }}eror</h6>
                                                         @enderror
@@ -143,7 +144,7 @@
                                                         <!--begin::Input-->
                                                         <input type="email" class="form-control form-control-solid"
                                                             id="email" name="email" value="{{ $user->email }}"
-                                                            placeholder="Email" readonly/>
+                                                            placeholder="Email" readonly />
                                                         <!--end::Input-->
                                                     </div>
                                                     <!--end::Input group Email-->
@@ -158,7 +159,8 @@
                                                         <!--begin::Input-->
                                                         <input type="text" class="form-control form-control-solid"
                                                             id="phone-number" name="phone-number"
-                                                            value="{{ $user->no_hp }}" placeholder="Phone Number" readonly/>
+                                                            value="{{ $user->no_hp }}" placeholder="Phone Number"
+                                                            readonly />
                                                         <!--end::Input-->
                                                     </div>
                                                     <!--end::Input group Phone-->
@@ -182,7 +184,7 @@
                                                     <!--end::Input group TTD-->
 
                                                     <!--begin::Input group is Active-->
-                                                    @if (Auth::user()->check_administrator || str_contains(Auth::user()->name, '(PIC)'))
+                                                    @if (Auth::user()->can('super-admin') || Auth::user()->can('admin-crm'))
                                                         <div class="form-check me-12">
                                                             <!--begin::Input-->
                                                             <input class="form-check-input" type="checkbox" value=""
@@ -226,7 +228,7 @@
                                                 <!--begin:::Tabs-->
                                                 <ul
                                                     class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
-                                                    @if (Auth::user()->check_administrator || str_contains(auth()->user()->name, '(PIC)'))
+                                                    @if (Auth::user()->can('super-admin') || Auth::user()->can('admin-crm'))
                                                         <!--begin:::Tab item Informasi Perusahaan-->
                                                         <li class="nav-item">
                                                             <a class="nav-link text-active-primary pb-4 active required"
@@ -261,16 +263,16 @@
                                                 <!--begin:::Tab content -->
                                                 <div class="tab-content" id="myTabContent">
 
-                                                    @if (Auth::user()->check_administrator || str_contains(auth()->user()->name, '(PIC)'))
+                                                    @if (Auth::user()->can('super-admin') || Auth::user()->can('admin-crm'))
                                                         <!--begin:::Tab pane Hak Akses-->
                                                         <div class="tab-pane fade show active"
                                                             id="kt_user_view_overview_tab" role="tabpanel">
-                                                        
+
                                                             <p><b>Aplikasi</b></p>
                                                             <!--begin::Row-->
                                                             <div class="d-flex flex-row h-50px">
                                                                 <!-- begin:: Form Input Group -->
-                                                                @if (Auth::user()->check_administrator)
+                                                                @if (Auth::user()->can('super-admin'))
                                                                     <!-- begin:: Form Input Administrator -->
                                                                     <div class="form-check me-12">
                                                                         <input class="form-check-input" type="checkbox"
@@ -330,57 +332,56 @@
                                                             <p><b>Role</b></p>
                                                             <div class="d-flex flex-row h-50px">
                                                                 <!-- begin:: Form Input Group -->
-                                                                @if (Auth::user()->check_administrator)
+                                                                @if (Auth::user()->can('super-admin'))
                                                                     <!-- begin:: Form Input Administrator -->
                                                                     <div class="form-check me-12">
-                                                                        <input class="form-check-input" type="checkbox"
+                                                                        <input class="role form-check-input" type="checkbox"
                                                                             value=""
                                                                             {{ $user->role_admin == 1 ? 'checked' : '' }}
-                                                                            name="role_admin" id="role_admin">
-                                                                        <label class="form-check-label"
-                                                                            for="role_admin">
+                                                                            name="role_admin" id="role_admin" onchange="checkAplikasi(this)">
+                                                                        <label class="form-check-label" for="role_admin">
                                                                             Admin
                                                                         </label>
                                                                     </div>
                                                                     <!-- end:: Form Input Administrator -->
                                                                     @cannot('csi')
-                                                                    <!-- begin:: Form Input User Sales -->
-                                                                    <div class="form-check me-12">
-                                                                        <input class="form-check-input" type="checkbox"
-                                                                            value=""
-                                                                            {{ $user->role_user == 1 ? 'checked' : '' }}
-                                                                            name="role_user" id="role_user">
-                                                                        <label class="form-check-label" for="role_user">
-                                                                            User
-                                                                        </label>
-                                                                    </div>
-                                                                    <!-- end:: Form Input Admin Kontrak -->
+                                                                        <!-- begin:: Form Input User Sales -->
+                                                                        <div class="form-check me-12">
+                                                                            <input class="role form-check-input" type="checkbox"
+                                                                                value=""
+                                                                                {{ $user->role_user == 1 ? 'checked' : '' }}
+                                                                                name="role_user" id="role_user" onchange="checkAplikasi(this)">
+                                                                            <label class="form-check-label" for="role_user">
+                                                                                User
+                                                                            </label>
+                                                                        </div>
+                                                                        <!-- end:: Form Input Admin Kontrak -->
 
-                                                                    <!-- begin:: Form Input Admin Kontrak -->
-                                                                    <div class="form-check me-12">
-                                                                        <input class="form-check-input" type="checkbox"
-                                                                            value=""
-                                                                            {{ $user->role_approver == 1 ? 'checked' : '' }}
-                                                                            name="role_approver" id="role_approver">
-                                                                        <label class="form-check-label"
-                                                                            for="role_approver">
-                                                                            Approver
-                                                                        </label>
-                                                                    </div>
-                                                                    <!-- end:: Form Input Admin Kontrak -->
-                                                                    @cannot('ccm')
-                                                                    <!-- begin:: Form Input Team Proyek -->
-                                                                    <div class="form-check me-12">
-                                                                        <input class="form-check-input" type="checkbox"
-                                                                            value=""
-                                                                            {{ $user->role_risk == 1 ? 'checked' : '' }}
-                                                                            name="role_risk" id="role_risk">
-                                                                        <label class="form-check-label" for="role_risk">
-                                                                            Risk
-                                                                        </label>
-                                                                    </div>
-                                                                    <!-- end:: Form Input Team Proyek -->
-                                                                    @endcannot
+                                                                        <!-- begin:: Form Input Admin Kontrak -->
+                                                                        <div class="form-check me-12">
+                                                                            <input class="role form-check-input" type="checkbox"
+                                                                                value=""
+                                                                                {{ $user->role_approver == 1 ? 'checked' : '' }}
+                                                                                name="role_approver" id="role_approver" onchange="checkAplikasi(this)">
+                                                                            <label class="form-check-label"
+                                                                                for="role_approver">
+                                                                                Approver
+                                                                            </label>
+                                                                        </div>
+                                                                        <!-- end:: Form Input Admin Kontrak -->
+                                                                        @cannot('ccm')
+                                                                            <!-- begin:: Form Input Team Proyek -->
+                                                                            <div class="form-check me-12">
+                                                                                <input class="role form-check-input" type="checkbox"
+                                                                                    value=""
+                                                                                    {{ $user->role_risk == 1 ? 'checked' : '' }}
+                                                                                    name="role_risk" id="role_risk" onchange="checkAplikasi(this)">
+                                                                                <label class="form-check-label" for="role_risk">
+                                                                                    Risk
+                                                                                </label>
+                                                                            </div>
+                                                                            <!-- end:: Form Input Team Proyek -->
+                                                                        @endcannot
                                                                     @endcannot
                                                                 @endif
 
@@ -429,6 +430,9 @@
                                                                         @php
                                                                             $list_unit_kerja = str_contains($user->unit_kerja, ',') ? collect(explode(',', $user->unit_kerja)) : $user->unit_kerja;
                                                                             // dd($list_unit_kerja);
+                                                                            if ($user->check_admin_kontrak) {
+                                                                                $dops = $dops->where('dop', '!=', 'EA'); 
+                                                                            }
                                                                         @endphp
                                                                         @foreach ($dops as $dop)
                                                                             <div
@@ -455,22 +459,24 @@
                                                                                         @endphp
                                                                                         @if ($is_unit_kerja_choosen)
                                                                                             <input
-                                                                                                class="form-check-input me-2"
+                                                                                                class="unit-kerja-checkbox form-check-input me-2"
                                                                                                 style="width: 1.5rem;height: 1.5rem;border-radius:3px;"
                                                                                                 type="checkbox"
                                                                                                 data-dop="{{ $dop->dop }}"
                                                                                                 value="{{ $unit_kerja->divcode }}"
                                                                                                 checked name="unit-kerja[]"
-                                                                                                id="{{ $unit_kerja->divcode }}">
+                                                                                                id="{{ $unit_kerja->divcode }}" 
+                                                                                                onchange="checkAplikasi(this)">
                                                                                         @else
                                                                                             <input
-                                                                                                class="form-check-input me-2"
+                                                                                                class="unit-kerja-checkbox form-check-input me-2"
                                                                                                 style="width: 1.5rem;height: 1.5rem;border-radius:3px;"
                                                                                                 type="checkbox"
                                                                                                 data-dop="{{ $dop->dop }}"
                                                                                                 value="{{ $unit_kerja->divcode }}"
                                                                                                 name="unit-kerja[]"
-                                                                                                id="{{ $unit_kerja->divcode }}">
+                                                                                                id="{{ $unit_kerja->divcode }}"
+                                                                                                onchange="checkAplikasi(this)">
                                                                                         @endif
                                                                                         <label class="form-check-label"
                                                                                             for="{{ $unit_kerja->divcode }}">
@@ -489,101 +495,212 @@
                                                         </div>
                                                         <!--end:::Tab pane Hak Akses-->
                                                     @endif
+                                                    <!--end:: D-flex -->
+
+
+                                                    <!--Begin :: Reset Password -->
+                                                    {{-- @if (Auth::user()->can('super-admin') || !Auth::user()->can('admin-crm'))
+                                                            <div class="tab-pane fade show active" id="kt_user_view_overview_user_password" role="tabpanel">
+                                                            @else
+                                                                <div class="tab-pane fade" id="kt_user_view_overview_user_password" role="tabpanel">
+                                                        @endif
+
+                                                        <form action="/user/password/reset" autocomplete="off" method="post">
+                                                            @csrf
+                                                            <input type="hidden" value="{{ $user->id }}" name="id-user">
+                                                            <div class="input-group input-group-sm">
+                                                                <label class="input-group-text required" for="old-password">Old Password:</label>
+                                                                <input type="password" name="old-password" onchange="checkCurrentPassword(this)"
+                                                                    class="form-control" required>
+                                                                <button class="btn btn-sm btn-secondary input-group-text" type="button"
+                                                                    onclick="seePassword(this)"><i class="bi bi-eye-slash-fill fs-3"></i></button>
+                                                            </div>
+                                                            <div class="input-group input-group-sm my-3">
+                                                                <label class="input-group-text required" for="new-password">New Password:</label>
+                                                                <input type="password" name="new-password" class="form-control" required disabled>
+                                                                <button class="btn btn-sm btn-secondary input-group-text" type="button"
+                                                                    onclick="seePassword(this)"><i class="bi bi-eye-slash-fill fs-3"></i></button>
+                                                            </div>
+                                                            <div class="input-group input-group-sm mb-4">
+                                                                <label class="input-group-text required" for="confirm-password">Confirm Password:</label>
+                                                                <input type="password" name="confirm-password" onkeyup="confirmPassword(this)"
+                                                                    class="form-control" required disabled>
+                                                                <button class="btn btn-sm btn-secondary input-group-text" type="button"
+                                                                    onclick="seePassword(this)"><i class="bi bi-eye-slash-fill fs-3"></i></button>
+                                                            </div>
+                                                            <div class="" style="position: relative; width: max-content;" data-bs-toggle="tooltip"
+                                                                data-bs-title="Silahkan isi field di atas untuk bisa mengganti password">
+                                                                <input type="submit" name="password-reset" class="btn btn-sm btn-active-primary text-white"
+                                                                    style="background-color: #008CB4;" value="Reset Password" disabled />
+                                                            </div>
+                                                        </form> --}}
+                                                    {{-- @if ($user->check_administrator == false)
+                                                        @endif
+                                                        @if ($user->check_administrator == true)
+                                                        <form action="/user/password/reset" method="post">
+                                                            @csrf
+                                                            <input type="hidden" value="{{ $user->id }}" name="id-user">
+                                                            <input type="hidden" value="" id="socket-id" name="socket-id">
+                                                            <button type="submit" name="password-reset" class="btn btn-sm btn-active-primary text-white"
+                                                            style="background-color: #008CB4;">Reset Password By Request</button>
+                                                        </form>
+                                                        @endif --}}
+                                                    <!--End :: Reset Password -->
+
+                                                    <!--Begin::Table List Proyek-->
+                                                    <div class="overflow-auto table-list-proyek {{ $user->check_admin_kontrak && $user->role_user ? "" : "d-none" }}" id="table-list-proyek">
+                                                        <!--begin::Table Proyek-->
+                                                        <table class="table table-striped table-hover align-middle table-row-dashed fs-6 gy-2" id="proyeks-ccm">
+                                                             <!--begin::Table head-->
+                                                             <thead>
+                                                                 <!--begin::Table row-->
+                                                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase text-sm gs-0">
+                                                                    <th class="min-w-auto ps-3">Kode Proyek</th>
+                                                                    <th class="w-20">Nama Proyek</th>
+                                                                    <th class="min-w-auto">Unit Kerja</th>
+                                                                    <th class="min-w-auto">Selected</th>
+                                                                 </tr>
+                                                                 <!--end::Table row-->
+                                                             </thead>
+                                                            <!--end::Table head-->
+                                                            <!--begin::Table body-->
+                                                            <tbody class="fw-bold text-gray-800">
+                                                            </tbody>
+                                                            <!--end::Table body-->
+
+                                                        </table>
+                                                        <!--end::Table Proyek-->
+                                                        <input type="hidden" id="listProyek" name="list-proyek" value="">
+                                                    </div>
+                                                    <!--End::Table List Proyek-->
+
+                                                </div>
+                                                <!--end:::Tab content -->
+                                            </div>
+                                            <!--end::Card body-->
+                                        </div>
+                                        <!--end::Contacts-->
+                                    </div>
+                                    <!--end::Content-->
+                                </div>
+                                <!--end::Contacts App- Edit Contact-->
+                            </div>
+                            <!--end::Container-->
+                        </div>
+                        <!--end::Post-->
                     </form>
-                    <!--end:: D-flex -->
-
-
-                    <!--Begin :: Reset Password -->
-                    @if (Auth::user()->check_administrator || !str_contains(auth()->user()->name, '(PIC)'))
-                        <div class="tab-pane fade show active" id="kt_user_view_overview_user_password" role="tabpanel">
-                        @else
-                            <div class="tab-pane fade" id="kt_user_view_overview_user_password" role="tabpanel">
-                    @endif
-
-                    <form action="/user/password/reset" autocomplete="off" method="post">
-                        @csrf
-                        <input type="hidden" value="{{ $user->id }}" name="id-user">
-                        {{-- <input type="hidden" value="" id="socket-id" name="socket-id"> --}}
-                        <div class="input-group input-group-sm">
-                            <label class="input-group-text required" for="old-password">Old Password:</label>
-                            <input type="password" name="old-password" onchange="checkCurrentPassword(this)"
-                                class="form-control" required>
-                            <button class="btn btn-sm btn-secondary input-group-text" type="button"
-                                onclick="seePassword(this)"><i class="bi bi-eye-slash-fill fs-3"></i></button>
-                        </div>
-                        <div class="input-group input-group-sm my-3">
-                            <label class="input-group-text required" for="new-password">New Password:</label>
-                            <input type="password" name="new-password" class="form-control" required disabled>
-                            <button class="btn btn-sm btn-secondary input-group-text" type="button"
-                                onclick="seePassword(this)"><i class="bi bi-eye-slash-fill fs-3"></i></button>
-                        </div>
-                        <div class="input-group input-group-sm mb-4">
-                            <label class="input-group-text required" for="confirm-password">Confirm Password:</label>
-                            <input type="password" name="confirm-password" onkeyup="confirmPassword(this)"
-                                class="form-control" required disabled>
-                            <button class="btn btn-sm btn-secondary input-group-text" type="button"
-                                onclick="seePassword(this)"><i class="bi bi-eye-slash-fill fs-3"></i></button>
-                        </div>
-                        <div class="" style="position: relative; width: max-content;" data-bs-toggle="tooltip"
-                            data-bs-title="Silahkan isi field di atas untuk bisa mengganti password">
-                            <input type="submit" name="password-reset" class="btn btn-sm btn-active-primary text-white"
-                                style="background-color: #008CB4;" value="Reset Password" disabled />
-                        </div>
-                    </form>
-                    {{-- @if ($user->check_administrator == false)
-                    @endif
-                    @if ($user->check_administrator == true)
-                    <form action="/user/password/reset" method="post">
-                        @csrf
-                        <input type="hidden" value="{{ $user->id }}" name="id-user">
-                        <input type="hidden" value="" id="socket-id" name="socket-id">
-                        <button type="submit" name="password-reset" class="btn btn-sm btn-active-primary text-white"
-                        style="background-color: #008CB4;">Reset Password By Request</button>
-                    </form>
-                    @endif --}}
-
                 </div>
-                <!--End :: Reset Password -->
-
+                <!--End::Content-->
             </div>
-            <!--end:::Tab content-->
+            <!--end::Wrapper-->
+
         </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    <!--end::Card body-->
-    </div>
-    <!--end::Contacts-->
-    </div>
-    <!--end::Content-->
-    </div>
-    <!--end::Contacts App- Edit Contact-->
-    </div>
-    <!--end::Container-->
-    </div>
-    <!--end::Post-->
-
-    </div>
-    <!--end::Content-->
-
-    </div>
-    <!--end::Wrapper-->
-    </div>
-    <!--end::Page-->
+        <!--end::Page-->
     </div>
     <!--end::Root-->
-
-    <!--begin::Modal-->
-    <!--begin::Modal - Create App-->
-    <!--end::Modal - Create App-->
 
 @endsection
 
 @section('js-script')
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+
     <script>
+        const user = {!! json_encode($user->toArray()) !!};
+        const unitKerja = user.unit_kerja.includes(",") ? user.unit_kerja.split(",") : user.unit_kerja;
+        const proyeks = user.proyeks_selected != null ? JSON.parse(user.proyeks_selected) : null;
+        let selectedRows = {};
+        if (proyeks != null) {
+            newData = proyeks.forEach(function(proyek){
+                selectedRows[proyek] = true
+            });
+        }
+        const configDataTable = {};
+        // configDataTable.pagingType ="simple"
+        configDataTable.processing = true
+        configDataTable.serverSide = true
+        configDataTable.destroy = true
+        configDataTable.search = false
+        configDataTable.paging = false
+        configDataTable.dom = '<"float-start me-3"f><"#example"t>rtip'
+
+
+        document.addEventListener("DOMContentLoaded", () => {
+            if (user.check_admin_kontrak && user.role_user) {
+                console.log(configDataTable);
+                configDataTable.ajax = {
+                    dataType: "JSON",
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    url:"{{ url('/user/get-proyek-datatable?divcode=') }}"+JSON.stringify(unitKerja),
+                    type: "GET"
+                },
+                configDataTable.columns = [ 
+                    {
+                        data: 'profit_center',
+                        className: 'align-midle text-center'
+                    },
+                    {
+                        data: 'proyek_name',
+                        className: 'align-midle'
+                    },
+                    {
+                        data: 'unit_kerja.unit_kerja',
+                        className: 'align-midle text-center'
+                    },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            let selected = "";
+                            if(proyeks != null){
+                                selected = proyeks.indexOf(data.profit_center) !== -1 ? "checked" : "";
+                            }
+                            return `<input class="row-checkbox form-check-input mt-0" type="checkbox" name="proyeks[]" data-id="${data.profit_center}" value="${data.profit_center}"`+ (selected == "checked" || selectedRows[row.profit_center] ? 'checked' : '') +">"
+                        },
+                        className: 'align-midle text-center'
+                    },
+                ];
+                const dataTable = $('#proyeks-ccm').DataTable(configDataTable);
+
+                // Menangani perubahan status checkbox
+                $('#proyeks-ccm tbody').on('change', '.row-checkbox', function() {
+                    let rowId = $(this).data('id');
+                    if (this.checked) {
+                        selectedRows[rowId] = this.checked;
+                    }else{
+                        delete selectedRows[rowId]
+                    }
+                });
+
+                // Menangani event draw.dt untuk mempertahankan status checkbox setelah redraw DataTable
+                dataTable.on('draw.dt', function() {
+                    for (let rowId in selectedRows) {
+                        $('input.row-checkbox[data-id="' + rowId + '"]').prop('checked', selectedRows[rowId]);
+                    }
+                });
+            }
+        });
+
+        function onSave(elt){
+            const eltInputHidden = document.querySelector('#listProyek');
+            // const listChecklistElt = document.querySelectorAll("[class*='row-checkbox']:checked");
+            // const collectChecked = [];
+            // if (listChecklistElt.length > 0) {
+            //     listChecklistElt.forEach(function(checked){
+            //         collectChecked.push(checked.value);
+            //     });
+            // }
+            // const convertArraySelected = Object.keys(selectedRows);
+
+            // if (collectChecked.length < 1 && convertArraySelected.length > 0) {
+            //     eltInputHidden.value = JSON.stringify(convertArraySelected);
+            // }else{
+
+            // }
+            const convertArraySelected = Object.keys(selectedRows);
+            eltInputHidden.value = JSON.stringify(convertArraySelected);
+            elt.form.submit();
+        }
+
         async function checkCurrentPassword(e) {
             const password = e.value;
             const idUser = e.parentElement.parentElement.querySelector("input[name='id-user']").value;
@@ -665,11 +782,13 @@
             elementI.classList.add("text-primary");
             elementSmall.classList.add("text-primary");
         }
+
         function getImage(e) {
             e.preventDefault();
             e.stopPropagation();
             // console.log(e.dataTransfer.files);
         }
+
         function cancelImage(e) {
             const element = e;
             const elementI = e.querySelector("i");
@@ -677,6 +796,74 @@
             e.classList.remove("border-primary");
             elementI.classList.remove("text-primary");
             elementSmall.classList.remove("text-primary");
+        }
+
+        function checkAplikasi(elt) {
+            const eltAplikasiCCM = document.querySelector('#admin-kontrak');
+            const eltRoleUser = document.querySelector('#role_user');
+            const eltRoleAll = document.querySelectorAll("[class*='role']:checked");
+
+            if (eltRoleAll.length > 1) {
+                elt.checked = false;
+                return alert('error', "Role tidak dapat dipilih lebih dari 1");
+            }
+            
+            if (eltAplikasiCCM.checked && eltRoleUser.checked) {
+                const collectInput = [...document.querySelectorAll("[class*='unit-kerja-checkbox']:checked")];
+                const arrDivcode = [];
+                const filterInputChecked = collectInput.map(function(element){
+                    return arrDivcode.push(element.value);
+                });
+
+                const divTableHide = document.querySelector('#table-list-proyek');
+                divTableHide.classList.remove('d-none');
+                configDataTable.ajax = {
+                    url:"{{ url('/user/get-proyek-datatable?divcode=') }}"+JSON.stringify(arrDivcode),
+                    type: "GET"
+                },
+                configDataTable.columns = [ 
+                    {
+                        data: 'profit_center',
+                        className: 'align-midle text-center'
+                    },
+                    {
+                        data: 'proyek_name',
+                        className: 'align-midle'
+                    },
+                    {
+                        data: 'unit_kerja.unit_kerja',
+                        className: 'align-midle text-center'
+                    },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return `<input class="form-check-input mt-0" type="checkbox" name="proyeks[]" value="${data.profit_center}"`+ (selectedRows[row.profit_center] ? 'checked' : '') +">"
+                        },
+                        className: 'align-midle text-center'
+                    },
+                ];
+
+                const dataTable = $('#proyeks-ccm').DataTable(configDataTable);
+                // Menangani perubahan status checkbox
+                $('#proyeks-ccm tbody').on('change', '.row-checkbox', function() {
+                    let rowId = $(this).data('id');
+                    if (this.checked) {
+                        selectedRows[rowId] = this.checked;
+                    }else{
+                        delete selectedRows[rowId]
+                    }
+                });
+
+                // Menangani event draw.dt untuk mempertahankan status checkbox setelah redraw DataTable
+                dataTable.on('draw.dt', function() {
+                    for (let rowId in selectedRows) {
+                        $('input.row-checkbox[data-id="' + rowId + '"]').prop('checked', selectedRows[rowId]);
+                    }
+                });
+            }else{
+                const divTableHide = document.querySelector('#table-list-proyek');
+                divTableHide.classList.add('d-none');
+            }
         }
     </script>
 @endsection
