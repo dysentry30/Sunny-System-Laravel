@@ -72,6 +72,7 @@ use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -2652,7 +2653,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         } else {
             $users = User::join("unit_kerjas", "unit_kerjas.divcode", "=", "users.unit_kerja")->where("unit_kerjas.divcode", "=", Auth::user()->unit_kerja)->get();
         }
-        return view("/MasterData/User", ["users" => $users, "unit_kerjas" => UnitKerja::all()]);
+
+        $pegawai_all = Pegawai::select(['id_pegawai', 'nip', 'nama_pegawai'])->get();
+        return view("/MasterData/User", ["users" => $users, "unit_kerjas" => UnitKerja::all(), "pegawai_all" => $pegawai_all]);
         // return view("/MasterData/User", ["users" => User::all()->reverse()]);
     });
     // Route::get('/user', [UserController::class, 'index']);
@@ -2662,6 +2665,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     });
 
     Route::post('/user/save', [UserController::class, "save"]);
+
+    Route::post('/user/role/save', [UserController::class, "saveRole"]);
 
     Route::post('/user/update', [UserController::class, "update"]);
 
