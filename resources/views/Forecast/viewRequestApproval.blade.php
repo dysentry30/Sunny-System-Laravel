@@ -158,13 +158,27 @@
                                         <div class="row">
                                             <div class="col">
                                                 @php
-                                                $now = Carbon\Carbon::now()->day(1)->subMonths(5);
+                                                $submonth = ((int) date('m')-1);
+                                                if ($submonth == 0) {
+                                                    // $submonth = 1;
+                                                    $now = Carbon\Carbon::now()->day(1)->subMonths($submonth + 1);
+                                                }else{
+                                                    $now = Carbon\Carbon::now()->day(1)->subMonths($submonth);
+                                                }
+                                                // dump($now->addMonths(1), $submonth, (int) date('d'));
                                                 @endphp
                                                 <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-5">
-                                                    @foreach (range(1,5) as $item)
+                                                    @php
+                                                    if ((int) date('d') >= 25) {
+                                                        $submonth = $submonth+1;
+                                                    } else {
+                                                        $submonth = $submonth;
+                                                    }
+                                                    @endphp
+                                                    @foreach (range(1,$submonth) as $item)
                                                         <!--begin:::Tab item Pasar Dini-->
                                                         <li class="nav-item">
-                                                            <a class="nav-link text-active-primary {{$item == 3 ? "active" : ""}}" data-bs-toggle="tab"
+                                                            <a class="nav-link text-active-primary {{$item == $submonth ? "active" : ""}}" data-bs-toggle="tab"
                                                                 href="#kt_user_view_forecasts_{{(int) $now->format("m")}}_{{$now->format("Y")}}"
                                                                 style="font-size:14px;">{{$now->translatedFormat("F Y")}}</a>
                                                         </li>
@@ -225,12 +239,25 @@
                                 style="overflow: auto; background-color:white; white-space: nowrap;">
                                 <!--begin::Contacts App- Edit Contact-->
                                 @php
-                                    $now = Carbon\Carbon::now()->day(1)->subMonths(5);
+                                    $submonth = ((int) date('m')-1);
+                                    if ($submonth == 0) {
+                                        // $submonth = 1;
+                                        $now = Carbon\Carbon::now()->day(1)->subMonths($submonth + 1);
+                                    }else{
+                                        $now = Carbon\Carbon::now()->day(1)->subMonths($submonth);
+                                    }
+                                    // $now = Carbon\Carbon::now()->day(1)->subMonths($submonth);
                                 @endphp
                                 <div class="tab-content">
-                                    @foreach (range(1,5) as $item)
-                                        <div class="tab-pane fade {{$item == 3 ? "show active" : ""}}" id="kt_user_view_forecasts_{{(int) $now->format("m")}}_{{$now->format("Y")}}" role="tabpanel">
-
+                                    @php
+                                    if ((int) date('d') >= 25) {
+                                        $submonth = $submonth+1;
+                                    } else {
+                                        $submonth = $submonth;
+                                    }
+                                    @endphp
+                                    @foreach (range(1, $submonth) as $item)
+                                        <div class="tab-pane fade {{$item == $submonth ? "show active" : ""}}" id="kt_user_view_forecasts_{{(int) $now->format("m")}}_{{$now->format("Y")}}" role="tabpanel">
                                             <!--begin::All Content-->
                                             <div class="col-xl-15">
 
@@ -243,17 +270,27 @@
                                                     <div class="card-body mt-0" style="background-color: white;">
                                                         @php
                                                             // $historyForecast_new = collect();
+                                                            // $tes = $historyForecast->map(function($hf1) use($now){
+                                                            //     return $hf1->map(function($hf2) use($now){
+                                                            //         return collect($hf2)->filter(function($hFilter) use($now){
+                                                            //             return $hFilter->tahun == $now->format('Y');
+                                                            //         });
+                                                            //     });
+                                                            // });
                                                             $historyForecast_new = $historyForecast->map(function ($h, $key) use($now, &$historyForecast, &$historyForecast_new) {
                                                                 $condition = true;
                                                                 return $h->map(function ($histories) use(&$condition, $now, &$historyForecast_new) {
-                                                                    return $histories->map(function($ph) use(&$condition, $now, &$historyForecast_new) {
-                                                                        if($ph->periode_prognosa == (int) $now->format("m") && $ph->tahun == (int) $now->format("Y")) {
-                                                                            return $ph;
-                                                                        }
+                                                                    return $histories->filter(function($hFilter) use($now){
+                                                                        return $hFilter->periode_prognosa == $now->format('m') && $hFilter->tahun == $now->format('Y');
                                                                     });
+                                                                    // return $histories->map(function($ph) use(&$condition, $now, &$historyForecast_new) {
+                                                                    //     if($ph->periode_prognosa == (int) $now->format("m") && $ph->tahun == (int) $now->format("Y")) {
+                                                                    //         return $ph;
+                                                                    //     }
+                                                                    // });
                                                                 });
                                                             });
-                                                            // dd($historyForecast_new, (int) $now->format("m"), (int) $now->format("Y"));
+                                                            // dump($historyForecast_new, (int) $now->format("m"), (int) $now->format("Y"));
                                                         @endphp
                                                         @forelse ($historyForecast_new as $dop => $historyUnitKerjas)
                                                             @php

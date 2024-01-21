@@ -2,15 +2,148 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ContractUploadFinal;
+use App\Models\DocumentTemplate;
+use App\Models\Proyek;
+use App\Models\UnitKerja;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 use stdClass;
 
 class DocumentController extends Controller
 {
+
+    function documentDatabaseView(Request $request)
+    {
+        // $data = $request->all();
+
+        $nama_proyek = $request->query("nama-proyek") ?? "";
+        $jenis_dokumen = $request->query("jenis-dokumen") ?? "";
+        // $document_all = ContractUploadFinal::all();
+
+        if (Auth::user()->check_administrator) {
+            $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"];
+            $unit_kerjas_all = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get("divcode");
+            $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->get();
+        } else {
+            $unit_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
+
+            $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"];
+            $unit_kerjas_all = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
+            $unit_kerjas = UnitKerja::whereNotIn("divcode",   $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
+        }
+
+        if (empty($nama_proyek)) {
+            $proyeks = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->whereIn("unit_kerja", $unit_kerjas_all)->get();
+        } else {
+            $proyeks = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->whereIn("unit_kerja", $unit_kerjas_all)->where("kode_proyek", "=", $nama_proyek)->get();
+        }
+        $contracts = $proyeks->map(function ($item) {
+            return $item->ContractManagements;
+        });
+
+        $documents = $contracts->map(function ($item) {
+            return $item->UploadFinal;
+        })->flatten()->sortByDesc('created_at');
+
+        if (!empty($jenis_dokumen)) {
+            $documents = $documents->where("category", "=", $jenis_dokumen);
+        }
+
+        $category_document = ContractUploadFinal::all()->groupBy("category")->keys();
+
+        // dd($category_document);
+        return view("6_Document", compact(['documents', 'proyeks', 'category_document', 'nama_proyek', 'jenis_dokumen']));
+    }
+
+    function documentTemplateView(Request $request)
+    {
+        $category_get = $request->query('jenis-dokumen');
+        $documents_template = DocumentTemplate::all();
+
+        if (!empty($category_get)) {
+            $documents_template = DocumentTemplate::where('category', '=', $category_get)->get();
+        }
+        return view("6_Document_Template", compact(['documents_template', 'category_get']));
+    }
+
+    function documentTemplateNew(Request $request, DocumentTemplate $template)
+    {
+        $data = $request->all();
+        $file = $request->file("file-document");
+        $id_document = date("His_") . $file->getClientOriginalName();
+        $nama_file = $file->getClientOriginalName();
+        try {
+            $messages = [
+                "required" => "Field di atas wajib diisi",
+                "file" => "This field must be file only",
+            ];
+            $rules = [
+                "file-document" => "required|file",
+            ];
+            $validation = Validator::make($data, $rules, $messages);
+            if ($validation->fails()) {
+                Alert::error('Error', "Dokumen Template gagal ditambahkan");
+                return Redirect::back()->with("modal", $data["modal-name"]);
+                // dd($validation->errors());
+            }
+            $validation->validate();
+
+
+            $template->id_dokumen = $id_document;
+            $template->nama_dokumen = $nama_file;
+            $template->category = $data['category'];
+
+            if ($template->save()) {
+                moveFileDocumentTemp($file, explode(".", $id_document)[0]);
+                Alert::success("Success", "Dokumen Template berhasil ditambahkan");
+                return redirect()->back();
+            }
+            Alert::error("Erorr", "Dokumen Final gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return redirect()->back();
+
+        } catch (\Throwable $th) {
+            throw $th;
+            // Alert::error("Erorr", "Dokumen Final gagal ditambahkan");
+            // return Redirect::back()->with("modal", $data["modal-name"]);
+        }
+        return view("6_DocumentTemplate", compact(['documents']));
+    }
+
+    function documentTemplateDelete($id)
+    {
+        $document_selected = DocumentTemplate::where('id', '=', $id)->first();
+        try {
+
+            File::delete(public_path("template/$document_selected->id_dokumen"));
+            if ($document_selected->delete()) {
+                Alert::success("Success", "Dokumen Template berhasil dihapus");
+                return response()->json([
+                    "status" => "success",
+                    "link" => true,
+                ]);
+            }
+            Alert::error("Erorr", "Dokumen Final gagal dihapus");
+            return response()->json([
+                "status" => "success",
+                "link" => false,
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            Alert::error("Erorr", "Dokumen Final gagal dihapus");
+            return response()->json([
+                "status" => "success",
+                "link" => false,
+            ]);
+        }
+    }
 
     function documentIndex()
     {

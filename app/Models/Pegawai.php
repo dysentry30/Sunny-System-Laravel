@@ -21,7 +21,4 @@ class Pegawai extends Model
         return $this->hasOne(User::class, "nip", "nip");
     }
 
-    public function MatriksApproval() {
-        return $this->hasMany(MatriksApprovalRekomendasi::class, "nama_pegawai", "nip");
-    }
 }

@@ -12,10 +12,16 @@ use App\Models\Proyek;
 use App\Models\ClaimDetails;
 use Illuminate\Http\Request;
 use App\Models\ClaimManagements;
+use App\Models\ContractApproval;
 use App\Models\ContractManagements;
 use App\Models\Pasals;
 use App\Models\PerubahanKontrak;
+use App\Models\ReviewContracts;
 use App\Models\UnitKerja;
+use App\Models\ProyekPISNew;
+use App\Models\JenisDokumen;
+use App\Models\DokumenPendukung;
+use Carbon\Carbon;
 use Google\Service\FactCheckTools\Resource\Claims;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -58,7 +64,7 @@ class ClaimController extends Controller
     //         $proyekClaim = $claims->where('jenis_perubahan', '=', "Klaim")->filter(function($data) use($column, $filter) {
     //             return preg_match("/^$filter/", $data[$column]);
     //         });
-            
+
     //         $proyekAnti = $claims->where('jenis_perubahan', '=', "Anti Klaim")->filter(function($data) use($column, $filter) {
     //             return preg_match("/^$filter/", $data[$column]);
     //         });
@@ -66,24 +72,24 @@ class ClaimController extends Controller
     //         $proyekAsuransi = $claims->where('jenis_perubahan', '=', "Klaim Asuransi")->filter(function($data) use($column, $filter) {
     //             return preg_match("/^$filter/", $data[$column]);
     //         });
-            
+
     //         $proyekVos = $claims->where('jenis_perubahan', '=', "VO")->filter(function($data) use($column, $filter) {
     //             return preg_match("/^$filter/", $data[$column]);
     //         });
-            
+
     //     } else {
     //         $proyekClaim = $claims->where('jenis_perubahan', '=', "Klaim")->groupBy('id_contract')->map(function($data){
     //             return $data->first();
     //         });
-            
+
     //         $proyekAnti = $claims->where('jenis_perubahan', '=', "Anti Klaim")->groupBy('id_contract')->map(function($data){
     //             return $data->first();
     //         });
-            
+
     //         $proyekAsuransi = $claims->where('jenis_perubahan', '=', "Klaim Asuransi")->groupBy('id_contract')->map(function($data){
     //             return $data->first();
     //         });
-            
+
     //         $proyekVos = $claims->where('jenis_perubahan', '=', "VO")->groupBy('id_contract')->map(function($data){
     //             return $data->first();
     //         });
@@ -95,14 +101,17 @@ class ClaimController extends Controller
     //     return view("5_Claim", compact(["proyekVos" ,"proyekClaim", "proyekAnti", "proyekAsuransi", "column", "filter", "proyeks"]));
     // }
 
-    public function index(Request $request)
+    public function indexOld(Request $request)
     {
-        $filterTahun = $request->query("tahun-proyek");
-        $filterUnitKerja = $request->query("unit-kerja");
-        $year = (int) date("Y");
-        $unitkerjas = UnitKerja::get()->whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "8"]);
-        $tahun_proyek = Proyek::get()->groupBy("tahun_perolehan")->keys();
-        // dd($unitkerjas);
+        // $filterTahun = $request->query("tahun-proyek") ?? (int) date("Y");
+        // $filterUnitKerja = $request->query("unit-kerja");
+        // $year = (int) date("Y");
+        // $unitkerjas = UnitKerja::get()->whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D"]);
+        // $tahun_proyek = Proyek::get()->groupBy("tahun_perolehan")->keys();
+        // $filter_unit = $unitkerjas->groupBy("divcode")->keys();
+        // $proyeks_all = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->where("tahun_perolehan", "=", $filterTahun)->get();
+        // dd($filterUnitKerja);
+        // dd($uk_map);
         // $proyeks = ContractManagements::join("proyeks", "contract_managements.project_id", "=", "proyeks.kode_proyek")->get();
         // $claims = $proyeks->map(function($proyek){
         //     $claim = PerubahanKontrak::where("id_contract", "=", $proyek->id_contract)->get();
@@ -117,18 +126,617 @@ class ClaimController extends Controller
         //     return $p->Proyek;
         // })->groupBy("kode_proyek");
         // $claims = ContractManagements::where("stages", "=", 2)->join("proyeks", "contract_managements.project_id", "=", "proyeks.kode_proyek")->get();
-        if(!empty($filterTahun)){
-            $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->where("tahun_perolehan", "=", $filterTahun)->get();
-        }elseif(!empty($filterUnitKerja)){
-            $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->where("unit_kerja", "=", $filterUnitKerja)->get();
-        }else{
-            $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->where("tahun_perolehan", "=", $year)->get();
+        // dd($filterTahun);
+        // if(!empty($filterUnitKerja)){
+        //     $proyeks = $proyeks_all->where("unit_kerja", "=", $filterUnitKerja);
+        // }else{
+        //     $proyeks = $proyeks_all;
+        // }
+        // dd($proyeks);
+
+        $filterUnitKerja = $request->query("filter-unit");
+        $filterJenis = $request->query("filter-jenis");
+        $filterTahun = !empty($request->query("tahun-proyek")) ? (int) $request->query("tahun-proyek") : (int) date("Y");
+        $filterBulan = !empty($request->query("bulan-proyek")) ? (int) $request->query("bulan-proyek") : (int) date("m");
+
+        $year = (int) date("Y");
+        $month = (int) date("m");
+
+        // $unitkerjas = UnitKerja::get()->whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8"]);
+        // dd($unitkerjas);
+        $tahun_proyeks = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->get()->groupBy("tahun_perolehan")->keys();
+        if (Auth::user()->check_administrator) {
+
+            if ($filterTahun < 2023) {
+                $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "P", "J"];
+                $unitkerjas = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get("divcode");
+                $unit_kerjas_select = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get();
+                // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->whereNotIn("unit_kerja", $unit_kerja_code)->get();
+                // $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->get();
+                // $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->whereNotIn("unit_kerja", $unit_kerja_code)->whereIn("stage", [6, 8, 9])->where("stages", "=", 3)->get();
+            } else {
+                $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "L", "F", "U", "O"];
+                $unitkerjas = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get("divcode");
+                $unit_kerjas_select = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get();
+                // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->whereNotIn("unit_kerja", $unit_kerja_code)->get();
+                // $unit_kerjas = UnitKerja::whereNotIn("divcode",   $unit_kerja_code)->get();
+                // $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->whereNotIn("unit_kerja", $unit_kerja_code)->whereIn("stage", [6, 8, 9])->where("stages", "=", 3)->get();
+            }
+
+            // $jenis_proyeks = JenisProyek::all("kode_jenis");
+            // dd($unitkerjas);
+
+            // $jenis_proyek_get = !empty($request->query("filter-jenis")) ? [$request->query("filter-jenis")] : $jenis_proyeks->toArray();
+            $unit_kerja_get = !empty($request->query("filter-unit")) ? [$request->query("filter-unit")] : $unitkerjas->toArray();
+
+            // if (!empty($filterBulan) && $filterTahun == 2023) {
+            //     $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->get();
+            // } else {
+            //     if ($filterTahun < 2023 && !empty($filterBulan)) {
+            //         $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->get();
+            //     } elseif ($filterTahun < 2023 && empty($filterBulan)) {
+            //         $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->get();
+            //     } else {
+            //         $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->get();
+            //         // dd("test");
+            //     }
+            // }
+            if ($filterBulan == (int) date("m") && $filterTahun == (int) date("Y")) {
+                // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->whereIn("unit_kerja", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->get();
+                $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->whereIn("unit_kerja", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->where('contract_managements.profit_center', '!=', null)->get();
+
+                $proyeks_all = $proyeks_all->map(function ($proyek) {
+                    $result = [];
+                    $result['kode_proyek'] = $proyek->kode_proyek;
+                    $result['profit_center'] = $proyek->ContractManagements->profit_center;
+                    $result['nama_proyek'] = $proyek->nama_proyek;
+                    $result['id_contract'] = $proyek->ContractManagements->id_contract;
+                    $result['unit_kerja'] = $proyek->UnitKerja->unit_kerja;
+
+                    if (!empty($proyek->PerubahanKontrak)) {
+                        $claim = $proyek->PerubahanKontrak;
+                        $cat_vo = $claim->where("jenis_perubahan", "=", "VO");
+                        $item_vo = $cat_vo->count();
+
+                        //Kategori Klaim
+                        $cat_klaim = $claim->where("jenis_perubahan", "=", "Klaim");
+                        $item_klaim = $cat_klaim->count();
+
+                        //Kategori ANti Klaim
+                        $cat_anti_klaim = $claim->where("jenis_perubahan", "=", "Anti Klaim");
+                        $item_anti_klaim = $cat_anti_klaim->count();
+
+                        //Kategori Klaim Asuransi
+                        $cat_klaim_asuransi = $claim->where("jenis_perubahan", "=", "Klaim Asuransi");
+                        $item_klaim_asuransi = $cat_klaim_asuransi->count();
+
+                        $result['total_vo'] = $item_vo;
+                        $result['total_klaim'] = $item_klaim;
+                        $result['total_anti_klaim'] = $item_anti_klaim;
+                        $result['total_klaim_asuransi'] = $item_klaim_asuransi;
+                    } else {
+                        $result['total_vo'] = 0;
+                        $result['total_klaim'] = 0;
+                        $result['total_anti_klaim'] = 0;
+                        $result['total_klaim_asuransi'] = 0;
+                    }
+
+                    return $result;
+                });
+            } else {
+
+                $proyeks_all = ContractApproval::join(
+                    "proyeks",
+                    "proyeks.kode_proyek",
+                    "=",
+                    "contract_approval.kode_proyek"
+                )->where("periode", '=', $filterBulan)->where(
+                    "tahun",
+                    "=",
+                    $filterTahun
+                )->get()->groupBy('kode_proyek');
+
+
+                $proyeks_all = $proyeks_all->map(function ($claim) {
+                    $cat_vo = $claim->where(
+                        "jenis_perubahan",
+                        "=",
+                        "VO"
+                    );
+                    $item_vo = $cat_vo->count();
+                    // dd($item_vo, $jumlah_vo);
+
+                    //Kategori Klaim
+                    $cat_klaim = $claim->where("jenis_perubahan", "=", "Klaim");
+                    $item_klaim = $cat_klaim->count();
+                    // dd($item_klaim, $jumlah_klaim);
+
+                    //Kategori ANti Klaim
+                    $cat_anti_klaim = $claim->where(
+                        "jenis_perubahan",
+                        "=",
+                        "Anti Klaim"
+                    );
+                    $item_anti_klaim = $cat_anti_klaim->count();
+                    // dd($item_anti_klaim, $jumlah_anti_klaim);
+
+                    //Kategori Klaim Asuransi
+                    $cat_klaim_asuransi = $claim->where(
+                        "jenis_perubahan",
+                        "=",
+                        "Klaim Asuransi"
+                    );
+                    $item_klaim_asuransi = $cat_klaim_asuransi->count();
+                    return [
+                        'kode_proyek' => $claim->first()->kode_proyek,
+                        'profit_center' => $claim->first()->ContractManagements->profit_center,
+                        'nama_proyek' => $claim->first()->Proyeks->nama_proyek,
+                        'id_contract' => $claim->first()->id_contract,
+                        'unit_kerja' => $claim->first()->Proyeks->UnitKerja->unit_kerja,
+                        'total_vo' => $item_vo,
+                        'total_klaim' => $item_klaim,
+                        'total_anti_klaim' => $item_anti_klaim,
+                        'total_klaim_asuransi' => $item_klaim_asuransi,
+                    ];
+                });
+            }
+        } else {
+            // $tahun_proyeks = Proyek::get()->groupBy("tahun_perolehan")->keys();
+
+            $unit_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
+
+            if ($filterTahun < 2023) {
+                $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "P", "J"];
+                $unitkerjas = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
+                $unit_kerjas_select = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
+                // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->whereNotIn("unit_kerja", $unit_kerja_code)->get();
+                // $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->get();
+                // $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->whereNotIn("unit_kerja", $unit_kerja_code)->whereIn("stage", [6, 8, 9])->where("stages", "=", 3)->get();
+            } else {
+                $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"];
+                $unitkerjas = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
+                $unit_kerjas_select = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
+                // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->whereNotIn("unit_kerja", $unit_kerja_code)->get();
+                // $unit_kerjas = UnitKerja::whereNotIn("divcode",   $unit_kerja_code)->get();
+                // $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->whereNotIn("unit_kerja", $unit_kerja_code)->whereIn("stage", [6, 8, 9])->where("stages", "=", 3)->get();
+            }
+
+            // $jenis_proyeks = JenisProyek::all("kode_jenis");
+            // dd($unitkerjas);
+
+            // $jenis_proyek_get = !empty($request->query("filter-jenis")) ? [$request->query("filter-jenis")] : $jenis_proyeks->toArray();
+            $unit_kerja_get = !empty($request->query("filter-unit")) ? [$request->query("filter-unit")] : $unitkerjas->toArray();
+
+            // if (!empty($filterBulan) && $filterTahun == 2023) {
+            //     $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->get();
+            // } else {
+            //     if ($filterTahun < 2023 && !empty($filterBulan)) {
+            //         $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->get();
+            //     } elseif ($filterTahun < 2023 && empty($filterBulan)) {
+            //         $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->get();
+            //     } else {
+            //         $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->get();
+            //         // dd("test");
+            //     }
+            // }
+
+            if ($filterBulan == (int) date("m") && $filterTahun == (int) date("Y")) {
+                // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->whereIn("unit_kerja", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->get();
+                $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->whereIn("unit_kerja", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->where('contract_managements.profit_center', '!=', null)->get();
+
+                $proyeks_all = $proyeks_all->map(function ($proyek) {
+                    $result = [];
+                    $result['kode_proyek'] = $proyek->kode_proyek;
+                    $result['profit_center'] = $proyek->ContractManagements->profit_center;
+                    $result['nama_proyek'] = $proyek->nama_proyek;
+                    $result['id_contract'] = $proyek->ContractManagements->id_contract;
+                    $result['unit_kerja'] = $proyek->UnitKerja->unit_kerja;
+
+                    if (!empty($proyek->PerubahanKontrak)) {
+                        $claim = $proyek->PerubahanKontrak;
+                        $cat_vo = $claim->where("jenis_perubahan", "=", "VO");
+                        $item_vo = $cat_vo->count();
+
+                        //Kategori Klaim
+                        $cat_klaim = $claim->where("jenis_perubahan", "=", "Klaim");
+                        $item_klaim = $cat_klaim->count();
+
+                        //Kategori ANti Klaim
+                        $cat_anti_klaim = $claim->where("jenis_perubahan", "=", "Anti Klaim");
+                        $item_anti_klaim = $cat_anti_klaim->count();
+
+                        //Kategori Klaim Asuransi
+                        $cat_klaim_asuransi = $claim->where("jenis_perubahan", "=", "Klaim Asuransi");
+                        $item_klaim_asuransi = $cat_klaim_asuransi->count();
+
+                        $result['total_vo'] = $item_vo;
+                        $result['total_klaim'] = $item_klaim;
+                        $result['total_anti_klaim'] = $item_anti_klaim;
+                        $result['total_klaim_asuransi'] = $item_klaim_asuransi;
+                    } else {
+                        $result['total_vo'] = 0;
+                        $result['total_klaim'] = 0;
+                        $result['total_anti_klaim'] = 0;
+                        $result['total_klaim_asuransi'] = 0;
+                    }
+
+                    return $result;
+                });
+            } else {
+
+                $proyeks_all = ContractApproval::join(
+                    "proyeks",
+                    "proyeks.kode_proyek",
+                    "=",
+                    "contract_approval.kode_proyek"
+                )->where("periode", '=', $filterBulan)->where(
+                    "tahun",
+                    "=",
+                    $filterTahun
+                )->get()->groupBy('kode_proyek');
+
+                $proyeks_all = $proyeks_all->map(function ($claim) {
+                    $cat_vo = $claim->where(
+                        "jenis_perubahan",
+                        "=",
+                        "VO"
+                    );
+                    $item_vo = $cat_vo->count();
+                    // dd($item_vo, $jumlah_vo);
+
+                    //Kategori Klaim
+                    $cat_klaim = $claim->where("jenis_perubahan", "=", "Klaim");
+                    $item_klaim = $cat_klaim->count();
+                    // dd($item_klaim, $jumlah_klaim);
+
+                    //Kategori ANti Klaim
+                    $cat_anti_klaim = $claim->where("jenis_perubahan", "=", "Anti Klaim");
+                    $item_anti_klaim = $cat_anti_klaim->count();
+                    // dd($item_anti_klaim, $jumlah_anti_klaim);
+
+                    //Kategori Klaim Asuransi
+                    $cat_klaim_asuransi = $claim->where(
+                        "jenis_perubahan",
+                        "=",
+                        "Klaim Asuransi"
+                    );
+                    $item_klaim_asuransi = $cat_klaim_asuransi->count();
+                    return [
+                        'kode_proyek' => $claim->first()->kode_proyek,
+                        'profit_center' => $claim->first()->ContractManagements->profit_center,
+                        'nama_proyek' => $claim->first()->Proyeks->nama_proyek,
+                        'id_contract' => $claim->first()->id_contract,
+                        'unit_kerja' => $claim->first()->Proyeks->UnitKerja->unit_kerja,
+                        'total_vo' => $item_vo,
+                        'total_klaim' => $item_klaim,
+                        'total_anti_klaim' => $item_anti_klaim,
+                        'total_klaim_asuransi' => $item_klaim_asuransi,
+                    ];
+                });
+            }
         }
-        $claims = $proyeks->where("stages", ">=", 2);
+
+        $claims = $proyeks_all;
         // dd($claims);
 
-        return view("5_Claim", compact(["claims", "tahun_proyek", "unitkerjas", "filterUnitKerja", "filterTahun"]));
+        return view(
+            "5_Claim",
+            compact([
+                "claims", "filterUnitKerja", "filterJenis", "unitkerjas", "tahun_proyeks", "filterTahun", "month", "filterBulan", "unit_kerjas_select"
+            ])
+        );
+    }
 
+    public function index(Request $request)
+    {
+
+        $filterUnitKerja = $request->query("filter-unit");
+        $filterJenis = $request->query("filter-jenis");
+        $filterTahun = !empty($request->query("tahun-proyek")) ? (int) $request->query("tahun-proyek") : (int) date("Y");
+        $filterBulan = !empty($request->query("bulan-proyek")) ? (int) $request->query("bulan-proyek") : (int) date("m");
+
+        $year = (int) date("Y");
+        $month = (int) date("m");
+
+        // $unitkerjas = UnitKerja::get()->whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8"]);
+        // dd($unitkerjas);
+        $tahun_proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->get()->groupBy("start_year")->keys();
+        if (Auth::user()->check_administrator) {
+
+            if ($filterTahun < 2023) {
+                $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "P", "J"];
+                $unitkerjas = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get("divcode");
+                $unit_kerjas_select = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get();
+                // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->whereNotIn("unit_kerja", $unit_kerja_code)->get();
+                // $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->get();
+                // $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->whereNotIn("unit_kerja", $unit_kerja_code)->whereIn("stage", [6, 8, 9])->where("stages", "=", 3)->get();
+            } else {
+                $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "L", "F", "U", "O"];
+                $unitkerjas = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get("divcode");
+                $unit_kerjas_select = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->get();
+                // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->whereNotIn("unit_kerja", $unit_kerja_code)->get();
+                // $unit_kerjas = UnitKerja::whereNotIn("divcode",   $unit_kerja_code)->get();
+                // $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->whereNotIn("unit_kerja", $unit_kerja_code)->whereIn("stage", [6, 8, 9])->where("stages", "=", 3)->get();
+            }
+
+            // $jenis_proyeks = JenisProyek::all("kode_jenis");
+            // dd($unitkerjas);
+
+            // $jenis_proyek_get = !empty($request->query("filter-jenis")) ? [$request->query("filter-jenis")] : $jenis_proyeks->toArray();
+            $unit_kerja_get = !empty($request->query("filter-unit")) ? [$request->query("filter-unit")] : $unitkerjas->toArray();
+
+            // if (!empty($filterBulan) && $filterTahun == 2023) {
+            //     $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->get();
+            // } else {
+            //     if ($filterTahun < 2023 && !empty($filterBulan)) {
+            //         $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->get();
+            //     } elseif ($filterTahun < 2023 && empty($filterBulan)) {
+            //         $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->get();
+            //     } else {
+            //         $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->get();
+            //         // dd("test");
+            //     }
+            // }
+            if ($filterBulan == (int) date("m") && $filterTahun == (int) date("Y")) {
+                // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->whereIn("unit_kerja", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->get();
+                $proyeks_all = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->whereIn("kd_divisi", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->where('contract_managements.profit_center', '!=', null)->get();
+
+                $proyeks_all = $proyeks_all->map(function ($proyek) {
+                    $result = [];
+                    // $result['kode_proyek'] = $proyek->kode_proyek;
+                    $result['profit_center'] = $proyek->profit_center;
+                    $result['nama_proyek'] = $proyek->proyek_name;
+                    // $result['id_contract'] = $proyek->ContractManagements->id_contract;
+                    $result['unit_kerja'] = $proyek->UnitKerja->unit_kerja;
+
+                    if (!empty($proyek->PerubahanKontrak)) {
+                        $claim = $proyek->PerubahanKontrak;
+                        $cat_vo = $claim->where("jenis_perubahan", "=", "VO");
+                        $item_vo = $cat_vo->count();
+
+                        //Kategori Klaim
+                        $cat_klaim = $claim->where("jenis_perubahan", "=", "Klaim");
+                        $item_klaim = $cat_klaim->count();
+
+                        //Kategori ANti Klaim
+                        $cat_anti_klaim = $claim->where("jenis_perubahan", "=", "Anti Klaim");
+                        $item_anti_klaim = $cat_anti_klaim->count();
+
+                        //Kategori Klaim Asuransi
+                        $cat_klaim_asuransi = $claim->where("jenis_perubahan", "=", "Klaim Asuransi");
+                        $item_klaim_asuransi = $cat_klaim_asuransi->count();
+
+                        $result['total_vo'] = $item_vo;
+                        $result['total_klaim'] = $item_klaim;
+                        $result['total_anti_klaim'] = $item_anti_klaim;
+                        $result['total_klaim_asuransi'] = $item_klaim_asuransi;
+                    } else {
+                        $result['total_vo'] = 0;
+                        $result['total_klaim'] = 0;
+                        $result['total_anti_klaim'] = 0;
+                        $result['total_klaim_asuransi'] = 0;
+                    }
+
+                    return $result;
+                });
+            } else {
+
+                $proyeks_all = ContractApproval::join(
+                    "proyek_pis_new",
+                    "proyek_pis_new.profit_center",
+                    "=",
+                    "contract_approval.profit_center"
+                )->where("periode", '=', $filterBulan)->where(
+                    "tahun",
+                    "=",
+                    $filterTahun
+                )->get()->groupBy('kode_proyek');
+
+
+                $proyeks_all = $proyeks_all->map(function ($claim) {
+                    $cat_vo = $claim->where(
+                        "jenis_perubahan",
+                        "=",
+                        "VO"
+                    );
+                    $item_vo = $cat_vo->count();
+                    // dd($item_vo, $jumlah_vo);
+
+                    //Kategori Klaim
+                    $cat_klaim = $claim->where("jenis_perubahan", "=", "Klaim");
+                    $item_klaim = $cat_klaim->count();
+                    // dd($item_klaim, $jumlah_klaim);
+
+                    //Kategori ANti Klaim
+                    $cat_anti_klaim = $claim->where(
+                        "jenis_perubahan",
+                        "=",
+                        "Anti Klaim"
+                    );
+                    $item_anti_klaim = $cat_anti_klaim->count();
+                    // dd($item_anti_klaim, $jumlah_anti_klaim);
+
+                    //Kategori Klaim Asuransi
+                    $cat_klaim_asuransi = $claim->where(
+                        "jenis_perubahan",
+                        "=",
+                        "Klaim Asuransi"
+                    );
+                    $item_klaim_asuransi = $cat_klaim_asuransi->count();
+                    return [
+                        'kode_proyek' => $claim->first()->kode_proyek,
+                        'profit_center' => $claim->first()->ContractManagements->profit_center,
+                        'nama_proyek' => $claim->first()->ProyekPISNew->proyek_name,
+                        'id_contract' => $claim->first()->id_contract,
+                        'unit_kerja' => $claim->first()->ProyekPISNew->UnitKerja->unit_kerja,
+                        'total_vo' => $item_vo,
+                        'total_klaim' => $item_klaim,
+                        'total_anti_klaim' => $item_anti_klaim,
+                        'total_klaim_asuransi' => $item_klaim_asuransi,
+                    ];
+                });
+            }
+        } else {
+            // $tahun_proyeks = Proyek::get()->groupBy("tahun_perolehan")->keys();
+
+            $unit_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
+
+            if ($filterTahun < 2023) {
+                $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "P", "J"];
+                $unitkerjas = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
+                $unit_kerjas_select = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
+                // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->whereNotIn("unit_kerja", $unit_kerja_code)->get();
+                // $unit_kerjas = UnitKerja::whereNotIn("divcode",  $unit_kerja_code)->get();
+                // $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->whereNotIn("unit_kerja", $unit_kerja_code)->whereIn("stage", [6, 8, 9])->where("stages", "=", 3)->get();
+            } else {
+                $unit_kerja_code =   ["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N"];
+                $unitkerjas = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get("divcode");
+                $unit_kerjas_select = UnitKerja::whereNotIn("divcode", $unit_kerja_code)->whereIn("divcode", $unit_user->toArray())->get();
+                // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->whereNotIn("unit_kerja", $unit_kerja_code)->get();
+                // $unit_kerjas = UnitKerja::whereNotIn("divcode",   $unit_kerja_code)->get();
+                // $proyeks = Proyek::join("contract_managements", "proyeks.kode_proyek", "=", "contract_managements.project_id")->whereNotIn("unit_kerja", $unit_kerja_code)->whereIn("stage", [6, 8, 9])->where("stages", "=", 3)->get();
+            }
+
+            // $jenis_proyeks = JenisProyek::all("kode_jenis");
+            // dd($unitkerjas);
+
+            // $jenis_proyek_get = !empty($request->query("filter-jenis")) ? [$request->query("filter-jenis")] : $jenis_proyeks->toArray();
+            $unit_kerja_get = !empty($request->query("filter-unit")) ? [$request->query("filter-unit")] : $unitkerjas->toArray();
+
+            // if (!empty($filterBulan) && $filterTahun == 2023) {
+            //     $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->get();
+            // } else {
+            //     if ($filterTahun < 2023 && !empty($filterBulan)) {
+            //         $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->get();
+            //     } elseif ($filterTahun < 2023 && empty($filterBulan)) {
+            //         $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->get();
+            //     } else {
+            //         $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->get();
+            //         // dd("test");
+            //     }
+            // }
+
+            if ($filterBulan == (int) date("m") && $filterTahun == (int) date("Y")) {
+                // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->whereIn("unit_kerja", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->get();
+                $proyeks_all = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->whereIn("kd_divisi", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->where('contract_managements.profit_center', '!=', null)->get();
+
+                $proyeks_all = $proyeks_all->map(function ($proyek) {
+                    $result = [];
+                    // $result['kode_proyek'] = $proyek->kode_proyek;
+                    $result['profit_center'] = $proyek->profit_center;
+                    $result['nama_proyek'] = $proyek->proyek_name;
+                    // $result['id_contract'] = $proyek->ContractManagements->id_contract;
+                    $result['unit_kerja'] = $proyek->UnitKerja->unit_kerja;
+
+                    if (!empty($proyek->PerubahanKontrak)) {
+                        $claim = $proyek->PerubahanKontrak;
+                        $cat_vo = $claim->where("jenis_perubahan", "=", "VO");
+                        $item_vo = $cat_vo->count();
+
+                        //Kategori Klaim
+                        $cat_klaim = $claim->where("jenis_perubahan", "=", "Klaim");
+                        $item_klaim = $cat_klaim->count();
+
+                        //Kategori ANti Klaim
+                        $cat_anti_klaim = $claim->where("jenis_perubahan", "=", "Anti Klaim");
+                        $item_anti_klaim = $cat_anti_klaim->count();
+
+                        //Kategori Klaim Asuransi
+                        $cat_klaim_asuransi = $claim->where("jenis_perubahan", "=", "Klaim Asuransi");
+                        $item_klaim_asuransi = $cat_klaim_asuransi->count();
+
+                        $result['total_vo'] = $item_vo;
+                        $result['total_klaim'] = $item_klaim;
+                        $result['total_anti_klaim'] = $item_anti_klaim;
+                        $result['total_klaim_asuransi'] = $item_klaim_asuransi;
+                    } else {
+                        $result['total_vo'] = 0;
+                        $result['total_klaim'] = 0;
+                        $result['total_anti_klaim'] = 0;
+                        $result['total_klaim_asuransi'] = 0;
+                    }
+
+                    return $result;
+                });
+            } else {
+
+                $proyeks_all = ContractApproval::join(
+                    "proyeks",
+                    "proyeks.kode_proyek",
+                    "=",
+                    "contract_approval.kode_proyek"
+                )->where("periode", '=', $filterBulan)->where(
+                    "tahun",
+                    "=",
+                    $filterTahun
+                )->get()->groupBy('kode_proyek');
+
+                $proyeks_all = ContractApproval::join(
+                    "proyek_pis_new",
+                    "proyek_pis_new.profit_center",
+                    "=",
+                    "contract_approval.profit_center"
+                )->where("periode", '=', $filterBulan)->where(
+                    "tahun",
+                    "=",
+                    $filterTahun
+                )->get()->groupBy('kode_proyek');
+
+
+                $proyeks_all = $proyeks_all->map(function ($claim) {
+                    $cat_vo = $claim->where(
+                        "jenis_perubahan",
+                        "=",
+                        "VO"
+                    );
+                    $item_vo = $cat_vo->count();
+                    // dd($item_vo, $jumlah_vo);
+
+                    //Kategori Klaim
+                    $cat_klaim = $claim->where("jenis_perubahan", "=", "Klaim");
+                    $item_klaim = $cat_klaim->count();
+                    // dd($item_klaim, $jumlah_klaim);
+
+                    //Kategori ANti Klaim
+                    $cat_anti_klaim = $claim->where(
+                        "jenis_perubahan",
+                        "=",
+                        "Anti Klaim"
+                    );
+                    $item_anti_klaim = $cat_anti_klaim->count();
+                    // dd($item_anti_klaim, $jumlah_anti_klaim);
+
+                    //Kategori Klaim Asuransi
+                    $cat_klaim_asuransi = $claim->where(
+                        "jenis_perubahan",
+                        "=",
+                        "Klaim Asuransi"
+                    );
+                    $item_klaim_asuransi = $cat_klaim_asuransi->count();
+                    return [
+                        'kode_proyek' => $claim->first()->kode_proyek,
+                        'profit_center' => $claim->first()->ContractManagements->profit_center,
+                        'nama_proyek' => $claim->first()->ProyekPISNew->proyek_name,
+                        'id_contract' => $claim->first()->id_contract,
+                        'unit_kerja' => $claim->first()->ProyekPISNew->UnitKerja->unit_kerja,
+                        'total_vo' => $item_vo,
+                        'total_klaim' => $item_klaim,
+                        'total_anti_klaim' => $item_anti_klaim,
+                        'total_klaim_asuransi' => $item_klaim_asuransi,
+                    ];
+                });
+            }
+        }
+
+        $claims = $proyeks_all;
+        // dd($claims);
+
+        return view(
+            "5_Claim",
+            compact([
+                "claims", "filterUnitKerja", "filterJenis", "unitkerjas", "tahun_proyeks", "filterTahun", "month", "filterBulan", "unit_kerjas_select"
+            ])
+        );
     }
 
     public function view($kode_proyek, $id_contract, Request $request)
@@ -137,18 +745,40 @@ class ClaimController extends Controller
         $filterStatus = $request->query("stage");
         // dd($filterStatus);
         // $filterBulan = $data["bulan-perubahan"];
+        $data = $request->all();
+        $link = $data["link"] ?? "kt_user_view_claim_VO";
+        $periode = isset($data["periode"]) ? (int) $data["periode"] : '';
 
-        $monthNow = new DateTime("M");
+        $tahun = isset($data["tahun"]) ? (int) $data["tahun"] : "";
+        // dd($periode);
+        $user = Auth::user();
+        // dd($user->Pegawai);
+
+        // $monthNow = new DateTime("M");
         $contracts = ContractManagements::where("id_contract", "=", $id_contract)->first();
         $proyek = Proyek::where("kode_proyek", "=", $kode_proyek)->first();
 
-        if(!empty($filterStatus)){
-            $claims = PerubahanKontrak::where("id_contract", "=", $id_contract)->where("stage", "=", $filterStatus)->get();
-        }else{
-            $claims = PerubahanKontrak::where("id_contract", "=", $id_contract)->get();
+        if (empty($periode)) {
+            if (!empty($filterStatus)) {
+                $claims = PerubahanKontrak::where("id_contract", "=", $id_contract)->where("stage", "=", $filterStatus)->get();
+            } else {
+                $claims = PerubahanKontrak::where("id_contract", "=", $id_contract)->get();
+            }
+        } else {
+            if (!empty($filterStatus)) {
+                $claims = ContractApproval::where("id_contract", "=", $id_contract)->where("stage", "=", $filterStatus)->where("periode", "=", $periode)->where("tahun", "=", $tahun)->get();
+            } else {
+                $claims = ContractApproval::where("id_contract", "=", $id_contract)->where("periode", "=", $periode)->where("tahun", "=", $tahun)->get();
+            }
         }
 
-        $claim_all = PerubahanKontrak::where("id_contract", "=", $id_contract)->get(); 
+        // dd(ContractApproval::where("id_contract", "=", $id_contract)->where("periode", "<=", $periode)->get());
+
+        $claim_all = PerubahanKontrak::where(
+            "id_contract",
+            "=",
+            $id_contract
+        )->get();
 
         // dd($contract);
 
@@ -158,7 +788,64 @@ class ClaimController extends Controller
         $claims_klaim_asuransi = $claims->where("jenis_perubahan", "=", "Klaim Asuransi");
         // dd($claims_vo);
 
-        return view("claimManagement/viewDetail", compact(["contracts", "claims_vo", "claims_klaim", "claims_anti_klaim", "claims_klaim_asuransi", "proyek", "claim_all"]));
+        return view("claimManagement/viewDetail", compact([
+            "contracts", "claims_vo", "claims_klaim", "claims_anti_klaim", "claims_klaim_asuransi", "proyek", "claim_all", "link", "periode", "user"
+        ]));
+    }
+
+    public function viewClaimNew(Request $request, $profitCenter)
+    {
+        // $filterBulan = $request->query("bulan-perubahan");
+        $filterStatus = $request->query("stage");
+        // dd($filterStatus);
+        // $filterBulan = $data["bulan-perubahan"];
+        $data = $request->all();
+        $link = $data["link"] ?? "kt_user_view_claim_VO";
+        $periode = isset($data["periode"]) ? (int) $data["periode"] : '';
+
+        $tahun = isset($data["tahun"]) ? (int) $data["tahun"] : "";
+        // dd($periode);
+        $user = Auth::user();
+        // dd($user->Pegawai);
+
+        // $monthNow = new DateTime("M");
+        $proyek = ProyekPISNew::where("profit_center", "=", $profitCenter)->first();
+        $contracts = ContractManagements::where("profit_center", "=", $profitCenter)->first();
+        // dd($contracts);
+
+        if (empty($periode)) {
+            if (!empty($filterStatus)) {
+                $claims = PerubahanKontrak::where("profit_ceter", "=", $profitCenter)->where("stage", "=", $filterStatus)->get();
+            } else {
+                $claims = PerubahanKontrak::where("profit_center", "=", $profitCenter)->get();
+            }
+        } else {
+            if (!empty($filterStatus)) {
+                $claims = ContractApproval::where("profit_center", "=", $profitCenter)->where("stage", "=", $filterStatus)->where("periode", "=", $periode)->where("tahun", "=", $tahun)->get();
+            } else {
+                $claims = ContractApproval::where("profit_center", "=", $profitCenter)->where("periode", "=", $periode)->where("tahun", "=", $tahun)->get();
+            }
+        }
+
+        // dd(ContractApproval::where("id_contract", "=", $id_contract)->where("periode", "<=", $periode)->get());
+
+        $claim_all = PerubahanKontrak::where(
+            "profit_center",
+            "=",
+            $profitCenter
+        )->get();
+
+        // dd($contract);
+
+        $claims_vo = $claims->where("jenis_perubahan", "=", "VO");
+        $claims_klaim = $claims->where("jenis_perubahan", "=", "Klaim");
+        $claims_anti_klaim = $claims->where("jenis_perubahan", "=", "Anti Klaim");
+        $claims_klaim_asuransi = $claims->where("jenis_perubahan", "=", "Klaim Asuransi");
+        // dd($claims_vo);
+
+        return view("claimManagement/viewDetail", compact([
+            "contracts", "claims_vo", "claims_klaim", "claims_anti_klaim", "claims_klaim_asuransi", "proyek", "claim_all", "link", "periode", "user"
+        ]));
     }
 
     // public function viewClaim($id_proyek, $jenis_claim)
@@ -182,7 +869,7 @@ class ClaimController extends Controller
     //     return view("claimManagement/viewClaim", ['proyekClaims' => $proyekClaim, 'proyek' => $proyek, "jenis_claim" => $jenis_claim]);
     // }
 
-    public function claimDelete(Request $request)
+    public function claimDeleteOld(Request $request)
     {
         $data = $request->all();
         $claim = ClaimManagements::find($data["id-claim"]);
@@ -196,6 +883,62 @@ class ClaimController extends Controller
         }
         Alert::error("Error", "Claim gagal dihapus");
         return redirect("/claim-management");
+    }
+
+    public function claimDelete(PerubahanKontrak $id)
+    {
+        if (empty($id)) {
+            Alert::error('Error', 'Claim gagal dihapus. Hubungi Admin');
+            return redirect()->back();
+        }
+        $profit_center = $id->profit_center;
+        JenisDokumen::where('id_perubahan_kontrak', $id->id_perubahan_kontrak)->get()?->each(function ($jd) {
+            $jd->delete();
+        });
+        DokumenPendukung::where('id_perubahan_kontrak', $id->id_perubahan_kontrak)->get()?->each(function ($dp) {
+            $nama_file = $dp->id_document;
+            File::delete(public_path("words/$nama_file"));
+            $dp->delete();
+        });
+
+        if ($id->delete()) {
+            return (object)[
+                'success' => true,
+                'message' => "Claim berhasil dihapus",
+            ];
+        }
+        return (object)[
+            'success' => false,
+            'message' => "Claim gagal dihapus",
+        ];
+    }
+
+    public function perubahanKontrakEdit(Request $request)
+    {
+        $data = $request->all();
+        $file = $request->file("dokumen-approve");
+        $id_document = date("His_") . $file->getClientOriginalName();
+        $nama_file = $file->getClientOriginalName();
+
+        $perubahan_kontrak = PerubahanKontrak::find($data["id-perubahan-kontrak"]);
+        // dd($perubahan_kontrak->DokumenPendukungs);
+
+        if ($perubahan_kontrak->DokumenPendukungs->isEmpty()) {
+            Alert::error("Erorr", "Input Dokumen Pendukung terlebih dahulu");
+            return redirect()->back();
+        }
+
+        $perubahan_kontrak->stage = $data["stage"];
+        $perubahan_kontrak->nilai_disetujui = str_replace(".", "", $data["nilai-disetujui"]);
+        $perubahan_kontrak->tanggal_disetujui = $data["tanggal-disetujui"];
+        $perubahan_kontrak->waktu_disetujui = $data["waktu-disetujui"];
+        $perubahan_kontrak->id_dokumen = $id_document;
+        $perubahan_kontrak->dokumen_approve = $nama_file;
+
+        $perubahan_kontrak->save();
+        moveFileTemp($file, explode(".", $id_document)[0]);
+        Alert::success("Success", "Perubahan Kontrak berhasil ditambahkan");
+        return redirect()->back();
     }
 
     /**
@@ -225,21 +968,22 @@ class ClaimController extends Controller
     }
 
     //New Claim
-    public function newClaim(Request $request) {
+    public function newClaimOld(Request $request)
+    {
         $data = $request->all();
         $messages = [
             "required" => "Field di atas wajib diisi",
             "string" => "Field di atas wajib diisi string",
         ];
         $rules = [
-            "kode-proyek" => "required|string",
+            // "kode-proyek" => "required|string",
             "jenis-perubahan" => "required|string",
             "tanggal-perubahan" => "required|string",
             "uraian-perubahan" => "required|string",
             "proposal-klaim" => "required|string",
             "tanggal-pengajuan" => "required|string",
-            "biaya-pengajuan" => "required|string",
-            "waktu-pengajuan" => "required|string",
+            // "biaya-pengajuan" => "required|string",
+            // "waktu-pengajuan" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
 
@@ -271,28 +1015,160 @@ class ClaimController extends Controller
         //     Alert::error("Erorr", "Perubahan Kontrak gagal diperbarui");
         //     return Redirect::back();
         // } else {
-            $contract = ContractManagements::where("project_id", "=", $data["kode-proyek"])->first();
-            // dd($contract->id_contract);
-            $perubahan_kontrak = new PerubahanKontrak();
-            $perubahan_kontrak->kode_proyek = $data["kode-proyek"];
-            $perubahan_kontrak->id_contract = $contract->id_contract;
-            $perubahan_kontrak->jenis_perubahan = $data["jenis-perubahan"];
-            $perubahan_kontrak->tanggal_perubahan = $data["tanggal-perubahan"];
-            $perubahan_kontrak->uraian_perubahan = $data["uraian-perubahan"];
-            // $perubahan_kontrak->jenis_dokumen = $data["jenis-dokumen"];
-            // $perubahan_kontrak->instruksi_owner = $data["instruksi-owner"];
-            $perubahan_kontrak->proposal_klaim = $data["proposal-klaim"];
-            $perubahan_kontrak->tanggal_pengajuan = $data["tanggal-pengajuan"];
-            $perubahan_kontrak->biaya_pengajuan = str_replace(".", "", $data["biaya-pengajuan"]);
-            $perubahan_kontrak->waktu_pengajuan = $data["waktu-pengajuan"];
-            $perubahan_kontrak->stage = 1;
-            // dd($perubahan_kontrak);
-            if ($perubahan_kontrak->save()) {
-                Alert::success("Success", "Perubahan Kontrak berhasil ditambahkan");
-                return redirect()->back();
-            }
-            Alert::error("Erorr", "Perubahan Kontrak gagal ditambahkan");
-            return Redirect::back()->with("modal", $data["modal-name"]);
+        $contract = ContractManagements::where("project_id", "=", $data["kode-proyek"])->first();
+        $perubahan_kontrak = new PerubahanKontrak();
+        $perubahan_kontrak->kode_proyek = $data["kode-proyek"];
+        $perubahan_kontrak->profit_center = $data["profit-center"];
+        $perubahan_kontrak->id_contract = $contract->id_contract;
+        $perubahan_kontrak->jenis_perubahan = $data["jenis-perubahan"];
+        $perubahan_kontrak->tanggal_perubahan = $data["tanggal-perubahan"];
+        $perubahan_kontrak->uraian_perubahan = $data["uraian-perubahan"];
+        $perubahan_kontrak->proposal_klaim = $data["proposal-klaim"];
+        $perubahan_kontrak->tanggal_pengajuan = $data["tanggal-pengajuan"];
+        $perubahan_kontrak->biaya_pengajuan = !empty($data["biaya-pengajuan"]) ? str_replace(".", "", $data["biaya-pengajuan"]) : null;
+        $perubahan_kontrak->waktu_pengajuan = !empty($data["biaya-pengajuan"]) ? $data["waktu-pengajuan"] : null;
+        $perubahan_kontrak->stage = 1;
+        // dd($perubahan_kontrak);
+        if ($perubahan_kontrak->save()) {
+            Alert::success("Success", "Perubahan Kontrak berhasil ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error("Erorr", "Perubahan Kontrak gagal ditambahkan");
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // }
+    }
+
+    public function newClaim(Request $request)
+    {
+        $data = $request->all();
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "string" => "Field di atas wajib diisi string",
+        ];
+        $rules = [
+            // "kode-proyek" => "required|string",
+            "jenis-perubahan" => "required|string",
+            "tanggal-perubahan" => "required|string",
+            "uraian-perubahan" => "required|string",
+            "proposal-klaim" => "required|string",
+            "tanggal-pengajuan" => "required|string",
+            "profit-center" => "required|string"
+            // "biaya-pengajuan" => "required|string",
+            // "waktu-pengajuan" => "required|string",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+
+        if ($validation->fails()) {
+            Alert::error('Error', "Perubahan Kontrak gagal ditambahkan");
+            return Redirect::back();
+            // return Redirect::back();
+            // dd($validation->errors());
+        }
+
+        $validation->validate();
+        // if(isset($data["id-perubahan-kontrak"])) {
+        //     $perubahan_kontrak = PerubahanKontrak::find($data["id-perubahan-kontrak"]);
+        //     $perubahan_kontrak->id_contract = $data["id-contract"];
+        //     $perubahan_kontrak->jenis_perubahan = $data["jenis-perubahan"];
+        //     $perubahan_kontrak->tanggal_perubahan = $data["tanggal-perubahan"];
+        //     $perubahan_kontrak->uraian_perubahan = $data["uraian-perubahan"];
+        //     // $perubahan_kontrak->jenis_dokumen = $data["jenis-dokumen"];
+        //     // $perubahan_kontrak->instruksi_owner = $data["instruksi-owner"];
+        //     $perubahan_kontrak->proposal_klaim = $data["proposal-klaim"];
+        //     $perubahan_kontrak->tanggal_pengajuan = $data["tanggal-pengajuan"];
+        //     $perubahan_kontrak->biaya_pengajuan = str_replace(".", "", $data["biaya-pengajuan"]);
+        //     $perubahan_kontrak->waktu_pengajuan = $data["waktu-pengajuan"];
+        //     $perubahan_kontrak->stage = 1;
+        //     if ($perubahan_kontrak->save()) {
+        //         Alert::success("Success", "Perubahan Kontrak berhasil diperbarui");
+        //         return redirect()->back();
+        //     }
+        //     Alert::error("Erorr", "Perubahan Kontrak gagal diperbarui");
+        //     return Redirect::back();
+        // } else {
+        // $contract = ContractManagements::where("project_id", "=", $data["kode-proyek"])->first();
+        $perubahan_kontrak = new PerubahanKontrak();
+        // $perubahan_kontrak->kode_proyek = $data["kode-proyek"];
+        $perubahan_kontrak->profit_center = $data["profit-center"];
+        $perubahan_kontrak->id_contract = $data["id-contract"] ?? null;
+        $perubahan_kontrak->jenis_perubahan = $data["jenis-perubahan"];
+        $perubahan_kontrak->tanggal_perubahan = $data["tanggal-perubahan"];
+        $perubahan_kontrak->uraian_perubahan = $data["uraian-perubahan"];
+        $perubahan_kontrak->proposal_klaim = $data["proposal-klaim"];
+        $perubahan_kontrak->tanggal_pengajuan = $data["tanggal-pengajuan"];
+        $perubahan_kontrak->biaya_pengajuan = !empty($data["biaya-pengajuan"]) ? str_replace(".", "", $data["biaya-pengajuan"]) : null;
+        $perubahan_kontrak->waktu_pengajuan = !empty($data["biaya-pengajuan"]) ? $data["waktu-pengajuan"] : null;
+        $perubahan_kontrak->stage = 1;
+        // dd($perubahan_kontrak);
+        if ($perubahan_kontrak->save()) {
+            Alert::success("Success", "Perubahan Kontrak berhasil ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error("Erorr", "Perubahan Kontrak gagal ditambahkan");
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // }
+    }
+
+    public function editClaim(Request $request, $id)
+    {
+        $data = $request->all();
+        $perubahan_kontrak = PerubahanKontrak::find($id);
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "string" => "Field di atas wajib diisi string",
+        ];
+        $rules = [
+            "tanggal-perubahan" => "required|string",
+            "uraian-perubahan" => "required|string",
+            "proposal-klaim" => "required|string",
+            "tanggal-pengajuan" => "required|string",
+            // "biaya-pengajuan" => "required|string",
+            // "waktu-pengajuan" => "required|string",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+
+        if ($validation->fails()) {
+            Alert::error('Error', "Perubahan Kontrak gagal diperbaharui");
+            return Redirect::back();
+            // return Redirect::back();
+            // dd($validation->errors());
+        }
+
+        $validation->validate();
+        // if(isset($data["id-perubahan-kontrak"])) {
+        //     $perubahan_kontrak = PerubahanKontrak::find($data["id-perubahan-kontrak"]);
+        //     $perubahan_kontrak->id_contract = $data["id-contract"];
+        //     $perubahan_kontrak->jenis_perubahan = $data["jenis-perubahan"];
+        //     $perubahan_kontrak->tanggal_perubahan = $data["tanggal-perubahan"];
+        //     $perubahan_kontrak->uraian_perubahan = $data["uraian-perubahan"];
+        //     // $perubahan_kontrak->jenis_dokumen = $data["jenis-dokumen"];
+        //     // $perubahan_kontrak->instruksi_owner = $data["instruksi-owner"];
+        //     $perubahan_kontrak->proposal_klaim = $data["proposal-klaim"];
+        //     $perubahan_kontrak->tanggal_pengajuan = $data["tanggal-pengajuan"];
+        //     $perubahan_kontrak->biaya_pengajuan = str_replace(".", "", $data["biaya-pengajuan"]);
+        //     $perubahan_kontrak->waktu_pengajuan = $data["waktu-pengajuan"];
+        //     $perubahan_kontrak->stage = 1;
+        //     if ($perubahan_kontrak->save()) {
+        //         Alert::success("Success", "Perubahan Kontrak berhasil diperbarui");
+        //         return redirect()->back();
+        //     }
+        //     Alert::error("Erorr", "Perubahan Kontrak gagal diperbarui");
+        //     return Redirect::back();
+        // } else {
+        $perubahan_kontrak->tanggal_perubahan = $data["tanggal-perubahan"];
+        $perubahan_kontrak->uraian_perubahan = $data["uraian-perubahan"];
+        $perubahan_kontrak->proposal_klaim = $data["proposal-klaim"];
+        $perubahan_kontrak->tanggal_pengajuan = $data["tanggal-pengajuan"];
+        $perubahan_kontrak->biaya_pengajuan = !empty($data["biaya-pengajuan"]) ? str_replace(".", "", $data["biaya-pengajuan"]) : null;
+        $perubahan_kontrak->waktu_pengajuan = !empty($data["biaya-pengajuan"]) ? $data["waktu-pengajuan"] : null;
+        // dd($perubahan_kontrak);
+        if ($perubahan_kontrak->save()) {
+            Alert::success("Success", "Perubahan Kontrak berhasil diperbaharui");
+            return redirect()->back();
+        }
+        Alert::error("Erorr", "Perubahan Kontrak gagal diperbaharui");
+        return Redirect::back()->with("modal", $data["modal-name"]);
         // }
     }
 
@@ -395,6 +1271,7 @@ class ClaimController extends Controller
      */
     public function show(ClaimManagements $claim_management)
     {
+        dd($claim_management);
         return view("claimManagement/new", ["currentContract" => $claim_management->contract, "claimContract" => $claim_management, "proyek" => $claim_management->project, "pasals" => Pasals::all()]);
     }
 

@@ -36,6 +36,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 //     $data = $request->all();
 //     dd($data);
 // });
+// Route::middleware(["web"])->group(function () {
 Route::middleware(["web"])->group(function () {
 
     // Begin Proyek
@@ -154,12 +155,20 @@ Route::middleware(["web"])->group(function () {
     // Begin - Detail Proyek yang ada forecast
     Route::post('/detail-nilai-proyek', function (Request $request) {
         $periode = getPeriode($request->periode);
-        $is_bpmcsrf_exist = $request->header("BPMCSRF");
-        if (isset($is_bpmcsrf_exist)) {
+        // $is_bpmcsrf_exist = $request->header("BPMCSRF");
+        // dd($is_bpmcsrf_exist);
+        // if (isset($is_bpmcsrf_exist)) {
 
-            // $forecasts = Forecast::with(["Proyek"])->get(["*"])->unique("kode_proyek");
-            // $forecasts = Forecast::where("periode_prognosa", '=', (int) $prognosa)->whereYear("created_at", "=", $tahun)->get();
-            $proyeks = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", ((int) $periode[1]))->where("tahun", "=", (int) $periode[0])->where("unit_kerja", "=", $request->unitkerjaid)->get(["nama_proyek", "stage", "proyeks.kode_proyek", "unit_kerja", "jenis_proyek", "tipe_proyek", "nilai_perolehan", "is_cancel", "month_forecast", "nilai_forecast", "realisasi_forecast", "periode_prognosa"])->where("stage", "!=", 7)->where("is_cancel", "!=", true);
+        // $forecasts = Forecast::with(["Proyek"])->get(["*"])->unique("kode_proyek");
+        // $forecasts = Forecast::where("periode_prognosa", '=', (int) $prognosa)->whereYear("created_at", "=", $tahun)->get();
+        $proyeks = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", ((int) $periode[1]))->where("tahun", "=", (int) $periode[0])->where("unit_kerja", "=", $request->unitkerjaid)->get(["nama_proyek", "history_forecast.stage", "proyeks.kode_proyek", "unit_kerja", "jenis_proyek", "tipe_proyek", "nilai_perolehan", "is_cancel", "month_forecast", "nilai_forecast", "realisasi_forecast", "periode_prognosa"])->where("history_forecast.stage", "!=", 7)->where("is_cancel", "!=", true);
+
+        if (empty($proyeks) || $proyeks->isEmpty()) {
+            return response()->json([
+                "status" => 500,
+                "msg" => "History Divisi tidak ditemukan."
+            ]);
+        }
             // $proyeks = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("unit_kerja", "=", $request->unitkerjaid)->get()->where("stage", "!=", 7)->where("is_cancel", "!=", true);
             $total_realisasi = $proyeks->sum(function($s) {
                 return (int) $s->realisasi_forecast;
@@ -267,11 +276,7 @@ Route::middleware(["web"])->group(function () {
 
             ];
             return response()->json($data);
-        }
-        return response()->json([
-            "status" => 401,
-            "msg" => "Tidak Terautentikasi"
-        ]);
+        // }
     })->middleware("userAuth");
     // End - Detail Proyek yang ada forecast
 

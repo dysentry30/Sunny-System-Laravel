@@ -16,15 +16,15 @@ class UserAuthenticatedMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if(str_contains($request->url(), "api")) {
-            if(auth()->user() != null) {
-                return $next($request);
-            }
-            $resp = [
-                "status_code" => 401,
-                "msg" => "Tidak terautentikasi"
-            ];
-            return response()->json($resp, 401);
+        if (str_contains($request->url(), "api")) {
+            return $next($request);
+            // if(auth()->user() != null) {
+            // }
+            // $resp = [
+            //     "status_code" => 401,
+            //     "msg" => "Tidak terautentikasi"
+            // ];
+            // return response($resp, 401);
         }
 
         if(auth()->user() != null) {

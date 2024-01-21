@@ -152,6 +152,26 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                         </div>
                                         @php
                                             $unit_kerja = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
+                                            if (is_array($unit_kerja)) {
+                                                if (date('Y') >= 2023) {
+                                                    $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "P", "J"];
+                                                    $unit_kerja_collect = [];
+                                                    foreach ($unit_kerja as $key => $unit) {
+                                                        if (in_array($unit, $unit_kerja_code)) {
+                                                            $unit_kerja_collect[] = $unit;
+                                                        }
+                                                    }
+                                                }else{
+                                                    $unit_kerja_code = ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "L", "F", "U", "O"];
+                                                    $unit_kerja_collect = [];
+                                                    foreach ($unit_kerja as $key => $unit) {
+                                                        if (in_array($unit, $unit_kerja_code)) {
+                                                            $unit_kerja_collect[] = $unit;
+                                                        }
+                                                    }
+                                                }
+                                                $unit_kerja = $unit_kerja_collect;
+                                            }
                                         @endphp
 
                                         <div class="">
@@ -178,8 +198,8 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         <span class="text-white mx-2 fs-6">Unlock</span>
                                                                         <i class="bi bi-lock-fill text-white"></i>
                                                                 </button>
-                                                        </div>
-                                                            @else
+                                                            </div>
+                                                        @else
                                                             <button type="button" style="background-color: #008CB4;" id="lock-forecast"
                                                                 onclick="lockMonthForecastBulanan(this)"
                                                                 class="btn btn-sm btn-active-primary mt-4 me-6">
@@ -189,7 +209,6 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                         @endif
                                                     </div>
                                                 @endif
-                                                
                                                 <div class="col-2 mt-4 me-8" style="width: 10% !important">
                                                     {{-- <button type="button" id="unlock-previous-forecast"
                                                     onclick="unlockPreviousForecast()"
@@ -198,11 +217,12 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                     </button> --}}
 
                                                     <!--begin::Select Options-->
-                                                    <select id="periode-prognosa" onchange="return document.location.href = `/{{Request::segment(1)}}/${this.value}/{{$year}}`" name="periode-prognosa"
+                                                    {{-- <select id="periode-prognosa" onchange="return document.location.href = `/{{Request::segment(1)}}/${this.value}/{{$year}}`" name="periode-prognosa" --}}
+                                                    <select id="periode-prognosa" name="periode-prognosa"
                                                         class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
                                                         style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                                         data-placeholder="Bulan" data-select2-id="select2-data-bulan" tabindex="-1"
-                                                        aria-hidden="true">
+                                                        aria-hidden="true" form="filterForecast">
                                                             <option {{ $periode == '' ? 'selected' : '' }}></option>
                                                             <option value="1" {{ $periode == 1 ? 'selected' : '' }}>Januari</option>
                                                             <option value="2" {{ $periode == 2 ? 'selected' : '' }}>Februari</option>
@@ -219,6 +239,57 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                     </select>
                                                     <!--end::Select Options-->
                                                 </div>
+                                                
+                                                <div class="col-2 mt-4 me-8" style="width: 10% !important">
+                                                    {{-- <button type="button" id="unlock-previous-forecast"
+                                                    onclick="unlockPreviousForecast()"
+                                                    class="btn btn-sm btn-light btn-active-primary mt-4 ms-0">
+                                                            <span class="fs-6">Pilih Bulan</span>
+                                                    </button> --}}
+
+                                                    <!--begin::Select Options-->
+                                                    @php
+                                                        $startYear = 2023;
+                                                        $currentYear = date('Y');
+                                                        $diffYear = $currentYear - $startYear;
+                                                    @endphp
+                                                    {{-- <select id="tahun-prognosa" onchange="return document.location.href = `/{{Request::segment(1)}}/${this.value}/{{$startYear}}`" name="tahun-prognosa" --}}
+                                                    <select id="tahun-prognosa" name="tahun-prognosa"
+                                                        class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
+                                                        style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                                        data-placeholder="Tahun" data-select2-id="select2-data-tahun" tabindex="-1"
+                                                        aria-hidden="true" form="filterForecast">
+                                                        <option value=""></option>
+                                                        @foreach (range(1,$diffYear+1) as $thn)
+                                                            <option value="{{ $startYear }}" {{ $year == $startYear ? 'selected' : '' }}>{{ $startYear }}</option>
+                                                        @php
+                                                            $startYear++;
+                                                        @endphp
+                                                        @endforeach
+                                                    </select>
+                                                    <!--end::Select Options-->
+                                                </div>
+
+                                                <div class="col-2 mt-4 me-1">
+                                                    <button type="button" onclick="clickFilter()" class="btn btn-primary btn-sm">Submit</button>
+                                                </div>
+
+                                                <script>
+                                                    async function clickFilter(){
+                                                        const bulanFilter = document.querySelector('#periode-prognosa').value;
+                                                        const tahunFilter = document.querySelector('#tahun-prognosa').value;
+
+                                                        // const formData = new FormData();
+                                                        const currentURL = window.location.href;
+                                                        // console.log(currentURL);
+                                                        const arrCurrentURL = currentURL.split("/");
+
+                                                        // formData.append("_token", "{{ csrf_token() }}");
+                                                        window.location.href = '/'+arrCurrentURL[3]+'/'+bulanFilter+'/'+tahunFilter;
+
+                                                    }
+                                                </script>
+                                                
 
                                                 
                                                 @if (($periode != (int) date("m") || $year != (int) date("Y")) && isset($periode))
@@ -721,105 +792,18 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                 <!--end::Januari Coloumn-->
                                                                             @endfor
 
+                                                                            <!--begin::$colum untuk apabila ada filter nama proyek-->
                                                                             @php
-                                                                                    if($column != "") {
-                                                                                        if(isset($is_forecast)) {
-                                                                                            $total_ok_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter, $year) {
-                                                                                                return $unit_kerja->Proyeks->where("is_rkap", "=", true)->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
-                                                                                                    if(preg_match("/$filter/i", $p->nama_proyek)) {
-                                                                                                        // return $p->nilai_rkap;
-                                                                                                        return $p->Forecasts->where("periode_prognosa", "=", $periode)->filter( function($y) use($year) {
-                                                                                                            return (Carbon\Carbon::create($y->created_at)->format("Y") == $year);
-                                                                                                        })->sum(function($f) use($periode) {
-                                                                                                            if($periode == $f->periode_prognosa) {
-                                                                                                                return (int) $f->rkap_forecast;
-                                                                                                            }
-                                                                                                        });
-                                                                                                        // if($p->tipe_proyek == "R") {
-                                                                                                        // } else {
-                                                                                                        //     return (int) $p->nilai_rkap;
-                                                                                                        // }
-                                                                                                    }
-                                                                                                    // return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($per_sejuta, $i, $periode, $filter) {
-                                                                                                    //     if($f->periode_prognosa == $periode) {
-                                                                                                    //     }
-                                                                                                    // });
-                                                                                                });
-                                                                                            });
 
-                                                                                            $total_forecast_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter, $year) {
-                                                                                                return $unit_kerja->Proyeks->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
-                                                                                                    if(preg_match("/$filter/i", $p->nama_proyek)) {
-                                                                                                        return $p->Forecasts->where("tahun", "=", $year)->where("periode_prognosa", "=", $periode)->sum(function($f) use($per_sejuta, $i, $periode, $filter) {
-                                                                                                            return (int) $f->nilai_forecast;
-                                                                                                        });
-                                                                                                    }
-                                                                                                });
-                                                                                            });
-
-                                                                                            $total_realisasi_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter, $year) {
-                                                                                                return $unit_kerja->Proyeks->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
-                                                                                                    if(preg_match("/$filter/i", $p->nama_proyek) && $p->stage == 8) {
-                                                                                                        return $p->Forecasts->where("periode_prognosa", "=", $periode)->where("tahun", "=", $year)->sum(function($f) use($per_sejuta, $i, $periode) {
-                                                                                                            return (int) $f->realisasi_forecast;
-                                                                                                        });
-                                                                                                    }
-                                                                                                    // return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($per_sejuta, $i, $periode) {
-                                                                                                    // });
-                                                                                                    // return $i == $p->bulan_ri_perolehan ? (int) $p->nilai_perolehan : 0;
-                                                                                                });
-                                                                                            });
-                                                                                        } else {
-                                                                                            $total_ok_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter, $year) {
-                                                                                                return $unit_kerja->Proyeks->where("is_rkap", "=", true)->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
-                                                                                                    if(preg_match("/$filter/i", $p->nama_proyek)) {
-                                                                                                        // return $p->nilai_rkap;
-                                                                                                        return $p->Forecasts->where("periode_prognosa", "=", $periode)->where("tahun", "=", $year)->sum(function($f) use($periode) {
-                                                                                                            if($periode == $f->periode_prognosa) {
-                                                                                                                return (int) $f->rkap_forecast;
-                                                                                                            }
-                                                                                                        });
-                                                                                                        // if($p->tipe_proyek == "R") {
-                                                                                                        // } else {
-                                                                                                        //     return (int) $p->nilai_rkap;
-                                                                                                        // }
-                                                                                                    }
-                                                                                                    // return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($per_sejuta, $i, $periode, $filter) {
-                                                                                                    //     if($f->periode_prognosa == $periode) {
-                                                                                                    //     }
-                                                                                                    // });
-                                                                                                });
-                                                                                            });
-
-                                                                                            $total_forecast_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter, $year) {
-                                                                                                return $unit_kerja->Proyeks->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
-                                                                                                    if(preg_match("/$filter/i", $p->nama_proyek)) {
-                                                                                                        return $p->Forecasts->where("tahun", "=", $year)->where("periode_prognosa", "=", $periode)->sum(function($f) use($per_sejuta, $i, $periode, $filter) {
-                                                                                                            return (int) $f->nilai_forecast;
-                                                                                                        });
-                                                                                                    }
-                                                                                                });
-                                                                                            });
-
-                                                                                            $total_realisasi_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter, $year) {
-                                                                                                return $unit_kerja->Proyeks->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
-                                                                                                    if(preg_match("/$filter/i", $p->nama_proyek) && $p->stage == 8) {
-                                                                                                        return $p->Forecasts->where("periode_prognosa", "=", $periode)->where("tahun", "=", $year)->sum(function($f) use($per_sejuta, $i, $periode) {
-                                                                                                            return (int) $f->realisasi_forecast;
-                                                                                                        });
-                                                                                                    }
-                                                                                                });
-                                                                                            });
-                                                                                        }
-
-                                                                                    } else {
-                                                                                        if(isset($is_forecast)) {
-                                                                                            $total_ok_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter, $year) {
-                                                                                                return $unit_kerja->Proyeks->where("is_rkap", "=", true)->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                if($column != "") {
+                                                                                    if(isset($is_forecast)) {
+                                                                                        $total_ok_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                            return $unit_kerja->Proyeks->where("is_rkap", "=", true)->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year)->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                                if(preg_match("/$filter/i", $p->nama_proyek)) {
                                                                                                     // return $p->nilai_rkap;
                                                                                                     return $p->Forecasts->where("periode_prognosa", "=", $periode)->filter( function($y) use($year) {
-                                                                                                            return (Carbon\Carbon::create($y->created_at)->format("Y") == $year);
-                                                                                                        })->sum(function($f) use($periode) {
+                                                                                                        return (Carbon\Carbon::create($y->created_at)->format("Y") == $year);
+                                                                                                    })->sum(function($f) use($periode) {
                                                                                                         if($periode == $f->periode_prognosa) {
                                                                                                             return (int) $f->rkap_forecast;
                                                                                                         }
@@ -828,29 +812,40 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     // } else {
                                                                                                     //     return (int) $p->nilai_rkap;
                                                                                                     // }
-                                                                                                });
+                                                                                                }
+                                                                                                // return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($per_sejuta, $i, $periode, $filter) {
+                                                                                                //     if($f->periode_prognosa == $periode) {
+                                                                                                //     }
+                                                                                                // });
                                                                                             });
+                                                                                        });
 
-                                                                                            $total_forecast_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter, $year) {
-                                                                                                return $unit_kerja->Proyeks->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                        $total_forecast_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                            return $unit_kerja->Proyeks->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year)->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                                if(preg_match("/$filter/i", $p->nama_proyek)) {
                                                                                                     return $p->Forecasts->where("tahun", "=", $year)->where("periode_prognosa", "=", $periode)->sum(function($f) use($per_sejuta, $i, $periode, $filter) {
                                                                                                         return (int) $f->nilai_forecast;
                                                                                                     });
-                                                                                                });
+                                                                                                }
                                                                                             });
+                                                                                        });
 
-                                                                                            $total_realisasi_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter, $year) {
-                                                                                                return $unit_kerja->Proyeks->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
-                                                                                                    if($p->stage == 8) {
-                                                                                                        return $p->Forecasts->where("periode_prognosa", "=", $periode)->where("tahun", "=", $year)->sum(function($f) use($per_sejuta, $i, $periode) {
-                                                                                                            return (int) $f->realisasi_forecast;
-                                                                                                        });
-                                                                                                    }
-                                                                                                });
+                                                                                        $total_realisasi_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                            return $unit_kerja->Proyeks->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year)->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                                if(preg_match("/$filter/i", $p->nama_proyek) && $p->stage == 8) {
+                                                                                                    return $p->Forecasts->where("periode_prognosa", "=", $periode)->where("tahun", "=", $year)->sum(function($f) use($per_sejuta, $i, $periode) {
+                                                                                                        return (int) $f->realisasi_forecast;
+                                                                                                    });
+                                                                                                }
+                                                                                                // return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($per_sejuta, $i, $periode) {
+                                                                                                // });
+                                                                                                // return $i == $p->bulan_ri_perolehan ? (int) $p->nilai_perolehan : 0;
                                                                                             });
-                                                                                        } else {
-                                                                                            $total_ok_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter, $year) {
-                                                                                                return $unit_kerja->Proyeks->where("is_rkap", "=", true)->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                        });
+                                                                                    } else {
+                                                                                        $total_ok_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                            return $unit_kerja->Proyeks->where("is_rkap", "=", true)->where("tahun_perolehan", "=", $year)->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                                if(preg_match("/$filter/i", $p->nama_proyek)) {
                                                                                                     // return $p->nilai_rkap;
                                                                                                     return $p->Forecasts->where("periode_prognosa", "=", $periode)->where("tahun", "=", $year)->sum(function($f) use($periode) {
                                                                                                         if($periode == $f->periode_prognosa) {
@@ -861,30 +856,115 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     // } else {
                                                                                                     //     return (int) $p->nilai_rkap;
                                                                                                     // }
-                                                                                                });
+                                                                                                }
+                                                                                                // return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($per_sejuta, $i, $periode, $filter) {
+                                                                                                //     if($f->periode_prognosa == $periode) {
+                                                                                                //     }
+                                                                                                // });
                                                                                             });
+                                                                                        });
 
-                                                                                            $total_forecast_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter, $year) {
-                                                                                                return $unit_kerja->Proyeks->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                        $total_forecast_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                            return $unit_kerja->Proyeks->where("tahun_perolehan", "=", $year)->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                                if(preg_match("/$filter/i", $p->nama_proyek)) {
                                                                                                     return $p->Forecasts->where("tahun", "=", $year)->where("periode_prognosa", "=", $periode)->sum(function($f) use($per_sejuta, $i, $periode, $filter) {
                                                                                                         return (int) $f->nilai_forecast;
                                                                                                     });
-                                                                                                });
+                                                                                                }
                                                                                             });
+                                                                                        });
 
-                                                                                            $total_realisasi_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter, $year) {
-                                                                                                return $unit_kerja->Proyeks->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
-                                                                                                    if($p->stage == 8) {
-                                                                                                        return $p->Forecasts->where("periode_prognosa", "=", $periode)->where("tahun", "=", $year)->sum(function($f) use($per_sejuta, $i, $periode) {
-                                                                                                            return (int) $f->realisasi_forecast;
-                                                                                                        });
+                                                                                        $total_realisasi_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                            return $unit_kerja->Proyeks->where("tahun_perolehan", "=", $year)->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                                if(preg_match("/$filter/i", $p->nama_proyek) && $p->stage == 8) {
+                                                                                                    return $p->Forecasts->where("periode_prognosa", "=", $periode)->where("tahun", "=", $year)->sum(function($f) use($per_sejuta, $i, $periode) {
+                                                                                                        return (int) $f->realisasi_forecast;
+                                                                                                    });
+                                                                                                }
+                                                                                            });
+                                                                                        });
+                                                                                    }
+
+                                                                                } else {
+                                                                                    // begin::FORECAST_EXTERNAL
+                                                                                    if(isset($is_forecast)) {
+                                                                                        $total_ok_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                            return $unit_kerja->Proyeks->where("is_rkap", "=", true)->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year)->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                                // return $p->nilai_rkap;
+                                                                                                return $p->Forecasts->where("periode_prognosa", "=", $periode)->filter( function($y) use($year) {
+                                                                                                        return (Carbon\Carbon::create($y->created_at)->format("Y") == $year);
+                                                                                                    })->sum(function($f) use($periode) {
+                                                                                                    if($periode == $f->periode_prognosa) {
+                                                                                                        return (int) $f->rkap_forecast;
                                                                                                     }
                                                                                                 });
+                                                                                                // if($p->tipe_proyek == "R") {
+                                                                                                // } else {
+                                                                                                //     return (int) $p->nilai_rkap;
+                                                                                                // }
                                                                                             });
-                                                                                        }
+                                                                                        });
+
+                                                                                        $total_forecast_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                            return $unit_kerja->Proyeks->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year)->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                                // dump($per_sejuta, $i, $periode, $filter, $year);
+                                                                                                return $p->Forecasts->where("month_forecast", "!=", 0)->where("tahun", "=", $year)->where("periode_prognosa", "=", $periode)->sum(function($f) use($per_sejuta, $i, $periode, $filter) {
+                                                                                                    return (int) $f->nilai_forecast;
+                                                                                                });
+                                                                                            });
+                                                                                        });
+
+                                                                                        $total_realisasi_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                            return $unit_kerja->Proyeks->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year)->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                                if($p->stage == 8) {
+                                                                                                return $p->Forecasts->where("month_realisasi", "!=", 0)->where("month_realisasi", "<=", $periode)->where("periode_prognosa", "=", $periode)->where("tahun", "=", $year)->sum(function($f) use($per_sejuta, $i, $periode) {
+                                                                                                    return (int) $f->realisasi_forecast;
+                                                                                                });
+                                                                                                }
+                                                                                            });
+                                                                                        });
+
+                                                                                        // dump($dop->UnitKerjas);
+                                                                                        
+                                                                                    } else {
+                                                                                        // begin::FORECAST_INTERNAL
+                                                                                        $total_ok_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                            return $unit_kerja->Proyeks->where("is_rkap", "=", true)->where("tahun_perolehan", "=", $year)->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                                // return $p->nilai_rkap;
+                                                                                                return $p->Forecasts->where("periode_prognosa", "=", $periode)->where("tahun", "=", $year)->sum(function($f) use($periode) {
+                                                                                                    if($periode == $f->periode_prognosa) {
+                                                                                                        return (int) $f->rkap_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                                // if($p->tipe_proyek == "R") {
+                                                                                                // } else {
+                                                                                                //     return (int) $p->nilai_rkap;
+                                                                                                // }
+                                                                                            });
+                                                                                        });
+
+                                                                                        $total_forecast_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                            return $unit_kerja->Proyeks->where("tahun_perolehan", "=", $year)->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                                return $p->Forecasts->where("month_forecast", "!=", 0)->where("tahun", "=", $year)->where("periode_prognosa", "=", $periode)->sum(function($f) use($per_sejuta, $i, $periode, $filter) {
+                                                                                                    return (int) $f->nilai_forecast;
+                                                                                                });
+                                                                                            });
+                                                                                        });
+
+                                                                                        $total_realisasi_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                            return $unit_kerja->Proyeks->where("tahun_perolehan", "=", $year)->sum(function($p) use($per_sejuta, $i, $periode, $filter, $year) {
+                                                                                                if($p->stage == 8) {
+                                                                                                    return $p->Forecasts->where("month_realisasi", "!=", 0)->where("month_realisasi", "<=", $periode)->where("periode_prognosa", "=", $periode)->where("tahun", "=", $year)->sum(function($f) use($per_sejuta, $i, $periode) {
+                                                                                                        return (int) $f->realisasi_forecast;
+                                                                                                    });
+                                                                                                }
+                                                                                            });
+                                                                                        });
+
                                                                                     }
-                                                                                    $total_ok_tahunan += (int) $total_ok_per_dop_tahunan;
-                                                                                @endphp 
+                                                                                }
+                                                                                $total_ok_tahunan += (int) $total_ok_per_dop_tahunan;
+                                                                            @endphp 
                                                                             <!--begin::Total Coloumn-->
                                                                             <td data-dop="{{$dop->dop}}" class="pinForecast HidePin"><b>{{number_format($total_ok_per_dop_tahunan / $per_sejuta, 0, ".", ".")}}</b></td>
                                                                             <td data-dop="{{$dop->dop}}" class="pinForecast HidePin"><b>{{number_format($total_forecast_per_dop_tahunan / $per_sejuta, 0, ".", ".")}}</b></td>
@@ -1077,7 +1157,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         });
                                                                                         $total_realisasi_per_divisi_tahunan = $unitKerja->Proyeks->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $filter, $column, $periode) {
                                                                                             return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($periode, $p, $filter) {
-                                                                                                if($p->stage == 8 && preg_match("/$filter/i", $p->nama_proyek) && $periode == $f->periode_prognosa) {
+                                                                                                if($p->stage == 8 && preg_match("/$filter/i", $p->nama_proyek) && $periode == $f->periode_prognosa && $f->month_realisasi <= $periode && $f->month_realisasi != 0 && $f->realisasi_forecast != '') {
                                                                                                     return (int) $f->realisasi_forecast;
                                                                                                 }
                                                                                             });
@@ -1109,7 +1189,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         });
                                                                                         $total_realisasi_per_divisi_tahunan = $unitKerja->Proyeks->sum(function($p) use($per_sejuta, $i, $periode) {
                                                                                             return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($periode, $p) {
-                                                                                                if($p->stage == 8 && $periode == $f->periode_prognosa) {
+                                                                                                if($p->stage == 8 && $periode == $f->periode_prognosa && $f->month_realisasi <= $periode && $f->month_realisasi != 0 && $f->realisasi_forecast != '') {
                                                                                                     return (int) $f->realisasi_forecast;
                                                                                                 }
                                                                                             });
@@ -1755,7 +1835,8 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             // dump($total_ok, $total_ok_new ?? 0);
                                                                                             $total_forecast_formatted = number_format($total_forecast, 0, ',', '.');
                                                                                             if(!empty($proyek->bulan_ri_perolehan)) {
-                                                                                                $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) / $per_sejuta;
+                                                                                                // $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) / $per_sejuta;
+                                                                                                $nilai_terkontrak_formatted = (int) str_replace(',', '', $forecast->realisasi_forecast) / $per_sejuta;
                                                                                             } else {
                                                                                                 $nilai_terkontrak_formatted = 0;
                                                                                             }
@@ -1942,7 +2023,10 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         $nilaiTotalForecastTahun = $historyTotalTahunan->where("month_forecast", "!=", 0)->sum(function($h) {
                                                                             return (int) $h->nilai_forecast;
                                                                         });
-                                                                        $nilaiTotalRealisasiTahun = $historyTotalTahunan->where("month_realisasi", "!=", 0)->where("stage", "=", "8")->sum(function($h) {
+                                                                        // $nilaiTotalRealisasiTahun = $historyTotalTahunan->where("month_realisasi", "!=", 0)->where("stage", "=", "8")->sum(function($h) {
+                                                                        //     return (int) $h->realisasi_forecast;
+                                                                        // });
+                                                                        $nilaiTotalRealisasiTahun = $historyTotalTahunan->where("month_realisasi", "!=", 0)->where("stage", "=", "8")->where("month_realisasi", "<=", $periode)->where("realisasi_forecast", "!=", null)->sum(function($h) {
                                                                             return (int) $h->realisasi_forecast;
                                                                         });
                                                                     @endphp

@@ -21,6 +21,8 @@
         <div class="bg-illustration">
             @if (str_contains(Request::Path(), 'ccm'))
                 <img style="margin-top: 100px; margin-left: 50px" src="/media/logos/logo-ccm.png" alt="logo">
+            @elseif (str_contains(Request::Path(), 'csi')) 
+                <img style="margin-top: 100px; margin-left: 50px" src="/media/logos/logo-csi-2.png" alt="logo">
             @else
                 <img style="margin-top: 100px; margin-left: 50px" src="/media/logos/logo-wika.png" alt="logo">
             @endif

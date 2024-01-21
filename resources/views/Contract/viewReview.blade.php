@@ -60,8 +60,16 @@
 
 
                 <!--begin::Content-->
+                @php
+                    $is_approved = $contract->ContractApproval?->where("periode", "=", (int)date("m") + 1)->where("is_locked", "=", true);
+                @endphp
                 <div class="container mx-3 mt-0">
-                    <h1>Add Tinjauan Dokumen Kontrak - {{ $contract->stages == 1 ? "Perolehan" : "Pelaksanaan" }}</h1>
+                    <h1>
+                        Add Tinjauan Dokumen Kontrak - {{ $stage == 1 ? "Perolehan" : "Pelaksanaan" }}
+                        @if (!empty($is_approved))
+                        <span><i class="bi bi-info-circle-fill p-3" data-bs-toggle="tooltip" data-bs-title="Kontrak sudah dilock, silahkan request unlock jika ingin mengubah"></i></span>
+                        @endif
+                    </h1>
                 </div>
                 
 
@@ -248,11 +256,17 @@
 
                     <!--begin:::Isi Data-->
                     <!--begin::Table-->
+                    
                     <div class="d-flex flex-column bg-white px-15 py-8 mx-7">
+                        <span class="mb-4 fw-bold fs-4">
+                            @if (!empty($review))
+                            <a href="#" onclick="exportToExcel(this, '#tinjauan-kontrak')" class="">(Klik di sini untuk Export ke Excel)</a>
+                            @endif
+                        </span>
                         <form action="/review-contract/upload" method="POST" class="card card-flush">
                             @csrf
-                            <input type="hidden" class="form-control form-control-solid" name="id-contract" value="{{ $contract->id_contract }}">
-                            <input type="hidden" class="form-control form-control-solid" name="stage" value="{{ $stage }}">
+                            <input type="hidden" class="form-control form-control-solid" name="id-contract" value="{{ $contract->id_contract }}" {{ empty($is_approved) ? "" : "disabled" }}>
+                            <input type="hidden" class="form-control form-control-solid" name="stage" value="{{ $stage }}" {{ empty($is_approved) ? "" : "disabled" }}>
                             
                             <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="tinjauan-kontrak">
                                 <!--begin::Table head-->
@@ -271,7 +285,7 @@
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-600">
                                     <!--begin::Row Nama Proyek-->
-                                    {{-- @dd($review[0]) --}}
+                                    {{-- @dump($review) --}}
                                     {{-- @dd($review->isEmpty()) --}}
                                     @if ($review->isNotEmpty())
                                         @foreach ($review as $item)
@@ -279,23 +293,24 @@
                                             <tr class="text-grey">
                                                 <td>
                                                     <label><b>{{ $item->kategori }}</b></label>
-                                                    <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="{{ $item->kategori }}">
+                                                    <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="{{ $item->kategori }}" {{ empty($is_approved) ? "" : "readonly" }}>
+                                                    <input type="hidden" class="form-control form-control-solid" name="index[]" value="{{ $item->index }}" {{ empty($is_approved) ? "" : "readonly" }}>
                                                 </td>
                                                 <td>
                                                     <p hidden>{{ $item->sub_pasal }}</p>
-                                                    <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal" value="{{ $item->sub_pasal }}">
+                                                    <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal" value="{{ $item->sub_pasal }}" {{ empty($is_approved) ? "" : "readonly" }}>
                                                 </td>
                                                 <td>
                                                     <p hidden>{{ $item->uraian }}</p>
-                                                    <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan" value="{{ $item->uraian }}">
+                                                    <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan" value="{{ $item->uraian }}" {{ empty($is_approved) ? "" : "readonly" }}>
                                                 </td>
                                                 <td>
                                                     <p hidden>{{ $item->pic }}</p>
-                                                    <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function" value="{{ $item->pic }}">
+                                                    <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function" value="{{ $item->pic }}" {{ empty($is_approved) ? "" : "readonly" }}>
                                                 </td>
                                                 <td>
                                                     <p hidden>{{ $item->catatan }}</p>
-                                                    <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan" value="{{ $item->catatan }}">
+                                                    <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan" value="{{ $item->catatan }}" {{ empty($is_approved) ? "" : "readonly" }}>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -305,19 +320,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Nama Proyek</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Nama Proyek">
+                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Nama Proyek">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="1">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Lokasi Proyek-->
@@ -326,19 +342,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Lokasi Proyek</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Lokasi Proyek">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Lokasi Proyek">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="2">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Lokasi Proyek-->
@@ -347,19 +364,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Nama Pemilik Proyek</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Nama Pemilik Proyek">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Nama Pemilik Proyek">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="3">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Nama Pemilik Proyek-->
@@ -368,19 +386,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Nama dan Alamat Engineer/Konsultan</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Nama dan Alamat Engineer/Konsultan">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Nama dan Alamat Engineer/Konsultan">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="4">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Nama dan Alamat Engineer/Konsultan-->
@@ -389,19 +408,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Ruang Lingkup</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Ruang Lingkup">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Ruang Lingkup">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="5">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Ruang Lingkup-->
@@ -410,19 +430,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Nilai Pugu/HPS (jika ada)</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Nilai Pugu/HPS (jika ada)">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Nilai Pugu/HPS (jika ada)">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="6">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Nilai Pugu/HPS-->
@@ -431,19 +452,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Sumber Dana</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Sumber Dana">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Sumber Dana">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="7">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Sumber Dana-->
@@ -452,19 +474,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Jenis Kontrak</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Jenis Kontrak">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Jenis Kontrak">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="8">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Jenis Kontrak-->
@@ -473,19 +496,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Hirarki Dokumen</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Hirarki Dokumen">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Hirarki Dokumen">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="9">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Hirarki Dokumen-->
@@ -494,19 +518,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Waktu Penyelesaisan Pekerjaan</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Waktu Penyelesaisan Pekerjaan">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Waktu Penyelesaisan Pekerjaan">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="10">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Waktu Penyelesaisan Pekerjaan-->
@@ -515,19 +540,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Jangka Waktu Masa Pemeliharaan</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Jangka Waktu Masa Pemeliharaan">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Jangka Waktu Masa Pemeliharaan">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="11">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Jangka Waktu Masa Pemeliharaan-->
@@ -536,19 +562,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Jangka Waktu Masa Performa (jika ada)</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Jangka Waktu Masa Performa (jika ada)">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Jangka Waktu Masa Performa (jika ada)">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="12">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Jangka Waktu Masa Performa-->
@@ -557,19 +584,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Hukum dan Bahasa yang Berlaku</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Hukum dan Bahasa yang Berlaku">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Hukum dan Bahasa yang Berlaku">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="13">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Hukum dan Bahasa yang Berlaku-->
@@ -578,19 +606,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Cara Pembayaran</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Cara Pembayaran">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Cara Pembayaran">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="14">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Cara Pembayaran-->
@@ -599,19 +628,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Dokumen Syarat Pembayaran</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Dokumen Syarat Pembayaran">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Dokumen Syarat Pembayaran">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="15">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Dokumen Syarat Pembayaran-->
@@ -620,19 +650,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Uang Muka</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Uang Muka">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Uang Muka">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="16">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Uang Muka-->
@@ -641,19 +672,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Hak dan Kewajiban Pengguna Jasa</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Hak dan Kewajiban Pengguna Jasa">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Hak dan Kewajiban Pengguna Jasa">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="17">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Hak dan Kewajiban Pengguna Jasa-->
@@ -662,19 +694,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Hak dan Kewajiban Penyedia Jasa</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Hak dan Kewajiban Penyedia Jasa">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Hak dan Kewajiban Penyedia Jasa">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="18">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Hak dan Kewajiban Penyedia Jasa-->
@@ -683,19 +716,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Akses ke Lokasi/Lapangan</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Akses ke Lokasi/Lapangan">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Akses ke Lokasi/Lapangan">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="19">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Akses ke Lokasi/Lapangan-->
@@ -704,19 +738,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Serah Terima Lahan/Lokasi Pekerjaan</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Serah Terima Lahan/Lokasi Pekerjaan">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Serah Terima Lahan/Lokasi Pekerjaan">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="20">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Serah Terima Lahan/Lokasi Pekerjaan-->
@@ -725,19 +760,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Jaminan Uang Muka</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Jaminan Uang Muka">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Jaminan Uang Muka">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="21">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Jaminan Uang Muka-->
@@ -746,19 +782,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Pengembalian Uang Muka</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Pengembalian Uang Muka">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Pengembalian Uang Muka">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="22">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Pengembalian Uang Muka-->
@@ -767,19 +804,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Jaminan Pelaksanaan</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Jaminan Pelaksanaan">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Jaminan Pelaksanaan">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="23">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Jaminan Pelaksanaan-->
@@ -788,19 +826,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Retensi</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Retensi">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Retensi">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="24">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Retensi-->
@@ -809,19 +848,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Jaminan Pemeliharaan</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Jaminan Pemeliharaan">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Jaminan Pemeliharaan">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="25">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Jaminan Pemeliharaan-->
@@ -830,19 +870,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Jaminan Performa (jika ada)</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Jaminan Performa (jika ada)">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Jaminan Performa (jika ada)">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="26">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Jaminan Performa-->
@@ -851,19 +892,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Asuransi (CAR/CECR)</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Asuransi (CAR/CECR)">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Asuransi (CAR/CECR)">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="27">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Asuransi-->
@@ -872,19 +914,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Serah Terima Pekerjaan (parsial/tidak)</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Serah Terima Pekerjaan (parsial/tidak)">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Serah Terima Pekerjaan (parsial/tidak)">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="28">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Serah Terima Pekerjaan-->
@@ -893,19 +936,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Pembayaran Material On Site (jika ada)</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Pembayaran Material On Site (jika ada)">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Pembayaran Material On Site (jika ada)">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="29">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Pembayaran Material On Site-->
@@ -920,36 +964,38 @@
                                             <td>
                                                 <small><b>a. Keterlambatan Pekerjaan</b></small>
                                             </td>
-                                            <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Denda/Sanksi - Keterlambatan Pekerjaan">
+                                            <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Denda/Sanksi - Keterlambatan Pekerjaan">
+                                            <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="30">
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>
                                                 <small><b>b. Keterlambatan Pembayaran</b></small>
                                             </td>
-                                            <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Denda/Sanksi - Keterlambatan Pembayaran">
+                                            <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Denda/Sanksi - Keterlambatan Pembayaran">
+                                            <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="31">
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Denda/Sanksi-->
@@ -958,19 +1004,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Peristiwa Kompensasi/Klaim</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Peristiwa Kompensasi/Klaim">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Peristiwa Kompensasi/Klaim">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="32">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Peristiwa Kompensasi/Klaim-->
@@ -979,19 +1026,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Variasi/Tambah Kurang</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Variasi/Tambah Kurang">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Variasi/Tambah Kurang">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="33">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Variasi/Tambah Kurang-->
@@ -1000,19 +1048,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Perpanjangan Waktu (EOT)</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Perpanjangan Waktu (EOT)">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Perpanjangan Waktu (EOT)">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="34">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Perpanjangan Waktu (EOT)-->
@@ -1021,19 +1070,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Penyesuaian Harga (Eskalasi)</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Penyesuaian Harga (Eskalasi)">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Penyesuaian Harga (Eskalasi)">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="35">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Penyesuaian Harga (Eskalasi)-->
@@ -1042,19 +1092,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>TKDN</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="TKDN">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="TKDN">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="36">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row TKDN-->
@@ -1063,19 +1114,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Hak Pemutusan Kontrak atau Penghentian Pekerjaan oleh Penyedia Jasa</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Hak Pemutusan Kontrak atau Penghentian Pekerjaan oleh Penyedia Jasa">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Hak Pemutusan Kontrak atau Penghentian Pekerjaan oleh Penyedia Jasa">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="37">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Hak Pemutusan Kontrak atau Penghentian Pekerjaan oleh Penyedia Jasa-->
@@ -1084,19 +1136,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Hak Penundaan Pekerjaan oleh Penyedia Jasa</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Hak Penundaan Pekerjaan oleh Penyedia Jasa">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Hak Penundaan Pekerjaan oleh Penyedia Jasa">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="38">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Hak Penundaan Pekerjaan oleh Penyedia Jasa-->
@@ -1105,19 +1158,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Penyelesaian Perselisihan</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Penyelesaian Perselisihan">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Penyelesaian Perselisihan">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="39">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Penyelesaian Perselisihan-->
@@ -1126,19 +1180,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Kegagalan Bangunan</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Kegagalan Bangunan">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Kegagalan Bangunan">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="40">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Kegagalan Bangunan-->
@@ -1147,19 +1202,20 @@
                                         <tr class="text-grey">
                                             <td>
                                                 <label><b>Force Majeure/Keadaan Kahar</b></label>
-                                                <input type="hidden" class="form-control form-control-solid" name="kategori[]" value="Force Majeure/Keadaan Kahar">
+                                                <input type="hidden" class="form-control form-control-solid" {{ empty($is_approved) ? "" : "readonly" }} name="kategori[]" {{ empty($is_approved) ? "" : "readonly" }} value="Force Majeure/Keadaan Kahar">
+                                                <input type="hidden" class="form-control form-control-solid" name="index[]" {{ empty($is_approved) ? "" : "readonly" }} value="41">
                                             </td>
                                             <td>
-                                                <input name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="sub-pasal[]" type="text" class="form-control form-control-solid" placeholder="Isi Sub Pasal">
                                             </td>
                                             <td>
-                                                <input name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="uraian[]" type="text" class="form-control form-control-solid" placeholder="Isi Uraian / Penjelasan">
                                             </td>
                                             <td>
-                                                <input name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="pic[]" type="text" class="form-control form-control-solid" placeholder="Isi PIC Cross Function">
                                             </td>
                                             <td>
-                                                <input name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
+                                                <input {{ empty($is_approved) ? "" : "readonly" }} name="catatan[]" type="text" class="form-control form-control-solid" placeholder="Isi Catatan">
                                             </td>
                                         </tr>
                                         <!--end::Row Force Majeure/Keadaan Kahar-->
@@ -1190,6 +1246,25 @@
 @section('js-script')
 <!--begin::Data Tables-->
 
+<script>
+    function exportToExcel(e, tableElt) {
+        // console.log(e.parentElement);
+        document.querySelector(`${tableElt}_wrapper .buttons-excel`).click();
+        return;
+    }
+</script>
+
+<script>
+    window.addEventListener("DOMContentLoaded", () => {
+        setTimeout(() => {
+            const exportBtn = document.querySelectorAll(".buttons-excel");
+            exportBtn.forEach(item => {
+                item.style.display = "none";
+            }); 
+        }, 1000);
+    });
+</script>
+
 <script src="{{ asset('/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset("/datatables/dataTables.buttons.min.js") }}"></script>
 <script src="{{ asset("/datatables/buttons.html5.min.js") }}"></script>
@@ -1211,7 +1286,7 @@
                         extend: 'excelHtml5',
                         title: 'Data Tinjauan Dokumen Kontrak'
                     },
-                        'copy', 'pdf', 'print'
+                    
                     ]
             } );
         });

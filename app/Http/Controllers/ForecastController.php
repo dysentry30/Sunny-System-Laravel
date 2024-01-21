@@ -31,8 +31,10 @@ class ForecastController extends Controller
         $column = $request->get("column");
         $filter = $request->get("filter");
 
-        $periode = $periode != "" ? (int) $periode : (int) date("m");
-        $year = $year != "" ? (int) $year : (int) date("Y");
+        $periode = $periode != "" ? (int) $periode : (int) $request->get('periode-prognosa');
+        $year = $year != "" ? (int) $year : (int) $request->get('tahun-prognosa');
+        // $periode = $periode != "" ? (int) $periode : (int) date("m");
+        // $year = $year != "" ? (int) $year : (int) date("Y");
 
         if (Auth::user()->check_administrator) {
             $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", $periode)->get();
@@ -238,8 +240,10 @@ class ForecastController extends Controller
         $column = $request->get("column");
         $filter = $request->get("filter");
 
-        $periode = $periode != "" ? (int) $periode : (int) date("m");
-        $year = $year != "" ? (int) $year : (int) date("Y");
+        // $periode = $periode != "" ? (int) $periode : (int) date("m");
+        // $year = $year != "" ? (int) $year : (int) date("Y");
+        $periode = $periode != "" ? (int) $periode : (int) $request->get('periode-prognosa');
+        $year = $year != "" ? (int) $year : (int) $request->get('tahun-prognosa');
 
         if (Auth::user()->check_administrator) {
             $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("forecasts.periode_prognosa", "=", $periode)->get();
@@ -389,7 +393,6 @@ class ForecastController extends Controller
         // }
 
         // dd($proyeks->groupBy(["dop", "unit_kerja"]));
-
         return view(
             'Forecast/viewForecast',
             [
@@ -747,25 +750,37 @@ class ForecastController extends Controller
 
         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
 
+        $submonth = ((int) date('m') - 1);
+        if ($submonth == 0) {
+            // $submonth = 1;
+            $year = \Carbon\Carbon::now()->day(1)->subMonths($submonth + 1)->format('Y');
+        } else {
+            $year = \Carbon\Carbon::now()->day(1)->subMonths($submonth)->format('Y');
+        }
+
         if (!empty($periode)) {
             if (!Auth::user()->check_administrator) {
                 // if ($unit_kerja_user instanceof Collection) {
+                    // $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "proyeks.stage", "proyeks.is_cancel", "proyeks.is_rkap"])->where("periode_prognosa", "=", $periode)->get()->whereIn("divcode", $unit_kerja_user->toArray())->groupBy(["dop", "unit_kerja", "periode_prognosa"]);
                     $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->where("history_forecast.tahun", "=", $year)->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "proyeks.stage", "proyeks.is_cancel", "proyeks.is_rkap"])->where("periode_prognosa", "=", $periode)->get()->whereIn("divcode", $unit_kerja_user->toArray())->groupBy(["dop", "unit_kerja", "periode_prognosa"]);
                 // } else {
                 //     $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "proyeks.stage", "proyeks.is_cancel"])->where("periode_prognosa", "=", $periode)->get()->where("divcode", "=", $unit_kerja_user)->groupBy(["dop", "unit_kerja", "periode_prognosa"]);
                 // }
             } else {
+                // $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "proyeks.stage", "proyeks.is_cancel", "proyeks.is_rkap"])->where("periode_prognosa", "=", $periode)->get()->groupBy(["dop", "unit_kerja", "periode_prognosa"]);
                 $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "proyeks.stage", "proyeks.is_cancel", "proyeks.is_rkap"])->where("periode_prognosa", "=", $periode)->where("history_forecast.tahun", "=", $year)->get()->groupBy(["dop", "unit_kerja", "periode_prognosa"]);
             }
         } else {
             if (!Auth::user()->check_administrator) {
                 // if ($unit_kerja_user instanceof Collection) {
+                    // $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "history_forecast.created_at", "proyeks.stage", "proyeks.is_cancel", "proyeks.is_rkap"])->get()->whereIn("divcode", $unit_kerja_user->toArray())->groupBy(["dop", "unit_kerja", "periode_prognosa"]);
                     $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->where("history_forecast.tahun", "=", $year)->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "history_forecast.created_at", "proyeks.stage", "proyeks.is_cancel", "proyeks.is_rkap"])->get()->whereIn("divcode", $unit_kerja_user->toArray())->groupBy(["dop", "unit_kerja", "periode_prognosa"]);
                     // dump($historyForecast);
                 // } else {
                 //     $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->where("history_forecast.tahun", "=", $year)->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "history_forecast.created_at", "proyeks.stage", "proyeks.is_cancel"])->get()->where("divcode", "=", $unit_kerja_user)->groupBy(["dop", "unit_kerja", "periode_prognosa"]);
                 // }
             } else {
+                // $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "history_forecast.created_at", "proyeks.stage", "proyeks.is_cancel" , "proyeks.is_rkap"])->get()->groupBy(["dop", "unit_kerja", "periode_prognosa"]);
                 $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->where("history_forecast.tahun", "=", $year)->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "history_forecast.created_at", "proyeks.stage", "proyeks.is_cancel" , "proyeks.is_rkap"])->get()->groupBy(["dop", "unit_kerja", "periode_prognosa"]);
             }
         }
@@ -785,9 +800,9 @@ class ForecastController extends Controller
                 // });
             });
         });
-        $historyForecast = $historyForecast->map(function ($h) {
-            return $h->map(function ($histories) {
-                return $histories->map(function($ph) {
+        $historyForecast = $historyForecast->map(function ($h) use ($periode) {
+            return $h->map(function ($histories) use ($periode) {
+                return $histories->map(function ($ph) use ($periode) {
                     $newClass = new stdClass();
                     $newClass->rkap_forecast = $ph->sum(function($f) {
                         if($f->is_rkap == true) {
@@ -799,9 +814,17 @@ class ForecastController extends Controller
                             return (int) $f->nilai_forecast;
                         }
                     });
+
                     $newClass->realisasi_forecast = $ph->sum(function($f) {
                         return (int) $f->realisasi_forecast;
                     });
+
+                    // $newClass->realisasi_forecast = $ph->filter(function($f) use ($periode) {
+                    //     return (int) $f->realisasi_forecast != $periode && $f->month_realisasi != 0 && $f->realisasi_forecast != '';
+                    // })->sum(function($f) {
+                    //     return (int) $f->realisasi_forecast;
+                    // });
+
                     $newClass->periode_prognosa = (int) $ph->avg(function($f) {
                         return (int) $f->periode_prognosa;
                     });
@@ -825,8 +848,8 @@ class ForecastController extends Controller
                 });
             });
         });
-        // dd($historyForecast);
-        return view("Forecast/viewRequestApproval", compact(["historyForecast", "is_user_unit_kerja", "periode"]));
+        // dd($historyForecast->first());
+        return view("Forecast/viewRequestApproval", compact(["historyForecast", "is_user_unit_kerja", "periode", "year"]));
     }
 
     private function stdClassToModel($data, $instance)

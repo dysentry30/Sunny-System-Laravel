@@ -278,7 +278,7 @@
                                         // $year = 2030 ;
                                     @endphp
                                     <!--begin::Select Options-->
-                                    <select onchange="this.form.submit()" id="tahun-history" name="tahun-history"
+                                    <select id="tahun-history" name="tahun-history"
                                         class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
                                         data-control="select2" data-hide-search="true" data-placeholder="Tahun"
                                         data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true">
@@ -880,223 +880,450 @@
                                                         <tbody class="fw-bold">
                                                             @foreach ($sisaForecast as $pareto)
                                                             {{-- @dump($pareto) --}}
-                                                                {{-- @foreach ($pareto as $pareto) --}}
-                                                                <tr>
-                                                                    <!--begin::Name-->
-                                                                    <td>
-                                                                        <a target="_blank" href="/proyek/view/{{ $pareto->kode_proyek }}" id="" class="text-gray-800 text-hover-primary mb-1">{{ $pareto->nama_proyek }}</a>
-                                                                    </td>
-                                                                    <!--end::Name-->
-                                                                    <!--begin::Unit Kerja-->
-                                                                    <td>
-                                                                        {{ $pareto->unit_kerja ?? "-" }}
-                                                                    </td>
-                                                                    <!--end::Unit Kerja-->
-                                                                    <!--begin::Unit Kerja-->
-                                                                    <td>
-                                                                        @switch($pareto->tipe_proyek)
-                                                                            @case('P')
-                                                                                Non-Retail
-                                                                            @break
-        
-                                                                            @case('R')
-                                                                                Retail
-                                                                            @break
-        
-                                                                            @default
-                                                                                -
-                                                                        @endswitch
-                                                                    </td>
-                                                                    <!--end::Unit Kerja-->
-        
-                                                                    <!--end::Stage-->
-                                                                    <td>
-                                                                        @switch($pareto->stage)
+                                                            @if ($pareto->stage != 8 && $pareto->tipe_proyek == 'P')
+                                                            {{-- @foreach ($pareto as $pareto) --}}
+                                                            <tr>
+                                                                <!--begin::Name-->
+                                                                <td>
+                                                                    <a target="_blank" href="/proyek/view/{{ $pareto->kode_proyek }}" id="" class="text-gray-800 text-hover-primary mb-1">{{ $pareto->nama_proyek }}</a>
+                                                                </td>
+                                                                <!--end::Name-->
+                                                                <!--begin::Unit Kerja-->
+                                                                <td>
+                                                                    {{ $pareto->unit_kerja ?? "-" }}
+                                                                </td>
+                                                                <!--end::Unit Kerja-->
+                                                                <!--begin::Unit Kerja-->
+                                                                <td>
+                                                                    @switch($pareto->tipe_proyek)
+                                                                        @case('P')
+                                                                            Non-Retail
+                                                                        @break
+    
+                                                                        {{-- @case('R')
+                                                                            Retail
+                                                                        @break --}}
+    
+                                                                        @default
+                                                                            -
+                                                                    @endswitch
+                                                                </td>
+                                                                <!--end::Unit Kerja-->
+    
+                                                                <!--end::Stage-->
+                                                                <td>
+                                                                    
+                                                                    @if ($pareto->tipe_proyek != 'R')
+                                                                    @switch($pareto->stage)
+                                                                        @case('1')
+                                                                            Pasar Dini
+                                                                        @break
+    
+                                                                        @case('2')
+                                                                            Pasar Potensial
+                                                                        @break
+    
+                                                                        @case('3')
+                                                                            Prakualifikasi
+                                                                        @break
+    
+                                                                        @case('4')
+                                                                            Tender Diikuti
+                                                                        @break
+    
+                                                                        @case('5')
+                                                                            Perolehan
+                                                                        @break
+    
+                                                                        @case('6')
+                                                                            Menang
+                                                                        @break
+    
+                                                                        @case('7')
+                                                                            Kalah
+                                                                        @break
+    
+                                                                        @case('8')
+                                                                            Terkontrak
+                                                                        @break
+    
+                                                                        @case('9')
+                                                                            Terendah
+                                                                        @break
+    
+                                                                        @default
+                                                                            Selesai
+                                                                    @endswitch
+                                                                    @endif
+                                                                </td>
+                                                                <!--end::Stage-->
+                                                                <!--begin::Nulan forecast-->
+                                                                <td>
+                                                                    {{-- @php
+                                                                        // dd($pareto)
+                                                                        $monthForecastPareto = $pareto->Forecasts->max(function($montF) {
+                                                                            return (int) $montF->month_forecast;
+                                                                        })
+                                                                    @endphp --}}
+                                                                    <small>
+                                                                        @switch($pareto->month_forecast)
                                                                             @case('1')
-                                                                                Pasar Dini
+                                                                                Januari
                                                                             @break
-        
+                    
                                                                             @case('2')
-                                                                                Pasar Potensial
+                                                                                Februari
                                                                             @break
-        
+                    
                                                                             @case('3')
-                                                                                Prakualifikasi
+                                                                                Maret
                                                                             @break
-        
+                    
                                                                             @case('4')
-                                                                                Tender Diikuti
+                                                                                April
                                                                             @break
-        
+                    
                                                                             @case('5')
-                                                                                Perolehan
+                                                                                Mei
                                                                             @break
-        
+                    
                                                                             @case('6')
-                                                                                Menang
+                                                                                Juni
                                                                             @break
-        
+                    
                                                                             @case('7')
-                                                                                Kalah
+                                                                                Juli
                                                                             @break
-        
+                    
                                                                             @case('8')
-                                                                                Terkontrak
+                                                                                Agustus
                                                                             @break
-        
+                    
                                                                             @case('9')
-                                                                                Terendah
+                                                                                September
                                                                             @break
-        
+                    
+                                                                            @case('10')
+                                                                                Oktober
+                                                                            @break
+                    
+                                                                            @case('11')
+                                                                                November
+                                                                            @break
+                    
+                                                                            @case('12')
+                                                                                Desember
+                                                                            @break
+                    
                                                                             @default
-                                                                                Selesai
+                                                                                @switch($pareto->bulan_pelaksanaan)
+                                                                                    @case('1')
+                                                                                        Januari
+                                                                                    @break
+                            
+                                                                                    @case('2')
+                                                                                        Februari
+                                                                                    @break
+                            
+                                                                                    @case('3')
+                                                                                        Maret
+                                                                                    @break
+                            
+                                                                                    @case('4')
+                                                                                        April
+                                                                                    @break
+                            
+                                                                                    @case('5')
+                                                                                        Mei
+                                                                                    @break
+                            
+                                                                                    @case('6')
+                                                                                        Juni
+                                                                                    @break
+                            
+                                                                                    @case('7')
+                                                                                        Juli
+                                                                                    @break
+                            
+                                                                                    @case('8')
+                                                                                        Agustus
+                                                                                    @break
+                            
+                                                                                    @case('9')
+                                                                                        September
+                                                                                    @break
+                            
+                                                                                    @case('10')
+                                                                                        Oktober
+                                                                                    @break
+                            
+                                                                                    @case('11')
+                                                                                        November
+                                                                                    @break
+                            
+                                                                                    @case('12')
+                                                                                        Desember
+                                                                                    @break
+                            
+                                                                                    @default
+                                                                                        -
+                                                                                @endswitch
                                                                         @endswitch
-                                                                    </td>
-                                                                    <!--end::Stage-->
-                                                                    <!--begin::Nulan forecast-->
-                                                                    <td>
-                                                                        {{-- @php
-                                                                            // dd($pareto)
-                                                                            $monthForecastPareto = $pareto->Forecasts->max(function($montF) {
-                                                                                return (int) $montF->month_forecast;
-                                                                            })
-                                                                        @endphp --}}
-                                                                        <small>
-                                                                            @switch($pareto->month_forecast)
-                                                                                @case('1')
-                                                                                    Januari
-                                                                                @break
-                        
-                                                                                @case('2')
-                                                                                    Februari
-                                                                                @break
-                        
-                                                                                @case('3')
-                                                                                    Maret
-                                                                                @break
-                        
-                                                                                @case('4')
-                                                                                    April
-                                                                                @break
-                        
-                                                                                @case('5')
-                                                                                    Mei
-                                                                                @break
-                        
-                                                                                @case('6')
-                                                                                    Juni
-                                                                                @break
-                        
-                                                                                @case('7')
-                                                                                    Juli
-                                                                                @break
-                        
-                                                                                @case('8')
-                                                                                    Agustus
-                                                                                @break
-                        
-                                                                                @case('9')
-                                                                                    September
-                                                                                @break
-                        
-                                                                                @case('10')
-                                                                                    Oktober
-                                                                                @break
-                        
-                                                                                @case('11')
-                                                                                    November
-                                                                                @break
-                        
-                                                                                @case('12')
-                                                                                    Desember
-                                                                                @break
-                        
-                                                                                @default
-                                                                                    @switch($pareto->bulan_pelaksanaan)
-                                                                                        @case('1')
-                                                                                            Januari
-                                                                                        @break
-                                
-                                                                                        @case('2')
-                                                                                            Februari
-                                                                                        @break
-                                
-                                                                                        @case('3')
-                                                                                            Maret
-                                                                                        @break
-                                
-                                                                                        @case('4')
-                                                                                            April
-                                                                                        @break
-                                
-                                                                                        @case('5')
-                                                                                            Mei
-                                                                                        @break
-                                
-                                                                                        @case('6')
-                                                                                            Juni
-                                                                                        @break
-                                
-                                                                                        @case('7')
-                                                                                            Juli
-                                                                                        @break
-                                
-                                                                                        @case('8')
-                                                                                            Agustus
-                                                                                        @break
-                                
-                                                                                        @case('9')
-                                                                                            September
-                                                                                        @break
-                                
-                                                                                        @case('10')
-                                                                                            Oktober
-                                                                                        @break
-                                
-                                                                                        @case('11')
-                                                                                            November
-                                                                                        @break
-                                
-                                                                                        @case('12')
-                                                                                            Desember
-                                                                                        @break
-                                
-                                                                                        @default
-                                                                                            -
-                                                                                    @endswitch
-                                                                            @endswitch
-                                                                        </small>
-                                                                    </td>
-                                                                    <!--end::Nulan forecast-->
-        
-                                                                    <!--begin::Nilai Forecast-->
-                                                                    <td class="text-end">
-                                                                        {{-- @php
-                                                                            $nilaiForecast = 0;
-                                                                            foreach ($pareto->Forecasts as $forecast)
-                                                                            if ($forecast->nilai_forecast != "") {
-                                                                                $nilaiForecast += $forecast->nilai_forecast;
-                                                                            }
-                                                                        @endphp --}}
-                                                                        {{-- {{ number_format($nilaiForecast, 0, '.', ',') }} --}}
-                                                                        {{-- @foreach ($pareto->Forecasts as $forecast)
-                                                                                {{ $forecast->nilai_forecast }};
-                                                                                @endforeach --}}
-                                                                        {{-- {{ number_format($pareto->forecast, 0, '.', ',') }} --}}
-                                                                        {{-- @php
-                                                                            $total_forecast = $pareto->Forecasts->sum(function($f) {
-                                                                                return (int) $f->nilai_forecast;
-                                                                            })
-                                                                        @endphp --}}
-                                                                        <small>
-                                                                            {{-- @dump($sisaForecast->first) --}}
-                                                                            {{ number_format((int)$pareto->nilai_forecast, 0, '.', '.') ?? '-' }}
-                                                                        </small>
-                                                                        {{-- {{ number_format((int) str_replace('.', '', $proyek->nilai_perolehan), 0, '.', '.') }} --}}
-                                                                    </td>
-                                                                    <!--end::Nilai Forecast-->
-                                                                </tr>
-                                                                {{-- @endforeach --}}
+                                                                    </small>
+                                                                </td>
+                                                                <!--end::Nulan forecast-->
+    
+                                                                <!--begin::Nilai Forecast-->
+                                                                <td class="text-end">
+                                                                    {{-- @php
+                                                                        $nilaiForecast = 0;
+                                                                        foreach ($pareto->Forecasts as $forecast)
+                                                                        if ($forecast->nilai_forecast != "") {
+                                                                            $nilaiForecast += $forecast->nilai_forecast;
+                                                                        }
+                                                                    @endphp --}}
+                                                                    {{-- {{ number_format($nilaiForecast, 0, '.', ',') }} --}}
+                                                                    {{-- @foreach ($pareto->Forecasts as $forecast)
+                                                                            {{ $forecast->nilai_forecast }};
+                                                                            @endforeach --}}
+                                                                    {{-- {{ number_format($pareto->forecast, 0, '.', ',') }} --}}
+                                                                    {{-- @php
+                                                                        $total_forecast = $pareto->Forecasts->sum(function($f) {
+                                                                            return (int) $f->nilai_forecast;
+                                                                        })
+                                                                    @endphp --}}
+                                                                    <small>
+                                                                        {{-- @dump($sisaForecast->first) --}}
+                                                                        {{ number_format((int)$pareto->nilai_forecast, 0, '.', '.') ?? '-' }}
+                                                                    </small>
+                                                                    {{-- {{ number_format((int) str_replace('.', '', $proyek->nilai_perolehan), 0, '.', '.') }} --}}
+                                                                </td>
+                                                                <!--end::Nilai Forecast-->
+                                                            </tr>
+                                                            {{-- @endforeach --}}
+                                                            @endif
+                                                            @if ($pareto->stage == 8 && $pareto->tipe_proyek == 'R')
+                                                            {{-- @foreach ($pareto as $pareto) --}}
+                                                            <tr>
+                                                                <!--begin::Name-->
+                                                                <td>
+                                                                    <a target="_blank" href="/proyek/view/{{ $pareto->kode_proyek }}" id="" class="text-gray-800 text-hover-primary mb-1">{{ $pareto->nama_proyek }}</a>
+                                                                </td>
+                                                                <!--end::Name-->
+                                                                <!--begin::Unit Kerja-->
+                                                                <td>
+                                                                    {{ $pareto->unit_kerja ?? "-" }}
+                                                                </td>
+                                                                <!--end::Unit Kerja-->
+                                                                <!--begin::Unit Kerja-->
+                                                                <td>
+                                                                    @switch($pareto->tipe_proyek)
+                                                                        {{-- @case('P')
+                                                                            Non-Retail
+                                                                        @break --}}
+    
+                                                                        @case('R')
+                                                                            Retail
+                                                                        @break
+    
+                                                                        @default
+                                                                            -
+                                                                    @endswitch
+                                                                </td>
+                                                                <!--end::Unit Kerja-->
+    
+                                                                <!--end::Stage-->
+                                                                <td>
+                                                                    
+                                                                    @if ($pareto->tipe_proyek != 'R')
+                                                                    @switch($pareto->stage)
+                                                                        @case('1')
+                                                                            Pasar Dini
+                                                                        @break
+    
+                                                                        @case('2')
+                                                                            Pasar Potensial
+                                                                        @break
+    
+                                                                        @case('3')
+                                                                            Prakualifikasi
+                                                                        @break
+    
+                                                                        @case('4')
+                                                                            Tender Diikuti
+                                                                        @break
+    
+                                                                        @case('5')
+                                                                            Perolehan
+                                                                        @break
+    
+                                                                        @case('6')
+                                                                            Menang
+                                                                        @break
+    
+                                                                        @case('7')
+                                                                            Kalah
+                                                                        @break
+    
+                                                                        @case('8')
+                                                                            Terkontrak
+                                                                        @break
+    
+                                                                        @case('9')
+                                                                            Terendah
+                                                                        @break
+    
+                                                                        @default
+                                                                            Selesai
+                                                                    @endswitch
+                                                                    @endif
+                                                                </td>
+                                                                <!--end::Stage-->
+                                                                <!--begin::Nulan forecast-->
+                                                                <td>
+                                                                    {{-- @php
+                                                                        // dd($pareto)
+                                                                        $monthForecastPareto = $pareto->Forecasts->max(function($montF) {
+                                                                            return (int) $montF->month_forecast;
+                                                                        })
+                                                                    @endphp --}}
+                                                                    <small>
+                                                                        @switch($pareto->month_forecast)
+                                                                            @case('1')
+                                                                                Januari
+                                                                            @break
+                    
+                                                                            @case('2')
+                                                                                Februari
+                                                                            @break
+                    
+                                                                            @case('3')
+                                                                                Maret
+                                                                            @break
+                    
+                                                                            @case('4')
+                                                                                April
+                                                                            @break
+                    
+                                                                            @case('5')
+                                                                                Mei
+                                                                            @break
+                    
+                                                                            @case('6')
+                                                                                Juni
+                                                                            @break
+                    
+                                                                            @case('7')
+                                                                                Juli
+                                                                            @break
+                    
+                                                                            @case('8')
+                                                                                Agustus
+                                                                            @break
+                    
+                                                                            @case('9')
+                                                                                September
+                                                                            @break
+                    
+                                                                            @case('10')
+                                                                                Oktober
+                                                                            @break
+                    
+                                                                            @case('11')
+                                                                                November
+                                                                            @break
+                    
+                                                                            @case('12')
+                                                                                Desember
+                                                                            @break
+                    
+                                                                            @default
+                                                                                @switch($pareto->bulan_pelaksanaan)
+                                                                                    @case('1')
+                                                                                        Januari
+                                                                                    @break
+                            
+                                                                                    @case('2')
+                                                                                        Februari
+                                                                                    @break
+                            
+                                                                                    @case('3')
+                                                                                        Maret
+                                                                                    @break
+                            
+                                                                                    @case('4')
+                                                                                        April
+                                                                                    @break
+                            
+                                                                                    @case('5')
+                                                                                        Mei
+                                                                                    @break
+                            
+                                                                                    @case('6')
+                                                                                        Juni
+                                                                                    @break
+                            
+                                                                                    @case('7')
+                                                                                        Juli
+                                                                                    @break
+                            
+                                                                                    @case('8')
+                                                                                        Agustus
+                                                                                    @break
+                            
+                                                                                    @case('9')
+                                                                                        September
+                                                                                    @break
+                            
+                                                                                    @case('10')
+                                                                                        Oktober
+                                                                                    @break
+                            
+                                                                                    @case('11')
+                                                                                        November
+                                                                                    @break
+                            
+                                                                                    @case('12')
+                                                                                        Desember
+                                                                                    @break
+                            
+                                                                                    @default
+                                                                                        -
+                                                                                @endswitch
+                                                                        @endswitch
+                                                                    </small>
+                                                                </td>
+                                                                <!--end::Nulan forecast-->
+    
+                                                                <!--begin::Nilai Forecast-->
+                                                                <td class="text-end">
+                                                                    {{-- @php
+                                                                        $nilaiForecast = 0;
+                                                                        foreach ($pareto->Forecasts as $forecast)
+                                                                        if ($forecast->nilai_forecast != "") {
+                                                                            $nilaiForecast += $forecast->nilai_forecast;
+                                                                        }
+                                                                    @endphp --}}
+                                                                    {{-- {{ number_format($nilaiForecast, 0, '.', ',') }} --}}
+                                                                    {{-- @foreach ($pareto->Forecasts as $forecast)
+                                                                            {{ $forecast->nilai_forecast }};
+                                                                            @endforeach --}}
+                                                                    {{-- {{ number_format($pareto->forecast, 0, '.', ',') }} --}}
+                                                                    {{-- @php
+                                                                        $total_forecast = $pareto->Forecasts->sum(function($f) {
+                                                                            return (int) $f->nilai_forecast;
+                                                                        })
+                                                                    @endphp --}}
+                                                                    <small>
+                                                                        {{-- @dump($sisaForecast->first) --}}
+                                                                        {{ number_format((int)$pareto->nilai_forecast, 0, '.', '.') ?? '-' }}
+                                                                    </small>
+                                                                    {{-- {{ number_format((int) str_replace('.', '', $proyek->nilai_perolehan), 0, '.', '.') }} --}}
+                                                                </td>
+                                                                <!--end::Nilai Forecast-->
+                                                            </tr>
+                                                            {{-- @endforeach --}}
+                                                            @endif
                                                             @endforeach
                                                         </tbody>
                                                         <!--end::Table body-->
@@ -1133,7 +1360,7 @@
                                                                 <th class="min-w-auto">@sortablelink('unit_kerja', 'Unit Kerja')</th>
                                                                 <th class="min-w-auto">@sortablelink('tipe_proyek', 'Tipe Proyek')</th>
                                                                 <th class="min-w-auto">@sortablelink('stage', 'Stage')</th>
-                                                                <th class="min-w-auto">Bulan Forecast</th>
+                                                                <th class="min-w-auto">Bulan Realisasi</th>
                                                                 <th class="min-w-auto text-end">@sortablelink('nilai_perolehan', 'Nilai Reailisasi')</th>
                                                             </tr>
                                                             <!--end::Table row-->
@@ -1630,6 +1857,11 @@
         let nilaiForecast = JSON.parse("{!! json_encode($nilaiForecastArray) !!}");
         let nilaiRkap = JSON.parse("{!! json_encode($nilaiRkapArray) !!}");
         let nilaiRealisasi = JSON.parse("{!! json_encode($nilaiRealisasiArray) !!}");
+        console.log(
+            nilaiForecast,
+            nilaiRkap,
+            nilaiRealisasi,
+        );
 
         const forecast1 = Highcharts.chart('forecast-line', {
 
@@ -2293,13 +2525,15 @@
 
     <!--begin::Competitive Index-->
     @php
-    $indexJumlahAll = $jumlahMenang + $jumlahKalah;
+    $indexJumlahAll = $jumlahMenang + $jumlahKalah + $jumlahTerkontrakCompetitive;
     if ($indexJumlahAll != 0) {
         $presentaseMenang = round($jumlahMenang / $indexJumlahAll * 100);
+        $presentaseTerkontrak = round($jumlahTerkontrakCompetitive / $indexJumlahAll * 100);
         $presentaseKalah = round($jumlahKalah / $indexJumlahAll * 100);
     } else {
         $presentaseMenang = 0;
         $presentaseKalah = 0;
+        $presentaseTerkontrak = 0;
     }
     @endphp
     <script>
@@ -2317,7 +2551,7 @@
             },
             subtitle: {
                 align: 'center',
-                text: '<b>Berdasarkan Jumlah</b>'
+                text: '<b>Berdasarkan Jumlah |  Win Rate : {{ round($winRateJumlahCompetitive) }}%</b>'
             },
             accessibility: {
                 announceNewData: {
@@ -2333,7 +2567,7 @@
                 }
                 
             },
-            colors: ["#61CB65", "#ED6D3F"],
+            colors: ["#61CB65", "#ED6D3F", "#F7C13E"],
             plotOptions: {
                 pie: {
                     innerSize: 75,
@@ -2368,6 +2602,11 @@
                         x: "Menang : " + {{ $presentaseMenang }},
                     },
                     {
+                        name: "Proyek Terkontrak Tender : " + {{ $jumlahTerkontrakCompetitive }},
+                        y: {{ $jumlahTerkontrakCompetitive }},
+                        x: "Terkontrak : " + {{ $presentaseTerkontrak }},
+                    },
+                    {
                         name: "Proyek Kalah Tender : " + {{ $jumlahKalah }},
                         y: {{ $jumlahKalah }},
                         x: "Kalah : " + {{ $presentaseKalah }},
@@ -2383,9 +2622,11 @@
         $indexNilaiAll = $nilaiMenang + $nilaiKalah;
     if ($indexNilaiAll != 0) {
         $presentaseNilaiMenang = round($nilaiMenang / $indexNilaiAll * 100);
+        $presentaseNilaiTerkontrak = round($nilaiTerkontrakCompetitive / $indexNilaiAll * 100);
         $presentaseNilaiKalah = round($nilaiKalah / $indexNilaiAll * 100);
     } else {
         $presentaseNilaiMenang = 0;
+        $presentaseNilaiTerkontrak = 0;
         $presentaseNilaiKalah = 0;
     }
     @endphp
@@ -2404,7 +2645,7 @@
             },
             subtitle: {
                 align: 'center',
-                text: '<b>Berdasarkan Nilai</b>'
+                text: '<b>Berdasarkan Nilai |  Win Rate : {{ round($winRateNilaiCompetitive) }}%</b>'
             },
             accessibility: {
                 announceNewData: {
@@ -2420,7 +2661,7 @@
                 }
                 
             },
-            colors: ["#61CB65", "#ED6D3F"],
+            colors: ["#61CB65", "#ED6D3F", "#F7C13E"],
             plotOptions: {
                 pie: {
                     innerSize: 75,
@@ -2453,6 +2694,11 @@
                         name: "Nilai Menang Tender : " + "{{ number_format( ((int) $nilaiMenang / 1000000 ), 0, '.' , '.' ) }}",
                         y: {{ $nilaiMenang }},
                         x: "Menang : " + {{ $presentaseNilaiMenang }},
+                    },
+                    {
+                        name: "Proyek Terkontrak Tender : " + "{{ number_format( ((int) $nilaiTerkontrakCompetitive / 1000000 ), 0, '.' , '.' ) }}",
+                        y: {{ $nilaiTerkontrakCompetitive }},
+                        x: "Terkontrak : " + {{ $presentaseNilaiTerkontrak }},
                     },
                     {
                         name: "Nilai Kalah Tender : " + "{{ number_format( ((int) $nilaiKalah / 1000000 ), 0, '.' , '.' ) }}",
@@ -2760,6 +3006,9 @@
         // const isFilterActive = !Boolean("{{!empty($unit_kerja_get) || !empty($dop_get)}}");
         const filterGet = "{{!empty($unit_kerja_get) ? $unit_kerja_get : $dop_get}}";
         const yearGet = "{{$year}}"
+        const urlParams = new URLSearchParams(window.location.search);
+        const myParam = urlParams.get('tahun-history');
+        console.log(myParam );
         // End :: Checking is filter active
 
         function getFullscreenElement() {
@@ -2773,7 +3022,7 @@
         const chartPointsForecastPerBulan = document.querySelectorAll("#forecast-line .highcharts-point");
         const periodePrognosa = document.querySelector("#periode-prognosa");
         // console.log(periodePrognosa.value);
-        // console.log(chartPointsForecastPerBulan);
+        console.log(chartPointsForecastPerBulan);
         chartPointsForecastPerBulan.forEach(point => {
             point.addEventListener("click", async function() {
                 const data = point.getAttribute("aria-label").replaceAll(/[^a-z|^A-Z|^.]/gi, "").split(
@@ -2788,7 +3037,7 @@
                     url += `/${unitKerja}`;
                 }
                 if(yearGet) {
-
+                    
                 }
                 const dop = $("#dop").select2({}).val();
                 if (dop) {
@@ -2886,7 +3135,7 @@
             const titleTable = table.querySelector("#title-table");
             const total = table.querySelector("#total");
             const unitKerja = url.split("/");
-            // console.log(type);
+            
             
             if (type == "Forecast") {
                 if (tableElt.includes("triwulan")) {
@@ -3675,7 +3924,7 @@
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
-            } else if(type == "Proyek Menang Tender" || type == "Proyek Kalah Tender" ) {
+            } else if(type == "Proyek Menang Tender" || type == "Proyek Terkontrak Tender" ||type == "Proyek Kalah Tender" ) {
                 let tbodyHTML = ``;
                 let totalNilaiLainnya = 0;
 
@@ -3694,6 +3943,8 @@
                     filter = filtering[filter];
                     let stage = "";
                     if(type == "Proyek Menang Tender") {
+                        totalNilaiLainnya += Number(filter.nilai_perolehan);
+                    }if(type == "Proyek Terkontrak Tender") {
                         totalNilaiLainnya += Number(filter.nilai_perolehan);
                     } else {
                         totalNilaiLainnya += Number(filter.hps_pagu);
@@ -3748,6 +3999,8 @@
                     let bulan = "";
                     if(type == "Proyek Menang Tender") {
                         getMonth = filter.bulan_ri_perolehan;
+                    }if(type == "Proyek Terkontrak Tender") {
+                        getMonth = filter.bulan_ri_perolehan;
                     } else {
                         getMonth = filter.bulan_pelaksanaan;
                     }
@@ -3795,6 +4048,8 @@
                     }
                     let nilai = 0;
                     if(type == "Proyek Menang Tender") {
+                        nilai = filter.nilai_perolehan;
+                    } else if(type == "Proyek Terkontrak Tender"){
                         nilai = filter.nilai_perolehan;
                     } else {
                         nilai = filter.hps_pagu;
@@ -3847,7 +4102,7 @@
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
-            } else if(type == "Nilai Menang Tender" || type == "Nilai Kalah Tender" ) {
+            } else if(type == "Nilai Menang Tender" || type == "Nilai Terkontrak Tender" || type == "Nilai Kalah Tender" ) {
                 let tbodyHTML = ``;
                 let totalNilaiLainnya = 0;
 
@@ -3866,6 +4121,8 @@
                     filter = filtering[filter];
                     let stage = "";
                     if(type == "Nilai Menang Tender") {
+                        totalNilaiLainnya += Number(filter.nilai_perolehan);
+                    }else if(type == "Nilai Terkontrak Tender") {
                         totalNilaiLainnya += Number(filter.nilai_perolehan);
                     } else {
                         totalNilaiLainnya += Number(filter.hps_pagu);
@@ -3919,6 +4176,8 @@
                     let bulan = "";
                     if(type == "Nilai Menang Tender") {
                         getMonth = filter.bulan_ri_perolehan;
+                    }else if(type == "Nilai Terkontrak Tender"){
+                        getMonth = filter.bulan_ri_perolehan;
                     } else {
                         getMonth = filter.bulan_pelaksanaan;
                     }
@@ -3966,6 +4225,8 @@
                     }
                     let nilai = 0;
                     if(type == "Nilai Menang Tender") {
+                        nilai = filter.nilai_perolehan;
+                    } if(type == "Nilai Terkontrak Tender") {
                         nilai = filter.nilai_perolehan;
                     } else {
                         nilai = filter.hps_pagu;
@@ -4638,11 +4899,12 @@
         competitiveIndex.forEach(point => {
             point.addEventListener("click", async e => {
                 const tipe = point.parentElement.getAttribute("aria-label").replaceAll(/[^a-z][^A-Z]|proyek stage|\./gi, "");
+                const filters = !filterGet ? false : filterGet
                 // console.log(filterGet);
                 if(filterGet) {
-                    getDataTable("#datatable-index-jumlah", "#index-jumlah", `/dashboard/index-jumlah/${tipe}/${filterGet}`, tipe, 9);
+                    getDataTable("#datatable-index-jumlah", "#index-jumlah", `/dashboard/index-jumlah/${tipe}/${filters}/{{ $year }}`, tipe, 9);
                 } else {
-                    getDataTable("#datatable-index-jumlah", "#index-jumlah", `/dashboard/index-jumlah/${tipe}`, tipe, 9);
+                    getDataTable("#datatable-index-jumlah", "#index-jumlah", `/dashboard/index-jumlah/${tipe}/${filters}/{{ $year }}`, tipe, 9);
                 }
                 
             })
@@ -4657,11 +4919,17 @@
         competitiveIndexNilai.forEach(point => {
             point.addEventListener("click", async e => {
                 const tipe = point.parentElement.getAttribute("aria-label").replaceAll(/[^a-z][^A-Z]|proyek stage|\./gi, "");
+                const filters = !filterGet ? false : filterGet
                 if(filterGet) {
-                    getDataTable("#datatable-index-nilai", "#index-nilai", `/dashboard/index-nilai/${tipe}/${filterGet}`, tipe, 9);
+                    getDataTable("#datatable-index-nilai", "#index-nilai", `/dashboard/index-nilai/${tipe}/${filters}/{{ $year }}`, tipe, 9);
                 } else {
-                    getDataTable("#datatable-index-nilai", "#index-nilai", `/dashboard/index-nilai/${tipe}`, tipe, 9);
+                    getDataTable("#datatable-index-nilai", "#index-nilai", `/dashboard/index-nilai/${tipe}/${filters}/{{ $year }}`, tipe, 9);
                 }
+                // if(filterGet) {
+                //     getDataTable("#datatable-index-nilai", "#index-nilai", `/dashboard/index-nilai/${tipe}/${filterGet}`, tipe, 9);
+                // } else {
+                //     getDataTable("#datatable-index-nilai", "#index-nilai", `/dashboard/index-nilai/${tipe}`, tipe, 9);
+                // }
                 
             })
         })
