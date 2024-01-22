@@ -250,7 +250,7 @@
                                         <tr>
                                             {{-- @dump($approval->Departemen) --}}
                                             <td>
-                                                <a href="#" class="text-hover-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_matriks_update_{{$approval->id_matriks_approval_rekomendasi}}">{{$approval->Pegawai->nama_pegawai}}</a>
+                                                <a href="#" class="text-hover-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_matriks_update_{{$approval->id_matriks_approval_rekomendasi}}">{{$approval->Pegawai?->nama_pegawai}}</a>
                                             </td>
                                             <td>{{$approval->Divisi->nama_kantor}}</td>
                                             <td>
@@ -1024,7 +1024,7 @@
                         <!--begin::Modal header-->
                         <div class="modal-header">
                             <!--begin::Modal title-->
-                            <h2>Hapus : {{ $approval->Pegawai->nama_pegawai }}</h2>
+                            <h2>Hapus : {{ $approval->Pegawai?->nama_pegawai }}</h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
                             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">

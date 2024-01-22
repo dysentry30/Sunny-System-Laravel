@@ -557,10 +557,11 @@ function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Coll
     $section->addTextBreak(3);
     $section->addText($now->translatedFormat("d F Y"), ["bold" => true], ["align" => "center"]);
     $section->addTextBreak(1);
-    $section->addText("$" . "{tandaTangan}", ["bold" => false], ["align" => "center"]);
+    $section->addTextBreak(1);
+    // $section->addText("$" . "{tandaTangan}", ["bold" => false], ["align" => "center"]);
     $section->addTextBreak(1);
     $section->addText("( " . Auth::user()->name . " )", ["bold" => true, "size" => 7], ["align" => "center"]);
-    $section->addText(Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    $section->addText(Auth::user()->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     $section->addTextBreak(5);
     $section->addText("Catatan :");
     $section->addText("Dokumen Pemilihan atau dokumen pendukung lainnya harap di upload dalam aplikasi CRM.");
@@ -579,7 +580,7 @@ function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Coll
     // $templateProcessor->setImageValue('tandaTangan', ["path" => public_path('qr-code/' . $fileQrCode), "height" => 75, "ratio" => false]);
 
     //Pake TTD
-    $templateProcessor->setImageValue('tandaTangan', ["path" => public_path('file-ttd/ttd.png'), "width" => 10, "ratio" => true]);
+    // $templateProcessor->setImageValue('tandaTangan', ["path" => public_path('file-ttd/ttd.png'), "width" => 10, "ratio" => true]);
     // $templateProcessor->setValue('tandaTangan', '<img src="' . public_path('\qr-code' . '\\' . $proyek->kode_proyek . '.svg') . '" width="300" height="300" />');
     $ttdFileName = $now->format("dmYHis") . "_signed-nota-pengajuan_$proyek->kode_proyek";
     $templateProcessor->saveAs(public_path($target_path . "/" . $ttdFileName . ".docx"));
@@ -1639,7 +1640,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
             $cell_2_ttd->addText("$" . "{ttdPenyusun$key}", ["bold" => false], ["align" => "center"]);
             $cell_2_ttd->addTextBreak(1);
             $cell_2_ttd->addText(User::find($p->user_id)->name, ["bold" => true], ["align" => "center"]);
-            $cell_2_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+            $cell_2_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
             $cell_2_ttd->addText("Tanggal: " . $tanggal_ttd->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
             // if ($p->status == "approved" && empty($p->catatan)) {
             //     $cell_2_ttd->addText("Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);
@@ -1657,7 +1658,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     // $cell_2_ttd->addTextBreak(1);
     // $cell_2_ttd->addText("$" . "{ttdPenyusun2}", ["bold" => false], ["align" => "center"]);
     // $cell_2_ttd->addText(User::find($penyusun[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
-    // $cell_2_ttd->addText(User::find($penyusun[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    // $cell_2_ttd->addText(User::find($penyusun[0]->user_id)->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     // $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
     $table_ttd->addRow();
@@ -1695,7 +1696,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
             $cell_3_ttd->addText("$" . "{ttdRekomendasi$key}", ["bold" => false], ["align" => "center"]);
             $cell_3_ttd->addTextBreak(1);
             $cell_3_ttd->addText(User::find($p->user_id)->name, ["bold" => true], ["align" => "center"]);
-            $cell_3_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+            $cell_3_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
             $cell_3_ttd->addText("Tanggal: " . $tanggal_ttd->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
             if ($p->status == "approved" && empty($p->catatan)) {
                 $cell_3_ttd->addText("Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);
@@ -1712,7 +1713,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     // $cell_2_ttd->addTextBreak(1);
     // $cell_2_ttd->addText("$" . "{ttdRekomendasi2}", ["bold" => false], ["align" => "center"]);
     // $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
-    // $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    // $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     // $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
     
     // $cell_2_ttd = $table_ttd->addCell(500);
@@ -1720,7 +1721,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     // $cell_2_ttd->addTextBreak(1);
     // $cell_2_ttd->addText("$" . "{ttdRekomendasi3}", ["bold" => false], ["align" => "center"]);
     // $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
-    // $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    // $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     // $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
     
     // $table_ttd->addRow();
@@ -1729,7 +1730,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     // $cell_2_ttd->addTextBreak(1);
     // $cell_2_ttd->addText("$" . "{ttdRekomendasi4}", ["bold" => false], ["align" => "center"]);
     // $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
-    // $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    // $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     // $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
     // $cell_2_ttd = $table_ttd->addCell(500);
@@ -1744,7 +1745,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     // $cell_2_ttd->addTextBreak(1);
     // $cell_2_ttd->addText("$" . "{ttdRekomendasi5}", ["bold" => false], ["align" => "center"]);
     // $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
-    // $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    // $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     // $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
     
     $table_ttd->addRow();
@@ -1782,7 +1783,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
             $cell_4_ttd->addText("$" . "{ttdPersetujuan$key}", ["bold" => false], ["align" => "center"]);
             $cell_4_ttd->addTextBreak(1);
             $cell_4_ttd->addText(User::find($p->user_id)->name ?? Auth::user()->name, ["bold" => true], ["align" => "center"]);
-            $cell_4_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+            $cell_4_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan ?? Auth::user()->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
             $cell_4_ttd->addText("Tanggal: " . $tanggal_ttd->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
             if ($p->status == "approved" && empty($p->catatan)) {
                 $cell_4_ttd->addText("Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);
@@ -1802,7 +1803,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     // $cell_2_ttd->addText("$" . "{ttdPersetujuan2}", ["bold" => false], ["align" => "center"]);
     // $cell_2_ttd->addTextBreak(1);
     // $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->name ?? Auth::user()->name, ["bold" => true], ["align" => "center"]);
-    // $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    // $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan?->nama_jabatan ?? Auth::user()->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     // $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
     // $table_ttd->addRow();
@@ -1812,7 +1813,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     // $cell_2_ttd->addText("$" . "{ttdPersetujuan3}", ["bold" => false], ["align" => "center"]);
     // $cell_2_ttd->addTextBreak(1);
     // $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->name ?? Auth::user()->name, ["bold" => true], ["align" => "center"]);
-    // $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    // $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan?->nama_jabatan ?? Auth::user()->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     // $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
     // $cell_2_ttd = $table_ttd->addCell(500);
@@ -1822,7 +1823,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     // $cell_2_ttd->addText("$" . "{ttdPersetujuan4}", ["bold" => false], ["align" => "center"]);
     // $cell_2_ttd->addTextBreak(1);
     // $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->name ?? Auth::user()->name, ["bold" => true], ["align" => "center"]);
-    // $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    // $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan?->nama_jabatan ?? Auth::user()->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     // $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
     // Old TTD
@@ -1839,7 +1840,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     //     $cell_2_ttd->addTextBreak(1);
     //     $cell_2_ttd->addText("$" . "{ttdPenyusun1}", ["bold" => false], ["align" => "center"]);
     //     $cell_2_ttd->addText(User::find($penyusun[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
-    //     $cell_2_ttd->addText(User::find($penyusun[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    //     $cell_2_ttd->addText(User::find($penyusun[0]->user_id)->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
     //     $cell_2_ttd = $table_ttd->addCell(500);
@@ -1848,7 +1849,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     //     $cell_2_ttd->addTextBreak(1);
     //     $cell_2_ttd->addText("$" . "{ttdPenyusun2}", ["bold" => false], ["align" => "center"]);
     //     $cell_2_ttd->addText(User::find($penyusun[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
-    //     $cell_2_ttd->addText(User::find($penyusun[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    //     $cell_2_ttd->addText(User::find($penyusun[0]->user_id)->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
     //     $table_ttd->addRow();
@@ -1862,7 +1863,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     //     $cell_2_ttd->addTextBreak(1);
     //     $cell_2_ttd->addText("$" . "{ttdRekomendasi1}", ["bold" => false], ["align" => "center"]);
     //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
-    //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
     //     $cell_2_ttd = $table_ttd->addCell(500);
@@ -1870,7 +1871,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     //     $cell_2_ttd->addTextBreak(1);
     //     $cell_2_ttd->addText("$" . "{ttdRekomendasi2}", ["bold" => false], ["align" => "center"]);
     //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
-    //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
     //     $cell_2_ttd = $table_ttd->addCell(500);
@@ -1878,7 +1879,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     //     $cell_2_ttd->addTextBreak(1);
     //     $cell_2_ttd->addText("$" . "{ttdRekomendasi3}", ["bold" => false], ["align" => "center"]);
     //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
-    //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
     //     $table_ttd->addRow();
@@ -1887,7 +1888,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     //     $cell_2_ttd->addTextBreak(1);
     //     $cell_2_ttd->addText("$" . "{ttdRekomendasi4}", ["bold" => false], ["align" => "center"]);
     //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
-    //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
     //     $cell_2_ttd = $table_ttd->addCell(500);
@@ -1902,7 +1903,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     //     $cell_2_ttd->addTextBreak(1);
     //     $cell_2_ttd->addText("$" . "{ttdRekomendasi5}", ["bold" => false], ["align" => "center"]);
     //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
-    //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
     //     $table_ttd->addRow();
@@ -1917,7 +1918,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     //     $cell_2_ttd->addTextBreak(1);
     //     $cell_2_ttd->addText("$" . "{ttdPersetujuan1}", ["bold" => false], ["align" => "center"]);
     //     $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->name ?? Auth::user()->name, ["bold" => true], ["align" => "center"]);
-    //     $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    //     $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan?->nama_jabatan ?? Auth::user()->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
     //     $cell_2_ttd = $table_ttd->addCell(500);
@@ -1926,7 +1927,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     //     $cell_2_ttd->addTextBreak(1);
     //     $cell_2_ttd->addText("$" . "{ttdPersetujuan2}", ["bold" => false], ["align" => "center"]);
     //     $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->name ?? Auth::user()->name, ["bold" => true], ["align" => "center"]);
-    //     $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    //     $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan?->nama_jabatan ?? Auth::user()->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
     // } else {
     //     $is_infra = false;
@@ -1948,7 +1949,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     //     $cell_2_ttd->addText("$" . "{ttdPenyusun1}", ["bold" => false], ["align" => "center"]);
     //     $cell_2_ttd->addTextBreak(1);
     //     $cell_2_ttd->addText( User::find($penyusun[0]->user_id)->name , ["bold" => true], ["align" => "center"]);
-    //     $cell_2_ttd->addText(User::find($penyusun[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    //     $cell_2_ttd->addText(User::find($penyusun[0]->user_id)->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
     //     if($is_infra) {
@@ -1959,7 +1960,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     //     $cell_2_ttd->addTextBreak(1);
     //     $cell_2_ttd->addText("$" . "{ttdPenyusun2}", ["bold" => false], ["align" => "center"]);
     //     $cell_2_ttd->addText(User::find($penyusun[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
-    //     $cell_2_ttd->addText(User::find($penyusun[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    //     $cell_2_ttd->addText(User::find($penyusun[0]->user_id)->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
     //     $table_ttd->addRow();
@@ -1973,7 +1974,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     //     $cell_2_ttd->addTextBreak(1);
     //     $cell_2_ttd->addText("$" . "{ttdRekomendasi1}", ["bold" => false], ["align" => "center"]);
     //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
-    //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
     //     if($is_infra) {
@@ -1984,7 +1985,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     //     $cell_2_ttd->addTextBreak(1);
     //     $cell_2_ttd->addText("$" . "{ttdRekomendasi2}", ["bold" => false], ["align" => "center"]);
     //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->name, ["bold" => true], ["align" => "center"]);
-    //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    //     $cell_2_ttd->addText(User::find($rekomendator[0]->user_id)->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
     //     $table_ttd->addRow();
@@ -1998,7 +1999,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     //     $cell_2_ttd->addTextBreak(1);
     //     $cell_2_ttd->addText("$" . "{ttdPersetujuan1}", ["bold" => false], ["align" => "center"]);
     //     $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->name ?? Auth::user()->name, ["bold" => true], ["align" => "center"]);
-    //     $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    //     $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan?->nama_jabatan ?? Auth::user()->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
     //     $cell_2_ttd = $table_ttd->addCell(500);
     //     // $cell_2_ttd = $table_ttd->addCell(500);
@@ -2006,7 +2007,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     //     $cell_2_ttd->addTextBreak(1);
     //     $cell_2_ttd->addText("$" . "{ttdPersetujuan2}", ["bold" => false], ["align" => "center"]);
     //     $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->name ?? Auth::user()->name, ["bold" => true], ["align" => "center"]);
-    //     $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    //     $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan?->nama_jabatan ?? Auth::user()->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     //     $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
 
     //     if(str_contains($proyek->UnitKerja->unit_kerja, "Infra")) {
@@ -2017,7 +2018,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     //         $cell_2_ttd->addTextBreak(1);
     //         $cell_2_ttd->addText("$" . "{ttdPersetujuan3}", ["bold" => false], ["align" => "center"]);
     //         $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->name ?? Auth::user()->name, ["bold" => true], ["align" => "center"]);
-    //         $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    //         $cell_2_ttd->addText(User::find($penyetuju[0]->user_id)->Pegawai->Jabatan?->nama_jabatan ?? Auth::user()->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     //         $cell_2_ttd->addText("Tanggal: " . $now->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
     //     }
     // }
@@ -2144,7 +2145,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
             // $qrcode = generateQrCode($proyek->kode_proyek, $user->nip, $request->schemeAndHttpHost() . "?nip=" . $user->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_dokumen_persetujuan_$proyek->kode_proyek");
             //Pake File TTD
             // $templateProcessor->setImageValue('ttdPenyusun' . ++$key, ["path" => "./file-ttd/" . $user->file_ttd, "width" => 10, "ratio" => true]);
-            $templateProcessor->setImageValue('ttdPenyusun' . ++$key, ["path" => public_path('file-ttd/ttd.png'), "width" => 10, "ratio" => true]);
+            // $templateProcessor->setImageValue('ttdPenyusun' . ++$key, ["path" => public_path('file-ttd/ttd.png'), "width" => 10, "ratio" => true]);
             //Pake QRCode
             // $templateProcessor->setImageValue('ttdPenyusun' . ++$key, ["path" => public_path("/qr-code//$qrcode"), "width" => 10, "ratio" => true]);
         }
@@ -2155,7 +2156,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
             // $qrcode = generateQrCode($proyek->kode_proyek, $user->nip, $request->schemeAndHttpHost() . "?nip=" . $user->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_dokumen_persetujuan_$proyek->kode_proyek");
             //Pake File TTD
             // $templateProcessor->setImageValue('ttdRekomendasi' . ++$key, ["path" => "./file-ttd/" . $user->file_ttd, "width" => 10, "ratio" => true]);
-            $templateProcessor->setImageValue('ttdRekomendasi' . ++$key, ["path" => public_path('file-ttd/ttd.png'), "width" => 10, "ratio" => true]);
+            // $templateProcessor->setImageValue('ttdRekomendasi' . ++$key, ["path" => public_path('file-ttd/ttd.png'), "width" => 10, "ratio" => true]);
             //Pake QRCode
             // $templateProcessor->setImageValue('ttdRekomendasi' . ++$key, ["path" => public_path("/qr-code//$qrcode"), "width" => 10, "ratio" => true]);
         }
@@ -2166,7 +2167,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
             // $qrcode = generateQrCode($proyek->kode_proyek, $user->nip, $request->schemeAndHttpHost() . "?nip=" . $user->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_dokumen_persetujuan_$proyek->kode_proyek");
             //Pake FIle TTD
             // $templateProcessor->setImageValue('ttdPersetujuan' . ++$key, ["path" => "./file-ttd/" . $user->file_ttd, "width" => 10, "ratio" => true]);
-            $templateProcessor->setImageValue('ttdPersetujuan' . ++$key, ["path" => public_path('file-ttd/ttd.png'), "width" => 10, "ratio" => true]);
+            // $templateProcessor->setImageValue('ttdPersetujuan' . ++$key, ["path" => public_path('file-ttd/ttd.png'), "width" => 10, "ratio" => true]);
             //Pake QRCode
             // $templateProcessor->setImageValue('ttdPersetujuan' . ++$key, ["path" => public_path("/qr-code//$qrcode"), "width" => 10, "ratio" => true]);
         }
@@ -2450,7 +2451,7 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
             $cell_2_ttd->addTextBreak(4);
             // $cell_2_ttd->addText("$" . "{ttdPenyusun$key}", ["bold" => false], ["align" => "center"]);
             $cell_2_ttd->addText(User::find($p->user_id)->name, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
-            $cell_2_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan->nama_jabatan, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
+            $cell_2_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
             $cell_2_ttd->addText("Tanggal: " . $tanggal_ttd->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
         }
     }
@@ -2489,7 +2490,7 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
             $cell_3_ttd->addTextBreak(4);
             // $cell_3_ttd->addText("$" . "{ttdRekomendasi$key}", ["bold" => false], ["align" => "center"]);
             $cell_3_ttd->addText(User::find($p->user_id)->name, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
-            $cell_3_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan->nama_jabatan, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
+            $cell_3_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
             $cell_3_ttd->addText("Tanggal: " . $tanggal_ttd->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
             if ($p->status == "approved" && empty($p->catatan)) {
                 $cell_3_ttd->addText("Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);
@@ -2534,7 +2535,7 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
             $cell_4_ttd->addTextBreak(4);
             // $cell_4_ttd->addText("$" . "{ttdPersetujuan$key}", ["bold" => false], ["align" => "center"]);
             $cell_4_ttd->addText(User::find($p->user_id)->name ?? Auth::user()->name, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
-            $cell_4_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
+            $cell_4_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan ?? Auth::user()->Pegawai->Jabatan?->nama_jabatan, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
             $cell_4_ttd->addText("Tanggal: " . $tanggal_ttd->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
             if ($p->status == "approved" && empty($p->catatan)) {
                 $cell_4_ttd->addText("Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);

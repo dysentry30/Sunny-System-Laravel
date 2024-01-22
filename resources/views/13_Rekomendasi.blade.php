@@ -538,60 +538,78 @@
                                                             @elseif($proyek->is_request_rekomendasi && !$proyek->review_assessment)
                                                                 <small class="badge badge-light-primary">Proses
                                                                     Pengajuan</small>
-                                                            @elseif($proyek->review_assessment == true && (is_null($proyek->is_draft_recommend_note) || $proyek->is_draft_recommend_note))
+                                                            @elseif(
+                                                                $proyek->review_assessment == true &&
+                                                                    (is_null($proyek->is_draft_recommend_note) || $proyek->is_draft_recommend_note))
                                                                 <small class="badge badge-light-primary">Proses
                                                                     Penyusunan</small>
-                                                            @elseif((!is_null($proyek->is_penyusun_approved) && $proyek->is_penyusun_approved) && is_null($proyek->is_verifikasi_approved))
+                                                            @elseif(
+                                                                !is_null($proyek->is_penyusun_approved) &&
+                                                                    $proyek->is_penyusun_approved &&
+                                                                    is_null($proyek->is_verifikasi_approved))
                                                                 <small class="badge badge-light-primary">Proses
                                                                     Verifikasi</small>
-                                                            @elseif($proyek->is_verifikasi_approved == true && is_null($proyek->is_recommended))
+                                                            @elseif($proyek->is_verifikasi_approved == true && is_null($proyek->is_rekomendasi_approved))
                                                                 <small class="badge badge-light-primary">Proses
                                                                     Rekomendasi</small>
-                                                            @elseif($proyek->is_recommended == true && is_null($proyek->is_disetujui))
+                                                            @elseif($proyek->is_rekomendasi_approved == true && is_null($proyek->is_disetujui))
                                                                 <small class="badge badge-light-primary">Proses
                                                                     Penyetujuan</small>
                                                             @endif
-
+    
                                                             @if ($proyek->is_revisi)
-                                                            @php
-                                                                $revisi_note = collect(json_decode($proyek->revisi_note))->last();
-                                                                $nama_verifikator = \App\Models\User::find($revisi_note->user_id)->name;
-                                                            @endphp
-                                                            @if (!empty($matriks_user))
-                                                                @if (
-                                                                    ($matriks_user->contains('kategori', 'Penyusun') && $matriks_user->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first()) ||
-                                                                    ($matriks_user->contains('kategori', 'Verifikasi') && $matriks_user->where('kategori', 'Verifikasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first())
-                                                                )
-                                                                    <button type="button" class="badge badge-danger" data-bs-toggle="modal" data-bs-target="#kt_modal_view_proyek_revisi_note_{{ $proyek->kode_proyek }}">Lihat Catatan Revisi</button>
+                                                                @php
+                                                                    $revisi_note = collect(json_decode($proyek->revisi_note))->last();
+                                                                    $nama_verifikator = \App\Models\User::find($revisi_note->user_id)->name;
+                                                                @endphp
+                                                                @if (!empty($matriks_user))
+                                                                    @if (
+                                                                        ($matriks_user->contains('kategori', 'Penyusun') &&
+                                                                            $matriks_user->where('kategori', 'Penyusun')
+                                                                                ?->where('departemen_code', $proyek->departemen_proyek)
+                                                                                ?->where('divisi_id', $proyek->UnitKerja->Divisi->id_divisi)
+                                                                                ?->where('klasifikasi_proyek', $proyek->klasifikasi_pasdin)
+                                                                                ?->first()) ||
+                                                                            ($matriks_user->contains('kategori', 'Verifikasi') &&
+                                                                                $matriks_user->where('kategori', 'Verifikasi')
+                                                                                    ?->where('departemen_code', $proyek->departemen_proyek)
+                                                                                    ?->where('divisi_id', $proyek->UnitKerja->Divisi->id_divisi)
+                                                                                    ?->where('klasifikasi_proyek', $proyek->klasifikasi_pasdin)
+                                                                                    ?->first()))
+                                                                        <button type="button" class="badge badge-danger"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#kt_modal_view_proyek_revisi_note_{{ $proyek->kode_proyek }}">Lihat
+                                                                            Catatan Revisi</button>
+                                                                    @endif
                                                                 @endif
                                                             @endif
-                                                            @endif
                                                         </td>
-                                                        <td>
+                                                        <td class="text-center">
                                                             @php
                                                                 $style = '';
                                                                 $matriks_group = [];
-                                                                if ($proyek->is_verifikasi_approved && $proyek->is_recommended && empty($proyek->recommended_with_note)) {
-                                                                    $style = 'bg-success';
-                                                                } elseif ($proyek->is_verifikasi_approved && $proyek->is_recommended && !empty($proyek->recommended_with_note)) {
-                                                                    $style = 'bg-warning';
-                                                                } elseif (!is_null($proyek->is_recommended) && !$proyek->is_recommended) {
-                                                                    $style = 'bg-danger';
-                                                                } else {
-                                                                    $style = 'bg-secondary';
-                                                                }
-
+                                                                // if ($proyek->is_verifikasi_approved && $proyek->is_rekomendasi_approved) {
+                                                                //     $style = 'bg-success';
+                                                                // } elseif ($proyek->is_verifikasi_approved && $proyek->is_rekomendasi_approved) {
+                                                                //     $style = 'bg-warning';
+                                                                // } elseif (!is_null($proyek->is_rekomendasi_approved) && !$proyek->is_rekomendasi_approved) {
+                                                                //     $style = 'bg-danger';
+                                                                // } else {
+                                                                //     $style = 'bg-secondary';
+                                                                // }
+    
                                                                 $matriks_category_array = $matriks_category->toArray();
                                                                 // dd($matriks_category_array);
-
+    
                                                                 if (array_key_exists($proyek->klasifikasi_pasdin, $matriks_category_array)) {
                                                                     $matriks_klasifikasi = $matriks_category_array[$proyek->klasifikasi_pasdin];
                                                                     // dump($matriks_klasifikasi);
     
                                                                     if ($proyek->is_request_rekomendasi && !$proyek->review_assessment) {
                                                                         $kategori_approval = 'Pengajuan';
+                                                                        // dump(!empty($matriks_klasifikasi['Pengajuan'][$proyek->Proyek->departemen_proyek]));
                                                                         if (array_key_exists('Pengajuan', $matriks_klasifikasi) && !empty($matriks_klasifikasi['Pengajuan'][$proyek->departemen_proyek])) {
-                                                                            $collect_matriks = collect(json_decode($proyek->approved_rekomendasi))->keyBy('user_id');
+                                                                            $collect_matriks = collect(json_decode($proyek->approved_pengajuan))->keyBy('user_id');
                                                                             $matriks_group = $matriks_klasifikasi['Pengajuan'][$proyek->departemen_proyek];
                                                                         } else {
                                                                             $matriks_group = [];
@@ -613,15 +631,15 @@
                                                                         } else {
                                                                             $matriks_group = [];
                                                                         }
-                                                                    } elseif ($proyek->is_verifikasi_approved == true && is_null($proyek->is_recommended)) {
+                                                                    } elseif ($proyek->is_verifikasi_approved == true && is_null($proyek->is_rekomendasi_approved)) {
                                                                         $kategori_approval = 'Rekomendasi';
                                                                         if (array_key_exists('Rekomendasi', $matriks_klasifikasi) && !empty($matriks_klasifikasi['Rekomendasi'][$proyek->departemen_proyek])) {
                                                                             $matriks_group = $matriks_klasifikasi['Rekomendasi'][$proyek->departemen_proyek];
-                                                                            $collect_matriks = collect(json_decode($proyek->approved_rekomendasi_final))->keyBy('user_id');
+                                                                            $collect_matriks = collect(json_decode($proyek->approved_rekomendasi))->keyBy('user_id');
                                                                         } else {
                                                                             $matriks_group = [];
                                                                         }
-                                                                    } elseif ($proyek->is_recommended == true && is_null($proyek->is_disetujui)) {
+                                                                    } elseif ($proyek->is_rekomendasi_approved == true && is_null($proyek->is_disetujui)) {
                                                                         $kategori_approval = 'Persetujuan';
                                                                         if (array_key_exists('Persetujuan', $matriks_klasifikasi) && !empty($matriks_klasifikasi['Persetujuan'][$proyek->departemen_proyek])) {
                                                                             $matriks_group = $matriks_klasifikasi['Persetujuan'][$proyek->departemen_proyek];
@@ -630,41 +648,44 @@
                                                                             $matriks_group = [];
                                                                         }
                                                                     }
-                                                                }else {
+                                                                } else {
                                                                     $matriks_group = [];
                                                                     $collect_matriks = [];
                                                                 }
                                                             @endphp
-
+    
                                                             {{-- @dump($matriks_group) --}}
                                                             <div class="text-center d-flex flex-row gap-2 flex-nowrap">
                                                                 @forelse (!empty($matriks_group) ? collect($matriks_group)->sortBy('urutan') : $matriks_group as $key => $matriks)
-                                                                @php
-                                                                    if(!empty($collect_matriks) && $collect_matriks->isNotEmpty()) {
-                                                                        $select_user = $collect_matriks?->filter(function($value, $key)use($matriks, $collect_matriks){
-                                                                            // return $key == $matriks->Pegawai?->User?->id;
-                                                                            return $key == \App\Models\User::where("nip" , "=", $matriks["nama_pegawai"])->first()?->id;
-                                                                        })->first();
-                                                                        if (empty($select_user)) {
-                                                                            $style = 'bg-secondary text-dark';
-                                                                        }else{
-                                                                            if ($select_user->status == "draft") {
+                                                                    @php
+                                                                        if (!empty($collect_matriks) && $collect_matriks->isNotEmpty()) {
+                                                                            $select_user = $collect_matriks
+                                                                                ?->filter(function ($value, $key) use ($matriks, $collect_matriks) {
+                                                                                    // return $key == $matriks->Pegawai?->User?->id;
+                                                                                    return $key == \App\Models\User::where('nip', '=', $matriks['nama_pegawai'])->first()?->id;
+                                                                                })
+                                                                                ->first();
+                                                                            if (empty($select_user)) {
                                                                                 $style = 'bg-secondary text-dark';
-                                                                            }elseif ($select_user->status == "approved" && empty($select_user->catatan)) {
-                                                                                $style = 'bg-success';
-                                                                            }elseif ($select_user->status == "approved" && !empty($select_user->catatan)) {
-                                                                                $style = 'bg-warning';
-                                                                            }else{
-                                                                                $style = 'bg-danger';
+                                                                            } else {
+                                                                                if ($select_user->status == 'draft') {
+                                                                                    $style = 'bg-secondary text-dark';
+                                                                                } elseif ($select_user->status == 'approved' && empty($select_user->catatan)) {
+                                                                                    $style = 'bg-success';
+                                                                                } elseif ($select_user->status == 'approved' && !empty($select_user->catatan)) {
+                                                                                    $style = 'bg-warning';
+                                                                                } else {
+                                                                                    $style = 'bg-danger';
+                                                                                }
                                                                             }
+                                                                        } else {
+                                                                            $style = 'bg-secondary text-dark';
                                                                         }
-                                                                    }else{
-                                                                        $style = 'bg-secondary text-dark';
-                                                                    }
-                                                                @endphp
+                                                                    @endphp
                                                                     <div class="circle {{ $style }} text-dark text-center"
                                                                         style="height:1.5vw; width:1.5vw; border-radius:50%;">
-                                                                        <small style="font-size: 10px">{{ $matriks["kode_unit_kerja"] }}</small>
+                                                                        <small
+                                                                            style="font-size: 10px">{{ $matriks['kode_unit_kerja'] }}</small>
                                                                     </div>
                                                                 @empty
                                                                 @endforelse
@@ -2975,7 +2996,7 @@
                                                                         Nama:
                                                                         <b>{{ App\Models\User::find($d->user_id)->name }}</b><br>
                                                                         Jabatan:
-                                                                        <b>{{ App\Models\User::find($d->user_id)->Pegawai->Jabatan->nama_jabatan }}</b><br>
+                                                                        <b>{{ App\Models\User::find($d->user_id)->Pegawai->Jabatan?->nama_jabatan }}</b><br>
                                                                         Status Approval:
                                                                         @if ($d->status == 'approved')
                                                                             <span><b
@@ -3073,7 +3094,7 @@
                                                             Nama:
                                                             <b>{{ App\Models\User::find($data->user_id)->name }}</b><br>
                                                             Jabatan:
-                                                            <b>{{ App\Models\User::find($data->user_id)->Pegawai->Jabatan->nama_jabatan }}</b><br>
+                                                            <b>{{ App\Models\User::find($data->user_id)->Pegawai->Jabatan?->nama_jabatan }}</b><br>
                                                             <br>
 
                                                             @if (!empty($data->tanggal))
