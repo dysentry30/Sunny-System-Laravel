@@ -27,6 +27,28 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+    public function welcomeAdmin(Request $request)
+    {
+        $data = $request->all();
+        // dd($data);
+        if (!empty($data["redirectTo"]) && !empty($data["nip"])) {
+            try {
+                // $credentials = (array) json_decode(decrypt($data["token"]));
+                $user = User::where("nip", $data["nip"])->first();
+                if (Auth::loginUsingId($user->id)) {
+                    return redirect($data["redirectTo"]);
+                }
+                Alert::error("Error", "User Tidak Ditemukan!");
+                return redirect("/");
+            } catch (Exception $e) {
+                Alert::error("Error", "User Tidak Ditemukan!");
+                return redirect("/");
+            }
+        }
+        return view('0_Welcome');
+        // return redirect('/dashboard');
+    }
+
     public function welcome(Request $request)
     {
         // $data = $request->all();
@@ -46,7 +68,7 @@ class UserController extends Controller
         //     }
         // }
         // return view('0_Welcome');
-        return redirect(env('WZONE_URL'));
+        return redirect('/dashboard');
     }
 
     public function delete($id)
@@ -763,7 +785,7 @@ class UserController extends Controller
                     // dd($response["responseData"]);
                     $nip = $response["responseData"]["nip"];
                 } else {
-                    return redirect()->back();
+                    dd($response);
                 }
                 // $nip = $user['NIP'];
             } else {
@@ -773,6 +795,7 @@ class UserController extends Controller
             if (!empty($nip)) {
                 //Check Pegawai yg login dari WZone ada di CRM atau tidak
                 $checkUserInCRM = User::where('nip', $nip)->first();
+                // dd($checkUserInCRM);
 
                 if (!empty($checkUserInCRM) && $checkUserInCRM->is_active) {
                     $dataPegawai = Pegawai::where('nip', $nip)->first();
@@ -789,27 +812,43 @@ class UserController extends Controller
                     $checkUserInCRM->no_hp = $response["responseData"]["handphone"];
 
                     // dd($dataPegawai);
-                    if (
-                        $dataPegawai->save() && $checkUserInCRM->save()
-                    ) {
+                    if ($dataPegawai->save() && $checkUserInCRM->save()) {
                         // Auth::login(['nip' => $nip]);
                         Auth::login($checkUserInCRM);
                         if (Auth::check()) {
                             $request->session()->regenerate();
                             return redirect()->intended("/dashboard");
+                        } else {
+                            dd([
+                                "Success" => false,
+                                "Status" => "Login Failed",
+                                "Message" => "Terjadi kesalahan. Mohon hubungi Admin!"
+                            ]);
                         }
                     } else {
-                        Alert::error('Error', "Terjadi kesalahan sistem. Silahkan hubungi Admin!");
-                        return redirect()->back();
+                        dd([
+                            "Success" => false,
+                            "Status" => "Login Failed",
+                            "Message" => "Terjadi kesalahan. Mohon hubungi Admin!"
+                        ]);
                     }
+                } else {
+                    dd([
+                        "Success" => false,
+                        "Status" => "Login Failed",
+                        "Message" => "User belum terdaftar di Aplikasi CRM."
+                    ]);
                 }
             } else {
-                return redirect()->back();
+                dd([
+                    "Success" => false,
+                    "Status" => "Login Failed",
+                    "Message" => "Key [NIP] undifined or null"
+                ]);
+                // return redirect(env('WZONE_URL')); 
             }
         } catch (\Exception $e) {
-            dd($e->getMessage());
-            Alert::error('Error', $e->getMessage());
-            return redirect()->back();
+            dd($e);
         }
     }
 

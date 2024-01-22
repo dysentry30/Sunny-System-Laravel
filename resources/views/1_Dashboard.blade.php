@@ -120,13 +120,13 @@
                                             <!--end:::Tab item Forecast Bulanan-->
 
                                             <!--begin:::Tab item Forecast Internal-->
-                                            @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
+                                            {{-- @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
                                                 <li class="nav-item">
                                                     <a onclick="showSummary()" class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
                                                         data-bs-toggle="tab" href="#kt_view_summary_dashboard"
                                                         style="font-size:14px;">Summary Dashboard</a>
                                                 </li>
-                                            @endif
+                                            @endif --}}
                                             <!--end:::Tab item Forecast Internal-->
 
                                             <!--begin:::Tab item Forecast Internal-->
@@ -337,7 +337,7 @@
 
                         <!--begin::Card body-->
                         <div class="card-body pt-0">
-                            <div class="tab-pane fade" id="kt_view_summary_dashboard" role="tabpanel">
+                            {{-- <div class="tab-pane fade" id="kt_view_summary_dashboard" role="tabpanel">
                                 @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
                                     <br>
                                     <div class="row">
@@ -446,19 +446,16 @@
                                                         <button class="btn btn-sm btn-light btn-active-danger fs-6"
                                                             onclick="toggleFullscreen()" id="exit-fullscreen"><i
                                                                 class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
-                                                        {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
                                                     </div>
                                                     <br>
                                                     <div class="" style="max-height: 500px; overflow-y:scroll">
                                                         <table class="table align-middle table-row-dashed fs-6 gy-2">
                                                             <!--begin::Table head-->
                                                             <thead class="bg-white" id="table-line-head" style="position: sticky; top: 0">
-                                                                {{-- THead Here --}}
                                                             </thead>
                                                             <!--end::Table head-->
                                                             <!--begin::Table body-->
                                                             <tbody class="fw-bold" id="table-line-body">
-                                                                {{-- Data Here --}}
                                                             </tbody>
                                                             <!--end::Table body-->
                                                         </table>
@@ -469,7 +466,7 @@
                                         </div>
                                     </div>
                                 @endif
-                            </div>      
+                            </div>       --}}
                             <div class="tab-pane fade {{ auth()->user()->check_admin_kontrak ? '' : 'show active' }}" id="kt_view_dashboard_crm" role="tabpanel">
                                 @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
                                     <!--begin::FORECAST LINE CHART-->

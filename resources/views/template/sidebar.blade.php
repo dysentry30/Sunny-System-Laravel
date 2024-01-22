@@ -14,7 +14,7 @@
             <!--begin::Brand-->
             <div class="aside-logo flex-column-auto" id="kt_aside_logo" style="background-color:#0db0d9;">
                 <!--begin::Logo-->
-                @if (auth()->user()->check_admin_kontrak)
+                {{-- @if (auth()->user()->check_admin_kontrak)
                     <a style="background-color:#0db0d9;">
                         <img alt="Logo" src="/media/logos/logo-ccm.png" class="h-60px logo ms-6"
                             style="margin-top:30px;margin-left:-10px;" />
@@ -24,7 +24,19 @@
                         <img alt="Logo" src="/media/logos/Logo2.png" class="h-60px logo"
                             style="margin-top:30px;margin-left:-10px;" />
                     </a>
-                @endif
+                @endif --}}
+
+                @can('ccm')
+                    <a style="background-color:#0db0d9;">
+                        <img alt="Logo" src="/media/logos/logo-ccm.png" class="h-60px logo ms-6"
+                            style="margin-top:30px;margin-left:-10px;" />
+                    </a>
+                @elsecan('ccm')
+                    <a style="background-color:#0db0d9;">
+                        <img alt="Logo" src="/media/logos/Logo2.png" class="h-60px logo"
+                            style="margin-top:30px;margin-left:-10px;" />
+                    </a>
+                @endcan
                 <!--end::Logo-->
                 <!--begin::Aside toggler-->
                 <div id="kt_aside_toggle" class="btn btn-icon w-auto px-0 btn-active-color-primary aside-toggle" data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body" data-kt-toggle-name="aside-minimize">
@@ -54,7 +66,7 @@
                     <!--begin::Menu-->
                     <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;">
 
-                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
+                        @canany(['super-admin', 'crm', 'ccm', 'csi'])
                             <div class="menu-item">
                                 <a class="menu-link " href="/dashboard"
                                     style="color:white; padding-left:20px; padding-top:10px; {{ str_contains(Request::Path(), 'dashboard') ? 'background-color:#008CB4' : '' }}">
@@ -69,9 +81,26 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">Dashboard</span>
                                 </a>
                             </div>
-                        @endif
+                        @endcanany
 
-                        @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
+                        {{-- @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
+                            <div class="menu-item">
+                                <a class="menu-link " href="/dashboard"
+                                    style="color:white; padding-left:20px; padding-top:10px; {{ str_contains(Request::Path(), 'dashboard') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/dashboards.svg"
+                                                class="h-35px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Dashboard</span>
+                                </a>
+                            </div>
+                        @endif --}}
+                        
+                        @canany(['super-admin', 'crm',])
                             <div class="menu-item">
                                 <a class="menu-link " href="/customer"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'customer') ? 'background-color:#008CB4' : '' }}">
@@ -86,10 +115,25 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">Pelanggan</span>
                                 </a>
                             </div>
-                        @endif
+                        @endcanany
+                        {{-- @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
+                            <div class="menu-item">
+                                <a class="menu-link " href="/customer"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'customer') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/account.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Pelanggan</span>
+                                </a>
+                            </div>
+                        @endif --}}
 
-
-                        @if (auth()->user()->check_administrator || auth()->user()->check_user_sales || auth()->user()->check_team_proyek)
+                        @canany(['super-admin', 'crm', 'ccm'])
                             <div class="menu-item">
                                 <a class="menu-link " href="/proyek"
                                     style="color:white; padding-left:20px; {{ Request::Segment(1) == 'proyek' ? 'background-color:#008CB4' : '' }}">
@@ -104,9 +148,24 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">Proyek</span>
                                 </a>
                             </div>
-                        @endif
-
-                        @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
+                        @endcanany
+                        {{-- @if (auth()->user()->check_administrator || auth()->user()->check_user_sales || auth()->user()->check_team_proyek)
+                            <div class="menu-item">
+                                <a class="menu-link " href="/proyek"
+                                    style="color:white; padding-left:20px; {{ Request::Segment(1) == 'proyek' ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/opportunity.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Proyek</span>
+                                </a>
+                            </div>
+                        @endif --}}
+                        @canany(['super-admin', 'crm'])
                             <div class="menu-item">
                                 <a class="menu-link " href="/forecast/{{ (int) date("m") }}/{{ (int) date("Y") }}"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'forecast') ? 'background-color:#008CB4' : '' }}">
@@ -121,9 +180,25 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">Forecast</span>
                                 </a>
                             </div>
-                        @endif
-
-                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_team_proyek)
+                        @endcanany
+                        {{-- @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
+                            <div class="menu-item">
+                                <a class="menu-link " href="/forecast/{{ (int) date("m") }}/{{ (int) date("Y") }}"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'forecast') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <i class="bi bi-bar-chart-fill text-white"
+                                                style="font-size: 18px; margin-left:7px"></i>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Forecast</span>
+                                </a>
+                            </div>
+                        @endif --}}
+                        
+                        @canany(['super-admin', 'ccm'])
                             <div class="menu-item">
                                 <a class="menu-link " href="/contract-management"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'contract-management') ? 'background-color:#008CB4' : '' }}">
@@ -138,9 +213,24 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">Contract Management</span>
                                 </a>
                             </div>
-                        @endif
-
-                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_team_proyek)
+                        @endcanany
+                        {{-- @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_team_proyek)
+                            <div class="menu-item">
+                                <a class="menu-link " href="/contract-management"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'contract-management') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/contract.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Contract Management</span>
+                                </a>
+                            </div>
+                        @endif --}}
+                        @canany(['super-admin', 'ccm'])
                             <div class="menu-item">
                                 <a class="menu-link " href="/claim-management"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'claim-management') ? 'background-color:#008CB4' : '' }}">
@@ -155,9 +245,25 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">Change Management</span>
                                 </a>
                             </div>
-                        @endif
-
-                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                        @endcanany
+                        {{-- @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_team_proyek)
+                            <div class="menu-item">
+                                <a class="menu-link " href="/claim-management"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'claim-management') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/releases.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Change Management</span>
+                                </a>
+                            </div>
+                        @endif --}}
+                        
+                        @canany(['super-admin', 'ccm'])
                             <div class="menu-item">
                                 <a class="menu-link " href="/history-approval"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'history-approval') ? 'background-color:#008CB4' : '' }}">
@@ -172,9 +278,25 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">Request For Approval</span>
                                 </a>
                             </div>
-                        @endif
-
-                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                        @endcanany
+                        {{-- @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                            <div class="menu-item">
+                                <a class="menu-link " href="/history-approval"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'history-approval') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/tranzaction.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Request For Approval</span>
+                                </a>
+                            </div>
+                        @endif --}}
+                        
+                        @canany(['super-admin', 'ccm'])
                             <div class="menu-item">
                                 <a class="menu-link " href="/document"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'document-database') ? 'background-color:#008CB4' : '' }}">
@@ -189,9 +311,41 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">Document Database</span>
                                 </a>
                             </div>
-                        @endif
+                        @endcanany
+                        {{-- @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                            <div class="menu-item">
+                                <a class="menu-link " href="/document"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'document-database') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Document Database</span>
+                                </a>
+                            </div>
+                        @endif --}}
                         
-                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                        @canany(['super-admin', 'ccm'])
+                            <div class="menu-item">
+                                <a class="menu-link " href="/document-template"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'document-template') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Document Template</span>
+                                </a>
+                            </div>                            
+                        @endcanany
+                        {{-- @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                             <div class="menu-item">
                                 <a class="menu-link " href="/document-template"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'document-template') ? 'background-color:#008CB4' : '' }}">
@@ -206,9 +360,25 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">Document Template</span>
                                 </a>
                             </div>
-                        @endif
+                        @endif --}}
 
-                        @if (auth()->user()->check_administrator || $adminPIC || auth()->user()->check_user_sales )
+                        @canany(['super-admin', 'crm'])
+                            <div class="menu-item">
+                                <a class="menu-link " href="/rekomendasi"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'rekomendasi') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Rekomendasi</span>
+                                </a>
+                            </div>                            
+                        @endcanany
+                        {{-- @if (auth()->user()->check_administrator || $adminPIC || auth()->user()->check_user_sales )
                             <div class="menu-item">
                                 <a class="menu-link " href="/rekomendasi"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'rekomendasi') ? 'background-color:#008CB4' : '' }}">
@@ -223,9 +393,58 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">Rekomendasi</span>
                                 </a>
                             </div>
-                        @endif
+                        @endif --}}
 
-                        @if (auth()->user()->check_administrator || $adminPIC || auth()->user()->check_user_sales )
+                        @canany(['super-admin', 'crm'])
+                            <div class="menu-item">
+                                <a class="menu-link"
+                                    data-bs-toggle="collapse" href="#tender-collapse" role="button"
+                                    aria-expanded="false" aria-controls="tender-collapse"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::url(), '/tender') ||
+                                    str_contains(Request::url(), '/personel-utama') ||
+                                    str_contains(Request::url(), '/alat')
+                                    ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <i class="bi bi-book-half text-white" style="font-size: 18px; margin-left:7px"></i>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Tender  <i
+                                        class="bi bi-caret-down-fill text-white"></i></span>
+                                </a>
+                            </div>
+                            <div class="collapse" id="tender-collapse">
+                                <!--begin::Menu Colapse-->
+                                <div id="#kt_aside_menu" data-kt-menu="true"
+                                    style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'personel-utama' ? 'background-color:#008CB4' : '' }}">
+                                    <a class="menu-link " href="/personel-utama" style="color:white; padding-left:20px;">
+                                        <span class="menu-icon">
+                                            <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                            <i class="bi bi-person-plus-fill text-white" style="font-size: 18px; margin-left:7px"></i>
+                                            <!--end::Svg Icon-->
+                                        </span>
+                                        <span class="menu-title" style="font-size: 16px; padding-left: 10px">Personel Utama</span>
+                                    </a>
+                                </div>
+                                <!--end::Menu Colapse-->
+                                <!--begin::Menu Colapse-->
+                                <div id="#kt_aside_menu" data-kt-menu="true"
+                                    style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'alat' ? 'background-color:#008CB4' : '' }}">
+                                    <a class="menu-link " href="/alat" style="color:white; padding-left:20px;">
+                                        <span class="menu-icon">
+                                            <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                            <i class="bi bi-tools text-white" style="font-size: 18px; margin-left:7px"></i>
+                                            <!--end::Svg Icon-->
+                                        </span>
+                                        <span class="menu-title" style="font-size: 16px; padding-left: 10px">Alat</span>
+                                    </a>
+                                </div>
+                                <!--end::Menu Colapse-->
+                            </div>                            
+                        @endcanany
+                        {{-- @if (auth()->user()->check_administrator || $adminPIC || auth()->user()->check_user_sales )
                                 <div class="menu-item">
                                     <a class="menu-link"
                                         data-bs-toggle="collapse" href="#tender-collapse" role="button"
@@ -273,10 +492,10 @@
                                     </div>
                                     <!--end::Menu Colapse-->
                                 </div>
-                        @endif
+                        @endif --}}
 
-
-                        @if (auth()->user()->check_administrator || $adminPIC)
+                        @canany(['super-admin', 'admin-crm'])
+                        {{-- @if (auth()->user()->check_administrator || $adminPIC) --}}
                             <!--Begin::Master Data Expand-->
                             {{-- <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#008CB4;margin-top:8px;"> --}}
                             <div class="menu-item" 
@@ -389,7 +608,7 @@
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
-                                    @if (!auth()->user()->check_user_sales)
+                                    {{-- @if (!auth()->user()->check_user_sales) --}}
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
                                         style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'pasal/edit' ? 'background-color:#008CB4' : '' }}">
@@ -403,8 +622,9 @@
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
-                                    @endif
-                                    @if (auth()->user()->check_administrator || $adminPIC)
+                                    {{-- @endif --}}
+                                    @canany(['super-admin', 'admin-crm'])
+                                    {{-- @if (auth()->user()->check_administrator || $adminPIC) --}}
                                         <!--begin::Menu Colapse-->
                                         <div id="#kt_aside_menu" data-kt-menu="true"
                                             style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'user' ? 'background-color:#008CB4' : '' }}">
@@ -418,7 +638,8 @@
                                             </a>
                                         </div>
                                         <!--end::Menu Colapse-->
-                                    @endif
+                                    {{-- @endif                                         --}}
+                                    @endcanany
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
                                         style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'mata-uang' ? 'background-color:#008CB4' : '' }}">
@@ -458,7 +679,7 @@
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
-                                    @if (!auth()->user()->check_user_sales)
+                                    {{-- @if (!auth()->user()->check_user_sales) --}}
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
                                         style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'team-proyek' ? 'background-color:#008CB4' : '' }}">
@@ -472,9 +693,9 @@
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
-                                    @endif
+                                    {{-- @endif --}}
 
-                                    @if (!auth()->user()->check_user_sales)
+                                    {{-- @if (!auth()->user()->check_user_sales) --}}
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
                                         style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'industry-attractivness' ? 'background-color:#008CB4' : '' }}">
@@ -488,9 +709,10 @@
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
-                                    @endif
+                                    {{-- @endif --}}
 
-                                    @if (auth()->user()->check_administrator)
+                                    @canany(['super-admin'])
+                                    {{-- @if (auth()->user()->check_administrator) --}}
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
                                         style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'provinsi' ? 'background-color:#008CB4' : '' }}">
@@ -504,9 +726,11 @@
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
-                                    @endif
+                                    {{-- @endif                                         --}}
+                                    @endcanany
 
-                                    @if (auth()->user()->check_administrator)
+                                    @canany(['super-admin'])
+                                    {{-- @if (auth()->user()->check_administrator) --}}
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
                                         style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'industry-sector' ? 'background-color:#008CB4' : '' }}">
@@ -521,9 +745,11 @@
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
-                                    @endif
+                                    {{-- @endif                                         --}}
+                                    @endcanany
 
-                                    @if (auth()->user()->check_administrator)
+                                    @canany(['super-admin'])
+                                    {{-- @if (auth()->user()->check_administrator) --}}
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
                                         style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'language' ? 'background-color:#008CB4' : '' }}">
@@ -538,9 +764,11 @@
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
-                                    @endif
+                                    {{-- @endif                                         --}}
+                                    @endcanany
 
-                                    @if (auth()->user()->check_administrator)
+                                    @canany(['super-admin'])
+                                    {{-- @if (auth()->user()->check_administrator) --}}
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
                                         style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'kriteria-green-line' ? 'background-color:#008CB4' : '' }}">
@@ -554,9 +782,11 @@
                                             <span class="menu-title" style="font-size: 16px; padding-left: 10px">Kriteria Green Line</span>
                                         </a>
                                     </div>
-                                    @endif
+                                    {{-- @endif                                         --}}
+                                    @endcanany
                                     
-                                    @if (auth()->user()->check_administrator)
+                                    @canany(['super-admin'])
+                                    {{-- @if (auth()->user()->check_administrator) --}}
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
                                         style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'kriteria-assessment' ? 'background-color:#008CB4' : '' }}">
@@ -571,9 +801,11 @@
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
-                                    @endif
+                                    {{-- @endif                                         --}}
+                                    @endcanany
 
-                                    @if (auth()->user()->check_administrator)
+                                    @canany(['super-admin', 'admin-crm'])
+                                    {{-- @if (auth()->user()->check_administrator) --}}
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
                                         style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'konsultan-perencana' ? 'background-color:#008CB4' : '' }}">
@@ -588,9 +820,11 @@
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
-                                    @endif
+                                    {{-- @endif                                         --}}
+                                    @endcanany
 
-                                    @if (auth()->user()->check_administrator)
+                                    @canany(['super-admin', 'admin-crm'])
+                                    {{-- @if (auth()->user()->check_administrator) --}}
                                     <div id="#kt_aside_menu" data-kt-menu="true"
                                         style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'master-alat-proyek' ? 'background-color:#008CB4' : '' }}">
                                         <a class="menu-link " href="/master-alat-proyek" style="color:white; padding-left:20px;">
@@ -603,7 +837,8 @@
                                             <span class="menu-title" style="font-size: 16px; padding-left: 10px">Master Alat</span>
                                         </a>
                                     </div>
-                                    @endif
+                                    {{-- @endif --}}
+                                    @endcanany
                                 </div>
                                 <!--end::Colapse-->
                                 <!--end::Svg Icon-->
@@ -612,9 +847,11 @@
                             </div>
                             {{-- </div> --}}
                             <!--end::Master Data Expand-->
-                        @endif
+                        {{-- @endif --}}
+                        @endcanany
 
-                        @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
+                        @canany(['super-admin', 'crm'])
+                        {{-- @if (auth()->user()->check_administrator || auth()->user()->check_user_sales) --}}
                             <div class="menu-item">
                                 <a class="menu-link " href="/rkap"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'rkap') ? 'background-color:#008CB4' : '' }}">
@@ -629,9 +866,11 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">Group RKAP</span>
                                 </a>
                             </div>
-                        @endif
+                        {{-- @endif                             --}}
+                        @endcanany
                         
-                        @if (auth()->user()->check_administrator)
+                        @canany(['super-admin'])
+                        {{-- @if (auth()->user()->check_administrator) --}}
                             <div class="menu-item">
                                 <a class="menu-link " href="/ok-awal"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'ok-awal') ? 'background-color:#008CB4' : '' }}">
@@ -646,9 +885,11 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">RKAP Awal</span>
                                 </a>
                             </div>
-                        @endif
+                        {{-- @endif                             --}}
+                        @endcanany
 
-                        @if (auth()->user()->check_administrator)
+                        @canany(['super-admin'])
+                        {{-- @if (auth()->user()->check_administrator) --}}
                             <div class="menu-item">
                                 <a class="menu-link " href="/ok-review"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'ok-review') ? 'background-color:#008CB4' : '' }}">
@@ -663,7 +904,8 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">RKAP Review</span>
                                 </a>
                             </div>
-                        @endif
+                        {{-- @endif                             --}}
+                        @endcanany
 
                         {{-- @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                             <div class="menu-item">
@@ -682,7 +924,8 @@
                             </div>
                         @endif --}}
 
-                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
+                        @canany(['super-admin', 'crm', 'ccm'])
+                        {{-- @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales) --}}
                             <div class="menu-item">
                                 <a class="menu-link " href="/knowledge-base"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'knowledge-base') ? 'background-color:#008CB4' : '' }}">
@@ -697,9 +940,11 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">Knowledge Base</span>
                                 </a>
                             </div>
-                        @endif
-
-                        @if (auth()->user()->check_administrator)
+                        {{-- @endif                             --}}
+                        @endcanany
+                        
+                        @canany(['super-admin'])
+                        {{-- @if (auth()->user()->check_administrator) --}}
                             <div class="menu-item">
                                 <a class="menu-link " href="/change-request"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'change-request') ? 'background-color:#008CB4' : '' }}">
@@ -714,7 +959,8 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">Change Request</span>
                                 </a>
                             </div>
-                        @endif
+                        {{-- @endif                             --}}
+                        @endcanany
 
                         {{-- @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                             <div class="menu-item">
@@ -733,7 +979,8 @@
                             </div>
                         @endif --}}
 
-                        @if (auth()->user()->check_administrator || $adminPIC)
+                        @canany(['super-admin', 'admin-crm'])
+                        {{-- @if (auth()->user()->check_administrator || $adminPIC) --}}
                             <div class="menu-item">
                                 <a class="menu-link " href="/history-autorisasi"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'history-autorisasi') ? 'background-color:#008CB4' : '' }}">
@@ -748,9 +995,11 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">History Autorisasi</span>
                                 </a>
                             </div>
-                        @endif
-
-                        @if (auth()->user()->check_administrator || $adminPIC)
+                        {{-- @endif                             --}}
+                        @endcanany
+                        
+                        @canany(['super-admin', 'csi'])
+                        {{-- @if (auth()->user()->check_administrator || $adminPIC) --}}
                             <div class="menu-item">
                                 <a class="menu-link " href="/csi"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'csi') ? 'background-color:#008CB4' : '' }}">
@@ -765,7 +1014,8 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">CSI</span>
                                 </a>
                             </div>
-                        @endif
+                        {{-- @endif                             --}}
+                        @endcanany
 
                         <br><br><br>
 
