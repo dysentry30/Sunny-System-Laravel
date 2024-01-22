@@ -121,7 +121,7 @@
                                         <input type="button" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan"
                                             style="background-color:#00b48d">
                                     @elseif ($proyek->stage == 4 && $check_non_green_line_nota_2 && is_null($proyek->is_request_rekomendasi_2) && is_null($proyek->is_disetujui_rekomendasi_2))
-                                        @if ($proyek->DokumenPenentuanProjectGreenlane->isEmpty() || $proyek->DokumenTender->isEmpty())
+                                        @if (empty($proyek->DokumenPenentuanProjectGreenlane) || empty($proyek->DokumenTender))
                                             <button type="button" class="btn btn-sm btn-success ms-2" data-bs-toggle="modal"data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="<b>Dokumen Form Penentuan Project Green Lane / Non Green Lane & Dokumen Tender</b> Wajib Diisi" disabled>Pengajuan Rekomendasi</button>
                                         @else
                                             <input type="button" name="proyek-rekomendasi-2" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi-2" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan-nota-2"
@@ -329,11 +329,11 @@
                                     <p>KSO / Non KSO  : <b class="">{{ $proyek->PorsiJO->isNotEmpty() ? "KSO" : "Non KSO" }}</b></p>
                                     <p>Negara Proyek  : <b class="{{ $proyek->negara ?? "text-danger" }}">{{ $proyek->negara ?? "*Belum Ditentukan" }}</b></p>
                                     <p>Provinsi Proyek  : <b class="{{ $proyek->Provinsi->province_name ?? "text-danger" }}">{{ $proyek->Provinsi->province_name ?? "*Belum Ditentukan" }}</b></p>
-                                    <p>Nilai Penawaran : <b class="{{ $proyek->nilaiok_awal ?? "text-danger" }}">{{ !empty($proyek->nilaiok_awal) ? "Rp. " . number_format($proyek->nilaiok_awal, 0, '', '.') : "*Belum Ditentukan" }}</b></p>
+                                    <p>Nilai Penawaran : <b class="{{ $proyek->hps_pagu ?? "text-danger" }}">{{ !empty($proyek->hps_pagu) ? "Rp. " . number_format($proyek->hps_pagu, 0, '', '.') : "*Belum Ditentukan" }}</b></p>
                                     <p>Jenis Kontrak : <b class="{{ $proyek->jenis_terkontrak ?? "text-danger" }}">{{ $proyek->jenis_terkontrak ?? "*Belum Ditentukan" }}</b></p>
                                     <p>Cara Pembayaran : <b class="{{ $proyek->sistem_bayar ?? "text-danger" }}">{{ $proyek->sistem_bayar ?? "*Belum Ditentukan" }}</b></p>
                                     <p>Uang Muka : <b class="{{ $proyek->is_uang_muka ?? "text-danger" }}">{{ $proyek->is_uang_muka ? "Ya" : "Tidak" }}</b></p>
-                                    <p>Waktu Pelaksanaan Pekerjaan : <b class="{{ $proyek->waktu_pelaksanaan ?? "text-danger" }}">{{ $proyek->waktu_pelaksanaan ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>Waktu Pelaksanaan Pekerjaan : <b class="{{ $proyek->waktu_pelaksanaan ?? "text-danger" }}">{{ $proyek->waktu_pelaksanaan . "Hari" ?? "*Belum Ditentukan" }}</b></p>
                                     <p>RA Klasifikasi Proyek  : <b class="{{ $proyek->klasifikasi_pasdin ?? "text-danger" }}">{{ $proyek->klasifikasi_pasdin ?? "*Belum Ditentukan" }}</b></p>
                                     <br>
 

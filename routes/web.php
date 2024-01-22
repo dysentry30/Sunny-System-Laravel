@@ -134,6 +134,7 @@ Route::get('/ccm', [UserController::class, 'welcome'])->middleware("userNotAuth"
 Route::get('/crm-login', [UserController::class, 'authenticate'])->middleware("userNotAuth");
 Route::get('/csi-login', [UserController::class, 'welcome'])->middleware("userNotAuth");
 
+Route::get('/login-admin', [UserController::class, 'welcome'])->middleware("userNotAuth");
 // begin :: Login
 
 Route::post('/login', [UserController::class, 'authen']);
@@ -4954,7 +4955,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         Alert::error('Error', "Master Catatan Rekomendasi Gagal Ditambahkan");
         return redirect()->back();
     });
-    Route::post('/master-catatan-rekomendasi/{id}/edit', function (Request $request, $id) {
+    Route::post('/master-catatan-rekomendasi/update/{id}', function (Request $request, $id) {
         $data = $request->all();
 
         $messages = [
@@ -4986,7 +4987,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             return redirect()->back();
         }
 
-        $pelanggan = Customer::find($data['nama_pelanggan']);
+        // $pelanggan = Customer::find($data['nama_pelanggan']);
 
         $masterCatatan->kategori = $data["kategori"];
         $masterCatatan->urutan = $data["urutan"];

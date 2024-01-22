@@ -2837,15 +2837,6 @@ function performAssessment(App\Models\Customer $customer, App\Models\Proyek $pro
     return $result_assessments;
 }
 
-function generateQrCode($kode_proyek, $nip, $url)
-{
-    $now = Carbon\Carbon::now();
-    $imageName = $now->format("dmYHis") . "_$nip" . "_$kode_proyek" . ".png";
-    $qrcode = QrCode::format('png')->size(100)->errorCorrection('H')->generate($url, public_path('qr-code/' . $imageName));
-
-    return $imageName;
-}
-
 function mergeFileLampiranRisiko($kode_proyek)
 {
     $proyek = Proyek::find($kode_proyek);
@@ -2990,7 +2981,7 @@ function createWordPengajuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekomen
     $section->addText($now->translatedFormat("d F Y"), ["bold" => true], ["align" => "center"]);
     $section->addTextBreak(3);
     $section->addText("( " . Auth::user()->name . " )", ["bold" => true, "size" => 7], ["align" => "center"]);
-    $section->addText(Auth::user()->Pegawai->Jabatan->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    $section->addText(Auth::user()->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     $section->addTextBreak(5);
     $section->addText("Catatan :");
     $section->addText("Dokumen Pemilihan atau dokumen pendukung lainnya harap di upload dalam aplikasi CRM.");
@@ -3239,7 +3230,7 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
             $cell_2_ttd->addTextBreak(4);
             // $cell_2_ttd->addText("$" . "{ttdPenyusun$key}", ["bold" => false], ["align" => "center"]);
             $cell_2_ttd->addText(User::find($p->user_id)->name, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
-            $cell_2_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan->nama_jabatan, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
+            $cell_2_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
             $cell_2_ttd->addText("Tanggal: " . $tanggal_ttd->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
         }
     }
@@ -3280,7 +3271,7 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
             $cell_3_ttd->addTextBreak(4);
             // $cell_3_ttd->addText("$" . "{ttdRekomendasi$key}", ["bold" => false], ["align" => "center"]);
             $cell_3_ttd->addText(User::find($p->user_id)->name, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
-            $cell_3_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan->nama_jabatan, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
+            $cell_3_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
             $cell_3_ttd->addText("Tanggal: " . $tanggal_ttd->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
             if ($p->status == "approved" && empty($p->catatan)) {
                 $cell_3_ttd->addText("Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);
@@ -3327,7 +3318,7 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
             $cell_4_ttd->addTextBreak(4);
             // $cell_4_ttd->addText("$" . "{ttdPersetujuan$key}", ["bold" => false], ["align" => "center"]);
             $cell_4_ttd->addText(User::find($p->user_id)->name ?? Auth::user()->name, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
-            $cell_4_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan->nama_jabatan ?? Auth::user()->Pegawai->Jabatan->nama_jabatan, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
+            $cell_4_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan ?? Auth::user()->Pegawai->Jabatan?->nama_jabatan, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
             $cell_4_ttd->addText("Tanggal: " . $tanggal_ttd->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
             if ($p->status == "approved") {
                 $cell_4_ttd->addText("Menyetujui", ["bold" => true, "size" => 7], ["align" => "center"]);

@@ -661,6 +661,7 @@
                                                         @if ($matriks_user->contains('kategori', 'Persetujuan')  && $matriks_user->where('kategori', 'Persetujuan')?->where('departemen_code', $proyek->Proyek->departemen_proyek)?->where('divisi_id', $proyek->Proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->Proyek->klasifikasi_pasdin)?->first() && $proyek->is_rekomendasi_approved)
                                                             <a href="#kt_modal_view_proyek_persetujuan_{{ $proyek->kode_proyek }}"
                                                                 target="_blank" data-bs-toggle="modal"
+                                                                {{-- onclick="showModal('{{ $proyek->kode_proyek }}')" --}}
                                                                 class="btn btn-sm btn-primary text-white">{{ $proyek->is_disetujui || (collect(json_decode($proyek->approved_persetujuan))->contains('user_id', auth()->user()->id) && collect(json_decode($proyek->approved_persetujuan))?->first()?->status == 'approved') ? "Rincian" : "Approve" }}</a>
                                                         @elseif($matriks_user->contains('kategori', 'Rekomendasi') && $matriks_user->where('kategori', 'Rekomendasi')?->where('departemen_code', $proyek->Proyek->departemen_proyek)?->where('divisi_id', $proyek->Proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->Proyek->klasifikasi_pasdin)?->first() && $proyek->is_verifikasi_approved)
                                                             <a href="#kt_modal_view_proyek_rekomendasi_{{ $proyek->kode_proyek }}"
@@ -676,9 +677,12 @@
                                                             })->count() > 0 && (collect(json_decode($proyek->approved_verifikasi))->isEmpty()))))
                                                             
                                                             @else
-                                                                <a href="#kt_modal_view_proyek_verifikasi_{{ $proyek->kode_proyek }}"
+                                                            <button type="button" class="btn btn-sm btn-primary text-white" data-bs-toggle="modal" data-bs-target="#kt_modal_view_proyek_verifikasi_{{ $proyek->kode_proyek }}">
+                                                                {{ $proyek->is_verifikasi_approved || (collect(json_decode($proyek->approved_verifikasi))->contains('user_id', auth()->user()->id) && collect(json_decode($proyek->approved_verifikasi))?->first()?->status == 'approved') ? "Rincian" : "Verifikasi" }}
+                                                              </button>
+                                                                {{-- <a href="#kt_modal_view_proyek_verifikasi_{{ $proyek->kode_proyek }}"
                                                                     target="_blank" data-bs-toggle="modal"
-                                                                    class="btn btn-sm btn-primary text-white">{{ $proyek->is_verifikasi_approved || (collect(json_decode($proyek->approved_verifikasi))->contains('user_id', auth()->user()->id) && collect(json_decode($proyek->approved_verifikasi))?->first()?->status == 'approved') ? "Rincian" : "Verifikasi" }}</a>
+                                                                    class="btn btn-sm btn-primary text-white">{{ $proyek->is_verifikasi_approved || (collect(json_decode($proyek->approved_verifikasi))->contains('user_id', auth()->user()->id) && collect(json_decode($proyek->approved_verifikasi))?->first()?->status == 'approved') ? "Rincian" : "Verifikasi" }}</a> --}}
                                                             @endif
                                                         @elseif ($matriks_user->contains('kategori', 'Penyusun') && $matriks_user->where('kategori', 'Penyusun')?->where('departemen_code', $proyek->Proyek->departemen_proyek)?->where('divisi_id', $proyek->Proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->Proyek->klasifikasi_pasdin)?->first())
                                                             @if ($proyek->is_request_rekomendasi || (($matriks_user->filter(function($value)use($proyek){
@@ -1143,7 +1147,7 @@
     </div>
     <!--End::Form Proses Pengajuan-->
     
-    @cannot('super-admin')
+    {{-- @cannot('super-admin') --}}
 
 
     <!--Begin::Form Confirm Pemaparan-->
@@ -2384,7 +2388,7 @@
     </div>
     <!--End::Form Proses Persetujuan-->
             
-    @endcannot
+    {{-- @endcannot --}}
 
 
     @endforeach
@@ -2619,6 +2623,16 @@
         function deleteBackdrop() {
             let backdrop = document.querySelector('.modal-backdrop');
             backdrop.remove();
+        }
+    </script>
+
+    <script>
+        function showModal(kodeProyek) {
+            const idModal = 'kt_modal_view_proyek_rekomendasi_'+kodeProyek;
+            console.log(document.getElementById(idModal));
+            const myModal = new bootstrap.Modal(document.getElementById(idModal), {});
+            // const myModal = bootstrap.Modal.getOrCreateInstance('#kt_modal_view_proyek_rekomendasi_'+kodeProyek);
+            myModal.show();
         }
     </script>
 @endsection

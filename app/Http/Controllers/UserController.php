@@ -17,6 +17,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 use App\Events\NotificationPasswordReset;
 use App\Models\Dop;
 use App\Models\Pegawai;
+use App\Models\ProyekPISNew;
 use App\Models\RoleManagements;
 use Exception;
 use Illuminate\Http\UploadedFile;
@@ -26,25 +27,48 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    public function welcome(Request $request)
+    public function welcomeAdmin(Request $request)
     {
         $data = $request->all();
         // dd($data);
         if (!empty($data["redirectTo"]) && !empty($data["nip"])) {
-            try{
+            try {
                 // $credentials = (array) json_decode(decrypt($data["token"]));
                 $user = User::where("nip", $data["nip"])->first();
-                if(Auth::loginUsingId($user->id)) {
+                if (Auth::loginUsingId($user->id)) {
                     return redirect($data["redirectTo"]);
                 }
                 Alert::error("Error", "User Tidak Ditemukan!");
                 return redirect("/");
-            }catch(Exception $e) {
+            } catch (Exception $e) {
                 Alert::error("Error", "User Tidak Ditemukan!");
                 return redirect("/");
             }
         }
         return view('0_Welcome');
+        // return redirect('/dashboard');
+    }
+
+    public function welcome(Request $request)
+    {
+        // $data = $request->all();
+        // // dd($data);
+        // if (!empty($data["redirectTo"]) && !empty($data["nip"])) {
+        //     try {
+        //         // $credentials = (array) json_decode(decrypt($data["token"]));
+        //         $user = User::where("nip", $data["nip"])->first();
+        //         if (Auth::loginUsingId($user->id)) {
+        //             return redirect($data["redirectTo"]);
+        //         }
+        //         Alert::error("Error", "User Tidak Ditemukan!");
+        //         return redirect("/");
+        //     } catch (Exception $e) {
+        //         Alert::error("Error", "User Tidak Ditemukan!");
+        //         return redirect("/");
+        //     }
+        // }
+        // return view('0_Welcome');
+        return redirect('/dashboard');
     }
 
     public function delete($id)
@@ -82,7 +106,7 @@ class UserController extends Controller
                     "user" => $user,
                 ])->cookie("BPMCSRF", $token, 60);
             }
-        } else if((bool) $request->isMobile)  {
+        } else if ((bool) $request->isMobile) {
             return self::loginForMobile($request);
         } else {
 
@@ -103,14 +127,17 @@ class UserController extends Controller
             if (Auth::attempt($credentials) && Auth::check()) {
                 // dd(Auth::user());
                 $request->session()->regenerate();
-                if (!str_contains(Auth::user()->email, "@wika-customer")) {
+                if (!str_contains(
+                    Auth::user()->email,
+                    "@wika-customer"
+                )) {
                     if (Auth::user()->is_active) {
                         $redirect = $request->schemeAndHttpHost() . $request->get("redirect-to");
-                        if(!empty($redirect)) {
-                            return redirect()->intended( $redirect );
+                        if (!empty($redirect)) {
+                            return redirect()->intended($redirect);
                         }
                         return redirect()->intended("/dashboard");
-                    }else{
+                    } else {
                         Auth::logout();
                         Alert::error("USER NON ACTIVE", "Hubungi Admin (PIC)");
                         return redirect()->intended("/");
@@ -183,16 +210,17 @@ class UserController extends Controller
         }
     }
 
-    function loginForMobile(Request $request) {
+    function loginForMobile(Request $request)
+    {
         $data = $request->all();
         $user = User::select(["*"])->where("email", "=", $data["UserName"])->get()->first();
-        if(!empty($user) && Hash::check($data["UserPassword"], $user->password)) {
+        if (!empty($user) && Hash::check($data["UserPassword"], $user->password)) {
             return response()->json($user);
         }
         return response()->json("Gagal");
     }
-    
-    public function logout(Request $request)
+
+    public function logoutOld(Request $request)
     {
         // auth()->user()->forceFill([
         //     "remember_token" => null,
@@ -351,6 +379,14 @@ class UserController extends Controller
     public function view($user)
     {
         $user = User::find($user);
+        // $proyeks = ProyekPISNew::addSelect(array_map(function ($item) {
+        //     return 'proyek_pis_new.' . $item;
+        // }, ['proyek_name', 'profit_center', 'kd_divisi']))
+        // ->with('UnitKerja')
+        // ->whereIn('kd_divisi', json_decode($request->query('divcode')))
+        // ->where('profit_center', '!=', null)
+        // ->orderBy('proyek_name')
+        // ->get();
         if (empty($user)) {
             Alert::error("Error", "User tidak ditemukan");
             return redirect("user");
@@ -467,6 +503,37 @@ class UserController extends Controller
         $user->role_user = $role_user;
         $user->role_approver = $role_approver;
         $user->role_risk = $role_risk;
+
+        // if (isset($data['proyeks'])) {
+        //     $proyekSelectedCollect = collect($data['proyeks']);
+        //     if (empty($user->proyeks_selected)) {
+        //         $user->proyeks_selected = $proyekSelectedCollect->toJson();
+        //     } else {
+        //         $collectProyekExist = collect(json_decode($user->proyeks_selected));
+        //         $proyekCancel = $collectProyekExist->diff($data["proyeks"]);
+
+        //         if ($proyekCancel->count() < 1) { //Jika tidak ada yg di cancel maka gunakan yg sebelumnya
+        //             $arrayTemp = $collectProyekExist;
+        //         } else { //Jika ada di proyekCancel maka hapus si proyeknya
+        //             $arrayTemp = $collectProyekExist->reject(function ($proyek) use ($proyekCancel) {
+        //                 return in_array($proyek, $proyekCancel->toArray());
+        //             });
+        //         }
+
+        //         $proyekNew = $proyekSelectedCollect->diff($arrayTemp);
+        //         $finalProyek = $arrayTemp->push($proyekNew->flatten()->toArray());
+
+        //         $user->proyeks_selected = $finalProyek->flatten()->toJson();
+        //     }
+        // } else {
+        //     $user->proyeks_selected = null;
+        // }
+
+        if (isset($data['proyeks'])) {
+            $user->proyeks_selected = $data['list-proyek'];
+        } else {
+            $user->proyeks_selected = null;
+        }
         // $user->alamat = $data["alamat"];
         
         if ($user->save()) {
@@ -705,7 +772,7 @@ class UserController extends Controller
 
         //Check Validate Token WZone
         try {
-            $validateLoginWZone = Http::withoutVerifying()->withOptions(["verify" => false])->get('http://' . env('WZONE_URL') . '/app/sso/valid', [
+            $validateLoginWZone = Http::withoutVerifying()->withOptions(["verify" => false])->get(env('WZONE_URL') . '/app/sso/valid', [
                 'app_secret' => env('WZONE_APP_SECRET'),
                 'token' => $token
             ]);
@@ -716,7 +783,7 @@ class UserController extends Controller
                 // $user = $validateLoginWZone->collect($key = 'data')->first();
 
                 if ($response["responseStatus"] != 0) {
-                    dd($response["responseData"]);
+                    // dd($response["responseData"]);
                     $nip = $response["responseData"]["nip"];
                 } else {
                     dd($response);
@@ -731,22 +798,92 @@ class UserController extends Controller
                 $checkUserInCRM = User::where('nip', $nip)->first();
                 // dd($checkUserInCRM);
 
-                if (
-                    !empty($checkUserInCRM) && $checkUserInCRM->is_active
-                ) {
-                    // Auth::login(['nip' => $nip]);
-                    Auth::login($checkUserInCRM);
-                    if (Auth::check()) {
-                        $request->session()->regenerate();
-                        return redirect()->intended("/dashboard");
+                if (!empty($checkUserInCRM) && $checkUserInCRM->is_active) {
+                    $dataPegawai = Pegawai::where('nip', $nip)->first();
+                    $dataPegawai->nama_pegawai = $response["responseData"]["full_name"];
+                    $dataPegawai->email = $response["responseData"]["email"];
+                    $dataPegawai->handphone = $response["responseData"]["handphone"];
+                    $dataPegawai->kode_jabatan = $response["responseData"]["kd_jabatan"];
+                    $dataPegawai->nama_fungsi_bidang = $response["responseData"]["nm_fungsi_bidang"];
+                    $dataPegawai->kode_kantor_sap = $response["responseData"]["cmp_id"];
+                    $dataPegawai->nama_kantor = $response["responseData"]["nm_kantor"];
+
+                    $checkUserInCRM->name = $response["responseData"]["full_name"];
+                    $checkUserInCRM->email = $response["responseData"]["email"];
+                    $checkUserInCRM->no_hp = $response["responseData"]["handphone"];
+
+                    // dd($dataPegawai);
+                    if ($dataPegawai->save() && $checkUserInCRM->save()
+                    ) {
+                        // Auth::login(['nip' => $nip]);
+                        Auth::login($checkUserInCRM);
+                        if (Auth::check()) {
+                            $request->session()->regenerate();
+                            return redirect()->intended("/dashboard");
+                        } else {
+                            dd([
+                                "Success" => false,
+                                "Status" => "Login Failed",
+                                "Message" => "Terjadi kesalahan. Mohon hubungi Admin!"
+                            ]);
+                        }
+                    } else {
+                        dd([
+                            "Success" => false,
+                            "Status" => "Login Failed",
+                            "Message" => "Terjadi kesalahan. Mohon hubungi Admin!"
+                        ]);
                     }
+                } else {
+                    dd([
+                        "Success" => false,
+                        "Status" => "Login Failed",
+                        "Message" => "User belum terdaftar di Aplikasi CRM."
+                    ]);
                 }
             } else {
-                return redirect()->back(); 
+                dd([
+                    "Success" => false,
+                    "Status" => "Login Failed",
+                    "Message" => "Key [NIP] undifined or null"
+                ]);
+                // return redirect(env('WZONE_URL')); 
             }
         } catch (\Exception $e) {
             dd($e);
         }
+    }
+
+    public function logout(Request $request)
+    {
+        // auth()->user()->forceFill([
+        //     "remember_token" => null,
+        // ])->save();
+
+
+        Request()->session()->invalidate();
+
+        Request()->session()->regenerateToken();
+
+
+        if (str_contains($request->url(), "api")) {
+
+            return response()->json([
+                "status" => "success",
+                "msg" => "Logged out",
+            ]);
+        }
+
+        Auth::logout();
+        return redirect(env("WZONE_URL"));
+
+        // if (auth()->user()->check_admin_kontrak) {
+        //     Auth::logout();
+        //     return redirect('/ccm');
+        // } else {
+        //     Auth::logout();
+        //     return redirect('/');
+        // }
     }
 
 }
