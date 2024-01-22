@@ -14,7 +14,7 @@ class Pegawai extends Model
     protected $keyType = "string";
 
     public function Jabatan() {
-        return $this->hasOne(Jabatan::class, "kode_jabatan", "kode_jabatan");
+        return $this->hasOne(Jabatan::class, "kode_jabatan_sap", "kode_jabatan_sap");
     }
 
     public function User() {
