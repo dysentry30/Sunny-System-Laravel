@@ -185,7 +185,7 @@ class KriteriaPenggunaJasaController extends Controller
         // dd($collectKriteriaDetail);
         if (KriteriaPenggunaJasaDetail::insert($collectKriteriaDetail)) {
             Alert::success("Success", "Form Kriteria Pengguna Jasa berhasil dibuat!");
-            return redirect()->back();
+            return redirect('/rekomendasi?open=kt_modal_view_proyek_rekomendasi_' . $data['kode_proyek']);
         }
 
         Alert::error("Error", "Form Kriteria Pengguna Jasa gagal dibuat!");

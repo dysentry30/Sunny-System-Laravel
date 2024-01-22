@@ -129,7 +129,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 
 
-Route::get('/', [UserController::class, 'welcome'])->middleware("userNotAuth");
+Route::get('/', [UserController::class, 'welcome']);
 Route::get('/ccm', [UserController::class, 'welcome'])->middleware("userNotAuth");
 Route::get('/crm-login', [UserController::class, 'authenticate'])->middleware("userNotAuth");
 Route::get('/csi-login', [UserController::class, 'welcome'])->middleware("userNotAuth");

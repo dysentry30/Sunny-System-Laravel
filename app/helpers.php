@@ -499,11 +499,12 @@ function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Coll
     $section->addText("NOTA REKOMENDASI TAHAP I", ['size' => 12, "bold" => true], ['align' => "center"]);
     $section->addText("Seleksi Pengguna Jasa Non Green Lane", ['size' => 12, "bold" => true], ['align' => "center"]);
 
-    if ($is_proyek_mega) {
-        $section->addText("Proyek Mega", ['size' => 12, "bold" => true], ['align' => "center"]);
-    } else {
-        $section->addText("Proyek Kecil / Proyek Menengah", ['size' => 12, "bold" => true], ['align' => "center"]);
-    }
+    $section->addText($proyek->klasifikasi_pasdin, ['size' => 12, "bold" => true], ['align' => "center"]);
+    // if ($is_proyek_mega) {
+    //     $section->addText("Proyek Mega", ['size' => 12, "bold" => true], ['align' => "center"]);
+    // } else {
+    //     $section->addText("Proyek Kecil / Proyek Menengah", ['size' => 12, "bold" => true], ['align' => "center"]);
+    // }
 
     $section->addTextBreak(1);
     $table = $section->addTable('myOwnTableStyle', array('borderSize' => 1, 'borderColor' => '999999', 'afterSpacing' => 0, 'Spacing' => 0, 'cellMargin' => 0));
@@ -879,7 +880,7 @@ function createWordProfileRisiko($kode_proyek)
     $totalBobot = KriteriaPenggunaJasa::all()->sum('bobot');
     $totalScore = $kriteriaPenggunaJasaDetail->sum('nilai') ?? 0;
     $kriteriaFinal = PenilaianPenggunaJasa::all()->filter(function ($item) use ($totalScore) {
-        return $item->dari_nilai <= $totalScore && $item->sampai_nilai > $totalScore;
+        return $item->dari_nilai <= $totalScore && $item->sampai_nilai >= $totalScore;
     })->first()->nama ?? '-';
 
     $table->addRow();
@@ -1428,7 +1429,7 @@ function createWordProfileRisikoNew($kode_proyek)
     $totalBobot = KriteriaPenggunaJasa::all()->sum('bobot');
     $totalScore = $kriteriaPenggunaJasaDetail->sum('nilai') ?? 0;
     $kriteriaFinal = PenilaianPenggunaJasa::all()->filter(function ($item) use ($totalScore) {
-        return $item->dari_nilai <= $totalScore && $item->sampai_nilai > $totalScore;
+        return $item->dari_nilai <= $totalScore && $item->sampai_nilai >= $totalScore;
     })->first()->nama ?? '-';
 
     $table->addRow();
@@ -2450,8 +2451,11 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
             // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
             $cell_2_ttd->addTextBreak(4);
             // $cell_2_ttd->addText("$" . "{ttdPenyusun$key}", ["bold" => false], ["align" => "center"]);
-            $cell_2_ttd->addText(User::find($p->user_id)->name, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
-            $cell_2_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
+            // $cell_2_ttd->addText(User::find($p->user_id)->name, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
+            $cell_2_ttd->addText(User::find($p->user_id)->name, ['bold' => true, 'size' => 8, 'name' => 'Times New Roman'], ['alignment' => 'center']);
+            $cell_2_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan, ['bold' => true, 'size' => 8, 'name' => 'Times New Roman'], ['alignment' => 'center']);
+            // $cell_2_ttd->addText(User::find($p->user_id)->name, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
+            // $cell_2_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
             $cell_2_ttd->addText("Tanggal: " . $tanggal_ttd->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
         }
     }
@@ -2489,8 +2493,10 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
             // $cell_3_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
             $cell_3_ttd->addTextBreak(4);
             // $cell_3_ttd->addText("$" . "{ttdRekomendasi$key}", ["bold" => false], ["align" => "center"]);
-            $cell_3_ttd->addText(User::find($p->user_id)->name, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
-            $cell_3_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
+            $cell_3_ttd->addText(User::find($p->user_id)->name, ['bold' => true, 'size' => 8, 'name' => 'Times New Roman'], ['alignment' => 'center']);
+            $cell_3_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan, ['bold' => true, 'size' => 8, 'name' => 'Times New Roman'], ['alignment' => 'center']);
+            // $cell_3_ttd->addText(User::find($p->user_id)->name, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
+            // $cell_3_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
             $cell_3_ttd->addText("Tanggal: " . $tanggal_ttd->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
             if ($p->status == "approved" && empty($p->catatan)) {
                 $cell_3_ttd->addText("Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);
@@ -2534,8 +2540,10 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
             $tanggal_ttd = Carbon\Carbon::create($p->tanggal);
             $cell_4_ttd->addTextBreak(4);
             // $cell_4_ttd->addText("$" . "{ttdPersetujuan$key}", ["bold" => false], ["align" => "center"]);
-            $cell_4_ttd->addText(User::find($p->user_id)->name ?? Auth::user()->name, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
-            $cell_4_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan ?? Auth::user()->Pegawai->Jabatan?->nama_jabatan, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
+            $cell_4_ttd->addText(User::find($p->user_id)->name ?? Auth::user()->name, ['bold' => true, 'size' => 8, 'name' => 'Times New Roman'], ['alignment' => 'center']);
+            $cell_4_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan ?? Auth::user()->Pegawai->Jabatan?->nama_jabatan, ['bold' => true, 'size' => 8, 'name' => 'Times New Roman'], ['alignment' => 'center']);
+            // $cell_4_ttd->addText(User::find($p->user_id)->name ?? Auth::user()->name, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
+            // $cell_4_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan ?? Auth::user()->Pegawai->Jabatan?->nama_jabatan, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
             $cell_4_ttd->addText("Tanggal: " . $tanggal_ttd->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
             if ($p->status == "approved" && empty($p->catatan)) {
                 $cell_4_ttd->addText("Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center"]);

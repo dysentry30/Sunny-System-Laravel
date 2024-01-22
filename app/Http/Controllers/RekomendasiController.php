@@ -92,7 +92,7 @@ class RekomendasiController extends Controller
                 // dd($nomorTarget);
                 foreach ($nomorTarget as $target) {
                     // dd($target->Pegawai->handphone);
-                    $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_rekomendasi_" . $proyek->kode_proyek;
+                    $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_user_view_kriteria_" . $proyek->kode_proyek;
                     // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
                     //     "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
                     //     "sender" => env("NO_WHATSAPP_BLAST"),
@@ -277,7 +277,7 @@ class RekomendasiController extends Controller
                         // $nomorTarget = !empty($this->isnomorTargetActive) ? self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Rekomendasi")->Pegawai->handphone : $this->nomorDefault;
                         $nomorTarget = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Verifikasi")?->where('urutan', '=', 1);
                         foreach ($nomorTarget as $target) {
-                            $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_user_view_persetujuan_" . $proyek->kode_proyek;
+                            $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_persetujuan_" . $proyek->kode_proyek;
                             // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
                             //     "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
                             //     "sender" => env("NO_WHATSAPP_BLAST"),
@@ -308,7 +308,7 @@ class RekomendasiController extends Controller
                         // $nomorTarget = !empty($this->isnomorTargetActive) ? self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Rekomendasi")->Pegawai->handphone : $this->nomorDefault;
                         $nomorTarget = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Verifikasi")?->where('urutan', '=', 1);
                         foreach ($nomorTarget as $target) {
-                            $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_user_view_persetujuan_" . $proyek->kode_proyek;
+                            $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_persetujuan_" . $proyek->kode_proyek;
                             // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
                             //     "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
                             //     "sender" => env("NO_WHATSAPP_BLAST"),
@@ -391,7 +391,7 @@ class RekomendasiController extends Controller
                         // $nomorTarget = !empty($this->isnomorTargetActive) ? self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Rekomendasi")->Pegawai->handphone : $this->nomorDefault;
                         $nomorTarget = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Verifikasi")?->where('urutan', '=', 1);
                         foreach ($nomorTarget as $target) {
-                            $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_user_view_persetujuan_" . $proyek->kode_proyek;
+                            $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_persetujuan_" . $proyek->kode_proyek;
                             // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
                             //     "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
                             //     "sender" => env("NO_WHATSAPP_BLAST"),
@@ -421,7 +421,7 @@ class RekomendasiController extends Controller
                         // $nomorTarget = !empty($this->isnomorTargetActive) ? self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Rekomendasi")->Pegawai->handphone : $this->nomorDefault;
                         $nomorTarget = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Verifikasi")?->where('urutan', '=', 1);
                         foreach ($nomorTarget as $target) {
-                            $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_user_view_persetujuan_" . $proyek->kode_proyek;
+                            $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_persetujuan_" . $proyek->kode_proyek;
                             // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
                             //     "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
                             //     "sender" => env("NO_WHATSAPP_BLAST"),
@@ -650,7 +650,7 @@ class RekomendasiController extends Controller
             if ($is_checked) {
                 $nomorTarget = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Rekomendasi");
                 foreach ($nomorTarget as $target) {
-                    $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_user_view_persetujuan_" . $proyek->kode_proyek;
+                    $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_persetujuan_" . $proyek->kode_proyek;
                     // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
                     //     "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
                     //     "sender" => env("NO_WHATSAPP_BLAST"),
@@ -688,7 +688,7 @@ class RekomendasiController extends Controller
                     if ($check_urutan_user) {
                         $get_nomor = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Verifikasi", (int)$matriks_sekarang + 1);
                         foreach ($get_nomor as $user) {
-                            $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyek->kode_proyek";
+                            $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_persetujuan_$proyek->kode_proyek";
                             // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
                             //     "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
                             //     "sender" => env("NO_WHATSAPP_BLAST"),
@@ -853,9 +853,9 @@ class RekomendasiController extends Controller
                     foreach ($matriks_approval as $key => $user) {
                         $user = $user->Pegawai->User;
                         // URL::forceScheme("https");
-                        $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_user_view_persetujuan_" . $proyek->kode_proyek;
+                        $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_persetujuan_" . $proyek->kode_proyek;
                         // $url = URL::temporarySignedRoute("rekomendasi", now()->addHours(3), ["open" => "kt_modal_view_proyek_persetujuan_" . $proyek->kode_proyek, "user" => $user->nip]);
-                        // $url = $request->schemeAndHttpHost() . "?redirectTo=/rekomendasi?open=kt_user_view_persetujuan_" . $proyek->kode_proyek . "&token=$token";
+                        // $url = $request->schemeAndHttpHost() . "?redirectTo=/rekomendasi?open=kt_modal_view_proyek_persetujuan_" . $proyek->kode_proyek . "&token=$token";
                         // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
                         //     "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
                         //     "sender" => env("NO_WHATSAPP_BLAST"),
@@ -964,7 +964,7 @@ class RekomendasiController extends Controller
                         // URL::forceScheme("https");
                         // $url = URL::temporarySignedRoute("rekomendasi", now()->addHours(3), ["open" => "kt_modal_view_proyek_persetujuan_" . $proyek->kode_proyek, "user" => $user->User->nip]);
                         $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_persetujuan_" . $proyek->kode_proyek;
-                        // $url = $request->schemeAndHttpHost() . "?redirectTo=/rekomendasi?open=kt_user_view_persetujuan_" . $proyek->kode_proyek . "&token=$token";
+                        // $url = $request->schemeAndHttpHost() . "?redirectTo=/rekomendasi?open=kt_modal_view_proyek_persetujuan_" . $proyek->kode_proyek . "&token=$token";
                         // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
                         //     "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
                         //     "sender" => env("NO_WHATSAPP_BLAST"),
