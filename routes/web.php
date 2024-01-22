@@ -5295,6 +5295,113 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         return response()->download(public_path("excel/$file_name"));
     });
     // End Download Files
+    //Begin::Get Data Jabatan
+    Route::get('/get-jabatans', function () {
+        $jabatans = HTTP::get("https://hcis.wika.co.id/services/rest/?format=json&wsc_id=WSC-000010&method=jabportal&pin=p0rt4lJ&is_active=1");
+        $status = 0;
+        $reason = "";
+        $jabatans->onError(function ($item) use (&$status, &$reason) {
+            // dd($item->status(), $item->reason());
+            $status = $item->status();
+            $reason = $item->reason();
+        });
+        dd($jabatans->collect());
+        if ($status != 0 && !empty($reason)
+        ) {
+            return response()->json([
+                "status" => $status,
+                "msg" => $reason
+            ]);
+        }
+        $jabatans_data = collect($jabatans->json()["data"]);
+        $jabatans_data->each(function ($jabatan) {
+            $is_jabatan_exist = Jabatan::find($jabatan["kd_jabatan_str"]);
+            if (!empty($is_jabatan_exist)) {
+                $is_jabatan_exist->kode_jabatan = (int) $jabatan["kd_jabatan_str"];
+                $is_jabatan_exist->kode_jabatan_sap = (int) $jabatan["kd_jabatan_str_sap"];
+                $is_jabatan_exist->nama_jabatan = $jabatan["nm_jabatan_str"];
+                $is_jabatan_exist->tahun = (int) date("Y");
+                $is_jabatan_exist->save();
+            } else {
+                $new_jabatan = new Jabatan();
+                $new_jabatan->kode_jabatan = (int) $jabatan["kd_jabatan_str"];
+                $new_jabatan->kode_jabatan_sap = (int) $jabatan["kd_jabatan_str_sap"];
+                $new_jabatan->nama_jabatan = $jabatan["nm_jabatan_str"];
+                $new_jabatan->tahun = (int) date("Y");
+                $new_jabatan->save();
+            }
+        });
+
+        // return response()->json([
+        //     "status" => 400,
+        //     "msg" => "Gagal menambahkan Jabatan"
+        // ]);
+        return response()->json($jabatans->json());
+    });
+    //End::Get Data Jabatan
+    //Begin::Get Data Pegawai
+    Route::get("/get-pegawai/hcms", function (Request $request) {
+        // $test_debug = "";
+        // $fp = fopen(storage_path('/logs/api-get-pegawai.log'), 'w+');
+        try {
+            for ($i = 1; $i < 100; $i++) {
+                $data = Http::withOptions([
+                    "verify" => false
+                    // "debug" => $test_debug
+                ])->get("https://hcms.wika.co.id/apiwika/?method=get_pegawai&key=93hDk1L&client=crm&page=$i");
+                setLogging("api", "GET DATA PEGAWAI => ", [$data->json()]);
+                $response = json_decode($data->body(), true);
+                if ($data->ok() && !empty($data->body()) && $response["status"] == 200) {
+                    $pegawaiData = collect($data->json()["data"])->where('active', '!=', 0);
+                    if (!empty($pegawaiData)) {
+                        $pegawaiData->each(function ($pegawai) {
+                            $is_pegawai_exist = Pegawai::where('nip', $pegawai["nip"])->first();
+                            dd($is_pegawai_exist, $pegawai);
+                            if (!empty($is_pegawai_exist)) {
+                                $is_pegawai_exist->nip = $pegawai["nip"] ?? null;
+                                $is_pegawai_exist->nama_pegawai = $pegawai["nm_peg"] ?? null;
+                                $is_pegawai_exist->handphone = $pegawai["telepon"] ?? null;
+                                $is_pegawai_exist->email = $pegawai["email"] ?? null;
+                                $is_pegawai_exist->kode_jabatan = (int)$pegawai["kd_kantor"] ?? null;
+                                $is_pegawai_exist->kode_jabatan_sap = (int)$pegawai["kd_jabatan"] ?? null;
+                                $is_pegawai_exist->kode_fungsi_bidang_sap = (int)$pegawai["kd_fungsi_bidang"];
+                                $is_pegawai_exist->kode_fungsi_bidang = (int)$pegawai["kd_posisi"] ?? null;
+                                $is_pegawai_exist->nama_fungsi_bidang = $pegawai["nm_fungsi_bidang"] ?? null;
+                                $is_pegawai_exist->kode_kantor_sap = $pegawai["cmp_id"] ?? null;
+                                $is_pegawai_exist->nama_kantor = $pegawai["jns_kantor"] ?? null;
+                                $is_pegawai_exist->save();
+                            } else {
+                                $new_pegawai = new Pegawai();
+                                $new_pegawai->nip = $pegawai["nip"] ?? null;
+                                $new_pegawai->nama_pegawai = $pegawai["nm_peg"] ?? null;
+                                $new_pegawai->handphone = $pegawai["telepon"] ?? null;
+                                $new_pegawai->email = $pegawai["email"] ?? null;
+                                $new_pegawai->kode_jabatan = (int)$pegawai["kd_kantor"] ?? null;
+                                $new_pegawai->kode_jabatan_sap = (int)$pegawai["kd_jabatan"] ?? null;
+                                $new_pegawai->kode_fungsi_bidang_sap = (int)$pegawai["kd_fungsi_bidang"];
+                                $new_pegawai->kode_fungsi_bidang = (int)$pegawai["kd_posisi"] ?? null;
+                                $new_pegawai->nama_fungsi_bidang = $pegawai["nm_fungsi_bidang"] ?? null;
+                                $new_pegawai->kode_kantor_sap = $pegawai["cmp_id"] ?? null;
+                                $new_pegawai->nama_kantor = $pegawai["jns_kantor"] ?? null;
+                                $new_pegawai->save();
+                            }
+                        });
+                    } else {
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage()
+            ]);
+            // dd($e->getMessage());
+        }
+    });
+    //End::Get Data Pegawai
 
     //Begin :: Integrasi Get Proyek PIS
     Route::get('/get-progress-pis/all', function () {

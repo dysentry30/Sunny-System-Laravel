@@ -799,22 +799,22 @@ class UserController extends Controller
                 // dd($checkUserInCRM);
 
                 if (!empty($checkUserInCRM) && $checkUserInCRM->is_active) {
-                    $dataPegawai = Pegawai::where('nip', $nip)->first();
-                    $dataPegawai->nama_pegawai = $response["responseData"]["full_name"];
-                    $dataPegawai->email = $response["responseData"]["email"];
-                    $dataPegawai->handphone = $response["responseData"]["handphone"];
-                    $dataPegawai->kode_jabatan = $response["responseData"]["kd_jabatan"];
-                    $dataPegawai->nama_fungsi_bidang = $response["responseData"]["nm_fungsi_bidang"];
-                    $dataPegawai->kode_kantor_sap = $response["responseData"]["cmp_id"];
-                    $dataPegawai->nama_kantor = $response["responseData"]["nm_kantor"];
+                    // $dataPegawai = Pegawai::where('nip', $nip)->first();
+                    // $dataPegawai->nama_pegawai = $response["responseData"]["full_name"];
+                    // $dataPegawai->email = $response["responseData"]["email"];
+                    // $dataPegawai->handphone = $response["responseData"]["handphone"];
+                    // $dataPegawai->kode_jabatan = $response["responseData"]["kd_jabatan"];
+                    // $dataPegawai->nama_fungsi_bidang = $response["responseData"]["nm_fungsi_bidang"];
+                    // $dataPegawai->kode_kantor_sap = $response["responseData"]["cmp_id"];
+                    // $dataPegawai->nama_kantor = $response["responseData"]["nm_kantor"];
 
                     $checkUserInCRM->name = $response["responseData"]["full_name"];
                     $checkUserInCRM->email = $response["responseData"]["email"];
                     $checkUserInCRM->no_hp = $response["responseData"]["handphone"];
 
                     // dd($dataPegawai);
-                    if ($dataPegawai->save() && $checkUserInCRM->save()
-                    ) {
+                    // if ($dataPegawai->save() && $checkUserInCRM->save()
+                    if ($checkUserInCRM->save()) {
                         // Auth::login(['nip' => $nip]);
                         Auth::login($checkUserInCRM);
                         if (Auth::check()) {
