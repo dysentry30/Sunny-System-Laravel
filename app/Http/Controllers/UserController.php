@@ -783,6 +783,7 @@ class UserController extends Controller
 
                 if ($response["responseStatus"] != 0) {
                     // dd($response["responseData"]);
+                    setLogging("login", "User Login WZONE => ",  $response["responseData"]);
                     $nip = $response["responseData"]["nip"];
                 } else {
                     dd($response);
@@ -799,13 +800,17 @@ class UserController extends Controller
 
                 if (!empty($checkUserInCRM) && $checkUserInCRM->is_active) {
                     $dataPegawai = Pegawai::where('nip', $nip)->first();
-                    $dataPegawai->nama_pegawai = $response["responseData"]["full_name"];
-                    $dataPegawai->email = $response["responseData"]["email"];
-                    $dataPegawai->handphone = $response["responseData"]["handphone"];
-                    $dataPegawai->kode_jabatan = $response["responseData"]["kd_jabatan"];
-                    $dataPegawai->nama_fungsi_bidang = $response["responseData"]["nm_fungsi_bidang"];
-                    $dataPegawai->kode_kantor_sap = $response["responseData"]["cmp_id"];
-                    $dataPegawai->nama_kantor = $response["responseData"]["nm_kantor"];
+                    // if (!empty($dataPegawai)) {
+                    //     $dataPegawai->nama_pegawai = $response["responseData"]["full_name"];
+                    //     $dataPegawai->email = $response["responseData"]["email"];
+                    //     $dataPegawai->handphone = $response["responseData"]["handphone"] ?? 0;
+                    //     // $dataPegawai->kode_jabatan = $response["responseData"]["kd_jabatan"];
+                    //     $dataPegawai->kode_fungsi_bidang_sap = $response["responseData"]["kd_fungsi_bidang"];
+                    //     $dataPegawai->nama_fungsi_bidang = $response["responseData"]["nm_fungsi_bidang"];
+                    //     $dataPegawai->kode_jabatan_sap = $response["responseData"]["kd_jabatan"];
+                    //     // $dataPegawai->kode_kantor_sap = $response["responseData"]["kd_kantor"];
+                    //     $dataPegawai->nama_kantor = $response["responseData"]["nm_kantor"];
+                    // }
 
                     $checkUserInCRM->name = $response["responseData"]["full_name"];
                     $checkUserInCRM->email = $response["responseData"]["email"];
