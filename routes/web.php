@@ -2904,10 +2904,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                     if (!empty($pegawaiData)) {
                         $pegawaiData->each(function ($pegawai) {
                             $is_pegawai_exist = Pegawai::where('nip', $pegawai["nip"])->first();
-                            dump($is_pegawai_exist, $pegawai);
+                            dd($is_pegawai_exist, $pegawai);
                             if (!empty($is_pegawai_exist)) {
-                                $is_pegawai_exist->nip = (int) $pegawai["nip"] ?? null;
-                                $is_pegawai_exist->nama_pegawai = (int) $pegawai["nm_peg"] ?? null;
+                                $is_pegawai_exist->nip = $pegawai["nip"] ?? null;
+                                $is_pegawai_exist->nama_pegawai = $pegawai["nm_peg"] ?? null;
                                 $is_pegawai_exist->handphone = $pegawai["telepon"] ?? null;
                                 $is_pegawai_exist->email = $pegawai["email"] ?? null;
                                 $is_pegawai_exist->kode_jabatan = (int)$pegawai["kd_kantor"] ?? null;
@@ -2920,8 +2920,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                                 $is_pegawai_exist->save();
                             } else {
                                 $new_pegawai = new Pegawai();
-                                $new_pegawai->nip = (int) $pegawai["nip"] ?? null;
-                                $new_pegawai->nama_pegawai = (int) $pegawai["nm_peg"] ?? null;
+                                $new_pegawai->nip = $pegawai["nip"] ?? null;
+                                $new_pegawai->nama_pegawai = $pegawai["nm_peg"] ?? null;
                                 $new_pegawai->handphone = $pegawai["telepon"] ?? null;
                                 $new_pegawai->email = $pegawai["email"] ?? null;
                                 $new_pegawai->kode_jabatan = (int)$pegawai["kd_kantor"] ?? null;
