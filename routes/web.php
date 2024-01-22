@@ -95,8 +95,10 @@ use Termwind\Components\Dd;
 
 Route::get('/', [UserController::class, 'welcome'])->middleware("userNotAuth");
 Route::get('/ccm', [UserController::class, 'welcome'])->middleware("userNotAuth");
-Route::get('/crm-login', [UserController::class, 'authen'])->middleware("userNotAuth");
+Route::get('/crm-login', [UserController::class, 'authenticate'])->middleware("userNotAuth");
 Route::get('/csi-login', [UserController::class, 'welcome'])->middleware("userNotAuth");
+
+Route::get('/login-admin', [UserController::class, 'welcomeAdmin'])->middleware("userNotAuth");
 
 
 // begin :: Login

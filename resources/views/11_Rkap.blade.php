@@ -163,8 +163,8 @@
                                         <tr>
                                             <!--begin::Name-->
                                             <td class="">
-                                                <a target="_blank" href="/rkap/{{ $proyek->first()->UnitKerja->divcode }}/{{ $proyek->first()->tahun_perolehan }}" id="click-name"
-                                                    class="text-gray-600 text-hover-primary mb-1">{{ $proyek->first()->UnitKerja->unit_kerja }}</a>
+                                                <a target="_blank" href="/rkap/{{ $proyek->first()->UnitKerja?->divcode }}/{{ $proyek->first()->tahun_perolehan }}" id="click-name"
+                                                    class="text-gray-600 text-hover-primary mb-1">{{ $proyek->first()->UnitKerja?->unit_kerja }}</a>
                                             </td>
                                             <!--end::Name-->
                                             <!--begin::Pelaksanaan-->
@@ -198,7 +198,7 @@
                                             <!--end::Coloumn-->
                                             <!--begin::Coloumn-->
                                             <td class="text-center">
-                                                {{ $proyek->first()->UnitKerja->is_active == 1 ? "Yes" : "No" }}
+                                                {{ $proyek->first()->UnitKerja?->is_active == 1 ? "Yes" : "No" }}
                                             </td>
                                             <!--end::Coloumn-->
 

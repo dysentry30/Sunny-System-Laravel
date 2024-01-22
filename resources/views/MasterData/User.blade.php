@@ -3,7 +3,7 @@ a{{-- Begin::Extend Header --}}
 {{-- End::Extend Header --}}
 
 {{-- Begin::Title --}}
-@section('title', 'Users')
+@section('title', 'Users Management')
 {{-- End::Title --}}
 
 <!--begin::Main-->
@@ -39,7 +39,7 @@ a{{-- Begin::Extend Header --}}
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">Users
+                                <h1 class="d-flex align-items-center fs-3 my-1">Users Management
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -53,8 +53,12 @@ a{{-- Begin::Extend Header --}}
                                     {{-- <a href="/user/new" class="btn btn-sm btn-primary w-80px"
                                         style="background-color:#008CB4; padding: 7px 30px 7px 30px">
                                         New</a> --}}
-                                    <button class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
+                                    {{-- <button class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
                                         data-bs-target="#kt_modal_create_user" id="kt_toolbar_primary_button"
+                                        id="kt_toolbar_primary_button" style="background-color:#008CB4; padding: 6px">
+                                        New</button> --}}
+                                    <button class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_create_user_new" id="kt_toolbar_primary_button"
                                         id="kt_toolbar_primary_button" style="background-color:#008CB4; padding: 6px">
                                         New</button>
 
@@ -116,162 +120,313 @@ a{{-- Begin::Extend Header --}}
 
 
                         <!--begin::Card header-->
-                        {{-- <div class="card-header border-0 pt-">
+                        <div class="card-header border-0 pt-">
                             <!--begin::Card title-->
                             <div class="card-title">
-                                <!--begin::Search-->
-                                <div class="d-flex align-items-center position-relative my-1">
-                                    <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                    <span class="svg-icon svg-icon-1 position-absolute ms-6">
-                                        <i class="bi bi-search"></i>
-                                    </span>
-                                    <!--end::Svg Icon-->
-                                    <input type="text" data-kt-customer-table-filter="search"
-                                        class="form-control form-control-solid w-250px ps-15" placeholder="Search User" />
-                                </div>
-                                <!--end::Search-->
-                            </div>
-                            <!--begin::Card title-->
+                                <!--begin::Panel-->
+                                <div class="d-flex align-items-center my-1" style="width: 100%;">
+                                    
+                                    <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
+                                        <!--begin:::Tab item Claim-->
+                                        <li class="nav-item">
+                                            <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab" aria-selected="true" href="#kt_panel_view_1"
+                                                style="font-size:14px;">User Wika</a>
+                                        </li>
+                                        <!--end:::Tab item Claim-->
+                                        
+                                        <!--begin:::Tab item -->
+                                        <li class="nav-item">
+                                            <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#kt_panel_view_2" style="font-size:14px;">User Customer Wika</a>
+                                        </li>
+                                        <!--end:::Tab item -->
 
-                        </div> --}}
+                                    </ul>
+
+                                </div>
+                                <!--end::Panel-->
+                            </div>
+                            <!--end::Card title-->
+                        </div>
                         <!--end::Card header-->
 
 
                         <!--begin::Card body-->
                         <div class="card-body pt-3 ">
-
-                            <!--begin::Table-->
-                            <table class="table table-hover align-middle table-row-dashed fs-6 gy-2" id="user_table">
-                                <!--begin::Table head-->
-                                <thead>
-                                    <!--begin::Table row-->
-                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-auto px-4">No.</th>
-                                        {{-- <th class="min-w-auto">Nip</th> --}}
-                                        <th class="min-w-auto">Name</th>
-                                        <th class="min-w-auto">Username</th>
-                                        <th class="min-w-auto">Unit Kerja</th>
-                                        <th class="min-w-auto">Role</th>
-                                        <th class="min-w-auto text-center">Is Active</th>
-                                        <th class="min-w-auto">Nomor Kontak</th>
-                                        @if (auth()->user()->check_administrator)
-                                            <th class="text-center">
-                                                Action
-                                            </th>
-                                        @endif
-                                    </tr>
-                                    <!--end::Table row-->
-                                </thead>
-                                <!--end::Table head-->
-                                <!--begin::Table body-->
-                                @php
-                                    // $companies = $companies->reverse();
-                                    $no = 1;
-                                @endphp
-                                <tbody class="fw-bold text-gray-600">
-                                    @foreach ($users as $user)
-                                        <tr>
-
-                                            <!--begin::No-->
-                                            <td class="px-4">
-                                                {{ $no++ }}
-                                            </td>
-                                            <!--end::No-->
-
-                                            <!--begin::NIP-->
-                                            {{-- <td>
-                                                <a href="/user/view/{{ $user->id }}"
-                                                    class="text-hover-primary text-gray-600">{{ $user->nip }}</a>
-                                            </td> --}}
-                                            <!--end::NIP-->
-
-                                            <!--begin::Ketua tender-->
-                                            <td>
-                                                <a href="/user/view/{{ $user->id }}"
-                                                    class="text-hover-primary text-gray-600">{{ $user->name }}</a>
-                                            </td>
-                                            <!--end::Ketua tender-->
-
-                                            <!--begin::Ketua tender-->
-                                            <td>
-                                                <a href="/user/view/{{ $user->id }}"
-                                                    class="text-hover-primary text-gray-600">{{ $user->email }}</a>
-                                            </td>
-                                            <!--end::Ketua tender-->
-
-                                            <!--begin::unit-->
-                                            <td>
-                                                @php
-                                                    $unit_kerja_user = str_contains($user->unit_kerja, ",") ? collect(explode(",", $user->unit_kerja)) : collect($user->unit_kerja);
-                                                @endphp
-                                                {{-- {{ $user->unit_kerja ?? '-' }} --}}
-                                                @foreach ($unit_kerja_user as $item)
-                                                    {{ $item }}
-                                                @endforeach
-                                                {{-- {{ $unit_kerja_user ?? '-' }} --}}
-                                            </td>
-                                            <!--end::unit-->
-
-                                            <!--begin::Role-->
-                                            <td>
-                                                @if (!$user->check_administrator &&
-                                                    !$user->check_admin_kontrak &&
-                                                    !$user->check_user_sales &&
-                                                    !$user->check_team_proyek)
-                                                    <span class="text-danger">Belum ditentukan</span>
+                            <div id="tab-content" class="tab-content">
+                                
+                                <!--begin::Panel-->
+                                <div class="tab-pane fade show active" id="kt_panel_view_1" role="tabpanel">
+                                    <!--begin::Table-->
+                                    <table class="table table-hover align-middle table-row-dashed fs-6 gy-2" id="user_table">
+                                        <!--begin::Table head-->
+                                        <thead>
+                                            <!--begin::Table row-->
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-auto px-4">No.</th>
+                                                {{-- <th class="min-w-auto">Nip</th> --}}
+                                                <th class="min-w-auto">Name</th>
+                                                <th class="min-w-auto">Username</th>
+                                                <th class="min-w-auto">Unit Kerja</th>
+                                                <th class="min-w-auto">Role</th>
+                                                <th class="min-w-auto text-center">Is Active</th>
+                                                <th class="min-w-auto">Nomor Kontak</th>
+                                                @if (auth()->user()->check_administrator)
+                                                    <th class="text-center">
+                                                        Action
+                                                    </th>
                                                 @endif
-                                                @if ($user->check_administrator)
-                                                    - Administrator <br>
-                                                @endif
-                                                @if ($user->check_admin_kontrak)
-                                                    - Admin Kontrak <br>
-                                                @endif
-                                                @if ($user->check_user_sales)
-                                                    - User Sales <br>
-                                                @endif
-                                                @if ($user->check_team_proyek)
-                                                    - Team Proyek <br>
-                                                @endif
-                                            </td>
-                                            <!--end::Role-->
+                                            </tr>
+                                            <!--end::Table row-->
+                                        </thead>
+                                        <!--end::Table head-->
+                                        <!--begin::Table body-->
+                                        @php
+                                            // $companies = $companies->reverse();
+                                            $no = 1;
+                                        @endphp
+                                        <tbody class="fw-bold text-gray-600">
+                                            @foreach ($users as $user)
+                                            @if (!str_contains($user->email, "@wika-customer"))
+                                                <tr>
 
-                                            <!--begin::Created at-->
-                                            <td class="text-center">
-                                                <p class="fs-6 badge {{ $user->is_active == true ? 'badge-light-success' : 'badge-light-danger' }}">
-                                                    {{ $user->is_active == true ? 'yes' : '* No' }}
-                                                </p>
-                                            </td>
-                                            <!--end::Created at-->
+                                                    <!--begin::No-->
+                                                    <td class="px-4">
+                                                        {{ $no++ }}
+                                                    </td>
+                                                    <!--end::No-->
 
-                                            <!--begin::Email-->
-                                            <td class="px-4">
-                                                {{ $user->no_hp ?? '-' }}
-                                            </td>
-                                            <!--end::Email-->
+                                                    <!--begin::NIP-->
+                                                    {{-- <td>
+                                                        <a href="/user/view/{{ $user->id }}"
+                                                            class="text-hover-primary text-gray-600">{{ $user->nip }}</a>
+                                                    </td> --}}
+                                                    <!--end::NIP-->
 
-                                            @if (auth()->user()->check_administrator)
-                                                <!--begin::Action-->
-                                                <td class="text-center">
-                                                    <!--begin::Button-->
-                                                    <button data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_delete{{ $user->id }}"
-                                                        id="modal-delete"
-                                                        class="btn btn-sm btn-light btn-active-primary">Delete
-                                                    </button>
-                                                    </form>
-                                                    <!--end::Button-->
-                                                </td>
-                                                <!--end::Action-->
+                                                    <!--begin::Ketua tender-->
+                                                    <td>
+                                                        <a href="/user/view/{{ $user->id }}"
+                                                            class="text-hover-primary text-gray-600">{{ $user->name }}</a>
+                                                    </td>
+                                                    <!--end::Ketua tender-->
+
+                                                    <!--begin::Ketua tender-->
+                                                    <td>
+                                                        <a href="/user/view/{{ $user->id }}"
+                                                            class="text-hover-primary text-gray-600">{{ $user->email }}</a>
+                                                    </td>
+                                                    <!--end::Ketua tender-->
+
+                                                    <!--begin::unit-->
+                                                    <td>
+                                                        @php
+                                                            $unit_kerja_user = str_contains($user->unit_kerja, ",") ? collect(explode(",", $user->unit_kerja)) : collect($user->unit_kerja);
+                                                        @endphp
+                                                        {{-- {{ $user->unit_kerja ?? '-' }} --}}
+                                                        @foreach ($unit_kerja_user as $item)
+                                                            {{ $item }}
+                                                        @endforeach
+                                                        {{-- {{ $unit_kerja_user ?? '-' }} --}}
+                                                    </td>
+                                                    <!--end::unit-->
+
+                                                    <!--begin::Role-->
+                                                    <td>
+                                                        @if (!$user->check_administrator &&
+                                                            !$user->check_admin_kontrak &&
+                                                            !$user->check_user_sales &&
+                                                            !$user->check_team_proyek)
+                                                            <span class="text-danger">Belum ditentukan</span>
+                                                        @endif
+                                                        @if ($user->check_administrator)
+                                                            - Administrator <br>
+                                                        @endif
+                                                        @if ($user->check_admin_kontrak)
+                                                            - Admin Kontrak <br>
+                                                        @endif
+                                                        @if ($user->check_user_sales)
+                                                            - User Sales <br>
+                                                        @endif
+                                                        @if ($user->check_team_proyek)
+                                                            - Team Proyek <br>
+                                                        @endif
+                                                    </td>
+                                                    <!--end::Role-->
+
+                                                    <!--begin::Created at-->
+                                                    <td class="text-center">
+                                                        <p class="fs-6 badge {{ $user->is_active == true ? 'badge-light-success' : 'badge-light-danger' }}">
+                                                            {{ $user->is_active == true ? 'yes' : '* No' }}
+                                                        </p>
+                                                    </td>
+                                                    <!--end::Created at-->
+
+                                                    <!--begin::Email-->
+                                                    <td class="px-4">
+                                                        {{ $user->no_hp ?? '-' }}
+                                                    </td>
+                                                    <!--end::Email-->
+
+                                                    @if (auth()->user()->check_administrator)
+                                                        <!--begin::Action-->
+                                                        <td class="text-center">
+                                                            <!--begin::Button-->
+                                                            <button data-bs-toggle="modal"
+                                                                data-bs-target="#kt_modal_delete{{ $user->id }}"
+                                                                id="modal-delete"
+                                                                class="btn btn-sm btn-light btn-active-primary">Delete
+                                                            </button>
+                                                            </form>
+                                                            <!--end::Button-->
+                                                        </td>
+                                                        <!--end::Action-->
+                                                    @endif
+                                                </tr>
                                             @endif
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                                <!--end::Table body-->
-                            </table>
-                            <!--end::Table-->
+                                            @endforeach
+                                        </tbody>
+                                        <!--end::Table body-->
+                                    </table>
+                                    <!--end::Table-->
+                                </div>
+                                <!--end::Panel-->
 
+                                <!--begin::Panel-->
+                                <div class="tab-pane fade" id="kt_panel_view_2" role="tabpanel">
+                                    <!--begin::Table-->
+                                    <table class="table table-hover align-middle table-row-dashed fs-6 gy-2" id="user_table_2">
+                                        <!--begin::Table head-->
+                                        <thead>
+                                            <!--begin::Table row-->
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-auto px-4">No.</th>
+                                                {{-- <th class="min-w-auto">Nip</th> --}}
+                                                <th class="min-w-auto">Name</th>
+                                                <th class="min-w-auto">Username</th>
+                                                <th class="min-w-auto">Unit Kerja</th>
+                                                <th class="min-w-auto">Role</th>
+                                                <th class="min-w-auto text-center">Is Active</th>
+                                                <th class="min-w-auto">Nomor Kontak</th>
+                                                @if (auth()->user()->check_administrator)
+                                                    <th class="text-center">
+                                                        Action
+                                                    </th>
+                                                @endif
+                                            </tr>
+                                            <!--end::Table row-->
+                                        </thead>
+                                        <!--end::Table head-->
+                                        <!--begin::Table body-->
+                                        @php
+                                            // $companies = $companies->reverse();
+                                            $no = 1;
+                                        @endphp
+                                        <tbody class="fw-bold text-gray-600">
+                                            @foreach ($users as $user)
+                                            @if (str_contains($user->email, "@wika-customer"))
+                                                <tr>
 
+                                                    <!--begin::No-->
+                                                    <td class="px-4">
+                                                        {{ $no++ }}
+                                                    </td>
+                                                    <!--end::No-->
 
+                                                    <!--begin::NIP-->
+                                                    {{-- <td>
+                                                        <a href="/user/view/{{ $user->id }}"
+                                                            class="text-hover-primary text-gray-600">{{ $user->nip }}</a>
+                                                    </td> --}}
+                                                    <!--end::NIP-->
+
+                                                    <!--begin::Ketua tender-->
+                                                    <td>
+                                                        <a href="/user/view/{{ $user->id }}"
+                                                            class="text-hover-primary text-gray-600">{{ $user->name }}</a>
+                                                    </td>
+                                                    <!--end::Ketua tender-->
+
+                                                    <!--begin::Ketua tender-->
+                                                    <td>
+                                                        <a href="/user/view/{{ $user->id }}"
+                                                            class="text-hover-primary text-gray-600">{{ $user->email }}</a>
+                                                    </td>
+                                                    <!--end::Ketua tender-->
+
+                                                    <!--begin::unit-->
+                                                    <td>
+                                                        @php
+                                                            $unit_kerja_user = str_contains($user->unit_kerja, ",") ? collect(explode(",", $user->unit_kerja)) : collect($user->unit_kerja);
+                                                        @endphp
+                                                        {{-- {{ $user->unit_kerja ?? '-' }} --}}
+                                                        @foreach ($unit_kerja_user as $item)
+                                                            {{ $item }}
+                                                        @endforeach
+                                                        {{-- {{ $unit_kerja_user ?? '-' }} --}}
+                                                    </td>
+                                                    <!--end::unit-->
+
+                                                    <!--begin::Role-->
+                                                    <td>
+                                                        @if (!$user->check_administrator &&
+                                                            !$user->check_admin_kontrak &&
+                                                            !$user->check_user_sales &&
+                                                            !$user->check_team_proyek)
+                                                            <span class="text-danger">Belum ditentukan</span>
+                                                        @endif
+                                                        @if ($user->check_administrator)
+                                                            - Administrator <br>
+                                                        @endif
+                                                        @if ($user->check_admin_kontrak)
+                                                            - Admin Kontrak <br>
+                                                        @endif
+                                                        @if ($user->check_user_sales)
+                                                            - User Sales <br>
+                                                        @endif
+                                                        @if ($user->check_team_proyek)
+                                                            - Team Proyek <br>
+                                                        @endif
+                                                    </td>
+                                                    <!--end::Role-->
+
+                                                    <!--begin::Created at-->
+                                                    <td class="text-center">
+                                                        <p class="fs-6 badge {{ $user->is_active == true ? 'badge-light-success' : 'badge-light-danger' }}">
+                                                            {{ $user->is_active == true ? 'yes' : '* No' }}
+                                                        </p>
+                                                    </td>
+                                                    <!--end::Created at-->
+
+                                                    <!--begin::Email-->
+                                                    <td class="px-4">
+                                                        {{ $user->no_hp ?? '-' }}
+                                                    </td>
+                                                    <!--end::Email-->
+
+                                                    @if (auth()->user()->check_administrator)
+                                                        <!--begin::Action-->
+                                                        <td class="text-center">
+                                                            <!--begin::Button-->
+                                                            <button data-bs-toggle="modal"
+                                                                data-bs-target="#kt_modal_delete{{ $user->id }}"
+                                                                id="modal-delete"
+                                                                class="btn btn-sm btn-light btn-active-primary">Delete
+                                                            </button>
+                                                            </form>
+                                                            <!--end::Button-->
+                                                        </td>
+                                                        <!--end::Action-->
+                                                    @endif
+                                                </tr>
+                                            @endif
+                                            @endforeach
+                                        </tbody>
+                                        <!--end::Table body-->
+                                    </table>
+                                    <!--end::Table-->
+                                </div>
+                                <!--end::Panel-->
+
+                            </div>
                         </div>
                         <!--end::Card body-->
                     </div>
@@ -334,12 +489,12 @@ a{{-- Begin::Extend Header --}}
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Name</span>
+                                        <span class="">Name</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="text" id="name-user" name="name-user" class="form-control form-control-solid" 
-                                    value="{{ old('name-user') }}" placeholder="Name" />
+                                    value="{{ old('name-user') }}" placeholder="Name" style="cursor: context-menu"/>
                                     @error('name-user')
                                     <h6 class="text-danger fw-normal">{{ $message }}</h6>
                                     @enderror
@@ -353,12 +508,12 @@ a{{-- Begin::Extend Header --}}
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Email</span>
+                                        <span class="">Email</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="email" class="form-control form-control-solid" 
-                                    id="email" name="email" value="{{ old('email') }}" placeholder="Email" />
+                                    id="email" name="email" value="{{ old('email') }}" placeholder="Email" style="cursor: context-menu"/>
                                     @error('email')
                                     <h6 class="text-danger fw-normal">{{ $message }}</h6>
                                     @enderror
@@ -378,12 +533,12 @@ a{{-- Begin::Extend Header --}}
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Phone Number</span>
+                                        <span class="">Phone Number</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="text" class="form-control form-control-solid" 
-                                    id="phone-number" name="phone-number" value="{{ old('phone-number') }}" placeholder="Phone Number" />
+                                    id="phone-number" name="phone-number" value="{{ old('phone-number') }}" placeholder="Phone Number" style="cursor: context-menu"/>
                                     @error('phone-number')
                                     <h6 class="text-danger fw-normal">{{ $message }}</h6>
                                     @enderror
@@ -403,7 +558,7 @@ a{{-- Begin::Extend Header --}}
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="text" class="form-control form-control-solid" 
-                                    id="nip" name="nip" value="{{ old("nip") }}" placeholder="Website" />
+                                    id="nip" name="nip" value="{{ old("nip") }}" placeholder="NIP" onfocusout="getNip(this)"/>
                                     <!--end::Input-->
                                 </div>
                                 @error('nip')
@@ -509,6 +664,127 @@ a{{-- Begin::Extend Header --}}
     </form>
     <!--end::Modal New User-->
 
+    <form action="/user/role/save" method="post" enctype="multipart/form-data">
+        @csrf
+        
+        <!--begin::Modal - Create Proyek-->
+        <div class="modal fade" id="kt_modal_create_user_new" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-800px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>New User</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+                        
+                        <!--begin::Get Modal JS-->
+                        <input type="hidden" class="modal-name" name="modal-name">
+                        <!--end::Get Modal JS-->
+
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="">Name Pegawai</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <div class="d-flex flex-row gap-2">
+                                    <!--begin::Input-->
+                                    <select id="nip-pegawai" name="nip"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="false" data-placeholder="Pilh Pegawai"
+                                        tabindex="-1" aria-hidden="true">
+                                        <option value=""></option>
+                                        @foreach ($pegawai_all as $pegawai)
+                                            <option value="{{ $pegawai->nip }}">{{ $pegawai->nip }} - {{ $pegawai->nama_pegawai }}</option>
+                                        @endforeach
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End::Row Kanan+Kiri-->
+
+                        <!--begin::Options-->
+                        <br>
+                        <label class="fs-6 fw-bold form-label mt-3">Aplikasi</label>
+                        <div class="d-flex" style="flex-direction: row">
+                            <!--begin::Options-->
+                            <label class="form-check form-check-sm form-check-custom form-check-solid me-6 ms-4 align-middle">
+                                <input class="form-check-input" type="checkbox" value="" id="administrator" name="administrator" />
+                                <span class="form-check-label me-8 required"><b>Super Admin</b></span>
+                            </label>
+                            <!--end::Options-->
+                            <!--begin::Options-->
+                            <label class="form-check form-check-sm form-check-custom form-check-solid me-6">
+                                <input class="form-check-input" type="checkbox" value="" id="user-sales" name="user-sales" />
+                                <span class="form-check-label me-8 required"><b>CRM</b></span>
+                            </label>
+                            <!--end::Options-->
+                            <!--begin::Options-->
+                            <label class="form-check form-check-sm form-check-custom form-check-solid me-6">
+                                <input class="form-check-input" type="checkbox" value="" id="team-proyek" name="team-proyek" />
+                                <span class="form-check-label me-8 required"><b>CSI</b></span>
+                            </label>
+                            <!--end::Options-->
+                            <!--begin::Options-->
+                            <label class="form-check form-check-sm form-check-custom form-check-solid me-6">
+                                <input class="form-check-input" type="checkbox" value="" id="admin-kontrak" name="admin-kontrak" />
+                                <span class="form-check-label me-8 required"><b>CCM</b></span>
+                            </label>
+                            <!--end::Options-->
+                        </div>
+                        <br>
+                        <br>
+                        <!--end::Options-->
+                        
+                        <!--begin:: D-flex -->
+                        <div class="row">
+                            <select name="unit-kerja" class="form-select form-select-solid select2-hidden-accessible" data-control="select2" data-hide-search="true" data-placeholder="Unit Kerja" data-select2-id="select2-data-4-1hgp" tabindex="-1" aria-hidden="true">
+                                <option data-select2-id="select2-data-6-c3oy"></option>
+                                @foreach ($unit_kerjas as $unitKerja)
+                                <option value="{{$unitKerja->divcode}}" data-select2-id="{{$unitKerja->divcode}}">{{$unitKerja->unit_kerja}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <br>
+                        <!--end:: D-flex -->
+
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                                style="background-color:#008CB4">Save</button>
+                        </div>
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+        <!--end::Modal - Create App-->
+    </form>
+
     {{-- begin::modal DELETE --}}
     @foreach ($users as $user)
         <form action="/user/delete/{{ $user->id }}" method="post" enctype="multipart/form-data">
@@ -573,9 +849,40 @@ a{{-- Begin::Extend Header --}}
                 //     'copy', 'csv', 'excel', 'pdf', 'print'
                 // ]
             } );
+
+            $("#nip-pegawai").select2({
+                dropdownParent: $("#kt_modal_create_user_new")
+            });
         } );
     </script>
     <!--end::Data Tables-->
+
+    <script>
+        async function getNip(e){
+            const data = e.value;
+            let namaElt = document.getElementById("name-user")
+            let emailElt = document.getElementById("email")
+            let phoneElt = document.getElementById("phone-number")
+            await fetch(`/testing-user/${data}`, {
+                method: 'GET',
+            }).then((result)=>{
+                return result.json();
+            }).then((data)=>{
+                if(data.status == true){
+                    document.getElementById("name-user").value = data.data.name
+                    document.getElementById("email").value = data.data.email
+                    document.getElementById("phone-number").value = data.data.phone
+                }else{
+                    document.getElementById("name-user").value = ""
+                    document.getElementById("email").value = ""
+                    document.getElementById("phone-number").value = ""
+                }
+            }).catch((err)=>{
+                console.log(err)
+            })
+            // console.log(data, namaElt, emailElt, phoneElt)
+        }
+    </script>
     
     <script>
         function copyPassword(elt) {
