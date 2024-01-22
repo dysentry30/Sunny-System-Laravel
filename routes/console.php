@@ -23,7 +23,7 @@ Artisan::command('inspire', function () {
 Artisan::command('pegawai:get', function () {
     try {
         $count = 0;
-        for ($i = 128; $i < 300; $i++) {
+        for ($i = 1; $i < 300; $i++) {
             $data = Http::withOptions([
                 "verify" => false
                 // "debug" => $test_debug
