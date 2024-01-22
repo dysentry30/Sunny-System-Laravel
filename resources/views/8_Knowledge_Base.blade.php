@@ -35,7 +35,7 @@
                                 <!--end::Title-->
                             </div>
                             <!--end::Page title-->
-                            @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
+                            @if (Auth::user()->canany(['super-admin', 'admin-crm', 'ccm']))
                             
                             <!--begin::Actions-->
                             <div class="d-flex align-items-center py-1">
@@ -152,7 +152,7 @@
                                     <a type="button" class="text-gray-500 text-hover-primary">
                                     Attachement : <i> Attachment Tidak Tersedia </i></a>
                                     
-                                        @if (auth()->user()->check_administrator)
+                                        @if (Auth::user()->canany(['super-admin']))
 
                                             {{-- <a type="submit" class="btn btn-sm btn-light btn-active-primary px-0px py-0px" id="proyek_new_save">Delete</a> --}}
                                                 <!--begin::Action=-->
@@ -167,7 +167,7 @@
                                     <a target="_blank" href="{{ asset('faqs/'.$faq->faq_attachment) }}" type="button" class="text-gray-500 text-hover-primary">
                                     Attachement : {{ $faq->faq_attachment }}</a>
                                         
-                                        @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
+                                        @if (Auth::user()->canany(['super-admin', 'admin-crm', 'ccm']))
 
                                             {{-- <a type="submit" class="btn btn-sm btn-light btn-active-primary px-0px py-0px" id="proyek_new_save">Delete</a> --}}
                                                 <!--begin::Action=-->
@@ -200,7 +200,7 @@
 
 {{-- begin::modal Edit faq --}}
         @foreach ($faqs as $faq)
-            @if (auth()->user()->check_administrator)
+            @if (Auth::user()->canany(['super-admin']))
                 <form action="/knowledge-base/update" method="post" enctype="multipart/form-data"> 
                     @csrf
 

@@ -168,7 +168,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                         $unit_kerja_count = collect($unit_kerja)->count();
                                                     @endphp
                                                 @endif
-                                                @if (!str_contains(Auth::user()->name, "(PIC)"))
+                                                @canany(['super-admin', 'user-crm', 'approver-crm'])
                                                     <div class="col-2" style="width: 11% !important">
                                                         @if ($historyForecast->count() == $unit_kerja_count)
                                                             <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="Untuk Request Unlock, silahkan buka tab <b>Request Approval History</b>." data-bs-placement="top">
@@ -178,8 +178,8 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         <span class="text-white mx-2 fs-6">Unlock</span>
                                                                         <i class="bi bi-lock-fill text-white"></i>
                                                                 </button>
-                                                        </div>
-                                                            @else
+                                                            </div>
+                                                        @else
                                                             <button type="button" style="background-color: #008CB4;" id="lock-forecast"
                                                                 onclick="lockMonthForecastBulanan(this)"
                                                                 class="btn btn-sm btn-active-primary mt-4 me-6">
@@ -188,7 +188,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                             </button>
                                                         @endif
                                                     </div>
-                                                @endif
+                                                @endcanany
                                                 
                                                 <div class="col-2 mt-4 me-8" style="width: 10% !important">
                                                     {{-- <button type="button" id="unlock-previous-forecast"
@@ -474,7 +474,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         //         }
                                                                         //     });
                                                                         // }
-                                                                        if(!Auth::user()->check_administrator) {
+                                                                        if(!Auth::user()->can('super-admin')) {
 
                                                                             if($unit_kerja instanceof \Illuminate\Support\Collection) {
                                                                                 $dops = $dops->filter(function($dop) use($unit_kerja) {
@@ -486,9 +486,8 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                 });
                                                                             }
                                                                         }
-                                                                        
 
-                                                                        if($column != "" && !Auth::user()->check_administrator) {
+                                                                        if($column != "" && !Auth::user()->can('super-admin')) {
                                                                             $dops = $dops->filter(function($dop) use($filter, $unit_kerja) {
                                                                                 if($unit_kerja instanceof \Illuminate\Support\Collection) {
                                                                                     $dop->UnitKerjas = $dop->UnitKerjas->whereIn("divcode", $unit_kerja->toArray());
@@ -520,7 +519,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                             {{-- @if (count($dop->UnitKerjas) > 0) --}}
                                                                             {{-- @foreach ($proyeks as $proyek) --}}
                                                                         @php
-                                                                            if(!Auth::user()->check_administrator && $unit_kerja instanceof \Illuminate\Support\Collection) {
+                                                                            if(!Auth::user()->can('super-admin') && $unit_kerja instanceof \Illuminate\Support\Collection) {
                                                                                 $dop->UnitKerjas = $dop->UnitKerjas->whereIn("divcode", $unit_kerja->toArray());
                                                                             } elseif(!empty(Auth::user()->unit_kerja)){
                                                                                 $dop->UnitKerjas = $dop->UnitKerjas->where("divcode", "=", $unit_kerja);

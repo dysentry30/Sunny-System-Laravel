@@ -66,7 +66,7 @@
                             </div>
 
                             <!--end::Page title-->
-                            @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
+                            @if (Auth::user()->canany(['super-admin', 'user-crm']))
                                 <!--begin::Actions-->
                                 <div class="d-flex align-items-center py-1">
 
@@ -339,7 +339,7 @@
                                         <th class="min-w-auto"><small>Pelanggan</small></th>
                                         <th class="min-w-auto text-center"><small>Jenis Proyek</small></th>
                                         <th class="min-w-auto text-center"><small>Tipe Proyek</small></th>
-                                        @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
+                                        @if (Auth::user()->canany(['super-admin', 'admin-crm']))
                                             <th class="min-w-auto text-center"><small>Action</small></th>
                                         @endif
                                     </tr>
@@ -621,7 +621,7 @@
                                             </td>
                                             <!--end::Tipe Proyek-->
 
-                                            @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
+                                            @if (Auth::user()->canany(['super-admin', 'admin-crm']))
                                                 <!--begin::Action-->
                                                 <td class="text-center px-3">
                                                     <!--begin::Button-->

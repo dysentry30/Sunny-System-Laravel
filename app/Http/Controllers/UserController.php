@@ -221,6 +221,8 @@ class UserController extends Controller
     }
 
     public function logoutOld(Request $request)
+
+    public function logoutOld(Request $request)
     {
         // auth()->user()->forceFill([
         //     "remember_token" => null,
@@ -786,7 +788,7 @@ class UserController extends Controller
                     // dd($response["responseData"]);
                     $nip = $response["responseData"]["nip"];
                 } else {
-                    dd($response);
+                    return redirect()->back();
                 }
                 // $nip = $user['NIP'];
             } else {
@@ -850,7 +852,9 @@ class UserController extends Controller
                 // return redirect(env('WZONE_URL')); 
             }
         } catch (\Exception $e) {
-            dd($e);
+            dd($e->getMessage());
+            Alert::error('Error', $e->getMessage());
+            return redirect()->back();
         }
     }
 

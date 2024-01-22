@@ -57,7 +57,7 @@
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
-                                    @if (Auth::user()->check_administrator || str_contains(auth()->user()->name, '(PIC)'))
+                                    @if (Auth::user()->can('super-admin') || Auth::user()->can('admin-crm'))
                                         <a href="/user" class="btn btn-sm btn-light btn-active-primary ms-3"
                                             id="customer_new_close">
                                             Close</a>
@@ -182,7 +182,7 @@
                                                     <!--end::Input group TTD-->
 
                                                     <!--begin::Input group is Active-->
-                                                    @if (Auth::user()->check_administrator || str_contains(Auth::user()->name, '(PIC)'))
+                                                    @if (Auth::user()->can('super-admin') || str_contains(Auth::user()->name, '(PIC)'))
                                                         <div class="form-check me-12">
                                                             <!--begin::Input-->
                                                             <input class="form-check-input" type="checkbox" value=""
@@ -226,7 +226,7 @@
                                                 <!--begin:::Tabs-->
                                                 <ul
                                                     class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
-                                                    @if (Auth::user()->check_administrator || str_contains(auth()->user()->name, '(PIC)'))
+                                                    @if (Auth::user()->can('super-admin') || Auth::user()->can('admin-crm'))
                                                         <!--begin:::Tab item Informasi Perusahaan-->
                                                         <li class="nav-item">
                                                             <a class="nav-link text-active-primary pb-4 active required"
@@ -261,7 +261,7 @@
                                                 <!--begin:::Tab content -->
                                                 <div class="tab-content" id="myTabContent">
 
-                                                    @if (Auth::user()->check_administrator || str_contains(auth()->user()->name, '(PIC)'))
+                                                    @if (Auth::user()->can('super-admin') || Auth::user()->can('admin-crm'))
                                                         <!--begin:::Tab pane Hak Akses-->
                                                         <div class="tab-pane fade show active"
                                                             id="kt_user_view_overview_tab" role="tabpanel">
@@ -270,7 +270,7 @@
                                                             <!--begin::Row-->
                                                             <div class="d-flex flex-row h-50px">
                                                                 <!-- begin:: Form Input Group -->
-                                                                @if (Auth::user()->check_administrator)
+                                                                @if (Auth::user()->can('super-admin'))
                                                                     <!-- begin:: Form Input Administrator -->
                                                                     <div class="form-check me-12">
                                                                         <input class="form-check-input" type="checkbox"
@@ -330,7 +330,7 @@
                                                             <p><b>Role</b></p>
                                                             <div class="d-flex flex-row h-50px">
                                                                 <!-- begin:: Form Input Group -->
-                                                                @if (Auth::user()->check_administrator)
+                                                                @if (Auth::user()->can('super-admin'))
                                                                     <!-- begin:: Form Input Administrator -->
                                                                     <div class="form-check me-12">
                                                                         <input class="form-check-input" type="checkbox"
@@ -494,7 +494,7 @@
 
 
                     <!--Begin :: Reset Password -->
-                    @if (Auth::user()->check_administrator || !str_contains(auth()->user()->name, '(PIC)'))
+                    @if (Auth::user()->can('super-admin') || !Auth::user()->can('admin-crm'))
                         <div class="tab-pane fade show active" id="kt_user_view_overview_user_password" role="tabpanel">
                         @else
                             <div class="tab-pane fade" id="kt_user_view_overview_user_password" role="tabpanel">

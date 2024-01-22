@@ -10,6 +10,7 @@ use App\Models\PorsiJO;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -32,7 +33,7 @@ class AssessmentPartnerSelectionController extends Controller
         if ($kriteriaPenilaian->isEmpty()) {
             Alert::error('Error', 'Mohon isi Master Data Penilaian Risiko Partner terlebih dahulu!');
 
-            if (auth()->user()->check_administrator) {
+            if (Gate::allows('super-admin')) {
                 return redirect('/penilaian-partner-selection');
             } else {
                 return redirect('/proyek');

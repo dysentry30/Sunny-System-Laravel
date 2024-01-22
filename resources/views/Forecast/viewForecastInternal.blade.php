@@ -151,7 +151,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                 <script>
                                                     const historyForecast = "{{ count($historyForecast) }}";
                                                 </script>
-                                                @if (Auth::user()->check_administrator)
+                                                @if (Auth::user()->can('super-admin'))
                                                     <button type="button" style="background-color: #008CB4;"
                                                         id="lock-forecast" onclick="lockMonthForecastBulanan(this)"
                                                         class="btn btn-sm btn-active-primary mt-4">
@@ -443,7 +443,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         //         }
                                                                         //     });
                                                                         // }
-                                                                        if (!Auth::user()->check_administrator) {
+                                                                        if (!Auth::user()->can('super-admin')) {
                                                                             $unit_kerja = str_contains(Auth::user()->unit_kerja, ',') ? collect(explode(',', Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
                                                                         
                                                                             if ($unit_kerja instanceof \Illuminate\Support\Collection) {
@@ -457,7 +457,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                             }
                                                                         }
                                                                         
-                                                                        if ($column != '' && !Auth::user()->check_administrator) {
+                                                                        if ($column != '' && !Auth::user()->can('super-admin')) {
                                                                             $dops = $dops->filter(function ($dop) use ($filter, $unit_kerja) {
                                                                                 if ($unit_kerja instanceof \Illuminate\Support\Collection) {
                                                                                     $dop->UnitKerjas = $dop->UnitKerjas->whereIn('divcode', $unit_kerja->toArray());
@@ -488,7 +488,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                 {{-- @if (count($dop->UnitKerjas) > 0) --}}
                                                                                 {{-- @foreach ($proyeks as $proyek) --}}
                                                                                 @php
-                                                                                    if (!Auth::user()->check_administrator && $unit_kerja instanceof \Illuminate\Support\Collection) {
+                                                                                    if (!Auth::user()->can('super-admin') && $unit_kerja instanceof \Illuminate\Support\Collection) {
                                                                                         $dop->UnitKerjas = $dop->UnitKerjas->whereIn('divcode', $unit_kerja->toArray());
                                                                                     } elseif (!empty(Auth::user()->unit_kerja)) {
                                                                                         $dop->UnitKerjas = $dop->UnitKerjas->where('divcode', $unit_kerja);

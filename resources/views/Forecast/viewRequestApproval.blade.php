@@ -444,7 +444,7 @@
                                                                                                         </div>
                                                                                                     </div>
                                                                                                     <div class="col-3">
-                                                                                                        @if (Auth::user()->check_administrator || str_contains(Auth::user()->name, "PIC"))
+                                                                                                        @if (Auth::user()->canany(['super-admin', 'admin-crm']))
                                                                                                             @if ($history->is_approved_1 == "t")
                                                                                                                 <div
                                                                                                                     class="d-flex flex-row justify-content-evenly align-items-center w-100">
