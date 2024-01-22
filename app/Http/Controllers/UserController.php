@@ -221,8 +221,6 @@ class UserController extends Controller
     }
 
     public function logoutOld(Request $request)
-
-    public function logoutOld(Request $request)
     {
         // auth()->user()->forceFill([
         //     "remember_token" => null,

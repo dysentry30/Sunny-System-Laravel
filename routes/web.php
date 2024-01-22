@@ -6311,25 +6311,43 @@ Route::get('/php-info', function () {
     return dd(phpinfo());
 });
 
-Route::post('/user/get-proyek-datatable', function (Request $request) {
+Route::get('/user/get-proyek-datatable', function (Request $request) {
+    // $divisi = null;
     $draw = $request->has('draw') ? intval($request->input('draw')) : 0;
     $start = (int)$request->input('start');
     $length = (int)$request->input('length');
     $page = ceil(($start + 1) / $length);
+    // dd(json_decode($request->query('divcode')));
+    // if (!empty($request->query('divcode'))) {
+    // }
+    $divisi = is_array(json_decode($request->query('divcode'))) ? json_decode($request->query('divcode')) : [json_decode($request->query('divcode'))];
     $search = !empty($request->input('search')) ? $request->input('search')["value"] : null;
 
-
-    $data = ProyekPISNew::addSelect(array_map(function ($item) {
-        return 'proyek_pis_new.' . $item;
-    }, ['proyek_name', 'profit_center', 'kd_divisi']))
+    if (!empty($divisi)) {
+        $data = ProyekPISNew::addSelect(array_map(function ($item) {
+            return 'proyek_pis_new.' . $item;
+        }, ['proyek_name', 'profit_center', 'kd_divisi']))
         ->with('UnitKerja')
-        ->whereIn('kd_divisi', json_decode($request->query('divcode')))
+        ->whereIn('kd_divisi', $divisi)
+            ->where('profit_center', '!=', null)
+            ->when(!empty($search), function ($query) use ($search) {
+                $query->where('proyek_name', 'like', '%' . $search . '%')
+                    ->orWhere('profit_center', 'like', '%' . $search . '%');
+            })
+            ->orderBy('proyek_name', 'ASC');
+    } else {
+        $data = ProyekPISNew::addSelect(array_map(function ($item) {
+            return 'proyek_pis_new.' . $item;
+        }, ['proyek_name', 'profit_center', 'kd_divisi']))
+        ->with('UnitKerja')
+        ->where('kd_divisi', '!=', null)
         ->where('profit_center', '!=', null)
         ->when(!empty($search), function ($query) use ($search) {
             $query->where('proyek_name', 'like', '%' . $search . '%')
                 ->orWhere('profit_center', 'like', '%' . $search . '%');
         })
-        ->orderBy('proyek_name', 'ASC');
+            ->orderBy('proyek_name', 'ASC');
+    }
 
     if ($length > 0) {
         $data = $data->paginate($length, ['*'], 'page', $page);

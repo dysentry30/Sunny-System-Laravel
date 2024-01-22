@@ -184,7 +184,7 @@
                                                     <!--end::Input group TTD-->
 
                                                     <!--begin::Input group is Active-->
-                                                    @if (Auth::user()->can('super-admin') || str_contains(Auth::user()->name, '(PIC)'))
+                                                    @if (Auth::user()->can('super-admin') || Auth::user()->can('admin-crm'))
                                                         <div class="form-check me-12">
                                                             <!--begin::Input-->
                                                             <input class="form-check-input" type="checkbox" value=""
@@ -550,15 +550,15 @@
                                                     <!--Begin::Table List Proyek-->
                                                     <div class="overflow-auto table-list-proyek {{ $user->check_admin_kontrak && $user->role_user ? "" : "d-none" }}" id="table-list-proyek">
                                                         <!--begin::Table Proyek-->
-                                                        <table class="table table-striped table-hover align-middle table-row-dashed fs-6 gy-2" id="proyek-ccm">
+                                                        <table class="table table-striped table-hover align-middle table-row-dashed fs-6 gy-2" id="proyeks-ccm">
                                                              <!--begin::Table head-->
                                                              <thead>
                                                                  <!--begin::Table row-->
                                                                  <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase text-sm gs-0">
-                                                                    <th class="min-w-auto ps-3"><small>Kode Proyek</small></th>
-                                                                    <th class="w-20"><small>Nama Proyek</small></th>
-                                                                    <th class="min-w-auto"><small>Unit Kerja</small></th>
-                                                                    <th class="min-w-auto"><small>Selected</small></th>
+                                                                    <th class="min-w-auto ps-3">Kode Proyek</th>
+                                                                    <th class="w-20">Nama Proyek</th>
+                                                                    <th class="min-w-auto">Unit Kerja</th>
+                                                                    <th class="min-w-auto">Selected</th>
                                                                  </tr>
                                                                  <!--end::Table row-->
                                                              </thead>
@@ -626,9 +626,13 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             if (user.check_admin_kontrak && user.role_user) {
+                console.log(configDataTable);
                 configDataTable.ajax = {
+                    dataType: "JSON",
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
                     url:"{{ url('/user/get-proyek-datatable?divcode=') }}"+JSON.stringify(unitKerja),
-                    type: "POST"
+                    type: "GET"
                 },
                 configDataTable.columns = [ 
                     {
@@ -655,10 +659,10 @@
                         className: 'align-midle text-center'
                     },
                 ];
-                const dataTable = $('#proyek-ccm').DataTable(configDataTable);
+                const dataTable = $('#proyeks-ccm').DataTable(configDataTable);
 
                 // Menangani perubahan status checkbox
-                $('#proyek-ccm tbody').on('change', '.row-checkbox', function() {
+                $('#proyeks-ccm tbody').on('change', '.row-checkbox', function() {
                     let rowId = $(this).data('id');
                     if (this.checked) {
                         selectedRows[rowId] = this.checked;
@@ -815,7 +819,7 @@
                 divTableHide.classList.remove('d-none');
                 configDataTable.ajax = {
                     url:"{{ url('/user/get-proyek-datatable?divcode=') }}"+JSON.stringify(arrDivcode),
-                    type: "POST"
+                    type: "GET"
                 },
                 configDataTable.columns = [ 
                     {
@@ -839,9 +843,9 @@
                     },
                 ];
 
-                const dataTable = $('#proyek-ccm').DataTable(configDataTable);
+                const dataTable = $('#proyeks-ccm').DataTable(configDataTable);
                 // Menangani perubahan status checkbox
-                $('#proyek-ccm tbody').on('change', '.row-checkbox', function() {
+                $('#proyeks-ccm tbody').on('change', '.row-checkbox', function() {
                     let rowId = $(this).data('id');
                     if (this.checked) {
                         selectedRows[rowId] = this.checked;
