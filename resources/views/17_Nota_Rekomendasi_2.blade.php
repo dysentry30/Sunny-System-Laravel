@@ -604,7 +604,7 @@
                                                                 $text =
                                                                     App\Models\PenilaianChecklistProjectSelection::all()
                                                                         ->filter(function ($item) use ($nilaiAssessmentProjectSelection) {
-                                                                            return $item->dari_nilai <= $nilaiAssessmentProjectSelection && $item->sampai_nilai > $nilaiAssessmentProjectSelection;
+                                                                            return $item->dari_nilai <= $nilaiAssessmentProjectSelection && $item->sampai_nilai >= $nilaiAssessmentProjectSelection;
                                                                         })
                                                                         ->first()->nama ?? '-';
                                                                 switch ($text) {

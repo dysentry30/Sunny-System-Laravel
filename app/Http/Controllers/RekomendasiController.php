@@ -1203,8 +1203,30 @@ class RekomendasiController extends Controller
                 return $p->is_recommended;
             });
 
-            $proyeks_proses_rekomendasi = Proyek::whereIn("unit_kerja", $unit_kerjas)->where("stage", "=", 1)->where('is_request_rekomendasi', '!=', null)->where('is_disetujui', '=', null)->get();
-            $proyeks_rekomendasi_final = Proyek::whereIn("unit_kerja", $unit_kerjas)->where("stage", "=", 1)->get()->filter(function ($p) use ($matriks_user) {
+            $proyeks_proses_rekomendasi = Proyek::whereIn("unit_kerja", $unit_kerjas)->whereNotIn("kode_proyek", [
+                'GNPC356',
+                'HNPC355',
+                'GNPC362',
+            ])->where("stage", "=", 1)->where('is_request_rekomendasi', '!=', null)->where('is_disetujui', '=', null)->get();
+            $proyeks_rekomendasi_final = Proyek::whereIn("unit_kerja", $unit_kerjas)->whereNotIn("kode_proyek", [
+                'GNPC362',
+                'HNPC355',
+                'GNPC356',
+                'GNPC003',
+                'PNPC003',
+                'PNPC004',
+                'PNPC002',
+                'GNPC010',
+                'GNPC364',
+                'PNPC008',
+                'PNPC007',
+                'PNPC005',
+                'GNPC006',
+                'PNPC000',
+                'GNPC004',
+                'GNPC363',
+                'GNPC361',
+            ])->where("stage", "=", 1)->get()->filter(function ($p) use ($matriks_user) {
                 return $p->is_recommended == true && $p->is_disetujui;
             });
             $matriks_category = MatriksApprovalRekomendasi::all()->groupBy(['klasifikasi_proyek', 'kategori']);
@@ -1287,10 +1309,32 @@ class RekomendasiController extends Controller
             //     // $proyeks_persetujuan = [];
 
             // }
-            $proyeks_rekomendasi_final = Proyek::whereIn('unit_kerja', $unit_kerjas)->where('is_request_rekomendasi', '!=', null)->where("stage", "=", 1)->get()->filter(function ($p) use ($matriks_user) {
+            $proyeks_rekomendasi_final = Proyek::whereIn('unit_kerja', $unit_kerjas)->where('is_request_rekomendasi', '!=', null)->whereNotIn("kode_proyek", [
+                'GNPC362',
+                'HNPC355',
+                'GNPC356',
+                'GNPC003',
+                'PNPC003',
+                'PNPC004',
+                'PNPC002',
+                'GNPC010',
+                'GNPC364',
+                'PNPC008',
+                'PNPC007',
+                'PNPC005',
+                'GNPC006',
+                'PNPC000',
+                'GNPC004',
+                'GNPC363',
+                'GNPC361',
+            ])->where("stage", "=", 1)->get()->filter(function ($p) use ($matriks_user) {
                 return !is_null($p->is_disetujui) && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0;
             });
-            $proyeks_proses_rekomendasi = Proyek::whereIn('unit_kerja', $unit_kerjas)->where('is_request_rekomendasi', '!=', null)->where("stage", "=", 1)->get()->filter(function ($p) use ($matriks_user) {
+            $proyeks_proses_rekomendasi = Proyek::whereIn('unit_kerja', $unit_kerjas)->where('is_request_rekomendasi', '!=', null)->whereNotIn("kode_proyek", [
+                'GNPC356',
+                'HNPC355',
+                'GNPC362',
+            ])->where("stage", "=", 1)->get()->filter(function ($p) use ($matriks_user) {
                 return is_null($p->is_disetujui) && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0;
             });
             $matriks_category = MatriksApprovalRekomendasi::all()->groupBy(['klasifikasi_proyek', 'kategori', 'departemen']);

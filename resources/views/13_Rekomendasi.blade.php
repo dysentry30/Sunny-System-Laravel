@@ -549,10 +549,10 @@
                                                                     is_null($proyek->is_verifikasi_approved))
                                                                 <small class="badge badge-light-primary">Proses
                                                                     Verifikasi</small>
-                                                            @elseif($proyek->is_verifikasi_approved == true && is_null($proyek->is_rekomendasi_approved))
+                                                            @elseif($proyek->is_verifikasi_approved == true && is_null($proyek->is_recommended))
                                                                 <small class="badge badge-light-primary">Proses
                                                                     Rekomendasi</small>
-                                                            @elseif($proyek->is_rekomendasi_approved == true && is_null($proyek->is_disetujui))
+                                                            @elseif($proyek->is_recommended == true && is_null($proyek->is_disetujui))
                                                                 <small class="badge badge-light-primary">Proses
                                                                     Penyetujuan</small>
                                                             @endif
@@ -588,11 +588,11 @@
                                                             @php
                                                                 $style = '';
                                                                 $matriks_group = [];
-                                                                // if ($proyek->is_verifikasi_approved && $proyek->is_rekomendasi_approved) {
+                                                                // if ($proyek->is_verifikasi_approved && $proyek->is_recommended) {
                                                                 //     $style = 'bg-success';
-                                                                // } elseif ($proyek->is_verifikasi_approved && $proyek->is_rekomendasi_approved) {
+                                                                // } elseif ($proyek->is_verifikasi_approved && $proyek->is_recommended) {
                                                                 //     $style = 'bg-warning';
-                                                                // } elseif (!is_null($proyek->is_rekomendasi_approved) && !$proyek->is_rekomendasi_approved) {
+                                                                // } elseif (!is_null($proyek->is_recommended) && !$proyek->is_recommended) {
                                                                 //     $style = 'bg-danger';
                                                                 // } else {
                                                                 //     $style = 'bg-secondary';
@@ -631,15 +631,15 @@
                                                                         } else {
                                                                             $matriks_group = [];
                                                                         }
-                                                                    } elseif ($proyek->is_verifikasi_approved == true && is_null($proyek->is_rekomendasi_approved)) {
+                                                                    } elseif ($proyek->is_verifikasi_approved == true && is_null($proyek->is_recommended)) {
                                                                         $kategori_approval = 'Rekomendasi';
                                                                         if (array_key_exists('Rekomendasi', $matriks_klasifikasi) && !empty($matriks_klasifikasi['Rekomendasi'][$proyek->departemen_proyek])) {
                                                                             $matriks_group = $matriks_klasifikasi['Rekomendasi'][$proyek->departemen_proyek];
-                                                                            $collect_matriks = collect(json_decode($proyek->approved_rekomendasi))->keyBy('user_id');
+                                                                            $collect_matriks = collect(json_decode($proyek->approved_rekomendasi_final))->keyBy('user_id');
                                                                         } else {
                                                                             $matriks_group = [];
                                                                         }
-                                                                    } elseif ($proyek->is_rekomendasi_approved == true && is_null($proyek->is_disetujui)) {
+                                                                    } elseif ($proyek->is_recommended == true && is_null($proyek->is_disetujui)) {
                                                                         $kategori_approval = 'Persetujuan';
                                                                         if (array_key_exists('Persetujuan', $matriks_klasifikasi) && !empty($matriks_klasifikasi['Persetujuan'][$proyek->departemen_proyek])) {
                                                                             $matriks_group = $matriks_klasifikasi['Persetujuan'][$proyek->departemen_proyek];
@@ -1575,13 +1575,7 @@
                         <h2>Form Legalitas Pengguna Jasa</h2>
                         <!--end::Modal title-->
                         <!--begin::Close-->
-                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                            <span class="svg-icon svg-icon-1">
-                                <i class="bi bi-x-lg"></i>
-                            </span>
-                            <!--end::Svg Icon-->
-                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"  onclick="deleteBackdrop()"></button>
                         <!--end::Close-->
                     </div>
                     <!--end::Modal header-->
@@ -1603,8 +1597,8 @@
                                         $legalitasJasa = App\Models\LegalitasPerusahaan::where('nota_rekomendasi', '=', 'Nota Rekomendasi 1')->get()->sortBy('position');
                                         $kriteriaDetails = App\Models\KriteriaPenggunaJasaDetail::where('kode_proyek', $proyek->kode_proyek)
                                             ->orderBy('index')
-                                            ->get()
-                                            ->unique('index');
+                                            ->unique('index')
+                                            ->keyBy('index');
                                         $index = 0;
                                     @endphp
                                     <tr>
@@ -1763,13 +1757,7 @@
                         <h2>Form Kriteria Pengguna Jasa</h2>
                         <!--end::Modal title-->
                         <!--begin::Close-->
-                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                            <span class="svg-icon svg-icon-1">
-                                <i class="bi bi-x-lg"></i>
-                            </span>
-                            <!--end::Svg Icon-->
-                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"  onclick="deleteBackdrop()"></button>
                         <!--end::Close-->
                     </div>
                     <!--end::Modal header-->
@@ -1795,7 +1783,7 @@
                                 </thead>
                                 <tbody>
                                     @php
-                                        $kriteriaPengguna = App\Models\KriteriaPenggunaJasa::where('nota_rekomendasi', '=', 'Nota Rekomendasi 1')->get()->sortBy("position");
+                                        $kriteriaPengguna = App\Models\KriteriaPenggunaJasa::where('nota_rekomendasi', '=', 'Nota Rekomendasi 1')->get()->sortBy("position")->values();
                                     @endphp
                                     @foreach ($kriteriaPengguna as $keys => $item)
                                         <tr>
@@ -2043,7 +2031,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Detail Proyek</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"  onclick="deleteBackdrop()" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <b>
@@ -2290,7 +2278,7 @@
                     @endif
                     <div class="modal-header">
                         <h5 class="modal-title">Detail Proyek</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"  onclick="deleteBackdrop()" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <b>
@@ -2948,7 +2936,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">History Pengajuan Nota Rekomendasi Tahap I</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"  onclick="deleteBackdrop()" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         @php
@@ -3064,7 +3052,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">History Revisi Nota Rekomendasi</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"  onclick="deleteBackdrop()" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     @php
@@ -3151,7 +3139,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <h1 class="modal-title fs-5" id="exampleModalLabel">Dokumen Persetujuan Nota Rekomendasi Tahap I</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"  onclick="deleteBackdrop()" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 @if (!empty($proyek->file_rekomendasi))
@@ -3178,7 +3166,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Detail Proyek</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"  onclick="deleteBackdrop()" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <b>

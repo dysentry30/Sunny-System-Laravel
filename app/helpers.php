@@ -2400,7 +2400,7 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
 
     $section->addText("Berdasarkan informasi di atas, mengajukan untuk mengikuti aktifitas Perolehan Kontrak (tender) tersebut di atas.");
 
-    $section->addTextBreak(11);
+    $section->addTextBreak(15);
     // $section->addPageBreak();
     $section2 = $phpWord->addSection();
     $footer2 = $section2->addFooter();
@@ -2449,11 +2449,11 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
 
             $tanggal_ttd = Carbon\Carbon::create($p->tanggal);
             // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-            $cell_2_ttd->addTextBreak(4);
+            $cell_2_ttd->addTextBreak(5);
             // $cell_2_ttd->addText("$" . "{ttdPenyusun$key}", ["bold" => false], ["align" => "center"]);
             // $cell_2_ttd->addText(User::find($p->user_id)->name, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
-            $cell_2_ttd->addText(User::find($p->user_id)->name, ['bold' => true, 'size' => 8, 'name' => 'Times New Roman'], ['alignment' => 'center']);
-            $cell_2_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan, ['bold' => true, 'size' => 8, 'name' => 'Times New Roman'], ['alignment' => 'center']);
+            $cell_2_ttd->addText(User::find($p->user_id)->name, ['bold' => true, 'size' => 8], ['alignment' => 'center', 'spacing' => 10]);
+            $cell_2_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan, ['bold' => true, 'size' => 8], ['alignment' => 'center', 'spacing' => 10]);
             // $cell_2_ttd->addText(User::find($p->user_id)->name, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
             // $cell_2_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
             $cell_2_ttd->addText("Tanggal: " . $tanggal_ttd->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
@@ -2491,10 +2491,10 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
             }
             $tanggal_ttd = Carbon\Carbon::create($p->tanggal);
             // $cell_3_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-            $cell_3_ttd->addTextBreak(4);
+            $cell_3_ttd->addTextBreak(5);
             // $cell_3_ttd->addText("$" . "{ttdRekomendasi$key}", ["bold" => false], ["align" => "center"]);
-            $cell_3_ttd->addText(User::find($p->user_id)->name, ['bold' => true, 'size' => 8, 'name' => 'Times New Roman'], ['alignment' => 'center']);
-            $cell_3_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan, ['bold' => true, 'size' => 8, 'name' => 'Times New Roman'], ['alignment' => 'center']);
+            $cell_3_ttd->addText(User::find($p->user_id)->name, ['bold' => true, 'size' => 8], ['alignment' => 'center', 'spacing' => 10]);
+            $cell_3_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan, ['bold' => true, 'size' => 8], ['alignment' => 'center', 'spacing' => 10]);
             // $cell_3_ttd->addText(User::find($p->user_id)->name, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
             // $cell_3_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
             $cell_3_ttd->addText("Tanggal: " . $tanggal_ttd->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
@@ -2538,10 +2538,10 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
                 }
             }
             $tanggal_ttd = Carbon\Carbon::create($p->tanggal);
-            $cell_4_ttd->addTextBreak(4);
+            $cell_4_ttd->addTextBreak(5);
             // $cell_4_ttd->addText("$" . "{ttdPersetujuan$key}", ["bold" => false], ["align" => "center"]);
-            $cell_4_ttd->addText(User::find($p->user_id)->name ?? Auth::user()->name, ['bold' => true, 'size' => 8, 'name' => 'Times New Roman'], ['alignment' => 'center']);
-            $cell_4_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan ?? Auth::user()->Pegawai->Jabatan?->nama_jabatan, ['bold' => true, 'size' => 8, 'name' => 'Times New Roman'], ['alignment' => 'center']);
+            $cell_4_ttd->addText(User::find($p->user_id)->name ?? Auth::user()->name, ['bold' => true, 'size' => 8], ['alignment' => 'center', 'spacing' => 10]);
+            $cell_4_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan ?? Auth::user()->Pegawai->Jabatan?->nama_jabatan, ['bold' => true, 'size' => 8], ['alignment' => 'center', 'spacing' => 10]);
             // $cell_4_ttd->addText(User::find($p->user_id)->name ?? Auth::user()->name, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
             // $cell_4_ttd->addText(User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan ?? Auth::user()->Pegawai->Jabatan?->nama_jabatan, $fontStyleTTD, ['alignment' => 'center', 'afterSpacing' => 0]);
             $cell_4_ttd->addText("Tanggal: " . $tanggal_ttd->translatedFormat("d F Y"), ["bold" => true, "size" => 7], ["align" => "center"]);
@@ -2646,10 +2646,10 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
 
     // Begin :: CONVERT Template docx to PDF
     $templatePhpWord = \PhpOffice\PhpWord\IOFactory::load(public_path($target_path . "/" . $file_name . ".docx"));
-    // $rendererName = \PhpOffice\PhpWord\Settings::PDF_RENDERER_DOMPDF;
-    $rendererName = \PhpOffice\PhpWord\Settings::PDF_RENDERER_TCPDF;
-    // $rendererLibraryPath = realpath('../vendor/dompdf/dompdf');
-    $rendererLibraryPath = realpath('../vendor/tecnickcom/tcpdf');
+    $rendererName = \PhpOffice\PhpWord\Settings::PDF_RENDERER_DOMPDF;
+    // $rendererName = \PhpOffice\PhpWord\Settings::PDF_RENDERER_TCPDF;
+    $rendererLibraryPath = realpath('../vendor/dompdf/dompdf');
+    // $rendererLibraryPath = realpath('../vendor/tecnickcom/tcpdf');
     \PhpOffice\PhpWord\Settings::setPdfRenderer($rendererName, $rendererLibraryPath);
     $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($templatePhpWord, 'PDF');
     $xmlWriter->save(public_path($target_path . "/" . $file_name . ".pdf"));
