@@ -15,7 +15,7 @@ return new class extends Migration
     {
         if (!Schema::hasColumn('proyeks', 'kode_kbli_2020')) {
             Schema::table('proyeks', function (Blueprint $table) {
-                $table->string('kode_kbli_2020');
+                $table->string('kode_kbli_2020')->nullable();
             });
         }
     }
