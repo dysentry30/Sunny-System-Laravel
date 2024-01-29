@@ -2301,6 +2301,20 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         }
     });
 
+    Route::get('/proyek/get-klasifikasi-sbu', function (Request $request) {
+        $search = $request->input('search');
+
+        $dataKlasifikasiSBU = MasterSubKlasifikasiSBU::with('MasterKlasifikasiSBU')->when(
+            !empty($search),
+            function ($query) use ($search) {
+                $query->where('subklasifikasi', 'like', '%' . strtoupper($search) . '%')
+                    ->orWhere('kode_subklasifikasi', 'like', '%' . strtoupper($search) . '%')
+                    ->orWhere('kbli_2020', 'like', '%' . strtoupper($search) . '%');
+            }
+        )->get()->groupBy('MasterKlasifikasiSBU.klasifikasi');
+        return response()->json($dataKlasifikasiSBU);
+    });
+
     Route::get('/master-alat-proyek', function (Request $request) {
         return view('MasterData/MasterAlatProyek', ['data' => MasterAlatProyek::all()]);
     });

@@ -621,6 +621,8 @@ class ProyekController extends Controller
         $newProyek->latitude = $dataProyek["latitude"];
         $newProyek->longitude = $dataProyek["longitude"];
 
+        $newProyek->kode_kbli_2020 = $dataProyek["klasifikasi-kbli-sbu"];
+
         $idCustomer = $dataProyek["customer"];
 
         // Form update Customer dan auto Proyek Berjalan
