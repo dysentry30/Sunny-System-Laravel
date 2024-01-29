@@ -2324,6 +2324,35 @@ class ProyekController extends Controller
         return redirect()->back();
     }
 
+    public function noteTender(Request $request, $id)
+    {
+        $data = $request->all();
+        $messages = [
+            "required" => "*Kolom Ini Harus Diisi !",
+        ];
+        $rules = [
+            "catatan" => "required",
+        ];
+
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Catatan Peserta Tender Gagal Diubah, Periksa Kembali !");
+        }
+
+        $validation->validate();
+
+        $editTender = PesertaTender::find($id);
+
+        $editTender->catatan = $data['catatan'];
+
+        if ($editTender->save()) {
+            Alert::success("Success", "Catatan Peserta Tender Berhasil Diubah");
+            return redirect()->back();
+        }
+        Alert::error("Error", "Catatan Peserta Tender Gagal Diubah");
+        return redirect()->back();
+    }
+
     public function tambahPersonelTender(Request $request,  PersonelTenderProyek $personel)
     {
         $data = $request->all();

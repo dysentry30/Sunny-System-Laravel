@@ -811,6 +811,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // EDIT Peserta Tender 
     Route::post('/proyek/peserta-tender/{id}/edit', [ProyekController::class, 'editTender']);
 
+    // NOTE Peserta Tender 
+    Route::post('/proyek/peserta-tender/{id}/note', [ProyekController::class, 'noteTender'
+    ]);
+
     // DELETE Peserta Tender 
     Route::delete('proyek/peserta-tender/{id}/delete', [ProyekController::class, 'deleteTender']);
 
@@ -2185,7 +2189,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 })->unique('kode_proyek')->values()->all();
 
                 $filterStageProyek = collect($checkAlatInProyek)->filter(function ($proyek) {
-                    return $proyek->is_cancel != true && $proyek->stage >= 4 && $proyek->stage != 7;
+                    return $proyek->is_cancel != true && $proyek->stage == 8;
                 });
 
                 if ($filterStageProyek->count() > 0) {
@@ -2197,10 +2201,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                         return $customer->kode_pelanggan == "A10021";
                     });
 
-                    if ($checkCustomerPUPR->count() > 3) {
+                    if ($checkCustomerPUPR->count() > 1) {
                         return response()->json([
                             "Success" => true,
-                            "Message" => "Alat sedang mengikuti proses 3 Tender"
+                            "Message" => "Alat sedang mengikuti proses Tender PUPR"
                         ]);
                     } else {
                         return response()->json([
@@ -2259,7 +2263,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 })->unique('kode_proyek')->values()->all();
 
                 $filterStageProyek = collect($checkPersonelInProyek)->filter(function ($proyek) {
-                    return $proyek->is_cancel != true && $proyek->stage >= 4 && $proyek->stage != 7;
+                    // return $proyek->is_cancel != true && $proyek->stage >= 4 && $proyek->stage != 7;
+                    return $proyek->is_cancel != true && $proyek->stage == 8;
                 });
 
                 if ($filterStageProyek->count() > 0) {
