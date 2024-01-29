@@ -48,7 +48,7 @@
                                 <!--end::Title-->
                             </div>
                             <!--end::Page title-->
-                            @if (auth()->user()->check_administrator)
+                            @canany(['super-admin', 'admin-crm'])
                                 <div class="d-flex align-items-center py-1">
 
                                     <!--begin::Button-->
@@ -58,7 +58,7 @@
                                         Tambah Alat</a>
 
                                 </div>
-                            @endif
+                            @endcanany
                             {{-- @canany(['super-admin', 'admin'])
                             <!--begin::Actions-->
                             <div class="d-flex align-items-center py-1">
