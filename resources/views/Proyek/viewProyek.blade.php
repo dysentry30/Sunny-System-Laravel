@@ -2345,6 +2345,25 @@
                                                             <!--end::Input-->
                                                         </div>
                                                     </div>
+                                                    <br>
+
+                                                    <!--Begin::KBLI SBU-->
+                                                    <div class="row fv-row">
+                                                        <div class="col-6">
+                                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                                <span>Klasifikasi SBU</span>
+                                                            </label>
+                                                            <!--begin::Input-->
+                                                            <select id="klasifikasi-kbli-sbu" name="klasifikasi-kbli-sbu"
+                                                                class="form-select form-select-solid select2-hidden-accessible"
+                                                                data-control="select2" data-hide-search="false" data-placeholder="Pilih Klasifikasi SBU"
+                                                                data-select2-id="select2-klasifikasi" tabindex="-1" aria-hidden="true">
+                                                                <option value="{{ $proyek->kode_kbli_2020 }}">{{ $proyek->MasterSubKlasifikasiSBU?->subklasifikasi }}</option>
+                                                            </select>
+                                                            <!--end::Input-->
+                                                        </div>
+                                                    </div>
+                                                    <!--End::KBLI SBU-->
 
 
                                                     <!--Begin::Title Biru Form: Kriteria pasar-->
@@ -9891,6 +9910,37 @@
                 }
 
             });
+            $("#klasifikasi-kbli-sbu").select2({
+                ajax: {
+                    url: '/proyek/get-klasifikasi-sbu',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function (data, params) {
+                        const optionData = Object.keys(data);
+                        const options = optionData.map((item) => {
+                            return {
+                                text: item,
+                                children:data[item]?.map(val => {
+                                    return {
+                                        id: val.kbli_2020,
+                                        text:val.subklasifikasi
+                                    }
+                                })
+                            }
+                        })
+                        return {
+                            results: options
+                        }
+                    },
+                    cache: true,
+                    minimumResultsForSearch: 0
+                },
+            })
         });
 
         function showModal(id, nip, namaPegawai, modal_name, eltSelectPegawaiId) {
