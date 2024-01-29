@@ -81,6 +81,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use Termwind\Components\Dd;
+use Faker\Core\Uuid;
 
 /*
 |--------------------------------------------------------------------------
