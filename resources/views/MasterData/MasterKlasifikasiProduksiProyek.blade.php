@@ -250,7 +250,7 @@
                 </div>
                 <!--end::Modal header-->
 
-                <form action="/php a/save" method="POST">
+                <form action="/master-klasifikasi-produksi/save" method="POST">
                     @csrf
                     <input type="hidden" name="modal" value="kt_modal_create_otomasi_approval">
                     <!--begin::Modal body-->
@@ -457,7 +457,7 @@
                     </div>
                     <!--end::Modal header-->
 
-                    <form action="/php a/update/{{ $item->id }}" method="POST">
+                    <form action="/master-klasifikasi-produksi/update/{{ $item->id }}" method="POST">
                         @csrf
                         <input type="hidden" name="modal" value="kt_modal_create_otomasi_approval">
                         <!--begin::Modal body-->
@@ -685,7 +685,7 @@
                 try {
                     const formData = new FormData();
                     formData.append("_token", "{{ csrf_token() }}");
-                    const req = await fetch(`{{ url('/php a/delete/') }}/${id}`, {
+                    const req = await fetch(`{{ url('/master-klasifikasi-produksi/delete/') }}/${id}`, {
                         method: 'POST',
                         header: {
                             "content-type": "application/json",

@@ -2749,6 +2749,25 @@
                                                             <!--end::Input-->
                                                         </div>
                                                     </div>
+                                                    <br>
+
+                                                    <!--Begin::KBLI SBU-->
+                                                    <div class="row fv-row">
+                                                        <div class="col-6">
+                                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                                <span>Klasifikasi SBU</span>
+                                                            </label>
+                                                            <!--begin::Input-->
+                                                            <select id="klasifikasi-kbli-sbu" name="klasifikasi-kbli-sbu"
+                                                                class="form-select form-select-solid select2-hidden-accessible"
+                                                                data-control="select2" data-hide-search="false" data-placeholder="Pilih Klasifikasi SBU"
+                                                                data-select2-id="select2-klasifikasi" tabindex="-1" aria-hidden="true">
+                                                                <option value="{{ $proyek->kode_kbli_2020 }}">{{ $proyek->MasterSubKlasifikasiSBU?->subklasifikasi }}</option>
+                                                            </select>
+                                                            <!--end::Input-->
+                                                        </div>
+                                                    </div>
+                                                    <!--End::KBLI SBU-->
 
 
                                                     <!--Begin::Title Biru Form: Kriteria pasar-->
@@ -3326,7 +3345,7 @@
                                                         <hr>
                                                         <br>
                                                         <!--End::Dokumen Penentuan KSO-->
-                                                        @can('super-admin')
+                                                        @canany(['super-admin', 'admin-crm'])
                                                             
                                                             <!--Begin::Title Biru Form: Alasan KSO-->
                                                             <h3 class="fw-bolder m-0" id="HeadDetail"
@@ -3369,6 +3388,31 @@
                                                                 style="font-size:14px;">Partner JO
                                                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                                                     data-bs-target="#kt_modal_porsijo">+</a>
+                                                                    &nbsp;
+                                                                @php
+                                                                    $isDokumenFinish = $porsiJO->every(function($jo){
+                                                                        return $jo->DokumenKelengkapanPartnerKSO->count() == 4;
+                                                                    });
+                                                                @endphp
+                                                                @canany(['super-admin', 'admin-crm', 'user-crm'])
+                                                                    @if ($isDokumenFinish)
+                                                                    <button id="approval-kso" class="btn btn-sm btn-primary" onclick="approvalKSO()"><b>Ajukan KSO</b></button>
+                                                                    @endif
+                                                                    <script>
+                                                                        function approvalKSO() {
+                                                                            window.confirm('success', 'Selamat Testing', '').then(result=>{
+                                                                                if (result.isConfirmed) {
+                                                                                    window.location.reload();
+                                                                                }
+                                                                            })
+                                                                        }
+                                                                        async function sendPorsiJO() {
+                                                                            const response = await fetch('/proyek/porsi-jo/'+'{{ $proyek->kode_proyek }}'+'/approval',{
+                                                                                method: 'GET',
+                                                                            });
+                                                                        }
+                                                                    </script>
+                                                                @endcanany
                                                             </h3>
                                                             <br>
                                                             <!--End::Title Biru Form: Partner JO-->
@@ -3507,8 +3551,8 @@
                                                                                                 <p class="badge rounded-pill badge-danger m-0">Expired</p>
                                                                                             @elseif($isActiveAssessment == "Belum ada pefindo")
                                                                                             
-                                                                                            @else
-                                                                                                <p class="badge rounded-pill badge-danger m-0">Expired</p>
+                                                                                            @elseif ($porsi->is_greenlane && $porsi->is_disetujui)
+                                                                                                <p class="badge rounded-pill badge-success m-0">Disetujui</p>
                                                                                             @endif
                                                                                         </td>
                                                                                         <!--end::Column-->
@@ -3562,7 +3606,7 @@
                                                                                         <!--begin::Action-->
                                                                                         <td class="text-center">
                                                                                             <div class="d-flex flex-row align-items-center justify-content-center gap-2">
-                                                                                                @if (is_null($isActiveAssessment))
+                                                                                                @if (is_null($isActiveAssessment) && !$porsi->is_greenlane)
                                                                                                 <small>
                                                                                                     <button type="button" class="btn btn-sm btn-success">
                                                                                                         Update
@@ -3573,7 +3617,7 @@
                                                                                                     <p data-bs-toggle="modal"
                                                                                                         data-bs-target="#kt_porsi_upload_dokumen_{{ $porsi->id }}"
                                                                                                         class="btn btn-sm btn-light btn-primary m-0">
-                                                                                                        {{ \App\Models\DokumenKelengkapanPartnerKSO::where('kode_proyek', $proyek->kode_proyek)->where('id_partner', $porsi->id)->get()?->count() == 4 ? "Lihat" : "Upload" }}
+                                                                                                        {{ $porsi->DokumenKelengkapanPartnerKSO->count() == 4 ? "Lihat" : "Upload" }}
                                                                                                     </p>
                                                                                                 </small>
                                                                                                 <small>
@@ -3597,7 +3641,7 @@
                                                             </div>
                                                             <!--End begin::Row-->
                                                             <br>
-                                                        @endcan
+                                                        @endcanany
                                                     @endif
 
 
@@ -10710,7 +10754,7 @@
                                 </thead>
                                 <tbody class="fw-bold text-gray-600">
                                     @php
-                                        $collectDokumenKelengkapanPartner = $proyek->DokumenKelengkapanPartnerKSO;
+                                        $collectDokumenKelengkapanPartner = $porsi->DokumenKelengkapanPartnerKSO;
                                     @endphp
                                     <tr>
                                         <td>Dokumen AHU</td>
@@ -10728,7 +10772,7 @@
                                             @if ($collectDokumenKelengkapanPartner?->contains('kategori', 'Dokumen AHU'))
                                                 <button type="button" onclick="deleteDocument('{{ $getDokumenAHU->id }}')" class="btn btn-danger btn-sm text-white">Delete</button>
                                             @else
-                                                <input type="file" name="dokumen-ahu-partner" id="dokumen-ahu-partner" class="form-control form-control-solid" accept="pdf">
+                                                <input type="file" name="dokumen-ahu-partner" id="dokumen-ahu-partner" class="form-control form-control-solid" accept=".pdf">
                                             @endif
 
                                         </td>
@@ -10749,7 +10793,7 @@
                                             @if ($collectDokumenKelengkapanPartner?->contains('kategori', 'Dokumen Laporan Keuangan'))
                                                 <button type="button" onclick="deleteDocument('{{ $getDokumenLaporanKeuangan->id }}')" class="btn btn-danger btn-sm text-white">Delete</button>
                                             @else
-                                                <input type="file" name="dokumen-keuangan-partner" id="dokumen-keuangan-partner" class="form-control form-control-solid" accept="pdf">
+                                                <input type="file" name="dokumen-keuangan-partner" id="dokumen-keuangan-partner" class="form-control form-control-solid" accept=".pdf">
                                             @endif
 
                                         </td>
@@ -10770,7 +10814,7 @@
                                             @if ($collectDokumenKelengkapanPartner?->contains('kategori', 'Dokumen Pengalaman'))
                                                 <button type="button" onclick="deleteDocument('{{ $getDokumenPengalaman->id }}')" class="btn btn-danger btn-sm text-white">Delete</button>
                                             @else
-                                                <input type="file" name="dokumen-pengalaman-partner" id="dokumen-pengalaman-partner" class="form-control form-control-solid" accept="pdf">
+                                                <input type="file" name="dokumen-pengalaman-partner" id="dokumen-pengalaman-partner" class="form-control form-control-solid" accept=".pdf">
                                             @endif
 
                                         </td>
@@ -10791,7 +10835,7 @@
                                             @if ($collectDokumenKelengkapanPartner?->contains('kategori', 'Dokumen Laporan SPT'))
                                                 <button type="button" onclick="deleteDocument('{{ $getDokumenSPT->id }}')" class="btn btn-danger btn-sm text-white">Delete</button>
                                             @else
-                                                <input type="file" name="dokumen-spt-partner" id="dokumen-spt-partner" class="form-control form-control-solid" accept="pdf">
+                                                <input type="file" name="dokumen-spt-partner" id="dokumen-spt-partner" class="form-control form-control-solid" accept=".pdf">
                                             @endif
 
                                         </td>
@@ -12302,6 +12346,37 @@
                 }
 
             });
+            $("#klasifikasi-kbli-sbu").select2({
+                ajax: {
+                    url: '/proyek/get-klasifikasi-sbu',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function (data, params) {
+                        const optionData = Object.keys(data);
+                        const options = optionData.map((item) => {
+                            return {
+                                text: item,
+                                children:data[item]?.map(val => {
+                                    return {
+                                        id: val.kbli_2020,
+                                        text:val.subklasifikasi
+                                    }
+                                })
+                            }
+                        })
+                        return {
+                            results: options
+                        }
+                    },
+                    cache: true,
+                    minimumResultsForSearch: 0
+                },
+            })
         });
 
         function showModal(id, nip, namaPegawai, modal_name, eltSelectPegawaiId) {

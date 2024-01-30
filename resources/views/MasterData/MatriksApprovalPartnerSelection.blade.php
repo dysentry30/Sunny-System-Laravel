@@ -87,7 +87,7 @@
                                         <th class="min-w-100px">Unit Kerja</th>
                                         <th class="min-w-100px">Kode Unit Kerja</th>
                                         <th class="min-w-auto">Departemen</th>
-                                        <th class="min-w-auto">Klasifikasi Proyek</th>
+                                        {{-- <th class="min-w-auto">Klasifikasi Proyek</th> --}}
                                         <th class="min-w-auto">Kategori</th>
                                         <th class="min-w-auto text-white">Start Periode</th>
                                         <th class="min-w-auto text-white">Finish Periode</th>
@@ -202,7 +202,7 @@
                                                 @endif
                                                 {{-- {{$approval->Departemen->nama_departemen ?? ""}} --}}
                                             </td>
-                                            <td>{{$approval->klasifikasi_proyek}}</td>
+                                            {{-- <td>{{$approval->klasifikasi_proyek}}</td> --}}
                                             <td>{{$approval->kategori}}</td>
                                             <td class="text-center">{{$start_bulan}}</td>
                                             <td class="text-center">{{$finish_bulan}}</td>
@@ -410,7 +410,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mb-7">
+                            {{-- <div class="row mb-7">
                                 <div class="col">
                                     <div id="tier">
                                         <!--begin::Label-->
@@ -429,15 +429,11 @@
                                             <option value="Proyek Menengah">Proyek Menengah</option>
                                             <option value="Proyek Besar">Proyek Besar</option>
                                             <option value="Mega Proyek">Mega Proyek</option>
-
-                                            {{-- @foreach ($sumber_danas as $sd)
-                                                <option value="{{$sd->kode}}">{{$sd->kode}}</option>
-                                            @endforeach --}}
                                         </select>
                                         <!--end::Input-->
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="row mb-7">
                                 <div class="col">
                                     <div id="tier">
@@ -454,9 +450,6 @@
                                             data-select2-id="select2-kategori" tabindex="-1" aria-hidden="true">
                                             <option value="" selected></option>
                                             <option value="Pengajuan">Pengajuan</option>
-                                            <option value="Verifikasi">Verifikasi</option>
-                                            <option value="Penyusun">Penyusun</option>
-                                            <option value="Rekomendasi">Rekomendasi</option>
                                             <option value="Persetujuan">Persetujuan</option>
                                         </select>
                                         <!--end::Input-->
@@ -734,7 +727,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row mb-7">
+                                {{-- <div class="row mb-7">
                                     <div class="col">
                                         <div id="tier">
                                             <!--begin::Label-->
@@ -753,15 +746,11 @@
                                                 <option value="Proyek Menengah" {{ $approval->klasifikasi_proyek == "Proyek Menengah" ? 'selected' : '' }}>Proyek Menengah</option>
                                                 <option value="Proyek Besar" {{ $approval->klasifikasi_proyek == "Proyek Besar" ? 'selected' : '' }}>Proyek Besar</option>
                                                 <option value="Mega Proyek" {{ $approval->klasifikasi_proyek == "Mega Proyek" ? 'selected' : '' }}>Mega Proyek</option>
-
-                                                {{-- @foreach ($sumber_danas as $sd)
-                                                    <option value="{{$sd->kode}}">{{$sd->kode}}</option>
-                                                @endforeach --}}
                                             </select>
                                             <!--end::Input-->
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="row mb-7">
                                     <div class="col">
                                         <div id="tier">
@@ -778,13 +767,7 @@
                                                 data-select2-id="select2-kategori-{{ $approval->id }}" tabindex="-1" aria-hidden="true">
                                                 <option value="" selected></option>
                                                 <option value="Pengajuan" {{ $approval->kategori == "Pengajuan" ? 'selected' : '' }}>Pengajuan</option>
-                                                <option value="Verifikasi" {{ $approval->kategori == "Verifikasi" ? 'selected' : '' }}>Verifikasi</option>
-                                                <option value="Penyusun" {{ $approval->kategori == "Penyusun" ? 'selected' : '' }}>Penyusun</option>
-                                                <option value="Rekomendasi" {{ $approval->kategori == "Rekomendasi" ? 'selected' : '' }}>Rekomendasi</option>
                                                 <option value="Persetujuan" {{ $approval->kategori == "Persetujuan" ? 'selected' : '' }}>Persetujuan</option>
-                                                {{-- @foreach ($sumber_danas as $sd)
-                                                    <option value="{{$sd->kode}}">{{$sd->kode}}</option>
-                                                @endforeach --}}
                                             </select>
                                             <!--end::Input-->
                                         </div>
@@ -964,7 +947,7 @@
     $(document).ready(function() {
         $("#nama-pegawai").select2({
             ajax: {
-                url: '/get-data-pegawai',
+                url: '/proyek/get-data-pegawai',
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {
@@ -1071,7 +1054,7 @@
 
         $(select2).select2({
             ajax: {
-                url: '/get-data-pegawai',
+                url: '/proyek/get-data-pegawai',
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {

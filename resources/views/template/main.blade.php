@@ -982,12 +982,12 @@
             icon: icon,
             title: message,
         });
-        window.confirm = (icon, title, text, closure) => ConfirmDialog.fire({
+        window.confirm = (icon, title, text) => ConfirmDialog.fire({
             icon: icon,
             title: title,
             text: text,
         })
-        .then((result) => closure(result));
+        .then((result) => resolve(result.isConfirmed));
     </script>
 
     <!--begin:: show calendar-->

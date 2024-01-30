@@ -100,6 +100,8 @@ use App\Models\TechnicalForm;
 use App\Models\TechnicalQuery;
 use App\Models\PersonelTenderProyek;
 use App\Models\AlatProyek;
+use App\Models\MasterKlasifikasiSBU;
+use App\Models\MasterSubKlasifikasiSBU;
 use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
 use Carbon\Carbon;
 use Illuminate\Routing\RouteGroup;
@@ -114,6 +116,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use Termwind\Components\Dd;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Faker\Core\Uuid;
 
 /*
 |--------------------------------------------------------------------------
@@ -3365,6 +3368,21 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         return response()->json($data);
     });
 
+    //Begin::Get Master Klasifikasi KBLI SBU
+    Route::get('/proyek/get-klasifikasi-sbu', function (Request $request) {
+        $search = $request->input('search');
+
+        $dataKlasifikasiSBU = MasterSubKlasifikasiSBU::with('MasterKlasifikasiSBU')->when(
+            !empty($search),
+            function ($query) use ($search) {
+                $query->where('subklasifikasi', 'like', '%' . strtoupper($search) . '%')
+                    ->orWhere('kode_subklasifikasi', 'like', '%' . strtoupper($search) . '%')
+                    ->orWhere('kbli_2020', 'like', '%' . strtoupper($search) . '%');
+            }
+        )->get()->groupBy('MasterKlasifikasiSBU.klasifikasi');
+        return response()->json($dataKlasifikasiSBU);
+    });
+
     Route::get(
         '/matriks-approval-partner',
         function () {
@@ -3647,6 +3665,172 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     });
     //End::Master Matriks Approval Nota Rekomendasi 2
 
+    //Begin::Master Klasifikasi SBU
+
+    Route::get(
+        '/master-klasifikasi-sbu',
+        function () {
+            return view('MasterData/MasterKlasifikasiSBU', ['data' => MasterKlasifikasiSBU::all()]);
+        }
+    );
+
+    Route::post('/master-klasifikasi-sbu/save', function (Request $request) {
+        $data = $request->all();
+        $rules = [
+            'klasifikasi' => 'required|string'
+        ];
+        $is_invalid = validateInput($data, $rules);
+        if (!empty($is_invalid)) {
+            Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
+            return redirect()->back()->with("modal", $data["modal"]);
+        }
+        $uuid = new Uuid();
+        $klasifikasiSBU = new MasterKlasifikasiSBU();
+        $klasifikasiSBU->id_klasifikasi = $uuid->uuid3();
+        $klasifikasiSBU->klasifikasi = $data['klasifikasi'];
+        if ($klasifikasiSBU->save()) {
+            Alert::success(
+                'Success',
+                'Klasifikasi SBU berhasil ditambahkan!'
+            );
+            return redirect()->back();
+        }
+        Alert::error('Error', 'Klasifikasi SBU gagal ditambahkan!');
+        return redirect()->back();
+    });
+
+    Route::post('/master-klasifikasi-sbu/{id}/edit', function (Request $request, $id) {
+        $data = $request->all();
+        $rules = [
+            'klasifikasi' => 'required|string'
+        ];
+        $is_invalid = validateInput($data, $rules);
+        if (!empty($is_invalid)) {
+            Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
+            return redirect()->back()->with("modal", $data["modal"]);
+        }
+
+        $klasifikasiSBU = MasterKlasifikasiSBU::find($id);
+        if (empty($klasifikasiSBU)) {
+            Alert::error('Error', 'Klasifikasi SBU tidak ditemukan!');
+            return redirect()->back();
+        }
+
+        $klasifikasiSBU->klasifikasi = $data['klasifikasi'];
+
+        if ($klasifikasiSBU->save()) {
+            Alert::success('Success', 'Klasifikasi SBU berhasil diubah!');
+            return redirect()->back();
+        }
+        Alert::error('Error', 'Klasifikasi SBU gagal diubah!');
+        return redirect()->back();
+    });
+
+    Route::post('/master-klasifikasi-sbu/{klasifikasi}/delete', function (Request $request, MasterKlasifikasiSBU $klasifikasi) {
+        if (empty($klasifikasi)) {
+            Alert::error('Error', 'Klasifikasi SBU tidak ditemukan!');
+            return redirect()->back();
+        }
+
+        try {
+            $klasifikasi->delete();
+            return response()->json([
+                'Success' => true,
+                'Message' => null
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'Success' => false,
+                'Message' => $e->getMessage()
+            ]);
+        }
+    });
+
+    //End::Master Klasifikasi SBU
+
+    //Begin::Master Sub Klasifikasi SBU
+    Route::get('/master-subklasifikasi-sbu', function () {
+        return view('MasterData/MasterSubKlasifikasiSBU', ['data' => MasterSubKlasifikasiSBU::all(), 'klasifikasiSBU' => MasterKlasifikasiSBU::all()]);
+    });
+
+    Route::post('/master-subklasifikasi-sbu/save', function (Request $request) {
+        $data = $request->all();
+        $rules = [
+            'klasifikasi' => 'required|string',
+            'subklasifikasi' => 'required|string'
+        ];
+        $is_invalid = validateInput($data, $rules);
+        if (!empty($is_invalid)) {
+            Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
+            return redirect()->back()->with("modal", $data["modal"]);
+        }
+        $subKlasifikasiSBU = new MasterSubKlasifikasiSBU();
+        $subKlasifikasiSBU->klasifikasi_id = $data['klasifikasi'];
+        $subKlasifikasiSBU->subklasifikasi = $data['subklasifikasi'];
+        $subKlasifikasiSBU->kode_subklasifikasi = $data['kode_subklasifikasi'];
+        $subKlasifikasiSBU->kbli_2020 = $data['kbli_2020'];
+        if ($subKlasifikasiSBU->save()) {
+            Alert::success(
+                'Success',
+                'Sub Klasifikasi SBU berhasil ditambahkan!'
+            );
+            return redirect()->back();
+        }
+        Alert::error('Error', 'Sub Klasifikasi SBU gagal ditambahkan!');
+        return redirect()->back();
+    });
+
+    Route::post('/master-subklasifikasi-sbu/{id}/edit', function (Request $request, $id) {
+        $data = $request->all();
+        $rules = [
+            'klasifikasi' => 'required|string',
+            'subklasifikasi' => 'required|string'
+        ];
+        $is_invalid = validateInput($data, $rules);
+        if (!empty($is_invalid)) {
+            Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
+            return redirect()->back()->with("modal", $data["modal"]);
+        }
+        $subKlasifikasiSBU = MasterSubKlasifikasiSBU::find($id);
+        if (empty($subKlasifikasiSBU)) {
+            Alert::error('Error', 'Sub Klasifikasi tidak ditemukan!');
+            return redirect()->back();
+        }
+        $subKlasifikasiSBU->klasifikasi_id = $data['klasifikasi'];
+        $subKlasifikasiSBU->subklasifikasi = $data['subklasifikasi'];
+        $subKlasifikasiSBU->kode_subklasifikasi = $data['kode_subklasifikasi'];
+        $subKlasifikasiSBU->kbli_2020 = $data['kbli_2020'];
+        if ($subKlasifikasiSBU->save()) {
+            Alert::success(
+                'Success',
+                'Sub Klasifikasi SBU berhasil diubah!'
+            );
+            return redirect()->back();
+        }
+        Alert::error('Error', 'Sub Klasifikasi SBU gagal diubah!');
+        return redirect()->back();
+    });
+
+    Route::post('/master-klasifikasi-sbu/{subklasifikasi}/delete', function (Request $request, MasterSubKlasifikasiSBU $subklasifikasi) {
+        if (empty($subklasifikasi)) {
+            Alert::error('Error', 'Sub Klasifikasi SBU tidak ditemukan!');
+            return redirect()->back();
+        }
+
+        try {
+            $subklasifikasi->delete();
+            return response()->json([
+                'Success' => true,
+                'Message' => null
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'Success' => false,
+                'Message' => $e->getMessage()
+            ]);
+        }
+    });
+    //End::Master Sub Klasifikasi SBU
     
     //End :: Master Data
 

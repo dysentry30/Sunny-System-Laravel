@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('divisi_id');
             $table->string('departemen_code');
             $table->string('kode_unit_kerja')->nullable();
-            $table->string('klasifikasi_proyek');
+            // $table->string('klasifikasi_proyek');
             $table->string('kategori');
             $table->string('urutan')->nullable();
             $table->timestamps();

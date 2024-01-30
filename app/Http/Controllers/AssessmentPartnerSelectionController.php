@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AssessmentPartnerSelection;
 use App\Models\KriteriaPenggunaJasa;
 use App\Models\LegalitasPerusahaan;
+use App\Models\MatriksApprovalPartnerSelection;
 use App\Models\PartnerSelectionDetail;
 use App\Models\PenilaianPartnerSelection;
 use App\Models\PorsiJO;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
@@ -23,10 +26,28 @@ class AssessmentPartnerSelectionController extends Controller
      */
     public function index()
     {
-        $customers = PorsiJO::where('id_company_jo', '!=', null)
-            ->where('is_greenlane', '!=', null)
-            ->where('is_greenlane', '!=', false)
-            ->get();
+        $all_super_user_counter = MatriksApprovalPartnerSelection::all()->filter(function ($user) {
+            return $user->Pegawai->nama_pegawai == Auth::user()->name;
+        });
+        $is_user_exist_in_matriks_approval = $all_super_user_counter->contains(function ($user) {
+            return $user->Pegawai->nama_pegawai == Auth::user()->name;
+        });
+
+        $matriks_user = Auth::user()->Pegawai->MatriksPartner ?? null;
+        $collectDivisiMatriksUser = $matriks_user?->groupBy('divisi_id')->keys()->values()->toArray() ?? [];
+        $collectDepartemenMatriksUser = $matriks_user?->groupBy('departemen_code')->keys()->values()->toArray() ?? [];
+
+        $partnerApprovalAll = AssessmentPartnerSelection::with('PartnerJO')->whereIn('divisi_id', $collectDivisiMatriksUser)?->whereIn('departemen_id', $collectDepartemenMatriksUser)?->get();
+        $customers = $partnerApprovalAll
+            ->where(function ($query) {
+                return $query->PartnerJO->id_company_jo != null;
+            })
+            ->where(function ($query) {
+                return !is_null($query->PartnerJO->is_greenlane) && $query->PartnerJO->is_greenlane == false;
+            })
+            ->where(function ($query) {
+                return !is_null($query->PartnerJO->is_disetujui) && $query->PartnerJO->is_disetujui == true;
+            });
         $partnerDetail = PartnerSelectionDetail::all();
         $kriteriaPenilaian = PenilaianPartnerSelection::where('is_active', true)->get();
 

@@ -1268,7 +1268,7 @@
                         @endcanany
 
 
-                        @can('super-admin')
+                        @canany(['super-admin', 'admin-crm', 'approver-crm', 'risk-crm'])
                         <div class="menu-item">
                             <a class="menu-link " href="/assessment-partner-selection"
                                 style="color:white; padding-left:20px; {{ str_contains(Request::url(), 'assessment-partner-selection') ? 'background-color:#008CB4' : '' }}">
@@ -1283,7 +1283,7 @@
                                 <span class="menu-title" style="font-size: 16px; padding-left: 10px">Partner Selection</span>
                             </a>
                         </div>
-                        @endcan
+                        @endcanany
 
                         @canany(['super-admin'])
                             <!--begin::Menu Colapse-->

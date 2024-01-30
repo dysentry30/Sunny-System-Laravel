@@ -71,6 +71,7 @@
                                     <!--begin::Table row-->
                                     @foreach ($customers as $partner)
                                         @php
+                                        $partner = $partner->PartnerJO;
                                             switch ($partner->keterangan) {
                                                 case 'Very Low Risk':
                                                     $style = 'badge rounded-pill badge-success';
@@ -133,7 +134,7 @@
                                             <td class="text-center">
                                                 <p class="{{ $style }} m-0">{{ $partner->keterangan }}</p>
                                             </td>
-                                            <td class="text-center"> {{ $nilaiRisk ?? '' }}</td>
+                                            <td class="text-center"> {{ $nilaiRisk != 0 ?: '' }}</td>
                                             <td class="text-center">
                                                 <p class="{{ $style_2 }} m-0">{{ $kategoriRiskPartner ?? '' }}</p>
                                             </td>

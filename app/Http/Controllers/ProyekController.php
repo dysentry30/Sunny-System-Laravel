@@ -409,49 +409,40 @@ class ProyekController extends Controller
         $pesertatender = PesertaTender::where("kode_proyek", "=", $kode_proyek)->get();
         $proyekberjalans = ProyekBerjalans::where("kode_proyek", "=", $kode_proyek)->get()->first();
         $departemen = Departemen::where("kode_divisi", "=", $proyek->UnitKerja->kode_sap)->get();
-        if ($proyek->tipe_proyek == "P") {
-            $konsultan_perencana = KonsultanPerencana::all();
-            $pefindo = null;
-            if (!empty($proyek->proyekBerjalan?->customer)) {
-                $customer = $proyek->proyekBerjalan->customer;
-                $findPefindo = MasterPefindo::where('id_pelanggan', $customer->id_customer)->first();
-                if (!empty($findPefindo)) {
-                    $pefindo = $findPefindo;
-                } else {
-                    $pefindo = null;
-                }
-            }
-            // dd($pefindo);
-        }
+
         // $historyForecast = $historyForecast;
         // $porsiJO = $porsiJO;
         // $data_negara = $data_negara;
         // dd($proyek); //tes log hasil 
         if ($proyek->tipe_proyek == "P") {
+            $konsultan_perencana = KonsultanPerencana::all();
             // dd($teamProyek, $kriteriaProyek, $porsiJO, $pesertatender, $proyekberjalans, $departemen);
             $isExistPorsiJO = PorsiJO::where('kode_proyek', $proyek->kode_proyek)->get();
             if (!empty($isExistPorsiJO)) {
                 $isExistPorsiJO->each(function ($porsi) {
-                    if (empty($porsi->score_pefindo_jo)) {
-                        $checkPefindo = MasterPefindo::where('id_pelanggan', $porsi->id_company_jo)->latest()?->first();
-                        if (!empty($checkPefindo)) {
-                            $porsi->score_pefindo_jo = $checkPefindo->score;
-                            $porsi->file_pefindo_jo = $checkPefindo->id_document;
-                            $porsi->grade = $checkPefindo->grade;
-                            $porsi->keterangan = $checkPefindo->keterangan;
-
-                            if (str_contains($checkPefindo->grade, 'E')) {
-                                $porsi->is_disetujui = false;
-                            } else {
-                                $porsi->is_disetujui = true;
-                            }
-                        }
-                    }
                     $kriteria_partner = MasterGrupTierBUMN::where('id_pelanggan', $porsi->id_company_jo)->first();
                     if (!empty($kriteria_partner)) {
                         $porsi->is_greenlane = true;
+                        $porsi->is_disetujui = true;
                     } else {
                         $porsi->is_greenlane = false;
+                    }
+                    if (!$porsi->is_greenlane) {
+                        if (empty($porsi->score_pefindo_jo)) {
+                            $checkPefindo = MasterPefindo::where('id_pelanggan', $porsi->id_company_jo)->latest()?->first();
+                            if (!empty($checkPefindo)) {
+                                $porsi->score_pefindo_jo = $checkPefindo->score;
+                                $porsi->file_pefindo_jo = $checkPefindo->id_document;
+                                $porsi->grade = $checkPefindo->grade;
+                                $porsi->keterangan = $checkPefindo->keterangan;
+
+                                if (str_contains($checkPefindo->grade, 'E')) {
+                                    $porsi->is_disetujui = false;
+                                } else {
+                                    $porsi->is_disetujui = true;
+                                }
+                            }
+                        }
                     }
                     $porsi->save();
                 });
@@ -459,7 +450,7 @@ class ProyekController extends Controller
             return view(
                 'Proyek/viewProyek',
                 ["proyek" => $proyek, "proyeks" => Proyek::all()],
-                compact(['companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'mataUang', "provinsi", "departemen", "konsultan_perencana", "pefindo"])
+                compact(['companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'mataUang', "provinsi", "departemen", "konsultan_perencana"])
                 // [
                 //     'companies' => Company::all(),
                 //     'sumberdanas' => SumberDana::all(),
@@ -655,20 +646,20 @@ class ProyekController extends Controller
             $nomorDefault = "085881028391";
             foreach ($matriks_approval2 as $key => $user) {
                 $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$newProyek->kode_proyek";
-                $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-                    "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
-                    // "sender" => "6281188827008",
-                    "sender" => env("NO_WHATSAPP_BLAST"),
-                    "number" => $isnomorTargetActive ? $user->Pegawai->handphone : $nomorDefault,
-                    // "number" => "085881028391",
-                    "message" => "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi II, *" . $newProyek->ProyekBerjalan->name_customer . "* untuk Proyek *$newProyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
-                    // "url" => $url
-                ]);
-                $send_msg_to_wa->onError(function ($error) {
-                    // dd($error);
-                    Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                    return redirect()->back();
-                });
+                // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+                //     "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
+                //     // "sender" => "6281188827008",
+                //     "sender" => env("NO_WHATSAPP_BLAST"),
+                //     "number" => $isnomorTargetActive ? $user->Pegawai->handphone : $nomorDefault,
+                //     // "number" => "085881028391",
+                //     "message" => "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi II, *" . $newProyek->ProyekBerjalan->name_customer . "* untuk Proyek *$newProyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
+                //     // "url" => $url
+                // ]);
+                // $send_msg_to_wa->onError(function ($error) {
+                //     // dd($error);
+                //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+                //     return redirect()->back();
+                // });
                 $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi II, " . $newProyek->ProyekBerjalan->name_customer . " untuk Proyek $newProyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
                 $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Tanda Tangan Pengajuan Nota Rekomendasi II", nl2br($message), $isnomorTargetActive);
                 if (!$sendEmailUser) {
@@ -720,26 +711,29 @@ class ProyekController extends Controller
         $isExistPorsiJO = PorsiJO::where('kode_proyek', $dataProyek["kode-proyek"])->get();
         if (!empty($isExistPorsiJO)) {
             $isExistPorsiJO->each(function ($porsi) {
-                if (empty($porsi->score_pefindo_jo)) {
-                    $checkPefindo = MasterPefindo::where('id_pelanggan', $porsi->id_company_jo)->first();
-                    if (!empty($checkPefindo)) {
-                        $porsi->score_pefindo_jo = $checkPefindo->score;
-                        $porsi->file_pefindo_jo = $checkPefindo->id_document;
-                        $porsi->grade = $checkPefindo->grade;
-                        $porsi->keterangan = $checkPefindo->keterangan;
-
-                        if (str_contains($checkPefindo->grade, 'E')) {
-                            $porsi->is_disetujui = false;
-                        } else {
-                            $porsi->is_disetujui = true;
-                        }
-                    }
-                }
                 $kriteria_partner = MasterGrupTierBUMN::where('id_pelanggan', $porsi->id_company_jo)->first();
                 if (!empty($kriteria_partner)) {
                     $porsi->is_greenlane = true;
+                    $porsi->is_disetujui = true;
                 } else {
                     $porsi->is_greenlane = false;
+                }
+                if (!$porsi->is_greenlane) {
+                    if (empty($porsi->score_pefindo_jo)) {
+                        $checkPefindo = MasterPefindo::where('id_pelanggan', $porsi->id_company_jo)->first();
+                        if (!empty($checkPefindo)) {
+                            $porsi->score_pefindo_jo = $checkPefindo->score;
+                            $porsi->file_pefindo_jo = $checkPefindo->id_document;
+                            $porsi->grade = $checkPefindo->grade;
+                            $porsi->keterangan = $checkPefindo->keterangan;
+
+                            if (str_contains($checkPefindo->grade, 'E')) {
+                                $porsi->is_disetujui = false;
+                            } else {
+                                $porsi->is_disetujui = true;
+                            }
+                        }
+                    }
                 }
                 $porsi->save();
             });
@@ -747,43 +741,55 @@ class ProyekController extends Controller
 
         if (!empty($dataProyek["hps-pagu"]) && !empty($dataProyek["waktu_pelaksanaan"])) {
 
-            $nilaiOmzetProyek = (int)str_replace('.', '', $dataProyek["hps-pagu"]) * ((int)$dataProyek["porsi-jo"] / 100);
+            $urutanKlasifikasi = collect(["Proyek Kecil", "Proyek Menengah", "Proyek Besar", "Proyek Mega"]);
+            $urutanKlasifikasiOmzet = null;
+            $urutanKlasifikasiProduksi = null;
+            $klasifikasiNotaRekomendasi2 = null;
+
+            $nilaiOmzetProyek = (int)str_replace('.', '', $dataProyek["nilai-rkap"]) * ((int)$dataProyek["porsi-jo"] / 100);
             $waktuPelaksanaanConvertBulan = (int)$dataProyek["waktu_pelaksanaan"] / 30; //Hari dijadikan bulan
-            $nilai_klasifikasi_nota_2 = $nilaiOmzetProyek / $waktuPelaksanaanConvertBulan;
-
-
-            $newProyek->nilai_klasifikasi_nota_2 = $nilai_klasifikasi_nota_2;
+            $nilaiProduksiPerbulan = $nilaiOmzetProyek / $waktuPelaksanaanConvertBulan;
 
             //Jika Pakai Omset Saja
-            $klasifikasiOmzetSelected = MasterKlasifikasiOmsetProyek::all()?->filter(function ($item) use ($nilai_klasifikasi_nota_2) {
-                return (float)$item->dari_nilai <= (int)$nilai_klasifikasi_nota_2 && (float)$item->sampai_nilai > (int)$nilai_klasifikasi_nota_2;
+            $klasifikasiOmzetSelected = MasterKlasifikasiOmsetProyek::all()?->filter(function ($item) use ($nilaiOmzetProyek) {
+                return (float)$item->dari_nilai <= (int)$nilaiOmzetProyek && (float)$item->sampai_nilai >= (int)$nilaiOmzetProyek;
             })->first()?->keterangan;
-            $newProyek->klasifikasi_proyek_nota_2 = $klasifikasiOmzetSelected;
+
+            if (!empty($klasifikasiOmzetSelected)) {
+                $urutanKlasifikasiOmzet = $urutanKlasifikasi->filter(function ($klasifikasi) use ($klasifikasiOmzetSelected) {
+                    return $klasifikasi == $klasifikasiOmzetSelected;
+                })?->keys()?->first();
+            }
 
             //Jika Pakai Produksi Perbulan
-            // $klasifikasiOmzetSelected = MasterKlasifikasiOmsetProyek::all()?->filter(function ($item) use ($nilaiOmzetProyek) {
-            //     return (float)$item->dari_nilai <= (int)$nilaiOmzetProyek && (float)$item->sampai_nilai > (int)$nilaiOmzetProyek;
-            // })->first()?->keterangan;
+            $klasifikasiProduksiSelected = MasterKlasifikasiProduksiProyek::all()?->filter(function ($item) use ($nilaiProduksiPerbulan) {
+                return (float)$item->dari_nilai <= (int)$nilaiProduksiPerbulan && (float)$item->sampai_nilai >= (int)$nilaiProduksiPerbulan;
+            })->first()?->keterangan;
 
+            if (!empty($klasifikasiProduksiSelected)) {
+                $urutanKlasifikasiProduksi = $urutanKlasifikasi->filter(function ($klasifikasi) use ($klasifikasiProduksiSelected) {
+                    return $klasifikasi == $klasifikasiProduksiSelected;
+                })?->keys()?->first();
+            }
 
-            // $klasifikasiProyekArray = collect(["Proyek Kecil", "Proyek Menengah", "Proyek Besar", "Proyek Mega"]);
+            if (!empty($urutanKlasifikasiOmzet) && !empty($urutanKlasifikasiProduksi)) {
+                if ($urutanKlasifikasiProduksi < $urutanKlasifikasiOmzet) {
+                    $klasifikasiNotaRekomendasi2 = $klasifikasiProduksiSelected;
+                } else {
+                    $klasifikasiNotaRekomendasi2 = $klasifikasiOmzetSelected;
+                }
+            } elseif (!empty($urutanKlasifikasiOmzet)) {
+                $klasifikasiNotaRekomendasi2 = $klasifikasiOmzetSelected;
+            } elseif (!empty($urutanKlasifikasiOmzet)) {
+                $klasifikasiNotaRekomendasi2 = $klasifikasiProduksiSelected;
+            } else {
+                Alert::error('Error', "Terjadi kesalahan. Hubungi Admin!");
+                return redirect()->back();
+            }
 
-            // $klasifikasiWaktuPelaksanaanSelected = MasterKlasifikasiProduksiProyek::all()?->filter(function ($item) use ($nilai_klasifikasi_nota_2) {
-            //     return (float)$item->dari_nilai <= (int)$nilai_klasifikasi_nota_2 && (float)$item->sampai_nilai > (int)$nilai_klasifikasi_nota_2;
-            // })->first()?->keterangan;
+            $newProyek->klasifikasi_proyek_nota_2 = $klasifikasiNotaRekomendasi2;
+            $newProyek->nilai_klasifikasi_nota_2 = $nilaiOmzetProyek;
 
-            // if (!empty($klasifikasiWaktuPelaksanaanSelected) && !empty($klasifikasiOmzetSelected)) {
-            //     $keyKlasifikasiOmzet =  $klasifikasiProyekArray->search($klasifikasiOmzetSelected);
-            //     $keyKlasifikasiProduksi =  $klasifikasiProyekArray->search($klasifikasiWaktuPelaksanaanSelected);
-
-            //     if ($keyKlasifikasiProduksi < $keyKlasifikasiOmzet) {
-            //         $klasifikasiReal = $klasifikasiProyekArray[$keyKlasifikasiProduksi];
-            //         $newProyek->klasifikasi_proyek_nota_2 = $klasifikasiReal;
-            //     } else {
-            //         $klasifikasiReal = $klasifikasiProyekArray[$keyKlasifikasiOmzet];
-            //         $newProyek->klasifikasi_proyek_nota_2 = $klasifikasiReal;
-            //     }
-            // }
         }
 
         $newProyek->keterangan_greenlane = $dataProyek["keterangan-greenlane"];
@@ -897,6 +903,7 @@ class ProyekController extends Controller
         $newProyek->rugi = str_replace('.', '', $dataProyek["rugi-performance"]);
         $newProyek->latitude = $dataProyek["latitude"];
         $newProyek->longitude = $dataProyek["longitude"];
+        $newProyek->kode_kbli_2020 = $dataProyek["klasifikasi-kbli-sbu"];
 
         //Begin::Waktu Pelaksanaan
         $newProyek->waktu_pelaksanaan = $dataProyek["waktu_pelaksanaan"];
@@ -2669,29 +2676,34 @@ class ProyekController extends Controller
         $newPorsiJO->id_company_jo = $customer->id_customer;
         $newPorsiJO->porsi_jo = $dataPorsiJO["porsijo-company"];
 
-        //Check Partner di Pefindo
-        $checkPefindo = MasterPefindo::where('id_pelanggan', $dataPorsiJO['company-jo'])->first();
-
-        if (!empty($checkPefindo)) {
-            $newPorsiJO->score_pefindo_jo = $checkPefindo->score;
-            $newPorsiJO->file_pefindo_jo = $checkPefindo->id_document;
-            $newPorsiJO->grade = $checkPefindo->grade;
-            $newPorsiJO->keterangan = $checkPefindo->keterangan;
-
-            if (str_contains($checkPefindo->grade, 'E')) {
-                $newPorsiJO->is_disetujui = false;
-            } else {
-                $newPorsiJO->is_disetujui = true;
-            }
-        }
-
+        //Check Partner di Master BUMN
         $kriteria_partner = MasterGrupTierBUMN::where('id_pelanggan', $customer->id_customer)->first();
 
         if (!empty($kriteria_partner)) {
             $newPorsiJO->is_greenlane = true;
+            $newPorsiJO->is_disetujui = true;
         } else {
             $newPorsiJO->is_greenlane = false;
         }
+
+        if (!$newPorsiJO->is_greenlane) {
+            //Check Partner di Pefindo
+            $checkPefindo = MasterPefindo::where('id_pelanggan', $dataPorsiJO['company-jo'])->first();
+
+            if (!empty($checkPefindo)) {
+                $newPorsiJO->score_pefindo_jo = $checkPefindo->score;
+                $newPorsiJO->file_pefindo_jo = $checkPefindo->id_document;
+                $newPorsiJO->grade = $checkPefindo->grade;
+                $newPorsiJO->keterangan = $checkPefindo->keterangan;
+
+                if (str_contains($checkPefindo->grade, 'E')) {
+                    $newPorsiJO->is_disetujui = false;
+                } else {
+                    $newPorsiJO->is_disetujui = true;
+                }
+            }
+        }
+
 
         // $newPorsiJO->max_jo = $dataPorsiJO["max-porsi"];
         $nama_file = collect([]);

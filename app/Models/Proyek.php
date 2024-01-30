@@ -249,4 +249,9 @@ class Proyek extends Model
     {
         return $this->hasMany(PersonelTenderProyek::class, 'kode_proyek', 'kode_proyek');
     }
+
+    public function MasterSubKlasifikasiSBU()
+    {
+        return $this->hasOne(MasterSubKlasifikasiSBU::class, 'kbli_2020', 'kode_kbli_2020');
+    }
 }
