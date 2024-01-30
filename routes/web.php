@@ -936,7 +936,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post('/forecast/set-lock/unit-kerja', function (Request $request) {
         $data = $request->all();
-        $tahun = (int) date("m") == 1 ? (int) date("Y") - 1 : (int) date("Y");
+        $tahun = (int) date("Y");
+        if ((int) date("m") == 1 && (int) date('d') < 15) {
+            $tahun = (int) date("Y") - 1;
+        }
         $month = (int) date("m");
         $data = $request->all();
         $unit_kerja = UnitKerja::where("unit_kerja", "=", $data["unit_kerja"])->first();
@@ -1006,7 +1009,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                                 "CUSTOMER" => $h->Proyek->proyekBerjalan->customer->kode_bp ?? "", // kode sap di customer
                                 "SBU" => $h->Proyek->Sbu->kode_sbu ?? "", // kode sbu di SBU
                                 "AMOUNT_PROGNOSA" => (int) $data["periode_prognosa"] <= (int) $h->month_forecast ? (int) $h->nilai_forecast : 0,
-                                "REPORT_PERIOD" => (int) (date("Y") . str_pad($data["periode_prognosa"], 3, 0, STR_PAD_LEFT)),
+                                // "REPORT_PERIOD" => (int) (date("Y") . str_pad($data["periode_prognosa"], 3, 0, STR_PAD_LEFT)),
+                                "REPORT_PERIOD" => (int) ($tahun . str_pad($data["periode_prognosa"], 3, 0, STR_PAD_LEFT)),
                                 "VERSION" => "PROG",
                             ]);
                             
@@ -1027,7 +1031,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                             "CUSTOMER" => $h->Proyek->proyekBerjalan->customer->kode_bp ?? "", // kode sap di customer
                             "SBU" => $h->Proyek->Sbu->kode_sbu ?? "", // kode sbu di SBU
                             "AMOUNT_PROGNOSA" => (int) $data["periode_prognosa"] == (int) $h->month_realisasi ? (int) $h->realisasi_forecast : 0,
-                            "REPORT_PERIOD" => (int) (date("Y") . str_pad($data["periode_prognosa"], 3, 0, STR_PAD_LEFT)),
+                            // "REPORT_PERIOD" => (int) (date("Y") . str_pad($data["periode_prognosa"], 3, 0, STR_PAD_LEFT)),
+                            "REPORT_PERIOD" => (int) ($tahun . str_pad($data["periode_prognosa"], 3, 0, STR_PAD_LEFT)),
                             "VERSION" => "ACT",
                         ]);
                         $result_all_data_send_to_sap->push($data_send_to_sap_realisasi);
