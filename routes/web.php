@@ -100,6 +100,7 @@ use App\Models\TechnicalForm;
 use App\Models\TechnicalQuery;
 use App\Models\PersonelTenderProyek;
 use App\Models\AlatProyek;
+use App\Models\HistoryRKAP;
 use App\Models\MasterKlasifikasiSBU;
 use App\Models\MasterSubKlasifikasiSBU;
 use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
@@ -945,6 +946,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             "msg" => "Nilai Forecast pada proyek <b>$proyek->nama_proyek</b> gagal di tambahkan",
         ]);
     });
+
+    //DELETE Pendukung Pasar Dini
+    Route::delete('/proyek/dokumen-pendukung-pasdin/{id}/delete', [ProyekController::class, 'deleteDokumenPendukungPasdin']);
 
     // GET Kriteria 
     Route::post('/proyek/get-kriteria', [ProyekController::class, "getKriteria"]);
@@ -5363,7 +5367,12 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $proyeks = Proyek::where('is_rkap', true)->where('tahun_perolehan', (int)date('Y'))->get();
         }
 
-        dd($proyeks);
+        // dd($proyeks);
+
+        $totalRkap = $proyeks->sum('nilai_rkap');
+        $totalOkReview = $proyeks->sum('nilaiok_review');
+
+        $proyeks = $proyeks->groupBy('unit_kerja');
 
         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
         if (Auth::user()->check_administrator) {
@@ -5375,7 +5384,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
         // dd();
 
-        return view("/11_Rkap", compact(["unitkerjas", "proyeks"]));
+        return view("/11_Rkap", compact(["unitkerjas", "proyeks", "filterTahun", "totalRkap", "totalOkReview"]));
     });
 
     Route::get('/rkap/{divcode}/{tahun_pelaksanaan}', function ($divcode, $tahun_pelaksanaan, Request $request) {
@@ -5385,15 +5394,90 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
         return view("/Rkap/viewRkap", compact(["proyeks", "tahun_pelaksanaan", "rkaps"]));
     });
+
+    Route::post('/rkap/locked', function (Request $request) {
+        $divisi = $request->get('divisi');
+        $tahun_pelaksanaan = $request->get('tahun_pelaksanaan');
+
+        $unitKerjaName = UnitKerja::where("divcode", "=", $divisi)->first()->unit_kerja;
+        $historyRKAP = HistoryRKAP::where('unit_kerja', $unitKerjaName)->where('tahun_pelaksanaan', $tahun_pelaksanaan)->first();
+        if (empty($historyRKAP)) {
+            return response()->json([
+                'Success' => false,
+                'Message' => "Data tidak ditemukan. Mohon hubungi Admin."
+            ]);
+        }
+
+
+        if ($historyRKAP->is_locked) {
+            return response()->json([
+                'Success' => false,
+                'Message' => "History RKAP $unitKerjaName Sudah di lock!"
+            ]);
+        }
+
+        $historyRKAP->is_locked = true;
+
+        if ($historyRKAP->save()) {
+            return response()->json([
+                'Success' => true,
+                'Message' => "History RKAP $unitKerjaName Berhasil di lock"
+            ]);
+        }
+
+        return response()->json([
+            'Success' => false,
+            'Message' => "History RKAP $unitKerjaName Gagal di lock"
+        ]);
+    });
+
+    Route::post('/rkap/unlocked', function (Request $request) {
+        $divisi = $request->get('divisi');
+        $tahun_pelaksanaan = $request->get('tahun_pelaksanaan');
+
+        $unitKerjaName = UnitKerja::where("divcode", "=", $divisi)->first()->unit_kerja;
+        $historyRKAP = HistoryRKAP::where('unit_kerja', $unitKerjaName)->where('tahun_pelaksanaan', $tahun_pelaksanaan)->first();
+        if (empty($historyRKAP)) {
+            return response()->json([
+                'Success' => false,
+                'Message' => "Data tidak ditemukan. Mohon hubungi Admin."
+            ]);
+        }
+
+
+        if (!is_null($historyRKAP->is_locked) && !$historyRKAP->is_locked) {
+            return response()->json([
+                'Success' => false,
+                'Message' => "History RKAP $unitKerjaName Sudah di unlock!"
+            ]);
+        }
+
+        $historyRKAP->is_locked = false;
+
+        if ($historyRKAP->save()) {
+            return response()->json([
+                'Success' => true,
+                'Message' => "History RKAP $unitKerjaName Berhasil di lock"
+            ]);
+        }
+
+        return response()->json([
+            'Success' => false,
+            'Message' => "History RKAP $unitKerjaName Gagal di lock"
+        ]);
+    });
     // end RKAP
 
     // begin RKAP AWAL dan REVIEW
-    Route::get('/ok-awal', function () {
+    Route::get('/ok-awal', function (Request $request) {
+        $filterTahun = $request->query("tahun-proyek") ?? (int) date("Y");
+
         if (Auth::user()->check_administrator) {
             $unitkerjas = Proyek::sortable()->get()->groupBy("unit_kerja");
         } else {
             $unitkerjas = Proyek::sortable()->where("unit_kerja", "=", Auth::user()->unit_kerja)->get()->groupBy("unit_kerja");
         }
+        
 
         $proyeks = [];
         foreach ($unitkerjas as $key => $unitkerja) {
@@ -5401,9 +5485,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             array_push($proyeks, $proyek);
             //    dump($proyeks);
         }
-        // dd();
+        // dd($proyeks);
 
-        return view("/11_Rkap", compact(["unitkerjas", "proyeks"]));
+        return view("/11_Rkap", compact(["unitkerjas", "proyeks", "filterTahun"]));
     });
 
     Route::get('/ok-review', function () {

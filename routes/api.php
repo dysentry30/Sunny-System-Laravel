@@ -567,7 +567,7 @@ Route::middleware(["web"])->group(function () {
             $history_rkap->unit_kerja = $unit_kerja->unit_kerja;
             $history_rkap->profit_center = $data["UsrUnitKerja"];
             $history_rkap->tahun_pelaksanaan = $data["UsrTahunPelaksanaan"];
-            $history_rkap->is_locked = true;
+            // $history_rkap->is_locked = true;
 
             $history_rkap->save();
 

@@ -254,4 +254,9 @@ class Proyek extends Model
     {
         return $this->hasOne(MasterSubKlasifikasiSBU::class, 'kbli_2020', 'kode_kbli_2020');
     }
+
+    public function DokumenPendukungPasarDini()
+    {
+        return $this->hasOne(DokumenPendukungPasdin::class, 'kode_proyek', 'kode_proyek');
+    }
 }

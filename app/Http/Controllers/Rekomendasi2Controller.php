@@ -50,11 +50,11 @@ class Rekomendasi2Controller extends Controller
         });
         $matriks_category = [];
 
-        $collectKlasifikasi = $matriks_user->unique('klasifikasi_proyek')->map(function ($item) {
+        $collectKlasifikasi = $matriks_user?->unique('klasifikasi_proyek')->map(function ($item) {
             return $item->klasifikasi_proyek;
         })->toArray();
 
-        $collectDepartement = $matriks_user->unique('klasifikasi_proyek')->map(function ($item) {
+        $collectDepartement = $matriks_user?->unique('klasifikasi_proyek')->map(function ($item) {
             return $item->departemen_code;
         })->toArray();
 

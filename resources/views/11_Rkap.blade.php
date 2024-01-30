@@ -171,7 +171,7 @@
 
                         <!--begin::Card body-->
                         <div class="card-body py-10">
-                            @if (Auth::user()->canany(['super-admin', 'crm']))
+                            @if (Auth::user()->canany(['super-admin', 'admin-crm']))
                                 <!--begin::Table-->
                                 <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
                                     <!--begin::Table head-->
@@ -192,16 +192,26 @@
                                     <!--begin::Table body-->
                                     <tbody class="fw-bold text-gray-600">
                                         @foreach ($proyeks as $divisi => $proyek)
+                                        @php
+                                            $nama_unit_kerja = \App\Models\UnitKerja::where('divcode', $divisi)?->first()?->unit_kerja;
+                                            $historyRkap = \App\Models\HistoryRKAP::where('unit_kerja', $nama_unit_kerja)->where('tahun_pelaksanaan', $filterTahun)?->first()->is_locked == true;
+                                        @endphp
                                             <tr>
                                                 <td class="min-w-auto">
-                                                    <a href="/rkap/{{ $proyek->first()->unit_kerja }}/{{ $filterTahun }}" target="_blank" class="text-gray-600 text-hover-primary mb-1">{{ $divisi }}</a>
+                                                    <a href="/rkap/{{ $proyek->first()->unit_kerja }}/{{ $filterTahun }}" target="_blank" class="text-gray-600 text-hover-primary mb-1">{{ $nama_unit_kerja }}</a>
                                                 </td>
                                                 <td class="min-w-auto text-center">{{ $filterTahun }}</td>
                                                 <td class="min-w-auto text-end">{{ number_format((int) str_replace('.', '', $proyek->sum('nilai_rkap')), 0, '.', '.') }}
                                                 </td>
                                                 <td class="min-w-auto text-end">{{ number_format((int) str_replace('.', '', $proyek->sum('nilaiok_review')), 0, '.', '.') }}
                                                 </td>
-                                                <td class="min-w-auto text-center">Yes</td>
+                                                <td class="min-w-auto text-center">
+                                                    @if (!empty($historyRkap) && $historyRkap)
+                                                        <button type="button" id="btnLocked" class="btn btn-sm btn-danger" onclick="lockedRKAPDivisi('{{ $divisi }}', '{{ $filterTahun }}', false)">Unlock</button>
+                                                    @else
+                                                        <button type="button" id="btnLocked" class="btn btn-sm btn-primary" onclick="lockedRKAPDivisi('{{ $divisi }}', '{{ $filterTahun }}', true)">Lock</button>
+                                                    @endif
+                                                </td>
                                             </tr>
                                         @endforeach
                                         <tr>
@@ -214,6 +224,60 @@
                                     <!--end::Table body-->
                                 </table>
                                 <!--end::Table-->
+
+                                <script>
+                                    function lockedRKAPDivisi(divisi, tahun_pelaksanaan, is_locked) {
+                                        let url
+                                        let text
+                                        if (is_locked) {
+                                            url = '/rkap/locked';
+                                            text = 'Lock';
+                                        } else {
+                                            url = '/rkap/unlocked';
+                                            text = 'Unlock';
+                                        }
+                                        Swal.fire({
+                                            title: 'Apakah anda yakin?',
+                                            icon: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#008CB4',
+                                            cancelButtonColor: '#d33',
+                                            confirmButtonText: text
+                                        }).then(async (result) => {
+                                            if (result.isConfirmed) {
+                                                try {
+                                                    const formData = new FormData();
+                                                    formData.append('_token', '{{ csrf_token() }}');
+                                                    formData.append('divisi', divisi);
+                                                    formData.append('tahun_pelaksanaan', tahun_pelaksanaan);
+
+                                                    const response = await fetch(url, {
+                                                        method:'POST',
+                                                        header:'application/json',
+                                                        body:formData
+                                                    }).then(res => res.json());
+
+                                                    if (response.Success != true) {
+                                                        return Swal.fire({
+                                                            icon: 'error',
+                                                            title: response.Message
+                                                        }).then(res => window.location.reload())
+                                                    }
+                                                    Swal.fire({
+                                                        icon: 'success',
+                                                        title: response.Message
+                                                    }).then(res => window.location.reload())
+                                                } catch (error) {
+                                                    Swal.fire({
+                                                        icon: 'error',
+                                                        title: error
+                                                    }).then(res => window.location.reload())
+                                                }
+                                            }
+                                        })
+
+                                    }
+                                </script>
                             @endif
 
 

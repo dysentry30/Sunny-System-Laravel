@@ -225,7 +225,7 @@
                         </div>
                         @endcanany
                         {{-- @endif --}}
-                        @canany(['super-admin', 'admin-crm', 'user-crm', 'approver-crm'])
+                        @canany(['super-admin', 'admin-crm', 'approver-crm'])
                             @if (str_contains(Request::url(), '/rekomendasi')||
                                 str_contains(Request::url(), '/green-lane') ||
                                 str_contains(Request::url(), '/non-green-lane')
@@ -1088,11 +1088,11 @@
                                         <!--end::Menu Colapse-->
                                     @endcan
                                     
-                                    @can('super-admin')
+                                    @canany(['super-admin', 'admin-crm'])
                                         <!--begin::Menu Colapse-->
                                         <div id="#kt_aside_menu" data-kt-menu="true"
                                             style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'master-alat-proyek' ? 'background-color:#008CB4' : '' }}">
-                                            <a class="menu-link " href="/master-klasifikasi-produksi" style="color:white; padding-left:20px;">
+                                            <a class="menu-link " href="/master-klasifikasi-alat" style="color:white; padding-left:20px;">
                                                 <span class="menu-icon">
                                                     <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                                     {{-- <i class="bi bi-buildings text-white"></i>                                                     --}}
@@ -1103,7 +1103,41 @@
                                             </a>
                                         </div>
                                         <!--end::Menu Colapse-->
-                                    @endcan
+                                    @endcanany
+
+                                    @canany(['super-admin', 'admin-crm'])
+                                        <!--begin::Menu Colapse-->
+                                        <div id="#kt_aside_menu" data-kt-menu="true"
+                                            style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'master-klasifikasi-sbu' ? 'background-color:#008CB4' : '' }}">
+                                            <a class="menu-link " href="/master-klasifikasi-sbu" style="color:white; padding-left:20px;">
+                                                <span class="menu-icon">
+                                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                    {{-- <i class="bi bi-buildings text-white"></i>                                                     --}}
+                                                    <i class="bi bi-tools text-white" style="font-size: 18px; margin-left:7px"></i>
+                                                    <!--end::Svg Icon-->
+                                                </span>
+                                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Master Klasifikasi SBU</span>
+                                            </a>
+                                        </div>
+                                        <!--end::Menu Colapse-->
+                                    @endcanany
+
+                                    @canany(['super-admin', 'admin-crm'])
+                                        <!--begin::Menu Colapse-->
+                                        <div id="#kt_aside_menu" data-kt-menu="true"
+                                            style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'master-subklasifikasi-sbu' ? 'background-color:#008CB4' : '' }}">
+                                            <a class="menu-link " href="/master-subklasifikasi-sbu" style="color:white; padding-left:20px;">
+                                                <span class="menu-icon">
+                                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                    {{-- <i class="bi bi-buildings text-white"></i>                                                     --}}
+                                                    <i class="bi bi-tools text-white" style="font-size: 18px; margin-left:7px"></i>
+                                                    <!--end::Svg Icon-->
+                                                </span>
+                                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Master Sub Klasifikasi SBU</span>
+                                            </a>
+                                        </div>
+                                        <!--end::Menu Colapse-->
+                                    @endcanany
                                 </div>
                                 <!--end::Colapse-->
                                 <!--end::Svg Icon-->
@@ -1131,7 +1165,7 @@
                             </div>
                         @endcanany
                         
-                        @can('super-admin')
+                        {{-- @can('super-admin')
                             <div class="menu-item">
                                 <a class="menu-link " href="/ok-awal"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'ok-awal') ? 'background-color:#008CB4' : '' }}">
@@ -1146,9 +1180,9 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">RKAP Awal</span>
                                 </a>
                             </div>                            
-                        @endcan
+                        @endcan --}}
 
-                        @can('super-admin')
+                        {{-- @can('super-admin')
                             <div class="menu-item">
                                 <a class="menu-link " href="/ok-review"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'ok-review') ? 'background-color:#008CB4' : '' }}">
@@ -1163,7 +1197,7 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">RKAP Review</span>
                                 </a>
                             </div>                            
-                        @endcan
+                        @endcan --}}
 
                         {{-- @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                             <div class="menu-item">
@@ -1285,7 +1319,7 @@
                         </div>
                         @endcanany
 
-                        @canany(['super-admin'])
+                        @canany(['super-admin', 'risk-crm'])
                             <!--begin::Menu Colapse-->
                             <div class="menu-item">
                                 <a class="menu-link " href="/master-fortune-rank" style="color:white; padding-left:20px; {{ Request::Path() == 'master-fortune-rank' ? 'background-color:#008CB4' : '' }}">

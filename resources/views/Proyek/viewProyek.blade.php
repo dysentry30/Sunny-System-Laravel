@@ -1907,6 +1907,89 @@
                                                                 <!--End begin::Col-->
                                                     </div>
 
+                                                    <!--Begin::Row Kanan+Kiri-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Input group Website-->
+                                                        <div class="fv-row mb-7">
+                                                            <!--Begin::Dokumen Nota Rekomendasi 1-->
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                                Dokumen Pendukung
+                                                            </h3>
+                                                            @canany(['super-admin', 'user-crm'])
+                                                            @if (empty($proyek->DokumenPendukungPasarDini))
+                                                            <br>
+                                                            <div class="w-50">
+                                                                <input type="file"
+                                                                    class="form-control form-control-sm form-input-solid"
+                                                                    name="dokumen-pendukung-pasar-dini" accept=".pdf">
+                                                            </div>
+                                                            <h6 id="error-dokumen-pendukung-pasar-dini" class="text-danger fw-normal"
+                                                                style="display: none">*File
+                                                                terlalu besar ! Max Size 50Mb</h6>
+                                                            @endif
+                                                            @endcanany
+                                                            <br>
+                                                            <!--begin::Table-->
+                                                            <table class="table align-middle table-row-dashed w-50 fs-6 gy-2"
+                                                                id="kt_customers_table">
+                                                                <!--begin::Table head-->
+                                                                <thead>
+                                                                    <!--begin::Table row-->
+                                                                    <tr
+                                                                        class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                        <th class="w-50px text-center">No.</th>
+                                                                        <th class="w-auto">Nama Document</th>
+                                                                        <th class="w-auto">Modified On</th>
+                                                                        <th class="w-auto text-center"></th>
+                                                                    </tr>
+                                                                    <!--end::Table row-->
+                                                                </thead>
+                                                                <!--end::Table head-->
+                                                                <!--begin::Table body-->
+                                                                <tbody class="fw-bold text-gray-600">
+                                                                    @if (!empty($proyek->DokumenPendukungPasarDini))
+                                                                    <tr>
+                                                                        <!--begin::Nomor-->
+                                                                        <td class="text-center">
+                                                                            1.
+                                                                        </td>
+                                                                        <!--end::Nomor-->
+                                                                        <!--begin::Name-->
+                                                                        <td>
+                                                                            <a target="_blank"
+                                                                                href="{{ asset('dokumen-pendukung-pasdin/' . $proyek->DokumenPendukungPasarDini->id_document) }}"
+                                                                                class="text-hover-primary">{{ $proyek->DokumenPendukungPasarDini->nama_document }}</a>
+                                                                        </td>
+                                                                        <!--end::Name-->
+                                                                        <!--begin::Column-->
+                                                                        <td>
+                                                                            {{ Carbon\Carbon::parse($proyek->DokumenPendukungPasarDini->created_at)->translatedFormat('d F Y') }}
+                                                                        </td>
+                                                                        <!--end::Column-->
+                                                                        <!--begin::Action-->
+                                                                        <td class="text-center">
+                                                                            <small>
+                                                                                <p data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_dokumen_pendukung_pasdin_delete_{{ $proyek->DokumenPendukungPasarDini->id }}"
+                                                                                    id="modal-delete"
+                                                                                    class="btn btn-sm btn-light btn-active-primary">
+                                                                                    Delete
+                                                                                </p>
+                                                                            </small>
+                                                                        </td>
+                                                                        <!--end::Action-->
+                                                                    </tr>
+                                                                    @endif
+                                                                </tbody>
+                                                                <!--end::Table body-->
+                                                            </table>
+                                                            <!--end::Table-->
+                                                            <!--End::Dokumen Nota Rekomendasi 1-->
+                                                        </div>
+                                                        <!--End::Input group Website-->
+                                                    </div>
+                                                    <!--End::Row Kanan+Kiri-->
+
 
                                                     <!--Begin::Title Biru Form: Nilai RKAP Review-->
                                                     &nbsp;<br>
@@ -11547,6 +11630,55 @@
         </form>
     @endforeach
     <!--end::DELETE ATTACHMENT MENANG-->
+
+    <!--begin::DELETE DOKUMEN PENDUKUNG PASAR DINI-->
+    @if (!empty($proyek->DokumenPendukungPasarDini))
+    <form action="/proyek/dokumen-pendukung-pasdin/{{ $proyek->DokumenPendukungPasarDini->id }}/delete" method="post"
+        enctype="multipart/form-data">
+        @method('delete')
+        @csrf
+        <div class="modal fade" id="kt_dokumen_pendukung_pasdin_delete_{{ $proyek->DokumenPendukungPasarDini->id }}" tabindex="-1"
+            aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-800px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Hapus : {{ $proyek->DokumenPendukungPasarDini->nama_document }}</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+                        Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                        <br>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                    </div>
+                    <!--end::Input group-->
+
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+        </div>
+    </form>
+    @endif
+    <!--end::DELETE DOKUMEN PENDUKUNG PASAR DINI-->
 
     <!--begin::DELETE DOKUMEN PEFINDO-->
     @foreach ($proyek->DokumenNotaRekomendasi1 as $dokumen)

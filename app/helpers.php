@@ -189,20 +189,24 @@ function checkGreenLine($proyek) {
 function checkNonGreenLaneNota2($proyek)
 {
     if ($proyek instanceof App\Models\Proyek) {
-        if ($proyek->stage == 4) {
-            if (empty($proyek->jenis_terkontrak) || empty($proyek->sistem_bayar)) {
-                return null;
-            }
+        if ($proyek->UnitKerja->dop != 'EA') {
+            if ($proyek->stage == 4) {
+                if (empty($proyek->jenis_terkontrak) || empty($proyek->sistem_bayar)) {
+                    return null;
+                }
 
-            if ($proyek->jenis_terkontrak == "Lumpsum" && $proyek->sistem_bayar == "Monthly" && $proyek->is_uang_muka) {
-                return true;
-            } else {
-                return false;
+                if ($proyek->jenis_terkontrak == "Lumpsum" || $proyek->sistem_bayar == "Monthly" || $proyek->is_uang_muka) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
+            return null;
+        } else {
+            return null;
         }
-        return null;
     } else {
-        return null;
+        return false;
     }
 }
 
@@ -213,6 +217,8 @@ function validateInput($data, $rules) {
         $fields = collect($errors->toArray())->map(function($item, $field) {
             if(str_contains($field, "-")) {
                 return ucwords(str_replace("-", " ", $field));
+            } elseif (str_contains($field, "_")) {
+                return ucwords(str_replace("_", " ", $field));
             }
             return ucwords(str_replace(".", " ", $field));
         })->values();
@@ -2400,7 +2406,7 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
 
     $section->addText("Berdasarkan informasi di atas, mengajukan untuk mengikuti aktifitas Perolehan Kontrak (tender) tersebut di atas.");
 
-    $section->addTextBreak(15);
+    $section->addTextBreak(10);
     // $section->addPageBreak();
     $section2 = $phpWord->addSection();
     $footer2 = $section2->addFooter();
@@ -2554,7 +2560,7 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
             }
         }
     }
-
+    $section2->addTextBreak(2);
     //Begin :: Catatan Rekomendasi
     $section3 = $phpWord->addSection();
     $footer3 = $section3->addFooter();

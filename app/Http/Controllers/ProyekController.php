@@ -67,6 +67,7 @@ use App\Models\DokumenKelengkapanPartnerKSO;
 use App\Models\MasterGrupTierBUMN;
 use App\Models\Negara;
 use App\Models\PersonelTenderProyek;
+use App\Models\DokumenPendukungPasdin;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -1150,6 +1151,10 @@ class ProyekController extends Controller
                     self::uploadDokumenPenentuanProjectGreenlane($dataProyek["dokumen-penentuan-project-greenlane"], $kode_proyek);
                 }
 
+                if (isset($dataProyek["dokumen-pendukung-pasar-dini"])) {
+                    self::uploadDokumenPendukungPasdin($dataProyek["dokumen-pendukung-pasar-dini"], $kode_proyek);
+                }
+
                 if (isset($dataProyek["dokumen-nota-rekomendasi-1"])) {
                     self::uploadDokumenNotaRekomendasi1($dataProyek["dokumen-nota-rekomendasi-1"], $kode_proyek);
                 }
@@ -1205,6 +1210,10 @@ class ProyekController extends Controller
                     self::uploadDokumenPenentuanProjectGreenlane($dataProyek["dokumen-penentuan-project-greenlane"], $kode_proyek);
                 }
 
+                if (isset($dataProyek["dokumen-pendukung-pasar-dini"])) {
+                    self::uploadDokumenPendukungPasdin($dataProyek["dokumen-pendukung-pasar-dini"], $kode_proyek);
+                }
+
                 if (isset($dataProyek["dokumen-nota-rekomendasi-1"])) {
                     self::uploadDokumenNotaRekomendasi1($dataProyek["dokumen-nota-rekomendasi-1"], $kode_proyek);
                 }
@@ -1248,6 +1257,28 @@ class ProyekController extends Controller
             }
             return redirect("/proyek/view/" . $kode_proyek);
         }
+    }
+
+    private function uploadDokumenPendukungPasdin(UploadedFile $uploadedFile, $kode_proyek)
+    {
+        $dokumen = new DokumenPendukungPasdin();
+        $file_name = $uploadedFile->getClientOriginalName();
+        $id_document = date("dmYHis_") . str_replace(" ", "-", $file_name);
+        $nama_document = $file_name;
+        $dokumen->nama_document = $nama_document;
+        $dokumen->id_document = $id_document;
+        $dokumen->kode_proyek = $kode_proyek;
+        $uploadedFile->move(public_path('dokumen-pendukung-pasdin'), $id_document);
+        $dokumen->save();
+    }
+
+    public function deleteDokumenPendukungPasdin($id)
+    {
+        $delete = DokumenPendukungPasdin::find($id);
+        File::delete(public_path(public_path("dokumen-pendukung-pasdin/$delete->id_document")));
+        $delete->delete();
+        Alert::success("Success", "Dokumen Pendukung Pasdin Berhasil Dihapus");
+        return redirect()->back();
     }
 
     public function updateRetail(Request $request, Proyek $newProyek, ProyekBerjalans $customerHistory)

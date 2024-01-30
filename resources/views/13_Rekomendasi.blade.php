@@ -557,7 +557,7 @@
                                                                     Penyetujuan</small>
                                                             @endif
     
-                                                            @if ($proyek->is_revisi)
+                                                            @if (!is_null($proyek->revisi_note))
                                                                 @php
                                                                     $revisi_note = collect(json_decode($proyek->revisi_note))->last();
                                                                     $nama_verifikator = \App\Models\User::find($revisi_note->user_id)->name;
@@ -566,14 +566,14 @@
                                                                     @if (
                                                                         ($matriks_user->contains('kategori', 'Penyusun') &&
                                                                             $matriks_user->where('kategori', 'Penyusun')
-                                                                                ?->where('departemen_code', $proyek->departemen_proyek)
-                                                                                ?->where('divisi_id', $proyek->UnitKerja->Divisi->id_divisi)
+                                                                                ?->where('departemen', $proyek->departemen_proyek)
+                                                                                ?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)
                                                                                 ?->where('klasifikasi_proyek', $proyek->klasifikasi_pasdin)
                                                                                 ?->first()) ||
                                                                             ($matriks_user->contains('kategori', 'Verifikasi') &&
                                                                                 $matriks_user->where('kategori', 'Verifikasi')
-                                                                                    ?->where('departemen_code', $proyek->departemen_proyek)
-                                                                                    ?->where('divisi_id', $proyek->UnitKerja->Divisi->id_divisi)
+                                                                                    ?->where('departemen', $proyek->departemen_proyek)
+                                                                                    ?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)
                                                                                     ?->where('klasifikasi_proyek', $proyek->klasifikasi_pasdin)
                                                                                     ?->first()))
                                                                         <button type="button" class="badge badge-danger"
@@ -779,7 +779,7 @@
                                                                 // }
                                                                 if (!empty($proyek->approved_rekomendasi_final)) {
                                                                     $check_data = collect(json_decode($proyek->approved_rekomendasi_final));
-                                                                    if (!is_null($proyek->is_recommended) && !$proyek->is_recommended) {
+                                                                    if ((!is_null($proyek->is_recommended) && !$proyek->is_recommended) || $check_data->where('status', '=', 'rejected')->count() > 0) {
                                                                         $status_rekomendasi = "Tidak Direkomendasikan";
                                                                         $style = "badge-light-danger";
                                                                     }elseif ($check_data->where('catatan', '!=', null)->count() > 0) {
@@ -801,7 +801,7 @@
                                                         <td>-</td>
                                                         @if (empty($matriks_user))
                                                             <td>
-                                                                @if (!is_null($proyek->is_request_rekomendasi))
+                                                                {{-- @if (!is_null($proyek->is_request_rekomendasi))
                                                                     @if ($proyek->is_request_rekomendasi && !$proyek->review_assessment)
                                                                         <a href="#kt_modal_view_proyek_{{ $proyek->kode_proyek }}"
                                                                             data-bs-toggle="modal"
@@ -815,7 +815,7 @@
                                                                             target="_blank" data-bs-toggle="modal"
                                                                             class="btn btn-sm btn-primary text-white">Submit</a>
                                                                     @endif
-                                                                @endif
+                                                                @endif --}}
                                                             </td>
                                                         @else
                                                             <td>
@@ -1300,7 +1300,7 @@
                             <h2>Form Legalitas Pengguna Jasa</h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
-                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <div class="btn btn-sm btn-icon btn-active-color-primary"data-bs-dismiss="modal"  onclick="deleteBackdrop()">
                                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                                 <span class="svg-icon svg-icon-1">
                                     <i class="bi bi-x-lg"></i>
@@ -1392,7 +1392,7 @@
                             <h2>Form Kriteria Pengguna Jasa</h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
-                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal"  onclick="deleteBackdrop()">
                                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                                 <span class="svg-icon svg-icon-1">
                                     <i class="bi bi-x-lg"></i>
@@ -1556,7 +1556,7 @@
     @php
         $approved_penyusun_1 = collect(json_decode($proyek->approved_penyusun));
         // $is_edit = !$proyek->is_request_rekomendasi && is_null($proyek->is_verifikasi_approved) && ((!is_null($proyek->is_draft_recommend_note) && $proyek->is_draft_recommend_note) || is_null($proyek->is_draft_recommend_note) && $matriks_user?->contains('kategori', 'Penyusun')) && !$approved_penyusun_1->contains('status', 'approved');
-        $is_edit = !$proyek->is_request_rekomendasi && is_null($proyek->is_penyusun_approved) && ((!is_null($proyek->is_draft_recommend_note) && $proyek->is_draft_recommend_note) || is_null($proyek->is_draft_recommend_note) && $matriks_user?->contains('kategori', 'Penyusun')) && !$approved_penyusun_1->contains('status', 'approved');
+        $is_edit = !$proyek->is_request_rekomendasi && is_null($proyek->is_penyusun_approved) && ((!is_null($proyek->is_draft_recommend_note) && $proyek->is_draft_recommend_note) || is_null($proyek->is_draft_recommend_note) && $matriks_user?->contains('kategori', 'Penyusun')) && !$approved_penyusun_1->contains('status', 'approved') || $proyek->is_revisi;
     @endphp 
         @if ($is_edit)
             <form action="/kriteria-pengguna-jasa/detail/edit" method="POST"
@@ -1575,7 +1575,18 @@
                         <h2>Form Legalitas Pengguna Jasa</h2>
                         <!--end::Modal title-->
                         <!--begin::Close-->
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"  onclick="deleteBackdrop()"></button>
+                        @if (!empty($matriks_user))
+                            @if ($matriks_user?->contains('kategori', 'Rekomendasi') && $matriks_user->where('kategori', 'Rekomendasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() && $proyek->is_verifikasi_approved && (!is_null($proyek->is_draft_recommend_note) && !$proyek->is_draft_recommend_note))
+                            <button type="button" class="btn-close" data-bs-toggle="modal"
+                            data-bs-target="#kt_modal_view_proyek_persetujuan_{{ $proyek->kode_proyek }}"></button>
+                            @elseif($matriks_user->contains('kategori', 'Verifikasi') && $matriks_user->where('kategori', 'Verifikasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first())
+                            <button type="button" class="btn-close" data-bs-toggle="modal"
+                            data-bs-target="#kt_modal_view_proyek_persetujuan_{{ $proyek->kode_proyek }}"></button>
+                            @else
+                            <button type="button" class="btn-close" data-bs-toggle="modal"
+                            data-bs-target="#kt_modal_view_proyek_rekomendasi_{{ $proyek->kode_proyek }}"></button>
+                            @endif
+                        @endif
                         <!--end::Close-->
                     </div>
                     <!--end::Modal header-->
@@ -1597,6 +1608,7 @@
                                         $legalitasJasa = App\Models\LegalitasPerusahaan::where('nota_rekomendasi', '=', 'Nota Rekomendasi 1')->get()->sortBy('position');
                                         $kriteriaDetails = App\Models\KriteriaPenggunaJasaDetail::where('kode_proyek', $proyek->kode_proyek)
                                             ->orderBy('index')
+                                            ->get()
                                             ->unique('index')
                                             ->keyBy('index');
                                         $index = 0;
@@ -1628,9 +1640,7 @@
                                                 rows="10" {{ $is_edit ? '' : 'disabled' }}>{!! $kriteriaDetails->isNotEmpty() ? $kriteriaDetails[$index]->keterangan : '' !!}</textarea>
                                         </td>
                                         <td class="text-center">
-                                            @if (
-                                                $matriks_user?->contains('kategori', 'Rekomendasi') &&
-                                                    (!is_null($proyek->is_draft_recommend_note) && !$proyek->is_draft_recommend_note))
+                                            @if ($matriks_user?->contains('kategori', 'Rekomendasi') && (!is_null($proyek->is_draft_recommend_note) && !$proyek->is_draft_recommend_note))
                                                 {{-- <a href="{{ $kriteriaDetails->isNotEmpty() ? asset('file-kriteria-pengguna-jasa' . '\\' . $kriteriaDetails[$index]->id_document) : '' }}"
                                                     class="text-hover-primary">{{ $kriteriaDetails[$index]->id_document }}</a> --}}
                                                     <table>
@@ -1691,8 +1701,9 @@
                                                             @php
                                                                 $id = $kriteriaDetails[$index]->id;
                                                                 $files = json_decode($kriteriaDetails[$index]->id_document);
-                                                                $files = (is_array($files) && count($files)) > 0 ? $files : array($files);
+                                                                $files = (is_array($files) && count($files)) > 0 ? $files : null;
                                                             @endphp
+                                                            @if (!is_null($files))
                                                             @foreach ($files as $file_index => $file)
                                                                 <tr>
                                                                     <td>
@@ -1714,6 +1725,7 @@
                                                                     </form>
                                                                 </tr>
                                                             @endforeach
+                                                            @endif
                                                         </tbody>
                                                     </table>
                                                 @endif
@@ -1757,7 +1769,18 @@
                         <h2>Form Kriteria Pengguna Jasa</h2>
                         <!--end::Modal title-->
                         <!--begin::Close-->
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"  onclick="deleteBackdrop()"></button>
+                        @if (!empty($matriks_user))
+                            @if ($matriks_user?->contains('kategori', 'Rekomendasi') && $matriks_user->where('kategori', 'Rekomendasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() && $proyek->is_verifikasi_approved && (!is_null($proyek->is_draft_recommend_note) && !$proyek->is_draft_recommend_note))
+                            <button type="button" class="btn-close" data-bs-toggle="modal"
+                            data-bs-target="#kt_modal_view_proyek_persetujuan_{{ $proyek->kode_proyek }}"></button>
+                            @elseif($matriks_user->contains('kategori', 'Verifikasi') && $matriks_user->where('kategori', 'Verifikasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first())
+                            <button type="button" class="btn-close" data-bs-toggle="modal"
+                            data-bs-target="#kt_modal_view_proyek_persetujuan_{{ $proyek->kode_proyek }}"></button>
+                            @else
+                            <button type="button" class="btn-close" data-bs-toggle="modal"
+                            data-bs-target="#kt_modal_view_proyek_rekomendasi_{{ $proyek->kode_proyek }}"></button>
+                            @endif
+                        @endif
                         <!--end::Close-->
                     </div>
                     <!--end::Modal header-->
@@ -2090,6 +2113,14 @@
                                 <iframe src="{{asset("file-rekomendasi" . "\\" . $proyek->file_rekomendasi)}}" width="800px" height="600px" ></iframe>
                             </div>
                         @endif --}}
+                        @if (!empty($proyek->DokumenPendukungPasarDini))
+                            <hr>
+                            <h5>File Preview Pendukung Pasar Dini: </h5>
+                            <div class="text-center">
+                                <iframe src="{{ asset('dokumen-pendukung-pasdin' . '\\' . $proyek->DokumenPendukungPasarDini->id_document) }}"
+                                    width="800px" height="600px"></iframe>
+                            </div>
+                        @endif
                         @if (!empty($proyek->file_pengajuan))
                             <hr>
                             <h5>File Preview: </h5>
@@ -2274,7 +2305,7 @@
             <div class="modal-dialog modal-dialog-centered modal-xl">
                 <div class="modal-content">
                     @if (is_null($proyek->is_draft_recommend_note) || $proyek->is_draft_recommend_note)
-                        <form action="" method="GET">
+                        <form action="" method="GET" onsubmit="addLoading(this)">
                     @endif
                     <div class="modal-header">
                         <h5 class="modal-title">Detail Proyek</h5>
@@ -2644,24 +2675,28 @@
                             @endphp
                             @if (!empty($matriks_user))
                                 @if (is_null($proyek->is_verifikasi_approved) &&
-                                        $matriks_user->contains('kategori', 'Verifikasi') &&
-                                        $matriks_user->where('kategori', 'Verifikasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() &&
-                                        !$is_user_exist_penyusun)
-                                    <form action="" method="get">
-                                        @csrf
-                                        <input type="hidden" value="{{ $proyek->kode_proyek }}" name="kode-proyek"
-                                            id="kode-proyek">
+                                $matriks_user->contains('kategori', 'Verifikasi') &&
+                                $matriks_user->where('kategori', 'Verifikasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() &&
+                                !$is_user_exist_penyusun)
+                                @if (is_null($proyek->is_revisi))
+                                <form action="" method="get">
+                                    @csrf
+                                    <input type="hidden" value="{{ $proyek->kode_proyek }}" name="kode-proyek"
+                                        id="kode-proyek">
 
-                                        <input type="submit" name="verifikasi-setujui" value="Setujui"
-                                            class="btn btn-sm btn-success">
+                                    <input type="submit" name="verifikasi-setujui" value="Setujui"
+                                        class="btn btn-sm btn-success">
+                                    
+                                    @if ($matriks_user->contains('kategori', 'Verifikasi') && $matriks_user->where('kategori', 'Verifikasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '=', 1)?->first())
+                                        <input type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_view_proyek_revisi_{{ $proyek->kode_proyek }}"
+                                            class="btn btn-sm btn-primary" value="Ajukan Revisi">
+                                    @endif
                                         
-                                        @if ($matriks_user->contains('kategori', 'Verifikasi') && $matriks_user->where('kategori', 'Verifikasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '=', 1)?->first())
-                                            <input type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_view_proyek_revisi_{{ $proyek->kode_proyek }}"
-                                                class="btn btn-sm btn-primary" value="Ajukan Revisi">
-                                        @endif
-                                            
-                                        <input type="submit" name="verifikasi-tolak" value="Ditolak" class="btn btn-sm btn-danger">
-                                    </form>
+                                    <input type="submit" name="verifikasi-tolak" value="Ditolak" class="btn btn-sm btn-danger">
+                                </form>
+                                @else
+                                    
+                                @endif
                                 @elseif (is_null($proyek->is_recommended) &&
                                         $matriks_user->contains('kategori', 'Rekomendasi') &&
                                         $matriks_user->where('kategori', 'Rekomendasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() &&
@@ -2694,7 +2729,7 @@
                                             class="form-select form-select-solid w-auto" style="margin-right: 2rem;"
                                             data-control="select2" data-hide-search="true" data-placeholder="Pilih Kategori"
                                             data-select2-id="select2-data-kategori-rekomendasi" tabindex="-1"
-                                            aria-hidden="true">
+                                            aria-hidden="true" onchange="disableEnableTextArea(this, '{{ $proyek->kode_proyek }}')">
                                             <option value=""></option>
                                             <option value="Direkomendasikan">Direkomendasikan</option>
                                             <option value="Direkomendasikan dengan catatan">Direkomendasikan dengan catatan
@@ -2704,7 +2739,7 @@
                                         <br>
                                         <label for="kategori-rekomendasi" class="text-start"><span class="">Catatan:
                                             </span></label>
-                                        <textarea name="alasan-ditolak" class="form-control form-control-solid"cols="1" rows="5"></textarea>
+                                        <textarea name="alasan-ditolak" id="alasan-ditolak-{{ $proyek->kode_proyek }}" class="form-control form-control-solid"cols="1" rows="5" disabled></textarea>
                                         <br>
                                         <input type="submit" class="btn btn-sm btn-success" name="rekomendasi-setujui"
                                             value="Submit">
@@ -3083,27 +3118,10 @@
                                                             <b>{{ App\Models\User::find($data->user_id)->name }}</b><br>
                                                             Jabatan:
                                                             <b>{{ App\Models\User::find($data->user_id)->Pegawai->Jabatan?->nama_jabatan }}</b><br>
-                                                            <br>
-
                                                             @if (!empty($data->tanggal))
                                                                 Tanggal:
-                                                                <b>{{ Carbon\Carbon::create($data->tanggal)->translatedFormat('d F Y H:i:s') }}</b>
-                                                                <br>
+                                                                <b>{{ Carbon\Carbon::create($data->tanggal)->translatedFormat('d F Y H:i:s') }}</b><br>
                                                             @endif
-
-                                                            @if ($key == 'Rekomendasi')
-                                                                Status :
-                                                                @if ($data->status == 'approved' && !empty($data->catatan))
-                                                                    <b>Direkomendasikan Dengan Catatan</b>
-                                                                @elseif ($data->status == 'approved')
-                                                                    <b>Direkomendasikan</b>
-                                                                @else
-                                                                    <b class="text-danger">Tidak
-                                                                        Direkomendasikan</b>
-                                                                @endif
-                                                            @endif
-                                                            <br>
-
                                                             @if (!empty($data->catatan))
                                                                 Catatan:
                                                                 <b>{!! nl2br($data->catatan) !!}</b><br>
@@ -3331,6 +3349,10 @@
         const LOADING_BODY = new KTBlockUI(document.querySelector('#kt_body'), {
             message: '<div class="blockui-message"><span class="spinner-border text-primary"></span> Loading...</div>',
         })
+        function addLoading(elt) {
+            LOADING_BODY.block();
+            elt.form.submit();
+        }
         async function generateFile(kode_proyek) {
             Swal.fire({
                 title: '',
@@ -3455,16 +3477,16 @@
     {{-- End :: Export To Excel Data --}}
 
     <script>
-        function disableEnableTextArea(e) {
+        function disableEnableTextArea(e, kode_proyek) {
             const value = e.value;
-            if (value == "Direkomendasikan" || value == "Tidak Direkomendasikan") {
+            if (value == "Direkomendasikan") {
                 // e.parentElement.querySelector("#note-rekomendasi").setAttribute("readonly", true);
-                if (!e.parentElement.querySelector("#note-rekomendasi").hasAttribute("disabled")) {
-                    e.parentElement.querySelector("#note-rekomendasi").setAttribute("disabled", true);
+                if (!document.querySelector(`#alasan-ditolak-${kode_proyek}`).hasAttribute("disabled")) {
+                    document.querySelector(`#alasan-ditolak-${kode_proyek}`).setAttribute("disabled", true);
                 }
             } else {
                 // e.parentElement.querySelector("#note-rekomendasi").removeAttribute("readonly");
-                e.parentElement.querySelector("#note-rekomendasi").removeAttribute("disabled");
+                document.querySelector(`#alasan-ditolak-${kode_proyek}`).removeAttribute("disabled");
             }
         }
     </script>
