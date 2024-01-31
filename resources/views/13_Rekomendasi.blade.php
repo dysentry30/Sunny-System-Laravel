@@ -847,7 +847,7 @@
                                                                     @endif
                                                                 @else
                                                                         @if ($is_user_exist_in_matriks_approval)
-                                                                            @if ($matriks_user->contains('kategori', 'Pengajuan') && $matriks_user->where('kategori', 'Pengajuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first())
+                                                                            {{-- @if ($matriks_user->contains('kategori', 'Pengajuan') && $matriks_user->where('kategori', 'Pengajuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first())
                                                                                 @if (!empty($proyek->approved_rekomendasi))
                                                                                     <a href="#kt_modal_view_proyek_{{ $proyek->kode_proyek }}"
                                                                                         target="_blank" data-bs-toggle="modal"
@@ -856,8 +856,8 @@
                                                                                     <a href="#kt_modal_view_proyek_{{ $proyek->kode_proyek }}"
                                                                                         data-bs-toggle="modal"
                                                                                         class="btn btn-sm btn-primary text-white">Ajukan</a>
-                                                                                @endif
-                                                                            @elseif ($matriks_user->contains('kategori', 'Penyusun') && $matriks_user->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first())
+                                                                                @endif --}}
+                                                                            @if ($matriks_user->contains('kategori', 'Penyusun') && $matriks_user->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first())
                                                                                 @if ($proyek->is_request_rekomendasi || (($matriks_user->filter(function($value)use($proyek){
                                                                                     return $value->unit_kerja == $proyek->UnitKerja->Divisi->id_divisi &&
                                                                                     $value->klasifikasi_proyek == $proyek->klasifikasi_pasdin &&
@@ -910,6 +910,7 @@
                                                 {{-- <th class="min-w-auto">File Penilaian Risiko</th> --}}
                                                 <th class="min-w-auto">Hasil NR I</th>
                                                 <th class="min-w-auto">Is Cancel</th>
+                                                <th class="min-w-auto">Upload Dokumen Final</th>
                                             </tr>
                                         </thead>
                                         @php
@@ -1034,97 +1035,12 @@
                                                             @endif
                                                         </td>
                                                         <td>
-                                                            {{-- @php
-                                                                $style = '';
-                                                                if ($proyek->is_verifikasi_approved && $proyek->is_recommended && empty($proyek->recommended_with_note)) {
-                                                                    $style = 'bg-success';
-                                                                } elseif ($proyek->is_verifikasi_approved && $proyek->is_recommended && !empty($proyek->recommended_with_note)) {
-                                                                    $style = 'bg-warning';
-                                                                } elseif (!is_null($proyek->is_recommended) && !$proyek->is_recommended) {
-                                                                    $style = 'bg-danger';
-                                                                } else {
-                                                                    $style = 'bg-secondary';
-                                                                }
-
-                                                                $matriks_category_array = $matriks_category->toArray(); 
-
-                                                                if (array_key_exists($proyek->klasifikasi_pasdin, $matriks_category_array)) {
-                                                                    $matriks_klasifikasi = $matriks_category_array[$proyek->klasifikasi_pasdin];
-    
-                                                                    if ($proyek->is_request_rekomendasi && !$proyek->review_assessment) {
-                                                                        $kategori_approval = 'Pengajuan';
-                                                                        if (array_key_exists('Pengajuan', $matriks_klasifikasi)) {
-                                                                            $matriks_group = $matriks_category[$proyek->klasifikasi_pasdin]['Pengajuan'];
-                                                                        } else {
-                                                                            $matriks_group = [];
-                                                                            $collect_matriks = [];
-                                                                        }
-                                                                    } elseif ($proyek->review_assessment == true && is_null($proyek->is_verifikasi_approved)) {
-                                                                        $kategori_approval = 'Penyusun';
-                                                                        if (array_key_exists('Penyusun', $matriks_klasifikasi)) {
-                                                                            $matriks_group = $matriks_category[$proyek->klasifikasi_pasdin]['Penyusun'];
-                                                                            $collect_matriks = collect(json_decode($proyek->approved_penyusun))->keyBy('user_id');
-                                                                        } else {
-                                                                            $matriks_group = [];
-                                                                        }
-                                                                    } elseif ($proyek->is_verifikasi_approved == true && is_null($proyek->is_recommended)) {
-                                                                        $kategori_approval = 'Rekomendasi';
-                                                                        if (array_key_exists('Rekomendasi', $matriks_klasifikasi)) {
-                                                                            $matriks_group = $matriks_category[$proyek->klasifikasi_pasdin]['Rekomendasi'];
-                                                                            $collect_matriks = collect(json_decode($proyek->approved_rekomendasi_final))->keyBy('user_id');
-                                                                        } else {
-                                                                            $matriks_group = [];
-                                                                        }
-                                                                    } elseif ($proyek->is_recommended == true && is_null($proyek->is_disetujui)) {
-                                                                        $kategori_approval = 'Persetujuan';
-                                                                        if (array_key_exists('Persetujuan', $matriks_klasifikasi)) {
-                                                                            $matriks_group = $matriks_category[$proyek->klasifikasi_pasdin]['Persetujuan'];
-                                                                            $collect_matriks = collect(json_decode($proyek->approved_persetujuan))->keyBy('user_id');
-                                                                        } else {
-                                                                            $matriks_group = [];
-                                                                        }
-                                                                    }
-                                                                }else {
-                                                                    $matriks_group = [];
-                                                                    $collect_matriks = [];
-                                                                }
-                                                            @endphp
-
-                                                            <div class="text-center d-flex flex-row gap-2 flex-nowrap">
-                                                                @foreach (!empty($matriks_group) ? $matriks_group->sortBy('urutan') : $matriks_group as $matriks)
-                                                                @php
-                                                                    if(!empty($collect_matriks)){
-                                                                        $select_user = $collect_matriks?->filter(function($value, $key)use($matriks){
-                                                                            return $key == $matriks->Pegawai->User->id;
-                                                                        })->first();
-
-                                                                        if (empty($select_user)) {
-                                                                            $style = 'bg-secondary';
-                                                                        }else{
-                                                                            if ($select_user->status == "approved" && empty($select_user->alasan)) {
-                                                                                $style = 'bg-success';
-                                                                            }elseif ($select_user->status == "approved" && !empty($select_user->alasn)) {
-                                                                                $style = 'bg-warning';
-                                                                            }else{
-                                                                                $style = 'bg-danger';
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                @endphp
-                                                                    <div class="circle {{ $style }} text-white"
-                                                                        style="height:25px; width:25px; border-radius:50%;">
-                                                                        <small>{{ $matriks->kode_unit_kerja }}</small>
-                                                                    </div>
-                                                                @endforeach
-                                                            </div> --}}
-
                                                             <div class="circle bg-success"
                                                                 style="height:25px; width:25px; border-radius:50%;">
                                                                 <small><a href="#kt_modal_view_proyek_history_{{ $proyek->kode_proyek }}"
                                                                     data-bs-toggle="modal"
                                                                     class="text-success">Klik</a></small>
                                                             </div>
-
                                                         </td>
                                                         <td class="text-center">
                                                             @php
@@ -1173,48 +1089,8 @@
                                                             @endif
                                                         </td>
                                                         @endif --}}
-                                                        <td>
+                                                        <td class="text-center align-middle">
                                                             @php
-                                                                // if (!empty($proyek->approved_persetujuan)) {
-                                                                //     $check_data = collect(json_decode($proyek->approved_persetujuan));
-                                                                //     if ($check_data->where('status', '=', 'rejected')->count() > 0) {
-                                                                //         $status_rekomendasi = "Tidak Direkomendasikan";
-                                                                //         $style = "badge-light-danger";
-                                                                //     }elseif (!empty($proyek->persetujuan_note)) {
-                                                                //         $status_rekomendasi = "Direkomendasikan dengan catatan";
-                                                                //         $style = "badge-light-warning";
-                                                                //     }else {
-                                                                //         $status_rekomendasi = "Direkomendasikan";
-                                                                //         $style = "badge-light-success";
-                                                                //     }
-                                                                // } elseif (!empty($proyek->approved_rekomendasi_final)) {
-                                                                //     $check_data = collect(json_decode($proyek->approved_rekomendasi_final));
-                                                                //     if (!is_null($proyek->is_recommended) && !$proyek->is_recommended) {
-                                                                //         $status_rekomendasi = "Tidak Direkomendasikan";
-                                                                //         $style = "badge-light-danger";
-                                                                //     }elseif ($check_data->where('alasan', '!=', null)->count() > 0) {
-                                                                //         $status_rekomendasi = "Direkomendasikan dengan catatan";
-                                                                //         $style = "badge-light-warning";
-                                                                //     }else {
-                                                                //         $status_rekomendasi = "Direkomendasikan";
-                                                                //         $style = "badge-light-success";
-                                                                //     }
-                                                                // } elseif (!empty($proyek->approved_penyusun)) {
-                                                                //     $check_data = collect(json_decode($proyek->approved_penyusun));
-                                                                //     if (!is_null($proyek->is_penyusun_approved) && !$proyek->is_penyusun_approved) {
-                                                                //         $status_rekomendasi = "Tidak Direkomendasikan";
-                                                                //         $style = "badge-light-danger";
-                                                                //     }elseif ($check_data->where('alasan', '!=', null)->count() > 0) {
-                                                                //         $status_rekomendasi = "Direkomendasikan dengan catatan";
-                                                                //         $style = "badge-light-warning";
-                                                                //     }else {
-                                                                //         $status_rekomendasi = "Direkomendasikan";
-                                                                //         $style = "badge-light-success";
-                                                                //     }
-                                                                // }else {
-                                                                //     $status_rekomendasi = "-";
-                                                                //     $style = "badge-light-secondary";
-                                                                // }
                                                                 if (!empty($proyek->approved_rekomendasi_final)) {
                                                                     $check_data = collect(json_decode($proyek->approved_rekomendasi_final));
                                                                     if (!is_null($proyek->is_recommended) && !$proyek->is_recommended) {
@@ -1256,7 +1132,22 @@
                                                                 {{-- <a href="#kt_modal_view_dokumen_persetujuan_{{ $proyek->kode_proyek }}" class="btn btn-sm btn-primary text-white" data-bs-toggle="model">Download</a> --}}
                                                             </small>
                                                         </td>
-                                                        <td>-</td>
+                                                        <td>
+                                                            @if ($proyek->is_cancel)
+                                                                <small class="badge badge-primary">Cancel</small>
+                                                            @endif
+                                                        </td>
+                                                        <td class="text-center">
+                                                            @if (($matriks_user?->contains('kategori', 'Pengajuan') && $matriks_user?->where('kategori', 'Pengajuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first()) ||
+                                                            ($matriks_user?->contains('kategori', 'Penyusun') && $matriks_user?->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '>', 1)?->first()))
+                                                            @else
+                                                                @if (!empty($proyek->file_persetujuan))
+                                                                    <button type="button" class="btn btn-primary p-2" data-bs-toggle="modal" data-bs-target="#kt_modal_upload_final_file_{{ $proyek->kode_proyek }}">
+                                                                        Upload File
+                                                                    </button>
+                                                                @endif
+                                                            @endif
+                                                        </td>
                                                     </tr>
                                                 @endforeach
                                             @endif
@@ -2462,31 +2353,73 @@
                                 $is_user_exist = $approved_verifikasi->contains("user_id", Auth::user()->id);
                                 dump($)
                             @endphp --}}
-                            @if (is_null($proyek->is_recommended))
+                        @if (is_null($proyek->is_recommended))
                             <label for="note-rekomendasi" class="text-start">Catatan: </label>
                             {{-- <textarea class="form-control form-control-solid" id="note-rekomendasi" name="note-rekomendasi" rows="10"
                                 {{ !is_null($proyek->is_draft_recommend_note) && !$proyek->is_draft_recommend_note || empty($matriks_user) || collect(json_decode($proyek->approved_penyusun))->contains('status', 'approved')  ? 'disabled' : '' }}>{!! is_null($proyek->is_draft_recommend_note) && (empty(collect(json_decode($proyek->approved_penyusun))) || collect(json_decode($proyek->approved_penyusun))->isEmpty())
                                     ? 'Profile Risiko Pengguna Jasa = ' . $text . ' (Score : ' . $nilaiKriteriaPenggunaJasa . ")\n\n"
                                     : $proyek->catatan_nota_rekomendasi !!}</textarea> --}}
-                            <textarea class="form-control form-control-solid" id="note-rekomendasi" name="note-rekomendasi" rows="10" {{ !is_null($proyek->is_draft_recommend_note) && !$proyek->is_draft_recommend_note || empty($matriks_user) || collect(json_decode($proyek->approved_penyusun))->contains('status', 'approved')  ? 'disabled' : '' }}>{!! empty($proyek->catatan_nota_rekomendasi) ? 'Profile Risiko Pengguna Jasa = ' . $text . ' (Score : ' . $nilaiKriteriaPenggunaJasa . ")\n\n" : $proyek->catatan_nota_rekomendasi !!}</textarea>
+                            @if ($matriks_user->contains('kategori', 'Penyusun') && $matriks_user->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '=', 2)?->first())
+                                <textarea class="form-control form-control-solid" id="note-rekomendasi" name="note-rekomendasi" rows="10" readonly>{{ $proyek->catatan_nota_rekomendasi }}</textarea>
+                            @else
+                                <textarea class="form-control form-control-solid" id="note-rekomendasi" name="note-rekomendasi" rows="10" {{ !is_null($proyek->is_draft_recommend_note) && !$proyek->is_draft_recommend_note || empty($matriks_user) || collect(json_decode($proyek->approved_penyusun))->contains('status', 'approved')  ? 'disabled' : '' }}>{!! empty($proyek->catatan_nota_rekomendasi) ? 'Profile Risiko Pengguna Jasa = ' . $text . ' (Score : ' . $nilaiKriteriaPenggunaJasa . ")\n\n" : $proyek->catatan_nota_rekomendasi !!}</textarea>
+                            @endif
                             <br>
                             @csrf
                             <input type="hidden" name="kode-proyek" value="{{ $proyek->kode_proyek }}">
-                            @if ((is_null($proyek->is_draft_recommend_note) || $proyek->is_draft_recommend_note) && !empty($matriks_user) && $matriks_user?->contains('kategori', 'Penyusun'))
-                                @if (!collect(json_decode($proyek->approved_penyusun))->contains('status', 'approved'))
-                                <input type="submit" name="save-draft-note-rekomendasi" value="Simpan Sebagai Draft"
-                                    class="btn btn-sm btn-primary">
-                                @endif
-                                <input type="submit" name="input-rekomendasi-with-note" value="Submit"
-                                    class="btn btn-sm btn-success" {{ collect(json_decode($proyek->approved_penyusun))->where('user_id', auth()->user()->id)->first()?->status == "approved" ? 'disabled' : '' }}>
+                            @if (str_contains($proyek->klasifikasi_pasdin, "Besar") || str_contains($proyek->klasifikasi_pasdin, "Mega"))
+                                @if ((is_null($proyek->is_draft_recommend_note) || $proyek->is_draft_recommend_note) && !empty($matriks_user) && $matriks_user?->contains('kategori', 'Penyusun'))
+                                    @if (!collect(json_decode($proyek->approved_penyusun))->contains('status', 'approved'))
+                                    <input type="submit" name="save-draft-note-rekomendasi" value="Simpan Sebagai Draft"
+                                        class="btn btn-sm btn-primary">
+                                    @endif
+                                    <input type="submit" name="input-rekomendasi-with-note" value="Submit"
+                                        class="btn btn-sm btn-success" {{ collect(json_decode($proyek->approved_penyusun))->where('user_id', auth()->user()->id)->first()?->status == "approved" ? 'disabled' : '' }}>
 
+                                @endif
+                            @else
+                                {{-- @if (is_null($proyek->is_revisi)) --}}
+                                    {{-- @if ((is_null($proyek->is_draft_recommend_note) || $proyek->is_draft_recommend_note) && !empty($matriks_user) && $matriks_user?->contains('kategori', 'Penyusun'))
+                                        @if ($matriks_user->contains('kategori', 'Penyusun') && $matriks_user->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '=', 1)?->first())
+                                            @if (!collect(json_decode($proyek->approved_penyusun))->contains('status', 'approved'))
+                                            <input type="submit" name="save-draft-note-rekomendasi" value="Simpan Sebagai Draft"
+                                                class="btn btn-sm btn-primary">
+                                            @endif
+                                        @elseif ($matriks_user->contains('kategori', 'Penyusun') && $matriks_user->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '=', 2)?->first())
+                                            <input type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_view_proyek_revisi_{{ $proyek->kode_proyek }}"
+                                            class="btn btn-sm btn-primary" value="Ajukan Revisi">
+                                        @endif
+                                        @if (!collect(json_decode($proyek->approved_penyusun))->where('user_id', auth()->user()->id)->first()?->status)
+                                            <input type="submit" name="input-rekomendasi-with-note" value="Submit"
+                                                class="btn btn-sm btn-success" {{ collect(json_decode($proyek->approved_penyusun))->where('user_id', auth()->user()->id)->first()?->status == "approved" ? 'disabled' : '' }}>
+                                        @endif
+                                    @endif --}}
+                                {{-- @else --}}
+                                    @if ($matriks_user->contains('kategori', 'Penyusun') && $matriks_user->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '=', 1)?->first())
+                                        @if (!collect(json_decode($proyek->approved_penyusun))->contains('status', 'approved'))
+                                            <input type="submit" name="save-draft-note-rekomendasi" value="Simpan Sebagai Draft"
+                                                class="btn btn-sm btn-primary">
+                                        @endif
+                                        @if (empty($proyek->approved_penyusun) || collect(json_decode($proyek->approved_penyusun))?->contains('status', 'draft'))
+                                            <input type="submit" name="input-rekomendasi-with-note" value="Submit"
+                                                class="btn btn-sm btn-success" {{ collect(json_decode($proyek->approved_penyusun))->where('user_id', auth()->user()->id)->first()?->status == "approved" ? 'disabled' : '' }}>
+                                        @endif
+                                    @else
+                                        @if (empty(collect(json_decode($proyek->approved_penyusun))->where('user_id', auth()->user()->id)->first()) && !is_null($proyek->approved_penyusun) && !collect(json_decode($proyek->approved_penyusun))->contains('status', 'draft'))
+                                            <input type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_view_proyek_revisi_{{ $proyek->kode_proyek }}"
+                                                class="btn btn-sm btn-primary" value="Ajukan Revisi">
+                                            <input type="submit" name="input-rekomendasi-with-note" value="Submit"
+                                                class="btn btn-sm btn-success" {{ collect(json_decode($proyek->approved_penyusun))->where('user_id', auth()->user()->id)->first()?->status == "approved" ? 'disabled' : '' }}>
+                                        @endif
+                                    @endif
+                                {{-- @endif --}}
                             @endif
-                        @elseif(is_null($proyek->is_recommended) && collect(json_decode($proyek->approved_penyusun))->where('user_id', '=', auth()->user()->id)?->first()?->status == "rejected")
+                        {{-- @elseif(is_null($proyek->is_recommended) && collect(json_decode($proyek->approved_penyusun))->where('user_id', '=', auth()->user()->id)?->first()?->status == "rejected")
                             <span class="badge badge-light-danger">Ditolak</span>
                         @elseif(is_null($proyek->is_recommended) && collect(json_decode($proyek->approved_penyusun))->where('user_id', '=', auth()->user()->id)?->first()?->status == "approved" && collect(json_decode($proyek->approved_penyusun))->where('user_id', '=', auth()->user()->id)?->first()?->catatan == "")
                             <span class="badge badge-light-success">Direkomendasikan</span>
                         @elseif(is_null($proyek->is_recommended) && collect(json_decode($proyek->approved_penyusun))->where('user_id', '=', auth()->user()->id)?->first()?->status == "approved" && collect(json_decode($proyek->approved_penyusun))->where('user_id', '=', auth()->user()->id)?->first()?->catatan != null)
-                            <span class="badge badge-light-warning">Direkomendasikan dengan catatan</span>
+                            <span class="badge badge-light-warning">Direkomendasikan dengan catatan</span> --}}
                         @endif
                     </div>
                     @if (is_null($proyek->is_draft_recommend_note) || $proyek->is_draft_recommend_note)
@@ -2687,10 +2620,10 @@
                                     <input type="submit" name="verifikasi-setujui" value="Setujui"
                                         class="btn btn-sm btn-success">
                                     
-                                    @if ($matriks_user->contains('kategori', 'Verifikasi') && $matriks_user->where('kategori', 'Verifikasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '=', 1)?->first())
+                                    {{-- @if ($matriks_user->contains('kategori', 'Verifikasi') && $matriks_user->where('kategori', 'Verifikasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '=', 1)?->first()) --}}
                                         <input type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_view_proyek_revisi_{{ $proyek->kode_proyek }}"
                                             class="btn btn-sm btn-primary" value="Ajukan Revisi">
-                                    @endif
+                                    {{-- @endif --}}
                                         
                                     <input type="submit" name="verifikasi-tolak" value="Ditolak" class="btn btn-sm btn-danger">
                                 </form>
@@ -3174,7 +3107,32 @@
             </div>
           </div>
         </div>
-      </div>
+    </div>
+    <!--Begin::Modal Upload Final File-->
+    <form action="/rekomendasi/dokumen-final/{{ $proyek->kode_proyek }}/upload" method="post" enctype="multipart/form-data">
+        @csrf
+        <div class="modal fade" id="kt_modal_upload_final_file_{{ $proyek->kode_proyek }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Upload File Nota Rekomendasi I - Final</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"  onclick="deleteBackdrop()" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <p>Upload File</p>
+                        <input type="file" class="form-control form-control-sm form-input-solid" name="dokumen-nota-rekomendasi-1" accept=".pdf">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+            </div>
+        </div>
+    </form>
+    <!--End::Modal Upload Final File-->
     @endforeach
 
     @if (!empty($proyek_from_url))

@@ -2877,6 +2877,9 @@ function mergeFileLampiranRisiko($kode_proyek)
                 return $k != null;
             })
             ->values();
+    if ($collectFileKriteria->isEmpty()) {
+        return null;
+    }
 
         $pdfMerger = new PdfMerge();
 

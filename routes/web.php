@@ -514,6 +514,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // Begin Rekomendasi
     Route::get('/rekomendasi', [RekomendasiController::class, "index"])->name('rekomendasi');
     Route::post('/rekomendasi/{kode_proyek}/generate', [RekomendasiController::class, "generateFileNotaRekomendasiFinal"]);
+    Route::post('rekomendasi/dokumen-final/{proyek}/upload', [RekomendasiController::class, 'uploadFileNotaRekomendasiFinal']);
+    Route::get('rekomendasi/dokumen-final/{id_document}/download', [RekomendasiController::class, 'downloadFileNotaRekomendasiFinal']);
     Route::get("/green-lane", [RekomendasiController::class, "indexGreenLane"]);
     Route::get("/non-green-lane", [RekomendasiController::class, "indexNonGreenLane"]);
     // End Rekomendasi
@@ -1280,7 +1282,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                                 "CUSTOMER" => $h->Proyek->proyekBerjalan->customer->kode_bp ?? "", // kode sap di customer
                                 "SBU" => $h->Proyek->Sbu->kode_sbu ?? "", // kode sbu di SBU
                                 "AMOUNT_PROGNOSA" => (int) $data["periode_prognosa"] <= (int) $h->month_forecast ? (int) $h->nilai_forecast : 0,
-                                "REPORT_PERIOD" => (int) (date("Y") . str_pad($data["periode_prognosa"], 3, 0, STR_PAD_LEFT)),
+                                // "REPORT_PERIOD" => (int) (date("Y") . str_pad($data["periode_prognosa"], 3, 0, STR_PAD_LEFT)),
+                                "REPORT_PERIOD" => (int) ($tahun . str_pad($data["periode_prognosa"], 3, 0, STR_PAD_LEFT)),
                                 "VERSION" => "PROG",
                             ]);
 
@@ -1301,7 +1304,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                             "CUSTOMER" => $h->Proyek->proyekBerjalan->customer->kode_bp ?? "", // kode sap di customer
                             "SBU" => $h->Proyek->Sbu->kode_sbu ?? "", // kode sbu di SBU
                             "AMOUNT_PROGNOSA" => (int) $data["periode_prognosa"] == (int) $h->month_realisasi ? (int) $h->realisasi_forecast : 0,
-                            "REPORT_PERIOD" => (int) (date("Y") . str_pad($data["periode_prognosa"], 3, 0, STR_PAD_LEFT)),
+                            // "REPORT_PERIOD" => (int) (date("Y") . str_pad($data["periode_prognosa"], 3, 0, STR_PAD_LEFT)),
+                            "REPORT_PERIOD" => (int) ($tahun . str_pad($data["periode_prognosa"], 3, 0, STR_PAD_LEFT)),
                             "VERSION" => "ACT",
                         ]);
                         $result_all_data_send_to_sap->push($data_send_to_sap_realisasi);

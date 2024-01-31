@@ -266,6 +266,7 @@
                                     <p>Sumber Dana  : <b class="{{ $proyek->SumberDana->nama_sumber ?? "text-danger" }}">{{ $proyek->SumberDana->nama_sumber ?? "*Belum Ditentukan" }}</b></p>
                                     <p>Negara Proyek  : <b class="{{ $proyek->negara ?? "text-danger" }}">{{ $proyek->negara ?? "*Belum Ditentukan" }}</b></p>
                                     <p>Provinsi Proyek  : <b class="{{ $proyek->Provinsi->province_name ?? "text-danger" }}">{{ $proyek->Provinsi->province_name ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>Dokumen Pendukung Pasar Dini  : <b class="{{ !empty($proyek->DokumenPendukungPasarDini) ? '' : "text-danger" }}">{{ !empty($proyek->DokumenPendukungPasarDini) ? "Sudah" : "*Belum Ditentukan" }}</b></p>
                                     <br>
                                     <p>Nama Pemberi Kerja : <b class="{{ $name_customer ?? "text-danger" }}">{{ $name_customer ?? "*Belum Ditentukan" }}</b></p>
                                     <p>Instansi Pemberi Kerja : <b class="{{ $jenis_instansi ?? "text-danger" }}">{{ $jenis_instansi ?? "*Belum Ditentukan" }}</b></p>
@@ -1856,7 +1857,7 @@
                                                                     data-placeholder="Pilih Negara">
                                                                     <option value=""></option>
                                                                     @foreach ($data_negara as $negara)
-                                                                        @if ($negara->abbreviation == $customer->negara || $negara->country == $customer->negara)
+                                                                        @if ($negara->abbreviation == $proyek->negara || $negara->country == $proyek->negara)
                                                                             <option value="{{ $negara->abbreviation }}" selected>{{ $negara->country }}
                                                                             </option>
                                                                         @else
@@ -2982,15 +2983,6 @@
                                                         Nota Rekomendasi 1
                                                     </h3>
                                                     <br>
-                                                    <div class="w-50">
-                                                        <input type="file"
-                                                            class="form-control form-control-sm form-input-solid"
-                                                            name="dokumen-nota-rekomendasi-1" accept=".pdf">
-                                                    </div>
-                                                    <h6 id="error-dokumen-nota-rekomendasi-1" class="text-danger fw-normal"
-                                                        style="display: none">*File
-                                                        terlalu besar ! Max Size 50Mb</h6>
-                                                    <br>
                                                     <!--begin::Table-->
                                                     <table class="table align-middle table-row-dashed w-50 fs-6 gy-2"
                                                         id="kt_customers_table">
@@ -3002,7 +2994,7 @@
                                                                 <th class="w-50px text-center">No.</th>
                                                                 <th class="w-auto">Nama Document</th>
                                                                 <th class="w-auto">Modified On</th>
-                                                                <th class="w-auto text-center"></th>
+                                                                <th class="w-auto align-middle"></th>
                                                             </tr>
                                                             <!--end::Table row-->
                                                         </thead>
@@ -3022,7 +3014,7 @@
                                                                     <!--begin::Name-->
                                                                     <td>
                                                                         <a target="_blank"
-                                                                            href="{{ asset('dokumen-nota-rekomendasi/' . $item->id_document) }}"
+                                                                            href="/rekomendasi/dokumen-final/{{ $item->id_document }}/download"
                                                                             class="text-hover-primary">{{ $item->nama_dokumen }}</a>
                                                                     </td>
                                                                     <!--end::Name-->
