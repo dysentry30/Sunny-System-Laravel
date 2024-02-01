@@ -90,9 +90,9 @@ class DashboardController extends Controller
             $claims = ClaimManagements::join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->get();
             $exceptUnitkerja = ["B", "C", "D", "8", "F", "L", "N", "O", "U"];
             if ($year >= 2023) {
-                $unitKerja = UnitKerja::orderBy('unit_kerja')->get()->whereNotIn("divcode", $exceptUnitkerja);
+                $unitKerja = UnitKerja::orderBy('unit_kerja')->get()->whereNotIn("divcode", $exceptUnitkerja)->sortBy('id_profit_center');
             } else {
-                $unitKerja = UnitKerja::orderBy('unit_kerja')->get()->whereNotIn("divcode", ["B", "C", "D", "8"]);
+                $unitKerja = UnitKerja::orderBy('unit_kerja')->get()->whereNotIn("divcode", ["B", "C", "D", "8"])->sortBy('id_profit_center');
             }
             // dd($unitKerja);
             $proyeks = Proyek::with(['Forecasts', 'UnitKerja', "SumberDana"])->where("tahun_perolehan", "=", $year)->get();
@@ -134,9 +134,9 @@ class DashboardController extends Controller
 
             $exceptUnitkerja = ["B", "C", "D", "8", "F", "L", "N", "O", "U"];
             if ($year >= 2023) {
-                $unitKerja = UnitKerja::get()->whereIn("divcode", $unit_kerja_user->toArray())->whereNotIn("divcode", $exceptUnitkerja);
+                $unitKerja = UnitKerja::get()->whereIn("divcode", $unit_kerja_user->toArray())->whereNotIn("divcode", $exceptUnitkerja)->sortBy('id_profit_center');
             } else {
-                $unitKerja = UnitKerja::get()->whereIn("divcode", $unit_kerja_user->toArray())->whereNotIn("divcode", ["B", "C", "D", "8"]);
+                $unitKerja = UnitKerja::get()->whereIn("divcode", $unit_kerja_user->toArray())->whereNotIn("divcode", ["B", "C", "D", "8"])->sortBy('id_profit_center');
             }
             // $nilaiHistoryForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("jenis_proyek", "!=", "I")->where("history_forecast.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : date("m"))->where("history_forecast.tahun", "=", (string) $request->get("tahun-history") != "" ? (string) $request->get("tahun-history") : date("Y"))->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
             // dd($paretoProyeks->where('stage', 8)->last());
