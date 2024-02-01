@@ -2917,23 +2917,36 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // End CSI
 
     // begin RKAP
-    Route::get('/rkap', function () {
+    Route::get('/rkap', function (Request $request) {
+
+        $filterTahun = $request->query("tahun-proyek") ?? (int) date("Y");
+
+        if (
+            $filterTahun != (int)date("Y")
+        ) {
+            $proyeks = Proyek::where('is_rkap', true)->where('tahun_perolehan', $filterTahun)->get();
+        } else {
+            $proyeks = Proyek::where('is_rkap', true)->where('tahun_perolehan', (int)date('Y'))->get();
+        }
+
+        // dd($proyeks);
+
+        $totalRkap = $proyeks->sum('nilai_rkap');
+        $totalOkReview = $proyeks->sum('nilaiok_review');
+
+        $proyeks = $proyeks->groupBy('unit_kerja');
+
         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
         if (Auth::user()->check_administrator) {
-        $unitkerjas = Proyek::sortable()->where("is_rkap", "=", true)->get()->groupBy("unit_kerja");
+            $unitkerjas = Proyek::sortable()->where("is_rkap", "=", true)->get()->groupBy("unit_kerja");
         } else {
             $unitkerjas = Proyek::sortable()->where("is_rkap", "=", true)->get()->whereIn("unit_kerja", $unit_kerja_user->toArray())->groupBy("unit_kerja");
         }
 
-        $proyeks = [];
-        foreach ($unitkerjas as $key => $unitkerja) {
-            $proyek = Proyek::sortable()->where("unit_kerja", "=", $key)->where("is_rkap", "=", true)->get()->groupBy("tahun_perolehan");
-            array_push($proyeks, $proyek);
-            //    dump($proyeks);
-        }
+
         // dd();
 
-        return view("/11_Rkap", compact(["unitkerjas", "proyeks"]));
+        return view("/11_Rkap", compact(["unitkerjas", "proyeks", "filterTahun", "totalRkap", "totalOkReview"]));
     });
 
     Route::get('/rkap/{divcode}/{tahun_pelaksanaan}', function ($divcode, $tahun_pelaksanaan, Request $request) {

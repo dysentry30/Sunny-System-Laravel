@@ -106,109 +106,178 @@
 
 
                         <!--begin::Card header-->
-                        {{-- <div class="card-header border-0 pt-">
+                        <div class="card-header border-0 pt-">
                             <!--begin::Card title-->
                             <div class="card-title">
-                                <!--begin::Search-->
-                                <div class="d-flex align-items-center position-relative my-1">
-                                    <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                    <span class="svg-icon svg-icon-1 position-absolute ms-6">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none">
-                                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546"
-                                                height="2" rx="1" transform="rotate(45 17.0365 15.1223)"
-                                                fill="black" />
-                                            <path
-                                                d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
-                                                fill="black" />
-                                        </svg>
-                                    </span>
-                                    <!--end::Svg Icon-->
-                                    <input type="text" data-kt-customer-table-filter="search"
-                                        class="form-control form-control-solid w-250px ps-15" placeholder="Search Proyek" />
+                                <!--begin::Card title-->
+                                <div class="card-title">
+
+                                    <!--Begin:: BUTTON FILTER-->
+                                    <form action="" class="d-flex flex-row w-auto" method="get">
+                                        <!--begin::Select Options-->
+                                        <div style="" id="filterTahun" class="d-flex align-items-center">
+                                            <select id="tahun-proyek" name="tahun-proyek"
+                                                class="form-select form-select-solid"
+                                                data-control="select2" data-hide-search="true" data-placeholder="Tahun"
+                                                tabindex="-1" aria-hidden="true">
+                                                @php
+                                                    $startYear = 2020;
+                                                    $currentYear = date('Y');
+                                                    $diffYear = $currentYear - $startYear;
+                                                @endphp
+                                                <option value=""></option>
+                                                @foreach (range(1,$diffYear+2) as $thn)
+                                                    <option value="{{ $startYear }}"
+                                                        {{ $filterTahun == $startYear ? 'selected' : '' }}>{{ $startYear }}
+                                                    </option>
+                                                @php
+                                                    $startYear++;
+                                                @endphp
+                                                @endforeach
+                                                {{-- @foreach ($tahunProyek as $tahun)
+                                                    <option value="{{ $tahun }}"
+                                                        {{ $filterTahun == $tahun ? 'selected' : '' }}>{{ $tahun }}
+                                                    </option>
+                                                @endforeach --}}
+                                            </select>
+                                        </div>
+                                        <!--end::Select Options-->
+
+                                        <!--begin:: Filter-->
+                                        <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-4"
+                                            id="kt_toolbar_primary_button">
+                                            Filter</button>
+                                        <!--end:: Filter-->
+
+                                        <!--begin:: RESET-->
+                                        <button type="button" class="btn btn-sm btn-light btn-active-primary ms-2"
+                                            onclick="resetFilter()" id="kt_toolbar_primary_button">Reset</button>
+
+                                        <script>
+                                            function resetFilter() {
+                                                window.location.href = "/rkap";
+                                            }
+                                        </script>
+                                    </form>
+                                    <!--end:: BUTTON FILTER-->
                                 </div>
-                                <!--end::Search-->
+                                <!--begin::Card title-->
                             </div>
                             <!--begin::Card title-->
 
-                        </div> --}}
+                        </div>
                         <!--end::Card header-->
 
 
                         <!--begin::Card body-->
                         <div class="card-body py-10">
-                            @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
+                            @if (Auth::user()->canany(['super-admin', 'admin-crm']))
                                 <!--begin::Table-->
-                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
-                                <!--begin::Table head-->
-                                <thead>
-                                    <!--begin::Table row-->
-                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-auto">@sortablelink('unit_kerja','Unit Kerja')</th>
-                                        <th class="min-w-auto text-center">Tahun Pelaksanaan</th>
-                                        <th class="min-w-auto text-center">Total OK Awal</th>
-                                        <th class="min-w-auto text-center">Total OK Review</th>
-                                        <th class="min-w-auto text-center">@sortablelink('is_active','Is Locked')</th>
-                                        {{-- <th class="text-center">Action</th>
+                                <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
+                                    <!--begin::Table head-->
+                                    <thead>
+                                        <!--begin::Table row-->
+                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                            <th class="min-w-auto">@sortablelink('unit_kerja', 'Unit Kerja')</th>
+                                            <th class="min-w-auto text-center">Tahun Pelaksanaan</th>
+                                            <th class="min-w-auto text-center">Total OK Awal</th>
+                                            <th class="min-w-auto text-center">Total OK Review</th>
+                                            <th class="min-w-auto text-center">@sortablelink('is_active', 'Is Locked')</th>
+                                            {{-- <th class="text-center">Action</th>
                                         <th class="text-center">Settings</th> --}}
-                                    </tr>
-                                    <!--end::Table row-->
-                                </thead>
-                                <!--end::Table head-->
-                                <!--begin::Table body-->
-                                <tbody class="fw-bold text-gray-600">
-                                    @foreach ($proyeks as $proyekArray)
-                                        @foreach ($proyekArray as $proyek)
-                                        {{-- @dd($proyek)     --}}
-                                        <tr>
-                                            <!--begin::Name-->
-                                            <td class="">
-                                                <a target="_blank" href="/rkap/{{ $proyek->first()->UnitKerja?->divcode }}/{{ $proyek->first()->tahun_perolehan }}" id="click-name"
-                                                    class="text-gray-600 text-hover-primary mb-1">{{ $proyek->first()->UnitKerja?->unit_kerja }}</a>
-                                            </td>
-                                            <!--end::Name-->
-                                            <!--begin::Pelaksanaan-->
-                                            <td class="text-center">
-                                                    {{ $proyek->first()->tahun_perolehan }}
-                                            </td>
-                                            <!--end::Pelaksanaan-->
-                                            <!--begin::Coloumn-->
-                                            @php
-                                                $total_ok_awal = 0;
-                                                $total_ok_review = 0;
-                                                foreach ($proyek as $proyekTotal) {
-                                                    $total_ok_awal += $proyekTotal->Forecasts->where("tahun", "=", (int) date("Y"))->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
-                                                        return (int) $f->rkap_forecast;
-                                                    });
-                                                    // $total_ok_review += (int) str_replace(",", "", $proyekTotal->nilaiok_review);
-                                                }
-                                                // dump($total_ok_awal, $total_ok_review);
-                                                // dd();
-                                                $total_ok_awal = number_format($total_ok_awal, 0, ",");
-                                                $total_ok_review = number_format($total_ok_review, 0, ",");
-                                            @endphp
-                                            <td class="text-end">
-                                                {{ $total_ok_awal }}
-                                            </td>
-                                            <!--end::Coloumn-->
-                                            <!--begin::Coloumn-->
-                                            <td class="text-end">
-                                                {{ $total_ok_review }}
-                                            </td>
-                                            <!--end::Coloumn-->
-                                            <!--begin::Coloumn-->
-                                            <td class="text-center">
-                                                {{ $proyek->first()->UnitKerja?->is_active == 1 ? "Yes" : "No" }}
-                                            </td>
-                                            <!--end::Coloumn-->
-
                                         </tr>
+                                        <!--end::Table row-->
+                                    </thead>
+                                    <!--end::Table head-->
+                                    <!--begin::Table body-->
+                                    <tbody class="fw-bold text-gray-600">
+                                        @foreach ($proyeks as $divisi => $proyek)
+                                        @php
+                                            $nama_unit_kerja = \App\Models\UnitKerja::where('divcode', $divisi)?->first()?->unit_kerja;
+                                            $historyRkap = \App\Models\HistoryRKAP::where('unit_kerja', $nama_unit_kerja)->where('tahun_pelaksanaan', $filterTahun)?->first()->is_locked == true;
+                                        @endphp
+                                            <tr>
+                                                <td class="min-w-auto">
+                                                    <a href="/rkap/{{ $proyek->first()->unit_kerja }}/{{ $filterTahun }}" target="_blank" class="text-gray-600 text-hover-primary mb-1">{{ $nama_unit_kerja }}</a>
+                                                </td>
+                                                <td class="min-w-auto text-center">{{ $filterTahun }}</td>
+                                                <td class="min-w-auto text-end">{{ number_format((int) str_replace('.', '', $proyek->sum('nilai_rkap')), 0, '.', '.') }}
+                                                </td>
+                                                <td class="min-w-auto text-end">{{ number_format((int) str_replace('.', '', $proyek->sum('nilaiok_review')), 0, '.', '.') }}
+                                                </td>
+                                                <td class="min-w-auto text-center">
+                                                    @if (!empty($historyRkap) && $historyRkap)
+                                                        <button type="button" id="btnLocked" class="btn btn-sm btn-danger" onclick="lockedRKAPDivisi('{{ $divisi }}', '{{ $filterTahun }}', false)">Unlock</button>
+                                                    @else
+                                                        <button type="button" id="btnLocked" class="btn btn-sm btn-primary" onclick="lockedRKAPDivisi('{{ $divisi }}', '{{ $filterTahun }}', true)">Lock</button>
+                                                    @endif
+                                                </td>
+                                            </tr>
                                         @endforeach
-                                    @endforeach
-                                </tbody>
-                                <!--end::Table body-->
-                            </table>
-                            <!--end::Table-->
+                                        <tr>
+                                            <td colspan="2" class="bg-dark text-white"><b class="px-4">Total</b></td>
+                                            <td class="text-end bg-dark text-white">{{ number_format((int) str_replace('.', '', $totalRkap), 0, '.', '.') }}</td>
+                                            <td class="text-end bg-dark text-white">{{ number_format((int) str_replace('.', '', $totalOkReview), 0, '.', '.') }}</td>
+                                            <td class=""></td>
+                                        </tr>
+                                    </tbody>
+                                    <!--end::Table body-->
+                                </table>
+                                <!--end::Table-->
+
+                                <script>
+                                    function lockedRKAPDivisi(divisi, tahun_pelaksanaan, is_locked) {
+                                        let url
+                                        let text
+                                        if (is_locked) {
+                                            url = '/rkap/locked';
+                                            text = 'Lock';
+                                        } else {
+                                            url = '/rkap/unlocked';
+                                            text = 'Unlock';
+                                        }
+                                        Swal.fire({
+                                            title: 'Apakah anda yakin?',
+                                            icon: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#008CB4',
+                                            cancelButtonColor: '#d33',
+                                            confirmButtonText: text
+                                        }).then(async (result) => {
+                                            if (result.isConfirmed) {
+                                                try {
+                                                    const formData = new FormData();
+                                                    formData.append('_token', '{{ csrf_token() }}');
+                                                    formData.append('divisi', divisi);
+                                                    formData.append('tahun_pelaksanaan', tahun_pelaksanaan);
+
+                                                    const response = await fetch(url, {
+                                                        method:'POST',
+                                                        header:'application/json',
+                                                        body:formData
+                                                    }).then(res => res.json());
+
+                                                    if (response.Success != true) {
+                                                        return Swal.fire({
+                                                            icon: 'error',
+                                                            title: response.Message
+                                                        }).then(res => window.location.reload())
+                                                    }
+                                                    Swal.fire({
+                                                        icon: 'success',
+                                                        title: response.Message
+                                                    }).then(res => window.location.reload())
+                                                } catch (error) {
+                                                    Swal.fire({
+                                                        icon: 'error',
+                                                        title: error
+                                                    }).then(res => window.location.reload())
+                                                }
+                                            }
+                                        })
+
+                                    }
+                                </script>
                             @endif
 
 
@@ -233,3 +302,17 @@
     <!--end::Root-->
 @endsection
 
+@section('js-script')
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+    </script>
+@endsection
