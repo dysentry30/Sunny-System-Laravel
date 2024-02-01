@@ -88,7 +88,12 @@ class DashboardController extends Controller
             // dump($nilaiHistoryForecast);
             // $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year)->where("forecasts.periode_prognosa", "=", $month != "" ? (string) $month : (int) date("m"))->where("forecasts.tahun", "=", $year)->get()->whereNotIn("unit_kerja", ["B", "C", "D", "8"]);
             $claims = ClaimManagements::join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->get();
-            $unitKerja = UnitKerja::orderBy('unit_kerja')->get()->whereNotIn("divcode", ["B", "C", "D", "8"]);
+            $exceptUnitkerja = ["B", "C", "D", "8", "F", "L", "N", "O", "U"];
+            if ($year >= 2023) {
+                $unitKerja = UnitKerja::orderBy('unit_kerja')->get()->whereNotIn("divcode", $exceptUnitkerja);
+            } else {
+                $unitKerja = UnitKerja::orderBy('unit_kerja')->get()->whereNotIn("divcode", ["B", "C", "D", "8"]);
+            }
             // dd($unitKerja);
             $proyeks = Proyek::with(['Forecasts', 'UnitKerja', "SumberDana"])->where("tahun_perolehan", "=", $year)->get();
             $paretoProyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements'])->where("proyeks.jenis_proyek", "!=", "I")->where("proyeks.tahun_perolehan", "=", $year)->where("is_cancel", "!=",
@@ -126,7 +131,13 @@ class DashboardController extends Controller
             $proyeks = Proyek::with(['Forecasts', 'UnitKerja', "SumberDana"])->where("tahun_perolehan", "=", $year)->where("jenis_proyek", "!=", "I")->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
             $paretoProyeks = Proyek::with(['Forecasts', 'UnitKerja', 'ContractManagements'])->where("proyeks.jenis_proyek", "!=", "I")->where("proyeks.tahun_perolehan", "=", $year)->where("is_cancel", "!=", true)->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
             $claims = ClaimManagements::join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
-            $unitKerja = UnitKerja::get()->whereIn("divcode", $unit_kerja_user->toArray());
+
+            $exceptUnitkerja = ["B", "C", "D", "8", "F", "L", "N", "O", "U"];
+            if ($year >= 2023) {
+                $unitKerja = UnitKerja::get()->whereIn("divcode", $unit_kerja_user->toArray())->whereNotIn("divcode", $exceptUnitkerja);
+            } else {
+                $unitKerja = UnitKerja::get()->whereIn("divcode", $unit_kerja_user->toArray())->whereNotIn("divcode", ["B", "C", "D", "8"]);
+            }
             // $nilaiHistoryForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("jenis_proyek", "!=", "I")->where("history_forecast.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : date("m"))->where("history_forecast.tahun", "=", (string) $request->get("tahun-history") != "" ? (string) $request->get("tahun-history") : date("Y"))->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
             // dd($paretoProyeks->where('stage', 8)->last());
 
