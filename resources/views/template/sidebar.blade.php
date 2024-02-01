@@ -903,8 +903,7 @@
                         {{-- @endif                             --}}
                         @endcanany
                         
-                        @canany(['super-admin'])
-                        {{-- @if (auth()->user()->check_administrator) --}}
+                        {{-- @canany(['super-admin'])
                             <div class="menu-item">
                                 <a class="menu-link " href="/ok-awal"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'ok-awal') ? 'background-color:#008CB4' : '' }}">
@@ -919,11 +918,9 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">RKAP Awal</span>
                                 </a>
                             </div>
-                        {{-- @endif                             --}}
-                        @endcanany
+                        @endcanany --}}
 
-                        @canany(['super-admin'])
-                        {{-- @if (auth()->user()->check_administrator) --}}
+                        {{-- @canany(['super-admin'])
                             <div class="menu-item">
                                 <a class="menu-link " href="/ok-review"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'ok-review') ? 'background-color:#008CB4' : '' }}">
@@ -938,8 +935,7 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">RKAP Review</span>
                                 </a>
                             </div>
-                        {{-- @endif                             --}}
-                        @endcanany
+                        @endcanany --}}
 
                         {{-- @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                             <div class="menu-item">
