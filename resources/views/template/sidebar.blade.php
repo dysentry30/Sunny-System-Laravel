@@ -1348,6 +1348,19 @@
                             <!--end::Menu Colapse-->
                             <!--begin::Menu Colapse-->
                             <div class="menu-item">
+                                <a class="menu-link " href="/masalah-hukum" style="color:white; padding-left:20px; {{ Request::Path() == 'masalah-hukum' ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        {{-- <i class="bi bi-buildings text-white"></i> --}}
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" fill="white"><path d="M160-120v-80h480v80H160Zm226-194L160-540l84-86 228 226-86 86Zm254-254L414-796l86-84 226 226-86 86Zm184 408L302-682l56-56 522 522-56 56Z"/></svg>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Masalah Hukum</span>
+                                </a>
+                            </div>
+                            <!--end::Menu Colapse-->
+                            <!--begin::Menu Colapse-->
+                            <div class="menu-item">
                                 <a class="menu-link " href="/master-pefindo" style="color:white; padding-left:20px; {{ Request::Path() == 'master-pefindo' ? 'background-color:#008CB4' : '' }}">
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->

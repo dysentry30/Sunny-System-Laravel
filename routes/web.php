@@ -56,6 +56,7 @@ use App\Http\Controllers\RoleManagementsController;
 use App\Http\Controllers\KonsultanPerencanaController;
 use App\Http\Controllers\AssessmentPartnerSelectionController;
 use App\Http\Controllers\Rekomendasi2Controller;
+use App\Http\Controllers\MasalahHukumController;
 use App\Models\ChecklistCalonMitraKSO;
 use App\Models\ContractChangeNotice;
 use App\Models\ContractChangeOrder;
@@ -633,6 +634,17 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     //End::Alat
 
     //End::Tender
+
+    /**
+     * Masalah Hukum
+     */
+    Route::group(['prefix' => 'masalah-hukum'], function () {
+        Route::get('/', [MasalahHukumController::class, 'index']);
+        Route::post('/save', [MasalahHukumController::class, 'save']);
+        Route::post('/{id}/edit', [MasalahHukumController::class, 'edit']);
+        Route::post('/{id}/delete', [MasalahHukumController::class, 'delete']);
+    });
+
 
 
     // DELETE data customer pada dasboard customer by ID 
@@ -3375,6 +3387,54 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
         return response()->json($data);
     });
+
+    //Begin::Get Pelanggan
+    Route::get('/masalah-hukum/get-customer', function (Request $request) {
+        $search = $request->input('search');
+        $page = $request->input(
+            'page',
+            1
+        );
+        $perPage = 10;
+        $maxResults = 10;
+
+        $dataCustomer = Customer::when(
+            !empty($search),
+            function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%');
+            }
+        );
+        $data = $dataCustomer->paginate($perPage, ['*'], 'page', $page);
+
+        // $data->pagination['more'] = ($page * $perPage) < $maxResults;
+
+        return response()->json($data);
+    });
+    //End::Get Pelanggan
+    //Begin::Get Proyek By Pelanggan
+    Route::get('/masalah-hukum/get-proyek-customer/{id_customer}', function (Request $request, $id_customer) {
+        $search = $request->input('search');
+        $page = $request->input(
+            'page',
+            1
+        );
+        $perPage = 10;
+        $maxResults = 10;
+
+        $dataProyek = ProyekBerjalans::where('id_customer', $id_customer)->when(
+            !empty($search),
+            function ($query) use ($search) {
+                $query->where('kode_proyek', 'like', '%' . $search . '%')
+                ->orWhere('nama_proyek', 'like', '%' . $search . '%');
+            }
+        );
+        $data = $dataProyek->paginate($perPage, ['*'], 'page', $page);
+
+        // $data->pagination['more'] = ($page * $perPage) < $maxResults;
+
+        return response()->json($data);
+    });
+    //End::Get Proyek By Pelanggan
 
     //Begin::Get Master Klasifikasi KBLI SBU
     Route::get('/proyek/get-klasifikasi-sbu', function (Request $request) {

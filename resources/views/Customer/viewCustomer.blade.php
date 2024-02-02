@@ -2675,7 +2675,7 @@
                                                         <div class="card-title m-0">
                                                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                                 Masalah Hukum   
-                                                                <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_input_masalah_hukum">+</a>
+                                                                {{-- <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_input_masalah_hukum">+</a> --}}
                                                                 {{-- <i onclick="hideColumn(this, '#divMasalahHukum')" id="hide-button" style="display: none" class="bi bi-arrows-collapse"></i>
                                                                 <i onclick="showColumn(this, '#divMasalahHukum')" id="show-button" class="bi bi-arrows-expand"></i>                                          --}}
                                                             </h3>
@@ -2704,23 +2704,23 @@
                                                                             @if (!empty($masalahHukum))
                                                                             @foreach ($customer->MasalahHukum as $mh)
                                                                             <tr>                                                                                    
-                                                                                            {{-- @dump($mh) --}}
-                                                                                            <td>
-                                                                                                <a target="_blank" href="/proyek/view/{{ $mh->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
-                                                                                                    {{ $mh->Proyek->nama_proyek }}                                                                                                
-                                                                                                </a>
-                                                                                            </td>
-                                                                                            <!--end::Name-->
-                                                                                            <!--begin::Jenis Masalah Hukum-->
-                                                                                            <td>
-                                                                                            {{ $mh->bentuk_masalah }}
-                                                                                            </td>
-                                                                                            <!--end::Unit-->
-                                                                                            <!--begin::Status-->
-                                                                                            <td>
-                                                                                                {{ $mh->status }}
-                                                                                            </td>
-                                                                                            <!--end::Status-->   
+                                                                                {{-- @dump($mh) --}}
+                                                                                <td>
+                                                                                    <a target="_blank" href="/proyek/view/{{ $mh->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
+                                                                                        {{ $mh->Proyek->nama_proyek }}                                                                                                
+                                                                                    </a>
+                                                                                </td>
+                                                                                <!--end::Name-->
+                                                                                <!--begin::Jenis Masalah Hukum-->
+                                                                                <td>
+                                                                                {{ $mh->bentuk_masalah }}
+                                                                                </td>
+                                                                                <!--end::Unit-->
+                                                                                <!--begin::Status-->
+                                                                                <td>
+                                                                                    {{ $mh->status }}
+                                                                                </td>
+                                                                                <!--end::Status-->   
                                                                             </tr>
                                                                             @endforeach
                                                                             @else
