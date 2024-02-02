@@ -329,7 +329,7 @@
                                 <div id="div-namaProyek">
                                     <select name="kode-proyek-hukum" id="new-proyek-{{ $item->id_hukum }}" class="form-select form-select-solid" data-hide-search="false" data-control="select2"
                                         data-placeholder="Pilih Nama Proyek">
-                                        <option value="{{ $item->kode_proyek }}">{{ $item->kode_proyek.' - '.$item->Proyek->nama_proyek }}</option>                                                                          
+                                        <option value="{{ $item->kode_proyek }}">{{ $item->kode_proyek.' - '.$item->Proyek?->nama_proyek }}</option>                                                                          
                                     </select>
                                 </div>
                             </div>
