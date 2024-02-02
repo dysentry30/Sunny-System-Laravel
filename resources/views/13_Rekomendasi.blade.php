@@ -2395,7 +2395,7 @@
                                         @endif
                                     @endif --}}
                                 {{-- @else --}}
-                                    @if ($matriks_user->contains('kategori', 'Penyusun') && $matriks_user->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '=', 1)?->first())
+                                    @if ($matriks_user?->contains('kategori', 'Penyusun') && $matriks_user?->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '=', 1)?->first())
                                         @if (!collect(json_decode($proyek->approved_penyusun))->contains('status', 'approved'))
                                             <input type="submit" name="save-draft-note-rekomendasi" value="Simpan Sebagai Draft"
                                                 class="btn btn-sm btn-primary">
