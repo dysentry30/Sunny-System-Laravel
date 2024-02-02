@@ -115,7 +115,7 @@
                                         <tr>
                                             <td class="text-center align-middle">{{ $no++ }}</td>
                                             <td class="align-middle">{{ $item->Customer->name }}</td>
-                                            <td class="align-middle">{{ $item->Proyek->nama_proyek }}</td>
+                                            <td class="align-middle">{{ $item->Proyek?->nama_proyek }}</td>
                                             <td class="align-middle">{{ $item->bentuk_masalah }}</td>
                                             <td class="text-center align-middle">{{ $item->status }}</td>
                                             <td class="text-center align-middle">
