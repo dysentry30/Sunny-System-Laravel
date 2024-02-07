@@ -20,6 +20,9 @@
         background: #e7e7e7 !important;
     }
 
+    .form-control.form-control-solid:read-only {
+        background: #e7e7e7 !important;
+    }
     .form-select.form-select-solid {
         border-left: 0px !important;
         border-top: 0px !important;
@@ -1643,6 +1646,9 @@
                                                                         <!--end::Table head-->
                                                                         <!--begin::Table body-->
                                                                         <tbody class="fw-bold text-gray-600">
+                                                                            @php
+                                                                                $is_exist_history = $proyek->HistoryForecasts->where('periode_prognosa', (int) $now_pane->format('m'));
+                                                                            @endphp
                                                                             @for ($i = 1; $i <= 12; $i++)
                                                                                 <form
                                                                                     action="/proyek/forecast/{{ $i }}/{{ (int) $now_pane->format('m') }}/{{ (int) $now_pane->format('Y') }}/retail"
@@ -1735,21 +1741,21 @@
                                                                                             $disabled_realisasi = '';
                                                                                             $is_save = true;
                                                                                             if (!$is_periode_unlock) {
-                                                                                                $disabled_ok = 'disabled';
-                                                                                                $disabled_forecast = 'disabled';
-                                                                                                $disabled_realisasi = 'disabled';
+                                                                                                $disabled_ok = 'readonly';
+                                                                                                $disabled_forecast = 'readonly';
+                                                                                                $disabled_realisasi = 'readonly';
                                                                                                 $is_save = false;
                                                                                             } else {
                                                                                                 if ($i == (int) $now_pane->format('m')) {
-                                                                                                    $disabled_ok = 'disabled';
+                                                                                                    $disabled_ok = 'readonly';
                                                                                                 } elseif ($i < (int) $now_pane->format('m')) {
-                                                                                                    $disabled_ok = 'disabled';
-                                                                                                    $disabled_forecast = 'disabled';
-                                                                                                    $disabled_realisasi = 'disabled';
+                                                                                                    $disabled_ok = 'readonly';
+                                                                                                    $disabled_forecast = 'readonly';
+                                                                                                    $disabled_realisasi = 'readonly';
                                                                                                     $is_save = false;
                                                                                                 } else {
-                                                                                                    $disabled_ok = 'disabled';
-                                                                                                    $disabled_realisasi = 'disabled';
+                                                                                                    $disabled_ok = 'readonly';
+                                                                                                    // $disabled_realisasi = 'disabled';
                                                                                                 }
                                                                                             }
 
@@ -1922,21 +1928,21 @@
                                                                                         $disabled_realisasi = '';
                                                                                         $is_save = true;
                                                                                         if (!$is_periode_unlock) {
-                                                                                            $disabled_ok = 'disabled';
-                                                                                            $disabled_forecast = 'disabled';
-                                                                                            $disabled_realisasi = 'disabled';
+                                                                                            $disabled_ok = 'readonly';
+                                                                                            $disabled_forecast = 'readonly';
+                                                                                            $disabled_realisasi = 'readonly';
                                                                                             $is_save = false;
                                                                                         } else {
-                                                                                            if ($i == (int) $now_pane->format('m')) {
-                                                                                                $disabled_ok = 'disabled';
-                                                                                            } elseif ($i < (int) $now_pane->format('m')) {
-                                                                                                $disabled_ok = 'disabled';
-                                                                                                // $disabled_forecast = 'disabled';
-                                                                                                // $disabled_realisasi = 'disabled';
-                                                                                                // $is_save = false;
+                                                                                            if ($i == (int) $new_now_pane) {
+                                                                                                $disabled_ok = 'readonly';
+                                                                                            } elseif ($i < (int) $new_now_pane) {
+                                                                                                $disabled_ok = 'readonly';
+                                                                                                $disabled_forecast = 'readonly';
+                                                                                                $disabled_realisasi = 'readonly';
+                                                                                                $is_save = false;
                                                                                             } else {
-                                                                                                $disabled_ok = 'disabled';
-                                                                                                // $disabled_realisasi = 'disabled';
+                                                                                                $disabled_ok = 'readonly';
+                                                                                                $disabled_realisasi = 'readonly';
                                                                                             }
                                                                                         }
                                                                                         @endphp
