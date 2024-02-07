@@ -19,10 +19,6 @@
     .form-control.form-control-solid:disabled {
         background: #e7e7e7 !important;
     }
-    
-    .form-control.form-control-solid:read-only {
-        background: #e7e7e7 !important;
-    }
 
     .form-select.form-select-solid {
         border-left: 0px !important;
@@ -1272,7 +1268,7 @@
                                                                     <select id="mata-uang-awal" name="mata-uang-awal"
                                                                         class="form-select form-select-solid"
                                                                         data-control="select2" data-hide-search="true"
-                                                                        data-placeholder="Pilih Mata Uang" readonly>
+                                                                        data-placeholder="Pilih Mata Uang">
                                                                         <option></option>
                                                                         <option value="Rupiah"
                                                                             {{ $proyek->mata_uang_awal == 'Rupiah' ? 'selected' : '' }}>
@@ -1557,9 +1553,12 @@
                                                         <div class="d-flex flex-row-reverse">
                                                             @php
                                                                 $now = Carbon\Carbon::now();
-                                                                $submonth = ((int) date('m'));
-                                                                $now = $now->setDays(1)->subMonths($submonth);
                                                                 $tgl = (int) date('d');
+                                                                $submonth = ((int) date('m'));
+                                                                $now = $now->setDays(1)->subMonths($submonth - 1);
+                                                                if ($submonth == 1 && $tgl < 5) {
+                                                                    $now = $now->setDays(1)->subMonths($submonth);
+                                                                }
                                                             @endphp
 
                                                             <ul
@@ -1584,6 +1583,8 @@
                                                                                     href="#kt_user_view_forecasts_{{ (int) $now->format('m') }}_{{ $now->format('Y') }}"
                                                                                     style="font-size:14px;">{{ $now->translatedFormat('F Y') }}</a>
                                                                             </li>
+                                                                        @else
+                                                                        
                                                                         @endif
                                                                     @endif
                                                                     @php
@@ -1603,7 +1604,12 @@
                                                     @php
                                                         $now_pane = Carbon\Carbon::now()
                                                             ->setDays(1)
-                                                            ->subMonths($submonth);
+                                                            ->subMonths($submonth - 1);
+                                                        if ((int)date('m') == 1 && $tgl < 5) {
+                                                            $now_pane = Carbon\Carbon::now()
+                                                                ->setDays(1)
+                                                                ->subMonths($submonth);
+                                                        }
                                                     @endphp
                                                     <div class="tab-content">
                                                         @foreach (range(1, $submonth) as $item)
@@ -1637,9 +1643,6 @@
                                                                         <!--end::Table head-->
                                                                         <!--begin::Table body-->
                                                                         <tbody class="fw-bold text-gray-600">
-                                                                            @php
-                                                                                $is_exist_history = $proyek->HistoryForecasts->where('periode_prognosa', (int) $now_pane->format('m'));
-                                                                            @endphp
                                                                             @for ($i = 1; $i <= 12; $i++)
                                                                                 <form
                                                                                     action="/proyek/forecast/{{ $i }}/{{ (int) $now_pane->format('m') }}/{{ (int) $now_pane->format('Y') }}/retail"
@@ -1709,15 +1712,17 @@
                                                                                         <!--end::Name-->
                                                                                         <!--begin::input-->
                                                                                         @php
-                                                                                            $forecasts = $proyek->Forecasts->where('periode_prognosa', '=', (int) $now_pane->format('m'))->filter(function ($f) use ($i) {
+                                                                                            $forecasts = $proyek->Forecasts->where('periode_prognosa', '=', (int) $now_pane->format('m'))->where('tahun', (int)$now_pane->format('Y'))->filter(function ($f) use ($i) {
                                                                                                 return $f->month_forecast == $i;
                                                                                             });
-                                                                                            $history = $proyek->HistoryForecasts->where('periode_prognosa', (int) $now_pane->format('m'));
-                                                                                            
+                                                                                            $history = $proyek->HistoryForecasts->where('periode_prognosa', (int) $now_pane->format('m'))->where('tahun', (int)$now_pane->format('Y'));
+                                                                                            if ($history->isEmpty() && $now_pane->format('m') == 1 && $now_pane->format('Y') == (int)date('Y')) {
+                                                                                                $history = $forecasts;
+                                                                                            }
+
                                                                                             $is_periode_unlock = $history->every(function ($item) {
                                                                                                 return empty($item->is_approved_1);
                                                                                             });
-
                                                                                             $currMonth = (int) date('m');
                                                                                             $forecast = count($forecasts) > 0 ? $forecasts->first() : null;
                                                                                         @endphp
@@ -1729,22 +1734,22 @@
                                                                                             $disabled_forecast = '';
                                                                                             $disabled_realisasi = '';
                                                                                             $is_save = true;
-                                                                                            if (!$is_periode_unlock || $is_exist_history->isNotEmpty()) {
-                                                                                                $disabled_ok = 'readonly';
-                                                                                                $disabled_forecast = 'readonly';
-                                                                                                $disabled_realisasi = 'readonly';
+                                                                                            if (!$is_periode_unlock) {
+                                                                                                $disabled_ok = 'disabled';
+                                                                                                $disabled_forecast = 'disabled';
+                                                                                                $disabled_realisasi = 'disabled';
                                                                                                 $is_save = false;
                                                                                             } else {
                                                                                                 if ($i == (int) $now_pane->format('m')) {
-                                                                                                    $disabled_ok = 'readonly';
+                                                                                                    $disabled_ok = 'disabled';
                                                                                                 } elseif ($i < (int) $now_pane->format('m')) {
-                                                                                                    $disabled_ok = 'readonly';
-                                                                                                    $disabled_forecast = 'readonly';
-                                                                                                    $disabled_realisasi = 'readonly';
+                                                                                                    $disabled_ok = 'disabled';
+                                                                                                    $disabled_forecast = 'disabled';
+                                                                                                    $disabled_realisasi = 'disabled';
                                                                                                     $is_save = false;
                                                                                                 } else {
-                                                                                                    $disabled_ok = 'readonly';
-                                                                                                    $disabled_realisasi = 'readonly';
+                                                                                                    $disabled_ok = 'disabled';
+                                                                                                    $disabled_realisasi = 'disabled';
                                                                                                 }
                                                                                             }
 
@@ -1900,10 +1905,10 @@
                                                                                         <!--end::Name-->
                                                                                         <!--begin::input-->
                                                                                         @php
-                                                                                            $forecasts = $proyek->Forecasts->where('periode_prognosa', '=', (int) $now_pane->format('m'))->filter(function ($f) use ($i) {
+                                                                                            $forecasts = $proyek->Forecasts->where('periode_prognosa', '=', (int) $now_pane->format('m'))->where('tahun', '=', (int) $now_pane->format('Y'))->filter(function ($f) use ($i) {
                                                                                                 return $f->month_forecast == $i;
                                                                                             });
-                                                                                            $history = $proyek->HistoryForecasts->where('periode_prognosa', (int) $now_pane->format('m'));
+                                                                                            $history = $proyek->HistoryForecasts->where('periode_prognosa', (int) $now_pane->format('m'))->where('tahun', '=', (int) $now_pane->format('Y'));
 
                                                                                             $is_periode_unlock = $history->every(function ($item) {
                                                                                                 return empty($item->is_approved_1);
@@ -1917,20 +1922,20 @@
                                                                                         $disabled_realisasi = '';
                                                                                         $is_save = true;
                                                                                         if (!$is_periode_unlock) {
-                                                                                            $disabled_ok = 'readonly';
-                                                                                            $disabled_forecast = 'readonly';
-                                                                                            $disabled_realisasi = 'readonly';
+                                                                                            $disabled_ok = 'disabled';
+                                                                                            $disabled_forecast = 'disabled';
+                                                                                            $disabled_realisasi = 'disabled';
                                                                                             $is_save = false;
                                                                                         } else {
                                                                                             if ($i == (int) $now_pane->format('m')) {
-                                                                                                $disabled_ok = 'readonly';
+                                                                                                $disabled_ok = 'disabled';
                                                                                             } elseif ($i < (int) $now_pane->format('m')) {
-                                                                                                $disabled_ok = 'readonly';
-                                                                                                $disabled_forecast = 'readonly';
-                                                                                                $disabled_realisasi = 'readonly';
-                                                                                                $is_save = false;
+                                                                                                $disabled_ok = 'disabled';
+                                                                                                // $disabled_forecast = 'disabled';
+                                                                                                // $disabled_realisasi = 'disabled';
+                                                                                                // $is_save = false;
                                                                                             } else {
-                                                                                                $disabled_ok = 'readonly';
+                                                                                                $disabled_ok = 'disabled';
                                                                                                 // $disabled_realisasi = 'disabled';
                                                                                             }
                                                                                         }
@@ -1993,8 +1998,8 @@
                                                                 @endphp
                                                                 <!--begin:::Tab Pane Forecasts-->
                                                                 <div class="tab-pane fade {{ $item == $submonth ? 'show active' : '' }}"
-                                                                    id="kt_user_view_forecasts_{{ (int) $new_now_pane }}_{{ $now_pane->format('Y') }}"
-                                                                    role="tabpanel">
+                                                                id="kt_user_view_forecasts_{{ (int) $new_now_pane }}_{{ $now_pane->format('Y') }}"
+                                                                role="tabpanel">
                                                                     <!--begin::Table-->
                                                                     <table
                                                                         class="table align-middle table-row-dashed fs-6 gy-2"
@@ -2108,21 +2113,21 @@
                                                                                             $disabled_realisasi = '';
                                                                                             $is_save = true;
                                                                                             if (!$is_periode_unlock) {
-                                                                                                $disabled_ok = 'readonly';
-                                                                                                $disabled_forecast = 'readonly';
-                                                                                                $disabled_realisasi = 'readonly';
+                                                                                                $disabled_ok = 'disabled';
+                                                                                                $disabled_forecast = 'disabled';
+                                                                                                $disabled_realisasi = 'disabled';
                                                                                                 $is_save = false;
                                                                                             } else {
                                                                                                 if ($i == (int) $new_now_pane) {
-                                                                                                    $disabled_ok = 'readonly';
+                                                                                                    $disabled_ok = 'disabled';
                                                                                                 } elseif ($i < (int) $new_now_pane) {
-                                                                                                    $disabled_ok = 'readonly';
-                                                                                                    $disabled_forecast = 'readonly';
-                                                                                                    $disabled_realisasi = 'readonly';
+                                                                                                    $disabled_ok = 'disabled';
+                                                                                                    $disabled_forecast = 'disabled';
+                                                                                                    $disabled_realisasi = 'disabled';
                                                                                                     $is_save = false;
                                                                                                 } else {
-                                                                                                    $disabled_ok = 'readonly';
-                                                                                                    $disabled_realisasi = 'readonly';
+                                                                                                    $disabled_ok = 'disabled';
+                                                                                                    $disabled_realisasi = 'disabled';
                                                                                                 }
                                                                                             }
 
