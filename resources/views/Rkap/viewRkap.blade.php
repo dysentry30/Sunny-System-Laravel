@@ -92,6 +92,9 @@
                                                 <!--end::Table head-->
                                                 <!--begin::Table body-->
                                                 <tbody class="fw-bold text-gray-600">
+                                                    @php
+                                                        $total_nilairkap = 0;
+                                                    @endphp
                                                     @forelse ($proyeks as $proyek)
                                                         <tr>
                                                             <!--begin::Name-->
@@ -158,7 +161,17 @@
                                                                     //     // $total_ok_review += (int) str_replace(",", "", $proyekTotal->nilaiok_review);
                                                                     // }
                                                                 @endphp --}}
-                                                                {{ number_format((int)$proyek->nilai_rkap, 0, '.', '.') ?? '-' }}
+                                                                @php
+                                                                    if ($proyek->tipe_proyek == "R") {
+                                                                        $nilai_rkap = $proyek->Forecasts?->where("tahun", $tahun_pelaksanaan)->sum(function($f){
+                                                                            return (int) $f->rkap_forecast;
+                                                                        });
+                                                                    }else{
+                                                                        $nilai_rkap = $proyek->nilai_rkap;
+                                                                    }
+                                                                    $total_nilairkap += $nilai_rkap;
+                                                                @endphp
+                                                                {{ number_format((int)$nilai_rkap, 0, '.', '.') ?? '-' }}
                                                                 {{-- {{ number_format((int)$total_ok_awal, 0, '.', '.') ?? '-' }} --}}
                                                             </td>
                                                             <!--end::Coloumn-->
@@ -184,7 +197,8 @@
                                                     @if (!empty($proyeks) || $proyeks->isNotEmpty())
                                                         <tr>
                                                             <td colspan="4" class="bg-dark text-white"><b class="px-3">Total</b></td>
-                                                            <td class="bg-dark text-white text-end">{{ number_format((int)$proyeks->sum('nilai_rkap'), 0, '.', '.') ?? '0' }}</td>
+                                                            {{-- <td class="bg-dark text-white text-end">{{ number_format((int)$proyeks->sum('nilai_rkap'), 0, '.', '.') ?? '0' }}</td> --}}
+                                                            <td class="bg-dark text-white text-end">{{ number_format((int)$total_nilairkap, 0, '.', '.') ?? '0' }}</td>
                                                             <td class="bg-dark text-white text-end">{{ number_format((int)$proyeks->sum('nilaiok_review'), 0, '.', '.') ?? '0' }}</td>
                                                             <td class="bg-dark"></td>
                                                         </tr>
