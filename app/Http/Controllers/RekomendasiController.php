@@ -89,7 +89,7 @@ class RekomendasiController extends Controller
             //Flow setelah setuju rekomendasi pengajuan
             // dd(MatriksApprovalRekomendasi::where("unit_kerja", "=", $proyek->UnitKerja->Divisi->id_divisi)->where("klasifikasi_proyek", "=", $proyek->klasifikasi_pasdin)->where("kategori", "=", "Pengajuan")->get());
             if ($is_checked) {
-            // if ($check_user_approval_counter) {
+                
                 $is_proyek_mega = (str_contains($proyek->klasifikasi_pasdin, "Besar") || str_contains($proyek->klasifikasi_pasdin, "Mega")) ? true : false;
                 $hasil_assessment = collect(performAssessment($proyek->proyekBerjalan->Customer, $proyek));
                 // dd($hasil_assessment);
@@ -100,7 +100,16 @@ class RekomendasiController extends Controller
                 // dd($nomorTarget);
                 foreach ($nomorTarget as $target) {
                     // dd($target->Pegawai->handphone);
-                    $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_user_view_kriteria_" . $proyek->kode_proyek;
+                    if (empty($proyek->is_revisi_pengajuan)) {
+                        $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_user_view_kriteria_" . $proyek->kode_proyek;
+                        $message = nl2br("Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan Pengajuan Nota Rekomendasi I, " . $proyek->ProyekBerjalan->name_customer . " untuk Proyek $proyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
+                        $sendEmailUser = sendNotifEmail($target->Pegawai, "Permohonan Pengajuan Nota Rekomendasi I", $message, $this->isnomorTargetActive);
+                    } else {
+                        $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_rekomendasi_" . $proyek->kode_proyek;
+                        $message = nl2br("Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan hasil revisi Pengajuan Nota Rekomendasi I, " . $proyek->ProyekBerjalan->name_customer . " untuk Proyek $proyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
+                        $sendEmailUser = sendNotifEmail($target->Pegawai, "Permohonan Pengajuan Hasil Revisi Nota Rekomendasi I", $message, $this->isnomorTargetActive);
+                    }
+                    
                     // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
                     //     "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
                     //     "sender" => env("NO_WHATSAPP_BLAST"),
@@ -111,8 +120,6 @@ class RekomendasiController extends Controller
                     //     "message" => "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan Pengajuan Nota Rekomendasi I, *" . $proyek->ProyekBerjalan->name_customer . "* untuk Proyek *$proyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
                     //     // "url" => $url
                     // ]);
-                    $message = nl2br("Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan Pengajuan Nota Rekomendasi I, " . $proyek->ProyekBerjalan->name_customer . " untuk Proyek $proyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
-                    $sendEmailUser = sendNotifEmail($target->Pegawai, "Permohonan Pengajuan Nota Rekomendasi I", $message, $this->isnomorTargetActive);
                     if (!$sendEmailUser) {
                         return redirect()->back();
                     }
@@ -123,6 +130,7 @@ class RekomendasiController extends Controller
                     //     return redirect()->back();
                     // });
                 }
+                
 
                 // QrCode::size(50)->generate($request->schemeAndHttpHost() . "?redirectTo=/rekomendasi?open=kt_modal_view_proyek_rekomendasi_", public_path('/qr-code' . '/' . $proyek->kode_proyek . '.svg'));
                 // $fileQrCode = generateQrCode($proyek->kode_proyek, Auth::user()->nip, $request->schemeAndHttpHost() . "?nip=" . Auth::user()->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyek->kode_proyek");
@@ -132,6 +140,7 @@ class RekomendasiController extends Controller
                 $proyek->is_request_rekomendasi = false;
                 $proyek->hasil_assessment = $hasil_assessment;
                 $proyek->approved_rekomendasi = $data->toJson();
+                $proyek->is_revisi_pengajuan = null;
             } else {
                 if (!$is_paralel) {
                     $matriks_approval = self::getUserMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Pengajuan");
@@ -812,6 +821,59 @@ class RekomendasiController extends Controller
                 // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega);
                 return redirect()->back();
             }
+        } else if (!empty($request["revisi-pengajuan"])) {
+            $proyek = Proyek::find($request->get("kode-proyek"));
+            if (empty($request["revisi-pengajuan-note"])) {
+                Alert::error('Mohon isi catatan revisi');
+                return redirect()->back();
+            }
+
+            $revisi_note = collect(json_decode($proyek->revisi_pengajuan_note));
+            $revisi_note->push([
+                "user_id" => Auth::user()->id,
+                "status" => "revisi",
+                "tanggal" => \Carbon\Carbon::now(),
+                "catatan" => $request["revisi-pengajuan-note"]
+            ]);
+
+            $proyek->revisi_pengajuan_note = $revisi_note;
+            $proyek->is_revisi_pengajuan = true;
+
+            $get_nomor = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Pengajuan", 1);
+
+            foreach ($get_nomor as $user) {
+                $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyek->kode_proyek";
+                $message = nl2br("Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permintaan revisi pengajuan " . $proyek->proyekBerjalan->customer->name . " untuk perbaikan Nota Rekomendasi tahap I pada proyek $proyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
+                $sendEmailUser = sendNotifEmail($user->Pegawai, "Pemberitahuan Revisi Dokumen Pengajuan Nota Rekomendasi I", $message, $this->isnomorTargetActive);
+                if (!$sendEmailUser) {
+                    return redirect()->back();
+                }
+            }
+
+            if (!empty($proyek->file_pengajuan)) {
+                File::delete(public_path('file-pengajuan/' . $proyek->file_pengajuan));
+            }
+
+            if (!empty($proyek->file_rekomendasi)) {
+                File::delete(public_path('file-rekomendasi/' . $proyek->file_rekomendasi));
+            }
+
+            $proyek->review_assessment = null;
+            $proyek->hasil_assessment = null;
+            $proyek->file_rekomendasi = null;
+            $proyek->file_pengajuan = null;
+            $proyek->approved_rekomendasi = null;
+            $proyek->is_request_rekomendasi = true;
+
+
+
+            if ($proyek->save()) {
+                // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_mega);
+                Alert::html("Success", "Proyek dengan nama proyek <b>$proyek->nama_proyek</b> berhasil dikembalikan ke Pengajuan", "success");
+                return redirect()->back();
+            }
+            Alert::html("Failed", "Proyek dengan nama proyek <b>$proyek->nama_proyek</b> gagal dikembalikan ke Pengajuan", "error");
+            return redirect()->back();
         } else if (!empty($request["verifikasi-setujui"])) {
             $proyek = Proyek::find($request->get("kode-proyek"));
             $is_paralel = false;
@@ -963,7 +1025,7 @@ class RekomendasiController extends Controller
 
             $proyek->is_penyusun_approved = null;
             $proyek->approved_penyusun = null;
-            $proyek->approved_penyusun = null;
+            $proyek->approved_verifikasi = null;
             $proyek->is_draft_recommend_note = null;
 
 

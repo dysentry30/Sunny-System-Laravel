@@ -655,7 +655,7 @@
                                                             @endphp
     
                                                             {{-- @dump($matriks_group) --}}
-                                                            <div class="text-center d-flex flex-row gap-2 flex-nowrap">
+                                                            <div class="text-center d-flex flex-row align-items-center justify-content-center gap-2 flex-nowrap">
                                                                 @forelse (!empty($matriks_group) ? collect($matriks_group)->sortBy('urutan') : $matriks_group as $key => $matriks)
                                                                     @php
                                                                         if (!empty($collect_matriks) && $collect_matriks->isNotEmpty()) {
@@ -690,6 +690,27 @@
                                                                 @empty
                                                                 @endforelse
                                                             </div>
+                                                            @if (!empty($proyek->revisi_pengajuan_note))
+                                                                @if (($matriks_user->contains('kategori', 'Pengajuan') &&
+                                                                $matriks_user->where('kategori', 'Pengajuan')
+                                                                    ?->where('departemen', $proyek->departemen_proyek)
+                                                                    ?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)
+                                                                    ?->where('klasifikasi_proyek', $proyek->klasifikasi_pasdin)
+                                                                    ?->first()) ||
+                                                                    ($matriks_user->contains('kategori', 'Penyusun') &&
+                                                                    $matriks_user->where('kategori', 'Penyusun')
+                                                                    ?->where('departemen', $proyek->departemen_proyek)
+                                                                    ?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)
+                                                                    ?->where('klasifikasi_proyek', $proyek->klasifikasi_pasdin)
+                                                                    ?->first()))
+                                                                    <div class="text-center mt-2">
+                                                                        <a href="#kt_modal_view_proyek_revisi_pengajuan_note_{{ $proyek->kode_proyek }}"
+                                                                            target="_blank" data-bs-toggle="modal">
+                                                                            <small class="badge badge-danger">Lihat Catatan Revisi</small>
+                                                                        </a>
+                                                                    </div>                                                                    
+                                                                @endif
+                                                            @endif
                                                         </td>
                                                         <td class="text-center">
                                                             @php
@@ -847,7 +868,7 @@
                                                                     @endif
                                                                 @else
                                                                         @if ($is_user_exist_in_matriks_approval)
-                                                                            {{-- @if ($matriks_user->contains('kategori', 'Pengajuan') && $matriks_user->where('kategori', 'Pengajuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first())
+                                                                            @if ($matriks_user->contains('kategori', 'Pengajuan') && $matriks_user->where('kategori', 'Pengajuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first())
                                                                                 @if (!empty($proyek->approved_rekomendasi))
                                                                                     <a href="#kt_modal_view_proyek_{{ $proyek->kode_proyek }}"
                                                                                         target="_blank" data-bs-toggle="modal"
@@ -856,8 +877,8 @@
                                                                                     <a href="#kt_modal_view_proyek_{{ $proyek->kode_proyek }}"
                                                                                         data-bs-toggle="modal"
                                                                                         class="btn btn-sm btn-primary text-white">Ajukan</a>
-                                                                                @endif --}}
-                                                                            @if ($matriks_user->contains('kategori', 'Penyusun') && $matriks_user->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first())
+                                                                                @endif
+                                                                            @elseif ($matriks_user->contains('kategori', 'Penyusun') && $matriks_user->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first())
                                                                                 @if ($proyek->is_request_rekomendasi || (($matriks_user->filter(function($value)use($proyek){
                                                                                     return $value->unit_kerja == $proyek->UnitKerja->Divisi->id_divisi &&
                                                                                     $value->klasifikasi_proyek == $proyek->klasifikasi_pasdin &&
@@ -1452,6 +1473,8 @@
         @if ($is_edit)
             <form action="/kriteria-pengguna-jasa/detail/edit" method="POST"
                 id="form-edit-kriteria-{{ $proyek->kode_proyek }}" enctype="multipart/form-data">
+        @else
+            <form id="form-edit-kriteria-{{ $proyek->kode_proyek }}">
         @endif
         @csrf
         <div class="modal fade" id="kt_user_edit_kriteria_{{ $proyek->kode_proyek }}" tabindex="-1"
@@ -1545,17 +1568,19 @@
                                                             @php
                                                                 $id = $kriteriaDetails[$index]->id;
                                                                 $files = json_decode($kriteriaDetails[$index]->id_document);
-                                                                $files = (is_array($files) && count($files)) > 0 ? $files : array($files);
+                                                                // $files = (is_array($files) && count($files)) > 0 ? $files : array($files);
+                                                                $files = (is_array($files) && count($files)) > 0 ? $files : [];
                                                             @endphp
                                                             @foreach ($files as $file_index => $file)
                                                                 <tr>
                                                                     <td>
                                                                         <small>
-                                                                            <a href="{{ $kriteriaDetails->isNotEmpty() ? asset('file-kriteria-pengguna-jasa' . '\\' . $file) : '' }}"
-                                                                                class="text-hover-primary">{{ $file }}</a>
+                                                                            <a href="{{ $kriteriaDetails->isNotEmpty() && !empty($file) ? asset('file-kriteria-pengguna-jasa' . '\\' . $file) : '' }}"
+                                                                                class="text-hover-primary">{{ !empty($file) ? $file : '' }}</a>
                                                                         </small>
                                                                     </td>
                                                                     <form action=""></form>
+                                                                    @if (!empty($file))
                                                                     <form action="/kriteria-pengguna-jasa/delete-file" onsubmit="return confirmDeleteFile(this, '{{$file}}');" name="delete-file-{{$id}}-{{$file_index + 1}}" id="delete-file-{{$id}}-{{$file_index + 1}}" method="post">
                                                                         @csrf
                                                                         <input type="hidden" form="delete-file-{{$id}}-{{$file_index + 1}}" name="id" id="id" value="{{$id}}">
@@ -1566,6 +1591,7 @@
                                                                             </button>
                                                                         </td>
                                                                     </form>
+                                                                    @endif
                                                                 </tr>
                                                             @endforeach
                                                         </tbody>
@@ -1592,7 +1618,8 @@
                                                             @php
                                                                 $id = $kriteriaDetails[$index]->id;
                                                                 $files = json_decode($kriteriaDetails[$index]->id_document);
-                                                                $files = (is_array($files) && count($files)) > 0 ? $files : null;
+                                                                // $files = (is_array($files) && count($files)) > 0 ? $files : null;
+                                                                $files = (is_array($files) && count($files)) > 0 ? $files : [];
                                                             @endphp
                                                             @if (!is_null($files))
                                                             @foreach ($files as $file_index => $file)
@@ -1928,9 +1955,9 @@
             </div>
             <!--end::Modal dialog-->
         </div>
-        @if ($is_edit)
+        {{-- @if ($is_edit) --}}
             </form>
-        @endif
+        {{-- @endif --}}
     @endforeach
     {{-- End::Tab Content Kriteria Pengguna Jasa --}}
 
@@ -2156,6 +2183,34 @@
                 </div>
             </div>
         </div>
+        
+        <div class="modal fade" id="kt_modal_view_proyek_revisi_pengajuan_{{ $proyek->kode_proyek }}" tabindex="-1"
+            aria-labelledby="kt_modal_view_proyek_revisi_pengajuan_{{ $proyek->kode_proyek }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+
+                    <form action="" method="get">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Isi catatan revisi</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                @csrf
+                                <input type="hidden" name="kode-proyek" value="{{ $proyek->kode_proyek }}">
+                                <textarea name="revisi-pengajuan-note" class="form-control form-control-solid" id="revisi-pengajuan-note" cols="1"
+                                    rows="5"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" name="revisi-pengajuan" class="btn btn-sm btn-primary"
+                                value="Revisi">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     @endforeach
 
     @foreach ($proyeks_proses_rekomendasi as $proyek)
@@ -2331,6 +2386,14 @@
                         <hr>
 
                         {{-- <textarea name="note-rekomendasi" id="note-rekomendasi" rows="4" class="form-control form-control-solid"></textarea> --}}
+                        @if (!empty($proyek->DokumenPendukungPasarDini))
+                            <h5>File Preview Pendukung Pasar Dini: </h5>
+                            <div class="text-center">
+                                <iframe src="{{ asset('dokumen-pendukung-pasdin' . '\\' . $proyek->DokumenPendukungPasarDini->id_document) }}"
+                                    width="800px" height="600px"></iframe>
+                            </div>
+                            <hr>
+                        @endif
                         @if (!empty($proyek->file_pengajuan))
                             <h5>Form Pengajuan Rekomendasi: </h5>
                             <div class="text-center">
@@ -2353,7 +2416,7 @@
                                 $is_user_exist = $approved_verifikasi->contains("user_id", Auth::user()->id);
                                 dump($)
                             @endphp --}}
-                        @if (is_null($proyek->is_recommended))
+                        @if (is_null($proyek->is_recommended) && $proyek->review_assessment)
                             <label for="note-rekomendasi" class="text-start">Catatan: </label>
                             {{-- <textarea class="form-control form-control-solid" id="note-rekomendasi" name="note-rekomendasi" rows="10"
                                 {{ !is_null($proyek->is_draft_recommend_note) && !$proyek->is_draft_recommend_note || empty($matriks_user) || collect(json_decode($proyek->approved_penyusun))->contains('status', 'approved')  ? 'disabled' : '' }}>{!! is_null($proyek->is_draft_recommend_note) && (empty(collect(json_decode($proyek->approved_penyusun))) || collect(json_decode($proyek->approved_penyusun))->isEmpty())
@@ -2368,14 +2431,15 @@
                             @csrf
                             <input type="hidden" name="kode-proyek" value="{{ $proyek->kode_proyek }}">
                             @if (str_contains($proyek->klasifikasi_pasdin, "Besar") || str_contains($proyek->klasifikasi_pasdin, "Mega"))
-                                @if ((is_null($proyek->is_draft_recommend_note) || $proyek->is_draft_recommend_note) && !empty($matriks_user) && $matriks_user?->contains('kategori', 'Penyusun'))
+                                @if ((is_null($proyek->is_draft_recommend_note) || $proyek->is_draft_recommend_note) && !empty($matriks_user) && $matriks_user?->contains('kategori', 'Penyusun') && $matriks_user?->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '=', 1)?->first())
                                     @if (!collect(json_decode($proyek->approved_penyusun))->contains('status', 'approved'))
                                     <input type="submit" name="save-draft-note-rekomendasi" value="Simpan Sebagai Draft"
                                         class="btn btn-sm btn-primary">
                                     @endif
                                     <input type="submit" name="input-rekomendasi-with-note" value="Submit"
                                         class="btn btn-sm btn-success" {{ collect(json_decode($proyek->approved_penyusun))->where('user_id', auth()->user()->id)->first()?->status == "approved" ? 'disabled' : '' }}>
-
+                                    <input type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_view_proyek_revisi_pengajuan_{{ $proyek->kode_proyek }}"
+                                        class="btn btn-sm btn-danger" value="Ajukan Revisi">
                                 @endif
                             @else
                                 {{-- @if (is_null($proyek->is_revisi)) --}}
@@ -2403,6 +2467,8 @@
                                         @if (empty($proyek->approved_penyusun) || collect(json_decode($proyek->approved_penyusun))?->contains('status', 'draft'))
                                             <input type="submit" name="input-rekomendasi-with-note" value="Submit"
                                                 class="btn btn-sm btn-success" {{ collect(json_decode($proyek->approved_penyusun))->where('user_id', auth()->user()->id)->first()?->status == "approved" ? 'disabled' : '' }}>
+                                            <input type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_view_proyek_revisi_pengajuan_{{ $proyek->kode_proyek }}"
+                                                class="btn btn-sm btn-danger" value="Ajukan Revisi">
                                         @endif
                                     @else
                                         @if (empty(collect(json_decode($proyek->approved_penyusun))->where('user_id', auth()->user()->id)->first()) && !is_null($proyek->approved_penyusun) && !collect(json_decode($proyek->approved_penyusun))->contains('status', 'draft'))
@@ -2612,124 +2678,33 @@
                                 $matriks_user->where('kategori', 'Verifikasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() &&
                                 !$is_user_exist_penyusun)
                                 @if (is_null($proyek->is_revisi))
+                                    <form action="" method="get">
+                                        @csrf
+                                        <input type="hidden" value="{{ $proyek->kode_proyek }}" name="kode-proyek"
+                                            id="kode-proyek">
+
+                                        <input type="submit" name="verifikasi-setujui" value="Setujui"
+                                            class="btn btn-sm btn-success">
+                                        
+                                        {{-- @if ($matriks_user->contains('kategori', 'Verifikasi') && $matriks_user->where('kategori', 'Verifikasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '=', 1)?->first()) --}}
+                                            <input type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_view_proyek_revisi_{{ $proyek->kode_proyek }}"
+                                                class="btn btn-sm btn-primary" value="Ajukan Revisi">
+                                        {{-- @endif --}}
+                                            
+                                        <input type="submit" name="verifikasi-tolak" value="Ditolak" class="btn btn-sm btn-danger">
+                                    </form>
+                                @else
+                                    
+                                @endif
+                            @elseif (is_null($proyek->is_recommended) &&
+                                $matriks_user->contains('kategori', 'Rekomendasi') &&
+                                $matriks_user->where('kategori', 'Rekomendasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() &&
+                                $proyek->is_verifikasi_approved &&
+                                !$is_user_exist_rekomendasi)
                                 <form action="" method="get">
                                     @csrf
                                     <input type="hidden" value="{{ $proyek->kode_proyek }}" name="kode-proyek"
                                         id="kode-proyek">
-
-                                    <input type="submit" name="verifikasi-setujui" value="Setujui"
-                                        class="btn btn-sm btn-success">
-                                    
-                                    {{-- @if ($matriks_user->contains('kategori', 'Verifikasi') && $matriks_user->where('kategori', 'Verifikasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '=', 1)?->first()) --}}
-                                        <input type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_view_proyek_revisi_{{ $proyek->kode_proyek }}"
-                                            class="btn btn-sm btn-primary" value="Ajukan Revisi">
-                                    {{-- @endif --}}
-                                        
-                                    <input type="submit" name="verifikasi-tolak" value="Ditolak" class="btn btn-sm btn-danger">
-                                </form>
-                                @else
-                                    
-                                @endif
-                                @elseif (is_null($proyek->is_recommended) &&
-                                        $matriks_user->contains('kategori', 'Rekomendasi') &&
-                                        $matriks_user->where('kategori', 'Rekomendasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() &&
-                                        $proyek->is_verifikasi_approved &&
-                                        !$is_user_exist_rekomendasi)
-                                    <form action="" method="get">
-                                        @csrf
-                                        <input type="hidden" value="{{ $proyek->kode_proyek }}" name="kode-proyek"
-                                            id="kode-proyek">
-                                        <label class="text-start"><b>Catatan Rekomendasi:</b></label>
-                                        {{-- @dump(json_decode($proyek->approved_rekomendasi_final)[0]->alasan) --}}
-                                        @php
-                                            $alasan = collect(json_decode($proyek->approved_rekomendasi_final));
-                                        @endphp
-                                        @foreach ($alasan as $note)
-                                        <span>
-                                            {{ App\Models\User::find($note->user_id)->name }} :
-                                            <p>{!! nl2br($note->catatan) !!}</p>
-                                        </span>
-                                        @endforeach
-                                        <br>
-                                        <button type="button" data-bs-toggle="modal" id="show-modal-tolak"
-                                            style="display: none"
-                                            data-bs-target="#kt_modal_view_proyek_tolak_rekomendasi_{{ $proyek->kode_proyek }}">clickhere</button>
-                                        <label for="kategori-rekomendasi" class="text-start"><span class="required">Kategori
-                                                Rekomendasi: </span></label>
-                                        {{-- <select onchange="disableEnableTextArea(this)" id="kategori-rekomendasi" name="kategori-rekomendasi" --}}
-                                        {{-- <select id="kategori-rekomendasi" onchange="showModalTolakRekomendasi(this, '{{$proyek->kode_proyek}}')" name="kategori-rekomendasi" --}}
-                                        <select id="kategori-rekomendasi" name="kategori-rekomendasi"
-                                            class="form-select form-select-solid w-auto" style="margin-right: 2rem;"
-                                            data-control="select2" data-hide-search="true" data-placeholder="Pilih Kategori"
-                                            data-select2-id="select2-data-kategori-rekomendasi" tabindex="-1"
-                                            aria-hidden="true" onchange="disableEnableTextArea(this, '{{ $proyek->kode_proyek }}')">
-                                            <option value=""></option>
-                                            <option value="Direkomendasikan">Direkomendasikan</option>
-                                            <option value="Direkomendasikan dengan catatan">Direkomendasikan dengan catatan
-                                            </option>
-                                            <option value="Tidak Direkomendasikan">Tidak Direkomendasikan</option>
-                                        </select>
-                                        <br>
-                                        <label for="kategori-rekomendasi" class="text-start"><span class="">Catatan:
-                                            </span></label>
-                                        <textarea name="alasan-ditolak" id="alasan-ditolak-{{ $proyek->kode_proyek }}" class="form-control form-control-solid"cols="1" rows="5" disabled></textarea>
-                                        <br>
-                                        <input type="submit" class="btn btn-sm btn-success" name="rekomendasi-setujui"
-                                            value="Submit">
-                                    </form>
-                                @elseif (is_null($proyek->is_disetujui) &&
-                                        $matriks_user?->contains('kategori', 'Persetujuan') &&
-                                        $matriks_user->where('kategori', 'Persetujuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() &&
-                                        $proyek->is_recommended &&
-                                        !$is_user_exist_persetujuan)
-                                    <form action="" method="get">
-                                        @csrf
-                                        @if (!empty($nip))
-                                            <input type="hidden" value="{{ $nip }}" name="user"
-                                                id="user">
-                                        @endif
-                                        <input type="hidden" value="{{ $proyek->kode_proyek }}" name="kode-proyek"
-                                            id="kode-proyek">
-                                        {{-- <label class="text-start"><b>Catatan Penyusun:</b></label>
-                                        <p>{!! nl2br($proyek->recommended_with_note) !!}</p>
-                                        <br> --}}
-                                        <label class="text-start"><b>Catatan Rekomendasi:</b></label>
-                                        {{-- @dump(json_decode($proyek->approved_rekomendasi_final)[0]->alasan) --}}
-                                        @php
-                                            $alasan = collect(json_decode($proyek->approved_rekomendasi_final));
-                                        @endphp
-                                        @foreach ($alasan as $note)
-                                        <span>
-                                            {{ App\Models\User::find($note->user_id)->name }} :
-                                            <p>{!! nl2br($note->catatan) !!}</p>
-                                        </span>
-                                            
-                                        @endforeach
-                                        <br>
-
-                                        <label class="text-start"><b>Catatan Persetujuan:</b></label>
-                                        {{-- @dump(json_decode($proyek->approved_rekomendasi_final)[0]->alasan) --}}
-                                        @php
-                                            $alasan = collect(json_decode($proyek->approved_persetujuan));
-                                        @endphp
-                                        @foreach ($alasan as $note)
-                                        <span>
-                                            {{ App\Models\User::find($note->user_id)->name }} :
-                                            <p>{!! nl2br($note->catatan) !!}</p>
-                                        </span>
-                                            
-                                        @endforeach
-                                        <br>
-                                        <label for="" class="text-start"><span class="required">Catatan:
-                                            </span></label>
-                                        <textarea name="catatan-persetujuan" class="form-control form-control-solid"cols="1" rows="5"></textarea>
-                                        <input type="submit" name="persetujuan-setujui" value="Disetujui"
-                                            class="btn btn-sm btn-success">
-                                        <input type="button" data-bs-toggle="modal"
-                                            data-bs-target="#kt_modal_view_proyek_tolak_persetujuan_{{ $proyek->kode_proyek }}"
-                                            name="persetujuan-tolak" value="Ditolak" class="btn btn-sm btn-danger">
-                                    </form>
-                                @else
                                     <label class="text-start"><b>Catatan Rekomendasi:</b></label>
                                     {{-- @dump(json_decode($proyek->approved_rekomendasi_final)[0]->alasan) --}}
                                     @php
@@ -2742,34 +2717,125 @@
                                     </span>
                                     @endforeach
                                     <br>
-                                    @if (!empty($proyek->approved_persetujuan))
-                                        <label class="text-start"><b>Catatan Persetujuan:</b></label>
-                                        {{-- @dump(json_decode($proyek->approved_rekomendasi_final)[0]->alasan) --}}
-                                        @php
-                                            $alasan = collect(json_decode($proyek->approved_persetujuan));
-                                        @endphp
-                                        @foreach ($alasan as $note)
-                                        <span>
-                                            {{ App\Models\User::find($note->user_id)->name }} :
-                                            <p>{!! nl2br($note->catatan) !!}</p>
-                                        </span>
-                                            
-                                        @endforeach
+                                    <button type="button" data-bs-toggle="modal" id="show-modal-tolak"
+                                        style="display: none"
+                                        data-bs-target="#kt_modal_view_proyek_tolak_rekomendasi_{{ $proyek->kode_proyek }}">clickhere</button>
+                                    <label for="kategori-rekomendasi" class="text-start"><span class="required">Kategori
+                                            Rekomendasi: </span></label>
+                                    {{-- <select onchange="disableEnableTextArea(this)" id="kategori-rekomendasi" name="kategori-rekomendasi" --}}
+                                    {{-- <select id="kategori-rekomendasi" onchange="showModalTolakRekomendasi(this, '{{$proyek->kode_proyek}}')" name="kategori-rekomendasi" --}}
+                                    <select id="kategori-rekomendasi-{{ $proyek->kode_proyek }}" name="kategori-rekomendasi"
+                                        class="form-select form-select-solid w-auto" style="margin-right: 2rem;"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Pilih Kategori"
+                                        data-select2-id="select2-data-kategori-rekomendasi-{{ $proyek->kode_proyek }}" tabindex="-1"
+                                        aria-hidden="true" onchange="disableEnableTextArea(this, '{{ $proyek->kode_proyek }}')">
+                                        <option value=""></option>
+                                        <option value="Direkomendasikan">Direkomendasikan</option>
+                                        <option value="Direkomendasikan dengan catatan">Direkomendasikan dengan catatan
+                                        </option>
+                                        <option value="Tidak Direkomendasikan">Tidak Direkomendasikan</option>
+                                    </select>
+                                    <br>
+                                    <label for="kategori-rekomendasi" class="text-start"><span class="">Catatan:
+                                        </span></label>
+                                    <textarea name="alasan-ditolak" id="alasan-ditolak-{{ $proyek->kode_proyek }}" class="form-control form-control-solid"cols="1" rows="5" disabled></textarea>
+                                    <br>
+                                    <input type="submit" class="btn btn-sm btn-success" name="rekomendasi-setujui"
+                                        value="Submit">
+                                </form>
+                            @elseif (is_null($proyek->is_disetujui) &&
+                                $matriks_user?->contains('kategori', 'Persetujuan') &&
+                                $matriks_user->where('kategori', 'Persetujuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() &&
+                                $proyek->is_recommended &&
+                                !$is_user_exist_persetujuan)
+                                <form action="" method="get">
+                                    @csrf
+                                    @if (!empty($nip))
+                                        <input type="hidden" value="{{ $nip }}" name="user"
+                                            id="user">
                                     @endif
-                                    <br>
-                                    <br>
+                                    <input type="hidden" value="{{ $proyek->kode_proyek }}" name="kode-proyek"
+                                        id="kode-proyek">
+                                    {{-- <label class="text-start"><b>Catatan Penyusun:</b></label>
+                                    <p>{!! nl2br($proyek->recommended_with_note) !!}</p>
+                                    <br> --}}
+                                    <label class="text-start"><b>Catatan Rekomendasi:</b></label>
+                                    {{-- @dump(json_decode($proyek->approved_rekomendasi_final)[0]->alasan) --}}
+                                    @php
+                                        $alasan = collect(json_decode($proyek->approved_rekomendasi_final));
+                                    @endphp
+                                    @foreach ($alasan as $note)
+                                    <span>
+                                        {{ App\Models\User::find($note->user_id)->name }} :
+                                        <p>{!! nl2br($note->catatan) !!}</p>
+                                    </span>
+                                        
+                                    @endforeach
                                     <br>
 
-                                    {{-- @if ($proyek->is_disetujui)
-                                        <small class="badge badge-light-success">Disetujui</small>
-                                    @elseif ($proyek->review_assessment)
-                                        <small class="badge badge-light-primary">Request</small>
-                                    @elseif($proyek->is_disetujui == false || $proyek->is_verifikasi_approved == false || $proyek->is_recommended == false)
-                                        <small class="badge badge-light-danger">Ditolak</small>
-                                    @endif --}}
+                                    <label class="text-start"><b>Catatan Persetujuan:</b></label>
+                                    {{-- @dump(json_decode($proyek->approved_rekomendasi_final)[0]->alasan) --}}
+                                    @php
+                                        $alasan = collect(json_decode($proyek->approved_persetujuan));
+                                    @endphp
+                                    @foreach ($alasan as $note)
+                                    <span>
+                                        {{ App\Models\User::find($note->user_id)->name }} :
+                                        <p>{!! nl2br($note->catatan) !!}</p>
+                                    </span>
+                                        
+                                    @endforeach
+                                    <br>
+                                    <label for="" class="text-start"><span class="required">Catatan:
+                                        </span></label>
+                                    <textarea name="catatan-persetujuan" class="form-control form-control-solid"cols="1" rows="5"></textarea>
+                                    <input type="submit" name="persetujuan-setujui" value="Disetujui"
+                                        class="btn btn-sm btn-success">
+                                    <input type="button" data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_view_proyek_tolak_persetujuan_{{ $proyek->kode_proyek }}"
+                                        name="persetujuan-tolak" value="Ditolak" class="btn btn-sm btn-danger">
+                                </form>
+                            @else
+                                <label class="text-start"><b>Catatan Rekomendasi:</b></label>
+                                {{-- @dump(json_decode($proyek->approved_rekomendasi_final)[0]->alasan) --}}
+                                @php
+                                    $alasan = collect(json_decode($proyek->approved_rekomendasi_final));
+                                @endphp
+                                @foreach ($alasan as $note)
+                                <span>
+                                    {{ App\Models\User::find($note->user_id)->name }} :
+                                    <p>{!! nl2br($note->catatan) !!}</p>
+                                </span>
+                                @endforeach
+                                <br>
+                                @if (!empty($proyek->approved_persetujuan))
+                                    <label class="text-start"><b>Catatan Persetujuan:</b></label>
+                                    {{-- @dump(json_decode($proyek->approved_rekomendasi_final)[0]->alasan) --}}
+                                    @php
+                                        $alasan = collect(json_decode($proyek->approved_persetujuan));
+                                    @endphp
+                                    @foreach ($alasan as $note)
+                                    <span>
+                                        {{ App\Models\User::find($note->user_id)->name }} :
+                                        <p>{!! nl2br($note->catatan) !!}</p>
+                                    </span>
+                                        
+                                    @endforeach
                                 @endif
-                            @endif
+                                <br>
+                                <br>
+                                <br>
 
+                                {{-- @if ($proyek->is_disetujui)
+                                    <small class="badge badge-light-success">Disetujui</small>
+                                @elseif ($proyek->review_assessment)
+                                    <small class="badge badge-light-primary">Request</small>
+                                @elseif($proyek->is_disetujui == false || $proyek->is_verifikasi_approved == false || $proyek->is_recommended == false)
+                                    <small class="badge badge-light-danger">Ditolak</small>
+                                @endif --}}
+                                
+                            @endif
+                            @endif
                         </div>
                     </form>
                 </div>
@@ -3025,6 +3091,75 @@
                 <div class="modal-body">
                     @php
                         $revisi_note = collect(json_decode($proyek->revisi_note));
+                    @endphp
+                    {{-- Begin :: History --}}
+                    <div class="row">
+                        @php
+                            $row = 1;
+                        @endphp
+                        <div class="timeline-centered">
+                            @forelse ($revisi_note as $key => $data)
+                                <article class="timeline-entry {{ $row % 2 == 0 ? 'left-aligned' : '' }}">
+
+                                    <div class="timeline-entry-inner">
+                                        <time class="timeline-time"></time>
+                                            <div class="timeline-icon bg-success">
+                                                <i class="entypo-feather"></i>
+                                            </div>
+
+                                        <div class="timeline-content">
+                                            <div class="row">
+                                                <h5>Catatan Revisi {{ $row }}:</h5>
+                                                <div class="card text-bg-light my-3">
+                                                    <div class="card-body">
+                                                        <small>
+                                                            Nama:
+                                                            <b>{{ App\Models\User::find($data->user_id)->name }}</b><br>
+                                                            Jabatan:
+                                                            <b>{{ App\Models\User::find($data->user_id)->Pegawai->Jabatan?->nama_jabatan }}</b><br>
+                                                            @if (!empty($data->tanggal))
+                                                                Tanggal:
+                                                                <b>{{ Carbon\Carbon::create($data->tanggal)->translatedFormat('d F Y H:i:s') }}</b><br>
+                                                            @endif
+                                                            @if (!empty($data->catatan))
+                                                                Catatan:
+                                                                <b>{!! nl2br($data->catatan) !!}</b><br>
+                                                            @endif
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                                @php
+                                    $row++;
+                                @endphp
+                            @empty
+                                <p class="text-center"><b>Belum ada catatan revisi</b></p>
+                            @endforelse
+                        </div>
+                    </div>
+                    {{-- End :: History --}}
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="kt_modal_view_proyek_revisi_pengajuan_note_{{ $proyek->kode_proyek }}" tabindex="-1"
+        aria-labelledby="kt_modal_view_proyek_revisi_note_{{ $proyek->kode_proyek }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">History Revisi Nota Rekomendasi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"  onclick="deleteBackdrop()" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @php
+                        $revisi_note = collect(json_decode($proyek->revisi_pengajuan_note));
                     @endphp
                     {{-- Begin :: History --}}
                     <div class="row">

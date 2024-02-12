@@ -172,6 +172,9 @@
                         <!--begin::Card body-->
                         <div class="card-body py-10">
                             @if (Auth::user()->canany(['super-admin', 'admin-crm']))
+                            @php
+                                $total_nilai_rkap = 0;
+                            @endphp
                                 <!--begin::Table-->
                                 <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
                                     <!--begin::Table head-->
@@ -194,14 +197,29 @@
                                         @foreach ($proyeks as $divisi => $proyek)
                                         @php
                                             $nama_unit_kerja = \App\Models\UnitKerja::where('divcode', $divisi)?->first()?->unit_kerja;
-                                            $historyRkap = \App\Models\HistoryRKAP::where('unit_kerja', $nama_unit_kerja)->where('tahun_pelaksanaan', $filterTahun)?->first()->is_locked == true;
+                                            $historyRkap = \App\Models\HistoryRKAP::where('unit_kerja', $nama_unit_kerja)->where('tahun_pelaksanaan', $filterTahun)?->first()?->is_locked == true;
+                                            $nilai_rkap_perproyek = 0;
+                                            $nilai_rkap = $proyek->each(function($p) use($filterTahun, &$nilai_rkap_perproyek){
+                                                if ($p->tipe_proyek != "R") {
+                                                    $nilai_rkap_perproyek += $p->nilai_rkap;
+                                                }else{
+                                                    $nilai_rkap_perproyek += $p->Forecasts->sum(function($f) use($filterTahun){
+                                                        if ($f->periode_prognosa == 1 && $f->tahun == $filterTahun) {
+                                                            return $f->rkap_forecast;
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                            $total_nilai_rkap += $nilai_rkap_perproyek;
                                         @endphp
+                                        {{-- @dump($nilai_rkap_perproyek) --}}
                                             <tr>
                                                 <td class="min-w-auto">
                                                     <a href="/rkap/{{ $proyek->first()->unit_kerja }}/{{ $filterTahun }}" target="_blank" class="text-gray-600 text-hover-primary mb-1">{{ $nama_unit_kerja }}</a>
                                                 </td>
                                                 <td class="min-w-auto text-center">{{ $filterTahun }}</td>
-                                                <td class="min-w-auto text-end">{{ number_format((int) str_replace('.', '', $proyek->sum('nilai_rkap')), 0, '.', '.') }}
+                                                {{-- <td class="min-w-auto text-end">{{ number_format((int) str_replace('.', '', $proyek->sum('nilai_rkap')), 0, '.', '.') }} --}}
+                                                <td class="min-w-auto text-end">{{ number_format((int) str_replace('.', '', $nilai_rkap_perproyek), 0, '.', '.') }}
                                                 </td>
                                                 <td class="min-w-auto text-end">{{ number_format((int) str_replace('.', '', $proyek->sum('nilaiok_review')), 0, '.', '.') }}
                                                 </td>
@@ -216,7 +234,7 @@
                                         @endforeach
                                         <tr>
                                             <td colspan="2" class="bg-dark text-white"><b class="px-4">Total</b></td>
-                                            <td class="text-end bg-dark text-white">{{ number_format((int) str_replace('.', '', $totalRkap), 0, '.', '.') }}</td>
+                                            <td class="text-end bg-dark text-white">{{ number_format((int) $total_nilai_rkap, 0, '.', '.') }}</td>
                                             <td class="text-end bg-dark text-white">{{ number_format((int) str_replace('.', '', $totalOkReview), 0, '.', '.') }}</td>
                                             <td class=""></td>
                                         </tr>

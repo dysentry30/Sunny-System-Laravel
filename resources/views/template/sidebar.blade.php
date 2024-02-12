@@ -296,7 +296,7 @@
                             @endif
                         @endcanany
 
-                        @canany(['crm', 'super-admin'])                        
+                        @canany(['super-admin'])                        
                         <div class="menu-item">
                             <a class="menu-link " href="/nota-rekomendasi-2"
                                 style="color:white; padding-left:20px; {{ str_contains(Request::url(), 'nota-rekomendasi-2') ? 'background-color:#008CB4' : '' }}">

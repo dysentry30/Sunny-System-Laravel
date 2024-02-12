@@ -531,7 +531,7 @@ Route::middleware(["web"])->group(function () {
                     $forecast->month_rkap = $f["UsrBulanRaPerolehan"];
                     $forecast->realisasi_forecast = 0;
                     $forecast->month_realisasi = $f["UsrBulanRaPerolehan"];
-                    $forecast->periode_prognosa = $bulan;
+                    $forecast->periode_prognosa = 1;
                     $forecast->tahun = $tahun;
                     if ($forecast->save()) {
                         $is_data_inserted = true;
@@ -548,7 +548,7 @@ Route::middleware(["web"])->group(function () {
                 $forecast->month_rkap = $proyek["UsrBulanPelaksanaan"];
                 $forecast->realisasi_forecast = 0;
                 $forecast->month_realisasi = null;
-                $forecast->periode_prognosa = $bulan;
+                $forecast->periode_prognosa = 1;
                 $forecast->tahun = $tahun;
                 $forecast->save();
                 // if($req_forecasts->isEmpty()) {
