@@ -163,8 +163,9 @@
                                                                 @endphp --}}
                                                                 @php
                                                                     if ($proyek->tipe_proyek == "R") {
-                                                                        $nilai_rkap = $proyek->Forecasts?->where("tahun", $tahun_pelaksanaan)->sum(function($f){
-                                                                            return (int) $f->rkap_forecast;
+                                                                        // dump($proyek->Forecasts?->where("tahun", 2024)->where("periode_prognosa", 1));
+                                                                        $nilai_rkap = $proyek->Forecasts?->where("tahun", $tahun_pelaksanaan)->where("periode_prognosa", 1)->sum(function($f){
+                                                                            return $f->rkap_forecast;
                                                                         });
                                                                     }else{
                                                                         $nilai_rkap = $proyek->nilai_rkap;

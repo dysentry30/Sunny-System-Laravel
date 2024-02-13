@@ -197,7 +197,7 @@
                                         @foreach ($proyeks as $divisi => $proyek)
                                         @php
                                             $nama_unit_kerja = \App\Models\UnitKerja::where('divcode', $divisi)?->first()?->unit_kerja;
-                                            $historyRkap = \App\Models\HistoryRKAP::where('unit_kerja', $nama_unit_kerja)->where('tahun_pelaksanaan', $filterTahun)?->first()->is_locked == true;
+                                            $historyRkap = \App\Models\HistoryRKAP::where('unit_kerja', $nama_unit_kerja)->where('tahun_pelaksanaan', $filterTahun)?->first()?->is_locked == true;
                                             $nilai_rkap_perproyek = 0;
                                             $nilai_rkap = $proyek->each(function($p) use($filterTahun, &$nilai_rkap_perproyek){
                                                 if ($p->tipe_proyek != "R") {
@@ -219,7 +219,7 @@
                                                 </td>
                                                 <td class="min-w-auto text-center">{{ $filterTahun }}</td>
                                                 {{-- <td class="min-w-auto text-end">{{ number_format((int) str_replace('.', '', $proyek->sum('nilai_rkap')), 0, '.', '.') }} --}}
-                                                <td class="min-w-auto text-end">{{ number_format((int) str_replace('.', '', $nilai_rkap_perproyek), 0, '.', '.') }}
+                                                <td class="min-w-auto text-end">{{ number_format($nilai_rkap_perproyek, 0, '.', '.') }}
                                                 </td>
                                                 <td class="min-w-auto text-end">{{ number_format((int) str_replace('.', '', $proyek->sum('nilaiok_review')), 0, '.', '.') }}
                                                 </td>
