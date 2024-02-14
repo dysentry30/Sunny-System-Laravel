@@ -275,7 +275,7 @@
                                     <p>Industry Sector Pemberi Kerja : <b class="{{ $industrySector ?? "text-danger" }}">{{ $industrySector->owner_description ?? "*Belum Ditentukan" }}</b></p>
                                     <p>Industry Attractiveness Pemberi Kerja : <b class="{{ $industrySector ?? "text-danger" }}">{{ $industrySector->owner_attractiveness ?? "*Belum Ditentukan" }}</b></p>
                                     <p>Masalah Hukum Pemberi Kerja : <b class="{{ $masalahHukum->count() == 0 ? "text-success" : "text-danger" }}">{{ $masalahHukum->count() == 0 ? "0 Kasus" : $masalahHukum->count()." Kasus" }}</b></p>
-                                    <p>File AHU : <b class="{{ !is_null($fileAHU) ? "text-dark" : "text-danger" }}">{{ !is_null($fileAHU) ? "Sudah" : "*Belum Ditentukan" }}</b></p>
+                                    <p>File AHU : <b class="{{ !is_null($fileAHU) && $fileAHU->isNotEmpty() ? "text-dark" : "text-danger" }}">{{ !is_null($fileAHU) && $fileAHU->isNotEmpty() ? "Sudah" : "*Belum Ditentukan" }}</b></p>
                                     <br>
 
                                     {{-- @if (!empty($name_customer) && !empty($proyek->klasifikasi_pasdin) && !empty($proyek->SumberDana->nama_sumber) && !empty($jenis_instansi) && !empty($custNegara) && !empty($custProvinsi) && !empty($forbes_rank) && !empty($lq_rank)) --}}
