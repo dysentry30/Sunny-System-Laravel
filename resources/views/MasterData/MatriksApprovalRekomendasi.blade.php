@@ -494,9 +494,9 @@
                                                 data-control="select2" data-hide-search="false" data-placeholder="Pilih Departemen"
                                                 data-select2-id="select2-unit-kerja" tabindex="-1" aria-hidden="true">
                                                 <option value=""></option>
-                                                {{-- @foreach ($departemens as $departemen)
+                                                @foreach ($departemens as $departemen)
                                                     <option value="{{$departemen->kode_departemen}}">{{$departemen->nama_departemen}} ({{ $departemen->UnitKerja->unit_kerja ?? "-" }})</option>
-                                                @endforeach --}}
+                                                @endforeach
                                             </select>
                                         </div>
                                         <!--end::Input-->
