@@ -9869,6 +9869,55 @@
     @endforeach
     <!--end::DELETE ATTACHMENT MENANG-->
 
+    <!--begin::DELETE DOKUMEN PENDUKUNG PASAR DINI-->
+    @if (!empty($proyek->DokumenPendukungPasarDini))
+    <form action="/proyek/dokumen-pendukung-pasdin/{{ $proyek->DokumenPendukungPasarDini->id }}/delete" method="post"
+        enctype="multipart/form-data">
+        @method('delete')
+        @csrf
+        <div class="modal fade" id="kt_dokumen_pendukung_pasdin_delete_{{ $proyek->DokumenPendukungPasarDini->id }}" tabindex="-1"
+            aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-800px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Hapus : {{ $proyek->DokumenPendukungPasarDini->nama_document }}</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+                        Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                        <br>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                    </div>
+                    <!--end::Input group-->
+
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+        </div>
+    </form>
+    @endif
+    <!--end::DELETE DOKUMEN PENDUKUNG PASAR DINI-->
+
     <!--begin::modal Cancel Proyek-->
     <form action="/proyek/cancel-modal/{{ $proyek->kode_proyek }}" method="post" enctype="multipart/form-data">
         @csrf
