@@ -137,6 +137,12 @@ class KriteriaPenggunaJasaController extends Controller
         $collectKriteriaDetail = [];
         // $files = collect($request->file("dokumen_penilaian"))->values();
         $index = collect($data["index"]);
+
+        if (empty($data["is_legalitas"]) || empty($data["is_kriteria_1"]) || empty($data["is_kriteria_2"]) || empty($data["is_kriteria_3"]) || empty($data["is_kriteria_4"]) || empty($data["is_kriteria_5"])) {
+            Alert::error('Form Penilaian Pengguna Jasa Tidak lengkap', "Mohon periksa kembali");
+            return redirect()->back();
+        }
+
         $kriteria_detail = new KriteriaPenggunaJasaDetail();
         foreach ($index as $key => $item) {
             if (isset($data["dokumen_penilaian_$item"])) {

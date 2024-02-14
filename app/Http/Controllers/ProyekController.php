@@ -68,6 +68,7 @@ use App\Models\MasterGrupTierBUMN;
 use App\Models\Negara;
 use App\Models\PersonelTenderProyek;
 use App\Models\DokumenPendukungPasdin;
+use App\Models\NotaRekomendasi;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -628,6 +629,18 @@ class ProyekController extends Controller
             //     // "url" => $url
             // ]);
             // dd($send_msg_to_wa, "send");
+            $newNotaRekomendasi = new NotaRekomendasi();
+            $newNotaRekomendasi->kode_proyek = $newProyek->kode_proyek;
+            $newNotaRekomendasi->unit_kerja = $newProyek->unit_kerja;
+            $newNotaRekomendasi->divisi_id = $divisi;
+            $newNotaRekomendasi->departemen_code = $departemen;
+            $newNotaRekomendasi->klasifikasi_pasdin = $newProyek->klasifikasi_pasdin;
+            $newNotaRekomendasi->is_request_rekomendasi = true;
+
+            if (!$newNotaRekomendasi->save()) {
+                Alert::error('Error', "Proyek Gagal Diajukan");
+                return redirect()->back();
+            }
             
             $newProyek->is_request_rekomendasi  = true;
 

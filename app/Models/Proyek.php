@@ -259,4 +259,9 @@ class Proyek extends Model
     {
         return $this->hasOne(DokumenPendukungPasdin::class, 'kode_proyek', 'kode_proyek');
     }
+
+    public function NotaRekomendasi()
+    {
+        return $this->belongsTo(NotaRekomendasi::class, 'kode_proyek', 'kode_proyek');
+    }
 }

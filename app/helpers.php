@@ -14,6 +14,7 @@ use App\Models\KriteriaAssessment;
 use App\Models\KriteriaPenggunaJasa;
 use App\Models\KriteriaPenggunaJasaDetail;
 use App\Models\LegalitasPerusahaan;
+use App\Models\NotaRekomendasi;
 use App\Models\PenilaianPenggunaJasa;
 use App\Models\Proyek;
 use Illuminate\Support\Facades\Log;
@@ -234,6 +235,7 @@ function createWordRekomendasi(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $target_path = "file-rekomendasi";
     $now = Carbon\Carbon::now();
     $file_name = $now->format("dmYHis") . "_nota-rekomendasi_$proyek->kode_proyek.pdf";
+    $notaRekomendasi = NotaRekomendasi::where('kode_proyek', $proyek->kode_proyek)->first();
     // if($customer->proyekBerjalans->where("stage", "=", 8)->count() > 0) {
     //     $internal_score = $hasil_assessment->sum(function($ra) {
     //         if($ra["kategori"] == "Internal") {
@@ -479,9 +481,12 @@ function createWordRekomendasi(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'PDF');
     $is_saved = $xmlWriter->save(public_path($target_path. "/". $file_name));
     // dd("saved");
-    $proyek->file_rekomendasi = $file_name;
-    $proyek->hasil_assessment = $hasil_assessment->toJson();
-    $proyek->save();
+    // $proyek->file_rekomendasi = $file_name;
+    // $proyek->hasil_assessment = $hasil_assessment->toJson();
+    // $proyek->save();
+    $notaRekomendasi->file_rekomendasi = $file_name;
+    $notaRekomendasi->hasil_assessment = $hasil_assessment->toJson();
+    $notaRekomendasi->save();
 }
 
 function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Collection $hasil_assessment = new \Illuminate\Support\Collection(), $is_proyek_mega, $fileQrCode)
@@ -491,6 +496,7 @@ function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Coll
     $target_path = "file-pengajuan";
     $now = Carbon\Carbon::now();
     $file_name = $now->format("dmYHis") . "_nota-pengajuan_$proyek->kode_proyek";
+    $notaRekomendasi = NotaRekomendasi::where('kode_proyek', $proyek->kode_proyek)->first();
 
     // $file_name = $now->format("dmYHis") . "_nota-pengajuan_$proyek->kode_proyek.pdf";
 
@@ -609,9 +615,12 @@ function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Coll
     File::delete(public_path($target_path . "/" . $ttdFileName . ".docx"));
 
     // dd("saved");
-    $proyek->file_pengajuan = $file_name . ".pdf";
-    $proyek->hasil_assessment = $hasil_assessment->toJson();
-    $proyek->save();
+    // $proyek->file_pengajuan = $file_name . ".pdf";
+    // $proyek->hasil_assessment = $hasil_assessment->toJson();
+    // $proyek->save();
+    $notaRekomendasi->file_pengajuan = $file_name . ".pdf";
+    $notaRekomendasi->hasil_assessment = $hasil_assessment->toJson();
+    $notaRekomendasi->save();
 }
 
 function createWordProfileRisiko($kode_proyek)
@@ -619,6 +628,7 @@ function createWordProfileRisiko($kode_proyek)
     $target_path = "file-profile-risiko";
     $proyek = Proyek::select('kode_proyek', 'nama_proyek')->where('kode_proyek', $kode_proyek)->first();
     $customer = $proyek->proyekBerjalan?->customer?->name;
+    $notaRekomendasi = NotaRekomendasi::where('kode_proyek', $proyek->kode_proyek)->first();
     // dd($customer);
     $now = Carbon\Carbon::now();
     $file_name = $now->format("dmYHis") . "_profile-risiko_" . $proyek->kode_proyek . ".docx";
@@ -916,8 +926,10 @@ function createWordProfileRisiko($kode_proyek)
     // \PhpOffice\PhpWord\Settings::setPdfRenderer($rendererName, $rendererLibraryPath);
 
     $phpWord->save($filePath);
-    $proyek->file_penilaian_risiko = $file_name;
-    $proyek->save();
+    // $proyek->file_penilaian_risiko = $file_name;
+    // $proyek->save();
+    $notaRekomendasi->file_penilaian_risiko = $file_name;
+    $notaRekomendasi->save();
 }
 
 function createWordProfileRisikoNew($kode_proyek)
@@ -925,6 +937,7 @@ function createWordProfileRisikoNew($kode_proyek)
     $target_path = "file-profile-risiko";
     $proyek = Proyek::select('kode_proyek', 'nama_proyek')->where('kode_proyek', $kode_proyek)->first();
     $customer = $proyek->proyekBerjalan?->customer?->name;
+    $notaRekomendasi = NotaRekomendasi::where('kode_proyek', $proyek->kode_proyek)->first();
     // dd($customer);
     $now = Carbon\Carbon::now();
     $file_name = $now->format("dmYHis") . "_profile-risiko_" . $proyek->kode_proyek;
@@ -2268,6 +2281,8 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $target_path = "file-persetujuan";
     $now = Carbon\Carbon::now();
     $file_name = $now->format("dmYHis") . "_nota-persetujuan_$proyek->kode_proyek";
+    $notaRekomendasi = NotaRekomendasi::where('kode_proyek', $proyek->kode_proyek)->first();
+
     $internal_score = $hasil_assessment->sum(function ($ra) {
         if ($ra->kategori == "Internal") {
             return $ra->score;
@@ -2280,9 +2295,12 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     });
 
     // $penyusun = collect(json_decode($proyek->approved_penyusun))->values()->toArray();
-    $penyusun = collect(json_decode($proyek->approved_verifikasi))->values()->toArray();
-    $rekomendator = json_decode($proyek->approved_rekomendasi_final);
-    $penyetuju = json_decode($proyek->approved_persetujuan);
+    // $penyusun = collect(json_decode($proyek->approved_verifikasi))->values()->toArray();
+    // $rekomendator = json_decode($proyek->approved_rekomendasi_final);
+    // $penyetuju = json_decode($proyek->approved_persetujuan);
+    $penyusun = collect(json_decode($notaRekomendasi->approved_verifikasi))->values()->toArray();
+    $rekomendator = json_decode($notaRekomendasi->approved_rekomendasi_final);
+    $penyetuju = json_decode($notaRekomendasi->approved_persetujuan);
     $max_grid_span = collect([!empty($penyusun) ? count($penyusun) : 0, !empty($rekomendator) ? count($rekomendator) : 0, !empty($penyetuju) ? count($penyetuju) : 0])->max();
     // dd($penyusun, $rekomendator, $penyetuju, $max_grid_span);
 
@@ -2395,7 +2413,8 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $table->addCell(2500, $columnRowStyle2)->addText("Catatan", $fontStyle);
     // $cell_catatan = $table->addCell(6000, $styleCell);
     $cell_catatan = $table->addCell(6000, $columnRowStyle3);
-    $catatan_list = preg_split("/\n|\r\n?/", htmlspecialchars($proyek->catatan_nota_rekomendasi, ENT_QUOTES));
+    // $catatan_list = preg_split("/\n|\r\n?/", htmlspecialchars($proyek->catatan_nota_rekomendasi, ENT_QUOTES));
+    $catatan_list = preg_split("/\n|\r\n?/", htmlspecialchars($notaRekomendasi->catatan_nota_rekomendasi, ENT_QUOTES));
     foreach ($catatan_list as $key => $catatan) {
         $cell_catatan->addText($catatan, $fontStyle);
         if ($catatan == "") {
@@ -2684,13 +2703,15 @@ function createWordPersetujuan(App\Models\Proyek $proyek, \Illuminate\Support\Co
     // Begin :: Merge PDF
     $pdf_merger = new PdfMerge();
     $pdf_merger->add(public_path($target_path . "/" . $file_name . ".pdf"));
-    $pdf_merger->add(public_path("file-rekomendasi" . "/" . $proyek->file_rekomendasi));
+    $pdf_merger->add(public_path("file-rekomendasi" . "/" . $notaRekomendasi->file_rekomendasi));
     $pdf_merger->merge(public_path($target_path . "/" . $file_name . ".pdf"));
     // dd($pdf_merger);
     // End :: Merge PDF
-    $proyek->file_persetujuan = $file_name . ".pdf";
     // dd("saved", $proyek->file_persetujuan);    
-    $proyek->save();
+    // $proyek->file_persetujuan = $file_name . ".pdf";
+    // $proyek->save();
+    $notaRekomendasi->file_persetujuan = $file_name . ".pdf";
+    $notaRekomendasi->save();
     // $is_saved = $phpWord->save(public_path($target_path. "\\". $file_name));
 }
 
