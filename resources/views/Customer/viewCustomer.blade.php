@@ -1038,6 +1038,55 @@
                                                         </table>
                                                         <!--end::Table-->
 
+                                                        <!--begin::Data Laporan Keuangan-->
+                                                        <div id="container-laporan-keuangan" style="display: ">
+                                                            <!--begin::INPUT PIC-->
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                                <span class="required">AHU</span>
+                                                                <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_input_AHU">+</a>
+                                                            </h3>
+                                                            <!--end::INPUT PIC-->
+                                                            <!--begin::Table-->
+                                                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_AHU">
+                                                                <!--begin::Table head-->
+                                                                <thead>
+                                                                    <!--begin::Table row-->
+                                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                        <th class="text-center">No</th>
+                                                                        <th class="min-w-auto">Nama File</th>
+                                                                        <th class="min-w-auto">Tanggal Upload</th>
+                                                                        <th class="min-w-auto">Action</th>
+                                                                    </tr>
+                                                                    <!--end::Table row-->
+                                                                </thead>
+                                                                <!--end::Table head-->
+                                                                <!--begin::Table body-->
+                                                                @php
+                                                                    $no = 1;
+                                                                @endphp
+                                                                <tbody class="fw-bold text-gray-600">
+                                                                    @foreach ($customer->AHU as $key => $item)
+                                                                        <tr>
+                                                                            <td class="text-center">
+                                                                                {{ $key + 1 }}
+                                                                            </td>
+                                                                            <td class="text-center"><a target="_blank"
+                                                                                href="{{ asset('customer/' . $item->file_document) }}"
+                                                                                class="text-hover-primary">{{ $item->nama_file }}</a></td>
+                                                                            <td class="text-center">{{ $item->updated_at }}</td>
+                                                                            <td class="text-center">
+                                                                                <button type="button" class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_edit_AHU_{{ $item->id }}">Edit</button>
+                                                                                <button type="button" class="btn btn-sm btn-light btn-danger" data-bs-toggle="modal" data-bs-target="#kt_laporan_AHU_{{ $item->id }}">Delete</button>
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                </tbody>
+                                                                <!--end::Table body-->
+                                                            </table>
+                                                            <!--end::Table-->
+                                                        </div>
+                                                        <!--end::Data Laporan Keuangan-->
+
                                                         <br>
 
                                                         <!--begin::Data PIC MANRISK-->
@@ -5429,6 +5478,160 @@
     @endforeach
 </div>
 <!--End:: Modal Karya Inovasi-->
+
+<!--Begin:: Modal AHU-->
+<div class="pop-up AHU">
+    <form action="/customer/AHU/save" method="POST" enctype="multipart/form-data">
+        @csrf
+        <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}">
+        <div class="modal fade" id="kt_modal_input_AHU" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-500px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Add AHU</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6" style="overflow:hidden;">
+                        <!--Begin:Nama Proyek-->
+                        <div class="row">
+                            <div class="d-flex flex-column">
+                                <p>Upload File: </p>
+                                <input type="file" name="file-document" class="form-control form-control-sm form-control-solid">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-primary">Save</button>
+                        </div>
+                    <!--end::Input group-->
+    
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+        </div>
+    </form>
+</div>
+<!--End:: Modal AHU-->
+
+<!--Begin:: Modal AHU Edit-->
+@foreach ($customer->AHU as $item)
+<div class="pop-up AHU-edit">
+    <form action="/customer/AHU/edit" method="POST" enctype="multipart/form-data">
+        @csrf
+        <input type="hidden" name="id-ahu" value="{{ $item->id }}">
+        <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}">
+        <div class="modal fade" id="kt_modal_edit_AHU_{{ $item->id }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-500px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Edit AHU</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6" style="overflow:hidden;">
+                        <!--Begin:Nama Proyek-->
+                        <div class="row">
+                            <div class="d-flex flex-column">
+                                <p>Upload File:</p>
+                                <input type="file" name="file-document" class="form-control form-control-sm form-control-solid">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-primary">Save</button>
+                        </div>
+                    <!--end::Input group-->
+    
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+        </div>
+    </form>
+</div>
+@endforeach
+<!--End:: Modal AHU Edit-->
+
+<!--Begin:: Modal AHU Delete-->
+@foreach ($customer->AHU as $item)
+<form action="/customer/AHU/{{ $item->id }}/delete" method="post">
+    @method("delete")
+    @csrf
+    <div class="modal fade" id="kt_laporan_AHU_{{ $item->id }}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-600px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Hapus : {{ $item->nama_file }}
+                    </h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+                    Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                    <br>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-light btn-active-danger">Delete</button>
+                </div>
+                <!--end::Input group-->
+
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+    </div>
+
+</form>
+@endforeach
+<!--End:: Modal AHU Delete-->
 <!--End::Modal-->
 
 @php
