@@ -3470,23 +3470,51 @@
                                                                     });
                                                                 @endphp
                                                                 @canany(['super-admin', 'admin-crm', 'user-crm'])
+                                                                @if ($porsiJO->isNotEmpty())
                                                                     @if ($isDokumenFinish)
-                                                                    <button id="approval-kso" class="btn btn-sm btn-primary" onclick="approvalKSO()"><b>Ajukan KSO</b></button>
+                                                                    <button type="button" id="approval-kso" class="btn btn-sm btn-primary" onclick="approvalKSO()"><b>Ajukan KSO</b></button>
                                                                     @endif
                                                                     <script>
                                                                         function approvalKSO() {
-                                                                            window.confirm('success', 'Selamat Testing', '').then(result=>{
-                                                                                if (result.isConfirmed) {
-                                                                                    window.location.reload();
+                                                                            Swal.fire({
+                                                                                title: '',
+                                                                                text: "Apakah anda yakin mengajukan KSO ?",
+                                                                                icon: 'warning',
+                                                                                showCancelButton: true,
+                                                                                confirmButtonColor: '#008CB4',
+                                                                                cancelButtonColor: '#BABABA',
+                                                                                confirmButtonText: 'Ya'
+                                                                            }).then(async (result)=>{
+                                                                                if(result.isConfirmed){
+                                                                                    sendPorsiJO();
                                                                                 }
                                                                             })
                                                                         }
                                                                         async function sendPorsiJO() {
-                                                                            const response = await fetch('/proyek/porsi-jo/'+'{{ $proyek->kode_proyek }}'+'/approval',{
-                                                                                method: 'GET',
-                                                                            });
+                                                                            const formData = new FormData()
+                                                                            formData.append("_token", "{{ csrf_token() }}");
+                                                                            formData.append("kode_proyek", "{{ $proyek->kode_proyek }}");
+
+                                                                            try {
+                                                                                const response = await fetch('/proyek/porsi-jo/approval',{
+                                                                                    method: 'POST',
+                                                                                    header: {
+                                                                                        "Content-Type": "application/json",
+                                                                                    },
+                                                                                    body: formData,
+                                                                                }).then(res => res.json());   
+                                                                                
+                                                                                if (response.success) {
+                                                                                    // console.log(response);
+                                                                                    window.alert('success', response.message);
+                                                                                }
+                                                                            } catch (error) {
+                                                                                // return console.log(error);
+                                                                                window.alert('error', error);
+                                                                            }
                                                                         }
-                                                                    </script>
+                                                                    </script>                                                                    
+                                                                @endif
                                                                 @endcanany
                                                             </h3>
                                                             <br>

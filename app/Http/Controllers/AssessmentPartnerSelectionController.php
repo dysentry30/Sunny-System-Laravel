@@ -9,6 +9,7 @@ use App\Models\MatriksApprovalPartnerSelection;
 use App\Models\PartnerSelectionDetail;
 use App\Models\PenilaianPartnerSelection;
 use App\Models\PorsiJO;
+use App\Models\Proyek;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -64,7 +65,8 @@ class AssessmentPartnerSelectionController extends Controller
         return view('16_Partner_Selection_Assessment', [
             'customers' => $customers,
             'partnerDetail' => $partnerDetail,
-            'kriteriaPenilaian' => $kriteriaPenilaian
+            'kriteriaPenilaian' => $kriteriaPenilaian,
+            'matriks_user' => $matriks_user
         ]);
     }
 
@@ -264,5 +266,276 @@ class AssessmentPartnerSelectionController extends Controller
             Log::error($th->getMessage());
             return redirect()->back();
         }
+    }
+
+    /**
+     * Pengajuan KSO
+     * 
+     * @param \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response JSON {success, message}
+     */
+    public function pengajuanApprovalKSO(Request $request)
+    {
+        $data = $request->all();
+        $proyek = Proyek::find($data['kode_proyek']);
+
+        if (empty($proyek)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Proyek Tidak Ditemukan. Hubungi Admin!'
+            ], 500);
+        }
+
+        $partnerKSO = $proyek->PorsiJO;
+
+        if (empty($partnerKSO)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Partner KSO belum ditentukan. Mohon tambah partner KSO terlebih dahulu!'
+            ], 500);
+        }
+
+        try {
+            $partnerKSO->each(function ($partner) use ($proyek, $request) {
+                $newAssessment = new AssessmentPartnerSelection();
+                $newAssessment->kode_proyek = $proyek->kode_proyek;
+                $newAssessment->partner_id = $partner->id;
+                $newAssessment->divisi_id = $proyek->UnitKerja->Divisi->id_divisi;
+                $newAssessment->departemen_id = $proyek->departemen_proyek;
+                $newAssessment->save();
+
+                $matriksSelected = self::getMatriksSelanjutnya($proyek->UnitKerja->Divisi->id_divisi, $proyek->departemen_proyek, 'Pengajuan');
+
+                if (empty($matriksSelected)) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Matriks Approval Pengajuan Partner Selection tidak ada. Hubungi Admin!'
+                    ], 500);
+                }
+
+                $url = $request->schemeAndHttpHost() . "?nip=" . $matriksSelected->Pegawai->nip . "&redirectTo=/assessment-partner-selection";
+                $message = nl2br("Yth Bapak/Ibu " . $matriksSelected->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan pengajuan Partner Selection untuk " . $partner->Company->name . " pada proyek $proyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
+                sendNotifEmail($matriksSelected->Pegawai->email, "Permohonan Pengajuan Approval Partner Selection", $message);
+            });
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Partner KSO berhasil diajukan'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Approval Pengajuan KSO
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response JSON {success, message}
+     */
+    public function setApprovalPengajuan(Request $request)
+    {
+        $data = $request->all();
+        $assessmentSelection = AssessmentPartnerSelection::find($data['id_partner']);
+        $proyek = Proyek::find($assessmentSelection->kode_proyek);
+        $is_form = isset($data["is_form"]) ? true : false;
+
+
+        if (empty($assessmentSelection)) {
+            if ($is_form) {
+                Alert::error('Error', 'Partner tidak ditemukan. Hubungi Admin!');
+                return redirect()->back();
+            }
+            return response()->json([
+                'success' => false,
+                'message' => 'Partner tidak ditemukan. Hubungi Admin!'
+            ], 500);
+        }
+
+        $approval_pengajuan = collect(json_decode($assessmentSelection->approved_pengajuan));
+
+        if ($data['is_setuju'] == 't') {
+            $approval_pengajuan = $approval_pengajuan->push([
+                "user_id" => Auth::user()->id,
+                "status" => "approved",
+                "tanggal" => Carbon::now(),
+            ]);
+            $assessmentSelection->is_pengajuan_approved = true;
+            $assessmentSelection->approved_pengajuan = $approval_pengajuan;
+        } else {
+            $approval_pengajuan = $approval_pengajuan->push([
+                "user_id" => Auth::user()->id,
+                "status" => "rejected",
+                "tanggal" => Carbon::now(),
+                "catatan" => $data["alasan_tolak"]
+            ]);
+            $assessmentSelection->is_pengajuan_approved = false;
+            $assessmentSelection->approved_pengajuan = $approval_pengajuan;
+        }
+
+        if ($assessmentSelection->save()) {
+            $matriksSelected = self::getMatriksSelanjutnya($proyek->UnitKerja->Divisi->id_divisi, $proyek->departemen_proyek, 'Pengajuan');
+
+            if (empty($matriksSelected)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Matriks Approval Persetujuan Partner Selection tidak ada. Hubungi Admin!'
+                ], 500);
+            }
+
+            $url = $request->schemeAndHttpHost() . "?nip=" . $matriksSelected->Pegawai->nip . "&redirectTo=/assessment-partner-selection";
+            $message = nl2br("Yth Bapak/Ibu " . $matriksSelected->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan persetujuan Partner Selection untuk " . $assessmentSelection->PartnerJO->Company->name . " pada proyek $proyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
+            sendNotifEmail($matriksSelected->Pegawai->email, "Permohonan Persetujuan Approval Partner Selection", $message);
+
+            if ($is_form) {
+                Alert::success('Success', 'Partner berhasil ditolak');
+                return redirect()->back();
+            }
+            return response()->json([
+                'success' => true,
+                'message' => 'Partner berhasil disetujui'
+            ]);
+        }
+        if ($is_form) {
+            Alert::error('Error', 'Partner gagal disetujui. Hubungi Admin!');
+            return redirect()->back();
+        }
+        return response()->json([
+            'success' => false,
+            'message' => 'Partner gagal disetujui. Hubungi Admin!'
+        ], 500);
+    }
+
+    /**
+     * Approval Persetujuan KSO
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response JSON {success, message}
+     */
+    public function setApprovalPersetujuan(Request $request)
+    {
+        $data = $request->all();
+        $assessmentSelection = AssessmentPartnerSelection::find($data['id_partner']);
+        $is_form = isset($data["is_form"]) ? true : false;
+
+
+        if (empty($assessmentSelection)) {
+            if ($is_form) {
+                Alert::error('Error', 'Partner tidak ditemukan. Hubungi Admin!');
+                return redirect()->back();
+            }
+            return response()->json([
+                'success' => false,
+                'message' => 'Partner tidak ditemukan. Hubungi Admin!'
+            ], 500);
+        }
+
+        $approval_persetujuan = collect(json_decode($assessmentSelection->approved_disetujui));
+
+        if ($data['is_setuju'] == 't') {
+            $approval_persetujuan = $approval_persetujuan->push([
+                "user_id" => Auth::user()->id,
+                "status" => "approved",
+                "tanggal" => Carbon::now(),
+            ]);
+            $assessmentSelection->is_disetujui = true;
+            $assessmentSelection->approved_disetujui = $approval_persetujuan;
+        } else {
+            $approval_persetujuan = $approval_persetujuan->push([
+                "user_id" => Auth::user()->id,
+                "status" => "rejected",
+                "tanggal" => Carbon::now(),
+                "catatan" => $data["alasan_tolak"]
+            ]);
+            $assessmentSelection->is_disetujui = false;
+            $assessmentSelection->approved_disetujui = $approval_persetujuan;
+        }
+
+        if ($assessmentSelection->save()) {
+            if ($is_form) {
+                Alert::success('Success', 'Partner berhasil ditolak');
+                return redirect()->back();
+            }
+            return response()->json([
+                'success' => true,
+                'message' => 'Partner berhasil disetujui'
+            ]);
+        }
+        if ($is_form) {
+            Alert::error('Error', 'Partner gagal disetujui. Hubungi Admin!');
+            return redirect()->back();
+        }
+        return response()->json([
+            'success' => false,
+            'message' => 'Partner gagal disetujui. Hubungi Admin!'
+        ], 500);
+    }
+
+    /**
+     * Revisi Approval KSO
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response JSON {success, message}
+     */
+    public function setApprovalRevisi(Request $request)
+    {
+        $data = $request->all();
+        $assessmentSelection = AssessmentPartnerSelection::find($data['id_partner']);
+        $is_form = isset($data["is_form"]) ? true : false;
+
+
+        if (empty($assessmentSelection)) {
+            if ($is_form) {
+                Alert::error('Error', 'Partner tidak ditemukan. Hubungi Admin!');
+                return redirect()->back();
+            }
+            return response()->json([
+                'success' => false,
+                'message' => 'Partner tidak ditemukan. Hubungi Admin!'
+            ], 500);
+        }
+
+        $revisi_approval = collect(json_decode($assessmentSelection->approved_revisi));
+
+        $revisi_approval = $revisi_approval->push([
+            "user_id" => Auth::user()->id,
+            "status" => "rejected",
+            "tanggal" => Carbon::now(),
+            "catatan" => $data["catatan_revisi"]
+        ]);
+        $assessmentSelection->is_revisi = true;
+        $assessmentSelection->approved_revisi = $revisi_approval;
+
+
+        $assessmentSelection->is_pengajuan_approved = null;
+        $assessmentSelection->approved_pengajuan = null;
+
+        if ($assessmentSelection->save()) {
+            if ($is_form) {
+                Alert::success('Success', 'Partner berhasil dikembalikan ke tahap Pengajuan');
+                return redirect()->back();
+            }
+            return response()->json([
+                'success' => true,
+                'message' => 'Partner berhasil dikembalikan ke tahap Pengajuan'
+            ]);
+        }
+        if ($is_form) {
+            Alert::error('Error', 'Partner gagal dikembalikan ke tahap Pengajuan');
+            return redirect()->back();
+        }
+        return response()->json([
+            'success' => false,
+            'message' => 'Partner gagal dikembalikan ke tahap Pengajuan'
+        ], 500);
+    }
+
+    /**
+     * Get Matriks untuk mengirim notifikasi email
+     * @return \App\Models\MatriksApprovalPartnerSelection
+     */
+    private function getMatriksSelanjutnya(string $divisi, string $departemen, string $kategori)
+    {
+        return MatriksApprovalPartnerSelection::where('is_active', true)->where('divisi_id', $divisi)->where('departemen_code', $departemen)->where('kategori', $kategori)->first();
     }
 }

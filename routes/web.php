@@ -535,6 +535,15 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/assessment-partner-selection/delete-file', [
         AssessmentPartnerSelectionController::class, 'deleteFile'
     ]);
+    Route::post('/assessment-partner-selection/pengajuan/approval', [
+        AssessmentPartnerSelectionController::class, 'setApprovalPengajuan'
+    ]);
+    Route::post('/assessment-partner-selection/persetujuan/approval', [
+        AssessmentPartnerSelectionController::class, 'setApprovalPersetujuan'
+    ]);
+    Route::post('/assessment-partner-selection/pengajuan-revisi/approval', [
+        AssessmentPartnerSelectionController::class, 'setApprovalRevisi'
+    ]);
     //End::Assessment Partner Selection
 
     //Begin::Nota Rekomendasi 2
@@ -979,7 +988,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // ADD Porsi-JO 
     Route::post('/proyek/porsi-jo', [ProyekController::class, "tambahJO"]);
 
-    // ADD Porsi-JO 
+    // GET PEFINDO
     Route::post('/proyek/porsi-jo/get-pefindo', [ProyekController::class, "getDataPefindo"]);
 
     // EDIT Porsi-JO 
@@ -990,6 +999,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     //ADD::Dokumen Kelengkapan Partner
     Route::post('/proyek/porsi-jo/upload/{id_partner}', [ProyekController::class, "uploadDokumenKelengkapanPartner"]);
+
+    //AJUKAN KSO
+    Route::post('/proyek/porsi-jo/approval', [
+        AssessmentPartnerSelectionController::class, "pengajuanApprovalKSO"
+    ]);
 
     //DOWNLOAD::Dokumen Kelengkapan Partner
     Route::get(
@@ -3477,8 +3491,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             "bulan_start" => "required|numeric",
             "nama-pegawai" => "required",
             "unit-kerja" => "required",
-            "klasifikasi-proyek" => "required",
-            // "departemen" => "required",
+            // "klasifikasi-proyek" => "required",
+            "departemen" => "required",
             "kategori" => "required",
             "kode-unit" => "required",
             "urutan" => "required",
@@ -3512,7 +3526,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $matriks->nama_pegawai = $data["nama-pegawai"];
         $matriks->title = $namaPegawai;
         $matriks->divisi_id = $data["unit-kerja"];
-        $matriks->klasifikasi_proyek = $data["klasifikasi-proyek"];
+        // $matriks->klasifikasi_proyek = $data["klasifikasi-proyek"];
         $matriks->kategori = $data["kategori"];
         $matriks->departemen_code = $data["departemen"];
         $matriks->kode_unit_kerja = $data["kode-unit"];
@@ -3533,11 +3547,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             "bulan_start" => "required|numeric",
             "nama-pegawai" => "required",
             "unit-kerja" => "required",
-            "klasifikasi-proyek" => "required",
+            // "klasifikasi-proyek" => "required",
             "kategori" => "required",
             "kode-unit" => "required",
             "urutan" => "required",
-            // "departemen" => "required"
+            "departemen" => "required"
         ];
         // $is_validate = $request->validateWithBag("post", [
         //     "tahun" => "required|numeric",
@@ -3565,7 +3579,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $matriks->nama_pegawai = $data["nama-pegawai"];
         $matriks->title = $namaPegawai;
         $matriks->divisi_id = $data["unit-kerja"];
-        $matriks->klasifikasi_proyek = $data["klasifikasi-proyek"];
+        // $matriks->klasifikasi_proyek = $data["klasifikasi-proyek"];
         $matriks->kategori = $data["kategori"];
         $matriks->departemen_code = $data["departemen"];
         $matriks->kode_unit_kerja = $data["kode-unit"];
