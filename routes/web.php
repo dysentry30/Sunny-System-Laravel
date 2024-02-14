@@ -789,6 +789,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         ]);
     });
 
+    //DELETE Pendukung Pasar Dini
+    Route::delete('/proyek/dokumen-pendukung-pasdin/{id}/delete', [ProyekController::class, 'deleteDokumenPendukungPasdin']);
+
     // GET Kriteria 
     Route::post('/proyek/get-kriteria', [ProyekController::class, "getKriteria"]);
 
