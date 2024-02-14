@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AHU;
 use App\Models\Cli;
 use App\Models\Csi;
 use Faker\Core\Uuid;
@@ -1225,6 +1226,62 @@ class CustomerController extends Controller
             Alert::error("Error", "Pastikan field-field Karya Inovasi terisi!");
             return redirect()->back();
         }
+    }
+
+    public function saveAHU(Request $request)
+    {
+        $data = $request->all();
+
+        if (isset($data["id-ahu"])) {
+            $id = $data["id-ahu"];
+            $customerAHU = AHU::find($id);
+        } else {
+            $customerAHU = null;
+        }
+
+
+        if (isset($data["file-document"])) {
+            $file = $request->file("file-document");
+            $nama_file = $file->getClientOriginalName();
+            $id_document = date("His_") . $file->getClientOriginalName();
+
+            if (empty($customerAHU)) {
+                $customerAHU = new AHU();
+                $customerAHU->id_customer = $data["id-customer"];
+                $is_create = true;
+            }
+            $customerAHU->file_document = $id_document;
+            $customerAHU->nama_file = $nama_file;
+            $file->move(public_path('customer-file'), $id_document);
+
+            if ($customerAHU->save()) {
+                if (isset($is_create)) {
+                    Alert::success("Success", "AHU Berhasil Dibuat");
+                } else {
+                    Alert::success("Success", "AHU Berhasil Diperbaharui");
+                }
+                return redirect()->back();
+            }
+        }
+        Alert::error("Error", "AHU Gagal Diperbarui / Dibuat!");
+        return redirect()->back();
+    }
+
+    public function deleteAHU(Request $request, $id_ahu)
+    {
+        $customerAHU = AHU::find($id_ahu);
+        if (empty($customerAHU)) {
+            Alert::error("Error", "AHU Tidak ditemukan!");
+            return redirect()->back();
+        }
+
+        if ($customerAHU->delete()) {
+            File::delete(public_path("customer/$customerAHU->file_document"));
+            Alert::success("Success", "AHU Berhasil dihapus");
+            return redirect()->back();
+        }
+        Alert::error("Error", "AHU Gagal dihapus!");
+        return redirect()->back();
     }
 
     public function getKodeNasabah(Request $request) {

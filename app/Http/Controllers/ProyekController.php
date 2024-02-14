@@ -46,6 +46,10 @@ use App\Models\JenisProyek;
 use App\Models\Provinsi;
 use App\Models\TipeProyek;
 use App\Models\Departemen;
+use App\Models\DokumenPendukungPasdin;
+use App\Models\MatriksApprovalRekomendasi;
+use App\Models\Negara;
+use App\Models\NotaRekomendasi;
 use App\Models\PersonelTenderProyek;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Gate;
@@ -203,6 +207,19 @@ class ProyekController extends Controller
             $newProyek->jenis_jo = 20;
         }
 
+        $nilaiOK = (int) str_replace('.', '', $dataProyek["nilai-rkap"]);
+
+        if ($nilaiOK > 500000000000 && $nilaiOK <= 2000000000000) {
+            $newProyek->klasifikasi_pasdin = "Proyek Besar";
+        } elseif ($nilaiOK > 250000000000 && $nilaiOK <= 500000000000) {
+            $newProyek->klasifikasi_pasdin = "Proyek Menengah";
+        } elseif ($nilaiOK > 0 && $nilaiOK <= 250000000000) {
+            $newProyek->klasifikasi_pasdin = "Proyek Kecil";
+        } elseif ($nilaiOK > 2000000000000) {
+            $newProyek->klasifikasi_pasdin = "Proyek Mega";
+        }
+
+
         //auto filled by required 
         $newProyek->bulan_awal = $dataProyek["bulan-pelaksanaan"];
 
@@ -356,8 +373,9 @@ class ProyekController extends Controller
         $kriteriaProyek = KriteriaPasarProyek::where("kode_proyek", "=", $kode_proyek)->get();
         $porsiJO = PorsiJO::where("kode_proyek", "=", $kode_proyek)->get();
         // $data_provinsi = json_decode(Storage::get("/public/data/provinsi.json"));
-        $data_negara = json_decode(Storage::get("/public/data/country.json"));
-        $is_admin = Auth::user()->check_administrator || str_contains(Auth::user()->name, "PIC") || Gate::allows('admin-crm');
+        // $data_negara = json_decode(Storage::get("/public/data/country.json"));
+        $data_negara = Negara::all();
+        $is_admin = Auth::user()->check_administrator || str_contains(Auth::user()->name, "PIC");
         $companies = Company::all();
         $sumberdanas = SumberDana::all();
         $dops = Dop::all();
@@ -372,14 +390,44 @@ class ProyekController extends Controller
         $pesertatender = PesertaTender::where("kode_proyek", "=", $kode_proyek)->get();
         $proyekberjalans = ProyekBerjalans::where("kode_proyek", "=", $kode_proyek)->get()->first();
         $departemen = Departemen::where("kode_divisi", "=", $proyek->UnitKerja->kode_sap)->get();
-        if ($proyek->tipe_proyek == "P") {
-            $konsultan_perencana = KonsultanPerencana::all();
-        }
+
         // $historyForecast = $historyForecast;
         // $porsiJO = $porsiJO;
         // $data_negara = $data_negara;
         // dd($proyek); //tes log hasil 
         if ($proyek->tipe_proyek == "P") {
+            $konsultan_perencana = KonsultanPerencana::all();
+            // // dd($teamProyek, $kriteriaProyek, $porsiJO, $pesertatender, $proyekberjalans, $departemen);
+            // $isExistPorsiJO = PorsiJO::where('kode_proyek', $proyek->kode_proyek)->get();
+            // if (!empty($isExistPorsiJO)) {
+            //     $isExistPorsiJO->each(function ($porsi) {
+            //         $kriteria_partner = MasterGrupTierBUMN::where('id_pelanggan', $porsi->id_company_jo)->first();
+            //         if (!empty($kriteria_partner)) {
+            //             $porsi->is_greenlane = true;
+            //             $porsi->is_disetujui = true;
+            //         } else {
+            //             $porsi->is_greenlane = false;
+            //         }
+            //         if (!$porsi->is_greenlane) {
+            //             if (empty($porsi->score_pefindo_jo)) {
+            //                 $checkPefindo = MasterPefindo::where('id_pelanggan', $porsi->id_company_jo)->latest()?->first();
+            //                 if (!empty($checkPefindo)) {
+            //                     $porsi->score_pefindo_jo = $checkPefindo->score;
+            //                     $porsi->file_pefindo_jo = $checkPefindo->id_document;
+            //                     $porsi->grade = $checkPefindo->grade;
+            //                     $porsi->keterangan = $checkPefindo->keterangan;
+
+            //                     if (str_contains($checkPefindo->grade, 'E')) {
+            //                         $porsi->is_disetujui = false;
+            //                     } else {
+            //                         $porsi->is_disetujui = true;
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //         $porsi->save();
+            //     });
+            // }
             return view(
                 'Proyek/viewProyek',
                 ["proyek" => $proyek, "proyeks" => Proyek::all()],
@@ -487,8 +535,73 @@ class ProyekController extends Controller
         // } else {
         //     $newProyek->jenis_jo = null;
         // }
-        if(isset($dataProyek["proyek-rekomendasi"])) {
+        // if(isset($dataProyek["proyek-rekomendasi"])) {
+        //     $newProyek->is_request_rekomendasi  = true;
+        // }
+        if (isset($dataProyek["proyek-rekomendasi"]) && isset($dataProyek["confirm-send-wa"]) && isset($dataProyek["ra-klasifikasi-proyek"]) && isset($dataProyek["sumber-dana"])) {
+            $divisi = $newProyek->UnitKerja->Divisi->id_divisi;
+            $departemen = $newProyek->departemen_proyek;
+            // dump($divisi);
+            $klasifikasi_proyek = $newProyek->klasifikasi_pasdin;
+            $matriks_approval = MatriksApprovalRekomendasi::where("unit_kerja", "=", $divisi)->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where("departemen", $departemen)->where("kategori", "=", "Pengajuan")->get();
+            // dd($matriks_approval);
+            $isnomorTargetActive = false;
+            // $nomorDefault = "6285376444701";
+            $nomorDefault = "085881028391";
+            foreach ($matriks_approval as $key => $user) {
+                // dd($user->Pegawai->nama_pegawai);
+                $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$newProyek->kode_proyek";
+                // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+                //     "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
+                //     // "sender" => "6281188827008",
+                //     "sender" => env("NO_WHATSAPP_BLAST"),
+                //     "number" => $isnomorTargetActive ? $user->Pegawai->handphone : $nomorDefault,
+                //     // "number" => "085881028391",
+                //     "message" => "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi I, *" . $newProyek->ProyekBerjalan->name_customer . "* untuk Proyek *$newProyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
+                //     // "url" => $url
+                // ]);
+                // $send_msg_to_wa->onError(function ($error) {
+                //     // dd($error);
+                //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+                //     return redirect()->back();
+                // });
+                $message = nl2br("Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi I, " . $newProyek->ProyekBerjalan->name_customer . " untuk Proyek $newProyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
+                $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Tanda Tangan Pengajuan Nota Rekomendasi I", $message, $isnomorTargetActive);
+                if (!$sendEmailUser) {
+                    return redirect()->back();
+                }
+            }
+            // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+            //     "api_key" => "c15978155a6b4656c4c0276c5adbb5917eb033d5",
+            //     "sender" => "62811881227",
+            //     "number" => "081319736111",
+            //     "message" => "$newProyek->nama_proyek mengajukan rekomendasi.\nSilahkan tekan link di bawah ini untuk menyetujui atau tidak.\n\n$url",
+            //     // "url" => $url
+            // ]);
+            // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+            //     "api_key" => "c15978155a6b4656c4c0276c5adbb5917eb033d5",
+            //     "sender" => "62811881227",
+            //     "number" => "082125416666",
+            //     "message" => "$newProyek->nama_proyek mengajukan rekomendasi.\nSilahkan tekan link di bawah ini untuk menyetujui atau tidak.\n\n$url",
+            //     // "url" => $url
+            // ]);
+            // dd($send_msg_to_wa, "send");
+            $newNotaRekomendasi = new NotaRekomendasi();
+            $newNotaRekomendasi->kode_proyek = $newProyek->kode_proyek;
+            $newNotaRekomendasi->unit_kerja = $newProyek->unit_kerja;
+            $newNotaRekomendasi->divisi_id = $divisi;
+            $newNotaRekomendasi->departemen_code = $departemen;
+            $newNotaRekomendasi->klasifikasi_pasdin = $newProyek->klasifikasi_pasdin;
+            $newNotaRekomendasi->is_request_rekomendasi = true;
+
+            if (!$newNotaRekomendasi->save()) {
+                Alert::error('Error', "Proyek Gagal Diajukan");
+                return redirect()->back();
+            }
+
             $newProyek->is_request_rekomendasi  = true;
+
+            Alert::success('Success', "Proyek Berhasil Diajukan");
         }
         // $newProyek->nama_pendek_proyek = $dataProyek["short-name"];
 
@@ -798,6 +911,9 @@ class ProyekController extends Controller
                 if (isset($dataProyek["attachment-menang"])) {
                     self::attachmentMenang($dataProyek["attachment-menang"], $kode_proyek);
                 }
+                if (isset($dataProyek["dokumen-pendukung-pasar-dini"])) {
+                    self::uploadDokumenPendukungPasdin($dataProyek["dokumen-pendukung-pasar-dini"], $kode_proyek);
+                }
             }
             $customerHistory->save();
             return redirect("/proyek/view/" . $kode_proyek);
@@ -836,9 +952,34 @@ class ProyekController extends Controller
                 if (isset($dataProyek["attachment-menang"])) {
                     self::attachmentMenang($dataProyek["attachment-menang"], $kode_proyek);
                 }
+                if (isset($dataProyek["dokumen-pendukung-pasar-dini"])) {
+                    self::uploadDokumenPendukungPasdin($dataProyek["dokumen-pendukung-pasar-dini"], $kode_proyek);
+                }
             }
             return redirect("/proyek/view/" . $kode_proyek);
         }
+    }
+
+    private function uploadDokumenPendukungPasdin(UploadedFile $uploadedFile, $kode_proyek)
+    {
+        $dokumen = new DokumenPendukungPasdin();
+        $file_name = $uploadedFile->getClientOriginalName();
+        $id_document = date("dmYHis_") . str_replace(" ", "-", $file_name);
+        $nama_document = $file_name;
+        $dokumen->nama_document = $nama_document;
+        $dokumen->id_document = $id_document;
+        $dokumen->kode_proyek = $kode_proyek;
+        $uploadedFile->move(public_path('dokumen-pendukung-pasdin'), $id_document);
+        $dokumen->save();
+    }
+
+    public function deleteDokumenPendukungPasdin($id)
+    {
+        $delete = DokumenPendukungPasdin::find($id);
+        File::delete(public_path(public_path("dokumen-pendukung-pasdin/$delete->id_document")));
+        $delete->delete();
+        Alert::success("Success", "Dokumen Pendukung Pasdin Berhasil Dihapus");
+        return redirect()->back();
     }
 
     public function updateRetail(Request $request, Proyek $newProyek, ProyekBerjalans $customerHistory)

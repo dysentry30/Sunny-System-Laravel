@@ -362,21 +362,75 @@
                             </div>
                         @endif --}}
 
-                        @canany(['super-admin', 'crm'])
-                            <div class="menu-item">
-                                <a class="menu-link " href="/rekomendasi"
-                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'rekomendasi') ? 'background-color:#008CB4' : '' }}">
-                                    <span class="menu-icon">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                        <span class="svg-icon svg-icon-2">
-                                            <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
-                                                class="h-30px logo" />
+                        @canany(['super-admin', 'admin-crm', 'approver-crm'])
+                            @if (str_contains(Request::url(), '/rekomendasi')||
+                                str_contains(Request::url(), '/green-lane') ||
+                                str_contains(Request::url(), '/non-green-lane')
+                            )
+                                <div class="menu-item">
+                                    <a class="menu-link"
+                                        data-bs-toggle="collapse" href="#green-line-collapse" role="button"
+                                        aria-expanded="false" aria-controls="green-line-collapse"
+                                        style="color:white; padding-left:20px; {{ str_contains(Request::url(), '/rekomendasi') ||
+                                        str_contains(Request::url(), '/green-lane') ||
+                                        str_contains(Request::url(), '/non-green-lane')
+                                         ? 'background-color:#008CB4' : '' }}">
+                                        <span class="menu-icon">
+                                            <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                            <span class="svg-icon svg-icon-2">
+                                                <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
+                                                    class="h-30px logo" />
+                                            </span>
+                                            <!--end::Svg Icon-->
                                         </span>
-                                        <!--end::Svg Icon-->
-                                    </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Rekomendasi</span>
-                                </a>
-                            </div>                            
+                                        <span class="menu-title" style="font-size: 16px; padding-left: 10px">Nota Rekomendasi 1</span>
+                                        <span><i class="bi bi-caret-down-fill text-white"></i></span>
+                                    </a>
+                                </div>
+                                <div class="collapse" id="green-line-collapse">
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" class="p-5" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; {{ Request::Path() == 'green-lane' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link" href="/green-lane" style="color:white; padding-left:30px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                <i class="bi bi-building text-white"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Green Lane</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" class="p-5" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; {{ Request::Path() == 'non-green-lane' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link" href="/non-green-lane" style="color:white; padding-left:30px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                <i class="bi bi-wallet text-white"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Non Green Lane</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                </div>
+                            @else
+                                <div class="menu-item">
+                                    <a class="menu-link " href="/rekomendasi"
+                                        style="color:white; padding-left:20px; {{ str_contains(Request::url(), '/rekomendasi') ? 'background-color:#008CB4' : '' }}">
+                                        <span class="menu-icon">
+                                            <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                            <span class="svg-icon svg-icon-2">
+                                                <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
+                                                    class="h-30px logo" />
+                                            </span>
+                                            <!--end::Svg Icon-->
+                                        </span>
+                                        <span class="menu-title" style="font-size: 16px; padding-left: 10px">Nota Rekomendasi 1</span>
+                                    </a>
+                                </div>
+                            @endif
                         @endcanany
                         {{-- @if (auth()->user()->check_administrator || $adminPIC || auth()->user()->check_user_sales )
                             <div class="menu-item">
@@ -512,6 +566,10 @@
                             str_contains(Request::Path(), 'kriteria-green-line') ||
                             str_contains(Request::Path(), 'kriteria-assessment') ||
                             str_contains(Request::Path(), 'konsultan-perencana') ||
+                            str_contains(Request::Path(), 'kriteria-pengguna-jasa') ||
+                            str_contains(Request::Path(), 'legalitas-perusahaan') ||
+                            str_contains(Request::Path(), 'penilaian-pengguna-jasa') ||
+                            str_contains(Request::Path(), 'matriks-approval-rekomendasi') ||
                             str_contains(Request::Path(), 'team-proyek') ? 'background-color:#008CB4' : '' }}">
 
                                     <a class="menu-link" id="collapse-button" style="color:white; padding-left:20px;"
@@ -873,6 +931,57 @@
                                     </div>
                                     {{-- @endif --}}
                                     @endcanany
+
+                                    @can('super-admin')
+                                        <!--begin::Menu Colapse-->
+                                        <div id="#kt_aside_menu" data-kt-menu="true"
+                                            style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'matriks-approval-rekomendasi' ? 'background-color:#008CB4' : '' }}">
+                                            <a class="menu-link " href="/matriks-approval-rekomendasi" style="color:white; padding-left:20px;">
+                                                <span class="menu-icon">
+                                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                    {{-- <i class="bi bi-buildings text-white"></i> --}}
+                                                    <i class="bi bi-person-fill-lock text-white"></i>
+                                                    <!--end::Svg Icon-->
+                                                </span>
+                                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Matriks Approval Rekomendasi</span>
+                                            </a>
+                                        </div>
+                                        <!--end::Menu Colapse-->
+                                    @endcan
+
+                                    @can('super-admin')
+                                        <!--begin::Menu Colapse-->
+                                        <div id="#kt_aside_menu" data-kt-menu="true"
+                                            style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'kriteria-pengguna-jasa' ? 'background-color:#008CB4' : '' }}">
+                                            <a class="menu-link " href="/kriteria-pengguna-jasa" style="color:white; padding-left:20px;">
+                                                <span class="menu-icon">
+                                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                    {{-- <i class="bi bi-buildings text-white"></i>                                                     --}}
+                                                    <i class="bi bi-type text-white" style="font-size: 20px"></i>
+                                                    <!--end::Svg Icon-->
+                                                </span>
+                                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Kriteria Pengguna Jasa</span>
+                                            </a>
+                                        </div>
+                                        <!--end::Menu Colapse-->
+                                    @endcan
+                                    
+                                    @can('super-admin')
+                                        <!--begin::Menu Colapse-->
+                                        <div id="#kt_aside_menu" data-kt-menu="true"
+                                            style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'legalitas-perusahaan' ? 'background-color:#008CB4' : '' }}">
+                                            <a class="menu-link " href="/legalitas-perusahaan" style="color:white; padding-left:20px;">
+                                                <span class="menu-icon">
+                                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                    {{-- <i class="bi bi-buildings text-white"></i>                                                     --}}
+                                                    <i class="bi bi-type text-white" style="font-size: 20px"></i>
+                                                    <!--end::Svg Icon-->
+                                                </span>
+                                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Legalitas Perusahaan</span>
+                                            </a>
+                                        </div>
+                                        <!--end::Menu Colapse-->
+                                    @endcan
                                 </div>
                                 <!--end::Colapse-->
                                 <!--end::Svg Icon-->

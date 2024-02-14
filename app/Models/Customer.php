@@ -104,4 +104,9 @@ class Customer extends Model
         return $this->hasOne(Provinsi::class, "province_id", "provinsi");
     }
 
+    public function AHU()
+    {
+        return $this->hasMany(AHU::class, "id_customer");
+    }
+
 }
