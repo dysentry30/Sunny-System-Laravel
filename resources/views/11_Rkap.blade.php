@@ -219,7 +219,7 @@
                                                 </td>
                                                 <td class="min-w-auto text-center">{{ $filterTahun }}</td>
                                                 {{-- <td class="min-w-auto text-end">{{ number_format((int) str_replace('.', '', $proyek->sum('nilai_rkap')), 0, '.', '.') }} --}}
-                                                <td class="min-w-auto text-end">{{ number_format((int) str_replace('.', '', $nilai_rkap_perproyek), 0, '.', '.') }}
+                                                <td class="min-w-auto text-end">{{ number_format($nilai_rkap_perproyek, 0, '.', '.') }}
                                                 </td>
                                                 <td class="min-w-auto text-end">{{ number_format((int) str_replace('.', '', $proyek->sum('nilaiok_review')), 0, '.', '.') }}
                                                 </td>
