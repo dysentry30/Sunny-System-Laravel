@@ -602,9 +602,9 @@
                                                                             {{-- onchange="selectNegara(this)" --}}
                                                                             data-placeholder="Pilih Group Tier">
                                                                             <option value=""></option>
-                                                                            <option value="Tier A" {{$customer->group_tier && $is_instansi_BUMN == "Tier A" ? "selected" : ""}}>Tier A</option>
-                                                                            <option value="Tier B" {{$customer->group_tier && $is_instansi_BUMN == "Tier B" ? "selected" : ""}}>Tier B</option>
-                                                                            <option value="Tier C" {{$customer->group_tier && $is_instansi_BUMN == "Tier C" ? "selected" : ""}}>Tier C</option>
+                                                                            <option value="Tier A" {{$is_instansi_BUMN && $customer->group_tier  == "Tier A" ? "selected" : ""}}>Tier A</option>
+                                                                            <option value="Tier B" {{$is_instansi_BUMN && $customer->group_tier  == "Tier B" ? "selected" : ""}}>Tier B</option>
+                                                                            <option value="Tier C" {{$is_instansi_BUMN && $customer->group_tier  == "Tier C" ? "selected" : ""}}>Tier C</option>
                                                                         </select>
                                                                         <!--end::Input-->
                                                                         
