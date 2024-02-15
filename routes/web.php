@@ -4413,3 +4413,7 @@ Route::get('/user/get-proyek-datatable', function (Request $request) {
         'data' => $length > 0 ? $data->items() : $data
     ]);
 });
+
+Route::get('php-info', function () {
+    phpinfo();
+});
