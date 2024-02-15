@@ -362,7 +362,7 @@
                             </div>
                         @endif --}}
 
-                        @canany(['super-admin', 'admin-crm', 'approver-crm'])
+                        @canany(['super-admin', 'admin-crm', 'approver-crm', 'risk-crm'])
                             @if (str_contains(Request::url(), '/rekomendasi')||
                                 str_contains(Request::url(), '/green-lane') ||
                                 str_contains(Request::url(), '/non-green-lane')
