@@ -3,6 +3,7 @@
 // if(!function_exists("url_encode")) {
 // }
 
+use App\Models\Customer;
 use App\Models\Provinsi;
 use App\Models\IndustryOwner;
 use PhpOffice\PhpWord\PhpWord;
@@ -175,6 +176,11 @@ function checkGreenLine($proyek) {
             if ((str_contains($customer->jenis_instansi, "BUMN") || str_contains($customer->jenis_instansi, "Kementrian / Pemerintah Pusat") || str_contains($customer->jenis_instansi, "Anak dan Turunan BUMN"))) {
                 if(!empty($customer->group_tier)) {
                     $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $customer->jenis_instansi)->where("sub_isi", "=", $customer->group_tier)->count() > 0);
+                } elseif (!empty($customer->nama_holding)) {
+                    $holding = Customer::find($customer->nama_holding);
+                    if ($holding->jenis_instansi == "BUMN" && !empty($holding->group_tier)) {
+                        $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $holding->jenis_instansi)->where("sub_isi", "=", $holding->group_tier)->count() > 0);
+                    }                
                 } else {
                     $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $customer->jenis_instansi)->where()->count() > 0);
                 }
