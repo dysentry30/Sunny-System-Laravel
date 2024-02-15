@@ -1102,7 +1102,7 @@
                     const options = optionData.map(item => {
                         return {
                             id: item.nip, 
-                            text: item.nama_pegawai
+                            text: item.nip + " - " + item.nama_pegawai
                         }
                     })
                     return {
@@ -1312,7 +1312,7 @@
                     const options = optionData.map(item => {
                         return {
                             id: item.nip, 
-                            text: item.nama_pegawai
+                            text: item.nip + " - " + item.nama_pegawai
                         }
                     })
                     return {
