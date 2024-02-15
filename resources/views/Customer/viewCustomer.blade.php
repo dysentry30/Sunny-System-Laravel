@@ -575,6 +575,7 @@
                                                                 <!--begin::Col-->
                                                                 @php
                                                                     $is_instansi_BUMN = $customer->jenis_instansi == "BUMN";
+                                                                    $is_instansi_Anak_BUMN = $customer->jenis_instansi == "Anak dan Turunan BUMN";
                                                                     $is_user_pic = str_contains(Auth::user()->name, "PIC") || Auth::user()->check_administrator || Auth::user()->can('admin-crm');
                                                                     // $title_tooltip = collect('Hanya bisa diinput');
                                                                     // if(!$is_user_pic) {
@@ -605,6 +606,31 @@
                                                                             <option value="Tier A" {{$is_instansi_BUMN && $customer->group_tier  == "Tier A" ? "selected" : ""}}>Tier A</option>
                                                                             <option value="Tier B" {{$is_instansi_BUMN && $customer->group_tier  == "Tier B" ? "selected" : ""}}>Tier B</option>
                                                                             <option value="Tier C" {{$is_instansi_BUMN && $customer->group_tier  == "Tier C" ? "selected" : ""}}>Tier C</option>
+                                                                        </select>
+                                                                        <!--end::Input-->
+                                                                        
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <div class="col-6" id="holding-div" style="{{$is_instansi_Anak_BUMN ? "" : "display: none;"}}">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span class="required">Nama Holding</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        @php
+                                                                            $holding = \App\Models\Customer::find($customer->nama_holding);
+                                                                        @endphp
+                                                                        <select id="nama_holding" name="nama_holding"
+                                                                            class="form-select form-select-solid"data-hide-search="false" data-placeholder="Pilh Pelanggan" aria-hidden="true">
+                                                                            @if (!empty($holding))
+                                                                            <option value="{{ $holding->id_customer }}">{{ $holding->name }}</option>
+                                                                            @else
+                                                                            <option value="" selected></option>
+                                                                            @endif
                                                                         </select>
                                                                         <!--end::Input-->
                                                                         
@@ -7690,17 +7716,73 @@
     function getValueInstansi(e) {
         const value = e.value;
         console.log(value);
-        if(value.includes("BUMN")) {
+        // if(value.includes("BUMN")) {
+        //     document.querySelector("#group-tier-div").style.display = "";
+        // } else {
+        //     document.querySelector("#group-tier-div").style.display = "none";
+        //     $("#group-tier").select2({
+        //         minimumResultsForSearch: -1
+        //     }).val("").trigger("change");
+        // }
+        if(value == "BUMN") {
             document.querySelector("#group-tier-div").style.display = "";
+        }else if(value == "Anak dan Turunan BUMN"){
+            document.querySelector("#holding-div").style.display = "";
         } else {
+            document.querySelector("#holding-div").style.display = "none";
             document.querySelector("#group-tier-div").style.display = "none";
             $("#group-tier").select2({
+                minimumResultsForSearch: -1
+            }).val("").trigger("change");
+            $("#nama_holding").select2({
                 minimumResultsForSearch: -1
             }).val("").trigger("change");
         }
     }
 </script>
 <!--end::Show/Hide Group Tier When Instansi is BUMN-->
+
+<script>
+    const perPage = 10;
+    $(document).ready(function(){
+        $("#nama_holding").select2({
+            ajax:{
+                url: '/customer/get-customer',
+                dataType: 'json',
+                delay: 250,
+                allowClear : true,
+                data: function (params) {
+                    return {
+                        search: params.term,
+                        perPage: 10,
+                        page: params.page || 1
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1
+
+                    const isPagination = data.hasOwnProperty('data') && Array.isArray(data.data) ? true : false
+                    const optionData = isPagination ? data.data : data;
+                    const options = optionData.map(item => {
+                        return {
+                            id: item.id_customer, 
+                            text: item.name
+                        }
+                    })
+                    return {
+                        results: options,
+                        pagination: {
+                            more: isPagination ? (params.page * (perPage || 10)) < data.total : false
+                        }
+                    }
+                },
+                cache: true,
+                minimumResultsForSearch: 0
+            },
+        })
+    })
+</script>
 
 <!--begin::Enable Search Bar Select2-->
 <script>

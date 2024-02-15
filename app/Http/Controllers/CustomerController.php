@@ -520,6 +520,7 @@ class CustomerController extends Controller
         $editCustomer->unique_code = $data["unique_code"];
         $editCustomer->key_client = isset($data["key-client"]);
         $editCustomer->group_tier = isset($data["group-tier"]) ? $data["group-tier"] : null;
+        $editCustomer->nama_holding = isset($data["nama_holding"]) ? $data["nama_holding"] : null;
         // dd($data);
 
         // $editCustomer->journey_company = $data["journey-company"];

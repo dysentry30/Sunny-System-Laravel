@@ -51,6 +51,7 @@ use App\Models\AlatProyek;
 use App\Models\ContractChangeNotice;
 use App\Models\ContractChangeOrder;
 use App\Models\ContractChangeProposal;
+use App\Models\Customer;
 use App\Models\Departemen;
 use App\Models\Divisi;
 use App\Models\FieldChange;
@@ -561,6 +562,28 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/customer/AHU/save', [CustomerController::class, 'saveAHU']);
     Route::post('/customer/AHU/edit', [CustomerController::class, 'saveAHU']);
     Route::delete('/customer/AHU/{ahu}/delete', [CustomerController::class, 'deleteAHU']);
+
+    Route::get('/customer/get-customer', function (Request $request) {
+        $search = $request->input('search');
+        $page = $request->input(
+            'page',
+            1
+        );
+        $perPage = 10;
+        $maxResults = 10;
+
+        $dataCustomer = Customer::when(
+            !empty($search),
+            function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%');
+            }
+        );
+        $data = $dataCustomer->paginate($perPage, ['*'], 'page', $page);
+
+        // $data->pagination['more'] = ($page * $perPage) < $maxResults;
+
+        return response()->json($data);
+    });
 
 
     // Begin :: get Kabupaten
