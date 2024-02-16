@@ -1,10 +1,10 @@
-<?php 
+<?php
 
 // if(!function_exists("url_encode")) {
 // }
 
+use App\Models\Customer;
 use App\Models\Provinsi;
-use function Aws\filter;
 use App\Models\IndustryOwner;
 use PhpOffice\PhpWord\PhpWord;
 use Karriere\PdfMerge\PdfMerge;
@@ -24,7 +24,6 @@ use Illuminate\Support\Facades\File;
 use PhpOffice\PhpWord\TemplateProcessor;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Http;
 
 function url_encode($url) {
@@ -158,31 +157,50 @@ function setLogging($file, $message, $data) {
 
 function checkGreenLine($proyek) {
     if($proyek instanceof App\Models\Proyek) {
-        $customer = $proyek->proyekBerjalan->Customer ?? null;
-        $results = collect();
-        if(!empty($proyek->sumber_dana)) {
-            $results->push(App\Models\KriteriaGreenLine::where("isi", "=", $proyek->sumber_dana)->where("item", "=", "Sumber Dana")->count() > 0);
-        }
-        if(!empty($customer->jenis_instansi)) {
-            if((str_contains($customer->jenis_instansi, "BUMN") || str_contains($customer->jenis_instansi, "APBD") || str_contains($customer->jenis_instansi, "Provinsi"))) {
-                if(!empty($customer->group_tier)) {
-                    $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $customer->jenis_instansi)->where("sub_isi", "=", $customer->group_tier)->count() > 0);
+        if ($proyek->dop != "EA") {
+            $customer = $proyek->proyekBerjalan->Customer ?? null;
+            $results = collect();
+            if (!empty($proyek->sumber_dana)) {
+                if (!empty($proyek->negara) && ($proyek->negara == 'ID' || $proyek->negara == 'Indonesia')) {
+                    if ($proyek->sumber_dana == "APBD" || $proyek->sumber_dana == "BUMN") {
+                        $results->push(App\Models\KriteriaGreenLine::where("isi", "=", $proyek->sumber_dana)->where("item", "=", "Sumber Dana")->where(function ($query) use ($proyek, $customer) {
+                            $query->where('sub_isi', '=', $proyek->provinsi)
+                                ->orWhere('sub_isi', '=', $customer->group_tier);
+                        })->count() > 0);
+                    } else {
+                        $results->push(App\Models\KriteriaGreenLine::where("isi", "=", $proyek->sumber_dana)->where("item", "=", "Sumber Dana")->count() > 0);
+                    }
                 } else {
-                    $provinsi = Provinsi::find($customer->provinsi) ?? $customer->provinsi;
-                    $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $customer->jenis_instansi)->where("sub_isi", "=", "ID-JK")->count() > 0);
+                    $results->push(App\Models\KriteriaGreenLine::where("isi", "=", $proyek->sumber_dana)->where("item", "=", "Proyek Luar Negeri")->count() > 0);
+                }
+            }
+            if (!empty($customer->jenis_instansi)) {
+                if ((str_contains($customer->jenis_instansi, "BUMN") || str_contains($customer->jenis_instansi, "Kementrian / Pemerintah Pusat") || str_contains($customer->jenis_instansi, "Anak dan Turunan BUMN"))) {
+                    if (!empty($customer->group_tier)) {
+                        $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $customer->jenis_instansi)->where("sub_isi", "=", $customer->group_tier)->count() > 0);
+                    } elseif (!empty($customer->nama_holding)) {
+                        $holding = Customer::find($customer->nama_holding);
+                        if ($holding->jenis_instansi == "BUMN" && !empty($holding->group_tier)) {
+                            $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $holding->jenis_instansi)->where("sub_isi", "=", $holding->group_tier)->count() > 0);
+                        }
+                    } else {
+                        $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $customer->jenis_instansi)->count() > 0);
+                    }
+                } else {
+                    $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $customer->jenis_instansi)->count() > 0);
                 }
             } else {
-                $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $customer->jenis_instansi)->count() > 0);
+                $results->push(false);
             }
+            // if ($proyek->is_disetujui) {
+            //     return true;
+            // }
+            return $results->count() > 1 && $results->every(function ($item) {
+                return $item === true;
+            });
         } else {
-            $results->push(false);
+            return true;
         }
-        // if ($proyek->is_disetujui) {
-        //     return true;
-        // }
-        return $results->count() > 1 && $results->every(function($item) {
-            return $item === true;
-        });
     }
     return false;
 }
@@ -285,7 +303,7 @@ function createWordRekomendasi(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $nama_proyek = str_replace("&", "dan", $proyek->nama_proyek);
     
     $section->addText("Hasil Assessment", ['size'=>12, "bold" => true], ['align' => "center"]);
-    $section->addText($nama_proyek, ['size'=>12, "bold" => true], ['align' => "center"]);
+    $section->addText($nama_proyek, ['size' => 12, "bold" => true], ['align' => "center"]);
 
     $section->addTextBreak(1);
     $table = $section->addTable('myOwnTableStyle',array('borderSize' => 1, 'borderColor' => '999999', 'afterSpacing' => 0, 'Spacing'=> 0, 'cellMargin'=>0  ));
@@ -531,7 +549,7 @@ function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Coll
     $table->addCell(500, $TstyleCell)->addText('No', $TfontStyle);
     $table->addCell(2500, $TstyleCell)->addText("Item", $TfontStyle);
     $table->addCell(6000, $TstyleCell)->addText('Uraian', $TfontStyle);
-    
+
     $nama_proyek = str_replace("&", "dan", $proyek->nama_proyek);
     $table->addRow();
     $table->addCell(500, $styleCell)->addText('1', $fontStyle);
@@ -1271,7 +1289,8 @@ function createWordProfileRisikoNew($kode_proyek)
             //REPUTASI PEMBERI KERJA
             $table->addRow();
             $table->addCell(1000, ['borderSize' => 2, 'borderColor' => '000000', 'bgColor' => 'FFFEA8'])->addTextRun(['spaceAfter' => 0]);
-            $table->addCell(1000, ['gridSpan' => 6, 'borderSize' => 2, 'borderColor' => '000000', 'bgColor' => 'FFFEA8', 'afterSpacing' => 0
+            $table->addCell(1000, [
+                'gridSpan' => 6, 'borderSize' => 2, 'borderColor' => '000000', 'bgColor' => 'FFFEA8', 'afterSpacing' => 0
             ])->addText('REPUTASI PEMBERI KERJA', ['size' => 8, 'bold' => true], ['spaceAfter' => 0]);
 
             $kriteriaSelect = $lp->each(function ($ks, $k) use ($table, $cellHCentered, $kriteriaPenggunaJasaDetail) {
@@ -1359,7 +1378,7 @@ function createWordProfileRisikoNew($kode_proyek)
 
             $kriteriaSelect = $lp->each(function ($ks, $k) use ($table, $cellHCentered, $kriteriaPenggunaJasaDetail) {
                 $table->addRow();
-                
+
                 $kriteriaIndex = $kriteriaPenggunaJasaDetail->where('index', $k + 1)->first();
                 if ($ks->item == "Kepatuhan Pembayaran Pajak") {
                     $kriteriaIndex = $kriteriaPenggunaJasaDetail->where('index', $k + 2)->first();
@@ -1563,7 +1582,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     $table->addRow();
     $table->addCell(500,$styleCell)->addText('1', $fontStyle);
     $table->addCell(2500,$styleCell)->addText("Nama Proyek", $fontStyle);
-    $table->addCell(6000,$styleCell)->addText($nama_proyek, $fontStyle);
+    $table->addCell(6000, $styleCell)->addText($nama_proyek, $fontStyle);
     $table->addRow();
     $table->addCell(500,$styleCell)->addText('2', $fontStyle);
     $table->addCell(2500,$styleCell)->addText("Lokasi Proyek", $fontStyle);
@@ -1618,7 +1637,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     $table_ttd = $section2->addTable('ttd_table',array('borderSize' => 1, 'borderColor' => '999999', 'afterSpacing' => 0, 'Spacing'=> 0, 'cellMargin'=>0  ));
     // $table_ttd->addRow();
     $table_ttd->addRow();
-    
+
     $header_cell = $table_ttd->addCell(3000, ["vMerge" => "restart", "gridSpan" => 2, "bgColor" => "F4B083"]);
     $header_cell->addText("Disusun oleh,", ["bold" => true], ["align" => "center"]);
     // $header_cell->addText(null, ["bold" => true]);
@@ -1652,7 +1671,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
                     }
                 }
             }
-            
+
 
             $tanggal_ttd = Carbon\Carbon::create($p->tanggal);
             // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
@@ -2101,7 +2120,7 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
         foreach ($penyetuju as $key => $p) {
             if (!empty($p->catatan) || $p->catatan != null) {
                 $table_comment_penyetuju->addRow();
-    
+
                 $cell_1_note = $table_comment_penyetuju->addCell(200);
                 $cell_2_note = $table_comment_penyetuju->addCell(200);
                 // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
@@ -2130,14 +2149,14 @@ function createWordPersetujuanOld(App\Models\Proyek $proyek, \Illuminate\Support
     //     $cell_2_note->addText(preg_replace('/&(?!#?[a-z0-9]+;)/', '&amp;', nl2br($p->catatan)), $fontStyle);
     // }
     //end :: Catatan Rekomendasi
-    
+
     //Begin::Footer
     // $footerSection = $phpWord->addSection();
     // $footer = $footerSection->addFooter(\PhpOffice\PhpWord\Element\Footer::FIRST);
     // $footerSection->setFooterHeight(50);
     // $footerTextRun = $footer->addTextRun();
     // $footerTextRun->addText("*Dokumen ini dibuat oleh sistem CRM", ['size' => 10, 'bold' => true], ['align' => 'right']);
-    
+
     $section4->addTextBreak(1);
     $section4->addText("*Dokumen ini dibuat oleh sistem CRM", ['size' => 8, 'bold' => true], ['align' => 'right']);
     // $section4->addTextBreak(1);
@@ -2884,35 +2903,35 @@ function mergeFileLampiranRisiko($kode_proyek)
     $file_name = $now->format("dmYHis") . "_lampiran-kriteria_" . $proyek->kode_proyek;
 
     // if ($proyek->is_penyusun_approved && !empty($proyek->approved_penyusun)) {
-        $kriteria_detail = KriteriaPenggunaJasaDetail::where('kode_proyek', $proyek->kode_proyek)->get();
-        // dd($kriteria_detail);
-        $collectFileKriteria = $kriteria_detail->map(function ($kf) {
-            $collectArr = collect([]);
-            if ($kf->id_document != null || $kf->id_document != "[]") {
-                $collectArr->push(json_decode($kf->id_document));
-            }
-            return $collectArr;
+    $kriteria_detail = KriteriaPenggunaJasaDetail::where('kode_proyek', $proyek->kode_proyek)->get();
+    // dd($kriteria_detail);
+    $collectFileKriteria = $kriteria_detail->map(function ($kf) {
+        $collectArr = collect([]);
+        if ($kf->id_document != null || $kf->id_document != "[]") {
+            $collectArr->push(json_decode($kf->id_document));
+        }
+        return $collectArr;
+    })
+        ->flatten()
+        ->filter(function ($k) {
+            return $k != null;
         })
-            ->flatten()
-            ->filter(function ($k) {
-                return $k != null;
-            })
-            ->values();
+        ->values();
     if ($collectFileKriteria->isEmpty()) {
         return null;
     }
 
-        $pdfMerger = new PdfMerge();
+    $pdfMerger = new PdfMerge();
 
-        $collectFileKriteria->each(function ($cf) use ($pdfMerger) {
-            $pdfMerger->add(public_path('file-kriteria-pengguna-jasa' . '/' . $cf));
-        });
-        try {
-            $pdfMerger->merge(public_path("file-kriteria-pengguna-jasa" . "/" . $file_name . ".pdf"));
-            return $file_name . ".pdf";
-        } catch (\Exception $e) {
-            dd($e);
-        }
+    $collectFileKriteria->each(function ($cf) use ($pdfMerger) {
+        $pdfMerger->add(public_path('file-kriteria-pengguna-jasa' . '/' . $cf));
+    });
+    try {
+        $pdfMerger->merge(public_path("file-kriteria-pengguna-jasa" . "/" . $file_name . ".pdf"));
+        return $file_name . ".pdf";
+    } catch (\Exception $e) {
+        dd($e);
+    }
     // } else {
     //     return null;
     // }

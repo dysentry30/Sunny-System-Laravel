@@ -270,7 +270,7 @@
                                             <td class="text-center">{{$finish_bulan}}</td>
                                             <td class="d-flex flex-column align-items-center gap-2">
                                                 {{-- <a href="#kt_modal_edit_{{$approval->id_matriks_approval_rekomendasi }}" data-bs-toggle="modal" class="btn btn-sm btn-primary text-white" style="background-color: #008CB4;">Edit</a> --}}
-                                                <button class="btn btn-sm btn-primary text-white" style="background-color: #008CB4;" onclick="showModal('{{ $approval->id_matriks_approval_rekomendasi }}')">Edit</button>
+                                                <button class="btn btn-sm btn-primary text-white" style="background-color: #008CB4;" onclick="showModal('{{ $approval }}')">Edit</button>
                                                 <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#kt_modal_matriks_delete_{{$approval->id_matriks_approval_rekomendasi}}">Delete</button>
                                             </td>
                                         </tr>
@@ -401,9 +401,6 @@
                                         data-control="select2" data-hide-search="false" data-placeholder="Pilih Nama Pegawai..."
                                         data-select2-id="select2-nama-pegawai" tabindex="-1" aria-hidden="true">
                                         <option value="" selected></option>
-                                        @foreach ($pegawai_all as $pegawai)
-                                            <option value="{{$pegawai->nip}}">{{$pegawai->nama_pegawai}}</option>
-                                        @endforeach
                                     </select>
                                     <!--end::Input-->
                                 </div>
@@ -494,9 +491,9 @@
                                                 data-control="select2" data-hide-search="false" data-placeholder="Pilih Departemen"
                                                 data-select2-id="select2-unit-kerja" tabindex="-1" aria-hidden="true">
                                                 <option value=""></option>
-                                                {{-- @foreach ($departemens as $departemen)
+                                                @foreach ($departemens as $departemen)
                                                     <option value="{{$departemen->kode_departemen}}">{{$departemen->nama_departemen}} ({{ $departemen->UnitKerja->unit_kerja ?? "-" }})</option>
-                                                @endforeach --}}
+                                                @endforeach
                                             </select>
                                         </div>
                                         <!--end::Input-->
@@ -750,9 +747,9 @@
                                     <select id="nama-pegawai-{{ $approval->id_matriks_approval_rekomendasi }}" name="nama-pegawai"
                                         class="form-select form-select-solid" data-hide-search="false" data-placeholder="Pilih Nama Pegawai..."aria-hidden="true">
                                         <option value="" selected></option>
-                                        @foreach ($pegawai_all as $pegawai)
-                                            <option value="{{$pegawai->nip}}" {{ $pegawai->nip == $approval->nama_pegawai ? 'selected' : '' }}>{{$pegawai->nama_pegawai}}</option>
-                                        @endforeach
+                                        {{-- @foreach ($pegawai_all as $nip => $pegawai)
+                                            <option value="{{$nip}}" {{ $nip == $approval->nama_pegawai ? 'selected' : '' }}>{{$pegawai}}</option>
+                                        @endforeach --}}
                                     </select>
                                     <!--end::Input-->
                                 </div>
@@ -1056,11 +1053,11 @@
             </div>
         </form>
         <script>
-            $(document).ready(function() {
-                $("#kt_modal_matriks_update_{{ $approval->id_matriks_approval_rekomendasi  }} select").select2({
-                    dropdownParent: $('#kt_modal_matriks_update_{{ $approval->id_matriks_approval_rekomendasi  }}'),
-                });
-            });
+            // $(document).ready(function() {
+            //     $("#kt_modal_matriks_update_{{ $approval->id_matriks_approval_rekomendasi  }} select").select2({
+            //         dropdownParent: $('#kt_modal_matriks_update_{{ $approval->id_matriks_approval_rekomendasi  }}'),
+            //     });
+            // });
         </script>
     @endforeach
     <!--end::modal DELETE-->
@@ -1081,6 +1078,50 @@
 @endsection
 
 @section('js-script')
+<script>
+    const perPage = 10;
+    $(document).ready(function() {
+        $("#nama-pegawai").select2({
+            ajax: {
+                url: '/proyek/get-data-pegawai',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        search: params.term,
+                        perPage: perPage,
+                        page: params.page || 1
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1
+
+                    const isPagination = data.hasOwnProperty('data') && Array.isArray(data.data) ? true : false
+                    const optionData = isPagination ? data.data : data;
+                    const options = optionData.map(item => {
+                        return {
+                            id: item.nip, 
+                            text: item.nip + " - " + item.nama_pegawai
+                        }
+                    })
+                    return {
+                        results: options,
+                        pagination: {
+                            more: isPagination ? (params.page * (perPage || 10)) < data.total : false
+                        }
+                    }
+                },
+                cache: true,
+                minimumResultsForSearch: 0
+            },
+            dropdownParent: $('#kt_modal_input_kriteria_green_line'),
+        });
+        $("#unit-kerja, #klasifikasi-proyek, #kategori").select2({
+            dropdownParent: $('#kt_modal_input_kriteria_green_line'),
+        })
+    });
+</script>
 <script>
      function changeSelectView(e) {
          const value = e.value;
@@ -1182,13 +1223,13 @@
             document.querySelector("#rating select").removeAttribute("disabled");
         }
     }
-    $(document).ready(function() {
-        // $.fn.modal.Constructor.prototype.enforceFocus = function() {};
+    // $(document).ready(function() {
+    //     // $.fn.modal.Constructor.prototype.enforceFocus = function() {};
 
-        $("#nama-pegawai, #unit-kerja, #klasifikasi-proyek, #kategori").select2({
-            dropdownParent: $('#kt_modal_input_kriteria_green_line'),
-        });
-    });
+    //     $("#nama-pegawai, #unit-kerja, #klasifikasi-proyek, #kategori").select2({
+    //         dropdownParent: $('#kt_modal_input_kriteria_green_line'),
+    //     });
+    // });
 
     function setActive(e, id = null) {
         if (e.value == "create") {
@@ -1240,13 +1281,108 @@
     }
 </script>
 <script>
-    function showModal(id) {
-        let modal = document.getElementById('kt_modal_edit_' + id);
+    function showModal(approval) {
+        const approvalData = JSON.parse(approval);
+        console.log(approvalData);
+        let modal = document.getElementById('kt_modal_edit_' + approvalData.id_matriks_approval_rekomendasi);
+        console.log(modal);
+
         $(modal).modal('show');
-        let select2 = document.getElementById('nama-pegawai-' + id);
+
+        let select2 = document.getElementById('nama-pegawai-' + approvalData.id_matriks_approval_rekomendasi);
+
         $(select2).select2({
+            ajax: {
+                url: '/proyek/get-data-pegawai',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        search: params.term,
+                        perPage: perPage,
+                        page: params.page || 1
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1
+
+                    const isPagination = data.hasOwnProperty('data') && Array.isArray(data.data) ? true : false
+                    const optionData = isPagination ? data.data : data;
+                    const options = optionData.map(item => {
+                        return {
+                            id: item.nip, 
+                            text: item.nip + " - " + item.nama_pegawai
+                        }
+                    })
+                    return {
+                        results: options,
+                        pagination: {
+                            more: isPagination ? (params.page * (perPage || 10)) < data.total : false
+                        }
+                    }
+                },
+                cache: true,
+                minimumResultsForSearch: 0
+            },
             dropdownParent: $(modal)
         });
+
+        const newOption = new Option(
+            approvalData.pegawai?.nama_pegawai, 
+            approvalData.pegawai?.nip, 
+            true, 
+            true
+        )
+        $(select2).append(newOption).trigger('change')
+        $(select2).trigger({
+            type: 'select2:select',
+            params: {
+                data: approvalData.pegawai?.nip
+            }
+        })
+
+        $(`#unit-kerja-${approvalData.id_matriks_approval_rekomendasi}`).select2({
+            dropdownParent: $(modal)
+        });
+
+        $(`#departemen-proyek-${approvalData.id_matriks_approval_rekomendasi}`).select2({
+            dropdownParent: $(modal)
+        })
+
+        // $(`#departemen-proyek-${approvalData.id_matriks_approval_rekomendasi}`).select2({
+        //     ajax: {
+        //         url: `/get-data-divisi/${approvalData.divisi_id}`,
+        //         dataType: 'json',
+        //         delay: 250,
+        //         processResults: function (data, params) {
+        //             const parseData = data.map(item => {
+        //                 return {
+        //                     id : item.kode_departemen,
+        //                     text : item.nama_departemen
+        //                 }
+        //             })
+        //             return{
+        //                 results:parseData
+        //             }
+        //         }
+        //     },
+        //     dropdownParent: $(modal)
+        // });
+        
+        const newOption2 = new Option(
+            approvalData.departemen?.nama_departemen, 
+            approvalData.departemen?.kode_departemen, 
+            true, 
+            true
+        )
+        $(`#departemen-proyek-${approvalData.id_matriks_approval_rekomendasi}`).append(newOption2).trigger('change');
+        $(`#departemen-proyek-${approvalData.id_matriks_approval_rekomendasi}`).trigger({
+            type: 'select2:select',
+            params: {
+                data: approvalData.departemen?.kode_departemen
+            }
+        })
     }
 </script>
 @endsection
