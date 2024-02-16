@@ -481,7 +481,7 @@
                                                                                                         </div>
                                                                                                     </div>
                                                                                                     <div class="col-3">
-                                                                                                        @if (Auth::user()->check_administrator || str_contains(Auth::user()->name, "PIC"))
+                                                                                                        @if (Auth::user()->can('super-admin') || Auth::user()->can('admin-crm') || Auth::user()->can('approver-crm'))
                                                                                                             @if ($history->is_approved_1 == "t")
                                                                                                                 <div
                                                                                                                     class="d-flex flex-row justify-content-evenly align-items-center w-100">
