@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use RealRashid\SweetAlert\Facades\Alert;
 use DateTime;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 
 
@@ -42,8 +43,12 @@ class CSIController extends Controller
         if (!empty($id)) {
             $csi = Csi::find($id);
         } else {
-            $user = explode("-", Auth::user()->nip);
-            // dd($user);
+            $getStrukturFromEmailUser = StrukturCustomer::where('email_struktur', Auth::user()->email)->first();
+            if (empty($getStrukturFromEmailUser)) {
+                Alert::error('Error', 'Survey tidak ditemukan');
+                return redirect('/csi-login');
+            }
+            $user = explode("-", $getStrukturFromEmailUser->id_struktur_organisasi);
             // $csi = Csi::where('no_spk', '=', $user[0])->where('id_customer', '=', $user[1])->where('id_struktur_organisasi', '=', $user[2])->first();
             $csi = Csi::where('no_spk', '=', $user[0])->where('id_customer', '=', $user[1])->first();
             // $csi = Csi::find($user[2]);
@@ -59,8 +64,8 @@ class CSIController extends Controller
         $customer = Customer::where("id_customer", "=", $csi->id_customer)->first();
         // $proyek = Proyek::where("kode_proyek", "=", $csi->no_spk)->first();
         $proyek = ProyekPISNew::where("spk_intern_no", "=", $csi->no_spk)->first();
-        
-        if (str_contains(Auth::user()->email, "@wika-customer") && !empty($csi->jawaban)) {
+
+        if (Gate::allows('user-csi') && !empty($csi->jawaban)) {
             $user = User::find(Auth::user()->id);
             // dd($user);
             $user->is_active = false;
@@ -135,8 +140,8 @@ class CSIController extends Controller
         
         $jawaban = collect(json_decode($csi->jawaban));
         // dd($jawaban);
-        
-        if (str_contains(Auth::user()->email, "@wika-customer")) {
+
+        if (Gate::allows('user-csi')) {
             $user = User::find(Auth::user()->id);
             // dd($user);
             // $user->is_active = false;
@@ -151,85 +156,85 @@ class CSIController extends Controller
         }
     }
 
-    public function sendCsi(Request $request) {
+    // public function sendCsi(Request $request) {
 
-        $data = $request->all();
-        // dd($data);
-        $csi = Csi::find($data['id-csi']);
-        if ($csi->status != "Not Sent") {
-            Alert::error("Pesan Gagal Terkirim", "Pastikan Customer Telah Mengisi Survey Sebelumnya");
-            return redirect()->back();
-        }
+    //     $data = $request->all();
+    //     // dd($data);
+    //     $csi = Csi::find($data['id-csi']);
+    //     if ($csi->status != "Not Sent") {
+    //         Alert::error("Pesan Gagal Terkirim", "Pastikan Customer Telah Mengisi Survey Sebelumnya");
+    //         return redirect()->back();
+    //     }
 
-        $user = new User();
-        $idCustomer = Str::random(12);
-        $user->nip = $data['kode-proyek'] . "-" . $data['id-pemberi-kerja']."-" . $data['id-csi'] . "-" . $idCustomer;
-        // dd($data["nip"]);
-        $user->name = $data['nama-penerima'];
-        $user->email = $idCustomer. "@wika-customer";
-        $user->no_hp = $data['nomor-penerima'];
-        $user->unit_kerja = null;
-        // $user->alamat = $data["alamat"];
-        $user->check_user_sales = true;
-        $user->check_administrator = false;
-        $user->check_admin_kontrak = false;
-        $user->check_team_proyek = false;
-        // $user->password = Hash::make($password);
-        $user->is_active = true;
-        $user->password = Hash::make($user->email);
+    //     $user = new User();
+    //     $idCustomer = Str::random(12);
+    //     $user->nip = $data['kode-proyek'] . "-" . $data['id-pemberi-kerja']."-" . $data['id-csi'] . "-" . $idCustomer;
+    //     // dd($data["nip"]);
+    //     $user->name = $data['nama-penerima'];
+    //     $user->email = $idCustomer. "@wika-customer";
+    //     $user->no_hp = $data['nomor-penerima'];
+    //     $user->unit_kerja = null;
+    //     // $user->alamat = $data["alamat"];
+    //     $user->check_user_sales = true;
+    //     $user->check_administrator = false;
+    //     $user->check_admin_kontrak = false;
+    //     $user->check_team_proyek = false;
+    //     // $user->password = Hash::make($password);
+    //     $user->is_active = true;
+    //     $user->password = Hash::make($user->email);
         
-        $csi->status = "Requested";
-        $csi->id_struktur_organisasi = $user->nip;
-        // dd($csi, $user);
+    //     $csi->status = "Requested";
+    //     $csi->id_struktur_organisasi = $user->nip;
+    //     // dd($csi, $user);
 
 
-        // $url = "https://crm-dev.wika.co.id/customer/view/". $data['id-pemberi-kerja']."/". str_replace(" ", "%20", $data['pemberi-kerja']);
-        $url = "https://crm.wika.co.id/csi-login";
-        $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-            "api_key" => "4DCR3IU2Eu70znFSvnuc3X3x9gJdcc",
-            // "sender" => "628188827008",
-            // "sender" => "62811881227",
-            "sender" => env("NO_WHATSAPP_BLAST"),
-            "number" => $data['nomor-penerima'],
-            "message" => "Salam Hormat, *" . $data['nama-penerima'] . "* dari *" . $data['pemberi-kerja'] . "*.\nKami dari PT. Wijaya Karya (Persero) Tbk, membutuhkan bantuan Anda untuk perbaikan kinerja. Mohon tekan link di bawah ini untuk pengisian survey kepuasan pelanggan.\n\nGunakan User dan password dibawah ini untuk login :  \nUser : *" . $user->email . "*\nPassword : *" . $user->email . "*\n$url\n\n\nHi, *" . $data['nama-penerima'] . "* from *" . $data['pemberi-kerja'] . "*.\nWe are from PT. Wijaya Karya (Persero) Tbk, kindly need your help to improve our performance. Please click bellow link below to complete customer satisfaction survey.\n\nUse the username and password to log in:\nUser : *" . $user->email . "*\nPassword : *" . $user->email . "*\n$url",
-            // "url" => $url
-        ]);
-        // dd($send_msg_to_wa);
+    //     // $url = "https://crm-dev.wika.co.id/customer/view/". $data['id-pemberi-kerja']."/". str_replace(" ", "%20", $data['pemberi-kerja']);
+    //     $url = "https://crm.wika.co.id/csi-login";
+    //     $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+    //         "api_key" => "4DCR3IU2Eu70znFSvnuc3X3x9gJdcc",
+    //         // "sender" => "628188827008",
+    //         // "sender" => "62811881227",
+    //         "sender" => env("NO_WHATSAPP_BLAST"),
+    //         "number" => $data['nomor-penerima'],
+    //         "message" => "Salam Hormat, *" . $data['nama-penerima'] . "* dari *" . $data['pemberi-kerja'] . "*.\nKami dari PT. Wijaya Karya (Persero) Tbk, membutuhkan bantuan Anda untuk perbaikan kinerja. Mohon tekan link di bawah ini untuk pengisian survey kepuasan pelanggan.\n\nGunakan User dan password dibawah ini untuk login :  \nUser : *" . $user->email . "*\nPassword : *" . $user->email . "*\n$url\n\n\nHi, *" . $data['nama-penerima'] . "* from *" . $data['pemberi-kerja'] . "*.\nWe are from PT. Wijaya Karya (Persero) Tbk, kindly need your help to improve our performance. Please click bellow link below to complete customer satisfaction survey.\n\nUse the username and password to log in:\nUser : *" . $user->email . "*\nPassword : *" . $user->email . "*\n$url",
+    //         // "url" => $url
+    //     ]);
+    //     // dd($send_msg_to_wa);
 
-        $send_msg_to_wa->onError(function($error) {
-            // dd($error);
-            Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-            return redirect()->back();
-        });
+    //     $send_msg_to_wa->onError(function($error) {
+    //         // dd($error);
+    //         Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+    //         return redirect()->back();
+    //     });
         
-        $newStruktur = StrukturCustomer::where('id_struktur_organisasi', $data["id-pemberi-kerja"])->where('proyek_struktur', $data["kode-proyek"])->where('role_struktur', $data["segmen"])->first(); 
-        if (!empty($newStruktur)) {
-            $newStruktur->nama_struktur = $data["nama-penerima"];
-            $newStruktur->id_struktur_organisasi = $user->nip;
-            $newStruktur->jabatan_struktur = $data["jabatan"];
-            $newStruktur->email_struktur = $data["email"];
-            $newStruktur->phone_struktur = $data["nomor-penerima"];
-            $newStruktur->save();
-        } else {
-            $newStruktur = new StrukturCustomer();
-            $newStruktur->id_struktur_organisasi = $user->nip;
-            $newStruktur->id_customer = $data["id-pemberi-kerja"];
-            $newStruktur->nama_struktur = $data["nama-penerima"];
-            $newStruktur->jabatan_struktur = $data["jabatan"];
-            $newStruktur->email_struktur = $data["email"];
-            $newStruktur->phone_struktur = $data["nomor-penerima"];
-            $newStruktur->proyek_struktur = $data["kode-proyek"];
-            $newStruktur->role_struktur = $data["segmen"];
-            $newStruktur->save();
-        }
+    //     $newStruktur = StrukturCustomer::where('id_struktur_organisasi', $data["id-pemberi-kerja"])->where('proyek_struktur', $data["kode-proyek"])->where('role_struktur', $data["segmen"])->first(); 
+    //     if (!empty($newStruktur)) {
+    //         $newStruktur->nama_struktur = $data["nama-penerima"];
+    //         $newStruktur->id_struktur_organisasi = $user->nip;
+    //         $newStruktur->jabatan_struktur = $data["jabatan"];
+    //         $newStruktur->email_struktur = $data["email"];
+    //         $newStruktur->phone_struktur = $data["nomor-penerima"];
+    //         $newStruktur->save();
+    //     } else {
+    //         $newStruktur = new StrukturCustomer();
+    //         $newStruktur->id_struktur_organisasi = $user->nip;
+    //         $newStruktur->id_customer = $data["id-pemberi-kerja"];
+    //         $newStruktur->nama_struktur = $data["nama-penerima"];
+    //         $newStruktur->jabatan_struktur = $data["jabatan"];
+    //         $newStruktur->email_struktur = $data["email"];
+    //         $newStruktur->phone_struktur = $data["nomor-penerima"];
+    //         $newStruktur->proyek_struktur = $data["kode-proyek"];
+    //         $newStruktur->role_struktur = $data["segmen"];
+    //         $newStruktur->save();
+    //     }
 
-        $csi->save();
-        $user->save();
+    //     $csi->save();
+    //     $user->save();
 
 
-        Alert::success('Success', "Berhasil, Pesan Telah Terkirim ke ". $data['nama-penerima']);
-        return redirect()->back();
-    }
+    //     Alert::success('Success', "Berhasil, Pesan Telah Terkirim ke ". $data['nama-penerima']);
+    //     return redirect()->back();
+    // }
 
     public function sendCsiNew(Request $request)
     {
@@ -242,6 +247,16 @@ class CSIController extends Controller
         //     return redirect()->back();
         // }
 
+        $validateInput = validateInput($data, [
+            'email' => 'required|email',
+            'nama-penerima' => 'required|string'
+        ]);
+
+        if (!empty($validateInput)) {
+            Alert::html("Error", "Pastikan field <b>$validateInput</b> terisi!", "error");
+            return redirect()->back();
+        }
+
         $proyek = ProyekPISNew::where('spk_intern_no', $data['kode-proyek'])->first();
 
         $csi = new Csi();
@@ -252,17 +267,25 @@ class CSIController extends Controller
         $user->nip = $data['kode-proyek'] . "-" . $data['id-pemberi-kerja'] . "-" . $idCustomer;
         // dd($data["nip"]);
         $user->name = $data['nama-penerima'];
-        $user->email = $idCustomer . "@wika-customer";
+        $user->email = $data['email'];
         $user->no_hp = $data['nomor-penerima'];
         $user->unit_kerja = null;
         // $user->alamat = $data["alamat"];
-        $user->check_user_sales = true;
+        $user->check_user_csi = true;
+        $user->check_user_sales = false;
         $user->check_administrator = false;
         $user->check_admin_kontrak = false;
         $user->check_team_proyek = false;
+        $user->check_team_proyek = false;
+
+        $user->role_user = true;
+        $user->role_admin = false;
+        $user->role_approver = false;
+        $user->role_risk = false;
+
         // $user->password = Hash::make($password);
         $user->is_active = true;
-        $user->password = Hash::make($user->email);
+        $user->password = Hash::make($idCustomer);
 
         $csi->status = "Requested";
         $csi->id_struktur_organisasi = $user->nip;
@@ -276,14 +299,16 @@ class CSIController extends Controller
 
         // $url = "https://crm-dev.wika.co.id/customer/view/". $data['id-pemberi-kerja']."/". str_replace(" ", "%20", $data['pemberi-kerja']);
         $url = "https://crm.wika.co.id/csi-login";
-        $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-            "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
-            "sender" => env("NO_WHATSAPP_BLAST"),
-            "number" => $data['nomor-penerima'],
-            // "number" => "085881028391",
-            "message" => "Salam Hormat, *" . $data['nama-penerima'] . "* dari *" . $data['pemberi-kerja'] . "*.\nKami dari PT. Wijaya Karya (Persero) Tbk, membutuhkan bantuan Anda untuk perbaikan kinerja. Mohon tekan link di bawah ini untuk pengisian survey kepuasan pelanggan.\n\nGunakan User dan password dibawah ini untuk login :  \nUser : *" . $user->email . "*\nPassword : *" . $user->email . "*\n$url\n\n\nHi, *" . $data['nama-penerima'] . "* from *" . $data['pemberi-kerja'] . "*.\nWe are from PT. Wijaya Karya (Persero) Tbk, kindly need your help to improve our performance. Please click bellow link below to complete customer satisfaction survey.\n\nUse the username and password to log in:\nUser : *" . $user->email . "*\nPassword : *" . $user->email . "*\n$url",
-            // "url" => $url
-        ]);
+        $message = nl2br("Salam Hormat, " . $data['nama-penerima'] . " dari " . $data['pemberi-kerja'] . ".\nKami dari PT. Wijaya Karya (Persero) Tbk, membutuhkan bantuan Anda untuk perbaikan kinerja. Mohon tekan link di bawah ini untuk pengisian survey kepuasan pelanggan.\n\nGunakan User dan password dibawah ini untuk login :  \nUser : " . $user->email . "\nPassword : " . $idCustomer . "\n$url\n\n\nHi, " . $data['nama-penerima'] . " from " . $data['pemberi-kerja'] . ".\nWe are from PT. Wijaya Karya (Persero) Tbk, kindly need your help to improve our performance. Please click bellow link below to complete customer satisfaction survey.\n\nUse the username and password to log in:\nUser : " . $user->email . "\nPassword : " . $user->email . "\n$url");
+        // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+        //     "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
+        //     "sender" => env("NO_WHATSAPP_BLAST"),
+        //     "number" => $data['nomor-penerima'],
+        //     // "number" => "085881028391",
+        //     "message" => "Salam Hormat, *" . $data['nama-penerima'] . "* dari *" . $data['pemberi-kerja'] . "*.\nKami dari PT. Wijaya Karya (Persero) Tbk, membutuhkan bantuan Anda untuk perbaikan kinerja. Mohon tekan link di bawah ini untuk pengisian survey kepuasan pelanggan.\n\nGunakan User dan password dibawah ini untuk login :  \nUser : *" . $user->email . "*\nPassword : *" . $user->email . "*\n$url\n\n\nHi, *" . $data['nama-penerima'] . "* from *" . $data['pemberi-kerja'] . "*.\nWe are from PT. Wijaya Karya (Persero) Tbk, kindly need your help to improve our performance. Please click bellow link below to complete customer satisfaction survey.\n\nUse the username and password to log in:\nUser : *" . $user->email . "*\nPassword : *" . $user->email . "*\n$url",
+        //     // "url" => $url
+        // ]);
+
         // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
         //     "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
         //     "sender" => "6281188827008",
@@ -294,11 +319,16 @@ class CSIController extends Controller
         // ]);
         // dd($send_msg_to_wa);
 
-        $send_msg_to_wa->onError(function ($error) {
-            // dd($error);
-            Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+        // $send_msg_to_wa->onError(function ($error) {
+        //     // dd($error);
+        //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+        //     return redirect()->back();
+        // });
+
+        $emailNotification = sendNotifEmail($data['email'], "Permohonan Pengisian Survey Kepuasan Pelanggan", $message, true, false);
+        if (!$emailNotification) {
             return redirect()->back();
-        });
+        }
 
         $newStruktur = StrukturCustomer::where('id_struktur_organisasi', $data["id-pemberi-kerja"])->where('proyek_struktur', $data["kode-proyek"])->where('role_struktur', $data["segmen"])->first();
         if (!empty($newStruktur)) {

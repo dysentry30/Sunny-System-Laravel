@@ -15,7 +15,7 @@ class ProyekPISNew extends Model
         return $this->hasMany(ContractManagements::class, 'profit_center', 'profit_center');
     }
 
-    public function Progress()
+    public function ProyekProgress()
     {
         return $this->hasMany(ProyekProgress::class, 'kode_spk', 'spk_intern_no');
     }

@@ -184,11 +184,11 @@
                             </div>
 
                             <!--end::Page title-->
-                            @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
+                            @if (auth()->user()->canany(['super-admin', 'csi']))
                                 <!--begin::Actions-->
                                 <div class="d-flex align-items-center py-1">
                                     @php
-                                        $viewer = Auth::user()->nip != $csi->id_struktur_organisasi;
+                                        $viewer = !Auth::user()->can('user-csi');
                                     @endphp
 
                                     @if ($viewer)

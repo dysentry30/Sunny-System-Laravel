@@ -74,7 +74,7 @@
                         {{-- @endif --}}
 
                         {{-- @if (auth()->user()->check_administrator || auth()->user()->check_user_sales) --}}
-                        @canany(['super-admin', 'crm'])
+                        @canany(['super-admin', 'crm', 'admin-csi'])
                         <div class="menu-item">
                             <a class="menu-link " href="/customer"
                                 style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'customer') ? 'background-color:#008CB4' : '' }}">
@@ -94,7 +94,7 @@
 
 
                         {{-- @if (auth()->user()->check_administrator || auth()->user()->check_user_sales || auth()->user()->check_team_proyek) --}}
-                        @canany(['super-admin', 'crm', 'csi'])
+                        @canany(['super-admin', 'crm', 'admin-csi'])
                         <div class="menu-item">
                             <a class="menu-link " href="/proyek"
                                 style="color:white; padding-left:20px; {{ Request::Segment(1) == 'proyek' ? 'background-color:#008CB4' : '' }}">
@@ -1284,7 +1284,7 @@
                             </div>
                         @endcanany
 
-                        @canany(['super-admin'])
+                        @canany(['super-admin', 'csi'])
                             <div class="menu-item">
                                 <a class="menu-link " href="/csi"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'csi') ? 'background-color:#008CB4' : '' }}">

@@ -101,6 +101,7 @@
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600 fs-6">
                                             @foreach ($proyeks as $proyek)
+                                            {{-- @dd($proyek) --}}
                                             {{-- @if (!empty($proyek->Csi) && (int) $proyek->progress >= 5 && (int) $proyek->progress <= 89)
                                                 @if (!empty($proyek->proyekBerjalan) && !empty($proyek->proyekBerjalan->name_customer))
                                                     <tr>
@@ -157,9 +158,21 @@
                                                 @endif
                                             @endif --}}
                                                 @php
-                                                    // $proyekProgress = $proyek->Progress?->where('periode', date('Ym'))->first();
-                                                    $proyekProgress = $proyek->Progress?->last();
-                                                    // dump($proyekProgress);
+                                                $bulan = date('m');
+                                                $tahun = date('Y');
+
+                                                if ($bulan == 1) {
+                                                    $bulan = 12;
+                                                    $tahun = $tahun - 1;
+                                                }
+                                                    // $proyekProgress = $proyek->ProyekProgress?->where('periode', date('Ym'))->first();
+                                                    $proyekProgress = $proyek->ProyekProgress?->where('periode', (string) $tahun. (string) $bulan)->first();
+                                                    if (empty($proyekProgress)) {
+                                                        // $formatPeriode = (string)date('Y') . date('m')-1;
+                                                        $formatPeriode = (string)$tahun . $bulan - 1;
+                                                        // dump($formatPeriode);
+                                                        $proyekProgress = $proyek->ProyekProgress?->where('periode', $formatPeriode)->first();
+                                                    }
                                                     $progress = 0;
                                                     if (!empty($proyekProgress)) {
                                                         $progress = $proyekProgress->ok_review && $proyekProgress->progress_fisik_ri ? (int)$proyekProgress->progress_fisik_ri / (int)$proyekProgress->ok_review : 0;
@@ -185,15 +198,18 @@
                                                         </td>
                                                         <td class="text-center">
                                                         @empty(!$proyek->Csi)
-                                                            <span
-                                                                class="px-4 fs-7 badge {{ $proyek->Csi->status == 'Not Sent' ? 'badge-light-danger' : ($proyek->Csi->status == 'Requested' ? 'badge-light-primary' : 'badge-light-success') }} {{ $proyek->Csi->is_setuju == 'f' ? 'badge-light-danger' : ''}}">
+                                                        <span class="px-4 fs-7 badge {{ $proyek->Csi->status == 'Not Sent' ? 'badge-light-danger' : ($proyek->Csi->status == 'Requested' ? 'badge-light-primary' : 'badge-light-success') }} {{ $proyek->Csi->is_setuju == 'f' ? 'badge-light-danger' : ''}}">
                                                                 @if ($proyek->Csi->is_setuju == "f")
                                                                 Rejected                                                                
                                                                 @else
                                                                 {{ $proyek->Csi->status }}
                                                                 @endif
                                                             </span>
-                                                            @endempty
+                                                        @else
+                                                        <span class="px-4 fs-7 badge badge-light-warning">
+                                                            Not Sent
+                                                        </span>
+                                                        @endempty
                                                         </td>
                                                         <td class="text-center">
                                                         @if (!empty($proyek->Csi))
@@ -298,13 +314,27 @@
                                         @endif --}}
                                         {{-- @if ($proyek->Csi) --}}
                                         @php
-                                            $proyekProgress = $proyek->ProyekPIS?->Progress?->where('periode', date('Ym'))->first();
+                                            $bulan = date('m');
+                                            $tahun = date('Y');
+
+                                            if ($bulan == 1) {
+                                                $bulan = 12;
+                                                $tahun = $tahun - 1;
+                                            }
+                                            // $proyekProgress = $proyek->ProyekPIS?->ProyekProgress?->where('periode', date('Ym'))->first();
+                                            $proyekProgress = $proyek->ProyekPIS?->ProyekProgress?->where('periode', (string) $tahun . (string) $bulan)->first();
                                             // dump($proyekProgress);
+                                            if (empty($proyekProgress)) {
+                                                // $formatPeriode = (string)date('Y') . date('m')-1;
+                                                $formatPeriode = (string)$tahun.$bulan-1;
+                                                $proyekProgress = $proyek->ProyekPIS?->ProyekProgress?->where('periode', $formatPeriode)->first();
+                                            }
                                             $progress = 0;
                                             if (!empty($proyekProgress)) {
                                                 $progress = $proyekProgress->ok_review && $proyekProgress->progress_fisik_ri ? (int)$proyekProgress->progress_fisik_ri / (int)$proyekProgress->ok_review : 0;
                                             }
                                         @endphp
+                                        @if ($progress >= 0.9)
                                         <tr>
                                             <td>
                                                 <a target="_blank"
@@ -337,7 +367,7 @@
                                                 @endif
                                             </td>
                                         </tr>
-                                        {{-- @endif --}}
+                                        @endif
                                     @endforeach
                                 </tbody>
                             </table>

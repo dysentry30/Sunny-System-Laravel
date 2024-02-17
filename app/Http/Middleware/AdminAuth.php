@@ -131,18 +131,17 @@ class AdminAuth
         ]);
         $allowed_url_team_proyek = join(" ", ["dashboard", "proyek", "contract-management", "review-contract", "draft-contract", "issue-project", "question", "input-risk", "laporan-bulanan", "serah-terima", "claim-management", "approval-claim", "detail-claim", "claim", "document", "user"]);
         $concat_allowed_url = "";
-        if (Gate::any(['super-admin', 'admin-ccm', 'admin-crm', 'approver-crm'])) {
+        if (Gate::any(['super-admin', 'admin-ccm', 'admin-crm', 'approver-crm', 'admin-csi'])) {
             return $next($request);
         }
         if (Gate::allows('ccm')) {
             $concat_allowed_url .= $allowed_url_admin_kontrak;
         }
-        if (Gate::any(['crm', 'csi'])) {
-            if (!str_contains(Auth::user()->email, "@wika-customer")) {
-                $concat_allowed_url .= $allowed_url_user_sales;
-            } else {
-                $concat_allowed_url .= join(" ", ["/csi/customer-survey"]);
-            }
+        if (Gate::allows('crm')) {
+            $concat_allowed_url .= $allowed_url_user_sales;
+        }
+        if (Gate::allows('user-csi')) {
+            $concat_allowed_url .= join(" ", ["csi"]);
         }
         if (auth()->user()->check_team_proyek) {
             $concat_allowed_url .= $allowed_url_team_proyek;
@@ -161,6 +160,7 @@ class AdminAuth
             Alert::error("USER NON ACTIVE", "Hubungi Admin (PIC)");
             return redirect("/");
         }
+        // dd($concat_allowed_url);
         if ($request->segment(1) == "user" && Gate::denies('admin-crm')) {
             if (str_contains($concat_allowed_url, $request->segment(1)) && ($request->segment(2) == "view" || $request->segment(2) == "password" || $request->segment(2) == "update")) {
                 return $next($request);

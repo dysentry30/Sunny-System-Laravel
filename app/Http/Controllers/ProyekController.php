@@ -786,6 +786,8 @@ class ProyekController extends Controller
                 })?->keys()?->first();
             }
 
+            dd($dataProyek);
+
             if (!empty($urutanKlasifikasiOmzet) && !empty($urutanKlasifikasiProduksi)) {
                 if ($urutanKlasifikasiProduksi < $urutanKlasifikasiOmzet) {
                     $klasifikasiNotaRekomendasi2 = $klasifikasiProduksiSelected;

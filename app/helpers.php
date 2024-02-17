@@ -3405,12 +3405,18 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
     return $proyekNotaRekomendasi->save();
 }
 
-function sendNotifEmail($user, $subject, $message, $activatedEmailToUser = false): bool
+function sendNotifEmail($user, $subject, $message, $activatedEmailToUser = false, $isNotaRekomendasi = true): bool
 {
+    if (!$isNotaRekomendasi) {
+        $emailTarget = $activatedEmailToUser ? $user : env("EMAIL_DEFAULT");
+    } else {
+        $emailTarget = $activatedEmailToUser ? $user->Pegawai->email : env("EMAIL_DEFAULT");
+    }
+
     try {
         $response = Http::withBasicAuth(env("EMAIL_USERNAME_AUTH"), env("EMAIL_PASSWORD_AUTH"))->post(env("EMAIL_URL_AUTH"), [
             "subject" => $subject,
-            "to" => $activatedEmailToUser ? $user->Pegawai->email : env("EMAIL_DEFAULT"),
+            "to" => $emailTarget,
             "cc" => "",
             "bcc" => "",
             "message" => $message
