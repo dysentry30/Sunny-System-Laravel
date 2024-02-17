@@ -257,6 +257,13 @@ class CSIController extends Controller
             return redirect()->back();
         }
 
+        $findEmailDuplicate = User::where('email', $data['email'])->first();
+
+        if ($findEmailDuplicate) {
+            Alert::error('Error', 'Email telah digunakan');
+            return redirect('/csi-login');
+        }
+
         $proyek = ProyekPISNew::where('spk_intern_no', $data['kode-proyek'])->first();
 
         $csi = new Csi();
