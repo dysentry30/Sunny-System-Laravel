@@ -186,7 +186,7 @@ a{{-- Begin::Extend Header --}}
                                         @endphp
                                         <tbody class="fw-bold text-gray-600">
                                             @foreach ($users as $user)
-                                            @if (!str_contains($user->email, "@wika-customer"))
+                                            @if (!Auth::user()->can('csi'))
                                                 <tr>
 
                                                     <!--begin::No-->
@@ -322,7 +322,7 @@ a{{-- Begin::Extend Header --}}
                                         @endphp
                                         <tbody class="fw-bold text-gray-600">
                                             @foreach ($users as $user)
-                                            @if (str_contains($user->email, "@wika-customer"))
+                                            @if (Auth::user()->can('csi'))
                                                 <tr>
 
                                                     <!--begin::No-->
@@ -744,7 +744,7 @@ a{{-- Begin::Extend Header --}}
                             <!--end::Options-->
                             <!--begin::Options-->
                             <label class="form-check form-check-sm form-check-custom form-check-solid me-6">
-                                <input class="form-check-input" type="checkbox" value="" id="team-proyek" name="team-proyek" />
+                                <input class="form-check-input" type="checkbox" value="" id="user-csi" name="user-csi" />
                                 <span class="form-check-label me-8 required"><b>CSI</b></span>
                             </label>
                             <!--end::Options-->

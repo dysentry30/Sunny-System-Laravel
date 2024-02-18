@@ -21,6 +21,7 @@ use App\Models\ProyekPISNew;
 use App\Models\RoleManagements;
 use Exception;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
@@ -72,10 +73,11 @@ class UserController extends Controller
             }
         } elseif (Auth::check()) {
             return redirect('/dashboard');
+        } elseif ($request->getRequestUri() == "/csi-login" || $request->getRequestUri() == "/login-admin") {
+            return view('0_Welcome');
         } else {
             return redirect(env('WZONE_URL'));
         }
-        // return view('0_Welcome');
         return redirect('/dashboard');
     }
 
@@ -135,9 +137,7 @@ class UserController extends Controller
             if (Auth::attempt($credentials) && Auth::check()) {
                 // dd(Auth::user());
                 $request->session()->regenerate();
-                if (!str_contains(Auth::user()->email,
-                    "@wika-customer"
-                )) {
+                if (!Gate::allows('user-csi')) {
                     if (Auth::user()->is_active) {
                         $redirect = $request->schemeAndHttpHost() . $request->get("redirect-to");
                         if (!empty($redirect)) {
@@ -347,12 +347,14 @@ class UserController extends Controller
         $is_administrator = $request->has("administrator") ?? false;
         $is_admin_kontrak = $request->has("admin-kontrak") ?? false;
         $is_user_sales = $request->has("user-sales") ?? false;
+        $is_user_csi = $request->has("user-csi") ?? false;
         $is_team_proyek = $request->has("team-proyek") ?? false;
 
-        if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_team_proyek == false) {
+        if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_user_csi == false && $is_team_proyek == false) {
             $rules["administrator"] = "accepted";
             $rules["admin-kontrak"] = "accepted";
             $rules["user-sales"] = "accepted";
+            $rules["user-csi"] = "accepted";
             $rules["team-proyek"] = "accepted";
 
             $validation = Validator::make($data, $rules, $messages);
@@ -373,6 +375,7 @@ class UserController extends Controller
         $user->check_administrator = $is_administrator;
         $user->check_admin_kontrak = $is_admin_kontrak;
         $user->check_user_sales = $is_user_sales;
+        $user->check_user_csi = $is_user_csi;
         $user->check_team_proyek = $is_team_proyek;
         $user->password = Hash::make("password");
 
@@ -420,6 +423,7 @@ class UserController extends Controller
         $is_administrator = $request->has("administrator") ?? false;
         $is_admin_kontrak = $request->has("admin-kontrak") ?? false;
         $is_user_sales = $request->has("user-sales") ?? false;
+        $is_user_csi = $request->has("user-csi") ?? false;
         $is_team_proyek = $request->has("team-proyek") ?? false;
         $role_admin = $request->has("role_admin") ?? false;
         $role_user = $request->has("role_user") ?? false;
@@ -439,10 +443,11 @@ class UserController extends Controller
         //     // return redirect()->back();
         // }
 
-        if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_team_proyek == false && $role_admin == false && $role_user == false && $role_approver == false && $role_risk == false) {
+        if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_user_csi == false && $is_team_proyek == false && $role_admin == false && $role_user == false && $role_approver == false && $role_risk == false) {
             $rules["administrator"] = "accepted";
             $rules["admin-kontrak"] = "accepted";
             $rules["user-sales"] = "accepted";
+            $rules["user-csi"] = "accepted";
             $rules["team-proyek"] = "accepted";
 
             $rules["role_admin"] = "accepted";
@@ -494,7 +499,7 @@ class UserController extends Controller
         // $user->file_ttd = $file_name;
         $user->is_active = $request->has("is-active");
         // if (!Auth::user()->check_administrator) {
-        if (str_contains($user->email, "@wika-customer")) {
+        if (Gate::allows('user-csi')) {
             $user->unit_kerja = null;
         } else {
             $user->unit_kerja = count($data["unit-kerja"]) > 1 ? join(",", $data["unit-kerja"]) : $data["unit-kerja"][0];
@@ -504,6 +509,7 @@ class UserController extends Controller
         $user->check_administrator = $is_administrator;
         $user->check_admin_kontrak = $is_admin_kontrak;
         $user->check_user_sales = $is_user_sales;
+        $user->check_user_csi = $is_user_csi;
         $user->check_team_proyek = $is_team_proyek;
 
         $user->role_admin = $role_admin;

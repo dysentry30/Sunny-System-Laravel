@@ -100,21 +100,21 @@
                             </div>
                         @endif --}}
                         
-                        @canany(['super-admin', 'crm',])
-                            <div class="menu-item">
-                                <a class="menu-link " href="/customer"
-                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'customer') ? 'background-color:#008CB4' : '' }}">
-                                    <span class="menu-icon">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                        <span class="svg-icon svg-icon-2">
-                                            <img alt="Logo" src="/media/icons/duotune/creatio/account.svg"
-                                                class="h-30px logo" />
-                                        </span>
-                                        <!--end::Svg Icon-->
+                        @canany(['super-admin', 'crm', 'admin-csi'])
+                        <div class="menu-item">
+                            <a class="menu-link " href="/customer"
+                                style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'customer') ? 'background-color:#008CB4' : '' }}">
+                                <span class="menu-icon">
+                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                    <span class="svg-icon svg-icon-2">
+                                        <img alt="Logo" src="/media/icons/duotune/creatio/account.svg"
+                                            class="h-30px logo" />
                                     </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Pelanggan</span>
-                                </a>
-                            </div>
+                                    <!--end::Svg Icon-->
+                                </span>
+                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Pelanggan</span>
+                            </a>
+                        </div>
                         @endcanany
                         {{-- @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
                             <div class="menu-item">
@@ -133,7 +133,7 @@
                             </div>
                         @endif --}}
 
-                        @canany(['super-admin', 'crm', 'ccm'])
+                        @canany(['super-admin', 'crm', 'admin-csi'])
                             <div class="menu-item">
                                 <a class="menu-link " href="/proyek"
                                     style="color:white; padding-left:20px; {{ Request::Segment(1) == 'proyek' ? 'background-color:#008CB4' : '' }}">
