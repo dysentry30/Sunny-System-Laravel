@@ -33,7 +33,7 @@
                     </a>
                 @elsecan('ccm')
                     <a style="background-color:#0db0d9;">
-                        <img alt="Logo" src="/media/logos/Logo2.png" class="h-60px logo"
+                        <img alt="Logo" src="/media/logos/logo-wika.png" class="h-60px logo"
                             style="margin-top:30px;margin-left:-10px;" />
                     </a>
                 @endcan
