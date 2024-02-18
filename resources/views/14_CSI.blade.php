@@ -476,7 +476,7 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid" name="email" placeholder="Email"/>
+                                <input type="text" class="form-control form-control-solid" name="email" placeholder="Email" required/>
                                 <!--end::Input-->
                             </div>
                             <!--end::Input group-->

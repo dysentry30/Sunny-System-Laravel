@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContractManagementsController;
 use App\Http\Controllers\ProyekController;
 use App\Http\Controllers\UserController;
 use App\Models\Customer;
@@ -633,4 +634,5 @@ Route::middleware(["web"])->group(function () {
     //     }
     //     return $xml_data->asXML();
     // }
+    Route::get("/get-progress-csi", [ContractManagementsController::class, "getProgressFromTableProyekPISNew"]);
 });

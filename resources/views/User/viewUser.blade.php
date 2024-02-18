@@ -315,9 +315,9 @@
                                                                     <div class="form-check me-12">
                                                                         <input class="form-check-input" type="checkbox"
                                                                             value=""
-                                                                            {{ $user->check_team_proyek == 1 ? 'checked' : '' }}
-                                                                            name="team-proyek" id="team-proyek">
-                                                                        <label class="form-check-label" for="team-proyek">
+                                                                            {{ $user->check_user_csi == 1 ? 'checked' : '' }}
+                                                                            name="user-csi" id="user-csi">
+                                                                        <label class="form-check-label" for="user-csi">
                                                                             CSI
                                                                         </label>
                                                                     </div>
@@ -369,7 +369,7 @@
                                                                             </label>
                                                                         </div>
                                                                         <!-- end:: Form Input Admin Kontrak -->
-                                                                        @cannot('ccm')
+                                                                        @can('crm')
                                                                             <!-- begin:: Form Input Team Proyek -->
                                                                             <div class="form-check me-12">
                                                                                 <input class="role form-check-input" type="checkbox"
@@ -381,7 +381,7 @@
                                                                                 </label>
                                                                             </div>
                                                                             <!-- end:: Form Input Team Proyek -->
-                                                                        @endcannot
+                                                                        @endcan
                                                                     @endcannot
                                                                 @endif
 

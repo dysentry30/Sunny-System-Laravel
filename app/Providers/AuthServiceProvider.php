@@ -38,7 +38,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('csi', function (User $user) {
-            return str_contains($user->email, '@wika-customer');
+            return $user->check_user_csi == true;
         });
 
         Gate::define('admin', function (User $user) {
@@ -94,6 +94,20 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('risk-ccm',
             function (User $user) {
                 return $user->check_admin_kontrak == true && $user->role_risk == true;
+            }
+        );
+
+        Gate::define(
+            'admin-csi',
+            function (User $user) {
+                return  $user->check_user_csi == true && $user->role_admin == true;
+            }
+        );
+
+        Gate::define(
+            'user-csi',
+            function (User $user) {
+                return  $user->check_user_csi == true && $user->role_user == true;
             }
         );
         //

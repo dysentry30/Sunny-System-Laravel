@@ -4651,116 +4651,122 @@ class ContractManagementsController extends Controller
         $str_current = $current->format('Ym');
         $is_exist_progress_period = ProyekProgress::where("kode_spk", "=", $kode_spk)->where("periode", "=", $str_current)->first();
         // dd($is_exist_progress_period);
+        try {
+            if ($kode_spk) {
 
-        if ($kode_spk) {
+                $response = Http::post('http://pis.wika.co.id/wpapi/files/getAPIQISList', [
+                    "kdspk" => $kode_spk,
+                    "period" => "$str_current"
+                ]);
 
-            $response = Http::post('http://pis.wika.co.id/wpapi/files/getAPIQISList', [
-                "kdspk" => $kode_spk,
-                "period" => "$str_current"
-            ]);
+                // dd($response->collect($key = "data")->first());
 
-            // dd($response->collect($key = "data")->first());
+                if ($response->successful()) {
+                    $data_response = $response->collect($key = "data")->first();
+                    $calculate_progress = (int)$data_response['ok_review'] && (int)$data_response['progress_fisik_ri'] ? round(((int)$data_response['ok_review'] / (int)$data_response['progress_fisik_ri']), 2) : 0;
 
-            if ($response->successful()) {
-                $data_response = $response->collect($key = "data")->first();
-                $calculate_progress = (int)$data_response['ok_review'] && (int)$data_response['progress_fisik_ri'] ? round(((int)$data_response['ok_review'] / (int)$data_response['progress_fisik_ri']), 2) : 0;
+                    // $newCsi = new Csi();
+                    // $newCsi->id_customer = $proyek->Customer?->id_customer;
+                    // $newCsi->id_struktur_organisasi = null;
+                    // $newCsi->no_spk = $kode_spk;
+                    // $newCsi->tanggal = $current;
+                    // $newCsi->status = "Not Sent";
+                    // $newCsi->progress = $calculate_progress;
 
-                $newCsi = new Csi();
-                $newCsi->id_customer = $proyek->Customer?->id_customer;
-                $newCsi->id_struktur_organisasi = null;
-                $newCsi->no_spk = $kode_spk;
-                $newCsi->tanggal = $current;
-                $newCsi->status = "Not Sent";
-                $newCsi->progress = $calculate_progress;
-
-                if ($is_exist_progress_period) {
-                    $data = $is_exist_progress_period;
-                    // $data->kode_proyek = $contract->project->kode_proyek;
-                    $data->kode_spk = $kode_spk;
-                    $data->ok_review = (int)$data_response["ok_review"];
-                    $data->progress_fisik_ri = (int)$data_response["progress_fisik_ri"];
-                    $data->lama_proyek = $data_response["lamaproyek"];
-                    $data->laba_kotor_ri = (int)$data_response["laba_kotor_ri"];
-                    $data->progress_fisik_ra = (int) $data_response["progress_fisik_ra"];
-                    $data->pu_berelasi = (int) $data_response["pu_berelasi"];
-                    $data->pu_ketiga = (int) $data_response["pu_ketiga"];
-                    $data->ra_bl = (int) $data_response["ra_bl"];
-                    $data->ri_bl = (int) $data_response["ri_bl"];
-                    $data->ra_btl = (int) $data_response["ra_btl"];
-                    $data->ri_btl = (int) $data_response["ri_btl"];
-                    $data->ri_pdpk = (int) $data_response["ri_pdpk"];
-                    $data->bdd = (int) $data_response["bdd"];
-                    $data->persekot = (int) $data_response["persekot"];
-                    $data->laba_kotor_ra = (int) $data_response["laba_kotor_ra"];
-                    $data->piutang = (int) $data_response["piutang"];
-                    $data->tagbrut = (int) $data_response["tagbrut"];
-                    $data->periode = $str_current;
-                } else {
-                    $data = new ProyekProgress();
-                    // $data->kode_proyek = $contract->project->kode_proyek;
-                    $data->kode_spk = $kode_spk;
-                    $data->ok_review = (int)$data_response["ok_review"];
-                    $data->progress_fisik_ri = (int)$data_response["progress_fisik_ri"];
-                    $data->lama_proyek = $data_response["lamaproyek"];
-                    $data->laba_kotor_ri = (int)$data_response["laba_kotor_ri"];
-                    $data->progress_fisik_ra = (int) $data_response["progress_fisik_ra"];
-                    $data->pu_berelasi = (int) $data_response["pu_berelasi"];
-                    $data->pu_ketiga = (int) $data_response["pu_ketiga"];
-                    $data->ra_bl = (int) $data_response["ra_bl"];
-                    $data->ri_bl = (int) $data_response["ri_bl"];
-                    $data->ra_btl = (int) $data_response["ra_btl"];
-                    $data->ri_btl = (int) $data_response["ri_btl"];
-                    $data->ri_pdpk = (int) $data_response["ri_pdpk"];
-                    $data->bdd = (int) $data_response["bdd"];
-                    $data->persekot = (int) $data_response["persekot"];
-                    $data->laba_kotor_ra = (int) $data_response["laba_kotor_ra"];
-                    $data->piutang = (int) $data_response["piutang"];
-                    $data->tagbrut = (int) $data_response["tagbrut"];
-                    $data->periode = $str_current;
-                }
-                if ($data->save() && $newCsi->save()) {
+                    if ($is_exist_progress_period) {
+                        $data = $is_exist_progress_period;
+                        // $data->kode_proyek = $contract->project->kode_proyek;
+                        $data->kode_spk = $kode_spk;
+                        $data->ok_review = (int)$data_response["ok_review"];
+                        $data->progress_fisik_ri = (int)$data_response["progress_fisik_ri"];
+                        $data->lama_proyek = $data_response["lamaproyek"];
+                        $data->laba_kotor_ri = (int)$data_response["laba_kotor_ri"];
+                        $data->progress_fisik_ra = (int) $data_response["progress_fisik_ra"];
+                        $data->pu_berelasi = (int) $data_response["pu_berelasi"];
+                        $data->pu_ketiga = (int) $data_response["pu_ketiga"];
+                        $data->ra_bl = (int) $data_response["ra_bl"];
+                        $data->ri_bl = (int) $data_response["ri_bl"];
+                        $data->ra_btl = (int) $data_response["ra_btl"];
+                        $data->ri_btl = (int) $data_response["ri_btl"];
+                        $data->ri_pdpk = (int) $data_response["ri_pdpk"];
+                        $data->bdd = (int) $data_response["bdd"];
+                        $data->persekot = (int) $data_response["persekot"];
+                        $data->laba_kotor_ra = (int) $data_response["laba_kotor_ra"];
+                        $data->piutang = (int) $data_response["piutang"];
+                        $data->tagbrut = (int) $data_response["tagbrut"];
+                        $data->periode = $str_current;
+                    } else {
+                        $data = new ProyekProgress();
+                        // $data->kode_proyek = $contract->project->kode_proyek;
+                        $data->kode_spk = $kode_spk;
+                        $data->ok_review = (int)$data_response["ok_review"];
+                        $data->progress_fisik_ri = (int)$data_response["progress_fisik_ri"];
+                        $data->lama_proyek = $data_response["lamaproyek"];
+                        $data->laba_kotor_ri = (int)$data_response["laba_kotor_ri"];
+                        $data->progress_fisik_ra = (int) $data_response["progress_fisik_ra"];
+                        $data->pu_berelasi = (int) $data_response["pu_berelasi"];
+                        $data->pu_ketiga = (int) $data_response["pu_ketiga"];
+                        $data->ra_bl = (int) $data_response["ra_bl"];
+                        $data->ri_bl = (int) $data_response["ri_bl"];
+                        $data->ra_btl = (int) $data_response["ra_btl"];
+                        $data->ri_btl = (int) $data_response["ri_btl"];
+                        $data->ri_pdpk = (int) $data_response["ri_pdpk"];
+                        $data->bdd = (int) $data_response["bdd"];
+                        $data->persekot = (int) $data_response["persekot"];
+                        $data->laba_kotor_ra = (int) $data_response["laba_kotor_ra"];
+                        $data->piutang = (int) $data_response["piutang"];
+                        $data->tagbrut = (int) $data_response["tagbrut"];
+                        $data->periode = $str_current;
+                    }
+                    // if ($data->save() && $newCsi->save()) {
+                    if ($data->save()) {
+                        $status = [
+                            'kode_proyek' => $nospk,
+                            'periode' => $str_current,
+                            'status' => 'SUCCESS',
+                            'progress' => $calculate_progress,
+                            'dataPIS' => $data_response
+                        ];
+                        // Alert::success
+                        setLogging("Get_Progress_PIS", "[Progress=>" . $nospk . '=>' . $calculate_progress . ']', $status);
+                        // toast("Data berhasil disimpan", "success")->autoClose(3000);
+                        return response()->json([
+                            "status" => "success",
+                            // "link" => true
+                            "message" => "Success"
+                        ], 200);
+                        // dd("success");
+                    }
                     $status = [
                         'kode_proyek' => $nospk,
                         'periode' => $str_current,
-                        'status' => 'SUCCESS',
+                        'status' => 'FAILED',
                         'progress' => $calculate_progress,
-                        'dataPIS' => $data_response
+                        'dataPIS' => $response
                     ];
                     // Alert::success
                     setLogging("Get_Progress_PIS", "[Progress=>" . $nospk . '=>' . $calculate_progress . ']', $status);
-                    toast("Data berhasil disimpan", "success")->autoClose(3000);
+                    // toast("Data gagal disimpan", "error")->autoClose(3000);
                     return response()->json([
                         "status" => "success",
-                        "link" => true
-                    ], 200);
-                    // dd("success");
+                        // "link" => true
+                        "message" => "Failed"
+                    ], 500);
+
+                    // dd($data);
                 }
 
-                $status = [
-                    'kode_proyek' => $nospk,
-                    'periode' => $str_current,
-                    'status' => 'FAILED',
-                    'progress' => $calculate_progress,
-                    'dataPIS' => $response
-                ];
-                // Alert::success
-                setLogging("Get_Progress_PIS", "[Progress=>" . $nospk . '=>' . $calculate_progress . ']', $status);
-                toast("Data gagal disimpan", "error")->autoClose(3000);
-                return response()->json([
-                    "status" => "success",
-                    "link" => true
-                ], 500);
+                // return response()->json($response->json(["link" => true]), 200);
 
-                // dd($data);
             }
-
-        // return response()->json($response->json(["link" => true]), 200);
-
+        } catch (\Exception $e) {
+            // toast("Kode SPK belum ada", "error")->autoClose(3000);
+            // return response()->json([
+            //     "status" => "failed",
+            //     // "link" => true,
+            //     "message" => $e->getMessage()
+            // ], 200);
+            dd($e->getMessage());
         }
-        toast("Kode SPK belum ada", "error")->autoClose(3000);
-        return response()->json([
-            "status" => "success",
-            "link" => true
-        ], 200);
     }
 }
