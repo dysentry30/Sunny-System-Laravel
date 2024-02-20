@@ -83,12 +83,13 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Kategori Matriks</th>
                                         <th class="min-w-125px">Nama Pegawai</th>
                                         <th class="min-w-100px">Unit Kerja</th>
                                         <th class="min-w-100px">Kode Unit Kerja</th>
                                         <th class="min-w-auto">Departemen</th>
                                         <th class="min-w-auto">Klasifikasi Proyek</th>
-                                        <th class="min-w-auto">Kategori</th>
+                                        <th class="min-w-auto">Kategori Role</th>
                                         <th class="min-w-auto text-white">Start Periode</th>
                                         <th class="min-w-auto text-white">Finish Periode</th>
                                         <th class="min-w-auto">Action</th>
@@ -187,8 +188,11 @@
                                         @endphp
                                         <tr>
                                             {{-- @dump($approval->Departemen) --}}
+                                            <td class="text-center align-middle">
+                                                <p class="m-0 badge badge-{{ $approval->is_ktt ? 'primary' : 'info' }}">{{ $approval->is_ktt ? 'KTT' : 'Pegawai' }}</p>
+                                            </td>
                                             <td>
-                                                <a href="#" class="text-hover-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_matriks_update_{{$approval->id}}">{{$approval->Pegawai->nama_pegawai}}</a>
+                                                <a href="#" class="text-hover-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_matriks_update_{{$approval->id}}">{{$approval->Pegawai?->nama_pegawai}}</a>
                                             </td>
                                             <td>{{$approval->Divisi->nama_kantor}}</td>
                                             <td>
@@ -324,12 +328,26 @@
                                 <!--end::Input group-->
                             </div>
                             <!--End begin::Col-->
+                            <div class="d-flex flex-row gap-4 my-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="ktt_option" value="ktt" onchange="onChangeIsKTT(this)" id="is_ktt" checked>
+                                    <label class="form-check-label fw-bold" for="is_ktt">
+                                      <b>Send to KTT</b>
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="ktt_option" value="pegawai" onchange="onChangeIsKTT(this)" id="is_pegawai">
+                                    <label class="form-check-label fw-bold" for="is_pegawai">
+                                      <b>Send to Pegawai</b>
+                                    </label>
+                                </div>
+                            </div>
                             <div class="">
                                 <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
+                                <div class="fv-row mb-7" id="pegawai-div" style="display: none">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Nama Pegawai</span>
+                                        <span class="">Nama Pegawai</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
@@ -345,6 +363,20 @@
                                 <!--end::Input group-->
                             </div>
                             <!--End begin::Col-->
+
+                            <script>
+                                function onChangeIsKTT(e, id = null){
+                                    const value = e.value;
+                                    const parentElementKTT = e.parentElement.parentElement;
+                                    const pegawaiDivElement = parentElementKTT.nextElementSibling.firstElementChild;
+
+                                    if (value == 'ktt') {
+                                        pegawaiDivElement.style.display = "none";
+                                    } else {
+                                        pegawaiDivElement.style.display = "";                                            
+                                    }
+                                }
+                            </script>
     
                             <div class="row mb-7">
                                 <div class="col">
@@ -641,12 +673,26 @@
                                     <!--end::Input group-->
                                 </div>
                                 <!--End begin::Col-->
+                                <div class="d-flex flex-row gap-4 my-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="ktt_option" value="ktt" onchange="onChangeIsKTT(this, '{{ $approval->id }}')" id="is_ktt" {{ $approval->is_ktt ? 'checked' : '' }}>
+                                        <label class="form-check-label fw-bold" for="is_ktt">
+                                          <b>Send to KTT</b>
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="ktt_option" value="pegawai" onchange="onChangeIsKTT(this, '{{ $approval->id }}'))" id="is_pegawai" {{ !$approval->is_ktt ? 'checked' : '' }}>
+                                        <label class="form-check-label fw-bold" for="is_pegawai">
+                                          <b>Send to Pegawai</b>
+                                        </label>
+                                    </div>
+                                </div>
                                 <div class="">
                                     <!--begin::Input group Website-->
-                                    <div class="fv-row mb-7">
+                                    <div class="fv-row mb-7" id="pegawai-div" style="display: {{ $approval->is_ktt ? 'none' : '' }}">
                                         <!--begin::Label-->
                                         <label class="fs-6 fw-bold form-label mt-3">
-                                            <span class="required">Nama Pegawai</span>
+                                            <span class="">Nama Pegawai</span>
                                         </label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
@@ -906,7 +952,7 @@
                         <!--begin::Modal header-->
                         <div class="modal-header">
                             <!--begin::Modal title-->
-                            <h2>Hapus : {{ $approval->Pegawai->nama_pegawai }}</h2>
+                            <h2>Hapus : {{ $approval->Pegawai?->nama_pegawai }}</h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
                             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -964,7 +1010,7 @@
     $(document).ready(function() {
         $("#nama-pegawai").select2({
             ajax: {
-                url: '/get-data-pegawai',
+                url: '/proyek/get-data-pegawai',
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {
@@ -1069,7 +1115,7 @@
 
         $(select2).select2({
             ajax: {
-                url: '/get-data-pegawai',
+                url: '/proyek/get-data-pegawai',
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {

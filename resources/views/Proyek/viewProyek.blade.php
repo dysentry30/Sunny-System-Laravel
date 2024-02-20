@@ -126,9 +126,9 @@
                                             style="background-color:#00b48d">
                                     @elseif ($proyek->stage == 4 && $check_non_green_line_nota_2 && is_null($proyek->is_request_rekomendasi_2) && is_null($proyek->is_disetujui_rekomendasi_2))
                                         @if (empty($proyek->DokumenPenentuanProjectGreenlane) || empty($proyek->DokumenTender))
-                                            <button type="button" class="btn btn-sm btn-success ms-2" data-bs-toggle="modal"data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="<b>Dokumen Form Penentuan Project Green Lane / Non Green Lane & Dokumen Tender</b> Wajib Diisi" disabled>Pengajuan Rekomendasi</button>
+                                            <p class="btn btn-sm btn-success ms-2 mb-0" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="bottom" data-bs-title="<b>Dokumen Form Penentuan Project Green Lane / Non Green Lane & Dokumen Tender</b><br> Wajib Diisi">Pengajuan Rekomendasi</p>
                                         @else
-                                            <input type="button" name="proyek-rekomendasi-2" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi-2" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan-nota-2"
+                                            <input type="button" name="proyek-rekomendasi-2" data-bs-toggle="modal"  value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi-2" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan-nota-2"
                                                     style="background-color:#00b48d">
                                         @endif    
                                     {{-- @elseif($proyek->stage > 1 && $proyek->is_disetujui == true &&  $proyek->is_recommended_with_note)
@@ -245,7 +245,7 @@
                     </div>
                     <!--end::Toolbar-->
                     
-                    @canany(['super-user', 'user-crm'])
+                    @canany(['super-admin', 'user-crm'])
                         @if ($proyek->is_request_rekomendasi == false && !$check_green_line && $proyek->stage == 1)
                         <!-- begin::modal confirm send wa-->
                         <div class="modal fade w-100" style="margin-top: 120px" id="modal-send-pengajuan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -353,10 +353,9 @@
                                     !empty($proyek->nilaiok_awal) &&
                                     !empty($proyek->jenis_terkontrak) &&
                                     !empty($proyek->sistem_bayar) &&
-                                    !empty($proyek->uang_muka) &&
                                     !empty($proyek->waktu_pelaksanaan)
                                     )
-                                        <input class="form-check-input" onclick="sendWa2(this)" id="confirm-send-wa" name="confirm-send-wa" type="checkbox">
+                                        <input class="form-check-input" onclick="sendWa2(this)" id="confirm-send-wa" name="confirm-send-wa-2" type="checkbox">
                                         <i class="fs-6 text-primary">
                                             Saya Setuju Melakukan Pengajuan dan Data Sudah Sudah Terisi Dengan Benar
                                         </i>
@@ -3478,7 +3477,7 @@
                                                                     });
                                                                 @endphp
                                                                 @canany(['super-admin', 'admin-crm', 'user-crm'])
-                                                                @if ($porsiJO->isNotEmpty())
+                                                                @if ($porsiJO->isNotEmpty() && $proyek->AssessmentPartnerSelection->isEmpty())
                                                                     @if ($isDokumenFinish)
                                                                     <button type="button" id="approval-kso" class="btn btn-sm btn-primary" onclick="approvalKSO()"><b>Ajukan KSO</b></button>
                                                                     @endif
@@ -3731,13 +3730,15 @@
                                                                                                         {{ $porsi->DokumenKelengkapanPartnerKSO->count() == 4 ? "Lihat" : "Upload" }}
                                                                                                     </p>
                                                                                                 </small>
+                                                                                                @if ($proyek->AssessmentPartnerSelection?->isEmpty() || $proyek->AssessmentPartnerSelection?->where('partner_id', $porsi->id)?->where('is_revisi', true)?->isNotEmpty())
                                                                                                 <small>
                                                                                                     <p data-bs-toggle="modal"
                                                                                                         data-bs-target="#kt_porsi_delete_{{ $porsi->id }}"
                                                                                                         class="btn btn-sm btn-light btn-active-danger m-0">
                                                                                                         Delete
                                                                                                     </p>
-                                                                                                </small>
+                                                                                                </small>                                                                                                    
+                                                                                                @endif
                                                                                             </div>
                                                                                         </td>
                                                                                         <!--end::Action-->
@@ -9169,8 +9170,8 @@
                                                 class="form-select form-select-solid" data-control="select2"
                                                 data-hide-search="true" data-placeholder="Pilih Posisi">
                                                 <option></option>
-                                                <option value="Leader">Leader</option>
-                                                <option value="Member">Member</option>
+                                                <option value="Ketua">Ketua</option>
+                                                <option value="Anggota">Anggota</option>
                                             </select>
                                             <!--end::Input-->
                                         </div>
@@ -10881,7 +10882,9 @@
                                         </td>
                                         <td class="text-center">
                                             @if ($collectDokumenKelengkapanPartner?->contains('kategori', 'Dokumen AHU'))
+                                                @if ($proyek->AssessmentPartnerSelection?->isEmpty() || $proyek->AssessmentPartnerSelection?->where('partner_id', $porsi->id)?->where('is_revisi', true)?->isNotEmpty())
                                                 <button type="button" onclick="deleteDocument('{{ $getDokumenAHU->id }}')" class="btn btn-danger btn-sm text-white">Delete</button>
+                                                @endif
                                             @else
                                                 <input type="file" name="dokumen-ahu-partner" id="dokumen-ahu-partner" class="form-control form-control-solid" accept=".pdf">
                                             @endif
@@ -10902,7 +10905,9 @@
                                         </td>
                                         <td class="text-center">
                                             @if ($collectDokumenKelengkapanPartner?->contains('kategori', 'Dokumen Laporan Keuangan'))
+                                                @if ($proyek->AssessmentPartnerSelection?->isEmpty() || $proyek->AssessmentPartnerSelection?->where('partner_id', $porsi->id)?->where('is_revisi', true)?->isNotEmpty())
                                                 <button type="button" onclick="deleteDocument('{{ $getDokumenLaporanKeuangan->id }}')" class="btn btn-danger btn-sm text-white">Delete</button>
+                                                @endif    
                                             @else
                                                 <input type="file" name="dokumen-keuangan-partner" id="dokumen-keuangan-partner" class="form-control form-control-solid" accept=".pdf">
                                             @endif
@@ -10923,7 +10928,9 @@
                                         </td>
                                         <td class="text-center">
                                             @if ($collectDokumenKelengkapanPartner?->contains('kategori', 'Dokumen Pengalaman'))
-                                                <button type="button" onclick="deleteDocument('{{ $getDokumenPengalaman->id }}')" class="btn btn-danger btn-sm text-white">Delete</button>
+                                                @if ($proyek->AssessmentPartnerSelection?->isEmpty() || $proyek->AssessmentPartnerSelection?->where('partner_id', $porsi->id)?->where('is_revisi', true)?->isNotEmpty())    
+                                                    <button type="button" onclick="deleteDocument('{{ $getDokumenPengalaman->id }}')" class="btn btn-danger btn-sm text-white">Delete</button>
+                                                @endif
                                             @else
                                                 <input type="file" name="dokumen-pengalaman-partner" id="dokumen-pengalaman-partner" class="form-control form-control-solid" accept=".pdf">
                                             @endif
@@ -10944,7 +10951,9 @@
                                         </td>
                                         <td class="text-center">
                                             @if ($collectDokumenKelengkapanPartner?->contains('kategori', 'Dokumen Laporan SPT'))
-                                                <button type="button" onclick="deleteDocument('{{ $getDokumenSPT->id }}')" class="btn btn-danger btn-sm text-white">Delete</button>
+                                                @if ($proyek->AssessmentPartnerSelection?->isEmpty() || $proyek->AssessmentPartnerSelection?->where('partner_id', $porsi->id)?->where('is_revisi', true)?->isNotEmpty())
+                                                    <button type="button" onclick="deleteDocument('{{ $getDokumenSPT->id }}')" class="btn btn-danger btn-sm text-white">Delete</button>
+                                                @endif
                                             @else
                                                 <input type="file" name="dokumen-spt-partner" id="dokumen-spt-partner" class="form-control form-control-solid" accept=".pdf">
                                             @endif

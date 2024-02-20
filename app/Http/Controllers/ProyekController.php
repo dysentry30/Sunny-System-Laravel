@@ -649,35 +649,51 @@ class ProyekController extends Controller
         //End :: Nota Rekomendasi 1
 
         //Begin :: Nota Rekomendasi 2
-        if (isset($dataProyek["proyek-rekomendasi-2"]) && isset($dataProyek["confirm-send-wa"]) && isset($dataProyek["uang-muka"]) && isset($dataProyek["jenis-terkontrak-new"]) && isset($dataProyek["sistem-bayar-new"])) {
+        if (isset($dataProyek["proyek-rekomendasi-2"]) && isset($dataProyek["confirm-send-wa-2"]) && isset($dataProyek["jenis-terkontrak-new"]) && isset($dataProyek["sistem-bayar-new"])) {
             $divisi = $newProyek->UnitKerja->Divisi->id_divisi;
             $departemen = $newProyek->departemen_proyek;
             $klasifikasi_proyek = $newProyek->klasifikasi_pasdin;
             $matriks_approval2 = MatriksApprovalNotaRekomendasi2::where("divisi_id", "=", $divisi)->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where("departemen_code", $departemen)->where("kategori", "=", "Pengajuan")->where('is_active', true)->get();
+            // dd($matriks_approval2);
 
             $isnomorTargetActive = false;
             // $nomorDefault = "6285376444701";
             $nomorDefault = "085881028391";
-            foreach ($matriks_approval2 as $key => $user) {
-                $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$newProyek->kode_proyek";
-                // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-                //     "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
-                //     // "sender" => "6281188827008",
-                //     "sender" => env("NO_WHATSAPP_BLAST"),
-                //     "number" => $isnomorTargetActive ? $user->Pegawai->handphone : $nomorDefault,
-                //     // "number" => "085881028391",
-                //     "message" => "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi II, *" . $newProyek->ProyekBerjalan->name_customer . "* untuk Proyek *$newProyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
-                //     // "url" => $url
-                // ]);
-                // $send_msg_to_wa->onError(function ($error) {
-                //     // dd($error);
-                //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                //     return redirect()->back();
-                // });
+
+            if ($matriks_approval2->contains('is_ktt', true)) {
+                $user = TimTender::where('kode_proyek', $dataProyek["kode-proyek"])?->where('posisi', 'Ketua')->first();
+                if (empty($user)) {
+                    Alert::error('Ketua Tim Tender Belum Ditentukan', "Mohon untuk mengisi data tim tender terlebih dahulu!");
+                    return redirect()->back();
+                }
+                $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_pengajuan_$newProyek->kode_proyek";
                 $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi II, " . $newProyek->ProyekBerjalan->name_customer . " untuk Proyek $newProyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
                 $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Tanda Tangan Pengajuan Nota Rekomendasi II", nl2br($message), $isnomorTargetActive);
                 if (!$sendEmailUser) {
                     return redirect()->back();
+                }
+            } else {
+                foreach ($matriks_approval2 as $key => $user) {
+                    $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_pengajuan_$newProyek->kode_proyek";
+                    // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+                    //     "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
+                    //     // "sender" => "6281188827008",
+                    //     "sender" => env("NO_WHATSAPP_BLAST"),
+                    //     "number" => $isnomorTargetActive ? $user->Pegawai->handphone : $nomorDefault,
+                    //     // "number" => "085881028391",
+                    //     "message" => "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi II, *" . $newProyek->ProyekBerjalan->name_customer . "* untuk Proyek *$newProyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
+                    //     // "url" => $url
+                    // ]);
+                    // $send_msg_to_wa->onError(function ($error) {
+                    //     // dd($error);
+                    //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+                    //     return redirect()->back();
+                    // });
+                    $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi II, " . $newProyek->ProyekBerjalan->name_customer . " untuk Proyek $newProyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                    $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Tanda Tangan Pengajuan Nota Rekomendasi II", nl2br($message), $isnomorTargetActive);
+                    if (!$sendEmailUser) {
+                        return redirect()->back();
+                    }
                 }
             }
 
@@ -786,7 +802,7 @@ class ProyekController extends Controller
                 })?->keys()?->first();
             }
 
-            dd($dataProyek);
+            // dd($dataProyek);
 
             if (!empty($urutanKlasifikasiOmzet) && !empty($urutanKlasifikasiProduksi)) {
                 if ($urutanKlasifikasiProduksi < $urutanKlasifikasiOmzet) {

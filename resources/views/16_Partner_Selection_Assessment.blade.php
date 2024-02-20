@@ -562,7 +562,7 @@
                                                         </a>
                                                     </td>
                                                     <td class="text-center">
-                                                        @canany(['admin-crm','risk-crm'])
+                                                        @canany(['admin-crm','approver-crm', 'risk-crm'])
                                                             @if (empty($partner->PartnerSelection) || $partner->PartnerSelection->isEmpty())
                                                                 @if ($partner->DokumenKelengkapanPartnerKSO->count() < 4)
                                                                     <button type="button" data-bs-toggle="tooltip"
@@ -622,12 +622,15 @@
     <!--begin::Root-->
 
     <!--begin::Modal Isi Assessment Partner Selection-->
-    @foreach ($customers as $partner)
-        <form action="/assessment-partner-selection/{{ $partner->id }}/save" method="POST"
-            id="form-kriteria-{{ $partner->id }}" enctype="multipart/form-data"
+    @foreach ($customers as $assessment)
+    @php
+        $partner = $assessment->PartnerJO;
+    @endphp
+        <form action="/assessment-partner-selection/{{ $assessment->id }}/save" method="POST"
+            id="form-kriteria-{{ $assessment->id }}" enctype="multipart/form-data"
             onsubmit="return validateFileSize(this)">
             @csrf
-            <div class="modal fade" id="kt_modal_create_assessment_{{ $partner->id }}" tabindex="-1"
+            <div class="modal fade" id="kt_modal_create_assessment_{{ $assessment->id }}" tabindex="-1"
                 aria-hidden="true">
                 <!--begin::Modal dialog-->
                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen">
@@ -652,7 +655,7 @@
 
                         <!--begin::Modal body-->
                         <div class="modal-body py-lg-6 px-lg-6">
-                            <input type="hidden" name="modal" value="#kt_user_view_kriteria_{{ $partner->id }}">
+                            <input type="hidden" name="modal" value="#kt_user_view_kriteria_{{ $assessment->id }}">
                             <div class="row fv-row">
                                 <table>
                                     <thead>
@@ -703,17 +706,17 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <textarea name="is_legalitas_keterangan[]" form="form-kriteria-{{ $partner->id }}" id="" cols="60"
+                                                    <textarea name="is_legalitas_keterangan[]" form="form-kriteria-{{ $assessment->id }}" id="" cols="60"
                                                         rows="10"></textarea>
                                                 </td>
                                                 <td>
                                                     <input type="file" name="dokumen_legalitas_{{ $key }}[]"
-                                                        form="form-kriteria-{{ $partner->id }}" id="dokumen_kriteria"
+                                                        form="form-kriteria-{{ $assessment->id }}" id="dokumen_kriteria"
                                                         multiple accept=".pdf"
-                                                        onchange="checkSizeFile(this, '{{ $partner->id }}', {{ $key + 1 }}, 'save-{{ $partner->id }}-new')"
+                                                        onchange="checkSizeFile(this, '{{ $partner->id }}', {{ $key + 1 }}, 'save-{{ $assessment->id }}-new')"
                                                         class="form-control form-control-sm form-control-solid">
                                                     <small class="text-danger d-none"
-                                                        id="alert-file-{{ $partner->id }}-{{ $key + 1 }}">Total
+                                                        id="alert-file-{{ $assessment->id }}-{{ $key + 1 }}">Total
                                                         ukuran file max 20MB. Periksa kembali!</small>
                                                 </td>
                                                 <td class="d-none">
@@ -729,7 +732,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-sm btn-light btn-active-primary text-white"
-                                data-bs-toggle="modal" data-bs-target="#kt_user_modal2_kriteria_{{ $partner->id }}"
+                                data-bs-toggle="modal" data-bs-target="#kt_user_modal2_kriteria_{{ $assessment->id }}"
                                 id="new_save" style="background-color:#008CB4">Next</button>
 
                         </div>
@@ -739,7 +742,7 @@
                 </div>
                 <!--end::Modal dialog-->
             </div>
-            <div class="modal fade" id="kt_user_modal2_kriteria_{{ $partner->id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal fade" id="kt_user_modal2_kriteria_{{ $assessment->id }}" tabindex="-1" aria-hidden="true">
                 <!--begin::Modal dialog-->
                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen">
                     <!--begin::Modal content-->
@@ -763,7 +766,7 @@
 
                         <!--begin::Modal body-->
                         <div class="modal-body py-lg-6 px-lg-6">
-                            <input type="hidden" name="modal" value="#kt_user_view_kriteria_{{ $partner->id }}">
+                            <input type="hidden" name="modal" value="#kt_user_view_kriteria_{{ $assessment->id }}">
                             <div class="row fv-row">
                                 <table>
                                     <thead>
@@ -854,21 +857,21 @@
                                                 <td>
                                                     <input type="number" name="nilai[]"
                                                         class="form-control form-control-solid"
-                                                        form="form-kriteria-{{ $partner->id }}"
+                                                        form="form-kriteria-{{ $assessment->id }}"
                                                         id="nilai_{{ $key }}" readonly>
                                                 </td>
                                                 <td>
-                                                    <textarea name="keterangan[]" form="form-kriteria-{{ $partner->id }}" id="" cols="30"
+                                                    <textarea name="keterangan[]" form="form-kriteria-{{ $assessment->id }}" id="" cols="30"
                                                         rows="10"></textarea>
                                                 </td>
                                                 <td>
                                                     <input type="file" name="dokumen_penilaian_{{ $key + 1 }}[]"
-                                                        form="form-kriteria-{{ $partner->id }}" id="dokumen_kriteria"
+                                                        form="form-kriteria-{{ $assessment->id }}" id="dokumen_kriteria"
                                                         multiple accept=".pdf"
-                                                        onchange="checkSizeFile(this, '{{ $partner->id }}', {{ $key + 1 }}, 'save-{{ $partner->id }}-new')"
+                                                        onchange="checkSizeFile(this, '{{ $partner->id }}', {{ $key + 1 }}, 'save-{{ $assessment->id }}-new')"
                                                         class="form-control form-control-sm form-control-solid">
                                                     <small class="text-danger d-none"
-                                                        id="alert-file-{{ $partner->id }}-{{ $key + 1 }}">Total
+                                                        id="alert-file-{{ $assessment->id }}-{{ $key + 1 }}">Total
                                                         ukuran file max 20MB. Periksa kembali!</small>
                                                 </td>
                                                 <td class="d-none">
@@ -884,10 +887,10 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-sm btn-light btn-secondary" data-bs-toggle="modal"
-                                data-bs-target="#kt_user_view_kriteria_{{ $partner->id }}" id="new_save">
+                                data-bs-target="#kt_user_view_kriteria_{{ $assessment->id }}" id="new_save">
                                 Back</button>
                             <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
-                                form="form-kriteria-{{ $partner->id }}" id="save-{{ $partner->id }}-new"
+                                form="form-kriteria-{{ $assessment->id }}" id="save-{{ $assessment->id }}-new"
                                 style="background-color:#008CB4">Save</button>
 
                         </div>

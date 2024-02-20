@@ -554,7 +554,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/nota-rekomendasi-2/{kode_proyek}/rekomendasi', [Rekomendasi2Controller::class, 'ProyekRekomendasi']);
     Route::post('/nota-rekomendasi-2/{kode_proyek}/persetujuan', [Rekomendasi2Controller::class, 'ProyekPersetujuan']);
 
-    Route::post('/nota-rekomendasi-2/{kode_proyek}/pemaparan', [Rekomendasi2Controller::class, 'ProyekPemaparan']);
+    Route::post('/nota-rekomendasi-2/{kode_proyek}/paparan', [Rekomendasi2Controller::class, 'ProyekPemaparan']);
+    Route::post('/nota-rekomendasi-2/{kode_proyek}/paparan', [Rekomendasi2Controller::class, 'ProyekPemaparan']);
+    Route::post('/nota-rekomendasi-2/{kode_proyek}/paparan/upload', [Rekomendasi2Controller::class, 'paparanUploadFile']);
+    Route::post('/nota-rekomendasi-2/{kode_proyek}/paparan/approval', [Rekomendasi2Controller::class, 'paparanApprove']);
 
 
     Route::post('/nota-rekomendasi-2/assessment-project-selection/detail/save', [KriteriaSelectionNonGreenlaneController::class, 'detailSave']);
@@ -3128,8 +3131,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
         // $klasifikasi->nota_rekomendasi = $data["nota_rekomendasi"];
         $klasifikasi->keterangan = $data["nama"];
-        $klasifikasi->dari_nilai = $data["dari_nilai"];
-        $klasifikasi->sampai_nilai = $data["sampai_nilai"];
+        $klasifikasi->dari_nilai = str_replace('.', '', $data["dari_nilai"]);
+        $klasifikasi->sampai_nilai = str_replace('.', '', $data["sampai_nilai"]);
         // $klasifikasi->start_tahun = $data["tahun_start"];
         // $klasifikasi->start_bulan = $data["bulan_start"];
         // $klasifikasi->is_active = isset($data["isActive"]) ? true : false;
@@ -3222,8 +3225,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
         // $klasifikasi->nota_rekomendasi = $data["nota_rekomendasi"];
         $klasifikasi->keterangan = $data["nama"];
-        $klasifikasi->dari_nilai = $data["dari_nilai"];
-        $klasifikasi->sampai_nilai = $data["sampai_nilai"];
+        $klasifikasi->dari_nilai = str_replace('.', '', $data["dari_nilai"]);
+        $klasifikasi->sampai_nilai = str_replace('.', '', $data["sampai_nilai"]);
         // $klasifikasi->start_tahun = $data["tahun_start"];
         // $klasifikasi->start_bulan = $data["bulan_start"];
         // $klasifikasi->is_active = isset($data["isActive"]) ? true : false;

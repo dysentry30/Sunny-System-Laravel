@@ -13,4 +13,9 @@ class TimTender extends Model
     {
         return $this->hasOne(Pegawai::class, 'nip', 'nip_pegawai');
     }
+
+    public function Proyek()
+    {
+        return $this->hasOne(Proyek::class, 'kode_proyek', 'kode_proyek');
+    }
 }

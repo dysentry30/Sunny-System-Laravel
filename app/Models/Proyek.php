@@ -264,4 +264,9 @@ class Proyek extends Model
     {
         return $this->belongsTo(NotaRekomendasi::class, 'kode_proyek', 'kode_proyek');
     }
+
+    public function AssessmentPartnerSelection()
+    {
+        return $this->hasMany(AssessmentPartnerSelection::class, 'kode_proyek', 'kode_proyek');
+    }
 }

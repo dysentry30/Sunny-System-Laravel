@@ -195,9 +195,10 @@ function checkGreenLine($proyek) {
             // if ($proyek->is_disetujui) {
             //     return true;
             // }
-            return $results->count() > 1 && $results->every(function ($item) {
-                return $item === true;
-            });
+            // return $results->count() > 1 && $results->every(function ($item) {
+            //     return $item === true;
+            // });
+            return $results->contains(true);
         } else {
             return true;
         }
@@ -3410,7 +3411,7 @@ function sendNotifEmail($user, $subject, $message, $activatedEmailToUser = false
     if (!$isNotaRekomendasi) {
         $emailTarget = $activatedEmailToUser ? $user : env("EMAIL_DEFAULT");
     } else {
-        $emailTarget = $activatedEmailToUser ? $user->Pegawai->email : env("EMAIL_DEFAULT");
+        $emailTarget = $activatedEmailToUser ? $user->email : env("EMAIL_DEFAULT");
     }
 
     try {

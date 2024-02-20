@@ -334,6 +334,13 @@
                                         <!--begin:::Tab item Claim-->
                                         <li class="nav-item">
                                             <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
+                                                aria-selected="true" href="#kt_view_proses_paparan"
+                                                style="font-size:14px;">Proses Paparan</a>
+                                        </li>
+                                        <!--end:::Tab item Claim-->
+                                        <!--begin:::Tab item Claim-->
+                                        <li class="nav-item">
+                                            <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
                                                 aria-selected="true" href="#kt_view_prosess_rekomendasi"
                                                 style="font-size:14px;">Dalam Proses</a>
                                         </li>
@@ -357,8 +364,106 @@
                         <div class="overflow-scroll card-body px-6 pt-0">
                             <!--Begin :: Tab Content-->
                             <div id="tab-content" class="tab-content">
+                                <!--Begin :: Tab Pane - Pengajuan Pemaparan-->
+                                <div class="tab-pane fade show active" id="kt_view_proses_paparan" role="tabpanel">
+                                    <!--begin::Table Proyek-->
+                                    <table class="table display align-middle table-row-dashed fs-6" id="pemaparan-proses">
+                                        <thead>
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-auto">No.</th>
+                                                <th class="min-w-250px">Proyek</th>
+                                                <th class="min-w-auto">Divisi</th>
+                                                <th class="min-w-auto">Departemen</th>
+                                                <th class="min-w-50px">RKAP</th>
+                                                <th class="min-w-auto">Pengguna Jasa</th>
+                                                <th class="min-w-auto">Instansi Pengguna Jasa</th>
+                                                <th class="min-w-auto">KSO / Non KSO</th>
+                                                <th class="min-w-auto">Jenis Kontrak</th>
+                                                <th class="min-w-auto">Sistem Bayar</th>
+                                                <th class="min-w-auto">Uang Muka (%)</th>
+                                                <th class="min-w-auto">Nilai OK</th>
+                                                <th class="min-w-auto">Kategori Proyek</th>
+                                                <th class="min-w-auto">Tanggal Pengajuan</th>
+                                                <th class="min-w-auto">Tanggal Persetujuan</th>
+                                                <th class="min-w-50px">Is Cancel</th>
+                                                <th class="min-w-auto">Action</th>
+                                            </tr>
+                                        </thead>
+                                        @php
+                                            $no = 1;
+                                        @endphp
+                                        @foreach ($proyeks_proses_paparan as $proyek)
+                                        <tr>
+                                            <td>{{ $no++ }}</td>
+                                            <td>{{ $proyek->Proyek->nama_proyek }}</td>
+                                            <td>{{ $proyek->Proyek->UnitKerja->Divisi->nama_kantor }}</td>
+                                            <td>{{ $proyek->Proyek->Departemen->nama_departemen }}</td>
+                                            <td class="text-center">
+                                                <span
+                                                    class="badge {{ $proyek->Proyek->is_rkap ? 'badge-light-success' : 'badge-light-warning' }}">{{ $proyek->Proyek->is_rkap ? 'RKAP' : 'Non RKAP' }}</span>
+                                            </td>
+                                            <td>
+                                                <a href="/customer/view/{{ $proyek->Proyek->proyekBerjalan?->customer?->id_customer }}/{{ $proyek->Proyek->proyekBerjalan?->customer?->name }}"
+                                                    target="_blank"
+                                                    class="text-hover-primary">{{ $proyek->Proyek->proyekBerjalan?->customer?->name }}</a>
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $proyek->Proyek->proyekBerjalan->customer->jenis_instansi }}</td>
+                                            <td class="text-center">
+                                                {{ $proyek->Proyek->PorsiJO->isNotEmpty() ? 'KSO' : 'Non KSO' }}
+                                            </td>
+                                            <td class="text-center">{{ $proyek->Proyek->jenis_terkontrak }}</td>
+                                            <td class="text-center">{{ $proyek->Proyek->sistem_bayar }}</td>
+                                            <td class="text-end">
+                                                {{ number_format((int) $proyek->Proyek->uang_muka, 0, '', '.') }}
+                                            </td>
+                                            <td class="text-end">
+                                                {{ number_format($proyek->Proyek->is_rkap ? $proyek->Proyek->nilai_rkap : $proyek->Proyek->nilaiok_awal, 0, '', '.') }}
+                                            </td>
+                                            <td class="text-center">{{ $proyek->Proyek->klasifikasi_pasdin }}</td>
+                                            <td class="text-center">{{ !empty($proyek->tanggal_paparan_diajukan) ? \Carbon\Carbon::create($proyek->tanggal_paparan_diajukan)->translatedFormat('d F Y') : '' }}</td>
+                                            <td class="text-center">{{ !empty($proyek->tanggal_paparan_disetujui) ? \Carbon\Carbon::create($proyek->tanggal_paparan_disetujui)->translatedFormat('d F Y') : '' }}</td>
+                                            <td class="text-center">
+                                                @if ($proyek->Proyek->is_cancel)
+                                                <p class="badge badge-danger">Cancel</p>                                                    
+                                                @endif
+                                            </td>
+                                            <td class="text-center">
+                                                @if ($proyek->is_request_paparan)
+                                                    @if ($matriks_user->contains('kategori', 'Penyusun') && $matriks_user->where('kategori', 'Penyusun')?->where('departemen_code', $proyek->Proyek->departemen_proyek)?->where('divisi_id', $proyek->Proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->Proyek->klasifikasi_pasdin)?->first())
+                                                        @php
+                                                            $filesNotulen = collect(json_decode($proyek->file_pemaparan));
+                                                            $filesAbsensi = collect(json_decode($proyek->file_absensi_paparan));
+                                                        @endphp
+                                                        @if (!is_null($proyek->tanggal_paparan_diajukan) && is_null($proyek->tanggal_paparan_disetujui) && (is_null($proyek->file_pemaparan) && is_null($proyek->file_absensi_paparan)))
+                                                            <a href="#kt_modal_view_req_paparan_setuju_{{ $proyek->kode_proyek }}"
+                                                                data-bs-toggle="modal"
+                                                                class="btn btn-sm btn-primary text-white">Approve Paparan</a>
+                                                        @elseif (!is_null($proyek->tanggal_paparan_disetujui) && (!is_null($proyek->file_pemaparan) && !empty($filesNotulen)) && (!is_null($proyek->file_absensi_paparan) && !empty($filesAbsensi)))
+                                                            <a href="#kt_modal_view_approval_paparan_{{ $proyek->kode_proyek }}"
+                                                                data-bs-toggle="modal"
+                                                                class="btn btn-sm btn-primary text-white">Approval</a>
+                                                        @endif
+                                                    @elseif ($matriks_user->contains('kategori', 'Pengajuan') && $matriks_user->where('kategori', 'Pengajuan')?->where('departemen_code', $proyek->Proyek->departemen_proyek)?->where('divisi_id', $proyek->Proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->Proyek->klasifikasi_pasdin)?->first())
+                                                        @if (is_null($proyek->tanggal_paparan_diajukan))
+                                                            <a href="#kt_modal_view_req_paparan_{{ $proyek->kode_proyek }}"
+                                                                data-bs-toggle="modal"
+                                                                class="btn btn-sm btn-primary text-white">Ajukan Paparan</a>
+                                                        @elseif ((!is_null($proyek->tanggal_paparan_disetujui) && (is_null($proyek->file_pemaparan) && empty($filesNotulen)) && (is_null($proyek->file_absensi_paparan) && empty($filesAbsensi))) || $proyek->is_revisi_paparan)
+                                                            <a href="#kt_modal_view_upload_paparan_{{ $proyek->kode_proyek }}"
+                                                                data-bs-toggle="modal"
+                                                                class="btn btn-sm btn-primary text-white">Upload File</a>
+                                                        @endif
+                                                    @endif
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </table>
+                                </div>
+                                <!--End :: Tab Pane - Pengajuan Pemaparan-->
                                 <!--Begin :: Tab Pane - Proses Rekomendasi-->
-                                <div class="tab-pane fade show active" id="kt_view_prosess_rekomendasi" role="tabpanel">
+                                <div class="tab-pane fade" id="kt_view_prosess_rekomendasi" role="tabpanel">
                                     <!--begin::Table Proyek-->
                                     <table class="table display align-middle table-row-dashed fs-6" id="rekomendasi-proses">
                                         <thead>
@@ -699,9 +804,9 @@
                                                                     class="btn btn-sm btn-primary text-white">{{ $proyek->is_penyusun_approved || (collect(json_decode($proyek->approved_penyusun))?->first()?->user_id == auth()->user()->id) && (collect(json_decode($proyek->approved_penyusun))?->first()?->status == 'approved') ? "Rincian" : "Submit" }}</a>
                                                             @elseif ($proyek->is_pengajuan_approved)
                                                                 @if (is_null($proyek->is_sudah_pemaparan))
-                                                                    <a href="#kt_modal_view_pemaparan_{{ $proyek->kode_proyek }}"
+                                                                    {{-- <a href="#kt_modal_view_pemaparan_{{ $proyek->kode_proyek }}"
                                                                         data-bs-toggle="modal"
-                                                                        class="btn btn-sm btn-primary text-white">Isi Pemaparan</a>
+                                                                        class="btn btn-sm btn-primary text-white">Isi Pemaparan</a> --}}
                                                                 @else
                                                                     <a href="#kt_user_modal_assessment_{{ $proyek->kode_proyek }}"
                                                                         target="_blank" data-bs-toggle="modal"
@@ -976,6 +1081,230 @@
         <!--begin::Page-->
     </div>
     <!--begin::Root-->
+
+    <!--End::Modal Proses Paparan-->
+    @foreach ($proyeks_proses_paparan as $proyek)
+    <!--Begin::Pengajuan Paparan-->
+    <form action="/nota-rekomendasi-2/{{ $proyek->kode_proyek }}/paparan" method="post">
+    @csrf
+        <div class="modal fade" id="kt_modal_view_req_paparan_{{ $proyek->kode_proyek }}" tabindex="-1"
+            aria-labelledby="kt_modal_view_req_paparan_{{ $proyek->kode_proyek }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Pengajuan Paparan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            @csrf
+                            <input type="hidden" name="kode-proyek" value="{{ $proyek->kode_proyek }}">
+                            <input type="hidden" name="kategori" value="Pengajuan">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Tanggal Pengajuan: </span>
+                                </label>
+                                <a href="#" class="btn"
+                                    style="background: transparent;"
+                                    id="start-date-modal"
+                                    onclick="showCalendarModal(this)">
+                                    <i class="bi bi-calendar2-plus-fill"
+                                        style="color: #008CB4"></i>
+                                </a>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="Date"
+                                    class="form-control form-control-solid"
+                                    id="tanggal-pengajuan-paparan" name="tanggal-pengajuan-paparan"
+                                    value=""
+                                    placeholder="Date" />
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </form>
+    <!--End::Pengajuan Paparan-->
+
+    <!--Begin::Persetujuan Paparan-->
+    <form action="/nota-rekomendasi-2/{{ $proyek->kode_proyek }}/paparan" method="post">
+    @csrf
+        <div class="modal fade" id="kt_modal_view_req_paparan_setuju_{{ $proyek->kode_proyek }}" tabindex="-1"
+            aria-labelledby="kt_modal_view_req_paparan_setuju_{{ $proyek->kode_proyek }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Persetujuan Paparan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            @csrf
+                            <input type="hidden" name="kode-proyek" value="{{ $proyek->kode_proyek }}">
+                            <input type="hidden" name="kategori" value="Persetujuan">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Tanggal Persetujuan: </span>
+                                </label>
+                                <a href="#" class="btn"
+                                    style="background: transparent;"
+                                    id="start-date-modal"
+                                    onclick="showCalendarModal(this)">
+                                    <i class="bi bi-calendar2-plus-fill"
+                                        style="color: #008CB4"></i>
+                                </a>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="Date"
+                                    class="form-control form-control-solid"
+                                    id="tanggal-persetujuan-paparan" name="tanggal-persetujuan-paparan"
+                                    value=""
+                                    placeholder="Date" />
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </form>
+    <!--End::Persetujuan Paparan-->
+    
+    <!--Begin::Upload File Paparan-->
+    <form action="/nota-rekomendasi-2/{{ $proyek->kode_proyek }}/paparan/upload" method="post" enctype="multipart/form-data">
+    @csrf
+        <div class="modal fade" id="kt_modal_view_upload_paparan_{{ $proyek->kode_proyek }}" tabindex="-1"
+            aria-labelledby="kt_modal_view_upload_paparan_{{ $proyek->kode_proyek }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Upload File Paparan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            @csrf
+                            <input type="hidden" name="kode-proyek" value="{{ $proyek->kode_proyek }}">
+                            <!--begin::Input group-->
+                            <div class="fv-row mb-7">
+                               <label for="file-notulensi" required>File Notulensi</label>
+                               <input type="file" class="form-control form-control-solid" name="file-pemaparan[]" multiple accept=".pdf">
+                            </div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="fv-row mb-7">
+                               <label for="file-notulensi" required>File Daftar Hadir</label>
+                               <input type="file" class="form-control form-control-solid" name="file-absensi-paparan[]" multiple accept=".pdf">
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </form>
+    <!--End::Upload File Paparan-->
+
+    <!--Begin::Approval Paparan-->
+    <form action="/nota-rekomendasi-2/{{ $proyek->kode_proyek }}/paparan/approval" method="post">
+    @csrf
+    <div class="modal fade" id="kt_modal_view_approval_paparan_{{ $proyek->kode_proyek }}" tabindex="-1"
+        aria-labelledby="kt_modal_view_approval_paparan_{{ $proyek->kode_proyek }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Upload File Paparan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        @php
+                            $filesNotulensi = collect(json_decode($proyek->file_pemaparan));
+                            $filesAbsensi = collect(json_decode($proyek->file_absensi_paparan));
+                        @endphp
+                        <h5>File Preview Notulensi: </h5>
+                        @if (!empty($filesNotulensi))
+                            @foreach ($filesNotulensi as $file)
+                            <div class="text-center">
+                                <iframe src="{{ asset('file-nota-rekomendasi-2\\file-notulen-paparan' . '\\' . $file) }}"
+                                    width="800px" height="600px"></iframe>
+                            </div>
+                            @endforeach
+                        @endif
+                        <hr>
+                        <h5>File Preview Absensi: </h5>
+                        @if (!empty($filesAbsensi))
+                            @foreach ($filesAbsensi as $file)
+                            <div class="text-center">
+                                <iframe src="{{ asset('file-nota-rekomendasi-2\\file-absensi-paparan' . '\\' . $file) }}"
+                                    width="800px" height="600px"></iframe>
+                            </div>
+                            @endforeach
+                        @endif
+                    </div>
+                </div>
+                <div class="modal-footer row">
+                    <input type="submit" name="approve" class="btn btn-sm btn-success" value="Approve"/>
+                    <input type="button" data-bs-toggle="modal"
+                        data-bs-target="#kt_modal_view_paparan_revisi_{{ $proyek->kode_proyek }}"
+                        name="tolak" value="Ajukan Revisi" class="btn btn-sm btn-primary">
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+    <!--End::Approval Paparan-->
+
+    <!--Begin::Revisi Paparan-->
+    <form action="/nota-rekomendasi-2/{{ $proyek->kode_proyek }}/paparan/approval" method="post">
+        @csrf
+        <div class="modal fade" id="kt_modal_view_paparan_revisi_{{ $proyek->kode_proyek }}" tabindex="-1"
+            aria-labelledby="kt_modal_view_paparan_revisi_{{ $proyek->kode_proyek }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Catatan Revisi</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                           <textarea name="revisi_note" id="revisi_note" rows="10" class="form-control form-control-solid"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" name="revisi" class="btn btn-sm btn-primary" value="Submit"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </form>
+    <!--End::Revisi Paparan-->
+
+
+    @endforeach
+    <!--End::Modal Proses Paparan-->
 
     <!--Begin::Modal Proses Rekomendasi-->
     @foreach ($proyeks_proses_rekomendasi as $proyek)
