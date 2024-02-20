@@ -2941,7 +2941,12 @@ function sendNotifEmail($user, $subject, $message, $activatedEmailToUser = false
     if (!$isNotaRekomendasi) {
         $emailTarget = $activatedEmailToUser ? $user : env("EMAIL_DEFAULT");
     } else {
-        $emailTarget = $activatedEmailToUser ? $user->Pegawai->email : env("EMAIL_DEFAULT");
+        $emailTarget = $activatedEmailToUser ? $user->email : env("EMAIL_DEFAULT");
+    }
+
+    if (empty($emailTarget)) {
+        Alert::error('Email Tidak Ditemukan', 'Silahkan hubungi admin!');
+        return redirect()->back();
     }
 
     try {
