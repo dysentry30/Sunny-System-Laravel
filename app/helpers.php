@@ -194,9 +194,10 @@ function checkGreenLine($proyek) {
             // if ($proyek->is_disetujui) {
             //     return true;
             // }
-            return $results->count() > 1 && $results->every(function ($item) {
-                return $item === true;
-            });
+            // return $results->count() > 1 && $results->every(function ($item) {
+            //     return $item === true;
+            // });
+            return $results->contains(true);
         } else {
             return true;
         }
