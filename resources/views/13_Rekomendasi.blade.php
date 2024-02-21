@@ -1502,6 +1502,7 @@
                                                         form="form-edit-kriteria-{{ $proyek->kode_proyek }}"
                                                         id="dokumen_kriteria"
                                                         multiple
+                                                        accept=".pdf"
                                                         class="form-control form-control-sm form-control-solid"
                                                         {{ $is_edit ? '' : 'disabled' }}>
                                                 @endif
@@ -1767,6 +1768,7 @@
                                                         form="form-edit-kriteria-{{ $proyek->kode_proyek }}"
                                                         id="dokumen_kriteria"
                                                         multiple
+                                                        accept=".pdf"
                                                         class="form-control form-control-sm form-control-solid"
                                                         {{ $is_edit ? '' : 'disabled' }}>
                                                 @endif
@@ -3360,10 +3362,19 @@
 
     <script>
         function confirmDeleteFile(e, fileName) {
-            const result = window.confirm('warning', `Apakah anda yakin ingin menghapus file <b>${fileName}</b>?`, "", result => {
-                if(result.isConfirmed) {
+            Swal.fire({
+                title: '',
+                text: `Apakah anda yakin ingin menghapus file ${fileName}?`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: '#008CB4',
+                cancelButtonColor: '#BABABA',
+                confirmButtonText: 'Ya'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
                     e.submit();
                 }
+                return false;
             });
             return false;
         }
