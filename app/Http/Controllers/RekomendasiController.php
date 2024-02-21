@@ -22,8 +22,8 @@ use Karriere\PdfMerge\PdfMerge;
 
 class RekomendasiController extends Controller
 {
-    // public $isnomorTargetActive = true;
-    public $isnomorTargetActive = false;
+    public $isnomorTargetActive = true;
+    // public $isnomorTargetActive = false;
     // public $nomorDefault = "6285376444701";
     public $nomorDefault = "085881028391";
 

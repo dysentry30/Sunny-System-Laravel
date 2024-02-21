@@ -393,6 +393,10 @@ class ForecastController extends Controller
         // }
 
         // dd($proyeks->groupBy(["dop", "unit_kerja"]));
+        $historyForecast = $historyForecast->map(function ($p) {
+            $p->rkap_forecast = trim($p->rkap_forecast);
+            return $p;
+        });
         return view(
             'Forecast/viewForecast',
             [
