@@ -1728,11 +1728,11 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                         0
                                                                                                                     </td>
                                                                                                                 @endif
-                                                                                                                @php
+                                                                                                                {{-- @php
                                                                                                                     $total_forecast += (int) $forecast->nilai_forecast;
                                                                                                                     $total_year_forecast += $total_forecast;
                                                                                                                     
-                                                                                                                @endphp
+                                                                                                                @endphp --}}
                                                                                                                 <td>
                                                                                                                     <input type="text"
                                                                                                                         data-id-proyek="{{ $proyek->kode_proyek }}"
@@ -1833,6 +1833,20 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 $total_ok_formatted = number_format($total_ok, 0, ',', '.');
                                                                                             }
                                                                                             // dump($total_ok, $total_ok_new ?? 0);
+
+                                                                                            
+                                                                                            $forecasts_original = $proyek->Forecasts->where('periode_prognosa', 1)->where('tahun', 2024)->map(function($f){
+                                                                                                $f->rkap_forecast = (int)$f->getOriginal('rkap_forecast');
+                                                                                                $f->nilai_forecast = (int)$f->getOriginal('nilai_forecast');
+                                                                                                return $f;
+                                                                                            });
+
+                                                                                            $total_forecast = $forecasts_original->sum(function($f) {
+                                                                                                return (int) round($f->rkap_forecast);
+                                                                                            })/$per_sejuta;
+
+                                                                                            $total_year_forecast += $total_forecast;
+                                                                                            
                                                                                             $total_forecast_formatted = number_format($total_forecast, 0, ',', '.');
                                                                                             if(!empty($proyek->bulan_ri_perolehan)) {
                                                                                                 // $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) / $per_sejuta;
@@ -1846,9 +1860,9 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         @endphp
 
                                                                                         @php
-                                                                                            $total_ok_formatted = $forecasts->sum(function($f) {
+                                                                                            $total_ok_formatted = $forecasts_original->sum(function($f) {
                                                                                                 return (int) round($f->rkap_forecast);
-                                                                                            });
+                                                                                            })/$per_sejuta;
                                                                                             
                                                                                         @endphp
 
