@@ -110,7 +110,7 @@
                                 <!--end::Button-->
 
                                 <!--begin::Button-->
-                                @canany(['super-admin', 'admin-crm', 'user-crm'])
+                                @canany(['super-admin', 'admin-crm', 'user-crm', 'approver-crm'])
                                     @if ($proyek->is_cancel == false)
                                         <button type="submit" name="proyek-save" class="btn btn-sm btn-primary ms-2" id="proyek-save"
                                             style="background-color:#008CB4">
@@ -245,7 +245,7 @@
                     </div>
                     <!--end::Toolbar-->
 
-                    @canany(['super-admin', 'user-crm'])
+                    @canany(['super-admin', 'approver-crm', 'user-crm'])
                         @if ($proyek->is_request_rekomendasi == false && !$check_green_line && $proyek->stage == 1)
                         <!-- begin::modal confirm send wa-->
                         <div class="modal fade w-100" style="margin-top: 120px" id="modal-send-pengajuan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -1847,7 +1847,7 @@
                                                          <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                              Dokumen Pendukung
                                                          </h3>
-                                                         @canany(['super-admin', 'user-crm'])
+                                                         @canany(['super-admin', 'approver-crm', 'user-crm'])
                                                          @if (empty($proyek->DokumenPendukungPasarDini))
                                                          <br>
                                                          <div class="w-50">
