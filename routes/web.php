@@ -83,12 +83,14 @@ use App\Models\MasterKriteriaGreenlanePartner;
 use App\Models\PenilaianPartnerSelection;
 use App\Models\PenilaianChecklistProjectSelection;
 use App\Models\MatriksApprovalPartnerSelection;
+use App\Models\MatriksApprovalPaparan;
 use App\Models\MatriksApprovalNotaRekomendasi2;
 use App\Models\MasterCatatanNotaRekomendasi2;
 use App\Models\MasterKlasifikasiProyek;
 use App\Models\MasterKlasifikasiOmsetProyek;
 use App\Models\MasterKlasifikasiProduksiProyek;
 use App\Models\MasterAlatProyek;
+use App\Models\NotaRekomendasi2;
 use App\Models\MataUang;
 use App\Models\MatriksApprovalRekomendasi;
 use App\Models\Pegawai;
@@ -104,6 +106,7 @@ use App\Models\AlatProyek;
 use App\Models\HistoryRKAP;
 use App\Models\MasterKlasifikasiSBU;
 use App\Models\MasterSubKlasifikasiSBU;
+use App\Models\ExceptGreenlane;
 use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
 use Carbon\Carbon;
 use Illuminate\Routing\RouteGroup;
@@ -538,8 +541,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/assessment-partner-selection/pengajuan/approval', [
         AssessmentPartnerSelectionController::class, 'setApprovalPengajuan'
     ]);
-    Route::post('/assessment-partner-selection/persetujuan/approval', [
-        AssessmentPartnerSelectionController::class, 'setApprovalPersetujuan'
+    Route::post('/assessment-partner-selection/penyusun/approval', [
+        AssessmentPartnerSelectionController::class, 'setApprovalPenyusun'
+    ]);
+    Route::post('/assessment-partner-selection/rekomendasi/approval', [
+        AssessmentPartnerSelectionController::class, 'setApprovalRekomendasi'
     ]);
     Route::post('/assessment-partner-selection/pengajuan-revisi/approval', [
         AssessmentPartnerSelectionController::class, 'setApprovalRevisi'
@@ -1034,6 +1040,12 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::get(
         '/proyek/porsi-jo/download/{id_kelengkapan}',
         [ProyekController::class, "downloadDokumenKelengkapanPartner"]
+    );
+
+    //UPDATE::Data Pefindo yg Expired
+    Route::get(
+        '/proyek/porsi-jo/{partner}/update-pefindo',
+        [ProyekController::class, "updatePefindoExpired"]
     );
 
     //DELETE::Dokumen Kelengkapan Partner
@@ -2353,6 +2365,189 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         return redirect()->back();
     });
     // End :: Master Data Kriteria Green Line
+
+    //Begin :: Master Data Pemberi Kerja Green Lane
+    Route::get('/except-greenlane', function () {
+        $data = ExceptGreenlane::all();
+        return view('MasterData/ExceptGreenlane', ['data' => $data]);
+    });
+
+    Route::post('/except-greenlane/save', function (Request $request) {
+        $data = $request->all();
+
+        $rules = [
+            'kategori' => 'required|string',
+            'sub-kategori' => 'required|string',
+            'item' => 'required|string',
+        ];
+
+        $validate = validateInput($data, $rules);
+
+        if (!empty($validate)) {
+            Alert::html(
+                'Error',
+                'Field <b>' . $validate . '</b> mohon diisi',
+                'error'
+            );
+            return redirect()->back();
+        }
+
+        $newData = new ExceptGreenlane();
+        $newData->kategori = $data['kategori'];
+        $newData->sub_kategori = $data['sub-kategori'];
+        $newData->item = $data['item'];
+        $newData->sub_item = $data['sub-item'] ?? null;
+
+        if ($newData->save()) {
+            Alert::success('Success', "Except Greenlane berhasil ditambahkan!");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Except Greenlane gagal ditambahkan!");
+        return redirect()->back();
+    });
+
+    Route::post('/except-greenlane/{id}/delete', function ($id) {
+
+        $data = ExceptGreenlane::find($id);
+
+        if ($data->delete()) {
+            return response()->json([
+                "Success" => true,
+                "Message" => "Pemberi Kerja berhasil dihapus"
+            ]);
+        }
+        return response()->json([
+            "Success" => true,
+            "Message" => "Pemberi Kerja gagal dihapus"
+        ]);
+    });
+
+    Route::get('/except-greenlane/{filter}/data-get', function (Request $request, $filter) {
+        $search = $request->input('search');
+        $page = $request->input(
+            'page',
+            1
+        );
+        $perPage = 10;
+        $maxResults = 10;
+
+        if ($filter == "pemberi-kerja") {
+            $data = Customer::select(['id_customer as value', 'name'])->when(!empty($search), function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%');
+            });
+        } elseif ($filter == "sumber-dana") {
+            $data = SumberDana::select('kode_sumber as value', 'kode_sumber as name')->when(
+                !empty($search),
+                function ($query) use ($search) {
+                    $query->where(
+                        'kode_sumber',
+                        'like',
+                        '%' . $search . '%'
+                    );
+                }
+            );
+        }
+
+        $data = $data->paginate($perPage, ['*'], 'page', $page);
+
+        return response()->json($data);
+    });
+
+    Route::get('/except-greenlane/{filter}/{subFilter}/data-get', function (Request $request, $filter, $subFilter) {
+        $search = $request->input('search');
+        $page = $request->input(
+            'page',
+            1
+        );
+        $perPage = 10;
+
+        if ($filter == "sumber-dana") {
+            if (
+                $subFilter == "apbd"
+            ) {
+                $data = Provinsi::select(['province_id as value', 'province_name as name'])->where('country_id', 'ID')->when(!empty($search), function ($query) use ($search) {
+                    $query->where('province_name', 'like', '%' . $search . '%');
+                });
+
+                $data = $data->paginate($perPage, ['*'], 'page', $page);
+            } else if (
+                $subFilter == "bumn"
+            ) {
+                $data = [
+                    [
+                        "value" => "Tier A",
+                        "name" => "Tier A",
+                    ],
+                    [
+                        "value" => "Tier B",
+                        "name" => "Tier B",
+                    ],
+                    [
+                        "value" => "Tier C",
+                        "name" => "Tier C",
+                    ],
+                ];
+            } else {
+                $data = [];
+            }
+        } else {
+            $data = [];
+        }
+
+
+        return response()->json($data);
+    });
+
+    Route::get('/except-greenlane/{data}/fetch', function (Request $request, ExceptGreenlane $data) {
+        $idKategori = null;
+        $idSubKategori = null;
+        $idItem = null;
+        $idSubItem = null;
+
+        $nameKategori = null;
+        $nameSubKategori = null;
+        $nameItem = null;
+        $nameSubItem = null;
+
+        if (!empty($data)) {
+            $idKategori = $data->kategori;
+            $nameKategori = $data->kategori;
+            $idSubKategori = $data->sub_kategori;
+            $nameSubKategori = $data->sub_kategori;
+
+            if ($data->sub_kategori == "Sumber Dana") {
+                $idItem = $data->item;
+                $nameItem = $data->item;
+
+                if (!empty($data->sub_item)) {
+                    if (str_contains($data->sub_item, "ID")) {
+                        $provinsi = Provinsi::where('province_id', $data->sub_item)->first();
+                        $idSubItem = $provinsi->province_id;
+                        $nameSubItem = $provinsi->province_name;
+                    } else {
+                        $idSubItem = $data->sub_item;
+                        $nameSubItem = $data->sub_item;
+                    }
+                }
+            } else if ($data->sub_kategori == "Pemberi Kerja") {
+                $customer = Customer::find($data->item);
+                $idItem = $customer->id_customer;
+                $nameItem = $customer->name;
+            }
+        }
+        return response()->json([
+            "id_kategori" => $idKategori,
+            "name_kategori" => $nameKategori,
+            "id_sub_kategori" => $idSubKategori,
+            "name_sub_kategori" => $nameSubKategori,
+            "id_item" => $idItem,
+            "name_item" => $nameItem,
+            "id_sub_item" => $idSubItem,
+            "name_sub_item" => $nameSubItem,
+        ]);
+    });
+
+    //End :: Master Data Pemberi Kerja Green Lane
     
     // Begin :: Master Data Kriteria Assessment
     Route::post('/kriteria-assessment/save', function (Request $request) {
@@ -3428,7 +3623,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     });
 
     //Begin::Get Pelanggan
-    Route::get('/masalah-hukum/get-customer', function (Request $request) {
+    Route::get('/customer/get-customer', function (Request $request) {
         $search = $request->input('search');
         $page = $request->input(
             'page',
@@ -3490,23 +3685,20 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         return response()->json($dataKlasifikasiSBU);
     });
 
-    Route::get(
-        '/matriks-approval-partner',
-        function () {
-            $matriks_all = MatriksApprovalPartnerSelection::with(["Pegawai", "Divisi"])
-            ->where('is_active', true)
-            ->orderBy('updated_at')
-            ->get();
+    Route::get('/matriks-approval-partner', function () {
+        $matriks_all = MatriksApprovalPartnerSelection::with(["Pegawai", "Divisi"])
+        ->where('is_active', true)
+        ->orderBy('updated_at')
+        ->get();
 
-            $divisi_all = Divisi::all();
-            $pegawai_all = Pegawai::pluck('nama_pegawai', 'nip');
-            $departemens = Departemen::all();
-            // dd($matriks_all);
-            return view("MasterData/MatriksApprovalPartnerSelection", compact([
-                "matriks_all", "divisi_all", "pegawai_all", "departemens"
-            ]));
-        }
-    );
+        $divisi_all = Divisi::all();
+        $pegawai_all = Pegawai::pluck('nama_pegawai', 'nip');
+        $departemens = Departemen::all();
+        // dd($matriks_all);
+        return view("MasterData/MatriksApprovalPartnerSelection", compact([
+            "matriks_all", "divisi_all", "pegawai_all", "departemens"
+        ]));
+    });
 
     Route::post('/matriks-approval-partner/save', function (Request $request) {
         $data = $request->all();
@@ -3632,6 +3824,135 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     });
     //End::Master Matriks Approval Partner Selection
 
+    //Begin::Master Matriks Approval Paparan
+    Route::get('/matriks-approval-paparan', function () {
+        $matriks_all = MatriksApprovalPaparan::with(["Pegawai", "Divisi"])
+        ->where('is_active', true)
+        ->orderBy('updated_at')
+        ->get();
+
+        $divisi_all = Divisi::all();
+        $pegawai_all = Pegawai::pluck('nama_pegawai', 'nip');
+        $departemens = Departemen::all();
+        // dd($matriks_all);
+        return view("MasterData/MatriksApprovalPaparan", compact([
+            "matriks_all", "divisi_all", "pegawai_all", "departemens"
+        ]));
+    });
+
+    Route::post('/matriks-approval-paparan/save', function (Request $request) {
+        $data = $request->all();
+        // dd($data);
+        $rules = [
+            "tahun_start" => "required|numeric",
+            "bulan_start" => "required|numeric",
+            "nama-pegawai" => "required",
+            "unit-kerja" => "required",
+            "klasifikasi-proyek" => "required",
+            "departemen" => "required",
+            "kategori" => "required",
+            "kode-unit" => "required",
+            "urutan" => "required",
+        ];
+        $is_invalid = validateInput($data, $rules);
+
+        if (!empty($is_invalid)) {
+            Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
+            return redirect()->back()->with("modal", $data["modal"]);
+        }
+
+        $namaPegawai = Pegawai::where(
+            'nip',
+            $data["nama-pegawai"]
+        )->first()->nama_pegawai;
+
+        $matriks = new MatriksApprovalPaparan();
+        $matriks->start_tahun = $data["tahun_start"];
+        $matriks->start_bulan = $data["bulan_start"];
+        if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
+            $matriks->finish_tahun = $data["tahun_finish"];
+            $matriks->finish_bulan = $data["bulan_finish"];
+        }
+        $matriks->is_active = isset($data["isActive"]) ? true : false;
+        $matriks->nama_pegawai = $data["nama-pegawai"];
+        $matriks->title = $namaPegawai;
+        $matriks->divisi_id = $data["unit-kerja"];
+        $matriks->klasifikasi_proyek = $data["klasifikasi-proyek"];
+        $matriks->kategori = $data["kategori"];
+        $matriks->departemen_code = $data["departemen"];
+        $matriks->kode_unit_kerja = $data["kode-unit"];
+        $matriks->urutan = $data["urutan"];
+
+        if ($matriks->save()) {
+            Alert::success('Success', "Matriks Approval Partner berhasil ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Matriks Approval Partner gagal ditambahkan");
+        return redirect()->back();
+    });
+
+    Route::post('/matriks-approval-paparan/update', function (Request $request) {
+        $data = $request->all();
+        $rules = [
+            "tahun_start" => "required|numeric",
+            "bulan_start" => "required|numeric",
+            "nama-pegawai" => "required",
+            "unit-kerja" => "required",
+            "klasifikasi-proyek" => "required",
+            "kategori" => "required",
+            "kode-unit" => "required",
+            "urutan" => "required",
+            "departemen" => "required"
+        ];
+
+        $is_invalid = validateInput($data, $rules);
+
+        if (!empty($is_invalid)) {
+            Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
+            return redirect()->back()->with("modal", $data["modal"]);
+        }
+
+        $matriks = MatriksApprovalPaparan::find($data["id-matriks-approval"]);
+        $namaPegawai = Pegawai::where('nip', $data["nama-pegawai"])->first()->nama_pegawai;
+
+        $matriks->start_bulan = $data["bulan_start"];
+        $matriks->start_tahun = $data["tahun_start"];
+        if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
+            $matriks->finish_tahun = $data["tahun_finish"];
+            $matriks->finish_bulan = $data["bulan_finish"];
+        }
+        $matriks->is_active = isset($data["isActive"]) ? true : false;
+        $matriks->nama_pegawai = $data["nama-pegawai"];
+        $matriks->title = $namaPegawai;
+        $matriks->divisi_id = $data["unit-kerja"];
+        $matriks->klasifikasi_proyek = $data["klasifikasi-proyek"];
+        $matriks->kategori = $data["kategori"];
+        $matriks->departemen_code = $data["departemen"];
+        $matriks->kode_unit_kerja = $data["kode-unit"];
+        $matriks->urutan = $data["urutan"];
+        // dd($matriks);
+
+        if ($matriks->save()) {
+            Alert::success('Success', "Matriks Approval Partner berhasil diperbarui");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Matriks Approval Partner gagal diperbarui");
+        return redirect()->back();
+    });
+
+    Route::post('/matriks-approval-paparan/delete', function (Request $request) {
+        $data = $request->all();
+        $approval_partner = MatriksApprovalPaparan::find($data["id-matriks-approval"]);
+
+        if ($approval_partner->delete()) {
+            Alert::success('Success', "Matriks Approval Partner berhasil dihapus");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Matriks Approval Partner gagal dihapus");
+        return redirect()->back();
+    });
+    //End::Master Matriks Approval Paparan
+
     //Begin::Master Matriks Approval Nota Rekomendasi 2   
     Route::get('/matriks-approval-rekomendasi-2', function () {
         $matriks_all = MatriksApprovalNotaRekomendasi2::with(["Pegawai", "Divisi"])
@@ -3654,7 +3975,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $rules = [
             "tahun_start" => "required|numeric",
             "bulan_start" => "required|numeric",
-            "nama-pegawai" => "required",
+            "ktt_option" => "required",
+            "nama-pegawai" => "required_if:ktt_option,pegawai",
             "unit-kerja" => "required",
             "klasifikasi-proyek" => "required",
             // "departemen" => "required",
@@ -3674,10 +3996,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             return redirect()->back()->with("modal", $data["modal"]);
         }
 
-        $namaPegawai = Pegawai::where(
-            'nip',
-            $data["nama-pegawai"]
-        )->first()->nama_pegawai;
+        $namaPegawai = $data['ktt_option'] == "pegawai" ? Pegawai::where('nip', $data["nama-pegawai"])?->first()?->nama_pegawai : '';
 
         $matriks = new MatriksApprovalNotaRekomendasi2();
         $matriks->start_tahun = $data["tahun_start"];
@@ -3695,6 +4014,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $matriks->kategori = $data["kategori"];
         $matriks->departemen_code = $data["departemen"];
         $matriks->kode_unit_kerja = $data["kode-unit"];
+        $matriks->is_ktt = $data["ktt_option"] ? true : false;
         $matriks->urutan = $data["urutan"];
 
         if ($matriks->save()) {
@@ -3710,7 +4030,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $rules = [
             "tahun_start" => "required|numeric",
             "bulan_start" => "required|numeric",
-            "nama-pegawai" => "required",
+            "ktt_option" => "required",
+            "nama-pegawai" => "required_if:ktt_option,pegawai",
             "unit-kerja" => "required",
             "klasifikasi-proyek" => "required",
             "kategori" => "required",
@@ -3731,7 +4052,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         }
 
         $matriks = MatriksApprovalNotaRekomendasi2::find($data["id-matriks-approval"]);
-        $namaPegawai = Pegawai::where('nip', $data["nama-pegawai"])->first()->nama_pegawai;
+        $namaPegawai = $data['ktt_option'] == "pegawai" ? Pegawai::where('nip', $data["nama-pegawai"])?->first()?->nama_pegawai : '';
 
         $matriks->start_bulan = $data["bulan_start"];
         $matriks->start_tahun = $data["tahun_start"];
@@ -3748,6 +4069,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $matriks->kategori = $data["kategori"];
         $matriks->departemen_code = $data["departemen"];
         $matriks->kode_unit_kerja = $data["kode-unit"];
+        $matriks->is_ktt = $data["ktt_option"] ? true : false;
         $matriks->urutan = $data["urutan"];
         // dd($matriks);
 
@@ -6860,4 +7182,9 @@ Route::get('/test-file', function (Request $request) {
     // $proyek = Proyek::find('PNPC009');
     // return createWordProfileRisikoNew('GNPC364');
     // return mergeFileLampiranRisiko('GNPC361');
+});
+
+Route::get('/tesss', function () {
+    $notaRekomendasi = NotaRekomendasi2::where('kode_proyek', 'HJPD003')->first();
+    return createWordPersetujuanNota2($notaRekomendasi);
 });

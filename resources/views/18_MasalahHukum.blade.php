@@ -457,7 +457,7 @@
         $(document).ready(function(){
             $("#nama_pelanggan").select2({
                 ajax:{
-                    url: '/masalah-hukum/get-customer',
+                    url: '/customer/get-customer',
                     dataType: 'json',
                     delay: 250,
                     allowClear : true,

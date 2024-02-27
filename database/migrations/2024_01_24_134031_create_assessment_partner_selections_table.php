@@ -22,10 +22,13 @@ return new class extends Migration
                 $table->string('departemen_id');
                 $table->boolean('is_pengajuan_approved')->nullable();
                 $table->text('approved_pengajuan')->nullable();
+                $table->boolean('is_penyusun_approved')->nullable();
+                $table->text('approved_penyusun')->nullable();
                 $table->boolean('is_revisi')->nullable();
                 $table->text('approved_revisi')->nullable();
-                $table->boolean('is_disetujui')->nullable();
-                $table->text('approved_disetujui')->nullable();
+                $table->boolean('is_rekomendasi_approved')->nullable();
+                $table->text('approved_rekomendasi')->nullable();
+                $table->text('hasil_rekomendasi_final')->nullable();
                 $table->timestamps();
             });
         }

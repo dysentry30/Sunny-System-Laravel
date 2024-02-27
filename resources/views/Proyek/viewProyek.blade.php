@@ -72,7 +72,7 @@
 
                     @php
                         $check_green_line = checkGreenLine($proyek);
-                        $check_non_green_line_nota_2 = checkNonGreenLaneNota2($proyek);
+                        $check_green_line_nota_2 = checkGreenLaneNota2($proyek);
                     @endphp
 
                     <!--begin::Toolbar-->
@@ -124,8 +124,8 @@
                                     @if (is_null($proyek->is_request_rekomendasi) && !$check_green_line && $proyek->stage == 1 && is_null($proyek->is_disetujui))
                                         <input type="button" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan"
                                             style="background-color:#00b48d">
-                                    @elseif ($proyek->stage == 4 && $check_non_green_line_nota_2 && is_null($proyek->is_request_rekomendasi_2) && is_null($proyek->is_disetujui_rekomendasi_2))
-                                        @if (empty($proyek->DokumenPenentuanProjectGreenlane) || empty($proyek->DokumenTender))
+                                    @elseif ($proyek->stage == 4 && !$check_green_line_nota_2 && is_null($proyek->is_request_rekomendasi_2) && is_null($proyek->is_disetujui_rekomendasi_2))
+                                        @if ((empty($proyek->DokumenPenentuanProjectGreenlane) && empty($proyek->DokumenTender)) || $proyek->PorsiJO->contains(function($item){return (!is_null(($item->is_greenlane) && !$item->is_greenlane) && ($item->is_hasil_assessment) && !$item->is_hasil_assessment);}))
                                             <p class="btn btn-sm btn-success ms-2 mb-0" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="bottom" data-bs-title="<b>Dokumen Form Penentuan Project Green Lane / Non Green Lane & Dokumen Tender</b><br> Wajib Diisi">Pengajuan Rekomendasi</p>
                                         @else
                                             <input type="button" name="proyek-rekomendasi-2" data-bs-toggle="modal"  value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi-2" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan-nota-2"
@@ -319,7 +319,7 @@
                         @endif                        
                     @endcanany
 
-                    @if ($proyek->is_request_rekomendasi_2 == false && $check_non_green_line_nota_2 && $proyek->stage == 4)
+                    @if ($proyek->is_request_rekomendasi_2 == false && !$check_green_line_nota_2 && $proyek->stage == 4)
                     <!-- begin::modal confirm send wa-->
                     <div class="modal fade w-100" style="margin-top: 120px" id="modal-send-pengajuan-nota-2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog mw-600px">
@@ -531,12 +531,24 @@
                                                                 Tender Diikuti
                                                             </a>
                                                         @else
-                                                            <a href="#"
-                                                                class="stage-button stage-action stage-is-not-active color-is-default"
-                                                                style="outline: 0px; cursor: pointer; {{ $proyek->is_tidak_lulus_pq == false ? '' : 'pointer-events: none;' }}"
-                                                                stage="4">
-                                                                Tender Diikuti
-                                                            </a>
+                                                            @if ($proyek->jenis_proyek != 'J' || ($proyek->PorsiJO->isNotEmpty() && $proyek->PorsiJO->every(function($porsi){
+                                                                return $porsi->is_hasil_assessment == true;
+                                                            })))
+                                                                <a href="#"
+                                                                    class="stage-button stage-action stage-is-not-active color-is-default"
+                                                                    style="outline: 0px; cursor: pointer; {{ $proyek->is_tidak_lulus_pq == false ? '' : 'pointer-events: none;' }}"
+                                                                    stage="4">
+                                                                    Tender Diikuti
+                                                                </a>                                                                
+                                                            @else
+                                                                <div class="stage-button color-is-default stage-is-not-active" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="Tidak bisa lanjut ke <b>Tender Diikuti</b>, karena Proyek <b>KSO</b>. Silahkan input <b>Partner KSO</b> atau lakukan <b>Assessment KSO</b> terlebih dahulu.">
+                                                                    <a href="#"
+                                                                        class="text-white stage-action"
+                                                                        style="outline: 0px; pointer-events: none;" stage="4">
+                                                                        Tender Diikuti
+                                                                    </a>
+                                                                </div>
+                                                            @endif
                                                         @endif
                                                     @endif
 
@@ -556,7 +568,7 @@
                                                                 Perolehan
                                                             </a>
                                                         @else
-                                                            @if ($proyek->NotaRekomendasi2?->is_disetujui || (!is_null($check_non_green_line_nota_2) && !$check_non_green_line_nota_2) || $proyek->UnitKerja?->dop == "EA")
+                                                            @if ($proyek->NotaRekomendasi2?->is_disetujui || $check_green_line_nota_2 || $proyek->UnitKerja?->dop == "EA")
                                                                 <a href="#"
                                                                     class="stage-button stage-action stage-is-not-active color-is-default"
                                                                     style="outline: 0px; cursor: pointer;" stage="5">
@@ -3427,7 +3439,7 @@
                                                         <hr>
                                                         <br>
                                                         <!--End::Dokumen Penentuan KSO-->
-                                                        @canany(['super-admin', 'admin-crm'])
+                                                        @canany(['super-admin', 'admin-crm', 'user-crm'])
                                                             
                                                             <!--Begin::Title Biru Form: Alasan KSO-->
                                                             <h3 class="fw-bolder m-0" id="HeadDetail"
@@ -3472,9 +3484,14 @@
                                                                     data-bs-target="#kt_modal_porsijo">+</a>
                                                                     &nbsp;
                                                                 @php
-                                                                    $isDokumenFinish = $porsiJO->every(function($jo){
+                                                                $selectedPartner = $porsiJO->where('is_greenlane', false);
+                                                                if ($selectedPartner->isEmpty()) {
+                                                                    $isDokumenFinish = false;
+                                                                }else{
+                                                                    $isDokumenFinish = $selectedPartner->every(function($jo){
                                                                         return $jo->DokumenKelengkapanPartnerKSO->count() == 4;
                                                                     });
+                                                                }
                                                                 @endphp
                                                                 @canany(['super-admin', 'admin-crm', 'user-crm'])
                                                                 @if ($porsiJO->isNotEmpty() && $proyek->AssessmentPartnerSelection->isEmpty())
@@ -3493,6 +3510,7 @@
                                                                                 confirmButtonText: 'Ya'
                                                                             }).then(async (result)=>{
                                                                                 if(result.isConfirmed){
+                                                                                    LOADING_BODY.block();
                                                                                     sendPorsiJO();
                                                                                 }
                                                                             })
@@ -3510,17 +3528,35 @@
                                                                                     },
                                                                                     body: formData,
                                                                                 }).then(res => res.json());   
-                                                                                
+                                                                                LOADING_BODY.release();
                                                                                 if (response.success) {
-                                                                                    // console.log(response);
-                                                                                    window.alert('success', response.message);
+                                                                                    Swal.fire({
+                                                                                        title: 'Success',
+                                                                                        text: response.message,
+                                                                                        icon: 'success',
+                                                                                        confirmButtonColor: '#008CB4',
+                                                                                        confirmButtonText: 'Oke'
+                                                                                    }).then(async (result)=>{
+                                                                                        if(result.isConfirmed){
+                                                                                            window.location.reload();
+                                                                                        }
+                                                                                    })
                                                                                 }
                                                                             } catch (error) {
-                                                                                // return console.log(error);
-                                                                                window.alert('error', error);
+                                                                                Swal.fire({
+                                                                                    title: 'Error',
+                                                                                    text: error,
+                                                                                    icon: 'error',
+                                                                                    confirmButtonColor: '#008CB4',
+                                                                                    confirmButtonText: 'Oke'
+                                                                                }).then(async (result)=>{
+                                                                                    if(result.isConfirmed){
+                                                                                        window.location.reload();
+                                                                                    }
+                                                                                })
                                                                             }
                                                                         }
-                                                                    </script>                                                                    
+                                                                    </script>                                                                  
                                                                 @endif
                                                                 @endcanany
                                                             </h3>
@@ -3555,6 +3591,7 @@
                                                                                     <th class="w-auto">Dokumen Eksternal</th>
                                                                                     <th class="w-auto">Hasil Profile Risiko</th>
                                                                                     <th class="w-auto">Hasil Assessment Internal</th>
+                                                                                    <th class="w-auto">Status Assessment Internal</th>
                                                                                     <th class="w-100px"></th>
                                                                                 </tr>
                                                                                 <!--end::Table row-->
@@ -3599,19 +3636,24 @@
                                                                                             @endforeach
                                                                                         </td>
                                                                                         <!--begin::Column-->
+                                                                                        @if ($porsi->is_greenlane)
+                                                                                            <td class="text-center align-middle" colspan="4">
+                                                                                                <p class="badge rounded-pill badge-light-success m-0">Green Lane</p>
+                                                                                            </td>
+                                                                                        @else
                                                                                         <!--begin::Column-->
-                                                                                        <td class="text-center">
+                                                                                        <td class="text-center align-middle">
                                                                                             <p class="badge rounded-pill {{ $porsi->is_greenlane ? 'badge-light-success' : 'badge-light-danger' }} m-0">{{ $porsi->is_greenlane ? 'Green Lane' : 'Non Green Lane' }}</p>
                                                                                         </td>
                                                                                         <!--begin::Column-->
                                                                                         <!--begin::Column-->
-                                                                                        <td class="text-center">
-                                                                                            {{ $porsi->score_pefindo_jo }}
+                                                                                        <td class="text-center align-middle">
+                                                                                            <p class="{{ $porsi->score_pefindo_jo ?? "badge rounded-pill text-bg-danger" }} m-0">{{ $porsi->score_pefindo_jo ?? "Belum ditentukan" }}</p>
                                                                                         </td>
                                                                                         <!--begin::Column-->
                                                                                         <!--begin::Column-->
-                                                                                        <td class="text-center">
-                                                                                            {{ $porsi->grade }}
+                                                                                        <td class="text-center align-middle">
+                                                                                            <p class="{{ $porsi->grade ?? "badge rounded-pill text-bg-danger" }} m-0">{{ $porsi->grade ?? "Belum ditentukan" }}</p>
                                                                                         </td>
                                                                                         <!--begin::Column-->
                                                                                         <!--begin::Column-->
@@ -3634,16 +3676,17 @@
                                                                                                     break;
                                                                                                 
                                                                                                 default:
-                                                                                                    $style = "";
+                                                                                                    $style = "text-bg-danger";
                                                                                                     break;
                                                                                             }
                                                                                         @endphp
-                                                                                        <td class="text-center">
-                                                                                            <p class="badge rounded-pill {{ $style }} m-0">{{ $porsi->keterangan }}</p>
+                                                                                        <td class="text-center align-middle">
+                                                                                            <p class="badge rounded-pill {{ $style }} m-0">{{ !empty($porsi->keterangan) ? $porsi->keterangan : "Belum ditentukan" }}</p>
                                                                                         </td>
-                                                                                        <!--end::Column-->
+                                                                                        <!--end::Column-->                                                                                            
+                                                                                        @endif
                                                                                         <!--begin::Column-->
-                                                                                        <td class="text-center">
+                                                                                        <td class="text-center align-middle">
                                                                                             @php
                                                                                                 $getAssessmentEksternal = App\Models\MasterPefindo::where('id_pelanggan', $porsi->id_company_jo)?->latest()?->first();
                                                                                                 $isActiveAssessment = "Belum ada pefindo";
@@ -3667,69 +3710,81 @@
                                                                                         </td>
                                                                                         <!--end::Column-->
                                                                                         <!--begin::Column-->
-                                                                                        <td>
-                                                                                            <a href="{{ asset('pefindo/').$porsi->file_pefindo_jo }}" class="text-hover-primary">{{ $porsi->file_pefindo_jo }}</a>
-                                                                                        </td>
-                                                                                        <!--begin::Column-->
-                                                                                        <!--begin::Column-->
-                                                                                        <td class="text-center">
-                                                                                            @php
-                                                                                                $nilaiRisk = $porsi->PartnerSelection?->where('kode_proyek', $proyek->kode_proyek)->sum('nilai');
-                                                                                                if (empty($nilaiRisk)) {
-                                                                                                    $kategoriRiskPartner = null;
-                                                                                                }else{
-                                                                                                    $kategoriRiskPartner = App\Models\PenilaianPartnerSelection::all()?->filter(function ($item) use ($nilaiRisk) {
-                                                                                                        return (float)$item->dari_nilai <= (int)$nilaiRisk && (float)$item->sampai_nilai >= (int)$nilaiRisk;
-                                                                                                    })->first()?->nama;
-                                                                                                }
-                                                                                                if (!empty($kategoriRiskPartner)) {
-                                                                                                    switch ($kategoriRiskPartner) {
-                                                                                                        case 'Risiko Rendah':
-                                                                                                            $style_2 = 'badge-success';
-                                                                                                            break;
-                                                                                                        case 'Risiko Moderat':
-                                                                                                            $style_2 = 'badge-warning';
-                                                                                                            break;
-                                                                                                        case 'Risiko Tinggi':
-                                                                                                            $style_2 = 'badge-danger';
-                                                                                                            break;
-                                                                                                        case 'Risiko Ekstrem':
-                                                                                                            $style_2 = 'text-bg-danger';
-                                                                                                            break;
-
-                                                                                                        default:
-                                                                                                            $style_2 = '';
-                                                                                                            break;
+                                                                                        @if ($porsi->is_greenlane)
+                                                                                            <td class="text-center" colspan="4">
+                                                                                                <p class="badge rounded-pill badge-light-success m-0">Green Lane</p>
+                                                                                            </td>
+                                                                                        @else
+                                                                                            <td class="text-center">
+                                                                                                <a href="{{ asset('pefindo/').$porsi->file_pefindo_jo }}" class="{{ $porsi->file_pefindo_jo ? 'text-hover-primary' : 'badge rounded-pill text-bg-danger' }}">{{ $porsi->file_pefindo_jo ?? 'Belum ditentukan' }}</a>
+                                                                                            </td>                                                                                            
+                                                                                            <!--begin::Column-->
+                                                                                            <td class="text-center">
+                                                                                                @php
+                                                                                                    $nilaiRisk = $porsi->PartnerSelection?->where('kode_proyek', $proyek->kode_proyek)->sum('nilai');
+                                                                                                    if (empty($nilaiRisk)) {
+                                                                                                        $kategoriRiskPartner = null;
+                                                                                                    }else{
+                                                                                                        $kategoriRiskPartner = App\Models\PenilaianPartnerSelection::all()?->filter(function ($item) use ($nilaiRisk) {
+                                                                                                            return (float)$item->dari_nilai <= (int)$nilaiRisk && (float)$item->sampai_nilai >= (int)$nilaiRisk;
+                                                                                                        })->first()?->nama;
                                                                                                     }
-                                                                                                }else {
-                                                                                                    $style_2 = 'badge-danger';
-                                                                                                }
-                                                                                            @endphp
-                                                                                            <p class="badge rounded-pill {{ $style_2 }} m-0">{{ $kategoriRiskPartner ?? 'Belum dilakukan Assessment Internal' }}</p>
-                                                                                        </td>
-                                                                                        <!--end::Column-->
-                                                                                        <!--begin::Column-->
-                                                                                        <td class="text-center">
-                                                                                            <p class="m-0">{{ empty($nilaiRisk) ? '' : $nilaiRisk }}</p>
-                                                                                        </td>
-                                                                                        <!--end::Column-->
+                                                                                                    if (!empty($kategoriRiskPartner)) {
+                                                                                                        switch ($kategoriRiskPartner) {
+                                                                                                            case 'Risiko Rendah':
+                                                                                                                $style_2 = 'badge-success';
+                                                                                                                break;
+                                                                                                            case 'Risiko Moderat':
+                                                                                                                $style_2 = 'badge-warning';
+                                                                                                                break;
+                                                                                                            case 'Risiko Tinggi':
+                                                                                                                $style_2 = 'badge-danger';
+                                                                                                                break;
+                                                                                                            case 'Risiko Ekstrem':
+                                                                                                                $style_2 = 'text-bg-danger';
+                                                                                                                break;
+    
+                                                                                                            default:
+                                                                                                                $style_2 = '';
+                                                                                                                break;
+                                                                                                        }
+                                                                                                    }else {
+                                                                                                        $style_2 = 'badge-danger';
+                                                                                                    }
+                                                                                                @endphp
+                                                                                                <p class="badge rounded-pill {{ $style_2 }} m-0">{{ $kategoriRiskPartner ?? 'Belum dilakukan Assessment Internal' }}</p>
+                                                                                            </td>
+                                                                                            <!--end::Column-->
+                                                                                            <!--begin::Column-->
+                                                                                            <td class="text-center">
+                                                                                                <p class="m-0 {{ empty($nilaiRisk) ? 'badge rounded-pill text-bg-danger' : '' }}">{{ empty($nilaiRisk) ? 'Belum dilakukan Assessment Internal' : $nilaiRisk }}</p>
+                                                                                            </td>
+                                                                                            <!--end::Column-->
+                                                                                            <!--begin::Column-->
+                                                                                            <td class="text-center">
+                                                                                                <p class="m-0 badge rounded-pill {{ empty($porsi->is_hasil_assessment) ? 'text-bg-danger' : (!$porsi->is_hasil_assessment ? 'text-bg-danger' : 'text-bg-success') }}">{{ empty($porsi->is_hasil_assessment) ? "Belum ditentukan" : $porsi->hasil_assessment }}</p>
+                                                                                            </td>
+                                                                                            <!--end::Column-->
+                                                                                        @endif
                                                                                         <!--begin::Action-->
                                                                                         <td class="text-center">
                                                                                             <div class="d-flex flex-row align-items-center justify-content-center gap-2">
                                                                                                 @if (is_null($isActiveAssessment) && !$porsi->is_greenlane)
                                                                                                 <small>
-                                                                                                    <button type="button" class="btn btn-sm btn-success">
+                                                                                                    <button type="button" class="btn btn-sm btn-success" onclick="buttonUpdatePefindoKSO('{{ $porsi->id }}')">
                                                                                                         Update
                                                                                                     </button>
                                                                                                 </small>
                                                                                                 @endif
+                                                                                                @if (!$porsi->is_greenlane)
                                                                                                 <small>
                                                                                                     <p data-bs-toggle="modal"
                                                                                                         data-bs-target="#kt_porsi_upload_dokumen_{{ $porsi->id }}"
                                                                                                         class="btn btn-sm btn-light btn-primary m-0">
                                                                                                         {{ $porsi->DokumenKelengkapanPartnerKSO->count() == 4 ? "Lihat" : "Upload" }}
                                                                                                     </p>
-                                                                                                </small>
+                                                                                                </small>                                                                                                    
+                                                                                                @endif
                                                                                                 @if ($proyek->AssessmentPartnerSelection?->isEmpty() || $proyek->AssessmentPartnerSelection?->where('partner_id', $porsi->id)?->where('is_revisi', true)?->isNotEmpty())
                                                                                                 <small>
                                                                                                     <p data-bs-toggle="modal"
@@ -3753,6 +3808,69 @@
                                                             </div>
                                                             <!--End begin::Row-->
                                                             <br>
+                                                            <script>
+                                                                function buttonUpdatePefindoKSO(id_partner) {
+                                                                    Swal.fire({
+                                                                        title: '',
+                                                                        text: "Apakah anda yakin update Assessment Eksternal ?",
+                                                                        icon: 'warning',
+                                                                        showCancelButton: true,
+                                                                        confirmButtonColor: '#008CB4',
+                                                                        cancelButtonColor: '#BABABA',
+                                                                        confirmButtonText: 'Ya'
+                                                                    }).then(async (result)=>{
+                                                                        if(result.isConfirmed){
+                                                                            LOADING_BODY.block();
+                                                                            updatePefindoKSO(id_partner);
+                                                                        }
+                                                                    })
+                                                                }
+                                                                async function updatePefindoKSO(id_partner) {
+                                                                    try {
+                                                                        const response = await fetch(`/proyek/porsi-jo/${id_partner}/update-pefindo`, {
+                                                                            method: "GET"
+                                                                        }).then(res => res.json());
+                                                                        LOADING_BODY.release();
+                                                                        if(response.Success){
+                                                                            Swal.fire({
+                                                                                title: 'Success',
+                                                                                text: "Data berhasil diupdate!",
+                                                                                icon: 'success',
+                                                                                confirmButtonColor: '#008CB4',
+                                                                                confirmButtonText: 'Oke'
+                                                                            }).then(async (result)=>{
+                                                                                if(result.isConfirmed){
+                                                                                    window.location.reload();
+                                                                                }
+                                                                            })
+                                                                        }else{
+                                                                            Swal.fire({
+                                                                                title: 'Error',
+                                                                                text: response.Message,
+                                                                                icon: 'error',
+                                                                                confirmButtonColor: '#008CB4',
+                                                                                confirmButtonText: 'Oke'
+                                                                            }).then(async (result)=>{
+                                                                                if(result.isConfirmed){
+                                                                                    window.location.reload();
+                                                                                }
+                                                                            })
+                                                                        }                                                               
+                                                                    } catch (error) {
+                                                                        Swal.fire({
+                                                                            title: 'Error',
+                                                                            text: error,
+                                                                            icon: 'error',
+                                                                            confirmButtonColor: '#008CB4',
+                                                                            confirmButtonText: 'Oke'
+                                                                        }).then(async (result)=>{
+                                                                            if(result.isConfirmed){
+                                                                                window.location.reload();
+                                                                            }
+                                                                        })
+                                                                    }
+                                                                }    
+                                                            </script>
                                                         @endcanany
                                                     @endif
 
@@ -4903,7 +5021,7 @@
                                                             </script>
                                                         </div>
                                                         <div class="col-6">
-                                                            @if (!is_null($check_non_green_line_nota_2) && $check_non_green_line_nota_2)
+                                                            @if (!is_null($check_green_line_nota_2) && !$check_green_line_nota_2)
                                                                 <span class="px-4 fs-4 badge badge-danger">
                                                                     Non Green Lane
                                                                 </span>
@@ -4917,7 +5035,7 @@
                                                                     Nota Rekomendasi II Ditolak
                                                                 </span>
                                                                 @endif
-                                                            @elseif (!is_null($check_non_green_line_nota_2) && $check_non_green_line_nota_2 == false)
+                                                            @elseif ($check_green_line_nota_2)
                                                                 <span class="px-4 fs-4 badge badge-success">
                                                                     Green Lane
                                                                 </span>
@@ -4992,7 +5110,7 @@
                                                                     <!--begin::Label-->
                                                                     <h3 class="fw-bolder m-0" id="HeadDetail"
                                                                         style="font-size:14px;">Generate Verifikasi Internal Penentuan Proyek Green Lane / Non Green lane
-                                                                        &nbsp;<a href="/proyek/{{ $proyek->kode_proyek }}/project-greenlane/generate" class="btn btn-sm btn-primary"><b>Generate</b></a>
+                                                                        &nbsp;@if (!empty($proyek->jenis_terkontrak) && !empty($proyek->sistem_bayar) && !empty($proyek->is_uang_muka))<a href="/proyek/{{ $proyek->kode_proyek }}/project-greenlane/generate" class="btn btn-sm btn-primary"><b>Generate</b></a>@endif
                                                                     </h3>
                                                                     <!--end::Label-->
                                                                 </div>

@@ -38,7 +38,9 @@
         }
     </style>
     <h5>Lampiran 11.1. Verifikasi Internal Penentuan Proyek Green Lane atau Non Green lane</h5>
-
+    @php
+        $is_green_lane_nota_2 = checkGreenLaneNota2($proyek);
+    @endphp
     <table style="width: 100%;">
         <tr style="margin: 0; padding:0">
             <td style="width: 8%;">
@@ -69,9 +71,9 @@
             <td>1.</td>
             <td><label style="font-size: 0.8rem">Jenis Kontrak</label> <label style="font-size: 0.6rem">**)</label></td>
             <td>
-                <input class="form-check-input" style="height:0px" type="checkbox" id="inlineCheckbox1" value="option1">
+                <input class="form-check-input" style="height:0px" type="checkbox" id="inlineCheckbox1" value="option1" {{ $proyek->jenis_terkontrak == "Unit Price" ? "checked" : "" }}>
                 <br>
-                <input class="form-check-input" style="height:0px" type="checkbox" id="inlineCheckbox2" value="option2" checked>
+                <input class="form-check-input" style="height:0px" type="checkbox" id="inlineCheckbox2" value="option2" {{ $proyek->jenis_terkontrak == "Lumpsum" ? "checked" : "" }}>
             </td>
             <td>
                 <label class="form-check-label" for="inlineCheckbox1"
@@ -84,7 +86,8 @@
         <tr>
             <td></td>
             <td>
-                <label style="font-size: 0.6rem">*Note: Jika Proyek terdiri dari 2 (dua) jenis Kontrak, maka dipilih yang paling dominan</label>
+                <label style="font-size: 0.6rem">*Note: Jika Proyek terdiri dari 2 (dua) jenis Kontrak, maka dipilih yang paling dominan</label><br>
+                <label style="font-size: 0.6rem">**Note: Jika jenis kontrak tidak ada yang terpilih maka jenis terkontrak diluar dari 2 pilihan diatas.</label>
             </td>
             <td></td>
             <td></td>
@@ -93,9 +96,9 @@
             <td>2.</td>
             <td><label style="font-size: 0.8rem">Uang Muka</label> <label style="font-size: 0.6rem">**)</label></td>
             <td>
-                <input class="form-check-input" style="height:0px" type="checkbox" id="inlineCheckbox1" value="option3" checked>
+                <input class="form-check-input" style="height:0px" type="checkbox" id="inlineCheckbox1" value="option3" {{ $proyek->is_uang_muka ? "checked" : "" }}>
                 <br>
-                <input class="form-check-input" style="height:0px" type="checkbox" id="inlineCheckbox2" value="option4">
+                <input class="form-check-input" style="height:0px" type="checkbox" id="inlineCheckbox2" value="option4" {{ !is_null($proyek->is_uang_muka) && !$proyek->is_uang_muka ? "checked" : "" }}>
             </td>
             <td>
                 <label class="form-check-label" for="inlineCheckbox1"
@@ -110,13 +113,13 @@
             <td>3.</td>
             <td><label style="font-size: 0.8rem">Metode Pembayaran</label> <label style="font-size: 0.6rem">**)</label></td>
             <td>
-                <input class="form-check-input" style="height:0px" type="checkbox" id="inlineCheckbox1" value="option5" checked>
+                <input class="form-check-input" style="height:0px" type="checkbox" id="inlineCheckbox1" value="option5" {{ $proyek->sistem_bayar == "Monthly" ? "checked" : "" }}>
                 <br>
-                <input class="form-check-input" style="height:0px" type="checkbox" id="inlineCheckbox2" value="option6">
+                <input class="form-check-input" style="height:0px" type="checkbox" id="inlineCheckbox2" value="option6" {{ $proyek->sistem_bayar == "Milestone" ? "checked" : "" }}>
                 <br>
-                <input class="form-check-input" style="height:0px" type="checkbox" id="inlineCheckbox2" value="option7">
+                <input class="form-check-input" style="height:0px" type="checkbox" id="inlineCheckbox2" value="option7" {{ $proyek->sistem_bayar == "CPF (Turn Key)" ? "checked" : "" }}>
                 <br>
-                <input class="form-check-input" style="height:0px" type="checkbox" id="inlineCheckbox2" value="option8">
+                <input class="form-check-input" style="height:0px" type="checkbox" id="inlineCheckbox2" value="option8" {{ $proyek->sistem_bayar == "Others" ? "checked" : "" }}>
             </td>
             <td>
                 <label class="form-check-label" for="inlineCheckbox1"
@@ -145,16 +148,16 @@
         <tr>
             <td style="width: 5%"><h5 style="margin: 0; padding:0"><i>Project Green Lane</i></h5></td>
             <td style="width: 3%">
-                <input class="form-check-input" style="height:-10px; font-size:20pt" type="checkbox" id="inlineCheckbox2" value="option9">
+                <input class="form-check-input" style="height:-10px; font-size:20pt" type="checkbox" id="inlineCheckbox2" value="option9" {{ $is_green_lane_nota_2 ? 'checked' : '' }}>
             </td>
             <td style="width: 10%; vertical-align: text-top" rowspan="2">
-                <p style="font-size: 0.8rem; margin:0; padding:0px">Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis repellendus quibusdam similique impedit in nostrum enim quaerat iure omnis debitis suscipit dolor porro, sit, eum libero iste maxime earum tempora?</p>
+                <p style="font-size: 0.8rem; margin:0; padding:0px">{!! nl2br($proyek->keterangan_greenlane) !!}</p>
             </td>
         </tr>
         <tr>
             <td style="width: 5%"><h5 style="margin: 0; padding:0"><i>Project Non Green Lane</i></h5></td>
             <td style="width: 3%">
-                <input class="form-check-input" style="height:-10px; font-size:20pt" type="checkbox" id="inlineCheckbox2" value="option10" checked>
+                <input class="form-check-input" style="height:-10px; font-size:20pt" type="checkbox" id="inlineCheckbox2" value="option10" {{ !$is_green_lane_nota_2 ? 'checked' : '' }}>
             </td>
         </tr>
     </table>

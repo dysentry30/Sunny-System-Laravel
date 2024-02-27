@@ -14,7 +14,9 @@ use App\Models\KriteriaAssessment;
 use App\Models\KriteriaPenggunaJasa;
 use App\Models\KriteriaPenggunaJasaDetail;
 use App\Models\LegalitasPerusahaan;
+use App\Models\MasterCatatanNotaRekomendasi2;
 use App\Models\NotaRekomendasi;
+use App\Models\ExceptGreenlane;
 use App\Models\PenilaianPenggunaJasa;
 use App\Models\Proyek;
 use Illuminate\Support\Facades\Log;
@@ -159,46 +161,68 @@ function checkGreenLine($proyek) {
     if($proyek instanceof App\Models\Proyek) {
         if ($proyek->dop != "EA") {
             $customer = $proyek->proyekBerjalan->Customer ?? null;
-            $results = collect();
-            if (!empty($proyek->sumber_dana)) {
-                if (!empty($proyek->negara) && ($proyek->negara == 'ID' || $proyek->negara == 'Indonesia')) {
-                    if ($proyek->sumber_dana == "APBD" || $proyek->sumber_dana == "BUMN") {
-                        $results->push(App\Models\KriteriaGreenLine::where("isi", "=", $proyek->sumber_dana)->where("item", "=", "Sumber Dana")->where(function ($query) use ($proyek, $customer) {
-                            $query->where('sub_isi', '=', $proyek->provinsi)
-                                ->orWhere('sub_isi', '=', $customer->group_tier);
-                        })->count() > 0);
-                    } else {
-                        $results->push(App\Models\KriteriaGreenLine::where("isi", "=", $proyek->sumber_dana)->where("item", "=", "Sumber Dana")->count() > 0);
-                    }
-                } else {
-                    $results->push(App\Models\KriteriaGreenLine::where("isi", "=", $proyek->sumber_dana)->where("item", "=", "Proyek Luar Negeri")->count() > 0);
-                }
+
+            $greenlaneExcept = null;
+            if (!empty($customer->id_customer) || !empty($proyek->sumber_dana)) {
+                $greenlaneExcept = ExceptGreenlane::where(function ($query) use ($proyek, $customer) {
+                    $query->where('item', $customer->id_customer)
+                        ->orWhere('item', $proyek->sumber_dana);
+                })->first();
             }
-            if (!empty($customer->jenis_instansi)) {
-                if ((str_contains($customer->jenis_instansi, "BUMN") || str_contains($customer->jenis_instansi, "Kementrian / Pemerintah Pusat") || str_contains($customer->jenis_instansi, "Anak dan Turunan BUMN"))) {
-                    if (!empty($customer->group_tier)) {
-                        $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $customer->jenis_instansi)->where("sub_isi", "=", $customer->group_tier)->count() > 0);
-                    } elseif (!empty($customer->nama_holding)) {
-                        $holding = Customer::find($customer->nama_holding);
-                        if ($holding->jenis_instansi == "BUMN" && !empty($holding->group_tier)) {
-                            $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $holding->jenis_instansi)->where("sub_isi", "=", $holding->group_tier)->count() > 0);
+
+            if (empty($greenlaneExcept) || !empty($greenlaneExcept->sub_item)) {
+                $results = collect();
+
+                if (!empty($proyek->sumber_dana)) {
+                    if (!empty($proyek->negara) && ($proyek->negara == 'ID' || $proyek->negara == 'Indonesia')) {
+                        if ($proyek->sumber_dana == "APBD" || $proyek->sumber_dana == "BUMN") {
+                            //Jika ada Sumber Dana yg di Except Green Lane maka langsung kategori Green Lane
+                            if ($proyek->provinsi == $greenlaneExcept->sub_item || $customer->group_tier == $greenlaneExcept->sub_item) {
+                                return true;
+                            }
+
+                            //Jika tidak ada maka dicek di kriteria green lane dahulu untuk sumber dana dan anakannya
+                            $results->push(App\Models\KriteriaGreenLine::where("isi", "=", $proyek->sumber_dana)->where("item", "=", "Sumber Dana")->where(function ($query) use ($proyek, $customer) {
+                                $query->where('sub_isi', '=', $proyek->provinsi)
+                                ->orWhere('sub_isi', '=', $customer->group_tier);
+                            })->count() > 0);
+                        } else {
+                            //Jika diluar APBD dan BUMN
+                            $results->push(App\Models\KriteriaGreenLine::where("isi", "=", $proyek->sumber_dana)->where("item", "=", "Sumber Dana")->count() > 0);
+                        }
+                    } else {
+                        //Jika Proyek Luar Negeri
+                        $results->push(App\Models\KriteriaGreenLine::where("isi", "=", $proyek->sumber_dana)->where("item", "=", "Proyek Luar Negeri")->count() > 0);
+                    }
+                }
+                if (!empty($customer->jenis_instansi)) {
+                    if ((str_contains($customer->jenis_instansi, "BUMN") || str_contains($customer->jenis_instansi, "Kementrian / Pemerintah Pusat") || str_contains($customer->jenis_instansi, "Anak dan Turunan BUMN"))) {
+                        if (!empty($customer->group_tier)) {
+                            $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $customer->jenis_instansi)->where("sub_isi", "=", $customer->group_tier)->count() > 0);
+                        } elseif (!empty($customer->nama_holding)) {
+                            $holding = Customer::find($customer->nama_holding);
+                            if ($holding->jenis_instansi == "BUMN" && !empty($holding->group_tier)) {
+                                $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $holding->jenis_instansi)->where("sub_isi", "=", $holding->group_tier)->count() > 0);
+                            }
+                        } else {
+                            $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $customer->jenis_instansi)->count() > 0);
                         }
                     } else {
                         $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $customer->jenis_instansi)->count() > 0);
                     }
                 } else {
-                    $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $customer->jenis_instansi)->count() > 0);
+                    $results->push(false);
                 }
+                // if ($proyek->is_disetujui) {
+                //     return true;
+                // }
+                return $results->count() > 1 && $results->every(function ($item) {
+                    return $item === true;
+                });
+                // return $results->contains(true);
             } else {
-                $results->push(false);
+                return true;
             }
-            // if ($proyek->is_disetujui) {
-            //     return true;
-            // }
-            // return $results->count() > 1 && $results->every(function ($item) {
-            //     return $item === true;
-            // });
-            return $results->contains(true);
         } else {
             return true;
         }
@@ -206,24 +230,24 @@ function checkGreenLine($proyek) {
     return false;
 }
 
-function checkNonGreenLaneNota2($proyek)
+function checkGreenLaneNota2($proyek)
 {
     if ($proyek instanceof App\Models\Proyek) {
         if ($proyek->UnitKerja->dop != 'EA') {
             if ($proyek->stage == 4) {
                 if (empty($proyek->jenis_terkontrak) || empty($proyek->sistem_bayar)) {
-                    return null;
+                    return false;
                 }
 
-                if ($proyek->jenis_terkontrak == "Lumpsum" || $proyek->sistem_bayar == "Monthly" || $proyek->is_uang_muka) {
+                if ($proyek->jenis_terkontrak == "Unit Price" && $proyek->sistem_bayar == "Monthly" && !is_null($proyek->is_uang_muka) && $proyek->is_uang_muka) {
                     return true;
                 } else {
                     return false;
                 }
             }
-            return null;
+            return true;
         } else {
-            return null;
+            return true;
         }
     } else {
         return false;
@@ -3097,6 +3121,8 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
     $penyusun = collect(json_decode($proyekNotaRekomendasi->approved_verifikasi))->values()->toArray();
     $rekomendator = json_decode($proyekNotaRekomendasi->approved_rekomendasi);
     $penyetuju = json_decode($proyekNotaRekomendasi->approved_persetujuan);
+    $catatanAssessment = collect(json_decode($proyekNotaRekomendasi->catatan_master))->whereNotNull('urutan');
+    $urutanCatatan = MasterCatatanNotaRekomendasi2::select(['kategori', 'urutan'])->where('is_active', true)->orderBy('urutan')->get()->toArray();
 
     $section = $phpWord->addSection();
 
@@ -3146,9 +3172,9 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
             $statusWIKA = (int)$partner->porsi_jo < (int)$proyek->porsi_jo ? "Leader" : "Member";
             $kso_table->addText("Nama Partner : " . $partner->company_jo, $fontStyle);
             $kso_table->addText("WIKA : " . $statusWIKA, $fontStyle);
-            if ($proyek->PorsiJO->count() > 1) {
-                $kso_table->addTextBreak(1);
-            }
+            // if ($proyek->PorsiJO->count() > 1) {
+            //     $kso_table->addTextBreak(1);
+            // }
         }
     } else {
         $table->addCell(6000, $styleCell)->addText('Non KSO', $fontStyle);
@@ -3184,7 +3210,7 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
 
     $section->addText("Berdasarkan informasi di atas, mengajukan untuk mengikuti aktifitas Perolehan Kontrak (tender) tersebut di atas.");
 
-    $section->addTextBreak(1);
+    // $section->addTextBreak(1);
 
     $section_2 = $phpWord->addSection();
     $section_2->addText("B. SELF ASSESSMENT", ['size' => 12, "bold" => true], ['align' => "center"]);
@@ -3222,18 +3248,18 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
     $catatan_table->addCell(3000, $TstyleCell)->addText("Item", $TfontStyle);
     $catatan_table->addCell(6000, $TstyleCell)->addText("Uraian", $TfontStyle);
 
-    if (!empty($rekomendator)) {
-        foreach ($rekomendator as $key => $p) {
+    if (!empty($catatanAssessment)) {
+        foreach ($catatanAssessment as $key => $p) {
             $catatan_table->addRow();
 
             $cell_1_note = $catatan_table->addCell(3000);
             $cell_2_note = $catatan_table->addCell(6000);
             // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-            $cell_1_note->addText(User::find($p->user_id)->name, ["bold" => true], ["align" => "center"]);
+            $cell_1_note->addText($urutanCatatan[$key + 1]['kategori'], ["bold" => true], ["align" => "center"]);
             // $cell_1_note->addTextBreak(1);
             // $cell_2_note->addText(preg_replace('/&(?!#?[a-z0-9]+;)/', '&amp;', nl2br($p->catatan)), $fontStyle);
             // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-            $catatan_list = preg_split("/\n|\r\n?/", htmlspecialchars($p->catatan, ENT_QUOTES));
+            $catatan_list = preg_split("/\n|\r\n?/", htmlspecialchars($p->uraian, ENT_QUOTES));
             foreach ($catatan_list as $key => $catatan) {
                 if ($key != 0 && $catatan == "") {
                     $cell_2_note->addTextBreak(1, ['size' => 8], ['afterSpacing' => 0, 'spacing' => 10]);
@@ -3243,7 +3269,7 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
         }
     }
 
-    $section_3->addTextBreak(11);
+    $section_3->addTextBreak(5);
 
     $section_4 = $phpWord->addSection();
     $section_4->addText("D. APPROVAL", ['size' => 12, "bold" => true], ['align' => "center"]);

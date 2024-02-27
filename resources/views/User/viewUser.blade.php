@@ -369,7 +369,7 @@
                                                                             </label>
                                                                         </div>
                                                                         <!-- end:: Form Input Admin Kontrak -->
-                                                                        @can('crm')
+                                                                        @can('super-admin')
                                                                             <!-- begin:: Form Input Team Proyek -->
                                                                             <div class="form-check me-12">
                                                                                 <input class="role form-check-input" type="checkbox"

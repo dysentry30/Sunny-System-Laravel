@@ -388,6 +388,7 @@
                             str_contains(Request::Path(), 'matriks-approval-rekomendasi') ||
                             str_contains(Request::Path(), 'matriks-approval-rekomendasi-2') ||
                             str_contains(Request::Path(), 'matriks-approval-partner') ||
+                            str_contains(Request::Path(), 'matriks-approval-paparan') ||
                             str_contains(Request::Path(), 'provinsi') ||
                             str_contains(Request::Path(), 'otomasi-approval') ||
                             str_contains(Request::Path(), 'kriteria-pengguna-jasa') ||
@@ -746,6 +747,40 @@
                                                     <!--end::Svg Icon-->
                                                 </span>
                                                 <span class="menu-title" style="font-size: 16px; padding-left: 10px">Matriks Approval Partner</span>
+                                            </a>
+                                        </div>
+                                        <!--end::Menu Colapse-->
+                                    @endcan
+                                   
+                                    @can('super-admin')
+                                        <!--begin::Menu Colapse-->
+                                        <div id="#kt_aside_menu" data-kt-menu="true"
+                                            style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'matriks-approval-paparan' ? 'background-color:#008CB4' : '' }}">
+                                            <a class="menu-link " href="/matriks-approval-paparan" style="color:white; padding-left:20px;">
+                                                <span class="menu-icon">
+                                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                    {{-- <i class="bi bi-buildings text-white"></i> --}}
+                                                    <i class="bi bi-person-fill-lock text-white"></i>
+                                                    <!--end::Svg Icon-->
+                                                </span>
+                                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Matriks Approval Paparan</span>
+                                            </a>
+                                        </div>
+                                        <!--end::Menu Colapse-->
+                                    @endcan
+                                   
+                                    @can('super-admin')
+                                        <!--begin::Menu Colapse-->
+                                        <div id="#kt_aside_menu" data-kt-menu="true"
+                                            style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'except-greenlane' ? 'background-color:#008CB4' : '' }}">
+                                            <a class="menu-link " href="/except-greenlane" style="color:white; padding-left:20px;">
+                                                <span class="menu-icon">
+                                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                    {{-- <i class="bi bi-buildings text-white"></i> --}}
+                                                    <i class="bi bi-person-fill-lock text-white"></i>
+                                                    <!--end::Svg Icon-->
+                                                </span>
+                                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Except Greenlane</span>
                                             </a>
                                         </div>
                                         <!--end::Menu Colapse-->

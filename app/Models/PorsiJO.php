@@ -30,4 +30,9 @@ class PorsiJO extends Model
         return $this->hasMany(DokumenKelengkapanPartnerKSO::class, 'id_partner', 'id');
     }
 
+    public function AssessmentPartnerJO()
+    {
+        return $this->belongsTo(DokumenKelengkapanPartnerKSO::class, 'id_partner', 'id');
+    }
+
 }

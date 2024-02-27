@@ -3,7 +3,7 @@
 {{-- End::Extend Header --}}
 
 {{-- Begin::Title --}}
-@section('title', 'Matriks Approval Partner Selection')
+@section('title', 'Matriks Approval Paparan')
 {{-- End::Title --}}
 
 <!--begin::Main-->
@@ -32,7 +32,7 @@
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">Matriks Approval Partner Selection
+                                <h1 class="d-flex align-items-center fs-3 my-1">Matriks Approval Paparan
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -45,7 +45,7 @@
                                     <!--begin::Button-->
                                     <a href="#kt_modal_input_matriks_approval" data-bs-toggle="modal" class="btn btn-sm btn-primary py-3"
                                         style="background-color:#008CB4; padding: 6px">
-                                        Tambah Matriks Approval Partner Selection</a>
+                                        Tambah Matriks Approval Paparan</a>
 
                                 </div>
                                 <!--end::Actions-->
@@ -87,7 +87,7 @@
                                         <th class="min-w-100px">Unit Kerja</th>
                                         <th class="min-w-100px">Kode Unit Kerja</th>
                                         <th class="min-w-auto">Departemen</th>
-                                        {{-- <th class="min-w-auto">Klasifikasi Proyek</th> --}}
+                                        <th class="min-w-auto">Klasifikasi Proyek</th>
                                         <th class="min-w-auto">Kategori</th>
                                         <th class="min-w-auto text-white">Start Periode</th>
                                         <th class="min-w-auto text-white">Finish Periode</th>
@@ -202,12 +202,11 @@
                                                 @endif
                                                 {{-- {{$approval->Departemen->nama_departemen ?? ""}} --}}
                                             </td>
-                                            {{-- <td>{{$approval->klasifikasi_proyek}}</td> --}}
+                                            <td>{{$approval->klasifikasi_proyek}}</td>
                                             <td>{{$approval->kategori}}</td>
                                             <td class="text-center">{{$start_bulan}}</td>
                                             <td class="text-center">{{$finish_bulan}}</td>
                                             <td class="d-flex flex-column align-items-center gap-2">
-                                                {{-- <a href="#kt_modal_edit_{{$approval->id }}" data-bs-toggle="modal" class="btn btn-sm btn-primary text-white" style="background-color: #008CB4;">Edit</a> --}}
                                                 <button class="btn btn-sm btn-primary text-white" style="background-color: #008CB4;" onclick="showModal('{{ $approval }}')">Edit</button>
                                                 <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#kt_modal_matriks_delete_{{$approval->id}}">Delete</button>
                                             </td>
@@ -249,7 +248,7 @@
                 <!--begin::Modal header-->
                 <div class="modal-header">
                     <!--begin::Modal title-->
-                    <h2>Tambah Matriks Approval Partner Selection</h2>
+                    <h2>Tambah Matriks Approval Paparan</h2>
                     <!--end::Modal title-->
                     <!--begin::Close-->
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -263,7 +262,7 @@
                 </div>
                 <!--end::Modal header-->
 
-                <form action="/matriks-approval-partner/save" method="POST">
+                <form action="/matriks-approval-paparan/save" method="POST">
                     @csrf
                     <input type="hidden" name="modal" value="kt_modal_input_matriks_approval">
                     <!--begin::Modal body-->
@@ -410,7 +409,7 @@
                                     </div>
                                 </div>
                             </div>
-                            {{-- <div class="row mb-7">
+                            <div class="row mb-7">
                                 <div class="col">
                                     <div id="tier">
                                         <!--begin::Label-->
@@ -433,7 +432,7 @@
                                         <!--end::Input-->
                                     </div>
                                 </div>
-                            </div> --}}
+                            </div>
                             <div class="row mb-7">
                                 <div class="col">
                                     <div id="tier">
@@ -450,8 +449,7 @@
                                             data-select2-id="select2-kategori" tabindex="-1" aria-hidden="true">
                                             <option value="" selected></option>
                                             <option value="Pengajuan">Pengajuan</option>
-                                            <option value="Penyusun">Penyusun</option>
-                                            <option value="Rekomendasi">Rekomendasi</option>
+                                            <option value="Persetujuan">Persetujuan</option>
                                         </select>
                                         <!--end::Input-->
                                     </div>
@@ -560,7 +558,7 @@
                     <!--begin::Modal header-->
                     <div class="modal-header">
                         <!--begin::Modal title-->
-                        <h2>Edit Matriks Approval Partner Selection</h2>
+                        <h2>Edit Matriks Approval Paparan</h2>
                         <!--end::Modal title-->
                         <!--begin::Close-->
                         <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -574,7 +572,7 @@
                     </div>
                     <!--end::Modal header-->
 
-                    <form action="/matriks-approval-partner/update" method="POST">
+                    <form action="/matriks-approval-paparan/update" method="POST">
                         @csrf
                         <input type="hidden" name="modal" value="kt_modal_edit_{{ $approval->id }}">
                         <!--begin::Modal body-->
@@ -728,7 +726,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{-- <div class="row mb-7">
+                                <div class="row mb-7">
                                     <div class="col">
                                         <div id="tier">
                                             <!--begin::Label-->
@@ -751,7 +749,7 @@
                                             <!--end::Input-->
                                         </div>
                                     </div>
-                                </div> --}}
+                                </div>
                                 <div class="row mb-7">
                                     <div class="col">
                                         <div id="tier">
@@ -768,8 +766,7 @@
                                                 data-select2-id="select2-kategori-{{ $approval->id }}" tabindex="-1" aria-hidden="true">
                                                 <option value="" selected></option>
                                                 <option value="Pengajuan" {{ $approval->kategori == "Pengajuan" ? 'selected' : '' }}>Pengajuan</option>
-                                                <option value="Penyusun" {{ $approval->kategori == "Penyusun" ? 'selected' : '' }}>Penyusun</option>
-                                                <option value="Rekomendasi" {{ $approval->kategori == "Rekomendasi" ? 'selected' : '' }}>Rekomendasi</option>
+                                                <option value="Persetujuan" {{ $approval->kategori == "Persetujuan" ? 'selected' : '' }}>Persetujuan</option>
                                             </select>
                                             <!--end::Input-->
                                         </div>
@@ -880,7 +877,7 @@
 
     <!--begin::modal DELETE-->
     @foreach ($matriks_all as $approval)
-        <form action="/matriks-approval-partner/delete" method="post" enctype="multipart/form-data">
+        <form action="/matriks-approval-paparan/delete" method="post" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="id-matriks-approval" value="{{$approval->id}}">
             <div class="modal fade" id="kt_modal_matriks_delete_{{ $approval->id  }}" tabindex="-1" aria-hidden="true">

@@ -7,6 +7,7 @@ use App\Models\KriteriaSelectionNonGreenlane;
 use App\Models\MatriksApprovalNotaRekomendasi2;
 use App\Models\NotaRekomendasi2;
 use App\Models\MasterCatatanNotaRekomendasi2;
+use App\Models\MatriksApprovalPaparan;
 use App\Models\TimTender;
 use App\Models\UnitKerja;
 use Carbon\Carbon;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Http;
 use Karriere\PdfMerge\PdfMerge;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Gate;
 
 class Rekomendasi2Controller extends Controller
 {
@@ -65,37 +67,49 @@ class Rekomendasi2Controller extends Controller
 
         // dd($all_super_user_counter);
 
-        if ($is_matriks_has_ktt) {
-            $matriks_user = $all_super_user_counter;
-            $collectKlasifikasi = $matriks_user?->map(function ($item) {
-                return $item->klasifikasi_proyek;
-            })->toArray();
-
-            $collectDivisi = $matriks_user?->map(function ($item) {
-                return $item->divisi_id;
-            })->toArray();
-
-            $collectDepartement = $matriks_user?->map(function ($item) {
-                return $item->departemen_code;
-            })->toArray();
+        if (Gate::allows('super-admin')) {
+            $matriks_user = MatriksApprovalNotaRekomendasi2::all();
+            $matriks_paparan = MatriksApprovalPaparan::all();
+            $collectKlasifikasi = $matriks_user?->groupBy('klasifikasi_proyek')?->keys()?->toArray();
+            $unit_kerjas = ['H', 'G', 'P', 'J'];
+            $collectDivisi = $matriks_user?->groupBy('divisi_id')?->keys()?->toArray();
+            $collectDepartement = $matriks_user?->groupBy('departemen_code')?->keys()?->toArray();
         } else {
-            $matriks_user = Auth::user()->Pegawai?->MatriksApproval2;
-            $collectKlasifikasi = $matriks_user?->map(function ($item) {
-                return $item->klasifikasi_proyek;
-            })->toArray();
+            if ($is_matriks_has_ktt) {
+                $matriks_user = $all_super_user_counter;
+                $collectKlasifikasi = $matriks_user?->map(function ($item) {
+                    return $item->klasifikasi_proyek;
+                })->toArray();
 
-            $collectDivisi = $matriks_user?->map(function ($item) {
-                return $item->divisi_id;
-            })->toArray();
+                $collectDivisi = $matriks_user?->map(function ($item) {
+                    return $item->divisi_id;
+                })->toArray();
 
-            $collectDepartement = $matriks_user?->map(function ($item) {
-                return $item->departemen_code;
-            })->toArray();
+                $collectDepartement = $matriks_user?->map(function ($item) {
+                    return $item->departemen_code;
+                })->toArray();
+            } else {
+                $matriks_user = Auth::user()->Pegawai?->MatriksApproval2;
+                $collectKlasifikasi = $matriks_user?->map(function ($item) {
+                    return $item->klasifikasi_proyek;
+                })->toArray();
+
+                $collectDivisi = $matriks_user?->map(function ($item) {
+                    return $item->divisi_id;
+                })->toArray();
+
+                $collectDepartement = $matriks_user?->map(function ($item) {
+                    return $item->departemen_code;
+                })->toArray();
+            }
+            $matriks_paparan = MatriksApprovalPaparan::all()->filter(function ($user) {
+                return $user->Pegawai->nama_pegawai == Auth::user()->name;
+            });
         }
 
 
         $proyeks = NotaRekomendasi2::all();
-        $proyeks_proses_paparan = $proyeks->whereIn("unit_kerja", $unit_kerjas)->whereIn('klasifikasi_proyek', $collectKlasifikasi)->whereIn('departemen_proyek', $collectDepartement)->whereIn('divisi_id', $collectDivisi)->where('is_request_paparan', true)->whereNull('is_disetujui');
+        $proyeks_proses_paparan = $proyeks->whereIn("unit_kerja", $unit_kerjas)->whereIn('klasifikasi_proyek', $collectKlasifikasi)->whereIn('departemen_proyek', $collectDepartement)->whereIn('divisi_id', $collectDivisi)->whereNotNull('is_request_paparan')->whereNull('is_disetujui');
         $proyeks_proses_rekomendasi = $proyeks->whereIn("unit_kerja", $unit_kerjas)->whereIn('klasifikasi_proyek', $collectKlasifikasi)->whereIn('departemen_proyek', $collectDepartement)->whereIn('divisi_id', $collectDivisi)->whereNull('is_disetujui');
         $proyeks_rekomendasi_final = $proyeks->whereIn("unit_kerja", $unit_kerjas)->whereIn('klasifikasi_proyek', $collectKlasifikasi)->whereIn('departemen_proyek', $collectDepartement)->whereIn('divisi_id', $collectDivisi)->whereNotNull('is_disetujui');
 
@@ -111,6 +125,7 @@ class Rekomendasi2Controller extends Controller
             "proyeks_proses_rekomendasi" => $proyeks_proses_rekomendasi,
             "proyeks_rekomendasi_final" => $proyeks_rekomendasi_final,
             "matriks_user" => $matriks_user,
+            "matriks_paparan" => $matriks_paparan,
             "matriks_category" => $matriks_category,
             "is_user_exist_in_matriks_approval" => $is_user_exist_in_matriks_approval,
             "kriteriaAssessmentProjectSelection" => $kriteriaAssessmentProjectSelection,
@@ -153,23 +168,20 @@ class Rekomendasi2Controller extends Controller
             $is_checked = self::checkMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, $data, "Pengajuan");
 
             if ($is_checked) {
-                // $is_proyek_mega = (str_contains($proyekSelected->klasifikasi_pasdin, "Besar") || str_contains($proyekSelected->klasifikasi_pasdin, "Mega")) ? true : false;
+                $matriks_paparan = MatriksApprovalPaparan::where("divisi_id", "=", $proyekSelected->UnitKerja->Divisi->id_divisi)->where("klasifikasi_proyek", "=", $proyekSelected->klasifikasi_pasdin)->where("departemen_code", $proyekSelected->departemen_proyek)->where("kategori", "=", "Pengajuan")->where('is_active', true)->get();
+                if ($matriks_paparan->isEmpty()) {
+                    Alert::error('Error', 'Matriks untuk paparan tidak ditemukan. Hubungi Admin!');
+                    return redirect()->back();
+                }
 
-                // $nomorTarget = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Penyusun")->where('urutan', '=', 1);
-                // foreach ($nomorTarget as $target) {
-                //     $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_proyek_rekomendasi_" . $proyekSelected->kode_proyek;
-                //     $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan Pengajuan Nota Rekomendasi I, " . $proyekSelected->ProyekBerjalan->name_customer . " untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                //     $sendEmailUser = sendNotifEmail($target->Pegawai, "Permohonan Pengajuan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
-                //     if (!$sendEmailUser) {
-                //         return redirect()->back();
-                //     }
-                //     // $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
-
-                //     // $send_msg_to_wa->onError(function ($error) {
-                //     //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                //     //     return redirect()->back();
-                //     // });
-                // }
+                foreach ($matriks_paparan as $user) {
+                    $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_req_paparan_$proyekSelected->kode_proyek";
+                    $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan pengajuan tanggal paparan untuk Nota Rekomendasi II, " . $proyekSelected->ProyekBerjalan->name_customer . " untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                    $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Tanda Tangan Pengajuan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                    if (!$sendEmailUser) {
+                        return redirect()->back();
+                    }
+                }
 
                 createWordPengajuanNota2($proyekPengajuan);
                 $proyekPengajuan->is_pengajuan_approved = true;
@@ -211,7 +223,7 @@ class Rekomendasi2Controller extends Controller
 
 
     /**
-     * Proses Pengajuan
+     * Proses Penyusun
      * @param Request $request
      * @param string $kode_proyek
      */
@@ -297,7 +309,7 @@ class Rekomendasi2Controller extends Controller
 
                 $proyekPenyusun->approved_penyusun = $data->values()->toJson();
             }
-            // $proyekPenyusun->approved_penyusun = $note_penyusun;
+
             $proyekPenyusun->catatan_nota_rekomendasi = $request->get("note-rekomendasi");
 
             $is_checked = self::checkMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, $data, "Penyusun");
@@ -316,15 +328,6 @@ class Rekomendasi2Controller extends Controller
                             if (!$sendEmailUser) {
                                 return redirect()->back();
                             }
-                            // $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
-                            // $response->onError(function ($error) {
-                            //     // dd($error);
-                            //     Alert::error(
-                            //         'Error',
-                            //         "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !"
-                            //     );
-                            //     return redirect()->back();
-                            // });
                         }
                     } elseif (str_contains($proyekSelected->klasifikasi_pasdin, "Besar")) {
 
@@ -336,16 +339,6 @@ class Rekomendasi2Controller extends Controller
                             if (!$sendEmailUser) {
                                 return redirect()->back();
                             }
-                            // $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
-
-                            // $response->onError(function ($error) {
-                            //     // dd($error);
-                            //     Alert::error(
-                            //         'Error',
-                            //         "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !"
-                            //     );
-                            //     return redirect()->back();
-                            // });
                         }
                     } else {
 
@@ -357,16 +350,6 @@ class Rekomendasi2Controller extends Controller
                             if (!$sendEmailUser) {
                                 return redirect()->back();
                             }
-                            // $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
-
-                            // $response->onError(function ($error) {
-                            //     // dd($error);
-                            //     Alert::error(
-                            //         'Error',
-                            //         "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !"
-                            //     );
-                            //     return redirect()->back();
-                            // });
                         }
 
                         $approved_verifikasi = collect(json_decode($proyekPenyusun->approved_verifikasi));
@@ -389,18 +372,8 @@ class Rekomendasi2Controller extends Controller
                             if (!$sendEmailUser) {
                                 return redirect()->back();
                             }
-                            // $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
-
-                            // $response->onError(function ($error) {
-                            //     Alert::error(
-                            //         'Error',
-                            //         "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !"
-                            //     );
-                            //     return redirect()->back();
-                            // });
                         }
                     } elseif (str_contains($proyekSelected->klasifikasi_pasdin, "Besar")) {
-                        // $nomorTarget = !empty($this->isnomorTargetActive) ? self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Rekomendasi")->Pegawai->handphone : $this->nomorDefault;
                         $nomorTarget = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Verifikasi")?->where('urutan', '=', 1);
                         foreach ($nomorTarget as $target) {
                             $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_user_view_persetujuan_" . $proyekPenyusun->kode_proyek;
@@ -409,15 +382,6 @@ class Rekomendasi2Controller extends Controller
                             if (!$sendEmailUser) {
                                 return redirect()->back();
                             }
-                            // $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
-
-                            // $response->onError(function ($error) {
-                            //     Alert::error(
-                            //         'Error',
-                            //         "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !"
-                            //     );
-                            //     return redirect()->back();
-                            // });
                         }
                     }
 
@@ -454,18 +418,21 @@ class Rekomendasi2Controller extends Controller
                         if ($check_urutan_user) {
                             $get_nomor = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Penyusun", (int)$matriks_sekarang + 1);
                             foreach ($get_nomor as $user) {
+                                if ($user->is_ktt) {
+                                    $user = $proyekSelected->TimTender->where('posisi', 'Ketua')->first();
+                                }
+
+                                if (empty($user->Pegawai)) {
+                                    Alert::error('Error', 'KTT Belum ditentukan, mohon untuk mengisi KTT');
+                                    return redirect()->back();
+                                }
                                 $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_proyek_$proyekPenyusun->kode_proyek";
                                 $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan Pengajuan Nota Rekomendasi II, " . $proyekPenyusun->ProyekBerjalan->name_customer . " untuk Proyek $proyekPenyusun->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
                                 $sendEmailUser = sendNotifEmail($user->Pegawai, "Pemberitahuan Hasil Revisi Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
                                 if (!$sendEmailUser) {
                                     return redirect()->back();
                                 }
-                                // $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
-
-                                // $response->onError(function ($error) {
-                                //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                                //     return redirect()->back();
-                                // });
+                                
                             }
                         }
                     } elseif (str_contains($proyekSelected->klasifikasi_pasdin, "Besar")) {
@@ -478,18 +445,20 @@ class Rekomendasi2Controller extends Controller
                         if ($check_urutan_user) {
                             $get_nomor = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Penyusun", (int)$matriks_sekarang + 1);
                             foreach ($get_nomor as $user) {
+                                if ($user->is_ktt) {
+                                    $user = $proyekSelected->TimTender->where('posisi', 'Ketua')->first();
+                                }
+
+                                if (empty($user->Pegawai)) {
+                                    Alert::error('Error', 'KTT Belum ditentukan, mohon untuk mengisi KTT');
+                                    return redirect()->back();
+                                }
                                 $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_proyek_$proyekPenyusun->kode_proyek";
                                 $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan Pengajuan Nota Rekomendasi II, " . $proyekPenyusun->ProyekBerjalan->name_customer . " untuk Proyek $proyekPenyusun->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
                                 $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Pengajuan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
                                 if (!$sendEmailUser) {
                                     return redirect()->back();
                                 }
-                                // $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
-
-                                // $response->onError(function ($error) {
-                                //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                                //     return redirect()->back();
-                                // });
                             }
                         }
                     } else {
@@ -504,19 +473,21 @@ class Rekomendasi2Controller extends Controller
                             $get_nomor = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Penyusun", (int)$matriks_sekarang + 1);
 
                             foreach ($get_nomor as $user) {
+                                if ($user->is_ktt) {
+                                    $user = $proyekSelected->TimTender->where('posisi', 'Ketua')->first();
+                                }
+
+                                if (empty($user->Pegawai)) {
+                                    Alert::error('Error', 'KTT Belum ditentukan, mohon untuk mengisi KTT');
+                                    return redirect()->back();
+                                }
+
                                 $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_proyek_$proyekPenyusun->kode_proyek";
                                 $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan Pengajuan Nota Rekomendasi I, " . $proyekPenyusun->ProyekBerjalan->name_customer . " untuk Proyek $proyekPenyusun->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
                                 $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Pengajuan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
                                 if (!$sendEmailUser) {
                                     return redirect()->back();
                                 }
-                                // $response = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
-
-                                // $response->onError(function ($error) {
-
-                                //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                                //     return redirect()->back();
-                                // });
                             }
                         }
                     }
@@ -534,7 +505,7 @@ class Rekomendasi2Controller extends Controller
     }
 
     /**
-     * Proses Pengajuan
+     * Proses Verifikasi
      * @param Request $request
      * @param string $kode_proyek
      */
@@ -557,19 +528,12 @@ class Rekomendasi2Controller extends Controller
             if ($is_checked) {
                 $nomorTarget = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Rekomendasi");
                 foreach ($nomorTarget as $target) {
-                    $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_user_view_persetujuan_" . $proyekVerifikasi->kode_proyek;
+                    $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_proyek_rekomendasi_" . $proyekVerifikasi->kode_proyek;
                     $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan hasil asesmen untuk proyek " . $proyekSelected->nama_proyek . " untuk permohonan pemberian rekomendasi tahap II.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
                     $sendEmailUser = sendNotifEmail($target->Pegawai, "Pemberitahuan Hasil Assessment Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
                     if (!$sendEmailUser) {
                         return redirect()->back();
                     }
-                    // $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $target->Pegawai->handphone : $this->nomorDefault, $message);
-
-                    // $send_msg_to_wa->onError(function ($error) {
-                    //     // dd($error);
-                    //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                    //     return redirect()->back();
-                    // });
                 }
                 $proyekVerifikasi->is_verifikasi_approved = true;
             } else {
@@ -584,25 +548,25 @@ class Rekomendasi2Controller extends Controller
                     if ($check_urutan_user) {
                         $get_nomor = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Verifikasi", (int)$matriks_sekarang + 1);
                         foreach ($get_nomor as $user) {
-                            $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_proyek_$proyekVerifikasi->kode_proyek";
+                            if ($user->is_ktt) {
+                                $user = $proyekSelected->TimTender->where('posisi', 'Ketua')->first();
+                            }
+
+                            if (empty($user->Pegawai)) {
+                                Alert::error('Error', 'KTT Belum ditentukan, mohon untuk mengisi KTT');
+                                return redirect()->back();
+                            }
+                            $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_proyek_verifikasi_$proyekVerifikasi->kode_proyek";
                             $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan hasil asesmen untuk proyek " . $proyekSelected->nama_proyek . " untuk proses tandatangan penyusun Nota Rekomendasi tahap II.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
                             $sendEmailUser = sendNotifEmail($user->Pegawai, "Pemberitahuan Hasil Assessment Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
                             if (!$sendEmailUser) {
                                 return redirect()->back();
                             }
-                            // $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
-
-                            // $send_msg_to_wa->onError(function ($error) {
-                            //     // dd($error);
-                            //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                            //     return redirect()->back();
-                            // });
                         }
                     }
                 }
             }
             if ($proyekVerifikasi->save()) {
-                // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_mega);
                 Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyekSelected->nama_proyek</b> telah disetujui oleh tim Penyusun melalui <b>Tahap Nota Rekomendasi 2</b>", "success");
                 return redirect()->back();
             }
@@ -634,17 +598,11 @@ class Rekomendasi2Controller extends Controller
                 if (!$sendEmailUser) {
                     return redirect()->back();
                 }
-                // $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
-
-                // $send_msg_to_wa->onError(function ($error) {
-                //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                //     return redirect()->back();
-                // });
             }
 
             $proyekVerifikasi->is_penyusun_approved = null;
             $proyekVerifikasi->approved_penyusun = null;
-            $proyekVerifikasi->approved_penyusun = null;
+            $proyekVerifikasi->approved_verifikasi = null;
             $proyekVerifikasi->is_draft_recommend_note = null;
 
             if ($proyekVerifikasi->save()) {
@@ -677,7 +635,7 @@ class Rekomendasi2Controller extends Controller
     }
 
     /**
-     * Proses Pengajuan
+     * Proses Rekomendasi
      * @param Request $request
      * @param string $kode_proyek
      */
@@ -716,14 +674,7 @@ class Rekomendasi2Controller extends Controller
                     if (!$sendEmailUser) {
                         return redirect()->back();
                     }
-                    // $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
-
-                    // $send_msg_to_wa->onError(function ($error) {
-                    //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                    //     return redirect()->back();
-                    // });
                 }
-                // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega);
                 $proyekRekomendasi->is_recommended_with_note = true;
                 $proyekRekomendasi->is_rekomendasi_approved = true;
             } else {
@@ -743,16 +694,6 @@ class Rekomendasi2Controller extends Controller
                             if (!$sendEmailUser) {
                                 return redirect()->back();
                             }
-                            // $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
-
-                            // $send_msg_to_wa->onError(function ($error) {
-                            //     // dd($error);
-                            //     Alert::error(
-                            //         'Error',
-                            //         "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !"
-                            //     );
-                            //     return redirect()->back();
-                            // });
                         }
                     }
                 }
@@ -771,11 +712,6 @@ class Rekomendasi2Controller extends Controller
             $proyekRekomendasi->is_rekomendasi_approved = false;
             $proyekRekomendasi->is_disetujui = false;
 
-            // $hasil_assessment = collect(json_decode($proyek->hasil_assessment));
-            // $is_proyek_mega = str_contains($proyekSelected->klasifikasi_pasdin, "Mega") ? true : false;
-            // $is_proyek_besar = str_contains($proyekSelected->klasifikasi_pasdin, "Besar") ? true : false;
-            createWordPersetujuanNota2($proyekRekomendasi);
-
             if ($proyekRekomendasi->save()) {
                 Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyekSelected->nama_proyek</b> ditolak oleh tim Rekomendasi", "success");
                 return redirect()->back();
@@ -791,9 +727,7 @@ class Rekomendasi2Controller extends Controller
             $proyekRekomendasi->approved_rekomendasi = $approved_verifikasi->toJson();
 
             $is_checked = self::checkMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, $approved_verifikasi, "Rekomendasi");
-            // dd($is_checked);
             if ($is_checked) {
-                // $matriks_approval = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Persetujuan");
                 $matriks_approval = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Persetujuan");
                 foreach ($matriks_approval as $key => $user) {
                     $user = $user->Pegawai->User;
@@ -803,20 +737,11 @@ class Rekomendasi2Controller extends Controller
                     if (!$sendEmailUser) {
                         return redirect()->back();
                     }
-                    // $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
-
-                    // $send_msg_to_wa->onError(function ($error) {
-                    //     // dd($error);
-                    //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                    //     return redirect()->back();
-                    // });
                 }
-                // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega);
                 $proyekRekomendasi->is_rekomendasi_approved = true;
             } else {
                 if (!$is_paralel) {
                     $matriks_approval = self::getUserMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Rekomendasi");
-                    // $matriks_sekarang = MatriksApprovalRekomendasi::where('nama_pegawai', Auth::user()->nip)->first()->urutan;
                     $matriks_sekarang = self::getUrutanUserMatriksApprovalSekarang(Auth::user()->nip, $proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Rekomendasi");
                     $check_urutan_user = $matriks_approval->contains(function ($user) use ($matriks_sekarang) {
                         return $user->urutan == $matriks_sekarang + 1;
@@ -831,16 +756,6 @@ class Rekomendasi2Controller extends Controller
                             if (!$sendEmailUser) {
                                 return redirect()->back();
                             }
-                            // $send_msg_to_wa = self::sendWAToUser(!empty($this->isnomorTargetActive) ? $user->Pegawai->handphone : $this->nomorDefault, $message);
-
-                            // $send_msg_to_wa->onError(function ($error) {
-                            //     // dd($error);
-                            //     Alert::error(
-                            //         'Error',
-                            //         "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !"
-                            //     );
-                            //     return redirect()->back();
-                            // });
                         }
                     }
                 }
@@ -926,9 +841,36 @@ class Rekomendasi2Controller extends Controller
 
         if ($kategori == "Pengajuan") {
             $ProyekPemaparan->tanggal_paparan_diajukan = $data["tanggal-pengajuan-paparan"];
-            $nomorTarget = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Penyusun", 1);
+            $nomorTargetPaparan = self::getNomorMatriksApprovalPaparan($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Persetujuan", 1);
+            $inputFileNotulen = isset($data['file-pemaparan']) ? $data['file-pemaparan'] : [];
+            $inputFileAbsensi = isset($data['file-absensi-paparan']) ? $data['file-absensi-paparan'] : [];
 
-            foreach ($nomorTarget as $user) {
+            // if (empty($inputFileNotulen) || empty($inputFileAbsensi)) {
+            //     Alert::error('Dokumen Belum Lengkap', "Mohon lengkapi dokumen paparan");
+            //     return redirect()->back();
+            // }
+
+            if (!empty($inputFileNotulen)) {
+                $collectFileNotulen = collect([]);
+                foreach ($inputFileNotulen as $fileNotulen) {
+                    $id_document = date("His_") .  str_replace(' ', '-', $fileNotulen->getClientOriginalName());
+                    $collectFileNotulen->push($id_document);
+                    $fileNotulen->move(public_path('file-nota-rekomendasi-2/file-notulen-paparan/'), $id_document);
+                }
+                $ProyekPemaparan->file_pemaparan = $collectFileNotulen->toJson();
+            }
+
+            if (!empty($inputFileAbsensi)) {
+                $collectFileAbsensi = collect([]);
+                foreach ($inputFileAbsensi as $fileAbsensi) {
+                    $id_document = date("His_") .  str_replace(' ', '-', $fileAbsensi->getClientOriginalName());
+                    $collectFileAbsensi->push($id_document);
+                    $fileAbsensi->move(public_path('file-nota-rekomendasi-2/file-absensi-paparan/'), $id_document);
+                }
+                $ProyekPemaparan->file_absensi_paparan = $collectFileAbsensi->toJson();
+            }
+
+            foreach ($nomorTargetPaparan as $user) {
                 $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai?->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_req_paparan_setuju_$proyekSelected->kode_proyek";
                 $message = "Yth Bapak/Ibu " . $user->Pegawai?->nama_pegawai . "\nDengan ini menyampaikan permohonan waktu paparan untuk Nota Rekomendasi II, " . $proyekSelected->ProyekBerjalan->name_customer . " untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
                 $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Pengajuan Waktu Paparan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
@@ -938,12 +880,12 @@ class Rekomendasi2Controller extends Controller
             }
         } else {
             $ProyekPemaparan->tanggal_paparan_disetujui = $data["tanggal-persetujuan-paparan"];
-            $nomorTarget = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Pengajuan", 1);
+            $nomorTargetPaparan = self::getNomorMatriksApprovalPaparan($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Pengajuan", 1);
 
-            foreach ($nomorTarget as $user) {
-                if ($user->is_ktt) {
-                    $user = $proyekSelected->TimTender->where('posisi', 'Ketua')->first();
-                }
+            foreach ($nomorTargetPaparan as $user) {
+                // if ($user->is_ktt) {
+                //     $user = $proyekSelected->TimTender->where('posisi', 'Ketua')->first();
+                // }
 
                 $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai?->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_req_paparan_setuju_$proyekSelected->kode_proyek";
                 $message = "Yth Bapak/Ibu " . $user->Pegawai?->nama_pegawai . "\nDengan ini menyampaikan pemberitahuan waktu paparan untuk Nota Rekomendasi II, " . $proyekSelected->ProyekBerjalan->name_customer . " untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
@@ -952,6 +894,9 @@ class Rekomendasi2Controller extends Controller
                     return redirect()->back();
                 }
             }
+
+            $ProyekPemaparan->is_request_paparan = false;
+            $ProyekPemaparan->is_sudah_pemaparan = true;
         }
 
         if ($ProyekPemaparan->save()) {
@@ -969,144 +914,6 @@ class Rekomendasi2Controller extends Controller
 
         Alert::html("Error", $messageAllert, "error");
         return redirect()->back();
-    }
-
-    /**
-     * Proses Upload File Paparan
-     * @param Request $request
-     * @param string $kode_proyek
-     */
-    public function paparanUploadFile(Request $request, $kode_proyek)
-    {
-        $proyekPaparan = NotaRekomendasi2::where('kode_proyek', $kode_proyek)->first();
-        $proyekSelected = $proyekPaparan->Proyek;
-
-        $data = $request->all();
-
-        $inputFileNotulen = isset($data['file-pemaparan']) ? $data['file-pemaparan'] : [];
-        $inputFileAbsensi = isset($data['file-absensi-paparan']) ? $data['file-absensi-paparan'] : [];
-
-        if (empty($inputFileNotulen) || empty($inputFileAbsensi)) {
-            Alert::error('Dokumen Belum Lengkap', "Mohon lengkapi dokumen paparan");
-            return redirect()->back();
-        }
-
-        if (!empty($inputFileNotulen)) {
-            $collectFileNotulen = collect([]);
-            foreach ($inputFileNotulen as $fileNotulen) {
-                $id_document = date("His_") .  str_replace(' ', '-', $fileNotulen->getClientOriginalName());
-                $collectFileNotulen->push($id_document);
-                $fileNotulen->move(public_path('file-nota-rekomendasi-2/file-notulen-paparan/'), $id_document);
-            }
-            $proyekPaparan->file_pemaparan = $collectFileNotulen->toJson();
-        }
-
-        if (!empty($inputFileAbsensi)) {
-            $collectFileAbsensi = collect([]);
-            foreach ($inputFileAbsensi as $fileAbsensi) {
-                $id_document = date("His_") .  str_replace(' ', '-', $fileAbsensi->getClientOriginalName());
-                $collectFileAbsensi->push($id_document);
-                $fileAbsensi->move(public_path('file-nota-rekomendasi-2/file-absensi-paparan/'), $id_document);
-            }
-            $proyekPaparan->file_absensi_paparan = $collectFileAbsensi->toJson();
-        }
-        $is_revisi_paparan = $proyekPaparan->is_paparan_revisi;
-        if ($is_revisi_paparan) {
-            $proyekPaparan->is_paparan_revisi = null;
-        }
-
-        if ($proyekPaparan->save()) {
-            $nomorTarget = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Penyusun", 1);
-            foreach ($nomorTarget as $user) {
-                $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai?->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_approval_paparan_$proyekSelected->kode_proyek";
-
-                if ($is_revisi_paparan) {
-                    $message = "Yth Bapak/Ibu " . $user->Pegawai?->nama_pegawai . "\nDengan ini menyampaikan hasil revisi dokumen paparan untuk dilakukan approval untuk Nota Rekomendasi II, " . $proyekSelected->ProyekBerjalan->name_customer . " untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                    $sendEmailUser = sendNotifEmail($user->Pegawai, "Pemberitahuan Hasil Revisi Paparan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
-                } else {
-                    $message = "Yth Bapak/Ibu " . $user->Pegawai?->nama_pegawai . "\nDengan ini menyampaikan permohonan approval paparan untuk Nota Rekomendasi II, " . $proyekSelected->ProyekBerjalan->name_customer . " untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                    $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Approval Paparan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
-                }
-
-                if (!$sendEmailUser) {
-                    return redirect()->back();
-                }
-            }
-            Alert::success('Success', 'Dokumen paparan berhasil diupload!');
-            return redirect()->back();
-        }
-        Alert::error('Error', 'Dokumen paparan gagal diupload!');
-        return redirect()->back();
-    }
-
-    /**
-     * Proses Upload File Paparan
-     * @param Request $request
-     * @param string $kode_proyek
-     */
-    public function paparanApprove(Request $request, $kode_proyek)
-    {
-        $proyekApprovePaparan = NotaRekomendasi2::where('kode_proyek', $kode_proyek)->first();
-        $proyekSelected = $proyekApprovePaparan->Proyek;
-
-        $data = $request->all();
-
-        if (isset($data["approve"])) {
-            $proyekApprovePaparan->is_request_paparan = false;
-            $proyekApprovePaparan->is_sudah_pemaparan = true;
-            if ($proyekApprovePaparan->save()) {
-                Alert::success('Success', 'Proyek berhasil disetujui');
-                return redirect()->back();
-            }
-        } elseif (isset($data["revisi"])) {
-            $fileNotulensi = collect(json_decode($proyekApprovePaparan->file_pemaparan));
-            $fileAbsensi = collect(json_decode($proyekApprovePaparan->file_absensi_paparan));
-            $paparanRevisiNote = collect(json_decode($proyekApprovePaparan->revisi_paparan_note));
-
-            try {
-                foreach ($fileNotulensi as $doc) {
-                    File::delete(public_path('file-nota-rekomendasi-2//file-notulen-paparan//' . $doc));
-                }
-
-                foreach ($fileAbsensi as $doc2) {
-                    File::delete(public_path('file-nota-rekomendasi-2//file-absensi-paparan//' . $doc2));
-                }
-
-                $paparanRevisiNote = $paparanRevisiNote->push([
-                    'user_id' => Auth::user()->nip,
-                    "status" => "revisi",
-                    "tanggal" => Carbon::now(),
-                    "catatan" => $data["revisi_note"]
-                ]);
-
-                $nomorTarget = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Pengajuan", 1);
-                foreach ($nomorTarget as $user) {
-                    if ($user->is_ktt) {
-                        $user = $proyekSelected->TimTender->where('posisi', 'Ketua')->first();
-                    }
-
-                    $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai?->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_upload_paparan_$proyekSelected->kode_proyek";
-                    $message = "Yth Bapak/Ibu " . $user->Pegawai?->nama_pegawai . "\nDengan ini menyampaikan pemberitahuan revisi dokumen paparan untuk Nota Rekomendasi II, " . $proyekSelected->ProyekBerjalan->name_customer . " untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                    $sendEmailUser = sendNotifEmail($user->Pegawai, "Pemberitahuan Revisi Dokumen Paparan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
-                    if (!$sendEmailUser) {
-                        return redirect()->back();
-                    }
-                }
-
-                $proyekApprovePaparan->file_pemaparan = null;
-                $proyekApprovePaparan->file_absensi_paparan = null;
-                $proyekApprovePaparan->is_paparan_revisi = true;
-                $proyekApprovePaparan->revisi_paparan_note = $paparanRevisiNote;
-
-                if ($proyekApprovePaparan->save()) {
-                    Alert::success('Success', 'Proyek berhasil di kembalikan ke Pengajuan');
-                    return redirect()->back();
-                }
-            } catch (\Exception $e) {
-                Alert::error('Error', $e->getMessage());
-                return redirect()->back();
-            }
-        }
     }
 
 
@@ -1140,6 +947,16 @@ class Rekomendasi2Controller extends Controller
     private function getNomorMatriksApproval($divisi_id, $klasifikasi_pasdin, $departemen_code, $kategori, $urutan = null)
     {
         $matriks_approval = $this->matriks_approvals->where("klasifikasi_proyek", "=", $klasifikasi_pasdin)->where("kategori", "=", $kategori);
+        if (empty($urutan)) {
+            return $matriks_approval->where("divisi_id", $divisi_id)->where("departemen_code", $departemen_code)->get();
+        } else {
+            return $matriks_approval->where("divisi_id", $divisi_id)->where("departemen_code", $departemen_code)->where('urutan', '=', $urutan)->get();
+        }
+    }
+
+    private function getNomorMatriksApprovalPaparan($divisi_id, $klasifikasi_pasdin, $departemen_code, $kategori, $urutan = null)
+    {
+        $matriks_approval = MatriksApprovalPaparan::where("klasifikasi_proyek", "=", $klasifikasi_pasdin)->where("kategori", "=", $kategori);
         if (empty($urutan)) {
             return $matriks_approval->where("divisi_id", $divisi_id)->where("departemen_code", $departemen_code)->get();
         } else {
