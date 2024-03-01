@@ -269,4 +269,9 @@ class Proyek extends Model
     {
         return $this->hasMany(AssessmentPartnerSelection::class, 'kode_proyek', 'kode_proyek');
     }
+
+    public function CashFlowProyek()
+    {
+        return $this->hasMany(CashFlowProyek::class, 'kode_proyek', 'kode_proyek');
+    }
 }

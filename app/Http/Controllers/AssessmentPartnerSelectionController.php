@@ -108,83 +108,89 @@ class AssessmentPartnerSelectionController extends Controller
 
         $current_timestamp = Carbon::now();
 
-        foreach ($index as $key => $urutan) {
-            if ($key <= ($legalitasMaster->count() - 1)) {
-                if (isset($data["dokumen_legalitas_$key"])) {
-                    $files = collect($data["dokumen_legalitas_$key"])->values();
-                    $array_files = collect();
+        try {
+            foreach ($index as $key => $urutan) {
+                if ($key <= ($legalitasMaster->count() - 1)) {
+                    if (isset($data["dokumen_legalitas_$key"])) {
+                        $files = collect($data["dokumen_legalitas_$key"])->values();
+                        $array_files = collect();
 
-                    $partnerDetail->partner_id = $data["id_partner"];
-                    $partnerDetail->item = $legalitasMaster[$key]->kategori;
-                    $partnerDetail->kriteria = $data["is_legalitas_" . $urutan];
-                    $partnerDetail->nilai = null;
-                    $partnerDetail->keterangan = $data["is_legalitas_keterangan"][$key];
+                        $partnerDetail->partner_id = $data["id_partner"];
+                        $partnerDetail->item = $legalitasMaster[$key]->kategori;
+                        $partnerDetail->kriteria = $data["is_legalitas_" . $urutan];
+                        $partnerDetail->nilai = null;
+                        $partnerDetail->keterangan = $data["is_legalitas_keterangan"][$key];
 
-                    foreach ($files as $file) {
-                        $id_document = date("His_") . $key . '_' . str_replace(' ', '-', $file->getClientOriginalName());
-                        $array_files->push($id_document);
-                        $file->move(public_path('file-selection-partner'), $id_document);
+                        foreach ($files as $file) {
+                            $id_document = date("His_") . $key . '_' . str_replace(' ', '-', $file->getClientOriginalName());
+                            $array_files->push($id_document);
+                            $file->move(public_path('file-selection-partner'), $id_document);
+                        }
+
+                        $partnerDetail->id_document = $array_files->toJson();
+                        $partnerDetail->urutan = $urutan;
+                        $partnerDetail->kode_proyek = $data["kode_proyek"];
+                        $partnerDetail->index = $key;
+                    } else {
+                        $partnerDetail->partner_id = $data["id_partner"];
+                        $partnerDetail->item = $legalitasMaster[$key]->kategori;
+                        $partnerDetail->kriteria = $data["is_legalitas_" . $urutan];
+                        $partnerDetail->nilai = null;
+                        $partnerDetail->keterangan = $data["is_legalitas_keterangan"][$key];
+                        $partnerDetail->id_document = null;
+                        $partnerDetail->urutan = $urutan;
+                        $partnerDetail->kode_proyek = $data["kode_proyek"];
+                        $partnerDetail->index = $key;
                     }
-
-                    $partnerDetail->id_document = $array_files->toJson();
-                    $partnerDetail->urutan = $urutan;
-                    $partnerDetail->kode_proyek = $data["kode_proyek"];
-                    $partnerDetail->index = $key;
                 } else {
-                    $partnerDetail->partner_id = $data["id_partner"];
-                    $partnerDetail->item = $legalitasMaster[$key]->kategori;
-                    $partnerDetail->kriteria = $data["is_legalitas_" . $urutan];
-                    $partnerDetail->nilai = null;
-                    $partnerDetail->keterangan = $data["is_legalitas_keterangan"][$key];
-                    $partnerDetail->id_document = null;
-                    $partnerDetail->urutan = $urutan;
-                    $partnerDetail->kode_proyek = $data["kode_proyek"];
-                    $partnerDetail->index = $key;
-                }
-            } else {
-                if (isset($data["dokumen_penilaian_$key"])) {
-                    $files = collect($data["dokumen_penilaian_$key"])->values();
-                    $array_files = collect();
+                    if (isset($data["dokumen_penilaian_$key"])) {
+                        $files = collect($data["dokumen_penilaian_$key"])->values();
+                        $array_files = collect();
 
-                    $partnerDetail->partner_id = $data["id_partner"];
-                    $partnerDetail->item = $kriteriaMaster[(int)$urutan - 1]->kategori;
-                    $partnerDetail->kriteria = $data["is_kriteria_" . $urutan];
-                    $partnerDetail->nilai = (float)$data['nilai'][(int)$urutan - 1];
-                    $partnerDetail->keterangan = $data["keterangan"][(int)$urutan - 1];
+                        $partnerDetail->partner_id = $data["id_partner"];
+                        $partnerDetail->item = $kriteriaMaster[(int)$urutan - 1]->kategori;
+                        $partnerDetail->kriteria = $data["is_kriteria_" . $urutan];
+                        $partnerDetail->nilai = (float)$data['nilai'][(int)$urutan - 1];
+                        $partnerDetail->keterangan = $data["keterangan"][(int)$urutan - 1];
 
-                    foreach ($files as $file) {
-                        $id_document = date("His_") . $key . '_' . str_replace(' ', '-', $file->getClientOriginalName());
-                        $array_files->push($id_document);
-                        $file->move(public_path('file-selection-partner'), $id_document);
+                        foreach ($files as $file) {
+                            $id_document = date("His_") . $key . '_' . str_replace(' ', '-', $file->getClientOriginalName());
+                            $array_files->push($id_document);
+                            $file->move(public_path('file-selection-partner'), $id_document);
+                        }
+
+                        $partnerDetail->id_document = $array_files->toJson();
+                        $partnerDetail->urutan = $urutan;
+                        $partnerDetail->kode_proyek = $data["kode_proyek"];
+                        $partnerDetail->index = $key;
+                    } else {
+                        $partnerDetail->partner_id = $data["id_partner"];
+                        $partnerDetail->item = $kriteriaMaster[(int)$urutan - 1]->item;
+                        $partnerDetail->kriteria = $data["is_kriteria_" . $urutan];
+                        $partnerDetail->nilai = (float)$data['nilai'][(int)$urutan - 1];
+                        $partnerDetail->keterangan = $data["keterangan"][(int)$urutan - 1];
+                        $partnerDetail->id_document = null;
+                        $partnerDetail->urutan = $urutan;
+                        $partnerDetail->kode_proyek = $data["kode_proyek"];
+                        $partnerDetail->index = $key;
                     }
-
-                    $partnerDetail->id_document = $array_files->toJson();
-                    $partnerDetail->urutan = $urutan;
-                    $partnerDetail->kode_proyek = $data["kode_proyek"];
-                    $partnerDetail->index = $key;
-                } else {
-                    $partnerDetail->partner_id = $data["id_partner"];
-                    $partnerDetail->item = $kriteriaMaster[(int)$urutan - 1]->item;
-                    $partnerDetail->kriteria = $data["is_kriteria_" . $urutan];
-                    $partnerDetail->nilai = (float)$data['nilai'][(int)$urutan - 1];
-                    $partnerDetail->keterangan = $data["keterangan"][(int)$urutan - 1];
-                    $partnerDetail->id_document = null;
-                    $partnerDetail->urutan = $urutan;
-                    $partnerDetail->kode_proyek = $data["kode_proyek"];
-                    $partnerDetail->index = $key;
                 }
+
+                $collectJawaban[] = $partnerDetail->attributesToArray();
             }
 
-            $collectJawaban[] = $partnerDetail->attributesToArray();
-        }
+            if (PartnerSelectionDetail::insert($collectJawaban)) {
+                Alert::success("Success", "Partner Selection berhasil dibuat!");
+                return redirect()->back();
+            }
 
-        if (PartnerSelectionDetail::insert($collectJawaban)) {
-            Alert::success("Success", "Partner Selection berhasil dibuat!");
+            Alert::error("Error", "Partner Selection gagal dibuat!");
+            return redirect()->back();
+        } catch (\Exception $e) {
+            Alert::error("Error", "Data tidak lengkap, mohon periksa kembali!");
             return redirect()->back();
         }
 
-        Alert::error("Error", "Partner Selection gagal dibuat!");
-        return redirect()->back();
     }
 
     /**
@@ -245,7 +251,7 @@ class AssessmentPartnerSelectionController extends Controller
             Alert::success("Success", "Form Kriteria Partner Selection berhasil diperbaharui!");
             return redirect()->back();
         } catch (\Exception $th) {
-            Alert::error("Error", $th->getMessage());
+            Alert::error("Error", "Data tidak lengkap, mohon periksa kembali!");
             return redirect()->back();
         }
     }
@@ -322,6 +328,8 @@ class AssessmentPartnerSelectionController extends Controller
                 $newAssessment->departemen_id = $proyek->departemen_proyek;
                 $newAssessment->save();
 
+                mergeDokumenKelengkapanPartnerKSO($partner);
+
                 $matriksSelected = self::getMatriksSelanjutnya($proyek->UnitKerja->Divisi->id_divisi, $proyek->departemen_proyek, 'Pengajuan');
 
                 if (empty($matriksSelected)) {
@@ -338,6 +346,8 @@ class AssessmentPartnerSelectionController extends Controller
                 }
 
             });
+
+            
 
             return response()->json([
                 'success' => true,
@@ -398,9 +408,9 @@ class AssessmentPartnerSelectionController extends Controller
 
             foreach ($matriksSelected as $user) {
                 $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/assessment-partner-selection";
-                $message = nl2br("Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan persetujuan Partner Selection untuk " . $assessmentSelection->PartnerJO->Company->name . " pada proyek $proyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
+                $message = nl2br("Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan assessment Partner Selection untuk " . $assessmentSelection->PartnerJO->Company->name . " pada proyek $proyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
 
-                sendNotifEmail($user->Pegawai->email, "Permohonan Persetujuan Approval Partner Selection", $message);
+                sendNotifEmail($user->Pegawai->email, "Permohonan Assessment Partner Selection", $message);
             }
 
 
@@ -467,6 +477,9 @@ class AssessmentPartnerSelectionController extends Controller
         } else {
             $assessmentSelection->is_penyusun_approved = true;
             $matriksSelected = self::getMatriksSelanjutnya($proyek->UnitKerja->Divisi->id_divisi, $proyek->departemen_proyek, 'Rekomendasi');
+
+            createWordAssessmentPartner($assessmentSelection->PartnerJO);
+            mergeFileDokumenAssessmentPartnerKSO($assessmentSelection->PartnerJO);
 
             if ($matriksSelected->isEmpty()) {
                 Alert::error('Error', 'Matriks Approval Rekomendasi Partner Selection tidak ada. Hubungi Admin!');

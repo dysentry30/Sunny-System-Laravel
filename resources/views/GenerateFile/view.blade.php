@@ -73,7 +73,7 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" {{ $verifikasiKSO->contains('index', 4) ? "checked" : "" }}>
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" {{ $verifikasiKSO->contains('index', 3) ? "checked" : "" }}>
                                     </td>
                                     <td>
                                         <label class="form-check-label" style="margin: 0; padding:0" for="inlineCheckbox3" style="font-size: 0.8rem">Tidak Memiliki Peralatan yang Dipersyaratkan</label>

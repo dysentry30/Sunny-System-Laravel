@@ -1681,7 +1681,7 @@
         }
     @endphp
     <!--begin::Modal Pengajuan-->
-    <form action="/assessment-partner-selection/pengajuan/approval" method="post">
+    <form action="/assessment-partner-selection/pengajuan/approval" method="post" onsubmit="addLoading(this)">
     @csrf
         <div class="modal fade" id="pengajuan_{{ $assessment->id }}" tabindex="-1" aria-hidden="true">
             <!--begin::Modal dialog-->
@@ -1762,38 +1762,12 @@
                             <br>
                             <hr>
                             <h5>Dokumen Pendukung</h5>
-                            <div id="carouselDokumen" class="carousel slide">
-                                <div class="carousel-inner">
-                                    @if (!empty($partner->Proyek->DokumenPenentuanKSO))
-                                    <div class="carousel-item active">
-                                        <iframe src="{{ asset('dokumen-penentuan-kso' . '\\' . $partner->Proyek->DokumenPenentuanKSO->id_document) }}"
-                                            width="800px" height="600px"></iframe>
-                                    </div>
-                                    @endif
-                                    @if (!empty($partner->file_consent_npwp))
-                                        @foreach (json_decode($partner->file_consent_npwp) as $file)
-                                        <div class="carousel-item">
-                                            <iframe src="{{ asset('consent-npwp' . '\\' . $file) }}"
-                                                width="800px" height="600px"></iframe>
-                                        </div>                                    
-                                        @endforeach
-                                    @endif
-                                    @if (!empty($partner->file_pefindo_jo))
-                                    <div class="carousel-item">
-                                        <iframe src="{{ asset('pefindo'. '\\' . $partner->file_pefindo_jo) }}"
-                                            width="800px" height="600px"></iframe>
-                                    </div>
-                                    @endif
-                                </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselDokumen" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#carouselDokumen" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
+                            @if (!empty($assessment->PartnerJO?->file_kelengkapan_merge))
+                            <div class="text-center">
+                                <iframe src="{{ asset('file-kelengkapan-partner' . '\\' . $assessment->PartnerJO->file_kelengkapan_merge) }}"
+                                    width="800px" height="600px"></iframe>
                             </div>
+                            @endif
                         </div>
                     </div>
                     <div class="modal-footer row">
@@ -1870,7 +1844,7 @@
     <!--end::Modal Pengajuan-->
 
     <!--begin::Modal Penyusun-->
-    <form action="/assessment-partner-selection/penyusun/approval" method="post">
+    <form action="/assessment-partner-selection/penyusun/approval" method="post" onsubmit="addLoading(this)">
     @csrf
         <div class="modal fade" id="penyusun_{{ $assessment->id }}" tabindex="-1" aria-hidden="true">
             <!--begin::Modal dialog-->
@@ -1972,38 +1946,19 @@
                             <br>
                             <hr>
                             <h5>Dokumen Pendukung</h5>
-                            <div id="carouselDokumen" class="carousel slide">
-                                <div class="carousel-inner">
-                                    @if (!empty($partner->Proyek->DokumenPenentuanKSO))
-                                    <div class="carousel-item active">
-                                        <iframe src="{{ asset('dokumen-penentuan-kso' . '\\' . $partner->Proyek->DokumenPenentuanKSO->id_document) }}"
-                                            width="800px" height="600px"></iframe>
-                                    </div>
-                                    @endif
-                                    @if (!empty($partner->file_consent_npwp))
-                                        @foreach (json_decode($partner->file_consent_npwp) as $file)
-                                        <div class="carousel-item">
-                                            <iframe src="{{ asset('consent-npwp' . '\\' . $file) }}"
-                                                width="800px" height="600px"></iframe>
-                                        </div>                                    
-                                        @endforeach
-                                    @endif
-                                    @if (!empty($partner->file_pefindo_jo))
-                                    <div class="carousel-item">
-                                        <iframe src="{{ asset('pefindo'. '\\' . $partner->file_pefindo_jo) }}"
-                                            width="800px" height="600px"></iframe>
-                                    </div>
-                                    @endif
-                                </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselDokumen" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#carouselDokumen" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
+                            @if (!empty($assessment->PartnerJO?->file_kelengkapan_merge))
+                            <div class="text-center">
+                                <iframe src="{{ asset('file-kelengkapan-partner' . '\\' . $assessment->PartnerJO->file_kelengkapan_merge) }}"
+                                    width="800px" height="600px"></iframe>
                             </div>
+                            @endif
+                            <h5>Dokumen Assessment</h5>
+                            @if (!empty($assessment->PartnerJO?->file_assessment_merge))
+                            <div class="text-center">
+                                <iframe src="{{ asset('file-nota-rekomendasi-2'.'\\'.'file-kriteria-partner' . '\\' . $assessment->PartnerJO->file_assessment_merge) }}"
+                                    width="800px" height="600px"></iframe>
+                            </div>
+                            @endif
                         </div>
                     </div>
                     <div class="modal-footer row">
@@ -2029,7 +1984,7 @@
     <!--end::Modal Penyusun-->
 
     <!--begin::Modal Penyusun-->
-    <form action="/assessment-partner-selection/rekomendasi/approval" method="post">
+    <form action="/assessment-partner-selection/rekomendasi/approval" method="post" onsubmit="addLoading(this)">
         @csrf
             <div class="modal fade" id="rekomendasi_{{ $assessment->id }}" tabindex="-1" aria-hidden="true">
                 <!--begin::Modal dialog-->
@@ -2131,38 +2086,19 @@
                                 <br>
                                 <hr>
                                 <h5>Dokumen Pendukung</h5>
-                                <div id="carouselDokumen" class="carousel slide">
-                                    <div class="carousel-inner">
-                                        @if (!empty($partner->Proyek->DokumenPenentuanKSO))
-                                        <div class="carousel-item active">
-                                            <iframe src="{{ asset('dokumen-penentuan-kso' . '\\' . $partner->Proyek->DokumenPenentuanKSO->id_document) }}"
-                                                width="800px" height="600px"></iframe>
-                                        </div>
-                                        @endif
-                                        @if (!empty($partner->file_consent_npwp))
-                                            @foreach (json_decode($partner->file_consent_npwp) as $file)
-                                            <div class="carousel-item">
-                                                <iframe src="{{ asset('consent-npwp' . '\\' . $file) }}"
-                                                    width="800px" height="600px"></iframe>
-                                            </div>                                    
-                                            @endforeach
-                                        @endif
-                                        @if (!empty($partner->file_pefindo_jo))
-                                        <div class="carousel-item">
-                                            <iframe src="{{ asset('pefindo'. '\\' . $partner->file_pefindo_jo) }}"
-                                                width="800px" height="600px"></iframe>
-                                        </div>
-                                        @endif
-                                    </div>
-                                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselDokumen" data-bs-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Previous</span>
-                                    </button>
-                                    <button class="carousel-control-next" type="button" data-bs-target="#carouselDokumen" data-bs-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Next</span>
-                                    </button>
+                                @if (!empty($assessment->PartnerJO?->file_kelengkapan_merge))
+                                <div class="text-center">
+                                    <iframe src="{{ asset('file-kelengkapan-partner' . '\\' . $assessment->PartnerJO->file_kelengkapan_merge) }}"
+                                        width="800px" height="600px"></iframe>
                                 </div>
+                                @endif
+                                <h5>Dokumen Assessment</h5>
+                                @if (!empty($assessment->PartnerJO?->file_assessment_merge))
+                                <div class="text-center">
+                                    <iframe src="{{ asset('file-nota-rekomendasi-2'.'\\'.'file-kriteria-partner' . '\\' . $assessment->PartnerJO->file_assessment_merge) }}"
+                                        width="800px" height="600px"></iframe>
+                                </div>
+                                @endif
                             </div>
                         </div>
                         <div class="modal-footer row">
@@ -2200,7 +2136,7 @@
         <!--end::Modal Penyusun-->
 
     <!--begin::Modal Pengajuan Revisi-->
-    <form action="/assessment-partner-selection/pengajuan-revisi/approval" method="post">
+    <form action="/assessment-partner-selection/pengajuan-revisi/approval" method="post" onsubmit="addLoading(this)">
     @csrf
         <div class="modal fade" id="revisi_{{ $assessment->id }}" tabindex="-1" aria-hidden="true">
             <!--begin::Modal dialog-->
@@ -2327,6 +2263,13 @@
     <script src="/datatables/vfs_fonts.js"></script>
 
     <script>
+        const LOADING_BODY = new KTBlockUI(document.querySelector('#kt_body'), {
+            message: '<div class="blockui-message"><span class="spinner-border text-primary"></span> Loading...</div>',
+        })
+        function addLoading(elt) {
+            LOADING_BODY.block();
+            elt.form.submit();
+        }
         $('#partner-selection').DataTable({
             dom: 'Bfrtip',
             pageLength: 20,

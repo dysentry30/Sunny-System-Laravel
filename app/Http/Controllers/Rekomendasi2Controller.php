@@ -177,7 +177,7 @@ class Rekomendasi2Controller extends Controller
                 foreach ($matriks_paparan as $user) {
                     $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_req_paparan_$proyekSelected->kode_proyek";
                     $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan pengajuan tanggal paparan untuk Nota Rekomendasi II, " . $proyekSelected->ProyekBerjalan->name_customer . " untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                    $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Tanda Tangan Pengajuan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                    $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Pengajuan Waktu Paparan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
                     if (!$sendEmailUser) {
                         return redirect()->back();
                     }
@@ -235,7 +235,8 @@ class Rekomendasi2Controller extends Controller
         $is_paralel = false;
 
         $data = collect(json_decode($proyekPenyusun->approved_penyusun));
-        $dataCatatanNota = collect(json_decode($proyekPenyusun->catatan_master));
+        $proyekPenyusun->catatan_master = null;
+        $dataCatatanNota = collect([]);
 
         $catatanMasterInput = $request->get("catatan_nota_rekomendasi_master");
 
@@ -253,10 +254,10 @@ class Rekomendasi2Controller extends Controller
             ]);
         }
 
-        $proyekPenyusun->catatan_master = $dataCatatanNota->toJson();
-
+        
         //Proses Save Draft
         if (isset($request["save-draft-note-rekomendasi"])) {
+            $proyekPenyusun->catatan_master = $dataCatatanNota->toJson();
             $proyekPenyusun->is_draft_recommend_note = true;
 
             $data = collect(json_decode($proyekPenyusun->approved_penyusun));
@@ -311,11 +312,14 @@ class Rekomendasi2Controller extends Controller
             }
 
             $proyekPenyusun->catatan_nota_rekomendasi = $request->get("note-rekomendasi");
+            $proyekPenyusun->catatan_master = $dataCatatanNota->toJson();
 
             $is_checked = self::checkMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, $data, "Penyusun");
 
             if ($is_checked) {
                 $proyekPenyusun->is_penyusun_approved = true;
+                createWordKriteriaProjectSelection($proyekPenyusun);
+                mergeFileDokumenAssessmentProject($proyekPenyusun);
 
                 if (is_null($proyekPenyusun->is_revisi)) {
                     if (str_contains($proyekSelected->klasifikasi_pasdin, "Mega")) {
@@ -872,8 +876,8 @@ class Rekomendasi2Controller extends Controller
 
             foreach ($nomorTargetPaparan as $user) {
                 $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai?->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_req_paparan_setuju_$proyekSelected->kode_proyek";
-                $message = "Yth Bapak/Ibu " . $user->Pegawai?->nama_pegawai . "\nDengan ini menyampaikan permohonan waktu paparan untuk Nota Rekomendasi II, " . $proyekSelected->ProyekBerjalan->name_customer . " untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Pengajuan Waktu Paparan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                $message = "Yth Bapak/Ibu " . $user->Pegawai?->nama_pegawai . "\nDengan ini menyampaikan permohonan persetujuan waktu paparan untuk Nota Rekomendasi II, " . $proyekSelected->ProyekBerjalan->name_customer . " untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Persetujuan Waktu Paparan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
                 if (!$sendEmailUser) {
                     return redirect()->back();
                 }
@@ -881,6 +885,7 @@ class Rekomendasi2Controller extends Controller
         } else {
             $ProyekPemaparan->tanggal_paparan_disetujui = $data["tanggal-persetujuan-paparan"];
             $nomorTargetPaparan = self::getNomorMatriksApprovalPaparan($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Pengajuan", 1);
+            mergeDokumenKelengkapanProject($ProyekPemaparan);
 
             foreach ($nomorTargetPaparan as $user) {
                 // if ($user->is_ktt) {

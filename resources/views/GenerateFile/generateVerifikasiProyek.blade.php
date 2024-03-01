@@ -174,7 +174,7 @@
                     </b>
                     <br><br><br>
                     <p style="font-size:0.8rem; margin:0px; padding-top:0px;">(....................................)</p>
-                    {{-- <p style="font-size:0.8rem; margin:0px; padding-top:0px;">SubPJFs Key Account</p> --}}
+                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">SubPJFs Key Account</p>
                 </div>
             </td>
             <td style="text-align:center">
@@ -188,12 +188,12 @@
                             <td style="width:100%; text-align:center">
                                 <p style="font-size:0.8rem; margin:0px; padding-top:0px;">
                                     (....................................)</p>
-                                {{-- <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PJFs Marketing</p> --}}
+                                <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PJFs Marketing</p>
                             </td>
                             <td style="width:100%; text-align:center">
                                 <p style="font-size:0.8rem; margin:0px; padding-top:0px;">
                                     (....................................)</p>
-                                {{-- <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PJFs Operasi</p> --}}
+                                <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PJFs Operasi</p>
                             </td>
                         </tr>
                     </table>
@@ -210,12 +210,12 @@
                             <td style="width:100%; text-align:center">
                                 <p style="font-size:0.8rem; margin:0px; padding-top:0px;">
                                     (....................................)</p>
-                                {{-- <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PJFK Corporate Marketing</p> --}}
+                                <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PJFK Corporate Marketing</p>
                             </td>
                             <td style="width:100%; text-align:center">
                                 <p style="font-size:0.8rem; margin:0px; padding-top:0px;">
                                     (....................................)</p>
-                                {{-- <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PJPU Operasi</p> --}}
+                                <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PJPU Operasi</p>
                             </td>
                         </tr>
                     </table>

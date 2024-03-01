@@ -3493,12 +3493,15 @@
                                                                     });
                                                                 }
                                                                 @endphp
-                                                                @canany(['super-admin', 'admin-crm', 'user-crm'])
+                                                                @canany(['super-admin', 'admin-crm', 'user-crm', 'approver-crm'])
                                                                 @if ($porsiJO->isNotEmpty() && $proyek->AssessmentPartnerSelection->isEmpty())
                                                                     @if ($isDokumenFinish)
                                                                     <button type="button" id="approval-kso" class="btn btn-sm btn-primary" onclick="approvalKSO()"><b>Ajukan KSO</b></button>
                                                                     @endif
                                                                     <script>
+                                                                        const LOADING_BODY = new KTBlockUI(document.querySelector('#kt_body'), {
+                                                                            message: '<div class="blockui-message"><span class="spinner-border text-primary"></span> Loading...</div>',
+                                                                        })
                                                                         function approvalKSO() {
                                                                             Swal.fire({
                                                                                 title: '',
@@ -5110,7 +5113,7 @@
                                                                     <!--begin::Label-->
                                                                     <h3 class="fw-bolder m-0" id="HeadDetail"
                                                                         style="font-size:14px;">Generate Verifikasi Internal Penentuan Proyek Green Lane / Non Green lane
-                                                                        &nbsp;@if (!empty($proyek->jenis_terkontrak) && !empty($proyek->sistem_bayar) && !empty($proyek->is_uang_muka))<a href="/proyek/{{ $proyek->kode_proyek }}/project-greenlane/generate" class="btn btn-sm btn-primary"><b>Generate</b></a>@endif
+                                                                        &nbsp;@if (!empty($proyek->jenis_terkontrak) && !empty($proyek->sistem_bayar))<a href="/proyek/{{ $proyek->kode_proyek }}/project-greenlane/generate" class="btn btn-sm btn-primary"><b>Generate</b></a>@endif
                                                                     </h3>
                                                                     <!--end::Label-->
                                                                 </div>
@@ -5428,7 +5431,87 @@
 
                                                     <!--End::Alat-->
 
+                                                    <!--Begin::Title Biru Form: Document Cashflow-->
+                                                    <br>
+                                                    <h3 class="fw-bolder m-0 required" id="HeadDetail"
+                                                        style="font-size:14px;">Document Cashflow
+                                                    </h3>
+                                                    <br>
+                                                    <div class="w-50">
+                                                        <input type="file"
+                                                            class="form-control form-control-sm form-input-solid"
+                                                            name="file-cashflow" accept=".pdf">
+                                                    </div>
+                                                    <h6 id="error-file-cashflow" class="text-danger fw-normal"
+                                                        style="display: none">*File
+                                                        terlalu besar ! Max Size 50Mb</h6>
+                                                    <br>
+                                                    <!--begin::Table-->
+                                                    <table class="table align-middle table-row-dashed w-50 fs-6 gy-2"
+                                                        id="kt_customers_table">
+                                                        <!--begin::Table head-->
+                                                        <thead>
+                                                            <!--begin::Table row-->
+                                                            <tr
+                                                                class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                <th class="w-50px text-center">No.</th>
+                                                                <th class="w-auto">Nama Document</th>
+                                                                <th class="w-auto">Modified On</th>
+                                                                <th class="w-auto text-center"></th>
+                                                            </tr>
+                                                            <!--end::Table row-->
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        @php
+                                                            $no = 1;
+                                                        @endphp
+                                                        <!--begin::Table body-->
+                                                        <tbody class="fw-bold text-gray-600">
+                                                            @foreach ($proyek->CashFlowProyek as $dokumen)
+                                                                <tr>
+                                                                    <!--begin::Nomor-->
+                                                                    <td class="text-center">
+                                                                        {{ $no++ }}
+                                                                    </td>
+                                                                    <!--end::Nomor-->
+                                                                    <!--begin::Name-->
+                                                                    <td>
+                                                                        @if (str_contains("$dokumen->nama_document", '.doc'))
+                                                                            <a href="/document/view/{{ $dokumen->id }}/{{ $dokumen->id_document }}"
+                                                                                class="text-hover-primary">{{ $dokumen->nama_document }}</a>
+                                                                        @else
+                                                                            <a target="_blank"
+                                                                                href="{{ asset('words/' . $dokumen->id_document . '.pdf') }}"
+                                                                                class="text-hover-primary">{{ $dokumen->nama_document }}</a>
+                                                                        @endif
+                                                                    </td>
+                                                                    <!--end::Name-->
+                                                                    <!--begin::Column-->
+                                                                    <td>
+                                                                        {{ Carbon\Carbon::parse($dokumen->created_at)->translatedFormat('d F Y') }}
+                                                                    </td>
+                                                                    <!--end::Column-->
+                                                                    <!--begin::Action-->
+                                                                    @if ($proyek->stage < 5)
+                                                                        <td class="text-center">
+                                                                            <small>
+                                                                                <p data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_dokumen_cashflow_delete_{{ $dokumen->id }}"
+                                                                                    id="modal-delete"
+                                                                                    class="btn btn-sm btn-light btn-active-primary">
+                                                                                    Delete</p>
+                                                                            </small>
+                                                                        </td>
+                                                                    @endif
+                                                                    <!--end::Action-->
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                        <!--end::Table body-->
+                                                    </table>
 
+                                                    <!--end::Table-->
+                                                    <!--End::Title Biru Form: Document Cashflow-->
 
                                                     <!--Begin::Title Biru Form: Document Tender-->
                                                     <br>
@@ -5630,11 +5713,11 @@
                                                             Template Risk Tender</a></small>
                                                     <br><br>
                                                     <div class="w-50">
-                                                        @if (empty($upload_final))
-                                                            <input onchange="this.form.submit()" type="file"
+                                                        {{-- @if (empty($upload_final)) --}}
+                                                            <input type="file"
                                                                 class="form-control form-control-sm form-input-solid"
-                                                                name="risk-tender" accept=".pdf, .xlsx">
-                                                        @endif
+                                                                name="risk-tender" accept=".pdf">
+                                                        {{-- @endif --}}
                                                     </div>
                                                     <h6 id="error-risk-tender" class="text-danger fw-normal"
                                                         style="display: none">*File terlalu besar ! Max Size 50Mb</h6>
@@ -11638,6 +11721,55 @@
         </form>
     @endforeach
     <!--end::DELETE DOKUMEN ITB TOR -->
+
+    <!--begin::DELETE Cashflow-->
+    @foreach ($proyek->CashFlowProyek as $dokumen)
+        <form action="/proyek/cashflow/{{ $dokumen->id }}/delete" method="post"
+            enctype="multipart/form-data">
+            @method('delete')
+            @csrf
+            <div class="modal fade" id="kt_dokumen_cashflow_delete_{{ $dokumen->id }}" tabindex="-1"
+                aria-hidden="true">
+                <!--begin::Modal dialog-->
+                <div class="modal-dialog modal-dialog-centered mw-800px">
+                    <!--begin::Modal content-->
+                    <div class="modal-content">
+                        <!--begin::Modal header-->
+                        <div class="modal-header">
+                            <!--begin::Modal title-->
+                            <h2>Hapus : {{ $dokumen->nama_document }}</h2>
+                            <!--end::Modal title-->
+                            <!--begin::Close-->
+                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                <span class="svg-icon svg-icon-1">
+                                    <i class="bi bi-x-lg"></i>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </div>
+                            <!--end::Close-->
+                        </div>
+                        <!--end::Modal header-->
+                        <!--begin::Modal body-->
+                        <div class="modal-body py-lg-6 px-lg-6">
+                            Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                            <br>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                        </div>
+                        <!--end::Input group-->
+
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+            </div>
+        </form>
+    @endforeach
+    <!--end::DELETE Cashflow-->
 
     <!--begin::DELETE DOKUMEN TENDER-->
     @foreach ($proyek->DokumenTender as $dokumen)

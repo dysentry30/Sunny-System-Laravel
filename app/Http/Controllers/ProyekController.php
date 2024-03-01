@@ -70,6 +70,7 @@ use App\Models\PersonelTenderProyek;
 use App\Models\DokumenPendukungPasdin;
 use App\Models\MatriksApprovalPaparan;
 use App\Models\NotaRekomendasi;
+use App\Models\CashFlowProyek;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -1229,6 +1230,9 @@ class ProyekController extends Controller
                 if (isset($dataProyek["attachment-menang"])) {
                     self::attachmentMenang($dataProyek["attachment-menang"], $kode_proyek);
                 }
+                if (isset($dataProyek["file-cashflow"])) {
+                    self::cashFlow($dataProyek["file-cashflow"], $kode_proyek);
+                }
             }
             $customerHistory->save();
             return redirect("/proyek/view/" . $kode_proyek);
@@ -1285,6 +1289,9 @@ class ProyekController extends Controller
                 }
                 if (isset($dataProyek["attachment-menang"])) {
                     self::attachmentMenang($dataProyek["attachment-menang"], $kode_proyek);
+                }
+                if (isset($dataProyek["file-cashflow"])) {
+                    self::cashFlow($dataProyek["file-cashflow"], $kode_proyek);
                 }
             }
             return redirect("/proyek/view/" . $kode_proyek);
@@ -1506,6 +1513,33 @@ class ProyekController extends Controller
         File::delete($files);
         $delete->delete();
         Alert::success("Success", "Attachment Menang Berhasil Dihapus");
+        return redirect()->back();
+    }
+
+    private function cashFlow(UploadedFile $uploadedFile, $kode_proyek)
+    {
+        $faker = new Uuid();
+        $cashFlow = new CashFlowProyek();
+        $file_name = $uploadedFile->getClientOriginalName();
+        $id_document = str_replace(' ', '_', $file_name) . '_' . $faker->uuid3();
+        $nama_cashFlow = $file_name;
+        moveFileTemp($uploadedFile, $id_document);
+        $cashFlow->nama_document = $nama_cashFlow;
+        $cashFlow->id_document = $id_document;
+        $cashFlow->kode_proyek = $kode_proyek;
+        $cashFlow->save();
+    }
+
+    public function deleteCashFlow($id)
+    {
+        $delete = CashFlowProyek::find($id);
+        // dd($delete);
+        $files = collect(File::allFiles(public_path("words")))->filter(function ($f) use ($delete) {
+            return str_contains($f->getFilename(), $delete->id_document);
+        })->first();
+        File::delete($files);
+        $delete->delete();
+        Alert::success("Success", "Dokumen Cashflow Berhasil Dihapus");
         return redirect()->back();
     }
 

@@ -1097,6 +1097,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // DELETE KONSULTAN PERENCANA 
     Route::delete('proyek/konsultan-perencana/{id}/delete', [ProyekController::class, 'deleteKonsultan']);
 
+    // DELETE Cashflow 
+    Route::delete('proyek/cashflow/{cashflow}/delete', [
+        ProyekController::class, 'deleteCashflow'
+    ]);
+
     // ADD Tim Tender 
     Route::post('proyek/tim-tender/add', [ProyekController::class, 'tambahTimTender']);
 
@@ -4014,7 +4019,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $matriks->kategori = $data["kategori"];
         $matriks->departemen_code = $data["departemen"];
         $matriks->kode_unit_kerja = $data["kode-unit"];
-        $matriks->is_ktt = $data["ktt_option"] ? true : false;
+        $matriks->is_ktt = $data["ktt_option"] == "ktt" ? true : false;
         $matriks->urutan = $data["urutan"];
 
         if ($matriks->save()) {
@@ -4069,7 +4074,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $matriks->kategori = $data["kategori"];
         $matriks->departemen_code = $data["departemen"];
         $matriks->kode_unit_kerja = $data["kode-unit"];
-        $matriks->is_ktt = $data["ktt_option"] ? true : false;
+        $matriks->is_ktt = $data["ktt_option"] == "ktt" ? true : false;
         $matriks->urutan = $data["urutan"];
         // dd($matriks);
 
@@ -7185,6 +7190,10 @@ Route::get('/test-file', function (Request $request) {
 });
 
 Route::get('/tesss', function () {
-    $notaRekomendasi = NotaRekomendasi2::where('kode_proyek', 'HJPD003')->first();
-    return createWordPersetujuanNota2($notaRekomendasi);
+    $notaRekomendasi = NotaRekomendasi2::where('kode_proyek', 'HJPD004')->first();
+    // return createWordPersetujuanNota2($notaRekomendasi);
+    // return createWordKriteriaProjectSelection($notaRekomendasi);
+    // $porsiJO = App\Models\PorsiJO::find(50);
+    createWordKriteriaProjectSelection($notaRekomendasi);
+    return mergeFileDokumenAssessmentProject($notaRekomendasi);
 });

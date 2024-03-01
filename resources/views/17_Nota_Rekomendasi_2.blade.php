@@ -1060,7 +1060,7 @@
     <!--End::Modal Proses Paparan-->
     @foreach ($proyeks_proses_paparan as $proyek)
     <!--Begin::Pengajuan Paparan-->
-    <form action="/nota-rekomendasi-2/{{ $proyek->kode_proyek }}/paparan" method="post" enctype="multipart/form-data">
+    <form action="/nota-rekomendasi-2/{{ $proyek->kode_proyek }}/paparan" method="post" enctype="multipart/form-data" onsubmit="addLoading(this)">
     @csrf
         <div class="modal fade" id="kt_modal_view_req_paparan_{{ $proyek->kode_proyek }}" tabindex="-1"
             aria-labelledby="kt_modal_view_req_paparan_{{ $proyek->kode_proyek }}" aria-hidden="true">
@@ -1101,16 +1101,16 @@
                             <!--end::Input group-->
                             <!--begin::Input group-->
                             <div class="fv-row mb-7">
-                                <label class="fs-6 fw-bold form-label mt-3" for="file-notulensi" required>File Notulensi</label>
+                                <label class="fs-6 fw-bold form-label mt-3" for="file-notulensi" required>File Draft Paparan</label>
                                 <input type="file" class="form-control form-control-solid" name="file-pemaparan[]" multiple accept=".pdf">
                              </div>
                              <!--end::Input group-->
-                             <!--begin::Input group-->
+                             {{-- <!--begin::Input group-->
                              <div class="fv-row mb-7">
                                 <label class="fs-6 fw-bold form-label mt-3" for="file-notulensi" required>File Daftar Hadir</label>
                                 <input type="file" class="form-control form-control-solid" name="file-absensi-paparan[]" multiple accept=".pdf">
                              </div>
-                             <!--end::Input group-->
+                             <!--end::Input group--> --}}
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -1123,7 +1123,7 @@
     <!--End::Pengajuan Paparan-->
 
     <!--Begin::Persetujuan Paparan-->
-    <form action="/nota-rekomendasi-2/{{ $proyek->kode_proyek }}/paparan" method="post">
+    <form action="/nota-rekomendasi-2/{{ $proyek->kode_proyek }}/paparan" method="post" onsubmit="addLoading(this)">
     @csrf
         <div class="modal fade" id="kt_modal_view_req_paparan_setuju_{{ $proyek->kode_proyek }}" tabindex="-1"
             aria-labelledby="kt_modal_view_req_paparan_setuju_{{ $proyek->kode_proyek }}" aria-hidden="true">
@@ -1179,7 +1179,7 @@
     @foreach ($proyeks_proses_rekomendasi as $proyek)
 
     <!--Begin::Form Proses Pengajuan-->
-    <form action="/nota-rekomendasi-2/{{ $proyek->kode_proyek }}/pengajuan" method="post" id="pengajuan-form">
+    <form action="/nota-rekomendasi-2/{{ $proyek->kode_proyek }}/pengajuan" method="post" id="pengajuan-form" onsubmit="addLoading(this)">
         @csrf
         <div class="modal fade" id="kt_modal_view_pengajuan_{{ $proyek->kode_proyek }}" tabindex="-1"
             aria-labelledby="kt_modal_view_pengajuan_{{ $proyek->kode_proyek }}" aria-hidden="true">
@@ -1774,7 +1774,7 @@
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
                 @if (is_null($proyek->is_draft_recommend_note) || $proyek->is_draft_recommend_note)
-                    <form action="/nota-rekomendasi-2/{{ $proyek->kode_proyek }}/penyusun" method="POST">
+                    <form action="/nota-rekomendasi-2/{{ $proyek->kode_proyek }}/penyusun" method="POST" onsubmit="addLoading(this)">
                     @csrf
                 @endif
                 <div class="modal-header">
@@ -1926,6 +1926,22 @@
                                 width="800px" height="600px"></iframe>
                         </div>
                     @endif
+                    <br>
+                    @if (!empty($proyek->file_kelengkapan_merge))
+                    <h5>Dokumen Kelengkapan Project: </h5>
+                    <div class="text-center">
+                        <iframe src="{{ asset('file-nota-rekomendasi-2\\file-pengajuan' . '\\' . $proyek->file_kelengkapan_merge) }}"
+                            width="800px" height="600px"></iframe>
+                    </div>
+                    @endif
+                    <br>
+                    @if (!empty($proyek->file_assessment_merge))
+                    <h5>Dokumen Assessment: </h5>
+                    <div class="text-center">
+                        <iframe src="{{ asset('file-nota-rekomendasi-2\\file-kriteria-project-selection' . '\\' . $proyek->file_assessment_merge) }}"
+                            width="800px" height="600px"></iframe>
+                    </div>
+                    @endif
                 </div>
                 <div class="modal-footer row">
                     @php
@@ -1943,7 +1959,7 @@
                             $is_edit_penyusun = true;
                         }
 
-                        $catatan_master = collect(json_decode($proyek->catatan_master));
+                        $catatan_master = collect(json_decode($proyek->catatan_master))->sortBy('urutan');
                     @endphp
                     @if (is_null($proyek->is_rekomendasi_approved))
                         <label for="note-rekomendasi" class="text-start">Self Assessment: </label>
@@ -2032,7 +2048,7 @@
         aria-labelledby="kt_modal_view_proyek_verifikasi_{{ $proyek->kode_proyek }}" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
-                <form action="/nota-rekomendasi-2/{{ $proyek->kode_proyek }}/verifikasi" method="POST" id="verifikasi-form-{{ $proyek->kode_proyek }}">
+                <form action="/nota-rekomendasi-2/{{ $proyek->kode_proyek }}/verifikasi" method="POST" id="verifikasi-form-{{ $proyek->kode_proyek }}" onsubmit="addLoading(this)">
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title">Detail Proyek</h5>
@@ -2136,6 +2152,22 @@
                                 width="800px" height="600px"></iframe>
                         </div>
                         @endif
+                        <br>
+                        @if (!empty($proyek->file_kelengkapan_merge))
+                        <h5>Dokumen Kelengkapan Project: </h5>
+                        <div class="text-center">
+                            <iframe src="{{ asset('file-nota-rekomendasi-2\\file-pengajuan' . '\\' . $proyek->file_kelengkapan_merge) }}"
+                                width="800px" height="600px"></iframe>
+                        </div>
+                        @endif
+                        <br>
+                        @if (!empty($proyek->file_assessment_merge))
+                        <h5>Dokumen Assessment: </h5>
+                        <div class="text-center">
+                            <iframe src="{{ asset('file-nota-rekomendasi-2\\file-kriteria-project-selection' . '\\' . $proyek->file_assessment_merge) }}"
+                                width="800px" height="600px"></iframe>
+                        </div>
+                        @endif
                     </div>
                     <div class="modal-footer row">
                         <span><b>Hasil Assessment Profile Risiko</b> <a
@@ -2176,7 +2208,7 @@
         aria-labelledby="kt_modal_view_proyek_revisi_{{ $proyek->kode_proyek }}" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
             <div class="modal-content">
-                <form action="/nota-rekomendasi-2/{{ $proyek->kode_proyek }}/verifikasi" method="POST" id="revisi-verifikasi-form-{{ $proyek->kode_proyek }}">
+                <form action="/nota-rekomendasi-2/{{ $proyek->kode_proyek }}/verifikasi" method="POST" id="revisi-verifikasi-form-{{ $proyek->kode_proyek }}" onsubmit="addLoading(this)">
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title">Isi catatan revisi</h5>
@@ -2202,7 +2234,7 @@
         aria-labelledby="kt_modal_view_proyek_rekomendasi_{{ $proyek->kode_proyek }}" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
-                <form action="/nota-rekomendasi-2/{{ $proyek->kode_proyek }}/rekomendasi" method="POST" id="rekomendasi-form">
+                <form action="/nota-rekomendasi-2/{{ $proyek->kode_proyek }}/rekomendasi" method="POST" id="rekomendasi-form" onsubmit="addLoading(this)">
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title">Detail Proyek</h5>
@@ -2306,6 +2338,22 @@
                                 width="800px" height="600px"></iframe>
                         </div>
                         @endif
+                        <br>
+                        @if (!empty($proyek->file_kelengkapan_merge))
+                        <h5>Dokumen Kelengkapan Project: </h5>
+                        <div class="text-center">
+                            <iframe src="{{ asset('file-nota-rekomendasi-2\\file-pengajuan' . '\\' . $proyek->file_kelengkapan_merge) }}"
+                                width="800px" height="600px"></iframe>
+                        </div>
+                        @endif
+                        <br>
+                        @if (!empty($proyek->file_assessment_merge))
+                        <h5>Dokumen Assessment: </h5>
+                        <div class="text-center">
+                            <iframe src="{{ asset('file-nota-rekomendasi-2\\file-kriteria-project-selection' . '\\' . $proyek->file_assessment_merge) }}"
+                                width="800px" height="600px"></iframe>
+                        </div>
+                        @endif
                     </div>
                     <div class="modal-footer row">
                         <span><b>Hasil Assessment Profile Risiko</b> <a
@@ -2381,7 +2429,7 @@
         aria-labelledby="kt_modal_view_proyek_persetujuan_{{ $proyek->kode_proyek }}" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
-                <form action="/nota-rekomendasi-2/{{ $proyek->kode_proyek }}/persetujuan" method="POST" id="persetujuan-form">
+                <form action="/nota-rekomendasi-2/{{ $proyek->kode_proyek }}/persetujuan" method="POST" id="persetujuan-form" onsubmit="addLoading(this)">
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title">Detail Proyek</h5>
@@ -2477,6 +2525,22 @@
                         <h5>Form Pengajuan Rekomendasi: </h5>
                         <div class="text-center">
                             <iframe src="{{ asset('file-nota-rekomendasi-2\\file-pengajuan' . '\\' . $proyek->file_pengajuan) }}"
+                                width="800px" height="600px"></iframe>
+                        </div>
+                        @endif
+                        <br>
+                        @if (!empty($proyek->file_kelengkapan_merge))
+                        <h5>Dokumen Kelengkapan Project: </h5>
+                        <div class="text-center">
+                            <iframe src="{{ asset('file-nota-rekomendasi-2\\file-pengajuan' . '\\' . $proyek->file_kelengkapan_merge) }}"
+                                width="800px" height="600px"></iframe>
+                        </div>
+                        @endif
+                        <br>
+                        @if (!empty($proyek->file_assessment_merge))
+                        <h5>Dokumen Assessment: </h5>
+                        <div class="text-center">
+                            <iframe src="{{ asset('file-nota-rekomendasi-2\\file-kriteria-project-selection' . '\\' . $proyek->file_assessment_merge) }}"
                                 width="800px" height="600px"></iframe>
                         </div>
                         @endif
@@ -2818,6 +2882,13 @@
     <script src="/datatables/vfs_fonts.js"></script>
 
     <script>
+        const LOADING_BODY = new KTBlockUI(document.querySelector('#kt_body'), {
+            message: '<div class="blockui-message"><span class="spinner-border text-primary"></span> Loading...</div>',
+        })
+        function addLoading(elt) {
+            LOADING_BODY.block();
+            elt.form.submit();
+        }
         $('#rekomendasi-proses').DataTable({
             dom: 'Bfrtip',
             pageLength: 20,

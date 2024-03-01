@@ -132,47 +132,53 @@ class KriteriaSelectionNonGreenlaneController extends Controller
         $kriteriaMaster = KriteriaSelectionNonGreenlane::where('nota_rekomendasi', 'Nota Rekomendasi 2')->where('is_active', true)->get()->sortBy('position')->values();
         $kriteriaSelectioDetail = new KriteriaProjectSelectionDetail();
 
-        foreach ($index as $key => $urutan) {
-            if (isset($data["dokumen_kriteria_$key"])) {
-                $files = collect($data["dokumen_kriteria_$key"])->values();
-                $array_files = collect();
+        try {
+            foreach ($index as $key => $urutan) {
+                if (isset($data["dokumen_kriteria_$key"])) {
+                    $files = collect($data["dokumen_kriteria_$key"])->values();
+                    $array_files = collect();
 
-                $kriteriaSelectioDetail->parameter = $kriteriaMaster[(int)$urutan - 1]->parameter;
-                $kriteriaSelectioDetail->is_true = $data["is_kriteria_" . $urutan] == 1 ? true : false;
-                $kriteriaSelectioDetail->nilai = $data['nilai'][(int)$urutan - 1];
-                $kriteriaSelectioDetail->keterangan = $data["keterangan"][(int)$urutan - 1];
+                    $kriteriaSelectioDetail->parameter = $kriteriaMaster[(int)$urutan - 1]->parameter;
+                    $kriteriaSelectioDetail->is_true = $data["is_kriteria_" . $urutan] == 1 ? true : false;
+                    $kriteriaSelectioDetail->nilai = $data['nilai'][(int)$urutan - 1];
+                    $kriteriaSelectioDetail->keterangan = $data["keterangan"][(int)$urutan - 1];
 
-                foreach ($files as $file) {
-                    $id_document = date("His_") . $key . '_' . str_replace(' ', '-', $file->getClientOriginalName());
-                    $array_files->push($id_document);
-                    $file->move(public_path('file-project-selection'), $id_document);
+                    foreach ($files as $file) {
+                        $id_document = date("His_") . $key . '_' . str_replace(' ', '-', $file->getClientOriginalName());
+                        $array_files->push($id_document);
+                        $file->move(public_path('file-project-selection'), $id_document);
+                    }
+
+                    $kriteriaSelectioDetail->id_document = $array_files->toJson();
+                    $kriteriaSelectioDetail->urutan = $urutan;
+                    $kriteriaSelectioDetail->kode_proyek = $data["kode_proyek"];
+                    $kriteriaSelectioDetail->index = $key;
+                } else {
+                    $kriteriaSelectioDetail->parameter = $kriteriaMaster[(int)$urutan - 1]->parameter;
+                    $kriteriaSelectioDetail->is_true = $data["is_kriteria_" . $urutan] == 1 ? true : false;
+                    $kriteriaSelectioDetail->nilai = $data['nilai'][(int)$urutan - 1];
+                    $kriteriaSelectioDetail->keterangan = $data["keterangan"][(int)$urutan - 1];
+                    $kriteriaSelectioDetail->id_document = null;
+                    $kriteriaSelectioDetail->urutan = $urutan;
+                    $kriteriaSelectioDetail->kode_proyek = $data["kode_proyek"];
+                    $kriteriaSelectioDetail->index = $key;
                 }
 
-                $kriteriaSelectioDetail->id_document = $array_files->toJson();
-                $kriteriaSelectioDetail->urutan = $urutan;
-                $kriteriaSelectioDetail->kode_proyek = $data["kode_proyek"];
-                $kriteriaSelectioDetail->index = $key;
-            } else {
-                $kriteriaSelectioDetail->parameter = $kriteriaMaster[(int)$urutan - 1]->parameter;
-                $kriteriaSelectioDetail->is_true = $data["is_kriteria_" . $urutan] == 1 ? true : false;
-                $kriteriaSelectioDetail->nilai = $data['nilai'][(int)$urutan - 1];
-                $kriteriaSelectioDetail->keterangan = $data["keterangan"][(int)$urutan - 1];
-                $kriteriaSelectioDetail->id_document = null;
-                $kriteriaSelectioDetail->urutan = $urutan;
-                $kriteriaSelectioDetail->kode_proyek = $data["kode_proyek"];
-                $kriteriaSelectioDetail->index = $key;
+                $collectJawaban[] = $kriteriaSelectioDetail->attributesToArray();
             }
 
-            $collectJawaban[] = $kriteriaSelectioDetail->attributesToArray();
-        }
+            if (KriteriaProjectSelectionDetail::insert($collectJawaban)) {
+                Alert::success("Success", "Assessment Project Selection berhasil dibuat!");
+                return redirect()->back();
+            }
 
-        if (KriteriaProjectSelectionDetail::insert($collectJawaban)) {
-            Alert::success("Success", "Assessment Project Selection berhasil dibuat!");
+            Alert::error("Error", "Assessment Project Selection gagal dibuat!");
+            return redirect()->back();
+        } catch (\Exception) {
+            Alert::error("Error", "Data tidak lengkap, mohon periksa kembali!");
             return redirect()->back();
         }
 
-        Alert::error("Error", "Assessment Project Selection gagal dibuat!");
-        return redirect()->back();
     }
 
 
