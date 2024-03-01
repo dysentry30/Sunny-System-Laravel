@@ -1096,7 +1096,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // DELETE KONSULTAN PERENCANA 
     Route::delete('proyek/konsultan-perencana/{id}/delete', [ProyekController::class, 'deleteKonsultan']);
-
+    
     // DELETE Cashflow 
     Route::delete('proyek/cashflow/{cashflow}/delete', [
         ProyekController::class, 'deleteCashflow'

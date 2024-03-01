@@ -219,6 +219,7 @@ function checkGreenLine($proyek) {
                 // if ($proyek->is_disetujui) {
                 //     return true;
                 // }
+                // dd($results);
                 return $results->count() > 1 && $results->every(function ($item) {
                     return $item === true;
                 });
