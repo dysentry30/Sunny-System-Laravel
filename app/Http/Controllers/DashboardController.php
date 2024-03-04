@@ -4763,7 +4763,6 @@ class DashboardController extends Controller
             } else {
                 $forecasts = Forecast::where("periode_prognosa", "=", $month - 1)->where("tahun", "=", $year)->get();
             }
-            // dd($forecasts);
             $forecasts->each(function ($f) use ($month, $year) {
                 $new_forecast = $f->replicate();
                 // dd($f);

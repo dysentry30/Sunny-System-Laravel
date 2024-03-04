@@ -1835,14 +1835,14 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             // dump($total_ok, $total_ok_new ?? 0);
 
                                                                                             
-                                                                                            $forecasts_original = $proyek->Forecasts->where('periode_prognosa', 1)->where('tahun', 2024)->map(function($f){
+                                                                                            $forecasts_original = $proyek->Forecasts->where('periode_prognosa', $periode)->where('tahun', $year)->map(function($f){
                                                                                                 $f->rkap_forecast = (int)$f->getOriginal('rkap_forecast');
                                                                                                 $f->nilai_forecast = (int)$f->getOriginal('nilai_forecast');
                                                                                                 return $f;
                                                                                             });
 
                                                                                             $total_forecast = $forecasts_original->sum(function($f) {
-                                                                                                return (int) round($f->rkap_forecast);
+                                                                                                return (int) round($f->nilai_forecast);
                                                                                             })/$per_sejuta;
 
                                                                                             $total_year_forecast += $total_forecast;
