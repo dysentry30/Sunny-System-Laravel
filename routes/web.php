@@ -7193,7 +7193,7 @@ Route::get('/tesss', function () {
     $notaRekomendasi = NotaRekomendasi2::where('kode_proyek', 'HJPD004')->first();
     // return createWordPersetujuanNota2($notaRekomendasi);
     // return createWordKriteriaProjectSelection($notaRekomendasi);
-    // $porsiJO = App\Models\PorsiJO::find(50);
-    createWordKriteriaProjectSelection($notaRekomendasi);
-    return mergeFileDokumenAssessmentProject($notaRekomendasi);
+    $porsiJO = App\Models\PorsiJO::find(103);
+    // createWordKriteriaProjectSelection($notaRekomendasi);
+    return mergeFileDokumenAssessmentPartnerKSO($porsiJO);
 });

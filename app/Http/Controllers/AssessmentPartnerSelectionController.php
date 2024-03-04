@@ -342,7 +342,7 @@ class AssessmentPartnerSelectionController extends Controller
                 foreach ($matriksSelected as $user) {
                     $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/assessment-partner-selection";
                     $message = nl2br("Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan pengajuan Partner Selection untuk " . $partner->Company->name . " pada proyek $proyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
-                    sendNotifEmail($user->Pegawai->email, "Permohonan Pengajuan Approval Partner Selection", $message);
+                    sendNotifEmail($user->Pegawai, "Permohonan Pengajuan Approval Partner Selection", $message, true);
                 }
 
             });
@@ -410,7 +410,7 @@ class AssessmentPartnerSelectionController extends Controller
                 $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/assessment-partner-selection";
                 $message = nl2br("Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan assessment Partner Selection untuk " . $assessmentSelection->PartnerJO->Company->name . " pada proyek $proyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
 
-                sendNotifEmail($user->Pegawai->email, "Permohonan Assessment Partner Selection", $message);
+                sendNotifEmail($user->Pegawai, "Permohonan Assessment Partner Selection", $message, true);
             }
 
 
@@ -490,7 +490,7 @@ class AssessmentPartnerSelectionController extends Controller
                 $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/assessment-partner-selection";
                 $message = nl2br("Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan verifikasi Partner Selection untuk " . $assessmentSelection->PartnerJO->Company->name . " pada proyek $proyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
 
-                sendNotifEmail($user->Pegawai->email, "Permohonan Verifikasi Approval Partner Selection", $message);
+                sendNotifEmail($user->Pegawai, "Permohonan Verifikasi Approval Partner Selection", $message, true);
             }
         }
         // }
@@ -614,7 +614,7 @@ class AssessmentPartnerSelectionController extends Controller
             $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/assessment-partner-selection";
             $message = nl2br("Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan revisi penyusunan Partner Selection untuk " . $assessmentSelection->PartnerJO->Company->name . " pada proyek $proyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
 
-            sendNotifEmail($user->Pegawai->email, "Permohonan Revisi Penyusunan Approval Partner Selection", $message);
+            sendNotifEmail($user->Pegawai, "Permohonan Revisi Penyusunan Approval Partner Selection", $message, true);
         }
 
         if ($assessmentSelection->save()) {

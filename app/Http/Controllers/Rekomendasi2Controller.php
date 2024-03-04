@@ -29,7 +29,7 @@ class Rekomendasi2Controller extends Controller
     {
         $this->matriks_approvals = MatriksApprovalNotaRekomendasi2::where("is_active", true)->get();
         $this->matriks_approvals = $this->matriks_approvals->first();
-        $this->isnomorTargetActive = false;
+        $this->isnomorTargetActive = true;
         $this->nomorDefault = "085881028391";
         // $this->nomorDefault = "6285376444701";
     }
@@ -175,7 +175,7 @@ class Rekomendasi2Controller extends Controller
                 }
 
                 foreach ($matriks_paparan as $user) {
-                    $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_req_paparan_$proyekSelected->kode_proyek";
+                    $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_req_paparan_$proyekSelected->kode_proyek";
                     $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan pengajuan tanggal paparan untuk Nota Rekomendasi II, " . $proyekSelected->ProyekBerjalan->name_customer . " untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
                     $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Pengajuan Waktu Paparan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
                     if (!$sendEmailUser) {
@@ -319,6 +319,7 @@ class Rekomendasi2Controller extends Controller
             if ($is_checked) {
                 $proyekPenyusun->is_penyusun_approved = true;
                 createWordKriteriaProjectSelection($proyekPenyusun);
+                sleep(5);
                 mergeFileDokumenAssessmentProject($proyekPenyusun);
 
                 if (is_null($proyekPenyusun->is_revisi)) {

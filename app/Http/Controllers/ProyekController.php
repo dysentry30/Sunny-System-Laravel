@@ -84,6 +84,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\URL;
 use DateTime;
+use Illuminate\Support\Facades\Gate;
 
 class ProyekController extends Controller
 {
@@ -655,10 +656,10 @@ class ProyekController extends Controller
             $divisi = $newProyek->UnitKerja->Divisi->id_divisi;
             $departemen = $newProyek->departemen_proyek;
             $klasifikasi_proyek = $newProyek->klasifikasi_pasdin;
-            $matriks_paparan = MatriksApprovalPaparan::where("divisi_id", "=", $divisi)->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where("departemen_code", $departemen)->where("kategori", "=", "Pengajuan")->where('is_active', true)->get();
+            $matriks_paparan = MatriksApprovalNotaRekomendasi2::where("divisi_id", "=", $divisi)->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where("departemen_code", $departemen)->where("kategori", "=", "Pengajuan")->where('is_active', true)->get();
             // dd($matriks_paparan);
 
-            $isnomorTargetActive = false;
+            $isnomorTargetActive = true;
             // $nomorDefault = "6285376444701";
             // $nomorDefault = "085881028391";
 
@@ -668,8 +669,8 @@ class ProyekController extends Controller
             }
 
             foreach ($matriks_paparan as $user) {
-                $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_req_paparan_$newProyek->kode_proyek";
-                $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan pengajuan tanggal paparan untuk Nota Rekomendasi II, " . $newProyek->ProyekBerjalan->name_customer . " untuk Proyek $newProyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_pengajuan_$newProyek->kode_proyek";
+                $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan pengajuan untuk Nota Rekomendasi II, " . $newProyek->ProyekBerjalan->name_customer . " untuk Proyek $newProyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
                 $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Tanda Tangan Pengajuan Nota Rekomendasi II", nl2br($message), $isnomorTargetActive);
                 if (!$sendEmailUser) {
                     return redirect()->back();
@@ -952,7 +953,7 @@ class ProyekController extends Controller
         // $newProyek->waktu_prakualifikasi = $dataProyek["waktu-prakualifikasi"];
 
         //Begin::Alasan KSO
-        if (Auth::user()->check_administrator) {
+        if (Auth::user()->check_administrator || Gate::any(['user-crm', 'approver-crm'])) {
             $alasan_kso = collect([]);
             if (isset($dataProyek["checklist-alasan-kso-1"])) {
                 $alasan_kso->push([
@@ -996,7 +997,7 @@ class ProyekController extends Controller
         //End::Alasan KSO
 
         //Begin::Tujuan KSO
-        if (Auth::user()->check_administrator) {
+        if (Auth::user()->check_administrator || Gate::any(['user-crm', 'approver-crm'])) {
             $tujuan_kso = collect([]);
             if (isset($dataProyek["checklist-tujuan-kso-1"])) {
                 $tujuan_kso->push([
@@ -1033,7 +1034,7 @@ class ProyekController extends Controller
         //End::Tujuan KSO
 
         //Begin::Persetujuan Fasilitan NCL
-        if (Auth::user()->check_administrator) {
+        if (Auth::user()->check_administrator || Gate::any(['user-crm', 'approver-crm'])) {
             $newProyek->fasilitas_ncl = $dataProyek["fasilitas-ncl"] ?? null;
         }
         //End::Persetujuan Fasilitan NCL

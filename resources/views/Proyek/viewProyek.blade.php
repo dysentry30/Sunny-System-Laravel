@@ -3499,9 +3499,6 @@
                                                                     <button type="button" id="approval-kso" class="btn btn-sm btn-primary" onclick="approvalKSO()"><b>Ajukan KSO</b></button>
                                                                     @endif
                                                                     <script>
-                                                                        const LOADING_BODY = new KTBlockUI(document.querySelector('#kt_body'), {
-                                                                            message: '<div class="blockui-message"><span class="spinner-border text-primary"></span> Loading...</div>',
-                                                                        })
                                                                         function approvalKSO() {
                                                                             Swal.fire({
                                                                                 title: '',
@@ -3513,12 +3510,12 @@
                                                                                 confirmButtonText: 'Ya'
                                                                             }).then(async (result)=>{
                                                                                 if(result.isConfirmed){
-                                                                                    LOADING_BODY.block();
                                                                                     sendPorsiJO();
                                                                                 }
                                                                             })
                                                                         }
                                                                         async function sendPorsiJO() {
+                                                                            LOADING_BODY.block();
                                                                             const formData = new FormData()
                                                                             formData.append("_token", "{{ csrf_token() }}");
                                                                             formData.append("kode_proyek", "{{ $proyek->kode_proyek }}");
@@ -3531,8 +3528,8 @@
                                                                                     },
                                                                                     body: formData,
                                                                                 }).then(res => res.json());   
-                                                                                LOADING_BODY.release();
                                                                                 if (response.success) {
+                                                                                    LOADING_BODY.release();
                                                                                     Swal.fire({
                                                                                         title: 'Success',
                                                                                         text: response.message,
@@ -3546,6 +3543,7 @@
                                                                                     })
                                                                                 }
                                                                             } catch (error) {
+                                                                                LOADING_BODY.block();
                                                                                 Swal.fire({
                                                                                     title: 'Error',
                                                                                     text: error,
