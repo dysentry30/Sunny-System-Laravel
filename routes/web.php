@@ -3090,7 +3090,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::get('/history-autorisasi', function (Request $request) {
         $bulan = (int) date('m');
         $year = (int) date('Y');
-        $filterTahun = $request->query("tahun-prognosa"); 
+        $filterTahun = $request->query("tahun-prognosa") ?? date('Y'); 
         if ($bulan == 1) {
             $periodeOtor = $request->query("periode-prognosa") ?? 12;
             $year = $filterTahun ?? $year - 1;
