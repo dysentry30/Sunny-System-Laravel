@@ -3392,7 +3392,7 @@
                                                                         <!--begin::Label-->
                                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                                             style="font-size:14px;">Generate Form Penentuan KSO
-                                                                            &nbsp;<a href="/proyek/{{ $proyek->kode_proyek }}/kso/generate" class="btn btn-sm btn-primary"><b>Generate</b></a>
+                                                                            &nbsp;<a href="/proyek/{{ $proyek->kode_proyek }}/kso/generate" class="btn btn-sm btn-primary {{ is_null($proyek->alasan_kso) ? 'd-none' : '' }}"><b>Generate</b></a>
                                                                         </h3>
                                                                         <!--end::Label-->
                                                                     </div>
@@ -3439,7 +3439,7 @@
                                                         <hr>
                                                         <br>
                                                         <!--End::Dokumen Penentuan KSO-->
-                                                        @canany(['super-admin', 'admin-crm', 'user-crm'])
+                                                        @canany(['super-admin', 'admin-crm', 'user-crm', 'approver-crm', 'risk-crm'])
                                                             
                                                             <!--Begin::Title Biru Form: Alasan KSO-->
                                                             <h3 class="fw-bolder m-0" id="HeadDetail"
@@ -3519,7 +3519,7 @@
                                                                             const formData = new FormData()
                                                                             formData.append("_token", "{{ csrf_token() }}");
                                                                             formData.append("kode_proyek", "{{ $proyek->kode_proyek }}");
-
+                                                                            
                                                                             try {
                                                                                 const response = await fetch('/proyek/porsi-jo/approval',{
                                                                                     method: 'POST',
@@ -3543,7 +3543,6 @@
                                                                                     })
                                                                                 }
                                                                             } catch (error) {
-                                                                                LOADING_BODY.block();
                                                                                 Swal.fire({
                                                                                     title: 'Error',
                                                                                     text: error,
@@ -4915,7 +4914,7 @@
                                                                 <select id="jenis-terkontrak-{{ $proyek->kode_proyek }}" name="jenis-terkontrak-new"
                                                                     class="form-select form-select-solid"
                                                                     data-control="select2" data-hide-search="true"
-                                                                    data-placeholder="Jenis Kontrak">
+                                                                    data-placeholder="Jenis Kontrak" {{ !empty($proyek->NotaRekomendasi2) && $proyek->NotaRekomendasi2->is_request_rekomendasi == false ? 'readonly' : '' }}>
                                                                     <option></option>
                                                                     <option value="Cost-Plus/Provisional Sum"
                                                                         {{ $proyek->jenis_terkontrak == 'Cost-Plus/Provisional Sum' ? 'selected' : '' }}>
@@ -4960,7 +4959,7 @@
                                                                 <select id="sistem-bayar-{{ $proyek->kode_proyek }}" name="sistem-bayar-new"
                                                                     class="form-select form-select-solid"
                                                                     data-control="select2" data-hide-search="true"
-                                                                    data-placeholder="Sistem Pembayaran">
+                                                                    data-placeholder="Sistem Pembayaran" {{ !empty($proyek->NotaRekomendasi2) && $proyek->NotaRekomendasi2->is_request_rekomendasi == false ? 'readonly' : '' }}>
                                                                     <option></option>
                                                                     <option value="CPF (Turn Key)"
                                                                         {{ $proyek->sistem_bayar == 'CPF (Turn Key)' ? 'selected' : '' }}>
@@ -4991,7 +4990,7 @@
                                                                 <select id="is-uang-muka" name="is-uang-muka"
                                                                     class="form-select form-select-solid"
                                                                     data-control="select2" data-hide-search="true"
-                                                                    data-placeholder="Uang Muka" onchange="showUangMuka(this)">
+                                                                    data-placeholder="Uang Muka" onchange="showUangMuka(this)" {{ !empty($proyek->NotaRekomendasi2) && $proyek->NotaRekomendasi2->is_request_rekomendasi == false ? 'readonly' : '' }}>
                                                                     <option value="" selected></option>
                                                                     <option value="Ya" {{ !is_null($proyek->is_uang_muka) && $proyek->is_uang_muka == true ? 'selected' : '' }}>Ya</option>
                                                                     <option value="Tidak" {{ !is_null($proyek->is_uang_muka) && $proyek->is_uang_muka == false ? 'selected' : '' }}>Tidak</option>
@@ -5001,7 +5000,7 @@
                                                             <!--end::Input group-->
                                                             <div class="row fv-row mb-7 {{ $proyek->is_uang_muka == false ? 'd-none' : '' }}">
                                                                 <div class="col-4">
-                                                                    <input type="number" name="uang-muka" class="form-control form-control-solid" min="0" max="100" value="{{ $proyek->uang_muka }}" {{ $proyek->is_uang_muka == false ? 'disabled' : '' }}>
+                                                                    <input type="number" name="uang-muka" class="form-control form-control-solid" min="0" max="100" value="{{ $proyek->uang_muka }}" {{ $proyek->is_uang_muka == false || (!empty($proyek->NotaRekomendasi2) && $proyek->NotaRekomendasi2->is_request_rekomendasi == false) ? 'readonly' : '' }}>
                                                                 </div>
                                                                 <div class="col-2">
                                                                     <p class="mt-7"><i class="bi bi-percent text-dark"></i></p>
@@ -5056,7 +5055,7 @@
                                                                 <!--Begin::Input-->
                                                                 <div class="row">
                                                                     <div class="col-10">
-                                                                        <input type="number" name="waktu_pelaksanaan" class="form-control form-control-solid" min="0" value="{{ $proyek->waktu_pelaksanaan }}" placeholder="Waktu Pelaksanaan Proyek">
+                                                                        <input type="number" name="waktu_pelaksanaan" class="form-control form-control-solid" min="0" value="{{ $proyek->waktu_pelaksanaan }}" placeholder="Waktu Pelaksanaan Proyek" {{ !empty($proyek->NotaRekomendasi2) && $proyek->NotaRekomendasi2->is_request_rekomendasi == false ? 'readonly' : '' }}>
                                                                     </div>
                                                                     <div class="col-2">
                                                                         <p class="mt-7">Hari</p>
@@ -5078,7 +5077,7 @@
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--Begin::Input-->
-                                                                <textarea name="pekerjaan-utama" id="pekerjaan-utama" class="form-control form-control-solid">{!! $proyek->pekerjaan_utama !!}</textarea>
+                                                                <textarea name="pekerjaan-utama" id="pekerjaan-utama" class="form-control form-control-solid" {{ !empty($proyek->NotaRekomendasi2) && $proyek->NotaRekomendasi2->is_request_rekomendasi == false ? 'readonly' : '' }}>{!! $proyek->pekerjaan_utama !!}</textarea>
                                                                 <!--End::Input-->
 
                                                             </div>
@@ -5592,6 +5591,246 @@
 
                                                     <!--end::Table-->
                                                     <!--End::Title Biru Form: Document Tender-->
+
+                                                    <!--Begin::Document Draft Kontrak-->
+                                                    <br>
+                                                    <!--Begin::Title Biru Form: Document Draft Kontrak-->
+                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                        Document Draft Kontrak <i class="bi bi-journal-text"></i>
+                                                    </h3>
+                                                    <br>
+                                                    <div class="w-50">
+                                                        <input type="file"
+                                                            class="form-control form-control-sm form-input-solid"
+                                                            name="dokumen-draft" accept=".pdf">
+                                                    </div>
+                                                    <h6 id="error-dokumen-draft" class="text-danger fw-normal"
+                                                        style="display: none">*File
+                                                        terlalu besar ! Max Size 50Mb</h6>
+                                                    <br>
+                                                    <!--begin::Table-->
+                                                    <table class="table align-middle table-row-dashed w-50 fs-6 gy-2"
+                                                        id="kt_customers_table">
+                                                        <!--begin::Table head-->
+                                                        <thead>
+                                                            <!--begin::Table row-->
+                                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                <th class="w-50px text-center">No.</th>
+                                                                <th class="w-auto">Nama Document</th>
+                                                                <th class="w-auto">Modified On</th>
+                                                                <th class="w-auto text-center"></th>
+                                                            </tr>
+                                                            <!--end::Table row-->
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        @php
+                                                            $no = 1;
+                                                        @endphp
+                                                        <!--begin::Table body-->
+                                                        <tbody class="fw-bold text-gray-600">
+                                                            @foreach ($proyek->DokumenDraft as $dokumen)
+                                                                <tr>
+                                                                    <!--begin::Nomor-->
+                                                                    <td class="text-center">
+                                                                        {{ $no++ }}
+                                                                    </td>
+                                                                    <!--end::Nomor-->
+                                                                    <!--begin::Name-->
+                                                                    <td>
+                                                                        @if (str_contains("$dokumen->nama_dokumen", '.doc'))
+                                                                            <a href="/document/view/{{ $dokumen->id_dokumen_draft }}/{{ $dokumen->id_document }}"
+                                                                                class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
+                                                                        @else
+                                                                            <a target="_blank"
+                                                                                href="{{ asset('words/' . $dokumen->id_document . '.pdf') }}"
+                                                                                class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
+                                                                        @endif
+                                                                    </td>
+                                                                    <!--end::Name-->
+                                                                    <!--begin::Column-->
+                                                                    <td>
+                                                                        {{ Carbon\Carbon::parse($dokumen->created_at)->translatedFormat('d F Y') }}
+                                                                    </td>
+                                                                    <!--end::Column-->
+                                                                    <!--begin::Action-->
+                                                                    <td class="text-center">
+                                                                        <small>
+                                                                            <p data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_dokumen_draft_delete_{{ $dokumen->id_dokumen_draft }}"
+                                                                                id="modal-delete"
+                                                                                class="btn btn-sm btn-light btn-active-primary">
+                                                                                Delete
+                                                                            </p>
+                                                                        </small>
+                                                                    </td>
+                                                                    <!--end::Action-->
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                        <!--end::Table body-->
+                                                    </table>
+                                                    <!--end::Table-->
+                                                    <!--End::Document Draft Kontrak-->
+                                                    
+                                                    <!--Begin::Document Document S Curves-->
+                                                    <br>
+                                                    <!--Begin::Title Biru Form: Document S Curves-->
+                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                        Document S Curves <i class="bi bi-journal-text"></i>
+                                                    </h3>
+                                                    <br>
+                                                    <div class="w-50">
+                                                        <input type="file"
+                                                            class="form-control form-control-sm form-input-solid"
+                                                            name="dokumen-scurves[]" accept=".pdf" multiple>
+                                                    </div>
+                                                    <h6 id="error-dokumen-scurves" class="text-danger fw-normal"
+                                                        style="display: none">*File
+                                                        terlalu besar ! Max Size 50Mb</h6>
+                                                    <br>
+                                                    <!--begin::Table-->
+                                                    <table class="table align-middle table-row-dashed w-50 fs-6 gy-2"
+                                                        id="kt_customers_table">
+                                                        <!--begin::Table head-->
+                                                        <thead>
+                                                            <!--begin::Table row-->
+                                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                <th class="w-50px text-center">No.</th>
+                                                                <th class="w-auto">Nama Document</th>
+                                                                <th class="w-auto">Modified On</th>
+                                                                <th class="w-auto text-center"></th>
+                                                            </tr>
+                                                            <!--end::Table row-->
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        @php
+                                                            $no = 1;
+                                                        @endphp
+                                                        <!--begin::Table body-->
+                                                        <tbody class="fw-bold text-gray-600">
+                                                            @foreach ($proyek->DokumenSCurvesProyek as $dokumen)
+                                                                <tr>
+                                                                    <!--begin::Nomor-->
+                                                                    <td class="text-center">
+                                                                        {{ $no++ }}
+                                                                    </td>
+                                                                    <!--end::Nomor-->
+                                                                    <!--begin::Name-->
+                                                                    <td>
+                                                                        @if (str_contains("$dokumen->nama_document", '.doc'))
+                                                                            <a href="/document/view/{{ $dokumen->id }}/{{ $dokumen->id_document }}"
+                                                                                class="text-hover-primary">{{ $dokumen->nama_document }}</a>
+                                                                        @else
+                                                                            <a target="_blank"
+                                                                                href="{{ asset('words/' . $dokumen->id_document . '.pdf') }}"
+                                                                                class="text-hover-primary">{{ $dokumen->nama_document }}</a>
+                                                                        @endif
+                                                                    </td>
+                                                                    <!--end::Name-->
+                                                                    <!--begin::Column-->
+                                                                    <td>
+                                                                        {{ Carbon\Carbon::parse($dokumen->created_at)->translatedFormat('d F Y') }}
+                                                                    </td>
+                                                                    <!--end::Column-->
+                                                                    <!--begin::Action-->
+                                                                    <td class="text-center">
+                                                                        <small>
+                                                                            <p data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_dokumen_scurves_delete_{{ $dokumen->id }}"
+                                                                                id="modal-delete"
+                                                                                class="btn btn-sm btn-light btn-active-primary">
+                                                                                Delete
+                                                                            </p>
+                                                                        </small>
+                                                                    </td>
+                                                                    <!--end::Action-->
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                        <!--end::Table body-->
+                                                    </table>
+                                                    <!--end::Table-->
+                                                    <!--End::Document S Curves-->
+                                                    
+                                                    <!--Begin::Document Document Other-->
+                                                    <br>
+                                                    <!--Begin::Title Biru Form: Document Other-->
+                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                        Document Lain - Lain <i class="bi bi-journal-text"></i>
+                                                    </h3>
+                                                    <br>
+                                                    <div class="w-50">
+                                                        <input type="file"
+                                                            class="form-control form-control-sm form-input-solid"
+                                                            name="dokumen-other-proyek[]" accept=".pdf" multiple>
+                                                    </div>
+                                                    <h6 id="error-dokumen-other-proyek" class="text-danger fw-normal"
+                                                        style="display: none">*File
+                                                        terlalu besar ! Max Size 50Mb</h6>
+                                                    <br>
+                                                    <!--begin::Table-->
+                                                    <table class="table align-middle table-row-dashed w-50 fs-6 gy-2"
+                                                        id="kt_customers_table">
+                                                        <!--begin::Table head-->
+                                                        <thead>
+                                                            <!--begin::Table row-->
+                                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                <th class="w-50px text-center">No.</th>
+                                                                <th class="w-auto">Nama Document</th>
+                                                                <th class="w-auto">Modified On</th>
+                                                                <th class="w-auto text-center"></th>
+                                                            </tr>
+                                                            <!--end::Table row-->
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        @php
+                                                            $no = 1;
+                                                        @endphp
+                                                        <!--begin::Table body-->
+                                                        <tbody class="fw-bold text-gray-600">
+                                                            @foreach ($proyek->DokumenOtherProyek as $dokumen)
+                                                                <tr>
+                                                                    <!--begin::Nomor-->
+                                                                    <td class="text-center">
+                                                                        {{ $no++ }}
+                                                                    </td>
+                                                                    <!--end::Nomor-->
+                                                                    <!--begin::Name-->
+                                                                    <td>
+                                                                        @if (str_contains("$dokumen->nama_document", '.doc'))
+                                                                            <a href="/document/view/{{ $dokumen->id }}/{{ $dokumen->id_document }}"
+                                                                                class="text-hover-primary">{{ $dokumen->nama_document }}</a>
+                                                                        @else
+                                                                            <a target="_blank"
+                                                                                href="{{ asset('words/' . $dokumen->id_document . '.pdf') }}"
+                                                                                class="text-hover-primary">{{ $dokumen->nama_document }}</a>
+                                                                        @endif
+                                                                    </td>
+                                                                    <!--end::Name-->
+                                                                    <!--begin::Column-->
+                                                                    <td>
+                                                                        {{ Carbon\Carbon::parse($dokumen->created_at)->translatedFormat('d F Y') }}
+                                                                    </td>
+                                                                    <!--end::Column-->
+                                                                    <!--begin::Action-->
+                                                                    <td class="text-center">
+                                                                        <small>
+                                                                            <p data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_dokumen_other_proyek_delete_{{ $dokumen->id }}"
+                                                                                id="modal-delete"
+                                                                                class="btn btn-sm btn-light btn-active-primary">
+                                                                                Delete
+                                                                            </p>
+                                                                        </small>
+                                                                    </td>
+                                                                    <!--end::Action-->
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                        <!--end::Table body-->
+                                                    </table>
+                                                    <!--end::Table-->
+                                                    <!--End::Document Other-->
 
                                                     <!--Begin::Title Biru Form: List Peserta Tender-->
                                                     <br>
@@ -6423,7 +6662,7 @@
                                                         Document Draft Kontrak <i class="bi bi-journal-text"></i>
                                                     </h3>
                                                     <br>
-                                                    <div class="w-50">
+                                                    {{-- <div class="w-50">
                                                         <input type="file"
                                                             class="form-control form-control-sm form-input-solid"
                                                             name="dokumen-draft" accept=".pdf">
@@ -6431,7 +6670,7 @@
                                                     <h6 id="error-dokumen-draft" class="text-danger fw-normal"
                                                         style="display: none">*File
                                                         terlalu besar ! Max Size 50Mb</h6>
-                                                    <br>
+                                                    <br> --}}
                                                     <!--begin::Table-->
                                                     <table class="table align-middle table-row-dashed w-50 fs-6 gy-2"
                                                         id="kt_customers_table">
@@ -6442,7 +6681,7 @@
                                                                 <th class="w-50px text-center">No.</th>
                                                                 <th class="w-auto">Nama Document</th>
                                                                 <th class="w-auto">Modified On</th>
-                                                                <th class="w-auto text-center"></th>
+                                                                {{-- <th class="w-auto text-center"></th> --}}
                                                             </tr>
                                                             <!--end::Table row-->
                                                         </thead>
@@ -6476,7 +6715,7 @@
                                                                         {{ Carbon\Carbon::parse($dokumen->created_at)->translatedFormat('d F Y') }}
                                                                     </td>
                                                                     <!--end::Column-->
-                                                                    <!--begin::Action-->
+                                                                    {{-- <!--begin::Action-->
                                                                     <td class="text-center">
                                                                         <small>
                                                                             <p data-bs-toggle="modal"
@@ -6487,7 +6726,7 @@
                                                                             </p>
                                                                         </small>
                                                                     </td>
-                                                                    <!--end::Action-->
+                                                                    <!--end::Action--> --}}
                                                                 </tr>
                                                             @endforeach
                                                         </tbody>
@@ -10696,6 +10935,46 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Kekuatan</span>
+                                    </label>
+                                    <!--begin::Label-->
+                                    <!--begin::Input-->
+                                    <textarea name="kekuatan-partner" id="kekuatan-partner" class="form-control form-control-solid" rows="5"></textarea>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group Website-->
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Row Kanan+Kiri-->
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Kelemahan</span>
+                                    </label>
+                                    <!--begin::Label-->
+                                    <!--begin::Input-->
+                                    <textarea name="kelemahan-partner" id="kelemahan-partner" class="form-control form-control-solid" rows="5"></textarea>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group Website-->
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Row Kanan+Kiri-->
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
                                         <span>Upload Consent & NPWP</span>
                                     </label>
                                     <!--begin::Label-->
@@ -11768,6 +12047,104 @@
         </form>
     @endforeach
     <!--end::DELETE Cashflow-->
+
+    <!--begin::DELETE DOKUMEN SCURVES-->
+    @foreach ($proyek->DokumenSCurvesProyek as $dokumen)
+        <form action="/proyek/dokumen-scurves/{{ $dokumen->id }}/delete" method="post"
+            enctype="multipart/form-data">
+            @method('delete')
+            @csrf
+            <div class="modal fade" id="kt_dokumen_scurves_delete_{{ $dokumen->id }}" tabindex="-1"
+                aria-hidden="true">
+                <!--begin::Modal dialog-->
+                <div class="modal-dialog modal-dialog-centered mw-800px">
+                    <!--begin::Modal content-->
+                    <div class="modal-content">
+                        <!--begin::Modal header-->
+                        <div class="modal-header">
+                            <!--begin::Modal title-->
+                            <h2>Hapus : {{ $dokumen->nama_document }}</h2>
+                            <!--end::Modal title-->
+                            <!--begin::Close-->
+                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                <span class="svg-icon svg-icon-1">
+                                    <i class="bi bi-x-lg"></i>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </div>
+                            <!--end::Close-->
+                        </div>
+                        <!--end::Modal header-->
+                        <!--begin::Modal body-->
+                        <div class="modal-body py-lg-6 px-lg-6">
+                            Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                            <br>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                        </div>
+                        <!--end::Input group-->
+
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+            </div>
+        </form>
+    @endforeach
+    <!--end::DELETE DOKUMEN SCURVES-->
+
+    <!--begin::DELETE DOKUMEN OTHER PROYEK-->
+    @foreach ($proyek->DokumenOtherProyek as $dokumen)
+        <form action="/proyek/dokumen-other-proyek/{{ $dokumen->id }}/delete" method="post"
+            enctype="multipart/form-data">
+            @method('delete')
+            @csrf
+            <div class="modal fade" id="kt_dokumen_other_proyek_delete_{{ $dokumen->id }}" tabindex="-1"
+                aria-hidden="true">
+                <!--begin::Modal dialog-->
+                <div class="modal-dialog modal-dialog-centered mw-800px">
+                    <!--begin::Modal content-->
+                    <div class="modal-content">
+                        <!--begin::Modal header-->
+                        <div class="modal-header">
+                            <!--begin::Modal title-->
+                            <h2>Hapus : {{ $dokumen->nama_document }}</h2>
+                            <!--end::Modal title-->
+                            <!--begin::Close-->
+                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                <span class="svg-icon svg-icon-1">
+                                    <i class="bi bi-x-lg"></i>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </div>
+                            <!--end::Close-->
+                        </div>
+                        <!--end::Modal header-->
+                        <!--begin::Modal body-->
+                        <div class="modal-body py-lg-6 px-lg-6">
+                            Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                            <br>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                        </div>
+                        <!--end::Input group-->
+
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+            </div>
+        </form>
+    @endforeach
+    <!--end::DELETE DOKUMEN OTHER PROYEK-->
 
     <!--begin::DELETE DOKUMEN TENDER-->
     @foreach ($proyek->DokumenTender as $dokumen)

@@ -29,7 +29,7 @@ class Rekomendasi2Controller extends Controller
     {
         $this->matriks_approvals = MatriksApprovalNotaRekomendasi2::where("is_active", true)->get();
         $this->matriks_approvals = $this->matriks_approvals->first();
-        $this->isnomorTargetActive = true;
+        $this->isnomorTargetActive = false;
         $this->nomorDefault = "085881028391";
         // $this->nomorDefault = "6285376444701";
     }
@@ -168,18 +168,30 @@ class Rekomendasi2Controller extends Controller
             $is_checked = self::checkMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, $data, "Pengajuan");
 
             if ($is_checked) {
-                $matriks_paparan = MatriksApprovalPaparan::where("divisi_id", "=", $proyekSelected->UnitKerja->Divisi->id_divisi)->where("klasifikasi_proyek", "=", $proyekSelected->klasifikasi_pasdin)->where("departemen_code", $proyekSelected->departemen_proyek)->where("kategori", "=", "Pengajuan")->where('is_active', true)->get();
-                if ($matriks_paparan->isEmpty()) {
-                    Alert::error('Error', 'Matriks untuk paparan tidak ditemukan. Hubungi Admin!');
-                    return redirect()->back();
-                }
-
-                foreach ($matriks_paparan as $user) {
-                    $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_req_paparan_$proyekSelected->kode_proyek";
-                    $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan pengajuan tanggal paparan untuk Nota Rekomendasi II, " . $proyekSelected->ProyekBerjalan->name_customer . " untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                    $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Pengajuan Waktu Paparan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
-                    if (!$sendEmailUser) {
+                if (is_null($proyekPengajuan->revisi_pengajuan_note)) {
+                    $matriks_paparan = MatriksApprovalPaparan::where("divisi_id", "=", $proyekSelected->UnitKerja->Divisi->id_divisi)->where("klasifikasi_proyek", "=", $proyekSelected->klasifikasi_pasdin)->where("departemen_code", $proyekSelected->departemen_proyek)->where("kategori", "=", "Pengajuan")->where('is_active', true)->get();
+                    if ($matriks_paparan->isEmpty()) {
+                        Alert::error('Error', 'Matriks untuk paparan tidak ditemukan. Hubungi Admin!');
                         return redirect()->back();
+                    }
+
+                    foreach ($matriks_paparan as $user) {
+                        $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_req_paparan_$proyekSelected->kode_proyek";
+                        $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan pengajuan tanggal paparan untuk Nota Rekomendasi II, " . $proyekSelected->ProyekBerjalan->name_customer . " untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                        $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Pengajuan Waktu Paparan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                        if (!$sendEmailUser) {
+                            return redirect()->back();
+                        }
+                    }
+                } else {
+                    $nomorTarget = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Penyusun")->where('urutan', '=', 1);
+                    foreach ($nomorTarget as $target) {
+                        $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_proyek_rekomendasi_" . $proyekPengajuan->kode_proyek;
+                        $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan hasil revisi untuk proyek " . $proyekSelected->nama_proyek . " untuk permohonan pengajuan rekomendasi tahap II.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                        $sendEmailUser = sendNotifEmail($target->Pegawai, "Pemberitahuan Hasil Revisi Pengajuan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                        if (!$sendEmailUser) {
+                            return redirect()->back();
+                        }
                     }
                 }
 
@@ -394,23 +406,6 @@ class Rekomendasi2Controller extends Controller
                 }
 
                 $proyekPenyusun->is_draft_recommend_note = false;
-                // $mergeLampiran = mergeFileLampiranRisiko($proyekPenyusun->kode_proyek);
-                // $profileResiko = createWordProfileRisikoNew($proyekPenyusun->kode_proyek);
-                // if (!empty($profileResiko)) {
-                //     // if (!empty($mergeLampiran)) {
-                //     //     $pdfMerger = new PdfMerge();
-                //     //     $pdfMerger->add(public_path('file-profile-risiko' . '/' . $profileResiko));
-                //     //     $pdfMerger->add(public_path('file-kriteria-pengguna-jasa' . '/' . $mergeLampiran));
-
-                //     //     $now = \Carbon\Carbon::now();
-                //     //     $file_name = $now->format("dmYHis") . "_profile-risiko-final_" . $proyekPenyusun->kode_proyek;
-                //     //     sleep(10);
-                //     //     // File::delete(public_path('/file-profile-risiko//' . $profileResiko));
-                //     //     $pdfMerger->merge(public_path("file-profile-risiko" . "/" . $file_name . ".pdf"));
-                //     //     // dd($pdfMerger);
-                //     //     $proyekPenyusun->file_penilaian_risiko = $file_name . ".pdf";
-                //     // }
-                // }
             } else {
                 if (!$is_paralel) {
                     if (str_contains($proyekSelected->klasifikasi_pasdin, "Mega")) {
@@ -508,6 +503,79 @@ class Rekomendasi2Controller extends Controller
             return redirect()->back();
         }
     }
+
+
+    /**
+     * Proses Penyusun Revisi ke PIC NR 2
+     * @param Request $request
+     * @param string $kode_proyek
+     */
+    public function ProyekPengajuanRevisi(Request $request, $kode_proyek)
+    {
+        $proyekPengajuanRevisi = NotaRekomendasi2::where('kode_proyek', $kode_proyek)->first();
+        $proyekSelected = $proyekPengajuanRevisi->Proyek;
+
+        if (empty($request["revisi-note"]) || empty($request['revisi-pengajuan'])) {
+            Alert::error('Proses Gagal', 'Mohon isi catatan revisi terlebih dahulu');
+            return redirect()->back();
+        }
+
+        $data = collect(json_decode($proyekPengajuanRevisi->revisi_pengajuan_note));
+
+        $data = $data->push([
+            "user_id" => Auth::user()->id,
+            "status" => "revisi",
+            "catatan" => $request->get("revisi-note") ?? '-',
+            "tanggal" => \Carbon\Carbon::now()
+        ]);
+
+        try {
+            //Hapus progress history penyusun yg sudah ada sebelumnya
+            $proyekPengajuanRevisi->is_draft_recommend_note = null;
+            $proyekPengajuanRevisi->is_recommended_with_note = null;
+            $proyekPengajuanRevisi->catatan_nota_rekomendasi = null;
+            $proyekPengajuanRevisi->catatan_master = null;
+            $proyekPengajuanRevisi->is_penyusun_approved = null;
+            $proyekPengajuanRevisi->approved_penyusun = null;
+
+            //Hapus progress history pengajuan yg sudah ada sebelumnya
+            $proyekPengajuanRevisi->is_pengajuan_approved = null;
+            $proyekPengajuanRevisi->approved_pengajuan = null;
+
+            //Delete file pengajuan yg tergenerate sebelumnya
+            File::delete(public_path('nota-rekomendasi-2/file-pengajuan/' . $proyekPengajuanRevisi->file_pengajuan));
+            $proyekPengajuanRevisi->file_pengajuan = null;
+
+            //Setting is_request_rekomendasi menjadi true kembali
+            $proyekPengajuanRevisi->is_request_rekomendasi = true;
+
+            //Setting is_revisi_pengajuan = true & input catatan
+            $proyekPengajuanRevisi->is_revisi_pengajuan = true;
+            $proyekPengajuanRevisi->revisi_pengajuan_note = $data->toJson();
+
+            //Save perubahan
+            $proyekPengajuanRevisi->save();
+
+            //Check matriks ke verifikasi pengajuan dari SM Marketing
+            $nomorTarget = self::getNomorMatriksApprovalPaparan($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Pengajuan");
+            foreach ($nomorTarget as $user) {
+
+                $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai?->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_history_revisi_pengajuan_$proyekSelected->kode_proyek";
+                $message = "Yth Bapak/Ibu " . $user->Pegawai?->nama_pegawai . "\nDengan ini menyampaikan pemberitahuan revisi untuk Nota Rekomendasi II, " . $proyekSelected->ProyekBerjalan->name_customer . " untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                $sendEmailUser = sendNotifEmail($user->Pegawai, "Pemberitahuan Revisi Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                if (!$sendEmailUser) {
+                    return redirect()->back();
+                }
+            }
+
+            Alert::html("Success", "Nota Rekomendasi dengan nama proyek <b>$proyekSelected->nama_proyek</b> berhasil dikembalikan ke PIC", "success");
+            return redirect()->back();
+        } catch (\Exception $e) {
+            Alert::error('Error', $e->getMessage());
+            return redirect()->back();
+        }
+    }
+
 
     /**
      * Proses Verifikasi
@@ -846,7 +914,7 @@ class Rekomendasi2Controller extends Controller
 
         if ($kategori == "Pengajuan") {
             $ProyekPemaparan->tanggal_paparan_diajukan = $data["tanggal-pengajuan-paparan"];
-            $nomorTargetPaparan = self::getNomorMatriksApprovalPaparan($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Persetujuan", 1);
+            $nomorTargetPaparan = self::getNomorMatriksApprovalPaparan($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Persetujuan");
             $inputFileNotulen = isset($data['file-pemaparan']) ? $data['file-pemaparan'] : [];
             $inputFileAbsensi = isset($data['file-absensi-paparan']) ? $data['file-absensi-paparan'] : [];
 
@@ -885,7 +953,7 @@ class Rekomendasi2Controller extends Controller
             }
         } else {
             $ProyekPemaparan->tanggal_paparan_disetujui = $data["tanggal-persetujuan-paparan"];
-            $nomorTargetPaparan = self::getNomorMatriksApprovalPaparan($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Pengajuan", 1);
+            $nomorTargetPaparan = self::getNomorMatriksApprovalPaparan($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Pengajuan");
             mergeDokumenKelengkapanProject($ProyekPemaparan);
 
             foreach ($nomorTargetPaparan as $user) {

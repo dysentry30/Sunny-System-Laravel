@@ -525,36 +525,20 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // End Rekomendasi
 
     //Begin::Assessment Partner Selection
-    Route::get(
-        '/assessment-partner-selection',
-        [AssessmentPartnerSelectionController::class, 'index']
-    );
-    Route::post('/assessment-partner-selection/{partner}/save', [
-        AssessmentPartnerSelectionController::class, 'store'
-    ]);
-    Route::post('/assessment-partner-selection/{partner}/edit', [
-        AssessmentPartnerSelectionController::class, 'update'
-    ]);
-    Route::post('/assessment-partner-selection/delete-file', [
-        AssessmentPartnerSelectionController::class, 'deleteFile'
-    ]);
-    Route::post('/assessment-partner-selection/pengajuan/approval', [
-        AssessmentPartnerSelectionController::class, 'setApprovalPengajuan'
-    ]);
-    Route::post('/assessment-partner-selection/penyusun/approval', [
-        AssessmentPartnerSelectionController::class, 'setApprovalPenyusun'
-    ]);
-    Route::post('/assessment-partner-selection/rekomendasi/approval', [
-        AssessmentPartnerSelectionController::class, 'setApprovalRekomendasi'
-    ]);
-    Route::post('/assessment-partner-selection/pengajuan-revisi/approval', [
-        AssessmentPartnerSelectionController::class, 'setApprovalRevisi'
-    ]);
+    Route::get('/assessment-partner-selection', [AssessmentPartnerSelectionController::class, 'index']);
+    Route::post('/assessment-partner-selection/{partner}/save', [AssessmentPartnerSelectionController::class, 'store']);
+    Route::post('/assessment-partner-selection/{partner}/edit', [AssessmentPartnerSelectionController::class, 'update']);
+    Route::post('/assessment-partner-selection/delete-file', [AssessmentPartnerSelectionController::class, 'deleteFile']);
+    Route::post('/assessment-partner-selection/pengajuan/approval', [AssessmentPartnerSelectionController::class, 'setApprovalPengajuan']);
+    Route::post('/assessment-partner-selection/penyusun/approval', [AssessmentPartnerSelectionController::class, 'setApprovalPenyusun']);
+    Route::post('/assessment-partner-selection/rekomendasi/approval', [AssessmentPartnerSelectionController::class, 'setApprovalRekomendasi']);
+    Route::post('/assessment-partner-selection/pengajuan-revisi/approval', [AssessmentPartnerSelectionController::class, 'setApprovalRevisi']);
     //End::Assessment Partner Selection
 
     //Begin::Nota Rekomendasi 2
     Route::get('/nota-rekomendasi-2', [Rekomendasi2Controller::class, 'index']);
     Route::post('/nota-rekomendasi-2/{kode_proyek}/pengajuan', [Rekomendasi2Controller::class, 'ProsesPengajuan']);
+    Route::post('/nota-rekomendasi-2/{kode_proyek}/revisi-pengajuan', [Rekomendasi2Controller::class, 'ProyekPengajuanRevisi']);
     Route::post('/nota-rekomendasi-2/{kode_proyek}/penyusun', [Rekomendasi2Controller::class, 'ProsesPenyusun']);
     Route::post('/nota-rekomendasi-2/{kode_proyek}/verifikasi', [Rekomendasi2Controller::class, 'ProyekVerifikasi']);
     Route::post('/nota-rekomendasi-2/{kode_proyek}/rekomendasi', [Rekomendasi2Controller::class, 'ProyekRekomendasi']);
@@ -1096,11 +1080,15 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // DELETE KONSULTAN PERENCANA 
     Route::delete('proyek/konsultan-perencana/{id}/delete', [ProyekController::class, 'deleteKonsultan']);
-    
+
     // DELETE Cashflow 
-    Route::delete('proyek/cashflow/{cashflow}/delete', [
-        ProyekController::class, 'deleteCashflow'
-    ]);
+    Route::delete('proyek/cashflow/{cashflow}/delete', [ProyekController::class, 'deleteCashflow']);
+
+    // DELETE DOKUMEN S CURVES 
+    Route::delete('proyek/dokumen-scurves/{scurves}/delete', [ProyekController::class, 'deleteDokumenSCurves']);
+
+    // DELETE DOKUMEN OTHER PROYEK 
+    Route::delete('proyek/dokumen-other-proyek/{other}/delete', [ProyekController::class, 'deleteDokumenOther']);
 
     // ADD Tim Tender 
     Route::post('proyek/tim-tender/add', [ProyekController::class, 'tambahTimTender']);

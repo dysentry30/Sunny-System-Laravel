@@ -71,6 +71,8 @@ use App\Models\DokumenPendukungPasdin;
 use App\Models\MatriksApprovalPaparan;
 use App\Models\NotaRekomendasi;
 use App\Models\CashFlowProyek;
+use App\Models\DokumenOtherProyek;
+use App\Models\DokumenSCurvesProyek;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -659,7 +661,7 @@ class ProyekController extends Controller
             $matriks_paparan = MatriksApprovalNotaRekomendasi2::where("divisi_id", "=", $divisi)->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where("departemen_code", $departemen)->where("kategori", "=", "Pengajuan")->where('is_active', true)->get();
             // dd($matriks_paparan);
 
-            $isnomorTargetActive = true;
+            $isnomorTargetActive = false;
             // $nomorDefault = "6285376444701";
             // $nomorDefault = "085881028391";
 
@@ -1234,6 +1236,12 @@ class ProyekController extends Controller
                 if (isset($dataProyek["file-cashflow"])) {
                     self::cashFlow($dataProyek["file-cashflow"], $kode_proyek);
                 }
+                if (isset($dataProyek["dokumen-scurves"])) {
+                    self::uploadDokumenSCurves($dataProyek["dokumen-scurves"], $kode_proyek);
+                }
+                if (isset($dataProyek["dokumen-other-proyek"])) {
+                    self::uploadDokumenOtherProyek($dataProyek["dokumen-other-proyek"], $kode_proyek);
+                }
             }
             $customerHistory->save();
             return redirect("/proyek/view/" . $kode_proyek);
@@ -1293,6 +1301,12 @@ class ProyekController extends Controller
                 }
                 if (isset($dataProyek["file-cashflow"])) {
                     self::cashFlow($dataProyek["file-cashflow"], $kode_proyek);
+                }
+                if (isset($dataProyek["dokumen-scurves"])) {
+                    self::uploadDokumenSCurves($dataProyek["dokumen-scurves"], $kode_proyek);
+                }
+                if (isset($dataProyek["dokumen-other-proyek"])) {
+                    self::uploadDokumenOtherProyek($dataProyek["dokumen-other-proyek"], $kode_proyek);
                 }
             }
             return redirect("/proyek/view/" . $kode_proyek);
@@ -1530,7 +1544,7 @@ class ProyekController extends Controller
         $cashFlow->kode_proyek = $kode_proyek;
         $cashFlow->save();
     }
-
+    
     public function deleteCashFlow($id)
     {
         $delete = CashFlowProyek::find($id);
@@ -1541,6 +1555,60 @@ class ProyekController extends Controller
         File::delete($files);
         $delete->delete();
         Alert::success("Success", "Dokumen Cashflow Berhasil Dihapus");
+        return redirect()->back();
+    }
+
+    private function uploadDokumenSCurves($files, $kode_proyek)
+    {
+        foreach ($files as $file) {
+            $faker = new Uuid();
+            $scurves = new DokumenSCurvesProyek();
+            $file_name = $file->getClientOriginalName();
+            $id_document = str_replace(' ', '_', $file_name) . '_' . $faker->uuid3();
+            $nama_scurves = $file_name;
+            $scurves->nama_document = $nama_scurves;
+            $scurves->id_document = $id_document;
+            $scurves->kode_proyek = $kode_proyek;
+            $scurves->save();
+            $file->move(public_path('dokumen-s-curves/' . $id_document));
+        }
+    }
+
+    public function deleteDokumenSCurves($id)
+    {
+        $delete = DokumenSCurvesProyek::find($id);
+        // dd($delete);
+        $files = collect(File::allFiles(public_path("dokumen-scurves")))->filter(function ($f) use ($delete) {
+            return str_contains($f->getFilename(), $delete->id_document);
+        })->first();
+        File::delete($files);
+        $delete->delete();
+        Alert::success("Success", "Dokumen S Curves Berhasil Dihapus");
+        return redirect()->back();
+    }
+
+    private function uploadDokumenOtherProyek($files, $kode_proyek)
+    {
+        foreach ($files as $file) {
+            $faker = new Uuid();
+            $dokumenOther = new DokumenOtherProyek();
+            $file_name = $file->getClientOriginalName();
+            $id_document = str_replace(' ', '_', $file_name) . '_' . $faker->uuid3();
+            $nama_dokumenOther = $file_name;
+            $dokumenOther->nama_document = $nama_dokumenOther;
+            $dokumenOther->id_document = $id_document;
+            $dokumenOther->kode_proyek = $kode_proyek;
+            $dokumenOther->save();
+            $file->move(public_path('dokumen-other-proyek/' . $id_document));
+        }
+    }
+
+    public function deleteDokumenOtherProyek($id)
+    {
+        $delete = DokumenOtherProyek::find($id);
+        File::delete(public_path("dokumen-other-proyek/" . $delete->id_document));
+        $delete->delete();
+        Alert::success("Success", "Dokumen Berhasil Dihapus");
         return redirect()->back();
     }
 
@@ -2759,6 +2827,8 @@ class ProyekController extends Controller
         $rules = [
             "company-jo" => "required",
             "porsijo-company" => "required",
+            "kekuatan-partner" => "required",
+            "kelemahan-partner" => "required",
         ];
         $validation = Validator::make($dataPorsiJO, $rules, $messages);
         if ($validation->fails()) {
@@ -2773,6 +2843,8 @@ class ProyekController extends Controller
         $newPorsiJO->company_jo = $customer->name;
         $newPorsiJO->id_company_jo = $customer->id_customer;
         $newPorsiJO->porsi_jo = $dataPorsiJO["porsijo-company"];
+        $newPorsiJO->kekuatan_partner = $dataPorsiJO["kekuatan-partner"];
+        $newPorsiJO->kelemahan_partner = $dataPorsiJO["kelemahan-partner"];
 
         //Check Partner di Master BUMN
         $kriteria_partner = MasterGrupTierBUMN::where('id_pelanggan', $customer->id_customer)->first();

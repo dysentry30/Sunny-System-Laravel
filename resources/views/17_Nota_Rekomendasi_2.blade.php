@@ -330,19 +330,19 @@
                                 <div class="d-flex align-items-center my-1" style="width: 100%;">
 
                                     <ul
-                                        class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
+                                    class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
                                         <!--begin:::Tab item Claim-->
                                         <li class="nav-item">
                                             <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
-                                                aria-selected="true" href="#kt_view_proses_paparan"
-                                                style="font-size:14px;">Proses Paparan</a>
+                                                aria-selected="true" href="#kt_view_prosess_rekomendasi"
+                                                style="font-size:14px;">Dalam Proses</a>
                                         </li>
                                         <!--end:::Tab item Claim-->
                                         <!--begin:::Tab item Claim-->
                                         <li class="nav-item">
                                             <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
-                                                aria-selected="true" href="#kt_view_prosess_rekomendasi"
-                                                style="font-size:14px;">Dalam Proses</a>
+                                                aria-selected="true" href="#kt_view_proses_paparan"
+                                                style="font-size:14px;">Proses Paparan</a>
                                         </li>
                                         <!--end:::Tab item Claim-->
                                         <!--begin:::Tab item Claim-->
@@ -365,7 +365,7 @@
                             <!--Begin :: Tab Content-->
                             <div id="tab-content" class="tab-content">
                                 <!--Begin :: Tab Pane - Pengajuan Pemaparan-->
-                                <div class="tab-pane fade show active" id="kt_view_proses_paparan" role="tabpanel">
+                                <div class="tab-pane fade" id="kt_view_proses_paparan" role="tabpanel">
                                     <!--begin::Table Proyek-->
                                     <table class="table display align-middle table-row-dashed fs-6" id="pemaparan-proses">
                                         <thead>
@@ -451,7 +451,7 @@
                                 </div>
                                 <!--End :: Tab Pane - Pengajuan Pemaparan-->
                                 <!--Begin :: Tab Pane - Proses Rekomendasi-->
-                                <div class="tab-pane fade" id="kt_view_prosess_rekomendasi" role="tabpanel">
+                                <div class="tab-pane fade show active" id="kt_view_prosess_rekomendasi" role="tabpanel">
                                     <!--begin::Table Proyek-->
                                     <table class="table display align-middle table-row-dashed fs-6" id="rekomendasi-proses">
                                         <thead>
@@ -570,8 +570,40 @@
                                                                                 ?->first()))
                                                                     <button type="button" class="badge badge-danger"
                                                                         data-bs-toggle="modal"
-                                                                        data-bs-target="#kt_modal_view_proyek_revisi_note_{{ $proyek->kode_proyek }}">Lihat
-                                                                        Catatan Revisi</button>
+                                                                        data-bs-target="#kt_modal_view_proyek_revisi_note_{{ $proyek->kode_proyek }}">Lihat Catatan Revisi</button>
+                                                                @endif
+                                                            @endif
+                                                        @endif
+                                                        @if ($proyek->is_revisi_pengajuan)
+                                                            @php
+                                                                $revisi_note = collect(json_decode($proyek->revisi_pengajuan_note))->last();
+                                                                // $nama_verifikator = \App\Models\User::find($revisi_note->user_id)->name;
+                                                            @endphp
+                                                            @if (!empty($matriks_user))
+                                                                @if (
+                                                                    ($matriks_user->contains('kategori', 'Pengajuan') &&
+                                                                        $matriks_user->where('kategori', 'Pengajuan')
+                                                                            ?->where('departemen_code', $proyek->Proyek->departemen_proyek)
+                                                                            ?->where('divisi_id', $proyek->Proyek->UnitKerja->Divisi->id_divisi)
+                                                                            ?->where('klasifikasi_proyek', $proyek->Proyek->klasifikasi_pasdin)
+                                                                            ?->first()) ||
+                                                                    ($matriks_user->contains('kategori', 'Penyusun') &&
+                                                                        $matriks_user->where('kategori', 'Penyusun')
+                                                                            ?->where('departemen_code', $proyek->Proyek->departemen_proyek)
+                                                                            ?->where('divisi_id', $proyek->Proyek->UnitKerja->Divisi->id_divisi)
+                                                                            ?->where('klasifikasi_proyek', $proyek->Proyek->klasifikasi_pasdin)
+                                                                            ?->where('urutan', 1)
+                                                                            ?->first()) ||
+                                                                    ($matriks_paparan->contains('kategori', 'Pengajuan') &&
+                                                                        $matriks_paparan->where('kategori', 'Pengajuan')
+                                                                            ?->where('departemen_code', $proyek->Proyek->departemen_proyek)
+                                                                            ?->where('divisi_id', $proyek->Proyek->UnitKerja->Divisi->id_divisi)
+                                                                            ?->where('klasifikasi_proyek', $proyek->Proyek->klasifikasi_pasdin)
+                                                                            ?->where('urutan', 1)
+                                                                            ?->first()))
+                                                                    <button type="button" class="badge badge-danger"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#kt_modal_view_history_revisi_pengajuan_{{ $proyek->kode_proyek }}">Lihat Catatan Revisi Pengajuan</button>
                                                                 @endif
                                                             @endif
                                                         @endif
@@ -1851,7 +1883,7 @@
                                     @if ($proyek->Proyek->PorsiJO->isNotEmpty())
                                         <br>
                                         @foreach ($proyek->Proyek->PorsiJO as $partner)
-                                            <p class="m-0">Nama Partner : {{ $partner->company_jo }}</p>
+                                            <p class="m-0">Nama Partner : {{ $partner->company_jo }} (Porsi : {{ $partner->porsi_jo }} %)</p>
                                             <p class="m-0">WIKA : {{ (int)$partner->porsi_jo < (int)$proyek->Proyek->porsi_jo ? "Leader" : "Member" }}</p>
                                         @endforeach
                                     @endif
@@ -1959,85 +1991,137 @@
                             $is_edit_penyusun = true;
                         }
 
-                        $catatan_master = collect(json_decode($proyek->catatan_master))->sortBy('urutan');
+                        $catatan_master = collect(json_decode($proyek->catatan_master))?->sortBy('urutan');
                     @endphp
                     @if (is_null($proyek->is_rekomendasi_approved))
                         <label for="note-rekomendasi" class="text-start">Self Assessment: </label>
                         <textarea class="form-control form-control-solid" id="note-rekomendasi" name="note-rekomendasi" rows="10" {{ !is_null($proyek->is_draft_recommend_note) && !$proyek->is_draft_recommend_note || empty($matriks_user) || collect(json_decode($proyek->approved_penyusun))->contains('status', 'approved')  ? 'disabled' : '' }}>{!! trim($text_catatan) !!}</textarea>
                         <br>
-                        <label for="catatan-rekomendasi" class="text-start" >
-                            Catatan: 
-                        <a Id="Plus" data-bs-toggle="collapse" href="#kt_expand_catatan_{{ $proyek->kode_proyek }}" role="button" aria-expanded="false" aria-controls="collapseExample">
-                            <i id="hide-button"
-                            class="bi bi-arrows-collapse"></i></i>
-                        </a>
-                        </label>
-                        <br>
-                        <div class="collapse" id="kt_expand_catatan_{{ $proyek->kode_proyek }}">
-                            <div class="card card-body">
-                                <table class="table table-striped">
-                                    <thead>
+                    @endif
+                    <label for="catatan-rekomendasi" class="text-start" >
+                        Catatan: 
+                    <a Id="Plus" data-bs-toggle="collapse" href="#kt_expand_catatan_{{ $proyek->kode_proyek }}" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        <i id="hide-button" class="bi bi-arrows-collapse"></i>
+                    </a>
+                    </label>
+                    <br>
+                    <div class="collapse" id="kt_expand_catatan_{{ $proyek->kode_proyek }}">
+                        <div class="card card-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="min-w-auto">No.</th>
+                                        <th class="min-w-auto">Kategori</th>
+                                        <th class="min-w-auto">Action</th>
+                                        <th class="min-w-auto">Uraian</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($masterCatatanRekomendasi as $key => $kategori)
                                         <tr>
-                                            <th class="min-w-auto">No.</th>
-                                            <th class="min-w-auto">Kategori</th>
-                                            <th class="min-w-auto">Action</th>
-                                            <th class="min-w-auto">Uraian</th>
+                                            <td class="text-center align-middle">{{ $kategori->urutan }}</td>
+                                            <td class="text-start align-middle">{{ $kategori->kategori }}</td>
+                                            <td class="text-center align-middle">
+                                                @if ($catatan_master->isNotEmpty())
+                                                    <input class="form-check-input" type="checkbox" value="{{ $kategori->urutan }}" name="master_selected_{{ $kategori->urutan }}" id="master_selected_{{ $kategori->urutan }}" onchange="disabledTextArea(this)" {{ !empty($catatan_master) && $catatan_master[$key]->checked ? 'checked' : '' }} {{ $is_edit_penyusun ? '' : 'disabled' }}>
+                                                @else
+                                                    <input class="form-check-input" type="checkbox" value="{{ $kategori->urutan }}" name="master_selected_{{ $kategori->urutan }}" id="master_selected_{{ $kategori->urutan }}" onchange="disabledTextArea(this)" {{ $is_edit_penyusun ? '' : 'disabled' }}>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($catatan_master->isNotEmpty())
+                                                    <textarea name="catatan_nota_rekomendasi_master[]" id="catatan_nota_rekomendasi_master" class="form-control form-control-solid" readonly>{!! $catatan_master[$key]->checked ? $catatan_master[$key]->uraian : '' !!}</textarea>
+                                                @else
+                                                    <textarea name="catatan_nota_rekomendasi_master[]" id="catatan_nota_rekomendasi_master" class="form-control form-control-solid" readonly>{!! '' !!}</textarea>
+                                                @endif
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($masterCatatanRekomendasi as $key => $kategori)
-                                            <tr>
-                                                <td class="text-center align-middle">{{ $kategori->urutan }}</td>
-                                                <td class="text-start align-middle">{{ $kategori->kategori }}</td>
-                                                <td class="text-center align-middle">
-                                                    @if ($catatan_master->isNotEmpty())
-                                                        <input class="form-check-input" type="checkbox" value="{{ $kategori->urutan }}" name="master_selected_{{ $kategori->urutan }}" id="master_selected_{{ $kategori->urutan }}" onchange="disabledTextArea(this)" {{ !empty($catatan_master) && $catatan_master[$key]->checked ? 'checked' : '' }} {{ $is_edit_penyusun ? '' : 'disabled' }}>
-                                                    @else
-                                                        <input class="form-check-input" type="checkbox" value="{{ $kategori->urutan }}" name="master_selected_{{ $kategori->urutan }}" id="master_selected_{{ $kategori->urutan }}" onchange="disabledTextArea(this)" {{ $is_edit_penyusun ? '' : 'disabled' }}>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if ($catatan_master->isNotEmpty())
-                                                        <textarea name="catatan_nota_rekomendasi_master[]" id="catatan_nota_rekomendasi_master" class="form-control form-control-solid" readonly>{!! $catatan_master[$key]->checked ? $catatan_master[$key]->uraian : '' !!}</textarea>
-                                                    @else
-                                                        <textarea name="catatan_nota_rekomendasi_master[]" id="catatan_nota_rekomendasi_master" class="form-control form-control-solid" readonly>{!! '' !!}</textarea>
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                        <script>
-                                            function disabledTextArea(e) {
-                                                const checkBox = e.checked;
-                                                const textAreaTarget = e.parentElement.nextElementSibling.firstElementChild
+                                    @endforeach
+                                    <script>
+                                        function disabledTextArea(e) {
+                                            const checkBox = e.checked;
+                                            const textAreaTarget = e.parentElement.nextElementSibling.firstElementChild
 
-                                                if (checkBox) {
-                                                    textAreaTarget.removeAttribute('readonly');
-                                                } else {
-                                                    textAreaTarget.setAttribute('readonly', true);
-                                                }
+                                            if (checkBox) {
+                                                textAreaTarget.removeAttribute('readonly');
+                                            } else {
+                                                textAreaTarget.setAttribute('readonly', true);
                                             }
-                                        </script>
-                                    </tbody>
-                                </table>
-                            </div>
-                          </div>
-                        <br>
-                        @csrf
-                        <input type="hidden" name="kode-proyek" value="{{ $proyek->kode_proyek }}">
-                        @if ($is_edit_penyusun)
-                            @if (!collect(json_decode($proyek->approved_penyusun))->contains('status', 'approved'))
-                            <input type="submit" name="save-draft-note-rekomendasi" value="Simpan Sebagai Draft"
-                                class="btn btn-sm btn-primary">
+                                        }
+                                    </script>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <br>
+                    @csrf
+                    <input type="hidden" name="kode-proyek" value="{{ $proyek->kode_proyek }}">
+                    @if ($is_edit_penyusun)
+                        @if (str_contains($proyek->klasifikasi_proyek, "Besar") || str_contains($proyek->klasifikasi_proyek, "Mega"))
+                            @if ((is_null($proyek->is_draft_recommend_note) || $proyek->is_draft_recommend_note) && !empty($matriks_user) && $matriks_user?->contains('kategori', 'Penyusun') && $matriks_user?->where('kategori', 'Penyusun')?->where('departemen_code', $proyek->departemen_proyek)?->where('divisi_id', $proyek->Proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_proyek)?->where('urutan', '=', 1)?->first())
+                                @if (!collect(json_decode($proyek->approved_penyusun))->contains('status', 'approved'))
+                                <input type="submit" name="save-draft-note-rekomendasi" value="Simpan Sebagai Draft"
+                                    class="btn btn-sm btn-primary">
+                                @endif
+                                <input type="submit" name="input-rekomendasi-with-note" value="Submit"
+                                    class="btn btn-sm btn-success" {{ collect(json_decode($proyek->approved_penyusun))->where('user_id', auth()->user()->id)->first()?->status == "approved" ? 'disabled' : '' }}>
+                                <input type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_view_proyek_revisi_pengajuan_{{ $proyek->kode_proyek }}"
+                                    class="btn btn-sm btn-danger" value="Ajukan Revisi">
                             @endif
-                            <input type="submit" name="input-rekomendasi-with-note" value="Submit"
-                                class="btn btn-sm btn-success" {{ collect(json_decode($proyek->approved_penyusun))->where('user_id', auth()->user()->id)->first()?->status == "approved" ? 'disabled' : '' }}>
-
+                        @else
+                            @if ($matriks_user?->contains('kategori', 'Penyusun') && $matriks_user?->where('kategori', 'Penyusun')?->where('departemen_code', $proyek->departemen_proyek)?->where('divisi_id', $proyek->Proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_proyek)?->where('urutan', '=', 1)?->first())
+                                @if (!collect(json_decode($proyek->approved_penyusun))->contains('status', 'approved'))
+                                    <input type="submit" name="save-draft-note-rekomendasi" value="Simpan Sebagai Draft"
+                                        class="btn btn-sm btn-primary">
+                                @endif
+                                @if (empty($proyek->approved_penyusun) || collect(json_decode($proyek->approved_penyusun))?->contains('status', 'draft'))
+                                    <input type="submit" name="input-rekomendasi-with-note" value="Submit"
+                                        class="btn btn-sm btn-success" {{ collect(json_decode($proyek->approved_penyusun))->where('user_id', auth()->user()->id)->first()?->status == "approved" ? 'disabled' : '' }}>
+                                    <input type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_view_proyek_revisi_pengajuan_{{ $proyek->kode_proyek }}"
+                                        class="btn btn-sm btn-danger" value="Ajukan Revisi">
+                                @endif
+                            @else
+                                @if (empty(collect(json_decode($proyek->approved_penyusun))->where('user_id', auth()->user()->id)->first()) && !is_null($proyek->approved_penyusun) && !collect(json_decode($proyek->approved_penyusun))->contains('status', 'draft'))
+                                    <input type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_view_proyek_revisi_{{ $proyek->kode_proyek }}"
+                                        class="btn btn-sm btn-primary" value="Ajukan Revisi">
+                                    <input type="submit" name="input-rekomendasi-with-note" value="Submit"
+                                        class="btn btn-sm btn-success" {{ collect(json_decode($proyek->approved_penyusun))->where('user_id', auth()->user()->id)->first()?->status == "approved" ? 'disabled' : '' }}>
+                                @endif
+                            @endif
                         @endif
+                        {{-- @if (!collect(json_decode($proyek->approved_penyusun))->contains('status', 'approved'))
+                        <input type="submit" name="save-draft-note-rekomendasi" value="Simpan Sebagai Draft"
+                            class="btn btn-sm btn-primary">
+                        @endif
+                        <input type="submit" name="input-rekomendasi-with-note" value="Submit"
+                            class="btn btn-sm btn-success" {{ collect(json_decode($proyek->approved_penyusun))->where('user_id', auth()->user()->id)->first()?->status == "approved" ? 'disabled' : '' }}> --}}
                     @endif
                 </div>
                 @if (is_null($proyek->is_draft_recommend_note) || $proyek->is_draft_recommend_note)
-                    </form>
+                </form>
                 @endif
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="kt_modal_view_proyek_revisi_pengajuan_{{ $proyek->kode_proyek }}" tabindex="-1"
+        aria-labelledby="kt_modal_view_proyek_revisi_pengajuan_{{ $proyek->kode_proyek }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+                <form action="/nota-rekomendasi-2/{{ $proyek->kode_proyek }}/revisi-pengajuan" method="POST" id="revisi-pengajuan-form-{{ $proyek->kode_proyek }}" onsubmit="addLoading(this)">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title">Isi catatan revisi</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <textarea name="revisi-note" class="form-control form-control-solid" form="revisi-pengajuan-form-{{ $proyek->kode_proyek }}" id="revisi-note" cols="1" rows="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" name="revisi-pengajuan" form="revisi-pengajuan-form-{{ $proyek->kode_proyek }}" class="btn btn-sm btn-primary" value="Ajukan Revisi">
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -2088,7 +2172,7 @@
                                         @if ($proyek->Proyek->PorsiJO->isNotEmpty())
                                             <br>
                                             @foreach ($proyek->Proyek->PorsiJO as $partner)
-                                                <p class="m-0">Nama Partner : {{ $partner->company_jo }}</p>
+                                                <p class="m-0">Nama Partner : {{ $partner->company_jo }} (Porsi : {{ $partner->porsi_jo }} %)</p>
                                                 <p class="m-0">WIKA : {{ (int)$partner->porsi_jo < (int)$proyek->Proyek->porsi_jo ? "Leader" : "Member" }}</p>
                                             @endforeach
                                         @endif
@@ -2174,6 +2258,46 @@
                             href="#kt_user_edit_kriteria_{{ $proyek->kode_proyek }}"
                             class="btn btn-sm btn-primary" data-bs-toggle="modal">Lihat</a></span>
                         <br>
+                        <label for="catatan-rekomendasi" class="text-start" >
+                            Catatan: 
+                        <a Id="Plus" data-bs-toggle="collapse" href="#kt_expand_catatan_verifikasi_{{ $proyek->kode_proyek }}" role="button" aria-expanded="true" aria-controls="collapseExample">
+                            <i id="hide-button" class="bi bi-arrows-collapse"></i>
+                        </a>
+                        </label>
+                        @if (!is_null($proyek->catatan_master))
+                        <br>
+                        @php
+                            $catatan_master = collect(json_decode($proyek->catatan_master))?->sortBy('urutan');
+                        @endphp
+                        <div class="collapse show" id="kt_expand_catatan_verifikasi_{{ $proyek->kode_proyek }}">
+                            <div class="card card-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th class="min-w-auto">No.</th>
+                                            <th class="min-w-auto">Kategori</th>
+                                            <th class="min-w-auto">Action</th>
+                                            <th class="min-w-auto">Uraian</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($masterCatatanRekomendasi as $key => $kategori)
+                                            <tr>
+                                                <td class="text-center align-middle">{{ $kategori->urutan }}</td>
+                                                <td class="text-start align-middle">{{ $kategori->kategori }}</td>
+                                                <td class="text-center align-middle">
+                                                    <input class="form-check-input" type="checkbox" value="{{ $kategori->urutan }}" name="master_selected_{{ $kategori->urutan }}" id="master_selected_{{ $kategori->urutan }}" {{ !empty($catatan_master) && $catatan_master[$key]->checked ? 'checked' : '' }} disabled>
+                                                </td>
+                                                <td>
+                                                    <textarea id="catatan_nota_rekomendasi_master" class="form-control form-control-solid" disabled>{!! $catatan_master[$key]->checked ? $catatan_master[$key]->uraian : '' !!}</textarea>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>                            
+                        @endif
                         @php
                             $approved_verifikasi = collect(json_decode($proyek->approved_verifikasi));
                             $is_user_exist_penyusun = $approved_verifikasi->contains('user_id', Auth::user()->id);
@@ -2274,7 +2398,7 @@
                                         @if ($proyek->Proyek->PorsiJO->isNotEmpty())
                                             <br>
                                             @foreach ($proyek->Proyek->PorsiJO as $partner)
-                                                <p class="m-0">Nama Partner : {{ $partner->company_jo }}</p>
+                                                <p class="m-0">Nama Partner : {{ $partner->company_jo }} (Porsi : {{ $partner->porsi_jo }} %)</p>
                                                 <p class="m-0">WIKA : {{ (int)$partner->porsi_jo < (int)$proyek->Proyek->porsi_jo ? "Leader" : "Member" }}</p>
                                             @endforeach
                                         @endif
@@ -2360,6 +2484,46 @@
                             href="#kt_user_edit_kriteria_{{ $proyek->kode_proyek }}"
                             class="btn btn-sm btn-primary" data-bs-toggle="modal">Lihat</a></span>
                         <br>
+                        <label for="catatan-rekomendasi" class="text-start" >
+                            Catatan: 
+                        <a Id="Plus" data-bs-toggle="collapse" href="#kt_expand_catatan_rekomendasi_{{ $proyek->kode_proyek }}" role="button" aria-expanded="true" aria-controls="collapseExample">
+                            <i id="hide-button" class="bi bi-arrows-collapse"></i>
+                        </a>
+                        </label>
+                        @if (!is_null($proyek->catatan_master))
+                        <br>
+                        @php
+                            $catatan_master = collect(json_decode($proyek->catatan_master))?->sortBy('urutan');
+                        @endphp
+                        <div class="collapse show" id="kt_expand_catatan_rekomendasi_{{ $proyek->kode_proyek }}">
+                            <div class="card card-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th class="min-w-auto">No.</th>
+                                            <th class="min-w-auto">Kategori</th>
+                                            <th class="min-w-auto">Action</th>
+                                            <th class="min-w-auto">Uraian</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($masterCatatanRekomendasi as $key => $kategori)
+                                            <tr>
+                                                <td class="text-center align-middle">{{ $kategori->urutan }}</td>
+                                                <td class="text-start align-middle">{{ $kategori->kategori }}</td>
+                                                <td class="text-center align-middle">
+                                                    <input class="form-check-input" type="checkbox" value="{{ $kategori->urutan }}" name="master_selected_{{ $kategori->urutan }}" id="master_selected_{{ $kategori->urutan }}" {{ !empty($catatan_master) && $catatan_master[$key]->checked ? 'checked' : '' }} disabled>
+                                                </td>
+                                                <td>
+                                                    <textarea id="catatan_nota_rekomendasi_master" class="form-control form-control-solid" disabled>{!! $catatan_master[$key]->checked ? $catatan_master[$key]->uraian : '' !!}</textarea>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>                            
+                        @endif
                         @php
                             $approved_rekomendasi = collect(json_decode($proyek->approved_rekomendasi));
                                 $is_user_exist_rekomendasi = $approved_rekomendasi->contains('user_id', Auth::user()->id);
@@ -2469,7 +2633,7 @@
                                         @if ($proyek->Proyek->PorsiJO->isNotEmpty())
                                             <br>
                                             @foreach ($proyek->Proyek->PorsiJO as $partner)
-                                                <p class="m-0">Nama Partner : {{ $partner->company_jo }}</p>
+                                                <p class="m-0">Nama Partner : {{ $partner->company_jo }} (Porsi : {{ $partner->porsi_jo }} %)</p>
                                                 <p class="m-0">WIKA : {{ (int)$partner->porsi_jo < (int)$proyek->Proyek->porsi_jo ? "Leader" : "Member" }}</p>
                                             @endforeach
                                         @endif
@@ -2550,6 +2714,46 @@
                             href="#kt_user_edit_kriteria_{{ $proyek->kode_proyek }}"
                             class="btn btn-sm btn-primary" data-bs-toggle="modal">Lihat</a></span>
                         <br>
+                        <label for="catatan-rekomendasi" class="text-start" >
+                            Catatan: 
+                        <a Id="Plus" data-bs-toggle="collapse" href="#kt_expand_catatan_persetujuan_{{ $proyek->kode_proyek }}" role="button" aria-expanded="true" aria-controls="collapseExample">
+                            <i id="hide-button" class="bi bi-arrows-collapse"></i>
+                        </a>
+                        </label>
+                        @if (!is_null($proyek->catatan_master))
+                        <br>
+                        @php
+                            $catatan_master = collect(json_decode($proyek->catatan_master))?->sortBy('urutan');
+                        @endphp
+                        <div class="collapse show" id="kt_expand_catatan_persetujuan_{{ $proyek->kode_proyek }}">
+                            <div class="card card-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th class="min-w-auto">No.</th>
+                                            <th class="min-w-auto">Kategori</th>
+                                            <th class="min-w-auto">Action</th>
+                                            <th class="min-w-auto">Uraian</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($masterCatatanRekomendasi as $key => $kategori)
+                                            <tr>
+                                                <td class="text-center align-middle">{{ $kategori->urutan }}</td>
+                                                <td class="text-start align-middle">{{ $kategori->kategori }}</td>
+                                                <td class="text-center align-middle">
+                                                    <input class="form-check-input" type="checkbox" value="{{ $kategori->urutan }}" name="master_selected_{{ $kategori->urutan }}" id="master_selected_{{ $kategori->urutan }}" {{ !empty($catatan_master) && $catatan_master[$key]->checked ? 'checked' : '' }} disabled>
+                                                </td>
+                                                <td>
+                                                    <textarea id="catatan_nota_rekomendasi_master" class="form-control form-control-solid" disabled>{!! $catatan_master[$key]->checked ? $catatan_master[$key]->uraian : '' !!}</textarea>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>                            
+                        @endif
                         @php
                             $approved_persetujuan = collect(json_decode($proyek->approved_persetujuan));
                             $is_user_exist_persetujuan = $approved_persetujuan->contains('user_id', Auth::user()->id);
@@ -2720,6 +2924,77 @@
         </div>
     </div>
     <!--End::Modal Revisi-->
+    
+    <!--Begin::Modal Revisi Pengajuan-->
+    <div class="modal fade" id="kt_modal_view_history_revisi_pengajuan_{{ $proyek->kode_proyek }}" tabindex="-1"
+        aria-labelledby="kt_modal_view_history_revisi_pengajuan_{{ $proyek->kode_proyek }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">History Revisi Pengajuan Nota Rekomendasi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"  onclick="deleteBackdrop()" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @php
+                        $revisi_note = collect(json_decode($proyek->revisi_pengajuan_note));
+                    @endphp
+                    {{-- Begin :: History --}}
+                    <div class="row">
+                        @php
+                            $row = 1;
+                        @endphp
+                        <div class="timeline-centered">
+                            @forelse ($revisi_note as $key => $data)
+                                <article class="timeline-entry {{ $row % 2 == 0 ? 'left-aligned' : '' }}">
+
+                                    <div class="timeline-entry-inner">
+                                        <time class="timeline-time"></time>
+                                            <div class="timeline-icon bg-success">
+                                                <i class="entypo-feather"></i>
+                                            </div>
+
+                                        <div class="timeline-content">
+                                            <div class="row">
+                                                <h5>Catatan Revisi {{ $row }}:</h5>
+                                                <div class="card text-bg-light my-3">
+                                                    <div class="card-body">
+                                                        <small>
+                                                            Nama:
+                                                            <b>{{ App\Models\User::find($data->user_id)->name }}</b><br>
+                                                            Jabatan:
+                                                            <b>{{ App\Models\User::find($data->user_id)->Pegawai->Jabatan?->nama_jabatan }}</b><br>
+                                                            @if (!empty($data->tanggal))
+                                                                Tanggal:
+                                                                <b>{{ Carbon\Carbon::create($data->tanggal)->translatedFormat('d F Y H:i:s') }}</b><br>
+                                                            @endif
+                                                            @if (!empty($data->catatan))
+                                                                Catatan:
+                                                                <b>{!! nl2br($data->catatan) !!}</b><br>
+                                                            @endif
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                                @php
+                                    $row++;
+                                @endphp
+                            @empty
+                                <p class="text-center"><b>Belum ada catatan revisi</b></p>
+                            @endforelse
+                        </div>
+                    </div>
+                    {{-- End :: History --}}
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End::Modal Revisi Pengajuan-->
             
     {{-- @endcannot --}}
 
@@ -2936,6 +3211,20 @@
         }
 
         function validateFileSize(e) {
+
+            const eltCheckbox = e.querySelectorAll("input[type='radio']:checked");
+
+            if (eltCheckbox.length < 28) {
+                Swal.fire({
+                    title: 'Data Belum Lengkap',
+                    text: "Mohon periksa kembali",
+                    icon: 'error',
+                    confirmButtonColor: '#008CB4',
+                    confirmButtonText: 'Oke'
+                })
+                return false;
+            }
+
             const files = e.querySelectorAll("input[type='file']");
             let totalSizeFile = 0
 

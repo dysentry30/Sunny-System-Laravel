@@ -345,6 +345,7 @@
                                                 <th class="min-w-auto">Risk Kategori Partner Selection</th>
                                                 <th class="min-w-auto">Dokumen Kelengkapan Partner</th>
                                                 <th class="min-w-auto">Hasil Penentuan Rekomendasi</th>
+                                                <th class="min-w-auto">Progress</th>
                                                 <th class="min-w-auto">Action</th>
                                             </tr>
                                             <!--end::Table row-->
@@ -433,8 +434,10 @@
                                                         <p class="m-0 {{ $nilaiRisk != 0 ? '' : $style_2 }}">{{ $nilaiRisk != 0 ? (float)$nilaiRisk : '*Belum ditentukan' }}</p>
                                                     </td>
                                                     <td class="text-center">
-                                                        <p class="{{ $style_2 }} m-0">
-                                                            {{ $kategoriRiskPartner ?? '*Belum ditentukan' }}</p>
+                                                        <p class="{{ $style_2 }} m-0">{{ $kategoriRiskPartner ?? '*Belum ditentukan' }}</p><br>
+                                                        @if (!is_null($assessment->approved_revisi))
+                                                            <a href="#" class="badge rounded-pill badge-danger mt-2 mb-0 text-white" data-bs-toggle="modal" data-bs-target="#kt_modal_view_history_revisi_{{ $assessment->id }}">Lihat Catatan Revisi</a>
+                                                        @endif
                                                     </td>
                                                     <td class="text-center">
                                                         <a href="#"
@@ -446,6 +449,11 @@
                                                     </td>
                                                     <td class="text-center">
                                                         <p class="m-0 {{ !is_null($assessment->hasil_rekomendasi_final) && $assessment->hasil_rekomendasi_final != "Tidak Disetujui" ? "badge rounded-pill badge-primary" : "badge rounded-pill badge-danger" }}">{{ $assessment->hasil_rekomendasi_final ?? "*Belum ditentukan" }}</p>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <div class="circle bg-success" style="height:25px; width:25px; border-radius:50%;">
+                                                            <a href="#kt_modal_view_proyek_history_{{ $assessment->id }}" data-bs-toggle="modal" class="text-success">Klik</a>
+                                                        </div>
                                                     </td>
                                                     <td class="text-center">
                                                         @canany(['admin-crm','approver-crm', 'risk-crm'])
@@ -559,6 +567,7 @@
                                         @php
                                             $legalitasJasa = App\Models\LegalitasPerusahaan::where('nota_rekomendasi', '=', 'Nota Rekomendasi 2')->get()->sortBy('position')->values();
                                             $index = 0;
+                                            $count = 0;
                                         @endphp
                                         @foreach ($legalitasJasa as $key => $item)
                                             <tr>
@@ -609,6 +618,9 @@
                                                     <input type="hidden" name="index[]" value="{{ $key + 1 }}">
                                                 </td>
                                             </tr>
+                                            @php
+                                                ++$count;
+                                            @endphp
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -674,6 +686,9 @@
                                             $kriteriaPengguna = App\Models\KriteriaPenggunaJasa::where('nota_rekomendasi', '=', 'Nota Rekomendasi 2')->get()->sortBy('position')->values();
                                         @endphp
                                         @foreach ($kriteriaPengguna as $key => $item)
+                                        @php
+                                            $count++;
+                                        @endphp
                                             <tr>
                                                 <td>{{ $item->kategori }}</td>
                                                 <td>{{ $item->item }}</td>
@@ -747,21 +762,21 @@
                                                         id="nilai_{{ $key }}" readonly>
                                                 </td>
                                                 <td>
-                                                    <textarea name="keterangan[]" form="form-kriteria-{{ $assessment->id }}" id="" cols="30"
+                                                    <textarea name="keterangan[]" form="form-kriteria-{{ $assessment->id }}" id="keterangan" cols="30"
                                                         rows="10"></textarea>
                                                 </td>
                                                 <td>
-                                                    <input type="file" name="dokumen_penilaian_{{ $key + 1 }}[]"
+                                                    <input type="file" name="dokumen_penilaian_{{ $count }}[]"
                                                         form="form-kriteria-{{ $assessment->id }}" id="dokumen_kriteria"
                                                         multiple accept=".pdf"
-                                                        onchange="checkSizeFile(this, '{{ $partner->id }}', {{ $key + 1 }}, 'save-{{ $assessment->id }}-new')"
+                                                        onchange="checkSizeFile(this, '{{ $partner->id }}', {{ $count }}, 'save-{{ $assessment->id }}-new')"
                                                         class="form-control form-control-sm form-control-solid">
                                                     <small class="text-danger d-none"
-                                                        id="alert-file-{{ $assessment->id }}-{{ $key + 1 }}">Total
+                                                        id="alert-file-{{ $assessment->id }}-{{ $count }}">Total
                                                         ukuran file max 20MB. Periksa kembali!</small>
                                                 </td>
                                                 <td class="d-none">
-                                                    <input type="hidden" name="index[]" value="{{ $key + 1 }}">
+                                                    <input type="hidden" name="index[]" value="{{ $count }}">
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -773,7 +788,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-sm btn-light btn-secondary" data-bs-toggle="modal"
-                                data-bs-target="#kt_user_view_kriteria_{{ $assessment->id }}" id="new_save">
+                                data-bs-target="#kt_modal_create_assessment_{{ $assessment->id }}" id="new_save">
                                 Back</button>
                             <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
                                 form="form-kriteria-{{ $assessment->id }}" id="save-{{ $assessment->id }}-new"
@@ -816,7 +831,7 @@
                                 <h2>Form Legalitas Penilaian Partner</h2>
                                 <!--end::Modal title-->
                                 <!--begin::Close-->
-                                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-toggle="modal" data-bs-target="#penyusun_{{ $assessment->id }}">
                                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                                     <span class="svg-icon svg-icon-1">
                                         <i class="bi bi-x-lg"></i>
@@ -2185,7 +2200,7 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">History Revisi Nota Rekomendasi</h5>
+                    <h5 class="modal-title">History Revisi Assessment Partner Selection</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -2232,6 +2247,118 @@
                                         </div>
                                     </div>
                                 </article>
+                                @php
+                                    $row++;
+                                @endphp
+                            @empty
+                                <p class="text-center"><b>Belum ada catatan revisi</b></p>
+                            @endforelse
+                        </div>
+                    </div>
+                    {{-- End :: History --}}
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End::Modal Revisi Note-->
+
+    <!--Begin::Modal Revisi Note-->
+    <div class="modal fade" id="kt_modal_view_proyek_history_{{ $assessment->id }}" tabindex="-1"
+        aria-labelledby="kt_modal_view_proyek_history_{{ $assessment->id }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">History Assessment Partner Selection</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @php
+                        $pengajuan = collect(json_decode($assessment->approved_pengajuan));
+                        $penyusun = collect(json_decode($assessment->approved_penyusun));
+                        $rekomendasi = collect(json_decode($assessment->approved_rekomendasi));
+
+                        $data_approved_merged = collect();
+                        if ($pengajuan->isNotEmpty() || $penyusun->isNotEmpty() || $rekomendasi->isNotEmpty()) {
+                            $data_approved_merged = collect()->mergeRecursive(['Pengajuan' => $pengajuan->flatten(), 'Penyusun' => $penyusun->flatten(), 'Rekomendasi' => $rekomendasi->flatten()]);
+                        }
+                    @endphp
+                    {{-- Begin :: History --}}
+                    <div class="row">
+                        @php
+                            $row = 1;
+                        @endphp
+                        <div class="timeline-centered">
+                            @forelse ($data_approved_merged as $key => $data)
+                                @if ($data->isNotEmpty())
+                                <article class="timeline-entry {{ $row % 2 == 0 ? 'left-aligned' : '' }}">
+
+                                    <div class="timeline-entry-inner">
+                                        <time class="timeline-time"></time>
+                                        @if ($data->contains('status', 'rejected'))
+                                            <div class="timeline-icon bg-danger">
+                                                <i class="entypo-feather"></i>
+                                            </div>
+                                        @else
+                                            <div class="timeline-icon bg-success">
+                                                <i class="entypo-feather"></i>
+                                            </div>
+                                        @endif
+
+                                        <div class="timeline-content">
+                                            <div class="row">
+                                                <h5>Tanggung jawab {{ $key }} diberikan oleh:</h5>
+                                                @foreach ($data as $d)
+                                                    <div class="card text-bg-light my-3">
+                                                        <div class="card-body">
+                                                            <small>
+                                                                Nama:
+                                                                <b>{{ App\Models\User::find($d->user_id)->name }}</b><br>
+                                                                Jabatan:
+                                                                <b>{{ App\Models\User::find($d->user_id)->Pegawai->Jabatan?->nama_jabatan }}</b><br>
+                                                                Status Approval:
+                                                                @if ($d->status == 'approved')
+                                                                    <span><b
+                                                                            class="text-success">Menyetujui</b></span>
+                                                                @else
+                                                                    <span><b class="text-danger">Menolak</b></span>
+                                                                @endif
+                                                                <br>
+
+                                                                @if (!empty($d->tanggal))
+                                                                    Tanggal:
+                                                                    <b>{{ Carbon\Carbon::create($d->tanggal)->translatedFormat('d F Y H:i:s') }}</b>
+                                                                    <br>
+                                                                @endif
+
+                                                                @if ($key == 'Rekomendasi')
+                                                                    Status :
+                                                                    @if ($d->status == 'approved' && !empty($d->catatan))
+                                                                        <b>Direkomendasikan Dengan Catatan</b>
+                                                                    @elseif ($d->status == 'approved')
+                                                                        <b>Direkomendasikan</b>
+                                                                    @else
+                                                                        <b class="text-danger">Tidak
+                                                                            Direkomendasikan</b>
+                                                                    @endif
+                                                                @endif
+                                                                <br>
+
+                                                                @if (!empty($d->catatan))
+                                                                    Catatan:
+                                                                    <b>{!! nl2br($d->catatan) !!}</b><br>
+                                                                @endif
+                                                            </small>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                                @endif
                                 @php
                                     $row++;
                                 @endphp
@@ -2327,26 +2454,40 @@
         }
 
         function validateFileSize(e) {
-            const files = e.querySelectorAll("input[type='file']");
-            let totalSizeFile = 0
-
-            files.forEach(item => {
-                if (item.files.length > 0) {
-                    item.files.forEach(file => {
-                        totalSizeFile += file.size;
-                    })
-                }
-            })
-            //Maximum file 40 MB => dibuat 42 MB
-            if (totalSizeFile > 44040192) {
-                Toast.fire({
-                    html: "Ukuran file lebih dari 40 MB. Periksa kembali!",
-                    icon: "error",
-                });
+            const eltCheckbox = e.querySelectorAll("input[type='radio']:checked");
+            
+            if (eltCheckbox.length < 10) {
+                Swal.fire({
+                    title: 'Data Belum Lengkap',
+                    text: "Mohon periksa kembali",
+                    icon: 'error',
+                    confirmButtonColor: '#008CB4',
+                    confirmButtonText: 'Oke'
+                })
                 return false;
-            } else {
-                return true;
+            }else{
+                const files = e.querySelectorAll("input[type='file']");
+                let totalSizeFile = 0
+    
+                files.forEach(item => {
+                    if (item.files.length > 0) {
+                        item.files.forEach(file => {
+                            totalSizeFile += file.size;
+                        })
+                    }
+                })
+                //Maximum file 40 MB => dibuat 42 MB
+                if (totalSizeFile > 44040192) {
+                    Toast.fire({
+                        html: "Ukuran file lebih dari 40 MB. Periksa kembali!",
+                        icon: "error",
+                    });
+                    return false;
+                } else {
+                    return true;
+                }
             }
+
         }
     </script>
 

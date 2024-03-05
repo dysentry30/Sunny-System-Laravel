@@ -274,4 +274,14 @@ class Proyek extends Model
     {
         return $this->hasMany(CashFlowProyek::class, 'kode_proyek', 'kode_proyek');
     }
+
+    public function DokumenSCurvesProyek()
+    {
+        return $this->hasMany(DokumenSCurvesProyek::class, 'kode_proyek', 'kode_proyek');
+    }
+
+    public function DokumenOtherProyek()
+    {
+        return $this->hasMany(DokumenOtherProyek::class, 'kode_proyek', 'kode_proyek');
+    }
 }

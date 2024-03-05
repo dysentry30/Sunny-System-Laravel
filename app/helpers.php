@@ -3538,7 +3538,7 @@ function createWordKriteriaProjectSelection(App\Models\NotaRekomendasi2 $proyekN
                 $table->addRow();
                 $table->addCell(500)->addText($no, $cellFontStyle, $cellParagraphStyle2);
                 $table->addCell(3000)->addText(htmlspecialchars($mkp->parameter, ENT_QUOTES), $cellFontStyle, $cellParagraphStyle);
-                $table->addCell(500)->addText($mkp->bobot, $cellFontStyle, $cellParagraphStyle2);
+                $table->addCell(500)->addText(htmlspecialchars($mkp->bobot, ENT_QUOTES), $cellFontStyle, $cellParagraphStyle2);
                 $table->addCell(250)->addText($collectKriteriaDetail[$key]->is_true == false ? 'V' : '', $cellFontStyle, $cellParagraphStyle2);
                 $table->addCell(250)->addText($collectKriteriaDetail[$key]->is_true == true ? 'V' : '', $cellFontStyle, $cellParagraphStyle2);
                 $table->addCell(500)->addText($collectKriteriaDetail[$key]->nilai, $cellFontStyle, $cellParagraphStyle2);
@@ -3796,6 +3796,7 @@ function mergeDokumenKelengkapanPartnerKSO(App\Models\PorsiJO $partner)
         $dokumenLapKeu = $partner->DokumenKelengkapanPartnerKSO?->where('kategori', 'Dokumen Laporan Keuangan')->first();
         $dokumenSPT = $partner->DokumenKelengkapanPartnerKSO?->where('kategori', 'Dokumen Laporan SPT')->first();
         $dokumenPengalaman = $partner->DokumenKelengkapanPartnerKSO?->where('kategori', 'Dokumen Pengalaman')->first();
+        $dokumenPenentuanKSO = $partner->Proyek?->DokumenPenentuanKSO;
 
         foreach ($consentTemp as $file) {
             $pdfMerge->add(public_path('consent-npwp/' . $file));
@@ -3821,6 +3822,10 @@ function mergeDokumenKelengkapanPartnerKSO(App\Models\PorsiJO $partner)
             $pdfMerge->add(public_path('dokumen-kelengkapan-partner/dokumen-pengalaman/' . $dokumenPengalaman->id_document));
         }
 
+        if (!empty($dokumenPenentuanKSO)) {
+            $pdfMerge->add(public_path('dokumen-penentuan-kso/' . $dokumenPenentuanKSO->id_document));
+        }
+
         $pdfMerge->merge(public_path("file-kelengkapan-partner" . "/" . $file_name . ".pdf"));
 
         $partner->file_kelengkapan_merge = $file_name . '.pdf';
@@ -3828,10 +3833,12 @@ function mergeDokumenKelengkapanPartnerKSO(App\Models\PorsiJO $partner)
             return true;
         }
     } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => $e->getMessage()
-        ]);
+        Alert::error("Error", $e->getMessage());
+        return redirect()->back();
+        // return response()->json([
+        //     'success' => false,
+        //     'message' => $e->getMessage()
+        // ]);
     }
 }
 
@@ -3859,6 +3866,7 @@ function mergeFileDokumenAssessmentPartnerKSO(App\Models\PorsiJO $partner)
             return $k != null;
         })
         ->values();
+    // dd($collectFileKriteria, $partner->file_assessment_merge);
     if ($collectFileKriteria->isEmpty()) {
         return null;
     }
@@ -3903,6 +3911,9 @@ function mergeDokumenKelengkapanProject(App\Models\NotaRekomendasi2 $rekomendasi
         $pdfMerge = new PdfMerge();
         $dokumenCashFlow = $proyek->CashFlowProyek;
         $dokumenRiskTender = $proyek->RiskTenderProyek;
+        $dokumenDraftKontrak = $proyek->DokumenDraft;
+        $dokumenSCurves = $proyek->DokumenSCurvesProyek;
+        $dokumenOtherProyek = $proyek->DokumenOtherProyek;
         $dokumenPPTPaparan = collect(json_decode($rekomendasi->file_pemaparan));
 
         foreach ($dokumenCashFlow as $file) {
@@ -3913,8 +3924,20 @@ function mergeDokumenKelengkapanProject(App\Models\NotaRekomendasi2 $rekomendasi
             $pdfMerge->add(public_path('words/' . $file));
         }
 
+        foreach ($dokumenDraftKontrak as $file) {
+            $pdfMerge->add(public_path('words/' . $file));
+        }
+
         foreach ($dokumenPPTPaparan as $file) {
             $pdfMerge->add(public_path('file-nota-rekomendasi-2/file-notulen-paparan/' . $file));
+        }
+
+        foreach ($dokumenSCurves as $file) {
+            $pdfMerge->add(public_path('dokumen-s-curves/' . $file));
+        }
+
+        foreach ($dokumenOtherProyek as $file) {
+            $pdfMerge->add(public_path('dokumen-other-proyek/' . $file));
         }
 
         $pdfMerge->merge(public_path("file-nota-rekomendasi-2/file-kelengkapan-project" . "/" . $file_name . ".pdf"));

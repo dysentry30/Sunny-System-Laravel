@@ -20,6 +20,14 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class AssessmentPartnerSelectionController extends Controller
 {
+    public $isNomorTargetActive;
+
+    public function __construct()
+    {
+        $isNomorTargetActive = false;
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -143,18 +151,19 @@ class AssessmentPartnerSelectionController extends Controller
                         $partnerDetail->index = $key;
                     }
                 } else {
-                    if (isset($data["dokumen_penilaian_$key"])) {
-                        $files = collect($data["dokumen_penilaian_$key"])->values();
+                    $count = 0;
+                    if (isset($data["dokumen_penilaian_$urutan"])) {
+                        $files = collect($data["dokumen_penilaian_$urutan"])->values();
                         $array_files = collect();
 
                         $partnerDetail->partner_id = $data["id_partner"];
-                        $partnerDetail->item = $kriteriaMaster[(int)$urutan - 1]->kategori;
-                        $partnerDetail->kriteria = $data["is_kriteria_" . $urutan];
-                        $partnerDetail->nilai = (float)$data['nilai'][(int)$urutan - 1];
-                        $partnerDetail->keterangan = $data["keterangan"][(int)$urutan - 1];
+                        $partnerDetail->item = $kriteriaMaster[(int)$count]->kategori;
+                        $partnerDetail->kriteria = $data["is_kriteria_" . $count + 1];
+                        $partnerDetail->nilai = (float)$data['nilai'][(int)$count];
+                        $partnerDetail->keterangan = $data["keterangan"][(int)$count];
 
                         foreach ($files as $file) {
-                            $id_document = date("His_") . $key . '_' . str_replace(' ', '-', $file->getClientOriginalName());
+                            $id_document = date("His_") . $count . '_' . str_replace(' ', '-', $file->getClientOriginalName());
                             $array_files->push($id_document);
                             $file->move(public_path('file-selection-partner'), $id_document);
                         }
@@ -165,15 +174,16 @@ class AssessmentPartnerSelectionController extends Controller
                         $partnerDetail->index = $key;
                     } else {
                         $partnerDetail->partner_id = $data["id_partner"];
-                        $partnerDetail->item = $kriteriaMaster[(int)$urutan - 1]->item;
-                        $partnerDetail->kriteria = $data["is_kriteria_" . $urutan];
-                        $partnerDetail->nilai = (float)$data['nilai'][(int)$urutan - 1];
-                        $partnerDetail->keterangan = $data["keterangan"][(int)$urutan - 1];
+                        $partnerDetail->item = $kriteriaMaster[(int)$count]->item;
+                        $partnerDetail->kriteria = $data["is_kriteria_" . $count + 1];
+                        $partnerDetail->nilai = (float)$data['nilai'][(int)$count];
+                        $partnerDetail->keterangan = $data["keterangan"][(int)$count];
                         $partnerDetail->id_document = null;
                         $partnerDetail->urutan = $urutan;
                         $partnerDetail->kode_proyek = $data["kode_proyek"];
                         $partnerDetail->index = $key;
                     }
+                    $count++;
                 }
 
                 $collectJawaban[] = $partnerDetail->attributesToArray();
@@ -187,6 +197,7 @@ class AssessmentPartnerSelectionController extends Controller
             Alert::error("Error", "Partner Selection gagal dibuat!");
             return redirect()->back();
         } catch (\Exception $e) {
+            dd($e->getMessage());
             Alert::error("Error", "Data tidak lengkap, mohon periksa kembali!");
             return redirect()->back();
         }
@@ -310,7 +321,10 @@ class AssessmentPartnerSelectionController extends Controller
             ], 500);
         }
 
-        $partnerKSO = $proyek->PorsiJO->where('is_greenlane', '!=', true);
+        // $partnerKSO = $proyek->PorsiJO->where('is_greenlane', '!=', true);
+        $partnerKSO = $proyek->PorsiJO?->filter(function ($partner) {
+            return $partner->is_greenlane != true || (!is_null($partner->is_hasil_assessment) && !$partner->is_hasil_assessment);
+        });
 
         if (empty($partnerKSO)) {
             return response()->json([
@@ -342,7 +356,7 @@ class AssessmentPartnerSelectionController extends Controller
                 foreach ($matriksSelected as $user) {
                     $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/assessment-partner-selection";
                     $message = nl2br("Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan pengajuan Partner Selection untuk " . $partner->Company->name . " pada proyek $proyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
-                    sendNotifEmail($user->Pegawai, "Permohonan Pengajuan Approval Partner Selection", $message, true);
+                    sendNotifEmail($user->Pegawai, "Permohonan Pengajuan Approval Partner Selection", $message, $this->isNomorTargetActive);
                 }
 
             });
@@ -369,6 +383,7 @@ class AssessmentPartnerSelectionController extends Controller
     {
         $data = $request->all();
         $assessmentSelection = AssessmentPartnerSelection::find($data['id_partner']);
+        $porsiJO = PorsiJO::find($assessmentSelection->partner_id);
         $proyek = Proyek::find($assessmentSelection->kode_proyek);
 
 
@@ -399,29 +414,39 @@ class AssessmentPartnerSelectionController extends Controller
         $isChecked = self::checkMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->departemen_proyek, $approval_pengajuan, 'Pengajuan');
 
         if ($isChecked) {
-            $matriksSelected = self::getMatriksSelanjutnya($proyek->UnitKerja->Divisi->id_divisi, $proyek->departemen_proyek, 'Penyusun');
+            if ($approval_pengajuan->contains('status', 'rejected')) {
+                $assessmentSelection->hasil_rekomendasi_final = "Tidak Disetujui";
+                $assessmentSelection->is_rekomendasi_approved = false;
+                $porsiJO->is_hasil_assessment = false;
+                $porsiJO->hasil_assessment = "Tidak Disetujui";
+                $assessmentSelection->is_pengajuan_approved = false;
+            } else {
+                if (empty($porsiJO->file_kelengkapan_merge)) {
+                    mergeDokumenKelengkapanPartnerKSO($porsiJO);
+                }
+                $matriksSelected = self::getMatriksSelanjutnya($proyek->UnitKerja->Divisi->id_divisi, $proyek->departemen_proyek, 'Penyusun');
 
-            if ($matriksSelected->isEmpty()) {
-                Alert::error('Error', 'Matriks Approval Penyusun Partner Selection tidak ada. Hubungi Admin!');
-                return redirect()->back();
-            }
+                if ($matriksSelected->isEmpty()) {
+                    Alert::error('Error', 'Matriks Approval Penyusun Partner Selection tidak ada. Hubungi Admin!');
+                    return redirect()->back();
+                }
 
-            foreach ($matriksSelected as $user) {
-                $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/assessment-partner-selection";
-                $message = nl2br("Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan assessment Partner Selection untuk " . $assessmentSelection->PartnerJO->Company->name . " pada proyek $proyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
+                foreach ($matriksSelected as $user) {
+                    $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/assessment-partner-selection";
+                    $message = nl2br("Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan assessment Partner Selection untuk " . $assessmentSelection->PartnerJO->Company->name . " pada proyek $proyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
 
-                sendNotifEmail($user->Pegawai, "Permohonan Assessment Partner Selection", $message, true);
+                    sendNotifEmail($user->Pegawai, "Permohonan Assessment Partner Selection", $message, $this->isNomorTargetActive);
+                }
+                $assessmentSelection->is_pengajuan_approved = true;
             }
 
 
             if ($approval_pengajuan->contains('status', 'rejected')) {
-                $assessmentSelection->is_pengajuan_approved = false;
             } else {
-                $assessmentSelection->is_pengajuan_approved = true;
             }
         }
 
-        if ($assessmentSelection->save()) {
+        if ($assessmentSelection->save() && $porsiJO->save()) {
             if ($data['is_setuju'] == 't') {
                 Alert::success('Success', 'Partner berhasil disetujui');
                 return redirect()->back();
@@ -442,6 +467,7 @@ class AssessmentPartnerSelectionController extends Controller
     {
         $data = $request->all();
         $assessmentSelection = AssessmentPartnerSelection::find($data['id_partner']);
+        $porsiJO = PorsiJO::find($assessmentSelection->partner_id);
         $proyek = Proyek::find($assessmentSelection->kode_proyek);
 
 
@@ -474,12 +500,17 @@ class AssessmentPartnerSelectionController extends Controller
         // if ($isChecked) {
         if ($approved_penyusun->contains('status', 'rejected')) {
             $assessmentSelection->is_penyusun_approved = false;
+            $assessmentSelection->hasil_rekomendasi_final = "Tidak Disetujui";
+            $assessmentSelection->is_rekomendasi_approved = false;
+            $porsiJO->is_hasil_assessment = false;
+            $porsiJO->hasil_assessment = "Tidak Disetujui";
         } else {
             $assessmentSelection->is_penyusun_approved = true;
             $matriksSelected = self::getMatriksSelanjutnya($proyek->UnitKerja->Divisi->id_divisi, $proyek->departemen_proyek, 'Rekomendasi');
 
-            createWordAssessmentPartner($assessmentSelection->PartnerJO);
-            mergeFileDokumenAssessmentPartnerKSO($assessmentSelection->PartnerJO);
+            createWordAssessmentPartner($porsiJO);
+            sleep(5);
+            mergeFileDokumenAssessmentPartnerKSO($porsiJO);
 
             if ($matriksSelected->isEmpty()) {
                 Alert::error('Error', 'Matriks Approval Rekomendasi Partner Selection tidak ada. Hubungi Admin!');
@@ -490,12 +521,12 @@ class AssessmentPartnerSelectionController extends Controller
                 $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/assessment-partner-selection";
                 $message = nl2br("Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan verifikasi Partner Selection untuk " . $assessmentSelection->PartnerJO->Company->name . " pada proyek $proyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
 
-                sendNotifEmail($user->Pegawai, "Permohonan Verifikasi Approval Partner Selection", $message, true);
+                sendNotifEmail($user->Pegawai, "Permohonan Verifikasi Approval Partner Selection", $message, $this->isNomorTargetActive);
             }
         }
         // }
 
-        if ($assessmentSelection->save()) {
+        if ($assessmentSelection->save() && $porsiJO->save()) {
             if ($data['is_setuju'] == 't') {
                 Alert::success('Success', 'Partner berhasil disetujui');
                 return redirect()->back();
@@ -614,7 +645,7 @@ class AssessmentPartnerSelectionController extends Controller
             $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/assessment-partner-selection";
             $message = nl2br("Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan revisi penyusunan Partner Selection untuk " . $assessmentSelection->PartnerJO->Company->name . " pada proyek $proyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
 
-            sendNotifEmail($user->Pegawai, "Permohonan Revisi Penyusunan Approval Partner Selection", $message, true);
+            sendNotifEmail($user->Pegawai, "Permohonan Revisi Penyusunan Approval Partner Selection", $message, $this->isNomorTargetActive);
         }
 
         if ($assessmentSelection->save()) {
