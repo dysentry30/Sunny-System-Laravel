@@ -2431,7 +2431,7 @@
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span>SBU</span>
+                                                                    <span>SBU Internal WIKA</span>
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
@@ -2670,12 +2670,12 @@
                                                     <div class="row fv-row">
                                                         <div class="col-6">
                                                             <label class="fs-6 fw-bold form-label mt-3">
-                                                                <span>Klasifikasi SBU</span>
+                                                                <span>SBU KBLI</span>
                                                             </label>
                                                             <!--begin::Input-->
                                                             <select id="klasifikasi-kbli-sbu" name="klasifikasi-kbli-sbu"
                                                                 class="form-select form-select-solid select2-hidden-accessible"
-                                                                data-control="select2" data-hide-search="false" data-placeholder="Pilih Klasifikasi SBU"
+                                                                data-control="select2" data-hide-search="false" data-placeholder="Pilih SBU KBLI"
                                                                 data-select2-id="select2-klasifikasi" tabindex="-1" aria-hidden="true">
                                                                 <option value="{{ $proyek->kode_kbli_2020 }}">{{ $proyek->MasterSubKlasifikasiSBU?->subklasifikasi }}</option>
                                                             </select>

@@ -100,7 +100,7 @@ class DashboardController extends Controller
                 true
             )->get();
             $contracts = ContractManagements::join("proyeks", "proyeks.kode_proyek", "=", "contract_managements.project_id")->get();
-            $dops = Dop::orderBy('dop')->get();
+            $dops = Dop::orderBy('dop')->get()?->keyBy('dop')->keys()->sort();
             // $dopJoin = Dop::join("proyeks", "dops.dop", "=", "proyeks.dop")->get();
             // dd($dops);
             if (!empty($request->get("unit-kerja"))) {
@@ -192,7 +192,9 @@ class DashboardController extends Controller
             //     // dd($nilaiHistoryForecast, Auth::user());
             // }
             $unit_kerjas = "";
-            $dops = Dop::orderBy('dop')->get();
+            // $dops = Dop::orderBy('dop')->get();
+            $dops = $unitKerja->groupBy('dop')->keys()->sort();
+            // dd($dops);
         }
 
         // dd($nilaiHistoryForecast);

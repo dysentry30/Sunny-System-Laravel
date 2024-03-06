@@ -198,7 +198,7 @@
                             <!--begin::Card title-->
                             <div class="card-title">
                                 <form action="/dashboard" class="d-flex flex-row " method="get">
-                                    @if (Auth::user()->check_administrator || $adminPIC )                                        
+                                    {{-- @if (Auth::user()->check_administrator || $adminPIC )                                         --}}
                                         <!-- Begin :: Select Options Unit Kerja -->
                                         <select onchange="selectDOP(this)" id="dop" name="dop"
                                             class="form-select form-select-solid w-auto"
@@ -207,7 +207,7 @@
                                             aria-hidden="true">
                                             <option value="" {{$dop_get == "" ? "selected" : ""}}></option>
                                             @foreach ($dops as $dop)
-                                                <option value="{{ $dop->dop }}" {{ $dop_get == $dop->dop ? 'selected' : '' }} >{{ $dop->dop }}</option>
+                                                <option value="{{ $dop }}" {{ $dop_get == $dop ? 'selected' : '' }} >{{ $dop }}</option>
                                             @endforeach
                                         </select>
                                         <!-- End :: Select Options Unit Kerja -->
@@ -217,7 +217,7 @@
                                                 e.form.submit();
                                             }
                                             </script>
-                                    @endif
+                                    {{-- @endif --}}
                                         <!-- Begin :: Select Options Unit Kerja -->
                                         <select onchange="selectUnitKerja(this)" id="unit-kerja" name="unit-kerja"
                                             class="form-select form-select-solid w-auto ms-2"
