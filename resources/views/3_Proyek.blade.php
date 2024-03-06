@@ -66,7 +66,7 @@
                             </div>
 
                             <!--end::Page title-->
-                            @if (Auth::user()->canany(['super-admin', 'user-crm']))
+                            {{-- @if (Auth::user()->canany(['super-admin', 'user-crm'])) --}}
                                 <!--begin::Actions-->
                                 <div class="d-flex align-items-center py-1">
 
@@ -124,7 +124,7 @@
 
                                 </div>
                                 <!--end::Actions-->
-                            @endif
+                            {{-- @endif --}}
                         </div>
                         <!--end::Container-->
                     </div>

@@ -3163,11 +3163,11 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
         $table->addRow();
         $table->addCell(500, $styleCell)->addText('1', $fontStyle);
         $table->addCell(2500, $styleCell)->addText("Nama Proyek", $fontStyle);
-        $table->addCell(6000, $styleCell)->addText($nama_proyek, $fontStyle);
+        $table->addCell(6000, $styleCell)->addText(htmlspecialchars($proyek->nama_proyek, ENT_QUOTES), $fontStyle);
         $table->addRow();
         $table->addCell(500, $styleCell)->addText('2', $fontStyle);
         $table->addCell(2500, $styleCell)->addText("Nama Pengguna Jasa", $fontStyle);
-        $table->addCell(6000, $styleCell)->addText($customer->name, $fontStyle);
+        $table->addCell(6000, $styleCell)->addText(htmlspecialchars($customer->name, ENT_QUOTES), $fontStyle);
         $table->addRow();
         $table->addCell(500, $styleCell)->addText('3', $fontStyle);
         $table->addCell(2500, $styleCell)->addText("KSO / Non KSO", $fontStyle);
@@ -3175,7 +3175,7 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
             $kso_table = $table->addCell(6000, $styleCell);
             foreach ($proyek->PorsiJO as $partner) {
                 $statusWIKA = (int)$partner->porsi_jo < (int)$proyek->porsi_jo ? "Leader" : "Member";
-                $kso_table->addText("Nama Partner : " . $partner->company_jo, $fontStyle, ["align" => "left", "spaceBefore" => 4, "spaceAfter" => 0]);
+                $kso_table->addText("Nama Partner : " . htmlspecialchars($partner->company_jo, ENT_QUOTES), $fontStyle, ["align" => "left", "spaceBefore" => 4, "spaceAfter" => 0]);
                 $kso_table->addText("WIKA : " . $statusWIKA, $fontStyle, ["align" => "left", "spaceBefore" => 0, "spaceAfter" => 6]);
                 $kso_table->addText("</w:t><w:br/><w:t>", [], ["align" => "left", "spaceBefore" => 0, "spaceAfter" => 6]);
                 // if ($proyek->PorsiJO->count() > 1) {
@@ -3240,8 +3240,8 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
         $assessment->addCell(500, $styleCell)->addText('2', $fontStyle);
         $assessment->addCell(2500, $styleCell)->addText("Profil Risiko", $fontStyle);
         $assessment->addCell(6000, $styleCell)->addText("Risiko Tinggi", $fontStyle);
-        $footer = $section->addFooter();
-        $footer->addText('Testing', $fontStyle);
+        // $footer = $section->addFooter();
+        // $footer->addText('Testing', $fontStyle);
 
         $section_2->addTextBreak(1);
 
@@ -3263,7 +3263,7 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
 
                 $cell_1_note = $catatan_table->addCell(3000);
                 $cell_2_note = $catatan_table->addCell(6000);
-                $cell_1_note->addText($urutanCatatan[$key + 1]['kategori'], ["bold" => true], ["align" => "center", "spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0]);
+                $cell_1_note->addText(htmlspecialchars($urutanCatatan[$key + 1]['kategori'], ENT_QUOTES), ["bold" => true], ["align" => "center", "spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0]);
                 $cell_2_note->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($p->uraian, ENT_QUOTES)), ["bold" => false], ["align" => "left", "spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0]);
             }
         }
@@ -3468,8 +3468,9 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
         // dd("saved", $proyekNotaRekomendasi->file_persetujuan);    
         return $proyekNotaRekomendasi->save();
     } catch (\Throwable $th) {
-        Alert::warning('Under Maintenance!');
-        return redirect()->back();
+        dd($th->getMessage());
+        // Alert::warning('Under Maintenance!');
+        // return redirect()->back();
     }
 
 }
@@ -3987,21 +3988,22 @@ function mergeFileDokumenAssessmentProject(App\Models\NotaRekomendasi2 $rekomend
 
         if ($collectFileKriteria->isNotEmpty()) {
             $collectFileKriteria->each(function ($cf) use ($pdfMerger) {
-                $pdfMerger->add(public_path('file-selection-partner' . '/' . $cf));
+                $pdfMerger->add(public_path('file-project-selection' . '/' . $cf));
             });
         }
         $pdfMerger->merge(public_path("file-nota-rekomendasi-2/file-kriteria-project-selection" . "/" . $file_name . ".pdf"));
         $rekomendasi->file_assessment_merge = $file_name . '.pdf';
         return $rekomendasi->save();
     } catch (\Exception $e) {
-        dd($e);
+        Alert::error('Error', $e->getMessage());
+        return redirect()->back();
     }
     // } else {
     //     return null;
     // }
 }
 
-function sendNotifEmail($user, $subject, $message, $activatedEmailToUser = false, $isNotaRekomendasi = true): bool
+function sendNotifEmail($user, $subject, $message, $activatedEmailToUser = true, $isNotaRekomendasi = true): bool
 {
     if (!$isNotaRekomendasi) {
         $emailTarget = $activatedEmailToUser ? $user : env("EMAIL_DEFAULT");

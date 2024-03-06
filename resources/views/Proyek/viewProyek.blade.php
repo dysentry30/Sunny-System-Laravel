@@ -110,7 +110,7 @@
                                 <!--end::Button-->
 
                                 <!--begin::Button-->
-                                @canany(['super-admin', 'admin-crm', 'user-crm'])
+                                @canany(['super-admin', 'admin-crm', 'approver-crm', 'user-crm'])
                                     @if ($proyek->is_cancel == false)
                                         <button type="submit" name="proyek-save" class="btn btn-sm btn-primary ms-2" id="proyek-save"
                                             style="background-color:#008CB4">
@@ -245,7 +245,7 @@
                     </div>
                     <!--end::Toolbar-->
                     
-                    @canany(['super-admin', 'user-crm'])
+                    @canany(['super-admin', 'user-crm', 'approver-crm'])
                         @if ($proyek->is_request_rekomendasi == false && !$check_green_line && $proyek->stage == 1)
                         <!-- begin::modal confirm send wa-->
                         <div class="modal fade w-100" style="margin-top: 120px" id="modal-send-pengajuan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -3392,7 +3392,10 @@
                                                                         <!--begin::Label-->
                                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                                             style="font-size:14px;">Generate Form Penentuan KSO
-                                                                            &nbsp;<a href="/proyek/{{ $proyek->kode_proyek }}/kso/generate" class="btn btn-sm btn-primary {{ is_null($proyek->alasan_kso) ? 'd-none' : '' }}"><b>Generate</b></a>
+                                                                            &nbsp;
+                                                                            @if (!empty($proyek->alasan_kso) && $proyek->alasan_kso != "[]")
+                                                                                <a href="/proyek/{{ $proyek->kode_proyek }}/kso/generate" class="btn btn-sm btn-primary"><b>Generate</b></a>
+                                                                            @endif
                                                                         </h3>
                                                                         <!--end::Label-->
                                                                     </div>
@@ -5000,7 +5003,7 @@
                                                             <!--end::Input group-->
                                                             <div class="row fv-row mb-7 {{ $proyek->is_uang_muka == false ? 'd-none' : '' }}">
                                                                 <div class="col-4">
-                                                                    <input type="number" name="uang-muka" class="form-control form-control-solid" min="0" max="100" value="{{ $proyek->uang_muka }}" {{ $proyek->is_uang_muka == false || (!empty($proyek->NotaRekomendasi2) && $proyek->NotaRekomendasi2->is_request_rekomendasi == false) ? 'readonly' : '' }}>
+                                                                    <input type="number" name="uang-muka" class="form-control form-control-solid" min="0" max="100" value="{{ $proyek->uang_muka }}" {{ (!is_null($proyek->is_uang_muka) && $proyek->is_uang_muka == false) || (!empty($proyek->NotaRekomendasi2) && $proyek->NotaRekomendasi2->is_request_rekomendasi == false) ? 'readonly' : '' }}>
                                                                 </div>
                                                                 <div class="col-2">
                                                                     <p class="mt-7"><i class="bi bi-percent text-dark"></i></p>

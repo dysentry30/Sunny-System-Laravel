@@ -335,21 +335,21 @@
                                         <li class="nav-item">
                                             <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
                                                 aria-selected="true" href="#kt_view_prosess_rekomendasi"
-                                                style="font-size:14px;">Dalam Proses</a>
+                                                style="font-size:14px;">1. Dalam Proses</a>
                                         </li>
                                         <!--end:::Tab item Claim-->
                                         <!--begin:::Tab item Claim-->
                                         <li class="nav-item">
                                             <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
                                                 aria-selected="true" href="#kt_view_proses_paparan"
-                                                style="font-size:14px;">Proses Paparan</a>
+                                                style="font-size:14px;">2. Proses Paparan</a>
                                         </li>
                                         <!--end:::Tab item Claim-->
                                         <!--begin:::Tab item Claim-->
                                         <li class="nav-item">
                                             <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
                                                 aria-selected="true" href="#kt_view_finish_rekomendasi"
-                                                style="font-size:14px;">Proses Selesai</a>
+                                                style="font-size:14px;">3. Proses Selesai</a>
                                         </li>
                                         <!--end:::Tab item Claim-->
                                     </ul>
@@ -1253,7 +1253,7 @@
                                         @if ($proyek->Proyek->PorsiJO->isNotEmpty())
                                             <br>
                                             @foreach ($proyek->Proyek->PorsiJO as $partner)
-                                                <p class="m-0">Nama Partner : {{ $partner->company_jo }}</p>
+                                                <p class="m-0">Nama Partner : {{ $partner->company_jo }} - (Porsi : {{ $partner->porsi_jo }}%)</p>
                                                 <p class="m-0">WIKA : {{ (int)$partner->porsi_jo < (int)$proyek->Proyek->porsi_jo ? "Leader" : "Member" }}</p>
                                             @endforeach
                                         @endif
@@ -1883,7 +1883,7 @@
                                     @if ($proyek->Proyek->PorsiJO->isNotEmpty())
                                         <br>
                                         @foreach ($proyek->Proyek->PorsiJO as $partner)
-                                            <p class="m-0">Nama Partner : {{ $partner->company_jo }} (Porsi : {{ $partner->porsi_jo }} %)</p>
+                                            <p class="m-0">Nama Partner : {{ $partner->company_jo }} - (Porsi : {{ $partner->porsi_jo }} %)</p>
                                             <p class="m-0">WIKA : {{ (int)$partner->porsi_jo < (int)$proyek->Proyek->porsi_jo ? "Leader" : "Member" }}</p>
                                         @endforeach
                                     @endif
@@ -1991,7 +1991,7 @@
                             $is_edit_penyusun = true;
                         }
 
-                        $catatan_master = collect(json_decode($proyek->catatan_master))?->sortBy('urutan');
+                        $catatan_master = collect(json_decode($proyek->catatan_master))?->sortBy('urutan')->values();
                     @endphp
                     @if (is_null($proyek->is_rekomendasi_approved))
                         <label for="note-rekomendasi" class="text-start">Self Assessment: </label>
@@ -2172,7 +2172,7 @@
                                         @if ($proyek->Proyek->PorsiJO->isNotEmpty())
                                             <br>
                                             @foreach ($proyek->Proyek->PorsiJO as $partner)
-                                                <p class="m-0">Nama Partner : {{ $partner->company_jo }} (Porsi : {{ $partner->porsi_jo }} %)</p>
+                                                <p class="m-0">Nama Partner : {{ $partner->company_jo }} - (Porsi : {{ $partner->porsi_jo }} %)</p>
                                                 <p class="m-0">WIKA : {{ (int)$partner->porsi_jo < (int)$proyek->Proyek->porsi_jo ? "Leader" : "Member" }}</p>
                                             @endforeach
                                         @endif
@@ -2267,7 +2267,7 @@
                         @if (!is_null($proyek->catatan_master))
                         <br>
                         @php
-                            $catatan_master = collect(json_decode($proyek->catatan_master))?->sortBy('urutan');
+                            $catatan_master = collect(json_decode($proyek->catatan_master))?->sortBy('urutan')->values();
                         @endphp
                         <div class="collapse show" id="kt_expand_catatan_verifikasi_{{ $proyek->kode_proyek }}">
                             <div class="card card-body">
@@ -2398,7 +2398,7 @@
                                         @if ($proyek->Proyek->PorsiJO->isNotEmpty())
                                             <br>
                                             @foreach ($proyek->Proyek->PorsiJO as $partner)
-                                                <p class="m-0">Nama Partner : {{ $partner->company_jo }} (Porsi : {{ $partner->porsi_jo }} %)</p>
+                                                <p class="m-0">Nama Partner : {{ $partner->company_jo }} - (Porsi : {{ $partner->porsi_jo }} %)</p>
                                                 <p class="m-0">WIKA : {{ (int)$partner->porsi_jo < (int)$proyek->Proyek->porsi_jo ? "Leader" : "Member" }}</p>
                                             @endforeach
                                         @endif
@@ -2493,7 +2493,7 @@
                         @if (!is_null($proyek->catatan_master))
                         <br>
                         @php
-                            $catatan_master = collect(json_decode($proyek->catatan_master))?->sortBy('urutan');
+                            $catatan_master = collect(json_decode($proyek->catatan_master))?->sortBy('urutan')->values();
                         @endphp
                         <div class="collapse show" id="kt_expand_catatan_rekomendasi_{{ $proyek->kode_proyek }}">
                             <div class="card card-body">
@@ -2633,7 +2633,7 @@
                                         @if ($proyek->Proyek->PorsiJO->isNotEmpty())
                                             <br>
                                             @foreach ($proyek->Proyek->PorsiJO as $partner)
-                                                <p class="m-0">Nama Partner : {{ $partner->company_jo }} (Porsi : {{ $partner->porsi_jo }} %)</p>
+                                                <p class="m-0">Nama Partner : {{ $partner->company_jo }} - (Porsi : {{ $partner->porsi_jo }} %)</p>
                                                 <p class="m-0">WIKA : {{ (int)$partner->porsi_jo < (int)$proyek->Proyek->porsi_jo ? "Leader" : "Member" }}</p>
                                             @endforeach
                                         @endif
@@ -2723,7 +2723,7 @@
                         @if (!is_null($proyek->catatan_master))
                         <br>
                         @php
-                            $catatan_master = collect(json_decode($proyek->catatan_master))?->sortBy('urutan');
+                            $catatan_master = collect(json_decode($proyek->catatan_master))?->sortBy('urutan')->values();
                         @endphp
                         <div class="collapse show" id="kt_expand_catatan_persetujuan_{{ $proyek->kode_proyek }}">
                             <div class="card card-body">
@@ -3214,7 +3214,7 @@
 
             const eltCheckbox = e.querySelectorAll("input[type='radio']:checked");
 
-            if (eltCheckbox.length < 28) {
+            if (eltCheckbox.length < 29) {
                 Swal.fire({
                     title: 'Data Belum Lengkap',
                     text: "Mohon periksa kembali",
@@ -3245,6 +3245,42 @@
             } else {
                 return true;
             }
+        }
+    </script>
+
+    <script>
+        async function generateFile(kode_proyek) {
+            Swal.fire({
+                title: '',
+                text: "Apakah anda yakin?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: '#008CB4',
+                cancelButtonColor: '#BABABA',
+                confirmButtonText: 'Ya'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    LOADING_BODY.block();
+                    const formData = new FormData();
+                    formData.append("_token", "{{ csrf_token() }}");
+                    const sendData = await fetch(`{{ url('/nota-rekomendasi-2/${kode_proyek}/generate') }}`, {
+                        method: "POST",
+                        body: formData
+                    }).then(res => res.json());
+                    if (sendData.success) {
+                        LOADING_BODY.release();
+                        Swal.fire({title: sendData.message, icon: 'success'}).then(()=>{
+                            location.reload();
+                        })
+                    } else{
+                        LOADING_BODY.release();
+                        Swal.fire({title: sendData.message, icon: 'error'}).then(()=>{
+                            location.reload();
+                        })
+                    }
+                }
+    
+            })
         }
     </script>
 

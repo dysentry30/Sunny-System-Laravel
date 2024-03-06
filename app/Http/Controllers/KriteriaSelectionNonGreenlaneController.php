@@ -134,8 +134,8 @@ class KriteriaSelectionNonGreenlaneController extends Controller
 
         try {
             foreach ($index as $key => $urutan) {
-                if (isset($data["dokumen_kriteria_$key"])) {
-                    $files = collect($data["dokumen_kriteria_$key"])->values();
+                if (isset($data["dokumen_kriteria_$urutan"])) {
+                    $files = collect($data["dokumen_kriteria_$urutan"])->values();
                     $array_files = collect();
 
                     $kriteriaSelectioDetail->parameter = $kriteriaMaster[(int)$urutan - 1]->parameter;

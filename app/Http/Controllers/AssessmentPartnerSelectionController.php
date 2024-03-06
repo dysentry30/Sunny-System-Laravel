@@ -24,7 +24,7 @@ class AssessmentPartnerSelectionController extends Controller
 
     public function __construct()
     {
-        $isNomorTargetActive = false;
+        $isNomorTargetActive = true;
     }
 
 
@@ -65,16 +65,17 @@ class AssessmentPartnerSelectionController extends Controller
         }
 
         $partnerApprovalAll = AssessmentPartnerSelection::with('PartnerJO')->whereIn('divisi_id', $collectDivisiMatriksUser)?->whereIn('departemen_id', $collectDepartemenMatriksUser)?->get();
+        // dd($partnerApprovalAll);
         $customers = $partnerApprovalAll
             ->where(function ($query) {
-                return $query->PartnerJO->id_company_jo != null;
-            })
-            ->where(function ($query) {
-                return !is_null($query->PartnerJO->is_greenlane) && $query->PartnerJO->is_greenlane == false;
-            })
-            ->where(function ($query) {
-                return !is_null($query->PartnerJO->is_disetujui) && $query->PartnerJO->is_disetujui == true;
+            return $query->PartnerJO->id_company_jo != null;
             });
+            // ->where(function ($query) {
+            //     return !is_null($query->PartnerJO->is_greenlane) && $query->PartnerJO->is_greenlane == false;
+            // })
+            // ->where(function ($query) {
+            //     return !is_null($query->PartnerJO->is_disetujui) && $query->PartnerJO->is_disetujui == true;
+            // });
         $partnerDetail = PartnerSelectionDetail::all();
         $kriteriaPenilaian = PenilaianPartnerSelection::where('is_active', true)->get();
 
@@ -476,7 +477,7 @@ class AssessmentPartnerSelectionController extends Controller
             return redirect()->back();
         }
 
-        $approved_penyusun = collect(json_decode($assessmentSelection->approved_pengajuan));
+        $approved_penyusun = collect(json_decode($assessmentSelection->approved_penyusun));
 
         if ($data['is_setuju'] == 't') {
             $approved_penyusun = $approved_penyusun->push([

@@ -544,6 +544,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/nota-rekomendasi-2/{kode_proyek}/rekomendasi', [Rekomendasi2Controller::class, 'ProyekRekomendasi']);
     Route::post('/nota-rekomendasi-2/{kode_proyek}/persetujuan', [Rekomendasi2Controller::class, 'ProyekPersetujuan']);
 
+    Route::post('/nota-rekomendasi-2/{kode_proyek}/generate', [Rekomendasi2Controller::class, 'GenerateFileFinal']);
+
     Route::post('/nota-rekomendasi-2/{kode_proyek}/paparan', [Rekomendasi2Controller::class, 'ProyekPemaparan']);
     Route::post('/nota-rekomendasi-2/{kode_proyek}/paparan', [Rekomendasi2Controller::class, 'ProyekPemaparan']);
     Route::post('/nota-rekomendasi-2/{kode_proyek}/paparan/upload', [Rekomendasi2Controller::class, 'paparanUploadFile']);
@@ -7184,4 +7186,10 @@ Route::get('/tesss', function () {
     $porsiJO = App\Models\PorsiJO::find(103);
     // createWordKriteriaProjectSelection($notaRekomendasi);
     return mergeFileDokumenAssessmentPartnerKSO($porsiJO);
+});
+
+Route::get('/tes-email', function () {
+    // $notaRekomendasi = NotaRekomendasi2::where('kode_proyek', 'HJPD004')->first();
+    $user = User::find(52);
+    return sendNotifEmail($user, "Testing", "Tesss", true);
 });
