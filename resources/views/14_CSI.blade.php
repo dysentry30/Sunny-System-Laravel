@@ -168,9 +168,9 @@
                                                     // $proyekProgress = $proyek->ProyekProgress?->where('periode', date('Ym'))->first();
                                                     $proyekProgress = $proyek->ProyekProgress?->where('periode', (string) $tahun. (string) $bulan)->first();
                                                     if (empty($proyekProgress)) {
-                                                        // $formatPeriode = (string)date('Y') . date('m')-1;
-                                                        $formatPeriode = (string)$tahun . $bulan - 1;
+                                                        // $formatPeriode = (string)date('Y') . date('M')-1;
                                                         // dump($formatPeriode);
+                                                        $formatPeriode = (string)$tahun ."0".(string)$bulan - 1;
                                                         $proyekProgress = $proyek->ProyekProgress?->where('periode', $formatPeriode)->first();
                                                     }
                                                     $progress = 0;
@@ -326,7 +326,7 @@
                                             // dump($proyekProgress);
                                             if (empty($proyekProgress)) {
                                                 // $formatPeriode = (string)date('Y') . date('m')-1;
-                                                $formatPeriode = (string)$tahun.$bulan-1;
+                                                $formatPeriode = (string)$tahun ."0".(string)$bulan - 1;
                                                 $proyekProgress = $proyek->ProyekPIS?->ProyekProgress?->where('periode', $formatPeriode)->first();
                                             }
                                             $progress = 0;

@@ -469,6 +469,7 @@
                                                 <th class="min-w-auto" colspan="2">Status NR I</th>
                                                 <th class="min-w-auto">Level Risiko</th>
                                                 <th class="min-w-auto">Hasil NR I</th>
+                                                <th class="min-w-auto">Progress</th>
                                                 <th class="min-w-auto">Is Cancel</th>
                                                 <th class="min-w-auto">Action</th>
                                                 {{-- <th class="min-w-auto" style="display: none">Action</th> --}}
@@ -774,6 +775,16 @@
                                                                 <p class="badge {{ $style }} m-0">{{ $status_rekomendasi }}</p>
                                                             </small>
                                                         </td>
+                                                        <td class="text-center">
+                                                            <div class="text-center d-flex flex-row align-items-center justify-content-center flex-nowrap">
+                                                                <div class="circle bg-success"
+                                                                    style="height:25px; width:25px; border-radius:50%;">
+                                                                    <small><a href="#kt_modal_view_proyek_history_progress_{{ $proyek->kode_proyek }}"
+                                                                        data-bs-toggle="modal"
+                                                                        class="text-success">Klik</a></small>
+                                                                </div>
+                                                            </div>
+                                                        </td>
                                                         <td>-</td>
                                                         @if (empty($matriks_user))
                                                             <td>
@@ -964,12 +975,14 @@
                                                                     Penyetujuan</small>
                                                             @endif
                                                         </td>
-                                                        <td>
-                                                            <div class="circle bg-success"
-                                                                style="height:25px; width:25px; border-radius:50%;">
-                                                                <small><a href="#kt_modal_view_proyek_history_{{ $proyek->kode_proyek }}"
-                                                                    data-bs-toggle="modal"
-                                                                    class="text-success">Klik</a></small>
+                                                        <td class="text-center">
+                                                            <div class="text-center d-flex flex-row align-items-center justify-content-center flex-nowrap">
+                                                                <div class="circle bg-success"
+                                                                    style="height:25px; width:25px; border-radius:50%;">
+                                                                    <small><a href="#kt_modal_view_proyek_history_{{ $proyek->kode_proyek }}"
+                                                                        data-bs-toggle="modal"
+                                                                        class="text-success">Klik</a></small>
+                                                                </div>
                                                             </div>
                                                         </td>
                                                         <td class="text-center">
@@ -1502,6 +1515,7 @@
                                                         form="form-edit-kriteria-{{ $proyek->kode_proyek }}"
                                                         id="dokumen_kriteria"
                                                         multiple
+                                                        accept=".pdf"
                                                         class="form-control form-control-sm form-control-solid"
                                                         {{ $is_edit ? '' : 'disabled' }}>
                                                 @endif
@@ -1767,6 +1781,7 @@
                                                         form="form-edit-kriteria-{{ $proyek->kode_proyek }}"
                                                         id="dokumen_kriteria"
                                                         multiple
+                                                        accept=".pdf"
                                                         class="form-control form-control-sm form-control-solid"
                                                         {{ $is_edit ? '' : 'disabled' }}>
                                                 @endif
@@ -3036,6 +3051,120 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="kt_modal_view_proyek_history_progress_{{ $proyek->kode_proyek }}" tabindex="-1"
+        aria-labelledby="kt_modal_view_proyek_{{ $proyek->kode_proyek }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">History Pengajuan Nota Rekomendasi Tahap I</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"  onclick="deleteBackdrop()" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @php
+                        $approved_pengajuan = collect(json_decode($nota_rekomendasi->approved_rekomendasi));
+                        // $approved_penyusun = collect(json_decode($proyek->approved_penyusun));
+                        $approved_verifikasi = collect(json_decode($nota_rekomendasi->approved_verifikasi));
+                        $approved_rekomendasi = collect(json_decode($nota_rekomendasi->approved_rekomendasi_final));
+                        $approved_persetujuan = collect(json_decode($nota_rekomendasi->approved_persetujuan));
+                        $data_approved_merged = collect();
+                        if ($approved_pengajuan->isNotEmpty() || $approved_verifikasi->isNotEmpty() || $approved_rekomendasi->isNotEmpty() || $approved_persetujuan->isNotEmpty()) {
+                            $data_approved_merged = collect()->mergeRecursive(['Pengajuan' => $approved_pengajuan->flatten(), 'Penyusun' => $approved_verifikasi->flatten(), 'Rekomendasi' => $approved_rekomendasi->flatten(), 'Persetujuan' => $approved_persetujuan->flatten()]);
+                        }
+                    @endphp
+                    {{-- Begin :: History --}}
+                    <div class="row">
+                        @php
+                            $row = 1;
+                        @endphp
+                        <div class="timeline-centered">
+                            @forelse ($data_approved_merged as $key => $data)
+                                @if ($data->isNotEmpty())
+                                    {{-- @dd($data) --}}
+
+                                    <article class="timeline-entry {{ $row % 2 == 0 ? 'left-aligned' : '' }}">
+
+                                        <div class="timeline-entry-inner">
+                                            <time class="timeline-time"></time>
+                                            @if ($data->contains('status', 'rejected'))
+                                                <div class="timeline-icon bg-danger">
+                                                    <i class="entypo-feather"></i>
+                                                </div>
+                                            @else
+                                                <div class="timeline-icon bg-success">
+                                                    <i class="entypo-feather"></i>
+                                                </div>
+                                            @endif
+
+                                            <div class="timeline-content">
+                                                <div class="row">
+                                                    <h5>Tanggung jawab {{ $key }} diberikan oleh:</h5>
+                                                    @foreach ($data as $d)
+                                                        <div class="card text-bg-light my-3">
+                                                            <div class="card-body">
+                                                                <small>
+                                                                    Nama:
+                                                                    <b>{{ App\Models\User::find($d->user_id)->name }}</b><br>
+                                                                    Jabatan:
+                                                                    <b>{{ App\Models\User::find($d->user_id)->Pegawai->Jabatan?->nama_jabatan }}</b><br>
+                                                                    Status Approval:
+                                                                    @if ($d->status == 'approved')
+                                                                        <span><b
+                                                                                class="text-success">Menyetujui</b></span>
+                                                                    @else
+                                                                        <span><b class="text-danger">Menolak</b></span>
+                                                                    @endif
+                                                                    <br>
+
+                                                                    @if (!empty($d->tanggal))
+                                                                        Tanggal:
+                                                                        <b>{{ Carbon\Carbon::create($d->tanggal)->translatedFormat('d F Y H:i:s') }}</b>
+                                                                        <br>
+                                                                    @endif
+
+                                                                    @if ($key == 'Rekomendasi')
+                                                                        Status :
+                                                                        @if ($d->status == 'approved' && !empty($d->catatan))
+                                                                            <b>Direkomendasikan Dengan Catatan</b>
+                                                                        @elseif ($d->status == 'approved')
+                                                                            <b>Direkomendasikan</b>
+                                                                        @else
+                                                                            <b class="text-danger">Tidak
+                                                                                Direkomendasikan</b>
+                                                                        @endif
+                                                                    @endif
+                                                                    <br>
+
+                                                                    @if (!empty($d->catatan))
+                                                                        Catatan:
+                                                                        <b>{!! nl2br($d->catatan) !!}</b><br>
+                                                                    @endif
+                                                                </small>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </article>
+                                @else
+                                @endif
+                                @php
+                                    $row++;
+                                @endphp
+                            @empty
+                                <p class="text-center"><b>Belum ada history rekomendasi</b></p>
+                            @endforelse
+                        </div>
+                    </div>
+                    {{-- End :: History --}}
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
     @endforeach
     
     @foreach ($proyek_approval_finish as $proyek)
@@ -3360,10 +3489,19 @@
 
     <script>
         function confirmDeleteFile(e, fileName) {
-            const result = window.confirm('warning', `Apakah anda yakin ingin menghapus file <b>${fileName}</b>?`, "", result => {
-                if(result.isConfirmed) {
+            Swal.fire({
+                title: '',
+                text: `Apakah anda yakin ingin menghapus file ${fileName}?`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: '#008CB4',
+                cancelButtonColor: '#BABABA',
+                confirmButtonText: 'Ya'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
                     e.submit();
                 }
+                return false;
             });
             return false;
         }
