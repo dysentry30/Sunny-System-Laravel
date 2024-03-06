@@ -779,7 +779,7 @@
                                                             <div class="text-center d-flex flex-row align-items-center justify-content-center flex-nowrap">
                                                                 <div class="circle bg-success"
                                                                     style="height:25px; width:25px; border-radius:50%;">
-                                                                    <small><a href="#kt_modal_view_proyek_history_{{ $proyek->kode_proyek }}"
+                                                                    <small><a href="#kt_modal_view_proyek_history_progress_{{ $proyek->kode_proyek }}"
                                                                         data-bs-toggle="modal"
                                                                         class="text-success">Klik</a></small>
                                                                 </div>
@@ -3052,7 +3052,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="kt_modal_view_proyek_history_{{ $proyek->kode_proyek }}" tabindex="-1"
+    <div class="modal fade" id="kt_modal_view_proyek_history_progress_{{ $proyek->kode_proyek }}" tabindex="-1"
         aria-labelledby="kt_modal_view_proyek_{{ $proyek->kode_proyek }}" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
             <div class="modal-content">
