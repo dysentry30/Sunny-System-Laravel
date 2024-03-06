@@ -661,7 +661,7 @@ class ProyekController extends Controller
             $matriks_paparan = MatriksApprovalNotaRekomendasi2::where("divisi_id", "=", $divisi)->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where("departemen_code", $departemen)->where("kategori", "=", "Pengajuan")->where('is_active', true)->get();
             // dd($matriks_paparan);
 
-            $isnomorTargetActive = true;
+            $isnomorTargetActive = false;
             // $nomorDefault = "6285376444701";
             // $nomorDefault = "085881028391";
 

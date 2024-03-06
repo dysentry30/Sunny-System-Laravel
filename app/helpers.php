@@ -4003,7 +4003,7 @@ function mergeFileDokumenAssessmentProject(App\Models\NotaRekomendasi2 $rekomend
     // }
 }
 
-function sendNotifEmail($user, $subject, $message, $activatedEmailToUser = true, $isNotaRekomendasi = true): bool
+function sendNotifEmail($user, $subject, $message, $activatedEmailToUser, $isNotaRekomendasi = true): bool
 {
     if (!$isNotaRekomendasi) {
         $emailTarget = $activatedEmailToUser ? $user : env("EMAIL_DEFAULT");

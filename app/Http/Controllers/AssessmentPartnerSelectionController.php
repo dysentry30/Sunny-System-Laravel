@@ -24,7 +24,7 @@ class AssessmentPartnerSelectionController extends Controller
 
     public function __construct()
     {
-        $isNomorTargetActive = true;
+        $this->isNomorTargetActive = false;
     }
 
 
