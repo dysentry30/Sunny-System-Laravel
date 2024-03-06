@@ -636,10 +636,45 @@
                                                 <i class="bi bi-bar-chart text-white"></i>
                                                 <!--end::Svg Icon-->
                                             </span>
-                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">SBU</span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">SBU Internal WIKA</span>
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
+                                    
+                                    @canany(['super-admin', 'admin-crm'])
+                                    {{-- @if (auth()->user()->check_administrator) --}}
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'master-klasifikasi-sbu' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/master-klasifikasi-sbu" style="color:white; padding-left:20px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                {{-- <i class="bi bi-buildings text-white"></i>                                                     --}}
+                                                <i class="bi bi-tools text-white" style="font-size: 18px; margin-left:7px"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">SBU KBLI</span>
+                                        </a>
+                                    </div>
+                                    {{-- @endif --}}
+                                    @endcanany
+                                    
+                                    @canany(['super-admin', 'admin-crm'])
+                                    {{-- @if (auth()->user()->check_administrator) --}}
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'master-subklasifikasi-sbu' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/master-subklasifikasi-sbu" style="color:white; padding-left:20px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                {{-- <i class="bi bi-buildings text-white"></i>                                                     --}}
+                                                <i class="bi bi-tools text-white" style="font-size: 18px; margin-left:7px"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Sub Klasifikasi SBU KBLI</span>
+                                        </a>
+                                    </div>
+                                    {{-- @endif --}}
+                                    @endcanany
+                                    
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
                                         style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'unit-kerja' ? 'background-color:#008CB4' : '' }}">
@@ -893,40 +928,6 @@
                                                 <!--end::Svg Icon-->
                                             </span>
                                             <span class="menu-title" style="font-size: 16px; padding-left: 10px">Master Alat</span>
-                                        </a>
-                                    </div>
-                                    {{-- @endif --}}
-                                    @endcanany
-                                    
-                                    @canany(['super-admin', 'admin-crm'])
-                                    {{-- @if (auth()->user()->check_administrator) --}}
-                                    <div id="#kt_aside_menu" data-kt-menu="true"
-                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'master-klasifikasi-sbu' ? 'background-color:#008CB4' : '' }}">
-                                        <a class="menu-link " href="/master-klasifikasi-sbu" style="color:white; padding-left:20px;">
-                                            <span class="menu-icon">
-                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                                {{-- <i class="bi bi-buildings text-white"></i>                                                     --}}
-                                                <i class="bi bi-tools text-white" style="font-size: 18px; margin-left:7px"></i>
-                                                <!--end::Svg Icon-->
-                                            </span>
-                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Klasifikasi SBU</span>
-                                        </a>
-                                    </div>
-                                    {{-- @endif --}}
-                                    @endcanany
-                                    
-                                    @canany(['super-admin', 'admin-crm'])
-                                    {{-- @if (auth()->user()->check_administrator) --}}
-                                    <div id="#kt_aside_menu" data-kt-menu="true"
-                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'master-subklasifikasi-sbu' ? 'background-color:#008CB4' : '' }}">
-                                        <a class="menu-link " href="/master-subklasifikasi-sbu" style="color:white; padding-left:20px;">
-                                            <span class="menu-icon">
-                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                                {{-- <i class="bi bi-buildings text-white"></i>                                                     --}}
-                                                <i class="bi bi-tools text-white" style="font-size: 18px; margin-left:7px"></i>
-                                                <!--end::Svg Icon-->
-                                            </span>
-                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Sub Klasifikasi SBU</span>
                                         </a>
                                     </div>
                                     {{-- @endif --}}
