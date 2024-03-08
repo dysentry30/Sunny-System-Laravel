@@ -21,6 +21,7 @@ use App\Models\ExceptGreenlane;
 use App\Models\PenilaianPenggunaJasa;
 use App\Models\PenilaianChecklistProjectSelection;
 use App\Models\PenilaianPartnerSelection;
+use App\Models\IntegrationLog;
 use App\Models\Proyek;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
@@ -164,37 +165,84 @@ function checkGreenLine($proyek) {
     if($proyek instanceof App\Models\Proyek) {
         if ($proyek->dop != "EA") {
             $customer = $proyek->proyekBerjalan->Customer ?? null;
+            $exceptGreenlaneAll = ExceptGreenlane::all();
 
-            $greenlaneExcept = null;
-            if (!empty($customer->id_customer) || !empty($proyek->sumber_dana)) {
-                $greenlaneExcept = ExceptGreenlane::where(function ($query) use ($proyek, $customer) {
-                    $query->where('item', $customer->id_customer)
-                        ->orWhere('item', $proyek->sumber_dana);
-                })->first();
-            }
+            if ($exceptGreenlaneAll->count() > 0) {
+                $greenlaneExcept = null;
+                if (!empty($customer->id_customer) || !empty($proyek->sumber_dana)) {
+                    $greenlaneExcept = ExceptGreenlane::where(function ($query) use ($proyek, $customer) {
+                        $query->where('item', $customer->id_customer)
+                            ->orWhere('item', $proyek->sumber_dana);
+                    })->first();
+                }
 
-            if (empty($greenlaneExcept) || !empty($greenlaneExcept->sub_item)) {
+                if (empty($greenlaneExcept) || !empty($greenlaneExcept->sub_item)) {
+                    $results = collect();
+
+                    if (!empty($proyek->sumber_dana)) {
+                        if (!empty($proyek->negara) && ($proyek->negara == 'ID' || $proyek->negara == 'Indonesia')) {
+                            if ($proyek->sumber_dana == "APBD" || $proyek->sumber_dana == "BUMN") {
+                                //Jika ada Sumber Dana yg di Except Green Lane maka langsung kategori Green Lane
+                                if ($proyek->provinsi == $greenlaneExcept->sub_item || $customer->group_tier == $greenlaneExcept->sub_item) {
+                                    return true;
+                                }
+
+                                //Jika tidak ada maka dicek di kriteria green lane dahulu untuk sumber dana dan anakannya
+                                $results->push(App\Models\KriteriaGreenLine::where("isi", "=", $proyek->sumber_dana)->where("item", "=", "Sumber Dana")->where(function ($query) use ($proyek, $customer) {
+                                    $query->where('sub_isi', '=', $proyek->provinsi)
+                                        ->orWhere('sub_isi', '=', $customer->group_tier);
+                                })->count() > 0);
+                            } else {
+                                //Jika diluar APBD dan BUMN
+                                $results->push(App\Models\KriteriaGreenLine::where("isi", "=", $proyek->sumber_dana)->where("item", "=", "Sumber Dana")->count() > 0);
+                            }
+                        } else {
+                            //Jika Proyek Luar Negeri
+                            $results->push(App\Models\KriteriaGreenLine::where("isi", "=", $proyek->sumber_dana)->where("item", "=", "Proyek Luar Negeri")->count() > 0);
+                        }
+                    }
+                    if (!empty($customer->jenis_instansi)) {
+                        if ((str_contains($customer->jenis_instansi, "BUMN") || str_contains($customer->jenis_instansi, "Kementrian / Pemerintah Pusat") || str_contains($customer->jenis_instansi, "Anak dan Turunan BUMN"))) {
+                            if (!empty($customer->group_tier)) {
+                                $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $customer->jenis_instansi)->where("sub_isi", "=", $customer->group_tier)->count() > 0);
+                            } elseif (!empty($customer->nama_holding)) {
+                                $holding = Customer::find($customer->nama_holding);
+                                if ($holding->jenis_instansi == "BUMN" && !empty($holding->group_tier)) {
+                                    $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $holding->jenis_instansi)->where("sub_isi", "=", $holding->group_tier)->count() > 0);
+                                }
+                            } else {
+                                $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $customer->jenis_instansi)->count() > 0);
+                            }
+                        } else {
+                            $results->push(App\Models\KriteriaGreenLine::where("item", "=", "Instansi")->where("isi", "=", $customer->jenis_instansi)->count() > 0);
+                        }
+                    } else {
+                        $results->push(false);
+                    }
+                    // if ($proyek->is_disetujui) {
+                    //     return true;
+                    // }
+                    // dd($results);
+                    return $results->count() > 1 && $results->every(function ($item) {
+                        return $item === true;
+                    });
+                    // return $results->contains(true);
+                } else {
+                    return true;
+                }
+            } else {
                 $results = collect();
-
                 if (!empty($proyek->sumber_dana)) {
                     if (!empty($proyek->negara) && ($proyek->negara == 'ID' || $proyek->negara == 'Indonesia')) {
                         if ($proyek->sumber_dana == "APBD" || $proyek->sumber_dana == "BUMN") {
-                            //Jika ada Sumber Dana yg di Except Green Lane maka langsung kategori Green Lane
-                            // if ($proyek->provinsi == $greenlaneExcept->sub_item || $customer->group_tier == $greenlaneExcept->sub_item) {
-                            //     return true;
-                            // }
-
-                            //Jika tidak ada maka dicek di kriteria green lane dahulu untuk sumber dana dan anakannya
                             $results->push(App\Models\KriteriaGreenLine::where("isi", "=", $proyek->sumber_dana)->where("item", "=", "Sumber Dana")->where(function ($query) use ($proyek, $customer) {
                                 $query->where('sub_isi', '=', $proyek->provinsi)
-                                ->orWhere('sub_isi', '=', $customer->group_tier);
+                                    ->orWhere('sub_isi', '=', $customer->group_tier);
                             })->count() > 0);
                         } else {
-                            //Jika diluar APBD dan BUMN
                             $results->push(App\Models\KriteriaGreenLine::where("isi", "=", $proyek->sumber_dana)->where("item", "=", "Sumber Dana")->count() > 0);
                         }
                     } else {
-                        //Jika Proyek Luar Negeri
                         $results->push(App\Models\KriteriaGreenLine::where("isi", "=", $proyek->sumber_dana)->where("item", "=", "Proyek Luar Negeri")->count() > 0);
                     }
                 }
@@ -216,17 +264,8 @@ function checkGreenLine($proyek) {
                 } else {
                     $results->push(false);
                 }
-                // if ($proyek->is_disetujui) {
-                //     return true;
-                // }
-                // dd($results);
-                return $results->count() > 1 && $results->every(function ($item) {
-                    return $item === true;
-                });
-                // return $results->contains(true);
-            } else {
-                return true;
             }
+
         } else {
             return true;
         }
@@ -4011,28 +4050,59 @@ function sendNotifEmail($user, $subject, $message, $activatedEmailToUser, $isNot
         $emailTarget = $activatedEmailToUser ? $user->email : env("EMAIL_DEFAULT");
     }
 
+    $requestBody = [
+        "subject" => $subject,
+        "to" => $emailTarget,
+        "cc" => "",
+        "bcc" => "",
+        "message" => $message
+    ];
+
+    $newLog = new IntegrationLog();
+    $newLog->category = 'Email';
+    $newLog->request_body = collect($requestBody)->toJson();
+
     try {
-        $response = Http::withBasicAuth(env("EMAIL_USERNAME_AUTH"), env("EMAIL_PASSWORD_AUTH"))->post(env("EMAIL_URL_AUTH"), [
-            "subject" => $subject,
-            "to" => $emailTarget,
-            "cc" => "",
-            "bcc" => "",
-            "message" => $message
-        ]);
+
+        $response = Http::withBasicAuth(env("EMAIL_USERNAME_AUTH"), env("EMAIL_PASSWORD_AUTH"))->post(env("EMAIL_URL_AUTH"), $requestBody);
+
+        $data = $response->collect();
+        $data = $data->prepend($emailTarget, 'to');
+
+        $newLog->response_header = collect($response->headers())->toJson();
 
         if ($response->successful()) {
-            $data = $response->collect();
             if (!$data["status"]) {
+                $newLog->status_code = $response->status();
+                $newLog->status = 'failed';
+                $newLog->response_body = $data->toJson();
+                $newLog->error_message = $data['message'];
+                $newLog->save();
                 Alert::error('Error', $data["message"]);
                 return false;
             } else {
+                $newLog->status_code = $response->status();
+                $newLog->status = 'success';
+                $newLog->response_body = $data->toJson();
+                $newLog->save();
                 return true;
             }
         } else {
+            $newLog->status_code = $response->status();
+            $newLog->status = 'failed';
+            $newLog->response_body = $data->toJson();
+            $newLog->error_message = $data['message'];
+            $newLog->save();
             Alert::error('Error', "Tidak dapat mengirim Email saat ini. Mohon hubungi Admin!");
             return false;
         }
     } catch (\Exception $e) {
+        $newLog->status_code = 500;
+        $newLog->status = 'failed';
+        $newLog->response_header = '[]';
+        $newLog->response_body = '[]';
+        $newLog->error_message = 'Internal Server Error';
+        $newLog->save();
         Alert::error('Error', $e->getMessage());
         return false;
     }
