@@ -77,6 +77,7 @@ class ProyekController extends Controller
         $filterJenis = $request->query("filter-jenis");
         $filterTipe = $request->query("filter-tipe");
         $filterUnit = $request->query("filter-unit");
+        $filterKBLI = $request->query("filter-kbli");
         $selected_year = $request->query("tahun-proyek") ?? (int) date("Y");
         // dd($column);
         // $proyekBerjalan = ProyekBerjalans::all();
@@ -141,16 +142,23 @@ class ProyekController extends Controller
             // $proyeks = $proyeks->get()->filter(function ($p) use ($column, $filterTipe) {
             //     return preg_match("/$filterTipe/i", $p[$column]);
             // });
+        }
+
+        if (!empty($filterKBLI)) {
+            $proyeks = $proyeks->where('kode_kbli_2020', '=', $filterKBLI);
+            // $proyeks = $proyeks->get()->filter(function ($p) use ($column, $filterKBLI) {
+            //     return preg_match("/$filterKBLI/i", $p[$column]);
+            // });
         } 
 
         $proyeks = $proyeks->get();
         $filter = null;
         
         if (empty($datatables)) {
-            return view('3_Proyek', compact(["tahun_proyeks", "filterJenis", "filterTipe", "filterUnit", "filterStage", "selected_year", "proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas", "jenisProyek", "tipeProyek"]));
+            return view('3_Proyek', compact(["tahun_proyeks", "filterJenis", "filterTipe", "filterUnit", "filterStage", "selected_year", "proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas", "jenisProyek", "tipeProyek", "filterKBLI"]));
         } else {
             // dd($tahun_proyeks);
-            return view('3_DataSetProyek', compact(["tahun_proyeks", "filterJenis", "filterTipe", "filterUnit", "filterStage", "selected_year" ,"proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas", "jenisProyek", "tipeProyek"]));
+            return view('3_DataSetProyek', compact(["tahun_proyeks", "filterJenis", "filterTipe", "filterUnit", "filterStage", "selected_year", "proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas", "jenisProyek", "tipeProyek", "filterKBLI"]));
         }
     }
 

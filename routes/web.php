@@ -76,6 +76,7 @@ use App\Models\PerjanjianKso;
 use App\Models\ProyekPISNew;
 use App\Models\MasterKlasifikasiSBU;
 use App\Models\MasterSubKlasifikasiSBU;
+use App\Models\ExceptGreenlane;
 use App\Models\MatriksApprovalRekomendasi;
 use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
 use Carbon\Carbon;
@@ -2244,6 +2245,191 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         return redirect()->back();
     });
     // End :: Master Data Kriteria Green Line
+
+
+    //Begin :: Master Data Pemberi Kerja Green Lane
+    Route::get('/except-greenlane', function () {
+        $data = ExceptGreenlane::all();
+        return view('MasterData/ExceptGreenlane', ['data' => $data]);
+    });
+
+    Route::post('/except-greenlane/save', function (Request $request) {
+        $data = $request->all();
+
+        $rules = [
+            'kategori' => 'required|string',
+            'sub-kategori' => 'required|string',
+            'item' => 'required|string',
+        ];
+
+        $validate = validateInput($data, $rules);
+
+        if (!empty($validate)) {
+            Alert::html(
+                'Error',
+                'Field <b>' . $validate . '</b> mohon diisi',
+                'error'
+            );
+            return redirect()->back();
+        }
+
+        $newData = new ExceptGreenlane();
+        $newData->kategori = $data['kategori'];
+        $newData->sub_kategori = $data['sub-kategori'];
+        $newData->item = $data['item'];
+        $newData->sub_item = $data['sub-item'] ?? null;
+
+        if ($newData->save()) {
+            Alert::success('Success', "Except Greenlane berhasil ditambahkan!");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Except Greenlane gagal ditambahkan!");
+        return redirect()->back();
+    });
+
+    Route::post('/except-greenlane/{id}/delete', function ($id) {
+
+        $data = ExceptGreenlane::find($id);
+
+        if ($data->delete()) {
+            return response()->json([
+                "Success" => true,
+                "Message" => "Pemberi Kerja berhasil dihapus"
+            ]);
+        }
+        return response()->json([
+            "Success" => true,
+            "Message" => "Pemberi Kerja gagal dihapus"
+        ]);
+    });
+
+    Route::get('/except-greenlane/{filter}/data-get', function (Request $request, $filter) {
+        $search = $request->input('search');
+        $page = $request->input(
+            'page',
+            1
+        );
+        $perPage = 10;
+        $maxResults = 10;
+
+        if ($filter == "pemberi-kerja") {
+            $data = Customer::select(['id_customer as value', 'name'])->when(!empty($search), function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%');
+            });
+        } elseif ($filter == "sumber-dana") {
+            $data = SumberDana::select('kode_sumber as value', 'kode_sumber as name')->when(
+                !empty($search),
+                function ($query) use ($search) {
+                    $query->where(
+                        'kode_sumber',
+                        'like',
+                        '%' . $search . '%'
+                    );
+                }
+            );
+        }
+
+        $data = $data->paginate($perPage, ['*'], 'page', $page);
+
+        return response()->json($data);
+    });
+
+    Route::get('/except-greenlane/{filter}/{subFilter}/data-get', function (Request $request, $filter, $subFilter) {
+        $search = $request->input('search');
+        $page = $request->input(
+            'page',
+            1
+        );
+        $perPage = 10;
+
+        if ($filter == "sumber-dana") {
+            if (
+                $subFilter == "apbd"
+            ) {
+                $data = Provinsi::select(['province_id as value', 'province_name as name'])->where('country_id', 'ID')->when(!empty($search), function ($query) use ($search) {
+                    $query->where('province_name', 'like', '%' . $search . '%');
+                });
+
+                $data = $data->paginate($perPage, ['*'], 'page', $page);
+            } else if (
+                $subFilter == "bumn"
+            ) {
+                $data = [
+                    [
+                        "value" => "Tier A",
+                        "name" => "Tier A",
+                    ],
+                    [
+                        "value" => "Tier B",
+                        "name" => "Tier B",
+                    ],
+                    [
+                        "value" => "Tier C",
+                        "name" => "Tier C",
+                    ],
+                ];
+            } else {
+                $data = [];
+            }
+        } else {
+            $data = [];
+        }
+
+
+        return response()->json($data);
+    });
+
+    Route::get('/except-greenlane/{data}/fetch', function (Request $request, ExceptGreenlane $data) {
+        $idKategori = null;
+        $idSubKategori = null;
+        $idItem = null;
+        $idSubItem = null;
+
+        $nameKategori = null;
+        $nameSubKategori = null;
+        $nameItem = null;
+        $nameSubItem = null;
+
+        if (!empty($data)) {
+            $idKategori = $data->kategori;
+            $nameKategori = $data->kategori;
+            $idSubKategori = $data->sub_kategori;
+            $nameSubKategori = $data->sub_kategori;
+
+            if ($data->sub_kategori == "Sumber Dana") {
+                $idItem = $data->item;
+                $nameItem = $data->item;
+
+                if (!empty($data->sub_item)) {
+                    if (str_contains($data->sub_item, "ID")) {
+                        $provinsi = Provinsi::where('province_id', $data->sub_item)->first();
+                        $idSubItem = $provinsi->province_id;
+                        $nameSubItem = $provinsi->province_name;
+                    } else {
+                        $idSubItem = $data->sub_item;
+                        $nameSubItem = $data->sub_item;
+                    }
+                }
+            } else if ($data->sub_kategori == "Pemberi Kerja") {
+                $customer = Customer::find($data->item);
+                $idItem = $customer->id_customer;
+                $nameItem = $customer->name;
+            }
+        }
+        return response()->json([
+            "id_kategori" => $idKategori,
+            "name_kategori" => $nameKategori,
+            "id_sub_kategori" => $idSubKategori,
+            "name_sub_kategori" => $nameSubKategori,
+            "id_item" => $idItem,
+            "name_item" => $nameItem,
+            "id_sub_item" => $idSubItem,
+            "name_sub_item" => $nameSubItem,
+        ]);
+    });
+
+    //End :: Master Data Pemberi Kerja Green Lane
+
     
     // Begin :: Master Data Kriteria Assessment
     Route::post('/kriteria-assessment/save', function (Request $request) {
@@ -2769,6 +2955,32 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             ]);
         }
     });
+
+    //Begin::Get Pelanggan
+    Route::get('/customer/get-customer',
+        function (Request $request) {
+            $search = $request->input('search');
+            $page = $request->input(
+                'page',
+                1
+            );
+            $perPage = 10;
+            $maxResults = 10;
+
+            $dataCustomer = Customer::when(
+                !empty($search),
+                function ($query) use ($search) {
+                    $query->where('name', 'like', '%' . $search . '%');
+                }
+            );
+            $data = $dataCustomer->paginate($perPage, ['*'], 'page', $page);
+
+            // $data->pagination['more'] = ($page * $perPage) < $maxResults;
+
+            return response()->json($data);
+        }
+    );
+    //End::Get Pelanggan
 
     Route::get('/proyek/get-klasifikasi-sbu', function (Request $request) {
         $search = $request->input('search');

@@ -237,6 +237,23 @@
                                             <option value="P" {{ $filterTipe == 'P' ? 'selected' : '' }}>Non-Retail</option>
                                         </select>
                                     </div>
+
+                                    @php
+                                        $kbliAll = \App\Models\MasterSubKlasifikasiSBU::all();
+                                    @endphp
+                                    <div id="filterKBLI" class="d-flex align-items-center position-relative">
+                                        <select name="filter-kbli"
+                                            class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
+                                            data-control="select2" data-hide-search="false" data-placeholder="Kode SBU KBLI"
+                                            tabindex="-1" aria-hidden="true">
+                                            <option></option>
+                                            @if ($kbliAll->isNotEmpty())
+                                                @foreach ($kbliAll as $kbli)
+                                                    <option value="{{ $kbli->kbli_2020 }}" {{ $filterKBLI == $kbli->kbli_2020 ? 'selected' : '' }}>{{ $kbli->subklasifikasi . ' ('.$kbli->kbli_2020.')' }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
                                     <!--end:: Input Filter-->
 
                                         {{-- <div id="filter" class="d-flex align-items-center position-relative">
@@ -336,7 +353,7 @@
                                         <th class="min-w-auto"><small>Tahun RA Perolehan</small></th>
                                         <th class="min-w-auto"><small>Bulan RA Perolehan</small></th>
                                         <th class="min-w-auto"><small>Nilai RKAP</small></th>
-                                        <th class="min-w-auto"><small>Nilai Diluar RKAP</small></th>
+                                        {{-- <th class="min-w-auto"><small>Nilai Diluar RKAP</small></th> --}}
                                         <th class="min-w-auto"><small>Nilai Forecast</small></th>
                                         <th class="min-w-auto"><small>Nilai Realisasi</small></th>
                                         <th class="min-w-auto"><small>Pelanggan</small></th>
@@ -344,6 +361,8 @@
                                         <th class="min-w-auto text-center"><small>Tipe Proyek</small></th>
                                         <th class="min-w-auto text-center"><small>Jenis Terkontrak</small></th>
                                         <th class="min-w-auto text-center"><small>Sistem Bayar</small></th>
+                                        <th class="min-w-auto text-center"><small>Uang Muka</small></th>
+                                        <th class="min-w-auto text-center"><small>SBU KBLI</small></th>
                                         @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") || str_contains(auth()->user()->email, "@sunny"))
                                             <th class="min-w-auto text-center"><small>Action</small></th>
                                         @endif
@@ -551,12 +570,12 @@
                                                 }
                                                 @endphp
                                                 <small>
-                                                    {{ number_format((int)$total_rkap, 0, '.', '.') ?? '0' }}
+                                                    {{ number_format((int)$total_rkap, 0, '.', '.') ?? 0 }}
                                                 </small>
                                             </td>
                                             <!--end::Nilai OK-->
                                             <!--begin::Nilai OK-->
-                                            <td class="text-end">
+                                            {{-- <td class="text-end">
                                                 @if ($proyek->is_rkap == true)
                                                     <small>
                                                         0
@@ -566,7 +585,7 @@
                                                         {{ number_format((int)$proyek->nilaiok_awal, 0, '.', '.') ?? '0' }}
                                                     </small>
                                                 @endif
-                                            </td>
+                                            </td> --}}
                                             <!--end::Nilai OK-->
 
                                             <!--begin::Forecast-->
@@ -643,21 +662,37 @@
                                             </td>
                                             <!--end::Tipe Proyek-->
 
-                                            <!--begin::Tipe Proyek-->
+                                            <!--begin::Jenis Kontrak-->
                                             <td class="text-center">
                                                 <small>
                                                     {{ $proyek->jenis_terkontrak ?? "-" }}
                                                 </small>
                                             </td>
-                                            <!--end::Tipe Proyek-->
+                                            <!--end::Jenis Kontrak-->
 
-                                            <!--begin::Tipe Proyek-->
+                                            <!--begin::Sistem Bayar-->
                                             <td class="text-center">
                                                 <small>
                                                     {{ $proyek->sistem_bayar ?? "-" }}
                                                 </small>
                                             </td>
-                                            <!--end::Tipe Proyek-->
+                                            <!--end::Sistem Bayar-->
+                                            
+                                            <!--begin::Uang Muka-->
+                                            <td class="text-center">
+                                                <small>
+                                                    {{ $proyek->is_uang_muka ? $proyek->uang_muka . ' %' : '-' }}
+                                                </small>
+                                            </td>
+                                            <!--end::Uang Muka-->
+                                            
+                                            <!--begin::SBU KBLI-->
+                                            <td class="text-center">
+                                                <small>
+                                                    {{ $proyek->MasterSubKlasifikasiSBU?->subklasifikasi ?? '-' }}
+                                                </small>
+                                            </td>
+                                            <!--end::SBU KBLI-->
 
                                             @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") || str_contains(auth()->user()->email, "@sunny"))
                                                 <!--begin::Action-->
@@ -1206,7 +1241,10 @@
                 buttons: [
                     'copy', 'csv', 'excel', 'pdf', 'print'
                 ],
-                order: [[11, 'desc']],
+                language: {
+                    decimal: ',',
+                    thousands: '.'
+                }
                 
             } );
         } );
