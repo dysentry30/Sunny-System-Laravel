@@ -72,6 +72,7 @@ use App\Models\MatriksApprovalPaparan;
 use App\Models\NotaRekomendasi;
 use App\Models\CashFlowProyek;
 use App\Models\DokumenOtherProyek;
+use App\Models\DokumenPersetujuanKSO;
 use App\Models\DokumenSCurvesProyek;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
@@ -587,38 +588,50 @@ class ProyekController extends Controller
         //     $newProyek->jenis_jo = null;
         // }        //Begin :: Nota Rekomendasi 1
         if (isset($dataProyek["proyek-rekomendasi"]) && isset($dataProyek["confirm-send-wa"]) && isset($dataProyek["ra-klasifikasi-proyek"])&& isset($dataProyek["sumber-dana"]) ) {
+            if (!isset($dataProyek['selected-kam']) || empty($dataProyek['selected-kam'])) {
+                Alert::error('KAM Tidak Ditemukan', 'Mohon pilih KAM yang sesuai');
+                return redirect()->back();
+            }
             $divisi = $newProyek->UnitKerja->Divisi->id_divisi;
             $departemen = $newProyek->departemen_proyek;
             // dump($divisi);
             $klasifikasi_proyek = $newProyek->klasifikasi_pasdin;
-            $matriks_approval = MatriksApprovalRekomendasi::where("unit_kerja", "=", $divisi)->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where("departemen", $departemen)->where("kategori", "=", "Pengajuan")->get();
-            // dd($matriks_approval);
             $isnomorTargetActive = false;
-            // $nomorDefault = "6285376444701";
-            $nomorDefault = "085881028391";
-            foreach ($matriks_approval as $key => $user) {
-                // dd($user->Pegawai->nama_pegawai);
-                $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$newProyek->kode_proyek";
-                // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
-                //     "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
-                //     // "sender" => "6281188827008",
-                //     "sender" => env("NO_WHATSAPP_BLAST"),
-                //     "number" => $isnomorTargetActive ? $user->Pegawai->handphone : $nomorDefault,
-                //     // "number" => "085881028391",
-                //     "message" => "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi I, *" . $newProyek->ProyekBerjalan->name_customer . "* untuk Proyek *$newProyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
-                //     // "url" => $url
-                // ]);
-                // $send_msg_to_wa->onError(function ($error) {
-                //     // dd($error);
-                //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
-                //     return redirect()->back();
-                // });
-                $message = nl2br("Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi I, " . $newProyek->ProyekBerjalan->name_customer . " untuk Proyek $newProyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
-                $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Tanda Tangan Pengajuan Nota Rekomendasi I", $message, $isnomorTargetActive);
-                if (!$sendEmailUser) {
-                    return redirect()->back();
-                }
+            // $matriks_approval = MatriksApprovalRekomendasi::where("unit_kerja", "=", $divisi)->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where("departemen", $departemen)->where("kategori", "=", "Pengajuan")->get();
+            // // dd($matriks_approval);
+            // // $nomorDefault = "6285376444701";
+            // $nomorDefault = "085881028391";
+            // foreach ($matriks_approval as $key => $user) {
+            //     // dd($user->Pegawai->nama_pegawai);
+            //     $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$newProyek->kode_proyek";
+            //     // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
+            //     //     "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
+            //     //     // "sender" => "6281188827008",
+            //     //     "sender" => env("NO_WHATSAPP_BLAST"),
+            //     //     "number" => $isnomorTargetActive ? $user->Pegawai->handphone : $nomorDefault,
+            //     //     // "number" => "085881028391",
+            //     //     "message" => "Yth Bapak/Ibu *" . $user->Pegawai->nama_pegawai . "*\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi I, *" . $newProyek->ProyekBerjalan->name_customer . "* untuk Proyek *$newProyek->nama_proyek*.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻",
+            //     //     // "url" => $url
+            //     // ]);
+            //     // $send_msg_to_wa->onError(function ($error) {
+            //     //     // dd($error);
+            //     //     Alert::error('Error', "Terjadi Gangguan, Chat Whatsapp Tidak Terkirim Coba Beberapa Saat Lagi !");
+            //     //     return redirect()->back();
+            //     // });
+            //     $message = nl2br("Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi I, " . $newProyek->ProyekBerjalan->name_customer . " untuk Proyek $newProyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
+            //     $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Tanda Tangan Pengajuan Nota Rekomendasi I", $message, $isnomorTargetActive);
+            //     if (!$sendEmailUser) {
+            //         return redirect()->back();
+            //     }
+            // }
+            $pegawaiKAM = MatriksApprovalRekomendasi::where('nama_pegawai', $dataProyek["selected-kam"])->first()->Pegawai;
+            $url = $request->schemeAndHttpHost() . "?nip=" . $pegawaiKAM->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$newProyek->kode_proyek";
+            $message = nl2br("Yth Bapak/Ibu " . $pegawaiKAM->nama_pegawai . "\nDengan ini menyampaikan permohonan tandatangan untuk form pengajuan Nota Rekomendasi I, " . $newProyek->ProyekBerjalan->name_customer . " untuk Proyek $newProyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
+            $sendEmailUser = sendNotifEmail($pegawaiKAM, "Permohonan Tanda Tangan Pengajuan Nota Rekomendasi I", $message, $isnomorTargetActive);
+            if (!$sendEmailUser) {
+                return redirect()->back();
             }
+
             // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
             //     "api_key" => "c15978155a6b4656c4c0276c5adbb5917eb033d5",
             //     "sender" => "62811881227",
@@ -1242,6 +1255,9 @@ class ProyekController extends Controller
                 if (isset($dataProyek["dokumen-other-proyek"])) {
                     self::uploadDokumenOtherProyek($dataProyek["dokumen-other-proyek"], $kode_proyek);
                 }
+                if (isset($dataProyek["dokumen-penentuan-kso"])) {
+                    self::uploadDokumenPersetujuanKSO($dataProyek["dokumen-penentuan-kso"], $kode_proyek);
+                }
             }
             $customerHistory->save();
             return redirect("/proyek/view/" . $kode_proyek);
@@ -1307,6 +1323,9 @@ class ProyekController extends Controller
                 }
                 if (isset($dataProyek["dokumen-other-proyek"])) {
                     self::uploadDokumenOtherProyek($dataProyek["dokumen-other-proyek"], $kode_proyek);
+                }
+                if (isset($dataProyek["dokumen-penentuan-kso"])) {
+                    self::uploadDokumenPersetujuanKSO($dataProyek["dokumen-penentuan-kso"], $kode_proyek);
                 }
             }
             return redirect("/proyek/view/" . $kode_proyek);
@@ -1704,6 +1723,40 @@ class ProyekController extends Controller
         File::delete(public_path("/dokumen-penentuan-kso/$delete->id_document"));
         $delete->delete();
         Alert::success("Success", "Dokumen Penentuan KSO Berhasil Dihapus");
+        return redirect()->back();
+    }
+
+    private function uploadDokumenPersetujuanKSO(UploadedFile $uploadedFile, $kode_proyek)
+    {
+        $dokumen = new DokumenPersetujuanKSO();
+        $file_name = $uploadedFile->getClientOriginalName();
+        $id_document = date("dmYHis_") . str_replace(" ", "-", $file_name);
+        $nama_document = $file_name;
+        $dokumen->nama_document = $nama_document;
+        $dokumen->id_document = $id_document;
+        $dokumen->kode_proyek = $kode_proyek;
+        $uploadedFile->move(public_path('dokumen-persetujuan-kso'), $id_document);
+        $dokumen->save();
+    }
+
+    public function downloadDokumenPersetujuanKSO($id_document)
+    {
+        $file = DokumenPersetujuanKSO::where('id_document', $id_document)->first();
+        try {
+            $checkFileFromStorage = public_path('dokumen-persetujuan-kso/' . $file->id_document);
+            return response()->download($checkFileFromStorage, 'Dokumen Persetujuan KSO - ' . $file->Proyek->kode_proyek . '.pdf');
+        } catch (\Exception $e) {
+            Alert::error('Error', $e->getMessage());
+            return redirect()->back();
+        }
+    }
+
+    public function deleteDokumenPersetujuanKSO($id)
+    {
+        $delete = DokumenPenentuanKSO::find($id);
+        File::delete(public_path("/dokumen-persetujuan-kso/$delete->id_document"));
+        $delete->delete();
+        Alert::success("Success", "Dokumen Persetujuan KSO Berhasil Dihapus");
         return redirect()->back();
     }
 

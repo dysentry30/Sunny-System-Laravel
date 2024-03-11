@@ -284,4 +284,9 @@ class Proyek extends Model
     {
         return $this->hasMany(DokumenOtherProyek::class, 'kode_proyek', 'kode_proyek');
     }
+
+    public function DokumenPersetujuanKSO()
+    {
+        return $this->hasOne(DokumenPersetujuanKSO::class, 'kode_proyek', 'kode_proyek');
+    }
 }

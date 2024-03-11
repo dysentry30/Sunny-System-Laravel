@@ -2267,7 +2267,7 @@
                         @if (!is_null($proyek->catatan_master))
                         <br>
                         @php
-                            $catatan_master = collect(json_decode($proyek->catatan_master))?->sortBy('urutan')->values();
+                            $catatan_master = collect(json_decode($proyek->catatan_master))?->keyBy('urutan');
                         @endphp
                         <div class="collapse show" id="kt_expand_catatan_verifikasi_{{ $proyek->kode_proyek }}">
                             <div class="card card-body">
@@ -2285,12 +2285,21 @@
                                             <tr>
                                                 <td class="text-center align-middle">{{ $kategori->urutan }}</td>
                                                 <td class="text-start align-middle">{{ $kategori->kategori }}</td>
-                                                <td class="text-center align-middle">
-                                                    <input class="form-check-input" type="checkbox" value="{{ $kategori->urutan }}" name="master_selected_{{ $kategori->urutan }}" id="master_selected_{{ $kategori->urutan }}" {{ !empty($catatan_master) && $catatan_master[$key]->checked ? 'checked' : '' }} disabled>
-                                                </td>
-                                                <td>
-                                                    <textarea id="catatan_nota_rekomendasi_master" class="form-control form-control-solid" disabled>{!! $catatan_master[$key]->checked ? $catatan_master[$key]->uraian : '' !!}</textarea>
-                                                </td>
+                                                @if (isset($catatan_master[$key+1]))
+                                                    <td class="text-center align-middle">
+                                                        <input class="form-check-input" type="checkbox" value="{{ $kategori->urutan }}" name="master_selected_{{ $kategori->urutan }}" id="master_selected_{{ $kategori->urutan }}" {{ !empty($catatan_master) && $catatan_master[$key+1]->checked ? 'checked' : '' }} disabled>
+                                                    </td>
+                                                    <td>
+                                                        <textarea id="catatan_nota_rekomendasi_master" class="form-control form-control-solid" disabled>{!! $catatan_master[$key+1]->checked ? $catatan_master[$key+1]->uraian : '' !!}</textarea>
+                                                    </td>                                                    
+                                                @else
+                                                    <td class="text-center align-middle">
+                                                        <input class="form-check-input" type="checkbox" value="{{ $kategori->urutan }}" name="master_selected_{{ $kategori->urutan }}" id="master_selected_{{ $kategori->urutan }}" disabled>
+                                                    </td>
+                                                    <td>
+                                                        <textarea id="catatan_nota_rekomendasi_master" class="form-control form-control-solid" disabled></textarea>
+                                                    </td>  
+                                                @endif
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -2493,7 +2502,7 @@
                         @if (!is_null($proyek->catatan_master))
                         <br>
                         @php
-                            $catatan_master = collect(json_decode($proyek->catatan_master))?->sortBy('urutan')->values();
+                            $catatan_master = collect(json_decode($proyek->catatan_master))?->keyBy('urutan');
                         @endphp
                         <div class="collapse show" id="kt_expand_catatan_rekomendasi_{{ $proyek->kode_proyek }}">
                             <div class="card card-body">
@@ -2511,12 +2520,21 @@
                                             <tr>
                                                 <td class="text-center align-middle">{{ $kategori->urutan }}</td>
                                                 <td class="text-start align-middle">{{ $kategori->kategori }}</td>
-                                                <td class="text-center align-middle">
-                                                    <input class="form-check-input" type="checkbox" value="{{ $kategori->urutan }}" name="master_selected_{{ $kategori->urutan }}" id="master_selected_{{ $kategori->urutan }}" {{ !empty($catatan_master) && $catatan_master[$key]->checked ? 'checked' : '' }} disabled>
-                                                </td>
-                                                <td>
-                                                    <textarea id="catatan_nota_rekomendasi_master" class="form-control form-control-solid" disabled>{!! $catatan_master[$key]->checked ? $catatan_master[$key]->uraian : '' !!}</textarea>
-                                                </td>
+                                                @if (isset($catatan_master[$key+1]))
+                                                    <td class="text-center align-middle">
+                                                        <input class="form-check-input" type="checkbox" value="{{ $kategori->urutan }}" name="master_selected_{{ $kategori->urutan }}" id="master_selected_{{ $kategori->urutan }}" {{ !empty($catatan_master) && $catatan_master[$key+1]->checked ? 'checked' : '' }} disabled>
+                                                    </td>
+                                                    <td>
+                                                        <textarea id="catatan_nota_rekomendasi_master" class="form-control form-control-solid" disabled>{!! $catatan_master[$key+1]->checked ? $catatan_master[$key+1]->uraian : '' !!}</textarea>
+                                                    </td>                                                    
+                                                @else
+                                                    <td class="text-center align-middle">
+                                                        <input class="form-check-input" type="checkbox" value="{{ $kategori->urutan }}" name="master_selected_{{ $kategori->urutan }}" id="master_selected_{{ $kategori->urutan }}" disabled>
+                                                    </td>
+                                                    <td>
+                                                        <textarea id="catatan_nota_rekomendasi_master" class="form-control form-control-solid" disabled></textarea>
+                                                    </td>  
+                                                @endif
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -2723,7 +2741,7 @@
                         @if (!is_null($proyek->catatan_master))
                         <br>
                         @php
-                            $catatan_master = collect(json_decode($proyek->catatan_master))?->sortBy('urutan')->values();
+                            $catatan_master = collect(json_decode($proyek->catatan_master))?->keyBy('urutan');
                         @endphp
                         <div class="collapse show" id="kt_expand_catatan_persetujuan_{{ $proyek->kode_proyek }}">
                             <div class="card card-body">
@@ -2741,12 +2759,21 @@
                                             <tr>
                                                 <td class="text-center align-middle">{{ $kategori->urutan }}</td>
                                                 <td class="text-start align-middle">{{ $kategori->kategori }}</td>
-                                                <td class="text-center align-middle">
-                                                    <input class="form-check-input" type="checkbox" value="{{ $kategori->urutan }}" name="master_selected_{{ $kategori->urutan }}" id="master_selected_{{ $kategori->urutan }}" {{ !empty($catatan_master) && $catatan_master[$key]->checked ? 'checked' : '' }} disabled>
-                                                </td>
-                                                <td>
-                                                    <textarea id="catatan_nota_rekomendasi_master" class="form-control form-control-solid" disabled>{!! $catatan_master[$key]->checked ? $catatan_master[$key]->uraian : '' !!}</textarea>
-                                                </td>
+                                                @if (isset($catatan_master[$key+1]))
+                                                    <td class="text-center align-middle">
+                                                        <input class="form-check-input" type="checkbox" value="{{ $kategori->urutan }}" name="master_selected_{{ $kategori->urutan }}" id="master_selected_{{ $kategori->urutan }}" {{ !empty($catatan_master) && $catatan_master[$key+1]->checked ? 'checked' : '' }} disabled>
+                                                    </td>
+                                                    <td>
+                                                        <textarea id="catatan_nota_rekomendasi_master" class="form-control form-control-solid" disabled>{!! $catatan_master[$key+1]->checked ? $catatan_master[$key+1]->uraian : '' !!}</textarea>
+                                                    </td>                                                    
+                                                @else
+                                                    <td class="text-center align-middle">
+                                                        <input class="form-check-input" type="checkbox" value="{{ $kategori->urutan }}" name="master_selected_{{ $kategori->urutan }}" id="master_selected_{{ $kategori->urutan }}" disabled>
+                                                    </td>
+                                                    <td>
+                                                        <textarea id="catatan_nota_rekomendasi_master" class="form-control form-control-solid" disabled></textarea>
+                                                    </td>  
+                                                @endif
                                             </tr>
                                         @endforeach
                                     </tbody>

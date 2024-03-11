@@ -1165,22 +1165,23 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     //DELETE Dokumen Penentuan KSO
     Route::delete(
         '/proyek/dokumen-penentuan-kso/{id}/delete',
-        [
-            ProyekController::class, 'deleteDokumenPenentuanKSO'
-        ]
+        [ProyekController::class, 'deleteDokumenPenentuanKSO']
     );
 
     //DOWNLOAD Dokumen Penentuan KSO
-    Route::get(
-        '/proyek/dokumen-penentuan-project-greenlane/{id_document}/download',
-        [ProyekController::class, 'downloadDokumenPenentuanProjectGreenlane']
-    );
+    Route::get('/proyek/dokumen-penentuan-project-greenlane/{id_document}/download', [ProyekController::class, 'downloadDokumenPenentuanProjectGreenlane']);
 
-    //DELETE Dokumen Penentuan KSO
-    Route::delete(
-        '/proyek/dokumen-penentuan-project-greenlane/{id}/delete',
-        [ProyekController::class, 'deleteDokumenPenentuanProjectGreenlane']
-    );
+    //DELETE Dokumen Persetujuan KSO
+    Route::delete('/proyek/dokumen-persetujuan-kso/{id}/delete', [ProyekController::class, 'deleteDokumenPersetujuanKSO']);
+
+    //DELETE Dokumen Penentuan Project Greenlane
+    Route::delete('/proyek/dokumen-penentuan-project-greenlane/{id}/delete', [ProyekController::class, 'deleteDokumenPenentuanProjectGreenlane']);
+
+    //DOWNLOAD Dokumen Persetujuan KSO
+    Route::get('/proyek/dokumen-persetujuan-kso/{id_document}/download', [ProyekController::class, 'downloadDokumenPersetujuanKSO']);
+
+    //DELETE Dokumen Persetujuan KSO
+    Route::delete('/proyek/dokumen-persetujuan-kso/{id}/delete', [ProyekController::class, 'deleteDokumenPersetujuanKSO']);
 	
     //RFA Dokumen To CCM
     // Route::get('/proyek/{kode_proyek}/{kategori}', [ProyekController::class, 'updateRfaDocument']);
@@ -7188,8 +7189,27 @@ Route::get('/tesss', function () {
     return mergeFileDokumenAssessmentPartnerKSO($porsiJO);
 });
 
+Route::get('/tes-generate', function () {
+    $proyek = Proyek::find('HJPD004');
+    if (empty($proyek)) {
+        Alert::error('Error', 'Proyek tidak ditemukan!');
+        return redirect()->back();
+    }
+
+    try {
+        $pdf = Pdf::loadView('GenerateFile.generatePermohonanKSO', ["proyek" => $proyek]);
+        $pdf->setPaper('A4', 'potrait');
+        return $pdf->download('Form Persetujuan Pembentukan KSO - ' . $proyek->kode_proyek . '.pdf');
+    } catch (Exception $e) {
+        Alert::error('Error', $e->getMessage());
+        return redirect()->back();
+    }
+});
 Route::get('/tes-email', function () {
     // $notaRekomendasi = NotaRekomendasi2::where('kode_proyek', 'HJPD004')->first();
-    $user = User::find(52);
-    return sendNotifEmail($user, "Testing", "Tesss", true);
+    // $user = "fathur.rohman2353@gmail.com";
+    $user = "";
+    // $user = User::find(52);
+    $email = sendNotifEmail($user, "Testing", "Testing", false, false);
+    dd($email);
 });

@@ -245,11 +245,11 @@
                     </div>
                     <!--end::Toolbar-->
                     
-                    @canany(['super-admin', 'user-crm', 'approver-crm'])
+                    @canany(['super-admin', 'user-crm', 'approver-crm', 'admin-crm'])
                         @if ($proyek->is_request_rekomendasi == false && !$check_green_line && $proyek->stage == 1)
                         <!-- begin::modal confirm send wa-->
-                        <div class="modal fade w-100" style="margin-top: 120px" id="modal-send-pengajuan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog mw-600px">
+                        <div class="modal fade w-100" style="" id="modal-send-pengajuan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered mw-600px">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h1 class="modal-title fs-5" id="exampleModalLabel">Ajukan Rekomendasi Proyek ?</h1>
@@ -274,6 +274,7 @@
                                         <p>Negara Proyek  : <b class="{{ $proyek->negara ?? "text-danger" }}">{{ $proyek->negara ?? "*Belum Ditentukan" }}</b></p>
                                         <p>Provinsi Proyek  : <b class="{{ $proyek->Provinsi->province_name ?? "text-danger" }}">{{ $proyek->Provinsi->province_name ?? "*Belum Ditentukan" }}</b></p>
                                         <p>Dokumen Pendukung Pasar Dini  : <b class="{{ !empty($proyek->DokumenPendukungPasarDini) ? '' : "text-danger" }}">{{ !empty($proyek->DokumenPendukungPasarDini) ? "Sudah" : "*Belum Ditentukan" }}</b></p>
+                                        <hr>
                                         <br>
                                         <p>Nama Pemberi Kerja : <b class="{{ $name_customer ?? "text-danger" }}">{{ $name_customer ?? "*Belum Ditentukan" }}</b></p>
                                         <p>Instansi Pemberi Kerja : <b class="{{ $jenis_instansi ?? "text-danger" }}">{{ $jenis_instansi ?? "*Belum Ditentukan" }}</b></p>
@@ -283,10 +284,28 @@
                                         <p>Industry Attractiveness Pemberi Kerja : <b class="{{ $industrySector ?? "text-danger" }}">{{ $industrySector->owner_attractiveness ?? "*Belum Ditentukan" }}</b></p>
                                         <p>Masalah Hukum Pemberi Kerja : <b class="{{ $masalahHukum->count() == 0 ? "text-success" : "text-danger" }}">{{ $masalahHukum->count() == 0 ? "0 Kasus" : $masalahHukum->count()." Kasus" }}</b></p>
                                         <p>File AHU : <b class="{{ !is_null($fileAHU) && $fileAHU->isNotEmpty() ? "text-dark" : "text-danger" }}">{{ !is_null($fileAHU) && $fileAHU->isNotEmpty() ? "Sudah" : "*Belum Ditentukan" }}</b></p>
+                                        <hr>
+                                        <br>
+                                        <p><b>Ajukan ke KAM :</b></p>
+                                        @php
+                                            $selectMatriksApprovalPengajuan = \App\Models\MatriksApprovalRekomendasi::where('klasifikasi_proyek', $proyek->klasifikasi_pasdin)?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)->where('kategori', "Pengajuan")->get();
+                                        @endphp
+                                        @if (!empty($selectMatriksApprovalPengajuan))
+                                        <div class="d-flex flex-row flex-wrap">
+                                            @foreach ($selectMatriksApprovalPengajuan as $index => $kam)
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="selected-kam" id="radioBox{{ $index }}" value="{{ $kam->nama_pegawai }}" {{ $index == 0 ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="radioBox{{ $index }}">{{ $kam->kode_unit_kerja }} - {{ $kam->Pegawai->nama_pegawai }}</label>
+                                            </div>                                            
+                                            @endforeach
+                                        </div>
+                                        @endif
+                                        <br>
+                                        <br>
                                         <br>
 
                                         {{-- @if (!empty($name_customer) && !empty($proyek->klasifikasi_pasdin) && !empty($proyek->SumberDana->nama_sumber) && !empty($jenis_instansi) && !empty($custNegara) && !empty($custProvinsi) && !empty($forbes_rank) && !empty($lq_rank)) --}}
-                                        @if (!empty($name_customer) && !empty($proyek->klasifikasi_pasdin) && !empty($proyek->SumberDana->nama_sumber) && !empty($jenis_instansi) && !empty($custNegara) && !empty($custProvinsi) && !empty($industrySector) && (!is_null($fileAHU) && $fileAHU->isNotEmpty()) && !empty($proyek->Provinsi->province_name))
+                                        @if (!empty($name_customer) && !empty($proyek->klasifikasi_pasdin) && !empty($proyek->SumberDana->nama_sumber) && !empty($jenis_instansi) && !empty($custNegara) && !empty($custProvinsi) && !empty($industrySector) && (!is_null($fileAHU) && $fileAHU->isNotEmpty()) && !empty($proyek->Provinsi->province_name) && !empty($proyek->DokumenPendukungPasarDini))
                                             <input class="form-check-input" onclick="sendWa(this)" id="confirm-send-wa" name="confirm-send-wa" type="checkbox">
                                             <i class="fs-6 text-primary">
                                                 Saya Setuju Melakukan Pengajuan dan Data Sudah Sudah Terisi Dengan Benar
@@ -3419,8 +3438,7 @@
                                                             style="display: none">*File
                                                             terlalu besar ! Max Size 50Mb</h6>
                                                         <br>
-                                                        <table class="table align-middle table-row-dashed fs-6 gy-2 w-50"
-                                                        id="kt_customers_table">
+                                                        <table class="table align-middle table-row-dashed fs-6 gy-2 w-50" id="kt_customers_table">
                                                             <thead>
                                                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                                                     <th class="min-w-auto">Nama Dokumen</th>
@@ -3895,6 +3913,43 @@
                                                     </div>
                                                     <br>
 
+                                                    <!--Begin::Title Biru Form: Document Persetujuan KSO-->
+                                                    <h3 class="fw-bolder m-0 required" id="HeadDetail" style="font-size:14px;">
+                                                        Document Form Persetujuan KSO
+                                                    </h3>
+                                                    <br>
+                                                    <div class="w-50">
+                                                        <input type="file"
+                                                            class="form-control form-control-sm form-input-solid"
+                                                            name="dokumen-form-persetujuan-kso" accept=".pdf">
+                                                    </div>
+                                                    <h6 id="error-dokumen-form-persetujuan-kso" class="text-danger fw-normal"
+                                                        style="display: none">*File
+                                                        terlalu besar ! Max Size 50Mb</h6>
+                                                    <br>
+                                                    <!--begin::Table-->
+                                                    <table class="table align-middle table-row-dashed fs-6 gy-2 w-50" id="kt_customers_table">
+                                                        <thead>
+                                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                <th class="min-w-auto">Nama Dokumen</th>
+                                                                <th class="min-w-auto"></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody class="fw-bold text-gray-600">
+                                                            @if (!empty($proyek->DokumenPersetujuanKSO))
+                                                            <tr>
+                                                                <td><a href="/proyek/dokumen-persetujuan-kso/{{ $proyek->DokumenPersetujuanKSO->id_document }}/download" class="text-gray-800 text-hover-primary">{{ $proyek->DokumenPersetujuanKSO->nama_document }}</a></td>
+                                                                <td>
+                                                                    <a href="#" data-bs-toggle="modal"
+                                                                        data-bs-target="#kt_dokumen_persetujuan_kso_delete_{{ $proyek->DokumenPersetujuanKSO->id }}" class="btn btn-danger btn-sm text-white">Delete</a>
+                                                                </td>
+                                                            </tr>
+                                                            @endif
+                                                        </tbody>
+                                                    </table>
+                                                    <!--End::Table-->
+                                                    <!--End::Title Biru Form: Document Persetujuan KSO-->
+                                                    <br>
 
                                                     <!--Begin::Title Biru Form: Document Prakualifikasi-->
                                                     <h3 class="fw-bolder m-0 required" id="HeadDetail" style="font-size:14px;">
@@ -11502,7 +11557,7 @@
         }
     </script>
 
-    <!--begin::DELETE DOKUMEN PENENTUAN KSO-->
+    <!--begin::DELETE DOKUMEN PENENTUAN PROJECT NON GREENLANE-->
     @if (!empty($proyek->DokumenPenentuanProjectGreenlane))
         <form action="/proyek/dokumen-penentuan-project-greenlane/{{ $proyek->DokumenPenentuanProjectGreenlane->id }}/delete"
             method="post">
@@ -11550,7 +11605,7 @@
             </div>
         </form>
     @endif
-    <!--end::DELETE DOKUMEN PENENTUAN KSO-->
+    <!--end::DELETE DOKUMEN PENENTUAN PROJECT NON GREENLANE-->
 
     <!--begin::DELETE DOKUMEN PENENTUAN KSO-->
     @if (!empty($proyek->DokumenPenentuanKSO))
@@ -11569,6 +11624,56 @@
                         <div class="modal-header">
                             <!--begin::Modal title-->
                             <h2>Hapus : {{ $proyek->DokumenPenentuanKSO->nama_document }}</h2>
+                            <!--end::Modal title-->
+                            <!--begin::Close-->
+                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                <span class="svg-icon svg-icon-1">
+                                    <i class="bi bi-x-lg"></i>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </div>
+                            <!--end::Close-->
+                        </div>
+                        <!--end::Modal header-->
+                        <!--begin::Modal body-->
+                        <div class="modal-body py-lg-6 px-lg-6">
+                            Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                            <br>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                        </div>
+                        <!--end::Input group-->
+
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+            </div>
+        </form>
+    @endif
+    <!--end::DELETE DOKUMEN PENENTUAN KSO-->
+   
+    <!--begin::DELETE DOKUMEN PERSETUJUAN KSO-->
+    @if (!empty($proyek->DokumenPersetujuanKSO))
+        <form action="/proyek/dokumen-persetujuan-kso/{{ $proyek->DokumenPersetujuanKSO->id }}/delete"
+            method="post">
+            @method('delete')
+            @csrf
+            <div class="modal fade"
+                id="kt_dokumen_persetujuan_kso_delete_{{ $proyek->DokumenPersetujuanKSO->id }}"
+                tabindex="-1" aria-hidden="true">
+                <!--begin::Modal dialog-->
+                <div class="modal-dialog modal-dialog-centered mw-800px">
+                    <!--begin::Modal content-->
+                    <div class="modal-content">
+                        <!--begin::Modal header-->
+                        <div class="modal-header">
+                            <!--begin::Modal title-->
+                            <h2>Hapus : {{ $proyek->DokumenPersetujuanKSO->nama_document }}</h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
                             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
