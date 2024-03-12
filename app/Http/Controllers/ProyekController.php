@@ -3492,6 +3492,9 @@ class ProyekController extends Controller
     public function deletePersonelTender($id)
     {
         $deletePersonel = PersonelTenderProyek::find($id);
+        if (!empty($deletePersonel->dokumen_cv_upload)) {
+            File::delete(public_path('dokumen-cv-personel/upload/' . $deletePersonel->dokumen_cv_upload));
+        }
         $deletePersonel->delete();
         Alert::success("Success", "Personel Tender Berhasil Dihapus");
         return redirect()->back();
@@ -4140,6 +4143,89 @@ class ProyekController extends Controller
                 'success' => true,
                 'data' => null
             ]);
+        }
+    }
+
+    public function downloadCVPersonel(PersonelTenderProyek $personel)
+    {
+        if (empty($personel)) {
+            return response()->json([
+                'Success' => false,
+                'Message' => 'Personel Tender tidak ditemukan. Hubungi Admin!'
+            ]);
+        }
+
+        try {
+            $response = Http::withOptions([
+                "verify" => false
+            ])->get('https://hcms-dev.wika.co.id/apiwika/get_cvcrm.php?nip=' . $personel->nip);
+            // dd($response->collect());
+            if ($response->failed()) {
+                return response()->json([
+                    'Success' => false,
+                    'Message' => "Dokumen belum tersedia di database HCMS"
+                ]);
+            } elseif ($response->successful()) {
+                $fileName = date('HisdmY_') . 'CV-Personel-' . $personel->nip . '.pdf';
+                $filePath = public_path('dokumen-cv-personel/download' . $fileName);
+                $fileContent = file_get_contents($response->body());
+                dd($fileContent);
+
+                file_put_contents($filePath, $fileContent);
+
+                $downloadResponse = Response::make($fileContent);
+                $downloadResponse->header('Content-Type', 'application/octet-stream');
+                $downloadResponse->header('Content-Disposition', 'attachment; filename="CV Personel - ' . $personel->nip . '.pdf' . '"');
+                $responseJSON = response()->json([
+                    'Success' => true,
+                    'Message' => 'Dokumen dengan nama "CV Personel - ' . $personel->nip . '" berhasil di download'
+                ]);
+
+                $responses = [$downloadResponse, $responseJSON];
+                return $responses;
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'Success' => false,
+                'Message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function uploadCVPersonel(Request $request, PersonelTenderProyek $personel)
+    {
+        $data = $request->all();
+
+        if (empty($personel)) {
+            Alert::error('Personel Tender tidak ditemukan. Hubungi Admin!');
+            return redirect()->back();
+        }
+
+        if (!isset($data['upload-cv'])) {
+            Alert::error('Upload dokumen tidak boleh kosong!');
+            return redirect()->back();
+        }
+
+        try {
+            $file = $request->file('upload-cv');
+
+            $fileName = date('dmyHis_') . 'CV-Personel-Final_' . $personel->nip . '.' . $file->getClientOriginalExtension();
+
+            if (!empty($personel->dokumen_cv_upload)) {
+                File::delete(public_path('dokumen-cv-personel/upload/' . $personel->dokumen_cv_upload));
+            }
+
+            $file->move(public_path('dokumen-cv-personel/upload'), $fileName);
+
+            $personel->dokumen_cv_upload = $fileName;
+
+            $personel->save();
+
+            Alert::success('Success', 'Dokumen CV Personel Tender Berhasil Ditambahkan');
+            return redirect()->back();
+        } catch (\Exception $e) {
+            Alert::error('Error', $e->getMessage());
+            return redirect()->back();
         }
     }
 }

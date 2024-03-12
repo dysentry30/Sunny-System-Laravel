@@ -183,14 +183,16 @@ function checkGreenLine($proyek) {
                         if (!empty($proyek->negara) && ($proyek->negara == 'ID' || $proyek->negara == 'Indonesia')) {
                             if ($proyek->sumber_dana == "APBD" || $proyek->sumber_dana == "BUMN") {
                                 //Jika ada Sumber Dana yg di Except Green Lane maka langsung kategori Green Lane
-                                if ($proyek->provinsi == $greenlaneExcept->sub_item || $customer->group_tier == $greenlaneExcept->sub_item) {
-                                    return true;
+                                if (!empty($greenlaneExcept->sub_item)) {
+                                    if ($proyek->provinsi == $greenlaneExcept->sub_item || $customer->group_tier == $greenlaneExcept->sub_item) {
+                                        return true;
+                                    }
                                 }
 
                                 //Jika tidak ada maka dicek di kriteria green lane dahulu untuk sumber dana dan anakannya
                                 $results->push(App\Models\KriteriaGreenLine::where("isi", "=", $proyek->sumber_dana)->where("item", "=", "Sumber Dana")->where(function ($query) use ($proyek, $customer) {
                                     $query->where('sub_isi', '=', $proyek->provinsi)
-                                        ->orWhere('sub_isi', '=', $customer->group_tier);
+                                    ->orWhere('sub_isi', '=', $customer->group_tier);
                                 })->count() > 0);
                             } else {
                                 //Jika diluar APBD dan BUMN
