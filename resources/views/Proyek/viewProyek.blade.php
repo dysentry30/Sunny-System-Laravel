@@ -274,6 +274,7 @@
                                         <p>Negara Proyek  : <b class="{{ $proyek->negara ?? "text-danger" }}">{{ $proyek->negara ?? "*Belum Ditentukan" }}</b></p>
                                         <p>Provinsi Proyek  : <b class="{{ $proyek->Provinsi->province_name ?? "text-danger" }}">{{ $proyek->Provinsi->province_name ?? "*Belum Ditentukan" }}</b></p>
                                         <p>Dokumen Pendukung Pasar Dini  : <b class="{{ !empty($proyek->DokumenPendukungPasarDini) ? '' : "text-danger" }}">{{ !empty($proyek->DokumenPendukungPasarDini) ? "Sudah" : "*Belum Ditentukan" }}</b></p>
+                                        <hr>
                                         <br>
                                         <p>Nama Pemberi Kerja : <b class="{{ $name_customer ?? "text-danger" }}">{{ $name_customer ?? "*Belum Ditentukan" }}</b></p>
                                         <p>Instansi Pemberi Kerja : <b class="{{ $jenis_instansi ?? "text-danger" }}">{{ $jenis_instansi ?? "*Belum Ditentukan" }}</b></p>
@@ -283,6 +284,24 @@
                                         <p>Industry Attractiveness Pemberi Kerja : <b class="{{ $industrySector ?? "text-danger" }}">{{ $industrySector->owner_attractiveness ?? "*Belum Ditentukan" }}</b></p>
                                         <p>Masalah Hukum Pemberi Kerja : <b class="{{ $masalahHukum->count() == 0 ? "text-success" : "text-danger" }}">{{ $masalahHukum->count() == 0 ? "0 Kasus" : $masalahHukum->count()." Kasus" }}</b></p>
                                         <p>File AHU : <b class="{{ !is_null($fileAHU) && $fileAHU->isNotEmpty() ? "text-dark" : "text-danger" }}">{{ !is_null($fileAHU) && $fileAHU->isNotEmpty() ? "Sudah" : "*Belum Ditentukan" }}</b></p>
+                                        <hr>
+                                        <br>
+                                        <p><b>Ajukan ke KAM :</b></p>
+                                        @php
+                                            $selectMatriksApprovalPengajuan = \App\Models\MatriksApprovalRekomendasi::where('klasifikasi_proyek', $proyek->klasifikasi_pasdin)?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)->where('kategori', "Pengajuan")->get();
+                                        @endphp
+                                        @if (!empty($selectMatriksApprovalPengajuan))
+                                        <div class="d-flex flex-row flex-wrap">
+                                            @foreach ($selectMatriksApprovalPengajuan as $index => $kam)
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="selected-kam" id="radioBox{{ $index }}" value="{{ $kam->nama_pegawai }}" {{ $index == 0 ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="radioBox{{ $index }}">{{ $kam->kode_unit_kerja }} - {{ $kam->Pegawai->nama_pegawai }}</label>
+                                            </div>                                            
+                                            @endforeach
+                                        </div>
+                                        @endif
+                                        <br>
+                                        <br>
                                         <br>
 
                                         {{-- @if (!empty($name_customer) && !empty($proyek->klasifikasi_pasdin) && !empty($proyek->SumberDana->nama_sumber) && !empty($jenis_instansi) && !empty($custNegara) && !empty($custProvinsi) && !empty($forbes_rank) && !empty($lq_rank)) --}}
