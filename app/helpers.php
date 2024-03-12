@@ -15,6 +15,7 @@ use App\Models\KriteriaPenggunaJasaDetail;
 use App\Models\LegalitasPerusahaan;
 use App\Models\NotaRekomendasi;
 use App\Models\ExceptGreenlane;
+use App\Models\IntegrationLog;
 use App\Models\PenilaianPenggunaJasa;
 use App\Models\Proyek;
 use Illuminate\Support\Facades\Log;
@@ -3049,7 +3050,7 @@ function mergeFileLampiranRisiko($kode_proyek)
     // }
 }
 
-function sendNotifEmail($user, $subject, $message, $activatedEmailToUser = false, $isNotaRekomendasi = true): bool
+function sendNotifEmail($user, $subject, $message, $activatedEmailToUser, $isNotaRekomendasi = true): bool
 {
     if (!$isNotaRekomendasi) {
         $emailTarget = $activatedEmailToUser ? $user : env("EMAIL_DEFAULT");
@@ -3057,33 +3058,59 @@ function sendNotifEmail($user, $subject, $message, $activatedEmailToUser = false
         $emailTarget = $activatedEmailToUser ? $user->email : env("EMAIL_DEFAULT");
     }
 
-    if (empty($emailTarget)) {
-        Alert::error('Email Tidak Ditemukan', 'Silahkan hubungi admin!');
-        return redirect()->back();
-    }
+    $requestBody = [
+        "subject" => $subject,
+        "to" => $emailTarget,
+        "cc" => "",
+        "bcc" => "",
+        "message" => $message
+    ];
+
+    $newLog = new IntegrationLog();
+    $newLog->category = 'Email';
+    $newLog->request_body = collect($requestBody)->toJson();
 
     try {
-        $response = Http::withBasicAuth(env("EMAIL_USERNAME_AUTH"), env("EMAIL_PASSWORD_AUTH"))->post(env("EMAIL_URL_AUTH"), [
-            "subject" => $subject,
-            "to" => $emailTarget,
-            "cc" => "",
-            "bcc" => "",
-            "message" => $message
-        ]);
+
+        $response = Http::withBasicAuth(env("EMAIL_USERNAME_AUTH"), env("EMAIL_PASSWORD_AUTH"))->post(env("EMAIL_URL_AUTH"), $requestBody);
+
+        $data = $response->collect();
+        $data = $data->prepend($emailTarget, 'to');
+
+        $newLog->response_header = collect($response->headers())->toJson();
 
         if ($response->successful()) {
-            $data = $response->collect();
             if (!$data["status"]) {
+                $newLog->status_code = $response->status();
+                $newLog->status = 'failed';
+                $newLog->response_body = $data->toJson();
+                $newLog->error_message = $data['message'];
+                $newLog->save();
                 Alert::error('Error', $data["message"]);
                 return false;
             } else {
+                $newLog->status_code = $response->status();
+                $newLog->status = 'success';
+                $newLog->response_body = $data->toJson();
+                $newLog->save();
                 return true;
             }
         } else {
+            $newLog->status_code = $response->status();
+            $newLog->status = 'failed';
+            $newLog->response_body = $data->toJson();
+            $newLog->error_message = $data['message'];
+            $newLog->save();
             Alert::error('Error', "Tidak dapat mengirim Email saat ini. Mohon hubungi Admin!");
             return false;
         }
     } catch (\Exception $e) {
+        $newLog->status_code = 500;
+        $newLog->status = 'failed';
+        $newLog->response_header = '[]';
+        $newLog->response_body = '[]';
+        $newLog->error_message = 'Internal Server Error';
+        $newLog->save();
         Alert::error('Error', $e->getMessage());
         return false;
     }
