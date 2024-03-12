@@ -77,6 +77,8 @@ use App\Models\ProyekPISNew;
 use App\Models\MasterKlasifikasiSBU;
 use App\Models\MasterSubKlasifikasiSBU;
 use App\Models\ExceptGreenlane;
+use App\Models\IntegrationLog;
+use App\Models\SKASKTProyek;
 use App\Models\MatriksApprovalRekomendasi;
 use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
 use Carbon\Carbon;
@@ -866,6 +868,18 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // DELETE KONSULTAN PERENCANA 
     Route::delete('proyek/konsultan-perencana/{id}/delete', [ProyekController::class, 'deleteKonsultan']);
+
+    // ADD Personel Tender 
+    Route::post('proyek/personel-tender/add', [ProyekController::class, 'tambahPersonelTender']);
+
+    // EDIT Personel Tender 
+    Route::post('/proyek/personel-tender/{id}/edit', [ProyekController::class, 'editPersonelTender']);
+
+    // UPLOAD CV Personel Tender 
+    Route::post('/proyek/personel-tender/{personel}/upload', [ProyekController::class, 'uploadCVPersonel']);
+
+    // DELETE Personel Tender 
+    Route::delete('proyek/personel-tender/{id}/delete', [ProyekController::class, 'deletePersonelTender']);
 
     // DELETE Dokumen Prakualifikasi
     Route::delete('proyek/dokumen-prakualifikasi/{id}/delete', [ProyekController::class, 'deleteDokumenPrakualifikasi']);
@@ -3827,6 +3841,104 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         }
     });
     //End::Get Data Pegawai
+
+    //Begin :: SKA SKT PROYEK
+
+    /**
+     * Integrasi HCMS Get List SKA SKT
+     */
+    Route::get('/ska-skt/get-data', function () {
+
+        $limit = 5;
+
+        $jumlahInsert = 0;
+        $totalData = 0;
+
+        $url = 'https://hcms-dev.wika.co.id/apiwika/?method=get_sertifikat&client=crm&key=aksesaku&page=';
+
+
+        try {
+            for ($i = 0; $i < $limit; $i++) {
+
+                $response = Http::withOptions([
+                    "verify" => false
+                ])->get($url . $i);
+
+                $newLog = new IntegrationLog();
+                $newLog->category = "SKA SKT";
+                $newLog->request_body = '[]';
+                $newLog->response_header = collect($response->headers())->toJson();
+
+                if ($response->successful()) {
+                    $collect = $response->collect();
+                    $data = collect($collect['data']);
+
+                    if ($data->count() < 1) {
+                        break;
+                    }
+
+                    $totalData = $totalData + $collect['total_seluruh_data'];
+
+                    $data->each(function ($item) use (&$jumlahInsert) {
+                        $isExistSKASKT = SKASKTProyek::where('nip', $item['nip'])?->where('no_sertifikat', $item['no_sertifikat'])->first();
+
+                        if (!empty($isExistSKASKT)) {
+                            $isExistSKASKT->emp_name = $item['emp_name'];
+                            $isExistSKASKT->nm_fungsi_bidang = $item['nm_fungsi_bidang'];
+                            $isExistSKASKT->no_sertifikat = $item['no_sertifikat'];
+                            $isExistSKASKT->type_sertifikat = $item['type_sertifikat'];
+                            $isExistSKASKT->institusi_penertbit_sertifikat = $item['institusi_penertbit_sertifikat'];
+                            $isExistSKASKT->category_sertifikat = $item['category_sertifikat'];
+                            $isExistSKASKT->issued_date = Carbon::create($item['issued_date']);
+                            $isExistSKASKT->expired_date = Carbon::create($item['expired_date']);
+                            $isExistSKASKT->save();
+                        } else {
+                            $newSKASKT = new SKASKTProyek();
+                            $newSKASKT->nip = $item['nip'];
+                            $newSKASKT->emp_name = $item['emp_name'];
+                            $newSKASKT->nm_fungsi_bidang = $item['nm_fungsi_bidang'];
+                            $newSKASKT->no_sertifikat = $item['no_sertifikat'];
+                            $newSKASKT->type_sertifikat = $item['type_sertifikat'];
+                            $newSKASKT->institusi_penertbit_sertifikat = $item['institusi_penertbit_sertifikat'];
+                            $newSKASKT->category_sertifikat = $item['category_sertifikat'];
+                            $newSKASKT->issued_date = Carbon::create($item['issued_date']);
+                            $newSKASKT->expired_date = Carbon::create($item['expired_date']);
+                            if ($newSKASKT->save()) {
+                                $jumlahInsert++;
+                            }
+                        }
+                    });
+
+                    $newLog->status = 'success';
+                    $newLog->status_code = $collect['status'];
+                    $newLog->response_body = $response->body();
+
+                    $newLog->save();
+                }
+            }
+
+            return response()->json([
+                'Success' => true,
+                'Message' => 'Data SKA SKT Berhasil Diupdate!<br><b>Total Data :</b> ' . $totalData . '<br><b>Jumlah Insert :</b> ' . $jumlahInsert
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'Success' => true,
+                'Message' => $e->getMessage()
+            ]);
+        }
+    });
+
+    /**
+     * View Menu SKA SKT
+     */
+    Route::get('/ska-skt', function (Request $request) {
+        $data = SKASKTProyek::all();
+
+        return view('19_Menu_SKA_SKT', ['data' => $data]);
+    });
+
+    //End :: SKA SKT PROYEK
 
 });
 

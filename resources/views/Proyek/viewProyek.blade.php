@@ -4046,6 +4046,7 @@
                                                                         <th class="w-50px text-center">No.</th>
                                                                         <th class="w-auto">Nama Pegawai</th>
                                                                         <th class="w-auto">Kategori</th>
+                                                                        <th class="w-auto">Dokumen CV Upload</th>
                                                                         <th class="w-100px"></th>
                                                                     </tr>
                                                                     <!--end::Table row-->
@@ -4073,16 +4074,28 @@
                                                                                 </a>
                                                                             </td>
                                                                             <td class="text-center">{{ $personel->kategori }}</td>
+                                                                            <td class="text-center"><a target="_blank" href="{{ asset('dokumen-cv-personel/upload/'.$personel->dokumen_cv_upload) }}" class="text-hover-primary">{{ $personel->dokumen_cv_upload }}</a></td>
                                                                             <td class="text-center">
-                                                                                <small>
-                                                                                    <p data-bs-toggle="modal"
-                                                                                        data-bs-target="#kt_personel_delete_{{ $personel->id }}"
-                                                                                        id="modal-delete"
-                                                                                        class="btn btn-sm btn-light btn-active-primary">
-                                                                                        Delete
-                                                                                    </p>
-                                                                                </small>
-                                                                            </td>
+                                                                                <div class="d-flex flex-row align-items-center justify-content-center gap-2">
+                                                                                    {{-- <button type="button" class="btn btn-sm btn-primary" onclick="downloadCVPersonel('{{ $personel->id }}')">Download</button> --}}
+                                                                                    <a href="https://hcms-dev.wika.co.id/apiwika/get_cvcrm.php?nip={{ $personel->nip }}" class="btn btn-sm btn-primary text-white">Download</a>
+                                                                                    <small>
+                                                                                        <p data-bs-toggle="modal"
+                                                                                            data-bs-target="#kt_upload_cv_personel_{{ $personel->id }}"
+                                                                                            id="modal-upload"
+                                                                                            class="btn btn-sm btn-primary m-0">
+                                                                                            Upload
+                                                                                        </p>
+                                                                                    </small>
+                                                                                    <small>
+                                                                                        <p data-bs-toggle="modal"
+                                                                                            data-bs-target="#kt_personel_delete_{{ $personel->id }}"
+                                                                                            id="modal-delete"
+                                                                                            class="btn btn-sm btn-light btn-active-danger m-0">
+                                                                                            Delete
+                                                                                        </p>
+                                                                                    </small>
+                                                                                </div>
                                                                             <!--end::Action-->
                                                                         </tr>
                                                                     @endforeach
@@ -7895,6 +7908,50 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                                </div>
+                                <!--end::Input group-->
+
+                            </div>
+                            <!--end::Modal body-->
+                        </div>
+                        <!--end::Modal content-->
+                    </div>
+                    <!--end::Modal dialog-->
+                </form>
+
+                
+                <form action="/proyek/personel-tender/{{ $personel->id }}/upload" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal fade" id="kt_upload_cv_personel_{{ $personel->id }}" tabindex="-1"
+                        aria-hidden="true">
+                        <!--begin::Modal dialog-->
+                        <div class="modal-dialog modal-dialog-centered mw-800px">
+                            <!--begin::Modal content-->
+                            <div class="modal-content">
+                                <!--begin::Modal header-->
+                                <div class="modal-header">
+                                    <!--begin::Modal title-->
+                                    <h2>Upload CV Personel : {{ $personel->Pegawai->nama_pegawai }}
+                                    </h2>
+                                    <!--end::Modal title-->
+                                    <!--begin::Close-->
+                                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                        <span class="svg-icon svg-icon-1">
+                                            <i class="bi bi-x-lg"></i>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </div>
+                                    <!--end::Close-->
+                                </div>
+                                <!--end::Modal header-->
+                                <!--begin::Modal body-->
+                                <div class="modal-body py-lg-6 px-lg-6">
+                                    <small class="text-danger">Upload file format .pdf</small>
+                                    <input type="file" name="upload-cv" id="upload-cv" class="form-control form-control-solid" accept=".pdf">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary">Submit</button>
                                 </div>
                                 <!--end::Input group-->
 
