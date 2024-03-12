@@ -228,8 +228,10 @@ function checkGreenLine($proyek) {
                         if (!empty($proyek->negara) && ($proyek->negara == 'ID' || $proyek->negara == 'Indonesia')) {
                             if ($proyek->sumber_dana == "APBD" || $proyek->sumber_dana == "BUMN") {
                                 //Jika ada Sumber Dana yg di Except Green Lane maka langsung kategori Green Lane
-                                if ($proyek->provinsi == $greenlaneExcept->sub_item || $customer->group_tier == $greenlaneExcept->sub_item) {
-                                    return true;
+                                if (!empty($greenlaneExcept->sub_item)) {
+                                    if ($proyek->provinsi == $greenlaneExcept->sub_item || $customer->group_tier == $greenlaneExcept->sub_item) {
+                                        return true;
+                                    }
                                 }
 
                                 //Jika tidak ada maka dicek di kriteria green lane dahulu untuk sumber dana dan anakannya

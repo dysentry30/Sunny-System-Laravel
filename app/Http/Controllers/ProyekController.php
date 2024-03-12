@@ -2574,9 +2574,13 @@ class ProyekController extends Controller
         }
 
         $editPersonel = PersonelTenderProyek::find($id);
+        if (!empty($editPersonel->dokumen_cv_upload)) {
+            File::delete(public_path('dokumen-cv-upload/upload/' . $editPersonel->dokumen_cv_upload));
+        }
         $editPersonel->nip = $data["nama_pegawai"];
         $editPersonel->kategori = $data["kategori_personel"];
         $editPersonel->kode_proyek = $data["kode-proyek"];
+        $editPersonel->dokumen_cv_upload = null;
 
         $editPersonel->save();
         Alert::success("Success", "Personel Tender Berhasil Diubah");
@@ -2586,6 +2590,9 @@ class ProyekController extends Controller
     public function deletePersonelTender($id)
     {
         $deletePersonel = PersonelTenderProyek::find($id);
+        if (!empty($deletePersonel->dokumen_cv_upload)) {
+            File::delete(public_path('dokumen-cv-personel/upload/' . $deletePersonel->dokumen_cv_upload));
+        }
         $deletePersonel->delete();
         Alert::success("Success", "Personel Tender Berhasil Dihapus");
         return redirect()->back();
@@ -2966,5 +2973,42 @@ class ProyekController extends Controller
         }
 
         return sprintf('%04X%04X%04X%04X%04X%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
+    }
+
+    public function uploadCVPersonel(Request $request, PersonelTenderProyek $personel)
+    {
+        $data = $request->all();
+
+        if (empty($personel)) {
+            Alert::error('Personel Tender tidak ditemukan. Hubungi Admin!');
+            return redirect()->back();
+        }
+
+        if (!isset($data['upload-cv'])) {
+            Alert::error('Upload dokumen tidak boleh kosong!');
+            return redirect()->back();
+        }
+
+        try {
+            $file = $request->file('upload-cv');
+
+            $fileName = date('dmyHis_') . 'CV-Personel-Final_' . $personel->nip . '.' . $file->getClientOriginalExtension();
+
+            if (!empty($personel->dokumen_cv_upload)) {
+                File::delete(public_path('dokumen-cv-personel/upload/' . $personel->dokumen_cv_upload));
+            }
+
+            $file->move(public_path('dokumen-cv-personel/upload'), $fileName);
+
+            $personel->dokumen_cv_upload = $fileName;
+
+            $personel->save();
+
+            Alert::success('Success', 'Dokumen CV Personel Tender Berhasil Ditambahkan');
+            return redirect()->back();
+        } catch (\Exception $e) {
+            Alert::error('Error', $e->getMessage());
+            return redirect()->back();
+        }
     }
 }
