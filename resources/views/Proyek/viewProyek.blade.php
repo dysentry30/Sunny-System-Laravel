@@ -10079,8 +10079,8 @@
                                                         data-select2-id="status-{{ $peserta->id }}"
                                                         data-hide-search="true" data-placeholder="Status">
                                                         <option></option>
-                                                        <option value="Menang">Menang</option>
-                                                        <option value="Menang">Kalah</option>
+                                                        <option value="Menang" {{ $peserta->status == "Menang" ? 'selected' : '' }}>Menang</option>
+                                                        <option value="Kalah" {{ $peserta->status == "Kalah" ? 'selected' : '' }}>Kalah</option>
                                                     </select>
                                                     <!--end::Input-->
                                                 </div>
@@ -10099,7 +10099,7 @@
                                                     <!--begin::Input-->
                                                     <input type="text" class="form-control form-control-solid"
                                                         id="keterangan-tender" name="keterangan-tender"
-                                                        value="{{ $peserta->status }}" placeholder="Peringkat 1" />
+                                                        value="{{ $peserta->keterangan }}" placeholder="Peringkat 1" />
                                                     <!--end::Input-->
                                                 </div>
                                                 <!--end::Input group-->
