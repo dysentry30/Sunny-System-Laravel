@@ -2423,17 +2423,17 @@ class ProyekController extends Controller
         $validation->validate();
         $newTender->peserta_tender = $data["peserta-tender"];
         $newTender->kode_proyek = $data["tender-kode-proyek"];
-        if ($data["stage-proyek"] >= 5) {
-            $newTender->nilai_tender_peserta = $data["nilai-tender"];
-            $newTender->status = $data["status-tender"];
-            $oe_wika = 0;
-            if (!empty($data["nilai-tender"]) && !empty($data["tender-pagu"])) {
-                $nilai_tender = (int)  str_replace('.', '', $data["nilai-tender"]);
-                $nilai_pagu = (int)  str_replace('.', '', $data["tender-pagu"]);
-                $oe_wika = ($nilai_tender / $nilai_pagu) * 100;
-            };
-            $newTender->oe_tender = (int) number_format($oe_wika, 0, "", "");
-        }
+        // if ($data["stage-proyek"] >= 5) {
+        //     $newTender->nilai_tender_peserta = $data["nilai-tender"];
+        //     $newTender->status = $data["status-tender"];
+        //     $oe_wika = 0;
+        //     if (!empty($data["nilai-tender"]) && !empty($data["tender-pagu"])) {
+        //         $nilai_tender = (int)  str_replace('.', '', $data["nilai-tender"]);
+        //         $nilai_pagu = (int)  str_replace('.', '', $data["tender-pagu"]);
+        //         $oe_wika = ($nilai_tender / $nilai_pagu) * 100;
+        //     };
+        //     $newTender->oe_tender = (int) number_format($oe_wika, 0, "", "");
+        // }
         $newTender->save();
         Alert::success("Success", "Peserta Tender Berhasil Ditambahkan");
         return redirect()->back();
@@ -2443,18 +2443,18 @@ class ProyekController extends Controller
     {
         $data = $request->all();
         // dd($data);
-        $messages = [
-            "required" => "*Kolom Ini Harus Diisi !",
-        ];
-        $rules = [
-            "edit-peserta-tender" => "required",
-        ];
-        $validation = Validator::make($data, $rules, $messages);
-        if ($validation->fails()) {
-            Alert::error('Error', "Peserta Tender Gagal Diubah, Periksa Kembali !");
-        }
+        // $messages = [
+        //     "required" => "*Kolom Ini Harus Diisi !",
+        // ];
+        // $rules = [
+        //     "edit-peserta-tender" => "required",
+        // ];
+        // $validation = Validator::make($data, $rules, $messages);
+        // if ($validation->fails()) {
+        //     Alert::error('Error', "Peserta Tender Gagal Diubah, Periksa Kembali !");
+        // }
 
-        $validation->validate();
+        // $validation->validate();
 
         $editTender = PesertaTender::find($id);
         $editTender->peserta_tender = $data["edit-peserta-tender"];
@@ -2463,6 +2463,7 @@ class ProyekController extends Controller
         if ($data["stage-proyek"] >= 5) {
             $editTender->nilai_tender_peserta = $data["nilai-tender"];
             $editTender->status = $data["status-tender"];
+            $editTender->keterangan = $data["keterangan-tender"];
             $oe_wika = 0;
             $nilai_tender = (int)  str_replace('.', '', $data["nilai-tender"]);
             $nilai_pagu = (int)  str_replace('.', '', $data["tender-pagu"]);

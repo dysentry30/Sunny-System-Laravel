@@ -47,6 +47,7 @@ use App\Http\Controllers\TipeProyekController;
 use App\Http\Controllers\KonsultanPerencanaController;
 use App\Http\Controllers\KriteriaPenggunaJasaController;
 use App\Http\Controllers\PenilaianPenggunaJasaController;
+use App\Http\Controllers\CompetitorController;
 use App\Models\AlatProyek;
 use App\Models\ContractChangeNotice;
 use App\Models\ContractChangeOrder;
@@ -3939,6 +3940,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     });
 
     //End :: SKA SKT PROYEK
+
+    //Begin::Competitor
+    Route::get('/competitor', [CompetitorController::class, 'view']);
+    Route::get('/competitor/{customer}/view', [CompetitorController::class, 'viewDetail']);
+    //end::Competitor
 
 });
 

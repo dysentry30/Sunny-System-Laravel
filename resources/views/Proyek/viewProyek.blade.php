@@ -1943,216 +1943,7 @@
                                                  </div>
                                                  <!--End::Row Kanan+Kiri-->
 
-
-                                                 <!--Begin::Title Biru Form: Nilai RKAP Review-->
-                                                 &nbsp;<br>
-                                                 <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                                     Nilai RKAP Review &nbsp;
-                                                     <i onclick="hideReview()" id="hide-review"
-                                                         class="bi bi-arrows-collapse"></i><i onclick="showReview()"
-                                                         id="show-review" style="display: none"
-                                                         class="bi bi-arrows-expand"></i>
-                                                 </h3>
-                                                 <script>
-                                                     function hideReview() {
-                                                         document.getElementById("divRkapReview").style.display = "none";
-                                                         document.getElementById("hide-review").style.display = "none";
-                                                         document.getElementById("show-review").style.display = "";
-                                                     }
-
-                                                     function showReview() {
-                                                         document.getElementById("divRkapReview").style.display = "";
-                                                         document.getElementById("hide-review").style.display = "";
-                                                         document.getElementById("show-review").style.display = "none";
-                                                     }
-                                                 </script>
-                                                 <br>
-                                                 <div id="divRkapReview">
-                                                     <!--End::Title Biru Form: Nilai RKAP Review-->
-
-                                                     <!--begin::Row Kanan+Kiri-->
-                                                     <div class="row fv-row">
-                                                         <!--begin::Col-->
-                                                         <div class="col-6">
-                                                             <!--begin::Input group Website-->
-                                                             <div class="fv-row mb-7">
-                                                                 <!--begin::Label-->
-                                                                 <label class="fs-6 fw-bold form-label mt-3">
-                                                                     <span>Nilai OK Review (Valas) (Exclude Tax)</span>
-                                                                 </label>
-                                                                 <!--end::Label-->
-                                                                 <!--begin::Input-->
-                                                                 <input type="text" onkeyup="hitungReview()"
-                                                                     class="form-control form-control-solid reformat"
-                                                                     id="nilai-valas-review" name="nilai-valas-review"
-                                                                     value="{{ number_format((int) str_replace('.', '', $proyek->nilai_valas_review), 0, '.', '.') }}"
-                                                                     placeholder="Nilai OK Review (Valas) (Exclude Tax)" />
-                                                                 <!--end::Input-->
-                                                             </div>
-                                                             <!--end::Input group-->
-                                                         </div>
-                                                         <!--End begin::Col-->
-                                                         <div class="col-6">
-                                                             <!--begin::Input group Website-->
-                                                             <div class="fv-row mb-7">
-                                                                 <!--begin::Label-->
-                                                                 <label class="fs-6 fw-bold form-label mt-3">
-                                                                     <span>Mata Uang Review</span>
-                                                                 </label>
-                                                                 <!--end::Label-->
-                                                                 <!--Begin::Input-->
-                                                                 <select id="mata-uang-review" name="mata-uang-review"
-                                                                     class="form-select form-select-solid"
-                                                                     data-control="select2" data-hide-search="true"
-                                                                     data-placeholder="Pilih Mata Uang">
-                                                                     <option></option>
-                                                                     @foreach ($mataUang as $uang)
-                                                                         @if ($uang->mata_uang == $proyek->mata_uang_review)
-                                                                             <option value="{{ $uang->mata_uang }}"
-                                                                                 selected>
-                                                                                 {{ $uang->mata_uang }}
-                                                                             </option>
-                                                                         @else
-                                                                             <option value="{{ $uang->mata_uang }}">
-                                                                                 {{ $uang->mata_uang }}
-                                                                             </option>
-                                                                         @endif
-                                                                     @endforeach
-                                                                 </select>
-                                                                 <!--end::Input-->
-                                                             </div>
-                                                             <!--end::Input group-->
-                                                         </div>
-                                                         <!--End::Col-->
-                                                     </div>
-                                                     <!--End::Row Kanan+Kiri-->
-
-                                                     <!--begin::Row Kanan+Kiri-->
-                                                     <div class="row fv-row">
-                                                         <!--begin::Col-->
-                                                         <div class="col-6">
-                                                             <!--begin::Input group Website-->
-                                                             <div class="fv-row mb-7">
-                                                                 <!--begin::Label-->
-                                                                 <label class="fs-6 fw-bold form-label mt-3">
-                                                                     <span>Kurs Review <i class="bi bi-key"></i></span>
-                                                                 </label>
-                                                                 <!--end::Label-->
-                                                                 <!--begin::Input-->
-                                                                 <input onkeyup="hitungReview()" type="text"
-                                                                     class="form-control form-control-solid reformat"
-                                                                     id="kurs-review" name="kurs-review"
-                                                                     value="{{ $proyek->kurs_review }}"
-                                                                     placeholder="Kurs Review"
-                                                                     {{ auth()->user()->check_administrator ? '' : 'readonly' }} />
-                                                                 <!--end::Input-->
-                                                             </div>
-                                                             <!--end::Input group-->
-                                                         </div>
-                                                         <!--End begin::Col-->
-                                                         <div class="col-6">
-                                                             <!--begin::Input group Website-->
-                                                             <div class="fv-row mb-7">
-                                                                 <!--begin::Label-->
-                                                                 <label class="fs-6 fw-bold form-label mt-3">
-                                                                     <span>Bulan Pelaksanaan Review <i
-                                                                             class="bi bi-key"></i></span>
-                                                                 </label>
-                                                                 <!--end::Label-->
-                                                                 <!--Begin::Input-->
-                                                                 <select id="bulan-pelaksanaan-review"
-                                                                     name="bulan-pelaksanaan-review"
-                                                                     class="form-select form-select-solid"
-                                                                     data-control="select2" data-hide-search="true"
-                                                                     data-placeholder="Pilih Bulan Pelaksanaan"
-                                                                     {{ auth()->user()->check_administrator ? '' : 'readonly' }}>
-                                                                     <option></option>
-                                                                     <option value="1"
-                                                                         {{ $proyek->bulan_review == '1' ? 'selected' : '' }}>
-                                                                         Januari</option>
-                                                                     <option value="2"
-                                                                         {{ $proyek->bulan_review == '2' ? 'selected' : '' }}>
-                                                                         Februari</option>
-                                                                     <option value="3"
-                                                                         {{ $proyek->bulan_review == '3' ? 'selected' : '' }}>
-                                                                         Maret</option>
-                                                                     <option value="4"
-                                                                         {{ $proyek->bulan_review == '4' ? 'selected' : '' }}>
-                                                                         April</option>
-                                                                     <option value="5"
-                                                                         {{ $proyek->bulan_review == '5' ? 'selected' : '' }}>
-                                                                         Mei</option>
-                                                                     <option value="6"
-                                                                         {{ $proyek->bulan_review == '6' ? 'selected' : '' }}>
-                                                                         Juni</option>
-                                                                     <option value="7"
-                                                                         {{ $proyek->bulan_review == '7' ? 'selected' : '' }}>
-                                                                         Juli</option>
-                                                                     <option value="8"
-                                                                         {{ $proyek->bulan_review == '8' ? 'selected' : '' }}>
-                                                                         Agustus</option>
-                                                                     <option value="9"
-                                                                         {{ $proyek->bulan_review == '9' ? 'selected' : '' }}>
-                                                                         September</option>
-                                                                     <option value="10"
-                                                                         {{ $proyek->bulan_review == '10' ? 'selected' : '' }}>
-                                                                         Oktober</option>
-                                                                     <option value="11"
-                                                                         {{ $proyek->bulan_review == '11' ? 'selected' : '' }}>
-                                                                         November</option>
-                                                                     <option value="12"
-                                                                         {{ $proyek->bulan_review == '12' ? 'selected' : '' }}>
-                                                                         Desember</option>
-                                                                 </select>
-                                                                 <!--end::Input-->
-                                                             </div>
-                                                             <!--end::Input group-->
-                                                         </div>
-                                                         <!--End::Col-->
-                                                     </div>
-                                                     <!--End::Row Kanan+Kiri-->
-
-                                                     <!--begin::Row Kanan+Kiri-->
-                                                     <div class="row fv-row">
-                                                         <!--begin::Col-->
-                                                         <div class="col-6">
-                                                             <!--begin::Input group Website-->
-                                                             <div class="fv-row mb-7">
-                                                                 <!--begin::Label-->
-                                                                 <label class="fs-6 fw-bold form-label mt-3">
-                                                                     <span>Nilai OK (Exclude PPN) <i
-                                                                             class="bi bi-key"></i></span>
-                                                                 </label>
-                                                                 <!--end::Label-->
-                                                                 <!--begin::Input-->
-                                                                 <input type="text"
-                                                                     class="form-control form-control-solid reformat"
-                                                                     id="nilaiok-review" name="nilaiok-review"
-                                                                     value="{{ number_format((int) str_replace('.', '', $proyek->nilaiok_review), 0, '.', '.') }}"
-                                                                     placeholder="Nilai OK (Exclude PPN)"
-                                                                     {{ auth()->user()->check_administrator ? '' : 'readonly' }} />
-                                                                 <!--end::Input-->
-                                                             </div>
-                                                             <!--end::Input group-->
-                                                         </div>
-                                                         <!--End::Col-->
-                                                     </div>
-                                                     <!--End::Row Kanan+Kiri-->
-
-                                                     <script>
-                                                         function hitungReview() {
-                                                             let nilaiOkReview = document.getElementById("nilai-valas-review").value.replaceAll(".", "");
-                                                             // console.log(nilaiOkReview); 
-                                                             let kursReview = document.getElementById("kurs-review").value.replaceAll(".", "");
-                                                             let hasilOkReview = nilaiOkReview * kursReview;
-                                                             document.getElementById("nilaiok-review").value = Intl.NumberFormat(["id"]).format(hasilOkReview);
-                                                             // console.log(hasilOkReview);
-                                                         }
-                                                     </script>
-                                                 </div>
-                                                 <!--divRkapReview-->
-
-
+                                                 
                                                  <!--Begin::Title Biru Form: Nilai RKAP Awal-->
                                                  <br>
                                                  <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
@@ -2383,6 +2174,215 @@
                                                      <!--End::Row Kanan+Kiri-->
                                                  </div>
                                                  <!--divRkapAwal-->
+
+
+                                                 <!--Begin::Title Biru Form: Nilai RKAP Review-->
+                                                 &nbsp;<br>
+                                                 <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                     Nilai RKAP Review &nbsp;
+                                                     <i onclick="hideReview()" id="hide-review"
+                                                         class="bi bi-arrows-collapse"></i><i onclick="showReview()"
+                                                         id="show-review" style="display: none"
+                                                         class="bi bi-arrows-expand"></i>
+                                                 </h3>
+                                                 <script>
+                                                     function hideReview() {
+                                                         document.getElementById("divRkapReview").style.display = "none";
+                                                         document.getElementById("hide-review").style.display = "none";
+                                                         document.getElementById("show-review").style.display = "";
+                                                     }
+
+                                                     function showReview() {
+                                                         document.getElementById("divRkapReview").style.display = "";
+                                                         document.getElementById("hide-review").style.display = "";
+                                                         document.getElementById("show-review").style.display = "none";
+                                                     }
+                                                 </script>
+                                                 <br>
+                                                 <div id="divRkapReview">
+                                                     <!--End::Title Biru Form: Nilai RKAP Review-->
+
+                                                     <!--begin::Row Kanan+Kiri-->
+                                                     <div class="row fv-row">
+                                                         <!--begin::Col-->
+                                                         <div class="col-6">
+                                                             <!--begin::Input group Website-->
+                                                             <div class="fv-row mb-7">
+                                                                 <!--begin::Label-->
+                                                                 <label class="fs-6 fw-bold form-label mt-3">
+                                                                     <span>Nilai OK Review (Valas) (Exclude Tax)</span>
+                                                                 </label>
+                                                                 <!--end::Label-->
+                                                                 <!--begin::Input-->
+                                                                 <input type="text" onkeyup="hitungReview()"
+                                                                     class="form-control form-control-solid reformat"
+                                                                     id="nilai-valas-review" name="nilai-valas-review"
+                                                                     value="{{ number_format((int) str_replace('.', '', $proyek->nilai_valas_review), 0, '.', '.') }}"
+                                                                     placeholder="Nilai OK Review (Valas) (Exclude Tax)" />
+                                                                 <!--end::Input-->
+                                                             </div>
+                                                             <!--end::Input group-->
+                                                         </div>
+                                                         <!--End begin::Col-->
+                                                         <div class="col-6">
+                                                             <!--begin::Input group Website-->
+                                                             <div class="fv-row mb-7">
+                                                                 <!--begin::Label-->
+                                                                 <label class="fs-6 fw-bold form-label mt-3">
+                                                                     <span>Mata Uang Review</span>
+                                                                 </label>
+                                                                 <!--end::Label-->
+                                                                 <!--Begin::Input-->
+                                                                 <select id="mata-uang-review" name="mata-uang-review"
+                                                                     class="form-select form-select-solid"
+                                                                     data-control="select2" data-hide-search="true"
+                                                                     data-placeholder="Pilih Mata Uang">
+                                                                     <option></option>
+                                                                     @foreach ($mataUang as $uang)
+                                                                         @if ($uang->mata_uang == $proyek->mata_uang_review)
+                                                                             <option value="{{ $uang->mata_uang }}"
+                                                                                 selected>
+                                                                                 {{ $uang->mata_uang }}
+                                                                             </option>
+                                                                         @else
+                                                                             <option value="{{ $uang->mata_uang }}">
+                                                                                 {{ $uang->mata_uang }}
+                                                                             </option>
+                                                                         @endif
+                                                                     @endforeach
+                                                                 </select>
+                                                                 <!--end::Input-->
+                                                             </div>
+                                                             <!--end::Input group-->
+                                                         </div>
+                                                         <!--End::Col-->
+                                                     </div>
+                                                     <!--End::Row Kanan+Kiri-->
+
+                                                     <!--begin::Row Kanan+Kiri-->
+                                                     <div class="row fv-row">
+                                                         <!--begin::Col-->
+                                                         <div class="col-6">
+                                                             <!--begin::Input group Website-->
+                                                             <div class="fv-row mb-7">
+                                                                 <!--begin::Label-->
+                                                                 <label class="fs-6 fw-bold form-label mt-3">
+                                                                     <span>Kurs Review <i class="bi bi-key"></i></span>
+                                                                 </label>
+                                                                 <!--end::Label-->
+                                                                 <!--begin::Input-->
+                                                                 <input onkeyup="hitungReview()" type="text"
+                                                                     class="form-control form-control-solid reformat"
+                                                                     id="kurs-review" name="kurs-review"
+                                                                     value="{{ $proyek->kurs_review }}"
+                                                                     placeholder="Kurs Review"
+                                                                     {{ auth()->user()->check_administrator ? '' : 'readonly' }} />
+                                                                 <!--end::Input-->
+                                                             </div>
+                                                             <!--end::Input group-->
+                                                         </div>
+                                                         <!--End begin::Col-->
+                                                         <div class="col-6">
+                                                             <!--begin::Input group Website-->
+                                                             <div class="fv-row mb-7">
+                                                                 <!--begin::Label-->
+                                                                 <label class="fs-6 fw-bold form-label mt-3">
+                                                                     <span>Bulan Pelaksanaan Review <i
+                                                                             class="bi bi-key"></i></span>
+                                                                 </label>
+                                                                 <!--end::Label-->
+                                                                 <!--Begin::Input-->
+                                                                 <select id="bulan-pelaksanaan-review"
+                                                                     name="bulan-pelaksanaan-review"
+                                                                     class="form-select form-select-solid"
+                                                                     data-control="select2" data-hide-search="true"
+                                                                     data-placeholder="Pilih Bulan Pelaksanaan"
+                                                                     {{ auth()->user()->check_administrator ? '' : 'readonly' }}>
+                                                                     <option></option>
+                                                                     <option value="1"
+                                                                         {{ $proyek->bulan_review == '1' ? 'selected' : '' }}>
+                                                                         Januari</option>
+                                                                     <option value="2"
+                                                                         {{ $proyek->bulan_review == '2' ? 'selected' : '' }}>
+                                                                         Februari</option>
+                                                                     <option value="3"
+                                                                         {{ $proyek->bulan_review == '3' ? 'selected' : '' }}>
+                                                                         Maret</option>
+                                                                     <option value="4"
+                                                                         {{ $proyek->bulan_review == '4' ? 'selected' : '' }}>
+                                                                         April</option>
+                                                                     <option value="5"
+                                                                         {{ $proyek->bulan_review == '5' ? 'selected' : '' }}>
+                                                                         Mei</option>
+                                                                     <option value="6"
+                                                                         {{ $proyek->bulan_review == '6' ? 'selected' : '' }}>
+                                                                         Juni</option>
+                                                                     <option value="7"
+                                                                         {{ $proyek->bulan_review == '7' ? 'selected' : '' }}>
+                                                                         Juli</option>
+                                                                     <option value="8"
+                                                                         {{ $proyek->bulan_review == '8' ? 'selected' : '' }}>
+                                                                         Agustus</option>
+                                                                     <option value="9"
+                                                                         {{ $proyek->bulan_review == '9' ? 'selected' : '' }}>
+                                                                         September</option>
+                                                                     <option value="10"
+                                                                         {{ $proyek->bulan_review == '10' ? 'selected' : '' }}>
+                                                                         Oktober</option>
+                                                                     <option value="11"
+                                                                         {{ $proyek->bulan_review == '11' ? 'selected' : '' }}>
+                                                                         November</option>
+                                                                     <option value="12"
+                                                                         {{ $proyek->bulan_review == '12' ? 'selected' : '' }}>
+                                                                         Desember</option>
+                                                                 </select>
+                                                                 <!--end::Input-->
+                                                             </div>
+                                                             <!--end::Input group-->
+                                                         </div>
+                                                         <!--End::Col-->
+                                                     </div>
+                                                     <!--End::Row Kanan+Kiri-->
+
+                                                     <!--begin::Row Kanan+Kiri-->
+                                                     <div class="row fv-row">
+                                                         <!--begin::Col-->
+                                                         <div class="col-6">
+                                                             <!--begin::Input group Website-->
+                                                             <div class="fv-row mb-7">
+                                                                 <!--begin::Label-->
+                                                                 <label class="fs-6 fw-bold form-label mt-3">
+                                                                     <span>Nilai OK (Exclude PPN) <i
+                                                                             class="bi bi-key"></i></span>
+                                                                 </label>
+                                                                 <!--end::Label-->
+                                                                 <!--begin::Input-->
+                                                                 <input type="text"
+                                                                     class="form-control form-control-solid reformat"
+                                                                     id="nilaiok-review" name="nilaiok-review"
+                                                                     value="{{ number_format((int) str_replace('.', '', $proyek->nilaiok_review), 0, '.', '.') }}"
+                                                                     placeholder="Nilai OK (Exclude PPN)"
+                                                                     {{ auth()->user()->check_administrator ? '' : 'readonly' }} />
+                                                                 <!--end::Input-->
+                                                             </div>
+                                                             <!--end::Input group-->
+                                                         </div>
+                                                         <!--End::Col-->
+                                                     </div>
+                                                     <!--End::Row Kanan+Kiri-->
+
+                                                     <script>
+                                                         function hitungReview() {
+                                                             let nilaiOkReview = document.getElementById("nilai-valas-review").value.replaceAll(".", "");
+                                                             // console.log(nilaiOkReview); 
+                                                             let kursReview = document.getElementById("kurs-review").value.replaceAll(".", "");
+                                                             let hasilOkReview = nilaiOkReview * kursReview;
+                                                             document.getElementById("nilaiok-review").value = Intl.NumberFormat(["id"]).format(hasilOkReview);
+                                                             // console.log(hasilOkReview);
+                                                         }
+                                                     </script>
+                                                 </div>
+                                                 <!--divRkapReview-->
 
 
                                                  <!--Begin::Rekomendasi-->
@@ -4371,10 +4371,11 @@
                                                                         <!--end::Name-->
                                                                         <!--begin::Column-->
                                                                         <td>
-                                                                            <a href="#"
+                                                                            {{-- <a href="#"
                                                                                 class="text-gray-800 text-hover-primary"
                                                                                 data-bs-toggle="modal"
-                                                                                data-bs-target="#kt_modal_edit_tender_{{ $peserta->id }}">{{ $peserta->peserta_tender }}</a>
+                                                                                data-bs-target="#kt_modal_edit_tender_{{ $peserta->id }}">{{ $peserta->peserta_tender }}</a> --}}
+                                                                                <p class="m-0">{{ $peserta->peserta_tender }}</p>
                                                                         </td>
                                                                         <!--end::Column-->
                                                                         <!--begin::Column-->
@@ -4711,8 +4712,8 @@
                                                     <!--Begin::Title Biru Form: List Peserta Tender-->
                                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                         List Peserta Tender
-                                                        <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                            data-bs-target="#kt_modal_peserta_tender">+</a>
+                                                        {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_peserta_tender">+</a> --}}
                                                     </h3>
                                                     <br>
                                                     <!--begin::Table Kriteria Pasar-->
@@ -4729,6 +4730,7 @@
                                                                 <th class="w-auto"><i class="bi bi-percent"></i>OE
                                                                 </th>
                                                                 <th class="w-auto">Status</th>
+                                                                <th class="w-auto">Keterangan</th>
                                                                 <th class="w-100px"></th>
                                                             </tr>
                                                             <!--end::Table row-->
@@ -4767,6 +4769,11 @@
                                                                     <!--begin::Column-->
                                                                     <td>
                                                                         {{ $peserta->status ?? '-' }}
+                                                                    </td>
+                                                                    <!--end::Column-->
+                                                                    <!--begin::Column-->
+                                                                    <td>
+                                                                        {{ $peserta->keterangan ?? '-' }}
                                                                     </td>
                                                                     <!--end::Column-->
                                                                     <!--begin::Action-->
@@ -8014,7 +8021,7 @@
                                                 class="form-select form-select-solid" data-control="select2"
                                                 data-hide-search="false" data-placeholder="Pilih Peserta Tender">
                                                 <option></option>
-                                                @foreach ($customers as $customer)
+                                                @foreach ($customers->where('check_competitor', true) as $customer)
                                                     <option value="{{ $customer->name }}"> {{ $customer->name }}
                                                     </option>
                                                 @endforeach
@@ -8045,47 +8052,6 @@
                                     @endif
                                 </div>
                                 <!--End begin::Row-->
-
-                                @if ($proyek->stage >= 5)
-                                    <!--begin::Row-->
-                                    <div class="row fv-row">
-                                        <!--begin::Col-->
-                                        {{-- <div class="col-6">
-                        <!--begin::Input group Website-->
-                        <div class="fv-row mb-7">
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span><i class="bi bi-percent text-dark"></i> OE</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid reformat" id="oe-tender"
-                                name="oe-tender" placeholder="% OE" />
-                            <!--end::Input-->
-                        </div>
-                        <!--end::Input group-->
-                    </div> --}}
-                                        <!--End begin::Col-->
-                                        <div class="col-6">
-                                            <!--begin::Input group Website-->
-                                            <div class="fv-row mb-7">
-                                                <!--begin::Label-->
-                                                <label class="fs-6 fw-bold form-label mt-3">
-                                                    <span>Status</span>
-                                                </label>
-                                                <!--end::Label-->
-                                                <!--begin::Input-->
-                                                <input type="text" class="form-control form-control-solid"
-                                                    id="status-tender" name="status-tender" placeholder="Status" />
-                                                <!--end::Input-->
-                                            </div>
-                                            <!--end::Input group-->
-                                        </div>
-                                        <!--End begin::Col-->
-                                    </div>
-                                    <!--End begin::Row-->
-                                @endif
-
                             </div>
                             <div class="modal-footer">
 
@@ -8150,7 +8116,7 @@
                                                 <!--begin::Input-->
                                                 <select id="edit-peserta-tender" name="edit-peserta-tender"
                                                     class="form-select form-select-solid" data-control="select2"
-                                                    data-hide-search="false" data-placeholder="Pilih Peserta Tender">
+                                                    data-hide-search="false" data-placeholder="Pilih Peserta Tender" disabled>
                                                     <option></option>
                                                     @foreach ($customers as $customer)
                                                         @if ($customer->name == $peserta->peserta_tender)
@@ -8195,22 +8161,6 @@
                                     @if ($proyek->stage >= 5)
                                         <!--begin::Row-->
                                         <div class="row fv-row">
-                                            <!--begin::Col-->
-                                            {{-- <div class="col-6">
-                        <!--begin::Input group Website-->
-                        <div class="fv-row mb-7">
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span><i class="bi bi-percent text-dark"></i> OE</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid reformat" id="oe-tender"
-                                name="oe-tender" value="{{ $peserta->oe_tender }}" placeholder="% OE" />
-                            <!--end::Input-->
-                        </div>
-                        <!--end::Input group-->
-                    </div> --}}
                                             <!--End begin::Col-->
                                             <div class="col-6">
                                                 <!--begin::Input group Website-->
@@ -8221,9 +8171,32 @@
                                                     </label>
                                                     <!--end::Label-->
                                                     <!--begin::Input-->
+                                                    <select id="status-tender" name="status-tender"
+                                                        class="form-select form-select-solid" data-control="select2"
+                                                        data-select2-id="status-{{ $peserta->id }}"
+                                                        data-hide-search="true" data-placeholder="Status">
+                                                        <option></option>
+                                                        <option value="Menang" {{ $peserta->status == "Menang" ? 'selected' : '' }}>Menang</option>
+                                                        <option value="Kalah" {{ $peserta->status == "Kalah" ? 'selected' : '' }}>Kalah</option>
+                                                    </select>
+                                                    <!--end::Input-->
+                                                </div>
+                                                <!--end::Input group-->
+                                            </div>
+                                            <!--End begin::Col-->
+                                            <!--End begin::Col-->
+                                            <div class="col-6">
+                                                <!--begin::Input group Website-->
+                                                <div class="fv-row mb-7">
+                                                    <!--begin::Label-->
+                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                        <span>Keterangan</span>
+                                                    </label>
+                                                    <!--end::Label-->
+                                                    <!--begin::Input-->
                                                     <input type="text" class="form-control form-control-solid"
-                                                        id="status-tender" name="status-tender"
-                                                        value="{{ $peserta->status }}" placeholder="Status" />
+                                                        id="keterangan-tender" name="keterangan-tender"
+                                                        value="{{ $peserta->keterangan }}" placeholder="Peringkat 1" />
                                                     <!--end::Input-->
                                                 </div>
                                                 <!--end::Input group-->
