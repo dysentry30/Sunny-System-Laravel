@@ -1154,6 +1154,22 @@
                             </div>
                             <!--end::Menu Colapse-->
                         @endcanany
+                        
+                        @canany(['super-admin', 'admin-crm', 'user-crm'])
+                            <!--begin::Menu Colapse-->
+                            <div class="menu-item">
+                                <a class="menu-link " href="/competitor" style="color:white; padding-left:20px; {{ Request::Path() == 'competitor' ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        {{-- <i class="bi bi-buildings text-white"></i> --}}
+                                        <i class="bi bi-building-fill-exclamation text-white" style="font-size: 20px"></i>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Kompetitor</span>
+                                </a>
+                            </div>
+                            <!--end::Menu Colapse-->
+                        @endcanany
 
 
                         @canany(['super-admin', 'admin-crm'])

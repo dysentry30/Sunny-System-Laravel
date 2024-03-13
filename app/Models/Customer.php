@@ -109,4 +109,9 @@ class Customer extends Model
         return $this->hasMany(AHU::class, "id_customer");
     }
 
+    public function PesertaTender()
+    {
+        return $this->hasMany(PesertaTender::class, "peserta_tender", "name");
+    }
+
 }
