@@ -555,7 +555,7 @@ class ProyekController extends Controller
             $departemen = $newProyek->departemen_proyek;
             // dump($divisi);
             $klasifikasi_proyek = $newProyek->klasifikasi_pasdin;
-            $isnomorTargetActive = false;
+            $isnomorTargetActive = true;
             // $matriks_approval = MatriksApprovalRekomendasi::where("unit_kerja", "=", $divisi)->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where("departemen", $departemen)->where("kategori", "=", "Pengajuan")->get();
             // // dd($matriks_approval);
             // // $nomorDefault = "6285376444701";
