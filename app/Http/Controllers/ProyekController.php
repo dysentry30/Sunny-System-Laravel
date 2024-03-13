@@ -3480,6 +3480,9 @@ class ProyekController extends Controller
         }
 
         $editPersonel = PersonelTenderProyek::find($id);
+        if (!empty($editPersonel->dokumen_cv_upload)) {
+            File::delete(public_path('dokumen-cv-upload/upload/' . $editPersonel->dokumen_cv_upload));
+        }
         $editPersonel->nip = $data["nama_pegawai"];
         $editPersonel->kategori = $data["kategori_personel"];
         $editPersonel->kode_proyek = $data["kode-proyek"];
