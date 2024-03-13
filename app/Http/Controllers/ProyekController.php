@@ -113,7 +113,7 @@ class ProyekController extends Controller
         $year = (int) date("Y");
 
         if (Auth::user()->check_administrator) {
-            $unitkerjas = UnitKerja::all();
+            $unitkerjas = UnitKerja::all()->sortBy('id_profit_center');
             // dd($unitkerjas);
             // $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan']);
             $proyeks = Proyek::with(['UnitKerja', 'proyekBerjalan']);
@@ -121,7 +121,7 @@ class ProyekController extends Controller
             // $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan'])->where("unit_kerja", "=", Auth::user()->unit_kerja);
             $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
             if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
-                $unitkerjas = UnitKerja::all()->whereIn("divcode", $unit_kerja_user->toArray());
+                $unitkerjas = UnitKerja::all()->whereIn("divcode", $unit_kerja_user->toArray())->sortBy('id_profit_center');
                 $proyeks = Proyek::with(['UnitKerja', 'proyekBerjalan'])->whereIn("unit_kerja", $unit_kerja_user->toArray());
             }
         }
@@ -299,7 +299,7 @@ class ProyekController extends Controller
             $no_urut = (int) preg_replace("/[^0-9]/", "", $lastProyek->kode_proyek) + 1;
             $len = strlen($no_urut);
             // $no_urut = (int) trim($lastProyek->kode_proyek, $kode_proyek) + 1;
-            $no_urut = substr($no_urut, ($len - 3), 3);
+            // $no_urut = substr($no_urut, ($len-3), 3);
         }
         
         // dd($lastProyek, $no_urut, $len);
@@ -3268,17 +3268,17 @@ class ProyekController extends Controller
         $validation->validate();
         $newTender->peserta_tender = $data["peserta-tender"];
         $newTender->kode_proyek = $data["tender-kode-proyek"];
-        if ($data["stage-proyek"] >= 5) {
-            $newTender->nilai_tender_peserta = $data["nilai-tender"];
-            $newTender->status = $data["status-tender"];
-            $oe_wika = 0;
-            if (!empty($data["nilai-tender"]) && !empty($data["tender-pagu"])) {
-                $nilai_tender = (int)  str_replace('.', '', $data["nilai-tender"]);
-                $nilai_pagu = (int)  str_replace('.', '', $data["tender-pagu"]);
-                $oe_wika = ($nilai_tender / $nilai_pagu) * 100;
-            };
-            $newTender->oe_tender = (int) number_format($oe_wika, 0, "", "");
-        }
+        // if ($data["stage-proyek"] >= 5) {
+        //     $newTender->nilai_tender_peserta = $data["nilai-tender"];
+        //     $newTender->status = $data["status-tender"];
+        //     $oe_wika = 0;
+        //     if (!empty($data["nilai-tender"]) && !empty($data["tender-pagu"])) {
+        //         $nilai_tender = (int)  str_replace('.', '', $data["nilai-tender"]);
+        //         $nilai_pagu = (int)  str_replace('.', '', $data["tender-pagu"]);
+        //         $oe_wika = ($nilai_tender / $nilai_pagu) * 100;
+        //     };
+        //     $newTender->oe_tender = (int) number_format($oe_wika, 0, "", "");
+        // }
         $newTender->save();
         Alert::success("Success", "Peserta Tender Berhasil Ditambahkan");
         return redirect()->back();
@@ -3288,26 +3288,27 @@ class ProyekController extends Controller
     {
         $data = $request->all();
         // dd($data);
-        $messages = [
-            "required" => "*Kolom Ini Harus Diisi !",
-        ];
-        $rules = [
-            "edit-peserta-tender" => "required",
-        ];
-        $validation = Validator::make($data, $rules, $messages);
-        if ($validation->fails()) {
-            Alert::error('Error', "Peserta Tender Gagal Diubah, Periksa Kembali !");
-        }
+        // $messages = [
+        //     "required" => "*Kolom Ini Harus Diisi !",
+        // ];
+        // $rules = [
+        //     "edit-peserta-tender" => "required",
+        // ];
+        // $validation = Validator::make($data, $rules, $messages);
+        // if ($validation->fails()) {
+        //     Alert::error('Error', "Peserta Tender Gagal Diubah, Periksa Kembali !");
+        // }
 
-        $validation->validate();
+        // $validation->validate();
 
         $editTender = PesertaTender::find($id);
-        $editTender->peserta_tender = $data["edit-peserta-tender"];
+        // $editTender->peserta_tender = $data["edit-peserta-tender"];
         $editTender->kode_proyek = $data["tender-kode-proyek"];
 
         if ($data["stage-proyek"] >= 5) {
             $editTender->nilai_tender_peserta = $data["nilai-tender"];
             $editTender->status = $data["status-tender"];
+            $editTender->keterangan = $data["keterangan-tender"];
             $oe_wika = 0;
             $nilai_tender = (int)  str_replace('.', '', $data["nilai-tender"]);
             $nilai_pagu = (int)  str_replace('.', '', $data["tender-pagu"]);
