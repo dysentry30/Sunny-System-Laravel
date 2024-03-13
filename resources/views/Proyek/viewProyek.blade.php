@@ -4078,7 +4078,7 @@
                                                                             <td class="text-center">
                                                                                 <div class="d-flex flex-row align-items-center justify-content-center gap-2">
                                                                                     {{-- <button type="button" class="btn btn-sm btn-primary" onclick="downloadCVPersonel('{{ $personel->id }}')">Download</button> --}}
-                                                                                    <a href="https://hcms-dev.wika.co.id/apiwika/get_cvcrm.php?nip={{ $personel->nip }}" class="btn btn-sm btn-primary text-white">Download</a>
+                                                                                    <a href="https://hcms.wika.co.id/apiwika/get_cvcrm.php?nip={{ $personel->nip }}" class="btn btn-sm btn-primary text-white">Download</a>
                                                                                     <small>
                                                                                         <p data-bs-toggle="modal"
                                                                                             data-bs-target="#kt_upload_cv_personel_{{ $personel->id }}"

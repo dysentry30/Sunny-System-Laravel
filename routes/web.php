@@ -3854,7 +3854,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $jumlahInsert = 0;
         $totalData = 0;
 
-        $url = 'https://hcms-dev.wika.co.id/apiwika/?method=get_sertifikat&client=crm&key=aksesaku&page=';
+        $url = 'https://hcms.wika.co.id/apiwika/?method=get_sertifikat&client=crm&key=aksesaku&page=';
 
 
         try {

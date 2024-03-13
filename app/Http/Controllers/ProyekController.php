@@ -90,14 +90,14 @@ class ProyekController extends Controller
         $year = (int) date("Y");
 
         if (Auth::user()->check_administrator) {
-            $unitkerjas = UnitKerja::all();
+            $unitkerjas = UnitKerja::all()->sortBy('id_profit_center');;
             // dd($unitkerjas);
             $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan']);
         } else {
             // $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan'])->where("unit_kerja", "=", Auth::user()->unit_kerja);
             $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
             if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
-                $unitkerjas = UnitKerja::all()->whereIn("divcode", $unit_kerja_user->toArray());
+                $unitkerjas = UnitKerja::all()->whereIn("divcode", $unit_kerja_user->toArray())->sortBy('id_profit_center');;
                 $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan'])->whereIn("unit_kerja", $unit_kerja_user->toArray());
             }
         }
@@ -280,7 +280,7 @@ class ProyekController extends Controller
             $no_urut = (int) preg_replace("/[^0-9]/", "", $lastProyek->kode_proyek) + 1;
             $len = strlen($no_urut);
             // $no_urut = (int) trim($lastProyek->kode_proyek, $kode_proyek) + 1;
-            $no_urut = substr($no_urut, ($len-3), 3);
+            // $no_urut = substr($no_urut, ($len-3), 3);
         }
         
         // dd($lastProyek, $no_urut, $len);
