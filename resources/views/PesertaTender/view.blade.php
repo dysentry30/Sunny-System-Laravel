@@ -103,7 +103,7 @@
                                                             @foreach ($listTender as $index => $item)
                                                             <tr>
                                                                 <td class="align-midlle text-center">{{ $index+1 }}</td>
-                                                                <td class="align-midlle"><a target="_blank" href="/proyek/view/{{ $item->Proyek->kode_proyek }}" class="text-hover-primary">{{ $item->Proyek->nama_proyek }}</a></td>
+                                                                <td class="align-midlle"><a target="_blank" href="/proyek/view/{{ $item->Proyek?->kode_proyek }}" class="text-hover-primary">{{ $item->Proyek?->nama_proyek }}</a></td>
                                                                 <td class="align-middle text-center">
                                                                     @switch($item->Proyek?->stage)
                                                                         @case('1')
