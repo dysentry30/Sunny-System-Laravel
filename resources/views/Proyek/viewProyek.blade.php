@@ -4307,7 +4307,7 @@
                                                                     </td>
                                                                     <!--end::Column-->
                                                                     <!--begin::Action-->
-                                                                    @if ($proyek->stage < 5)
+                                                                    {{-- @if ($proyek->stage < 5) --}}
                                                                         <td class="text-center">
                                                                             <small>
                                                                                 <p data-bs-toggle="modal"
@@ -4317,7 +4317,7 @@
                                                                                     Delete</p>
                                                                             </small>
                                                                         </td>
-                                                                    @endif
+                                                                    {{-- @endif --}}
                                                                     <!--end::Action-->
                                                                 </tr>
                                                             @endforeach
