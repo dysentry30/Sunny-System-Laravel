@@ -1866,7 +1866,7 @@
                                                          <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                              Dokumen Pendukung
                                                          </h3>
-                                                         @canany(['super-admin', 'approver-crm', 'user-crm'])
+                                                         @canany(['super-admin', 'approver-crm', 'user-crm', 'admin-crm'])
                                                          @if (empty($proyek->DokumenPendukungPasarDini))
                                                          <br>
                                                          <div class="w-50">
@@ -2692,11 +2692,30 @@
                                                                 <span>SBU KBLI</span>
                                                             </label>
                                                             <!--begin::Input-->
-                                                            <select id="klasifikasi-kbli-sbu" name="klasifikasi-kbli-sbu"
+                                                            <select id="klasifikasi_sbu" name="klasifikasi-kbli"
                                                                 class="form-select form-select-solid select2-hidden-accessible"
-                                                                data-control="select2" data-hide-search="false" data-placeholder="Pilih SBU KBLI"
-                                                                data-select2-id="select2-klasifikasi" tabindex="-1" aria-hidden="true">
-                                                                <option value="{{ $proyek->kode_kbli_2020 }}">{{ $proyek->MasterSubKlasifikasiSBU?->subklasifikasi }}</option>
+                                                                data-control="select2" data-hide-search="false" data-placeholder="Pilih Klasifikasi"
+                                                                data-select2-id="select2-klasifikasi-sbu" tabindex="-1" aria-hidden="true">
+                                                                <option value=""></option>
+                                                                @foreach ($klasifikasiSBU as $klasifikasi)
+                                                                    <option value="{{ $klasifikasi->id_klasifikasi }}" {{ $proyek->klasifikasi_sbu_kbli == $klasifikasi->id_klasifikasi ? "selected" : "" }}>{{ $klasifikasi->klasifikasi }}</option>                                                                    
+                                                                @endforeach
+                                                            </select>
+                                                            <!--end::Input-->
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                                <span>Sub Klasifikasi SBU KBLI</span>
+                                                            </label>
+                                                            <!--begin::Input-->
+                                                            <select id="sub_subklasifikasi_sbu" name="sub-klasifikasi-kbli"
+                                                                class="form-select form-select-solid select2-hidden-accessible"
+                                                                data-control="select2" data-hide-search="false" data-placeholder="Pilih Sub Klasifikasi"
+                                                                data-select2-id="select2-subklasifikasi-sbu" tabindex="-1" aria-hidden="true">
+                                                                <option value=""></option>
+                                                                @foreach ($subKBLI as $sub)
+                                                                    <option value="{{ $sub->kbli_2020 }}" {{ $proyek->kode_kbli_2020 == $sub->kbli_2020 ? "selected" : "" }}>{{ $sub->subklasifikasi }}</option>                                                                    
+                                                                @endforeach
                                                             </select>
                                                             <!--end::Input-->
                                                         </div>
@@ -10462,7 +10481,7 @@
                 }
 
             });
-            $("#klasifikasi-kbli-sbu").select2({
+            $("#klasifikasi_sbu").select2({
                 ajax: {
                     url: '/proyek/get-klasifikasi-sbu',
                     dataType: 'json',
@@ -10473,25 +10492,65 @@
                         };
                     },
                     processResults: function (data, params) {
-                        const optionData = Object.keys(data);
-                        const options = optionData.map((item) => {
+                        params.page = params.page || 1
+                        const isPagination = data.hasOwnProperty('data') && Array.isArray(data.data) ? true : false
+                        const optionData = isPagination ? data.data : data;
+                        const options = optionData.map(item => {
+                            console.log(item);
                             return {
-                                text: item,
-                                children:data[item]?.map(val => {
-                                    return {
-                                        id: val.kbli_2020,
-                                        text:val.subklasifikasi
-                                    }
-                                })
+                                id: item.id_klasifikasi, 
+                                text: item.klasifikasi
                             }
                         })
                         return {
-                            results: options
+                            results: options,
+                            pagination: {
+                                more: isPagination ? (params.page * (perPage || 10)) < data.total : false
+                            }
                         }
                     },
                     cache: true,
                     minimumResultsForSearch: 0
                 },
+            }).on('select2:select', async function (e) {
+                let data = e.params.data;
+
+                $('#sub_subklasifikasi_sbu').val(null).trigger('change');
+
+                if (typeof(data) == "object") {
+                    const idKlasifikasi = data.id;
+                    $("#sub_subklasifikasi_sbu").select2({
+                        ajax: {
+                            url: `/proyek/get-subklasifikasi-sbu/${idKlasifikasi}`,
+                            dataType: 'json',
+                            delay: 250,
+                            data: function (params) {
+                                return {
+                                    search: params.term
+                                };
+                            },
+                            processResults: function (data, params) {
+                                params.page = params.page || 1
+                                const isPagination = data.hasOwnProperty('data') && Array.isArray(data.data) ? true : false
+                                const optionData = isPagination ? data.data : data;
+                                const options = optionData.map(item => {
+                                    return {
+                                        id: item.kbli_2020, 
+                                        text: item.subklasifikasi
+                                    }
+                                })
+                                return {
+                                    results: options,
+                                    pagination: {
+                                        more: isPagination ? (params.page * (perPage || 10)) < data.total : false
+                                    }
+                                }
+                            },
+                            cache: true,
+                            minimumResultsForSearch: 0
+                        },
+                    })
+                }
             })
         });
 

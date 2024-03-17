@@ -1244,7 +1244,7 @@ class CustomerController extends Controller
         if (isset($data["file-document"])) {
             $file = $request->file("file-document");
             $nama_file = $file->getClientOriginalName();
-            $id_document = date("His_") . $file->getClientOriginalName();
+            $id_document = date("His_") . str_replace(" ", "-", $file->getClientOriginalName());
 
             if (empty($customerAHU)) {
                 $customerAHU = new AHU();
