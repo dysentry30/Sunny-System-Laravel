@@ -1243,7 +1243,7 @@ function createWordProfileRisikoNew($kode_proyek)
             //         $addTextRun->addText($line, ['size' => 8]);
             //     }
             // }
-            $kriteriaIndex0ListOpsi = preg_split("/\n|\r\n?/", htmlspecialchars($lp->item, ENT_QUOTES));
+            $kriteriaIndex0ListOpsi = preg_split("/\n|\r\n?/", htmlspecialchars(!empty($lp->item) ? $lp->item : "Tidak Ada", ENT_QUOTES));
             foreach ($kriteriaIndex0ListOpsi as $key => $text) {
                 $cellKriteria->addText($text, ["bold" => false, 'size' => 8], ["align" => "left"]);
                 if ($text == "") {
@@ -1433,7 +1433,7 @@ function createWordProfileRisikoNew($kode_proyek)
                         break;
 
                     default:
-                        $selectedKriteria = $ks->kriteria_1;
+                        $selectedKriteria = "Tidak Ada";
                         break;
                 }
                 //Begin::Kriteria Selection
@@ -1457,8 +1457,8 @@ function createWordProfileRisikoNew($kode_proyek)
                 }
                 //End::Kriteria Selection
 
-                $table->addCell(1000, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addTextRun($cellHCentered)->addText($kriteriaIndex->kriteria, ['size' => 8]);
-                $table->addCell(1000, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addTextRun($cellHCentered)->addText($kriteriaIndex->nilai, ['size' => 8]);
+                $table->addCell(1000, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addTextRun($cellHCentered)->addText($kriteriaIndex->kriteria ?? 0, ['size' => 8]);
+                $table->addCell(1000, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addTextRun($cellHCentered)->addText($kriteriaIndex->nilai ?? 0, ['size' => 8]);
 
                 //Begin::Keterangan Selection
 
@@ -1520,7 +1520,7 @@ function createWordProfileRisikoNew($kode_proyek)
                         break;
 
                     default:
-                        $selectedKriteria = $ks->kriteria_1;
+                        $selectedKriteria = "Tidak Ada";
                         break;
                 }
 
@@ -1545,8 +1545,8 @@ function createWordProfileRisikoNew($kode_proyek)
                 }
                 //End::Kriteria Selection
 
-                $table->addCell(1000, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addTextRun($cellHCentered)->addText($kriteriaIndex->kriteria, ['size' => 8]);
-                $table->addCell(1000, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addTextRun($cellHCentered)->addText($kriteriaIndex->nilai, ['size' => 8]);
+                $table->addCell(1000, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addTextRun($cellHCentered)->addText($kriteriaIndex->kriteria ?? 0, ['size' => 8]);
+                $table->addCell(1000, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addTextRun($cellHCentered)->addText($kriteriaIndex->nilai ?? 0, ['size' => 8]);
 
                 //Begin::Keterangan Selection
 

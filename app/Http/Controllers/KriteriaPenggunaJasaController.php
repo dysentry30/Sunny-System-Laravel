@@ -151,11 +151,20 @@ class KriteriaPenggunaJasaController extends Controller
                 $kriteria_detail->kode_proyek = $data['kode_proyek'];
                 if ($key == 0) {
                     $kriteria_detail->item = null;
-                    $kriteria_detail->kriteria = $data['is_legalitas'];
+                    if (isset($data['is_legalitas'])) {
+                        $kriteria_detail->kriteria = $data['is_legalitas'];
+                    } else {
+                        $kriteria_detail->kriteria = null;
+                    }
                 } else {
                     if ($key <= 5) {
-                        $kriteria_detail->kriteria = $data['is_kriteria_' . $key];
-                        $kriteria_detail->item = $masterKriteriaPenggunaJasa[$key - 1]->item;
+                        if (isset($data['is_kriteria_' . $key])) {
+                            $kriteria_detail->kriteria = $data['is_kriteria_' . $key];
+                            $kriteria_detail->item = $masterKriteriaPenggunaJasa[$key - 1]->item;
+                        } else {
+                            $kriteria_detail->kriteria = null;
+                            $kriteria_detail->item = null;
+                        }
                     }
                 }
                 $kriteria_detail->nilai = (int)$data['nilai'][$key];
@@ -173,12 +182,20 @@ class KriteriaPenggunaJasaController extends Controller
             } else {
                 $kriteria_detail->kode_proyek = $data['kode_proyek'];
                 if ($key == 0) {
-                    $kriteria_detail->item = null;
-                    $kriteria_detail->kriteria = $data['is_legalitas'];
+                    if (isset($data['is_legalitas'])) {
+                        $kriteria_detail->kriteria = $data['is_legalitas'];
+                    } else {
+                        $kriteria_detail->kriteria = null;
+                    }
                 } else {
                     if ($key <= 5) {
-                        $kriteria_detail->kriteria = $data['is_kriteria_' . $key];
-                        $kriteria_detail->item = $masterKriteriaPenggunaJasa[$key - 1]->item;
+                        if (isset($data['is_kriteria_' . $key])) {
+                            $kriteria_detail->kriteria = $data['is_kriteria_' . $key];
+                            $kriteria_detail->item = $masterKriteriaPenggunaJasa[$key - 1]->item;
+                        } else {
+                            $kriteria_detail->kriteria = null;
+                            $kriteria_detail->item = null;
+                        }
                     }
                 }
                 $kriteria_detail->nilai = (int)$data['nilai'][$key];
@@ -219,12 +236,20 @@ class KriteriaPenggunaJasaController extends Controller
 
                 $kriteria_detail->kode_proyek = $data['kode_proyek'];
                 if ($key == 0) {
-                    $kriteria_detail->item = null;
-                    $kriteria_detail->kriteria = $data['is_legalitas'];
+                    if (isset($data['is_legalitas'])) {
+                        $kriteria_detail->kriteria = $data['is_legalitas'];
+                    } else {
+                        $kriteria_detail->kriteria = null;
+                    }
                 } else {
                     if ($key != 5) {
-                        $kriteria_detail->kriteria = $data['is_kriteria_' . $key];
-                        $kriteria_detail->item = $masterKriteriaPenggunaJasa[$key]->item;
+                        if (isset($data['is_kriteria_' . $key])) {
+                            $kriteria_detail->kriteria = $data['is_kriteria_' . $key];
+                            $kriteria_detail->item = $masterKriteriaPenggunaJasa[$key - 1]->item;
+                        } else {
+                            $kriteria_detail->kriteria = null;
+                            $kriteria_detail->item = null;
+                        }
                     }
                 }
                 $kriteria_detail->nilai = (int)$data['nilai'][$key];
