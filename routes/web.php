@@ -2997,18 +2997,42 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     );
     //End::Get Pelanggan
 
+    // Route::get('/proyek/get-klasifikasi-sbu', function (Request $request) {
+    //     $search = $request->input('search');
+
+    //     $dataKlasifikasiSBU = MasterSubKlasifikasiSBU::with('MasterKlasifikasiSBU')->when(
+    //         !empty($search),
+    //         function ($query) use ($search) {
+    //             $query->where('subklasifikasi', 'like', '%' . strtoupper($search) . '%')
+    //                 ->orWhere('kode_subklasifikasi', 'like', '%' . strtoupper($search) . '%')
+    //                 ->orWhere('kbli_2020', 'like', '%' . strtoupper($search) . '%');
+    //         }
+    //     )->get()->groupBy('MasterKlasifikasiSBU.klasifikasi');
+    //     return response()->json($dataKlasifikasiSBU);
+    // });
+
     Route::get('/proyek/get-klasifikasi-sbu', function (Request $request) {
         $search = $request->input('search');
+        $page = $request->input('page', 1);
+        $perPage = 10;
 
-        $dataKlasifikasiSBU = MasterSubKlasifikasiSBU::with('MasterKlasifikasiSBU')->when(
-            !empty($search),
-            function ($query) use ($search) {
-                $query->where('subklasifikasi', 'like', '%' . strtoupper($search) . '%')
-                    ->orWhere('kode_subklasifikasi', 'like', '%' . strtoupper($search) . '%')
-                    ->orWhere('kbli_2020', 'like', '%' . strtoupper($search) . '%');
-            }
-        )->get()->groupBy('MasterKlasifikasiSBU.klasifikasi');
-        return response()->json($dataKlasifikasiSBU);
+        $dataKlasifikasiSBU = MasterKlasifikasiSBU::select('id_klasifikasi', 'klasifikasi')->when(!empty($search), function ($query) use ($search) {
+            $query->where('klasifikasi', 'like', '%' . $search . '%');
+        });
+        $data = $dataKlasifikasiSBU->paginate($perPage, ['*'], 'page', $page);
+        return response()->json($data);
+    });
+
+    Route::get('/proyek/get-subklasifikasi-sbu/{klasifikasi_id}', function (Request $request, $klasifikasi_id) {
+        $search = $request->input('search');
+        $page = $request->input('page', 1);
+        $perPage = 10;
+
+        $dataSubKlasifikasiSBU = MasterSubKlasifikasiSBU::select('klasifikasi_id', 'subklasifikasi', 'kbli_2020')->where('klasifikasi_id', $klasifikasi_id)->when(!empty($search), function ($query) use ($search) {
+            $query->where('klasifikasi', 'like', '%' . $search . '%');
+        });
+        $data = $dataSubKlasifikasiSBU->paginate($perPage, ['*'], 'page', $page);
+        return response()->json($data);
     });
 
     Route::get('/master-alat-proyek', function (Request $request) {

@@ -51,6 +51,8 @@ use App\Models\MatriksApprovalRekomendasi;
 use App\Models\Negara;
 use App\Models\NotaRekomendasi;
 use App\Models\PersonelTenderProyek;
+use App\Models\MasterKlasifikasiSBU;
+use App\Models\MasterSubKlasifikasiSBU;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
@@ -405,6 +407,12 @@ class ProyekController extends Controller
         // dd($proyek); //tes log hasil 
         if ($proyek->tipe_proyek == "P") {
             $konsultan_perencana = KonsultanPerencana::all();
+            $klasifikasiSBU = MasterKlasifikasiSBU::all();
+            if (!empty($proyek->klasifikasi_sbu_kbli)) {
+                $subKBLI = MasterSubKlasifikasiSBU::where('klasifikasi_id', $proyek->klasifikasi_sbu_kbli)->get();
+            } else {
+                $subKBLI = [];
+            }
             // // dd($teamProyek, $kriteriaProyek, $porsiJO, $pesertatender, $proyekberjalans, $departemen);
             // $isExistPorsiJO = PorsiJO::where('kode_proyek', $proyek->kode_proyek)->get();
             // if (!empty($isExistPorsiJO)) {
@@ -439,7 +447,7 @@ class ProyekController extends Controller
             return view(
                 'Proyek/viewProyek',
                 ["proyek" => $proyek, "proyeks" => Proyek::all()],
-                compact(['companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'mataUang', "provinsi", "departemen", "konsultan_perencana"])
+                compact(['companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'mataUang', "provinsi", "departemen", "konsultan_perencana", "subKBLI", "klasifikasiSBU"])
                 // [
                 //     'companies' => Company::all(),
                 //     'sumberdanas' => SumberDana::all(),
@@ -633,6 +641,8 @@ class ProyekController extends Controller
         // $newProyek->status_pasar = $dataProyek["status-pasar"];
         $newProyek->sub_klasifikasi = $dataProyek["sub-klasifikasi"];
         $newProyek->proyek_strategis = $request->has("proyek-strategis");
+        $newProyek->klasifikasi_sbu_kbli = $dataProyek["klasifikasi-kbli"];
+        $newProyek->kode_kbli_2020 = $dataProyek["sub-klasifikasi-kbli"];
         // $newProyek->dop = $dataProyek["dop"];
         // $newProyek->company = $dataProyek["company"];
         $newProyek->laporan_kualitatif_paspot = $dataProyek["laporan-kualitatif-paspot"];
@@ -754,7 +764,6 @@ class ProyekController extends Controller
         $newProyek->latitude = $dataProyek["latitude"];
         $newProyek->longitude = $dataProyek["longitude"];
 
-        $newProyek->kode_kbli_2020 = $dataProyek["klasifikasi-kbli-sbu"];
 
         $idCustomer = $dataProyek["customer"];
 
