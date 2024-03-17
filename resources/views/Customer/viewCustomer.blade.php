@@ -1097,7 +1097,7 @@
                                                                                 {{ $key + 1 }}
                                                                             </td>
                                                                             <td class="text-center"><a target="_blank"
-                                                                                href="{{ asset('customer/' . $item->file_document) }}"
+                                                                                href="{{ asset('customer-file/' . $item->file_document) }}"
                                                                                 class="text-hover-primary">{{ $item->nama_file }}</a></td>
                                                                             <td class="text-center">{{ $item->updated_at }}</td>
                                                                             <td class="text-center">
@@ -5668,9 +5668,9 @@
     if ($countItem != 0) {
         foreach ($customer->Csi as $item) {
             if($item->status == "Done"){
-                $nilai_cli += $item->score_cli;
-                $nilai_csi += $item->score_csi;
-                $nilai_nps += $item->score_nps;
+                $nilai_cli += (int)$item->score_cli;
+                $nilai_csi += (int)$item->score_csi;
+                $nilai_nps += (int)$item->score_nps;
             }
         }
         $nilai_cli = (int) $nilai_cli / $countItem;

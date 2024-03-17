@@ -1714,7 +1714,11 @@ class RekomendasiController extends Controller
     {
         $matriks_approval = MatriksApprovalRekomendasi::where("start_tahun", "=", (int) date("Y"))->get();
         if ($kategori == "Penyusun") {
-            return $matriks_approval->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where("unit_kerja", "=", $unit_kerja)->where('departemen', $departemen)->where("kategori", "=", $kategori)->count() == $approved_data->count();
+            if ($matriks_approval->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where("unit_kerja", "=", $unit_kerja)->where('departemen', $departemen)->where("kategori", "=", $kategori)->where("urutan", "=", 1)->count() > 1) {
+                return ($matriks_approval->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where("unit_kerja", "=", $unit_kerja)->where('departemen', $departemen)->where("kategori", "=", $kategori)->count() - 1) == $approved_data->count();
+            } else {
+                return $matriks_approval->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where("unit_kerja", "=", $unit_kerja)->where('departemen', $departemen)->where("kategori", "=", $kategori)->count() == $approved_data->count();
+            }
         }
         return $matriks_approval->where("unit_kerja", "=", $unit_kerja)->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where('departemen', $departemen)->where("kategori", "=", $kategori)->count() == $approved_data->count();
     }
