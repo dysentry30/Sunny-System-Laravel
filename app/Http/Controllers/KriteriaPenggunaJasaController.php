@@ -126,6 +126,7 @@ class KriteriaPenggunaJasaController extends Controller
     public function detailSave(Request $request)
     {
         $data = $request->all();
+        // dd($data);
 
         // if (!isset($data['dokumen_penilaian']) || count($data['dokumen_penilaian']) != 6) {
         //     Alert::error("Error", "Harap masukkan semua dokumen!");
@@ -138,10 +139,10 @@ class KriteriaPenggunaJasaController extends Controller
         // $files = collect($request->file("dokumen_penilaian"))->values();
         $index = collect($data["index"]);
 
-        if (empty($data["is_legalitas"]) || empty($data["is_kriteria_1"]) || empty($data["is_kriteria_2"]) || empty($data["is_kriteria_3"]) || empty($data["is_kriteria_4"]) || empty($data["is_kriteria_5"])) {
-            Alert::error('Form Penilaian Pengguna Jasa Tidak lengkap', "Mohon periksa kembali");
-            return redirect()->back();
-        }
+        // if (empty($data["is_legalitas"]) || empty($data["is_kriteria_1"]) || empty($data["is_kriteria_2"]) || empty($data["is_kriteria_3"]) || empty($data["is_kriteria_4"]) || empty($data["is_kriteria_5"])) {
+        //     Alert::error('Form Penilaian Pengguna Jasa Tidak lengkap', "Mohon periksa kembali");
+        //     return redirect()->back();
+        // }
 
         $kriteria_detail = new KriteriaPenggunaJasaDetail();
         foreach ($index as $key => $item) {
@@ -154,8 +155,13 @@ class KriteriaPenggunaJasaController extends Controller
                     $kriteria_detail->kriteria = $data['is_legalitas'];
                 } else {
                     if ($key <= 5) {
-                        $kriteria_detail->kriteria = $data['is_kriteria_' . $key];
-                        $kriteria_detail->item = $masterKriteriaPenggunaJasa[$key - 1]->item;
+                        if (isset($data['is_kriteria_' . $key])) {
+                            $kriteria_detail->kriteria = $data['is_kriteria_' . $key];
+                            $kriteria_detail->item = $masterKriteriaPenggunaJasa[$key - 1]->item;
+                        } else {
+                            $kriteria_detail->kriteria = null;
+                            $kriteria_detail->item = null;
+                        }
                     }
                 }
                 $kriteria_detail->nilai = (int)$data['nilai'][$key];
@@ -177,11 +183,16 @@ class KriteriaPenggunaJasaController extends Controller
                     $kriteria_detail->kriteria = $data['is_legalitas'];
                 } else {
                     if ($key <= 5) {
-                        $kriteria_detail->kriteria = $data['is_kriteria_' . $key];
-                        $kriteria_detail->item = $masterKriteriaPenggunaJasa[$key - 1]->item;
+                        if (isset($data['is_kriteria_' . $key])) {
+                            $kriteria_detail->kriteria = $data['is_kriteria_' . $key];
+                            $kriteria_detail->item = $masterKriteriaPenggunaJasa[$key - 1]->item;
+                        } else {
+                            $kriteria_detail->kriteria = null;
+                            $kriteria_detail->item = null;
+                        }
                     }
                 }
-                $kriteria_detail->nilai = (int)$data['nilai'][$key];
+                $kriteria_detail->nilai = (int)$data['nilai'][$key] ?? 0;
                 $kriteria_detail->keterangan = $data['keterangan'][$key];
                 $kriteria_detail->index = $key;
                 $kriteria_detail->id_document = null;
@@ -223,11 +234,16 @@ class KriteriaPenggunaJasaController extends Controller
                     $kriteria_detail->kriteria = $data['is_legalitas'];
                 } else {
                     if ($key != 5) {
-                        $kriteria_detail->kriteria = $data['is_kriteria_' . $key];
-                        $kriteria_detail->item = $masterKriteriaPenggunaJasa[$key]->item;
+                        if (isset($data['is_kriteria_' . $key])) {
+                            $kriteria_detail->kriteria = $data['is_kriteria_' . $key];
+                            $kriteria_detail->item = $masterKriteriaPenggunaJasa[$key - 1]->item;
+                        } else {
+                            $kriteria_detail->kriteria = null;
+                            $kriteria_detail->item = null;
+                        }
                     }
                 }
-                $kriteria_detail->nilai = (int)$data['nilai'][$key];
+                $kriteria_detail->nilai = (int)$data['nilai'][$key] ?? 0;
                 $kriteria_detail->keterangan = $data['keterangan'][$key];
 
                 $files = $data["dokumen_penilaian_$key"] ?? null;
