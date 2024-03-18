@@ -2454,18 +2454,18 @@
         }
 
         function validateFileSize(e) {
-            const eltCheckbox = e.querySelectorAll("input[type='radio']:checked");
+            //const eltCheckbox = e.querySelectorAll("input[type='radio']:checked");
             
-            if (eltCheckbox.length < 10) {
-                Swal.fire({
-                    title: 'Data Belum Lengkap',
-                    text: "Mohon periksa kembali",
-                    icon: 'error',
-                    confirmButtonColor: '#008CB4',
-                    confirmButtonText: 'Oke'
-                })
-                return false;
-            }else{
+            // if (eltCheckbox.length < 10) {
+            //     Swal.fire({
+            //         title: 'Data Belum Lengkap',
+            //         text: "Mohon periksa kembali",
+            //         icon: 'error',
+            //         confirmButtonColor: '#008CB4',
+            //         confirmButtonText: 'Oke'
+            //     })
+            //     return false;
+            // }else{
                 const files = e.querySelectorAll("input[type='file']");
                 let totalSizeFile = 0
     
@@ -2486,7 +2486,7 @@
                 } else {
                     return true;
                 }
-            }
+            // }
 
         }
     </script>

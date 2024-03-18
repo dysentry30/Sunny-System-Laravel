@@ -3630,7 +3630,7 @@ function createWordAssessmentPartner(App\Models\PorsiJO $porsi)
         $now = Carbon\Carbon::now();
         $file_name = $now->format("dmYHis") . "_kriteria-partner_$porsi->kode_proyek";
 
-        $collectKriteriaDetail = $porsi->PartnerSelection->sortBy('index');
+        $collectKriteriaDetail = $porsi->PartnerSelection->sortBy('index')->values();
         $masterLegalitasPerusahaan = LegalitasPerusahaan::where('is_active', true)->where('nota_rekomendasi', 'Nota Rekomendasi 2')->get()->sortBy('position');
         $masterKriteriaPartner = KriteriaPenggunaJasa::where('is_active', true)->where('nota_rekomendasi', 'Nota Rekomendasi 2')->get()->sortBy('position');
         $index = 0;
@@ -3719,6 +3719,8 @@ function createWordAssessmentPartner(App\Models\PorsiJO $porsi)
                             $kriteriaItemSelected = $mlp->kriteria_3;
                         case 4:
                             $kriteriaItemSelected = $mlp->kriteria_4;
+                        default:
+                            $kriteriaItemSelected = "Tidak Ada";
                     }
 
                     if ($mlp->kategori == "Referensi") {
@@ -3727,8 +3729,8 @@ function createWordAssessmentPartner(App\Models\PorsiJO $porsi)
                         $table->addCell(2000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($mlp->item, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
                         $table->addCell(500)->addText($mlp->bobot, $cellFontStyle, $cellParagraphStyle2);
                         $table->addCell(3000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($kriteriaItemSelected, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
-                        $table->addCell(500)->addText($kriteriaSelected->kriteria, $cellFontStyle, $cellParagraphStyle2);
-                        $table->addCell(500)->addText($kriteriaSelected->nilai, $cellFontStyle, $cellParagraphStyle2);
+                        $table->addCell(500)->addText($kriteriaSelected->kriteria ?? '', $cellFontStyle, $cellParagraphStyle2);
+                        $table->addCell(500)->addText($kriteriaSelected->nilai ?? '0', $cellFontStyle, $cellParagraphStyle2);
                         $table->addCell(5000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($kriteriaSelected->keterangan, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
                     }
                 }
@@ -3748,6 +3750,8 @@ function createWordAssessmentPartner(App\Models\PorsiJO $porsi)
                             $kriteriaItemSelected = $mlp->kriteria_3;
                         case 4:
                             $kriteriaItemSelected = $mlp->kriteria_4;
+                        default:
+                            $kriteriaItemSelected = "Tidak Ada";
                     }
 
                     if ($mlp->kategori == "Reputasi") {
@@ -3756,8 +3760,8 @@ function createWordAssessmentPartner(App\Models\PorsiJO $porsi)
                         $table->addCell(2000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($mlp->item, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
                         $table->addCell(500)->addText($mlp->bobot, $cellFontStyle, $cellParagraphStyle2);
                         $table->addCell(3000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($kriteriaItemSelected, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
-                        $table->addCell(500)->addText($kriteriaSelected->kriteria, $cellFontStyle, $cellParagraphStyle2);
-                        $table->addCell(500)->addText($kriteriaSelected->nilai, $cellFontStyle, $cellParagraphStyle2);
+                        $table->addCell(500)->addText($kriteriaSelected->kriteria ?? '', $cellFontStyle, $cellParagraphStyle2);
+                        $table->addCell(500)->addText($kriteriaSelected->nilai ?? '0', $cellFontStyle, $cellParagraphStyle2);
                         $table->addCell(5000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($kriteriaSelected->keterangan, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
                     }
                 }
@@ -3777,6 +3781,8 @@ function createWordAssessmentPartner(App\Models\PorsiJO $porsi)
                             $kriteriaItemSelected = $mlp->kriteria_3;
                         case 4:
                             $kriteriaItemSelected = $mlp->kriteria_4;
+                        default:
+                            $kriteriaItemSelected = "Tidak Ada";
                     }
 
                     if ($mlp->kategori == "Financial") {
@@ -3785,8 +3791,8 @@ function createWordAssessmentPartner(App\Models\PorsiJO $porsi)
                         $table->addCell(2000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($mlp->item, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
                         $table->addCell(500)->addText($mlp->bobot, $cellFontStyle, $cellParagraphStyle2);
                         $table->addCell(3000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($kriteriaItemSelected, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
-                        $table->addCell(500)->addText($kriteriaSelected->kriteria, $cellFontStyle, $cellParagraphStyle2);
-                        $table->addCell(500)->addText($kriteriaSelected->nilai, $cellFontStyle, $cellParagraphStyle2);
+                        $table->addCell(500)->addText($kriteriaSelected->kriteria ?? '', $cellFontStyle, $cellParagraphStyle2);
+                        $table->addCell(500)->addText($kriteriaSelected->nilai ?? '0', $cellFontStyle, $cellParagraphStyle2);
                         $table->addCell(5000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($kriteriaSelected->keterangan, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
                     }
                 }

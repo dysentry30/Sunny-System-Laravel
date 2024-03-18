@@ -116,6 +116,7 @@ class AssessmentPartnerSelectionController extends Controller
         $partnerDetail = new PartnerSelectionDetail();
 
         $current_timestamp = Carbon::now();
+        $count = 0;
 
         try {
             foreach ($index as $key => $urutan) {
@@ -126,8 +127,13 @@ class AssessmentPartnerSelectionController extends Controller
 
                         $partnerDetail->partner_id = $data["id_partner"];
                         $partnerDetail->item = $legalitasMaster[$key]->kategori;
-                        $partnerDetail->kriteria = $data["is_legalitas_" . $urutan];
-                        $partnerDetail->nilai = null;
+                        if (isset($data["is_legalitas_" . $urutan])) {
+                            $partnerDetail->kriteria = $data["is_legalitas_" . $urutan];
+                            $partnerDetail->nilai = null;
+                        } else {
+                            $partnerDetail->kriteria = null;
+                            $partnerDetail->nilai = null;
+                        }
                         $partnerDetail->keterangan = $data["is_legalitas_keterangan"][$key];
 
                         foreach ($files as $file) {
@@ -143,8 +149,13 @@ class AssessmentPartnerSelectionController extends Controller
                     } else {
                         $partnerDetail->partner_id = $data["id_partner"];
                         $partnerDetail->item = $legalitasMaster[$key]->kategori;
-                        $partnerDetail->kriteria = $data["is_legalitas_" . $urutan];
-                        $partnerDetail->nilai = null;
+                        if (isset($data["is_legalitas_" . $urutan])) {
+                            $partnerDetail->kriteria = $data["is_legalitas_" . $urutan];
+                            $partnerDetail->nilai = null;
+                        } else {
+                            $partnerDetail->kriteria = null;
+                            $partnerDetail->nilai = null;
+                        }
                         $partnerDetail->keterangan = $data["is_legalitas_keterangan"][$key];
                         $partnerDetail->id_document = null;
                         $partnerDetail->urutan = $urutan;
@@ -152,15 +163,19 @@ class AssessmentPartnerSelectionController extends Controller
                         $partnerDetail->index = $key;
                     }
                 } else {
-                    $count = 0;
                     if (isset($data["dokumen_penilaian_$urutan"])) {
                         $files = collect($data["dokumen_penilaian_$urutan"])->values();
                         $array_files = collect();
 
                         $partnerDetail->partner_id = $data["id_partner"];
                         $partnerDetail->item = $kriteriaMaster[(int)$count]->kategori;
-                        $partnerDetail->kriteria = $data["is_kriteria_" . $count + 1];
-                        $partnerDetail->nilai = (float)$data['nilai'][(int)$count];
+                        if (isset($data["is_kriteria_" . $count + 1])) {
+                            $partnerDetail->kriteria = $data["is_kriteria_" . $count + 1];
+                            $partnerDetail->nilai = (float)$data['nilai'][(int)$count];
+                        } else {
+                            $partnerDetail->kriteria = null;
+                            $partnerDetail->nilai = 0;
+                        }
                         $partnerDetail->keterangan = $data["keterangan"][(int)$count];
 
                         foreach ($files as $file) {
@@ -176,8 +191,13 @@ class AssessmentPartnerSelectionController extends Controller
                     } else {
                         $partnerDetail->partner_id = $data["id_partner"];
                         $partnerDetail->item = $kriteriaMaster[(int)$count]->item;
-                        $partnerDetail->kriteria = $data["is_kriteria_" . $count + 1];
-                        $partnerDetail->nilai = (float)$data['nilai'][(int)$count];
+                        if (isset($data["is_kriteria_" . $count + 1])) {
+                            $partnerDetail->kriteria = $data["is_kriteria_" . $count + 1];
+                            $partnerDetail->nilai = (float)$data['nilai'][(int)$count];
+                        } else {
+                            $partnerDetail->kriteria = null;
+                            $partnerDetail->nilai = 0;
+                        }
                         $partnerDetail->keterangan = $data["keterangan"][(int)$count];
                         $partnerDetail->id_document = null;
                         $partnerDetail->urutan = $urutan;
@@ -227,7 +247,11 @@ class AssessmentPartnerSelectionController extends Controller
 
                 if ($key <= ($legalitasMaster->count() - 1)) {
                     $kriteriaDetail->item = $legalitasMaster[$key]->kategori;
-                    $kriteriaDetail->kriteria = $data["is_legalitas_" . $urutan];
+                    if (isset($data["is_legalitas_" . $urutan])) {
+                        $kriteriaDetail->kriteria = $data["is_legalitas_" . $urutan];
+                    } else {
+                        $kriteriaDetail->kriteria = null;
+                    }
                     $kriteriaDetail->nilai = null;
                     $kriteriaDetail->keterangan = $data["is_legalitas_keterangan"][$key];
 
@@ -242,8 +266,13 @@ class AssessmentPartnerSelectionController extends Controller
                     $kriteriaDetail->id_document = empty($current_file) || $current_file->isEmpty() ? null : $current_file->toJson();
                 } else {
                     $kriteriaDetail->item = $kriteriaMaster[(int)$urutan - 1]->kategori;
-                    $kriteriaDetail->kriteria = $data["is_kriteria_" . $urutan];
-                    $kriteriaDetail->nilai = (float)$data['nilai'][(int)$urutan - 1];
+                    if (isset($data["is_kriteria_" . $urutan])) {
+                        $kriteriaDetail->kriteria = $data["is_kriteria_" . $urutan];
+                        $kriteriaDetail->nilai = (float)$data['nilai'][(int)$urutan - 1];
+                    } else {
+                        $kriteriaDetail->kriteria = null;
+                        $kriteriaDetail->nilai = 0;
+                    }
                     $kriteriaDetail->keterangan = $data["keterangan"][(int)$urutan - 1];
 
                     $files = $data["dokumen_penilaian_$urutan"] ?? null;
