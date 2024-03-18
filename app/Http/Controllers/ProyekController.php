@@ -890,7 +890,7 @@ class ProyekController extends Controller
         $newProyek->laporan_menang = $dataProyek["laporan-menang"];
 
         // form KALAH
-        $newProyek->kategori_kalah = $dataProyek["kategori-kalah"];
+        $newProyek->kategori_kalah = $dataProyek["kategori-kalah"] ?? null;
 
 
         // form TERKONTRAK
