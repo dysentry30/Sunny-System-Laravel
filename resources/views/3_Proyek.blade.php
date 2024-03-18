@@ -236,6 +236,18 @@
                                             <option value="P" {{ $filterTipe == 'P' ? 'selected' : '' }}>Non-Retail</option>
                                         </select>
                                     </div>
+
+                                    <div id="filterKalah" class="d-flex align-items-center position-relative">
+                                        <select name="filter-kalah"
+                                            class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Kategori Kalah"
+                                            tabindex="-1" aria-hidden="true">
+                                            <option></option>
+                                            @foreach (\App\Models\KategoriKalah::all() as $item)
+                                                <option value="{{ $item->kategori }}" {{ $item->kategori == $filterKalah ? 'selected' : '' }}>{{ $item->kategori }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                     <!--end:: Input Filter-->
 
                                         {{-- <div id="filter" class="d-flex align-items-center position-relative">
@@ -339,6 +351,7 @@
                                         <th class="min-w-auto"><small>Pelanggan</small></th>
                                         <th class="min-w-auto text-center"><small>Jenis Proyek</small></th>
                                         <th class="min-w-auto text-center"><small>Tipe Proyek</small></th>
+                                        <th class="min-w-auto text-center"><small>Kategori Kalah</small></th>
                                         @if (Auth::user()->canany(['super-admin', 'admin-crm']))
                                             <th class="min-w-auto text-center"><small>Action</small></th>
                                         @endif
@@ -620,6 +633,14 @@
                                                 </small>
                                             </td>
                                             <!--end::Tipe Proyek-->
+
+                                            <!--begin::Kategori Kalah-->
+                                            <td class="text-center">
+                                                <small>
+                                                    {{ $proyek->kategori_kalah ?? '-' }}
+                                                </small>
+                                            </td>
+                                            <!--end::Kategori Kalah-->
 
                                             @if (Auth::user()->canany(['super-admin', 'admin-crm']))
                                                 <!--begin::Action-->

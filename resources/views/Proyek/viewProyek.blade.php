@@ -6490,6 +6490,37 @@
                                                     <br>
 
                                                     <div id="divMenang">
+                                                        @if ($proyek->stage == 7)
+                                                        <!--begin::Row-->
+                                                        <div class="row fv-row">
+                                                            <!--begin::Col-->
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span>Kategori Kalah / Gugur</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+
+                                                                    <!--begin::Input-->
+                                                                    <select id="kategori-kalah" name="kategori-kalah"
+                                                                        class="form-select form-select-solid"
+                                                                        data-control="select2" data-hide-search="true"
+                                                                        data-placeholder="Pilih Kategori">
+                                                                        <option></option>
+                                                                        @foreach (\App\Models\KategoriKalah::all() as $item)
+                                                                            <option value="{{ $item->kategori }}" {{ $item->kategori == $proyek->kategori_kalah ? 'selected' : '' }}>{{ $item->kategori }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                            <!--end::Col-->
+                                                        </div>
+                                                        <!--end::Row-->                                                            
+                                                        @endif
                                                         <!--begin::Row-->
                                                         <div class="row fv-row">
                                                             <!--begin::Col-->
