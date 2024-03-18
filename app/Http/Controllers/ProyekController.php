@@ -1270,8 +1270,8 @@ class ProyekController extends Controller
                 if (isset($dataProyek["dokumen-other-proyek"])) {
                     self::uploadDokumenOtherProyek($dataProyek["dokumen-other-proyek"], $kode_proyek);
                 }
-                if (isset($dataProyek["dokumen-penentuan-kso"])) {
-                    self::uploadDokumenPersetujuanKSO($dataProyek["dokumen-penentuan-kso"], $kode_proyek);
+                if (isset($dataProyek["dokumen-form-persetujuan-kso"])) {
+                    self::uploadDokumenPersetujuanKSO($dataProyek["dokumen-form-persetujuan-kso"], $kode_proyek);
                 }
             }
             $customerHistory->save();
@@ -1339,8 +1339,8 @@ class ProyekController extends Controller
                 if (isset($dataProyek["dokumen-other-proyek"])) {
                     self::uploadDokumenOtherProyek($dataProyek["dokumen-other-proyek"], $kode_proyek);
                 }
-                if (isset($dataProyek["dokumen-penentuan-kso"])) {
-                    self::uploadDokumenPersetujuanKSO($dataProyek["dokumen-penentuan-kso"], $kode_proyek);
+                if (isset($dataProyek["dokumen-form-persetujuan-kso"])) {
+                    self::uploadDokumenPersetujuanKSO($dataProyek["dokumen-form-persetujuan-kso"], $kode_proyek);
                 }
             }
             return redirect("/proyek/view/" . $kode_proyek);
