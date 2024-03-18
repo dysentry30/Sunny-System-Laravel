@@ -64,7 +64,32 @@
                         <div class="card-header border-0 py-2">
                             <!--begin::Card title-->
                             <div class="card-title">
-
+                                <form action="" class="d-flex flex-row w-auto" method="get">
+                                    <div id="filterBUMN" class="d-flex align-items-center position-relative">
+                                        <select name="filter-bumn" class="form-select form-select-solid w-200px ms-2"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Filter BUMN / Swasta">
+                                            <option></option>
+                                            <option value="BUMN" {{ $filterBUMN == "BUMN" ? 'selected' : '' }}>BUMN</option>
+                                            <option value="Pemerintah" {{ $filterBUMN == "Pemerintah" ? 'selected' : '' }}>Pemerintah</option>
+                                            <option value="Swasta" {{ $filterBUMN == "Swasta" ? 'selected' : '' }}>Swasta</option>
+                                        </select>
+                                    </div>
+                                    <div class="d-flex align-items-center position-relative">
+                                        <!--begin:: SUBMIT-->
+                                        <button type="submit" class="btn btn-sm btn-primary ms-2" id="kt_toolbar_primary_button">Submit</button>
+                                        <!--end:: SUBMIT-->
+                                        <!--begin:: RESET-->
+                                        <button type="button" class="btn btn-sm btn-light btn-active-primary ms-2"
+                                        onclick="resetFilter()" id="kt_toolbar_primary_button">Reset</button>
+                                        <!--end:: RESET-->
+                                        
+                                        <script>
+                                            function resetFilter() {
+                                                window.location.href = "/competitor";
+                                            }
+                                        </script>
+                                    </div>
+                                </form>
                             </div>
                             <!--begin::Card title-->
 

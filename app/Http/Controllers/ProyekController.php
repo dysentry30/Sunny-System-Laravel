@@ -81,6 +81,7 @@ class ProyekController extends Controller
         $filterUnit = $request->query("filter-unit");
         $filterKBLI = $request->query("filter-kbli");
         $selected_year = $request->query("tahun-proyek") ?? (int) date("Y");
+        $filterKalah = $request->query("filter-kalah");
         // dd($column);
         // $proyekBerjalan = ProyekBerjalans::all();
         // dd($proyekBerjalan);
@@ -92,17 +93,24 @@ class ProyekController extends Controller
         $year = (int) date("Y");
 
         if (Auth::user()->check_administrator) {
-            $unitkerjas = UnitKerja::all()->sortBy('id_profit_center');;
+            $unitkerjas = UnitKerja::all()->sortBy('id_profit_center');
+            if ($selected_year > 2022) {
+                $unitkerjas = $unitkerjas->whereNotNull('id_profit_center');
+            }
             // dd($unitkerjas);
             $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan']);
         } else {
             // $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan'])->where("unit_kerja", "=", Auth::user()->unit_kerja);
             $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
             if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
-                $unitkerjas = UnitKerja::all()->whereIn("divcode", $unit_kerja_user->toArray())->sortBy('id_profit_center');;
+                $unitkerjas = UnitKerja::all()->whereIn("divcode", $unit_kerja_user->toArray())->sortBy('id_profit_center');
+                if ($selected_year > 2022) {
+                    $unitkerjas = $unitkerjas->whereNotNull('id_profit_center');
+                }
                 $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan'])->whereIn("unit_kerja", $unit_kerja_user->toArray());
             }
         }
+        
         $tahun_proyeks = $proyeks->get()->groupBy("tahun_perolehan")->keys();
         if(!empty($selected_year)) {
             $proyeks = $proyeks->where("tahun_perolehan", "=", $selected_year);
@@ -151,16 +159,20 @@ class ProyekController extends Controller
             // $proyeks = $proyeks->get()->filter(function ($p) use ($column, $filterKBLI) {
             //     return preg_match("/$filterKBLI/i", $p[$column]);
             // });
-        } 
+        }
+
+        if (!empty($filterKalah)) {
+            $proyeks = $proyeks->where('kategori_kalah', '=', $filterKalah);
+        }
 
         $proyeks = $proyeks->get();
         $filter = null;
         
         if (empty($datatables)) {
-            return view('3_Proyek', compact(["tahun_proyeks", "filterJenis", "filterTipe", "filterUnit", "filterStage", "selected_year", "proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas", "jenisProyek", "tipeProyek", "filterKBLI"]));
+            return view('3_Proyek', compact(["tahun_proyeks", "filterJenis", "filterTipe", "filterUnit", "filterStage", "selected_year", "proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas", "jenisProyek", "tipeProyek", "filterKBLI", "filterKalah"]));
         } else {
             // dd($tahun_proyeks);
-            return view('3_DataSetProyek', compact(["tahun_proyeks", "filterJenis", "filterTipe", "filterUnit", "filterStage", "selected_year", "proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas", "jenisProyek", "tipeProyek", "filterKBLI"]));
+            return view('3_DataSetProyek', compact(["tahun_proyeks", "filterJenis", "filterTipe", "filterUnit", "filterStage", "selected_year", "proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas", "jenisProyek", "tipeProyek", "filterKBLI", "filterKalah"]));
         }
     }
 
@@ -686,6 +698,9 @@ class ProyekController extends Controller
         $newProyek->aspek_non_pesaing = $dataProyek["aspek-non-pesaing"];
         $newProyek->saran_perbaikan = $dataProyek["saran-perbaikan"];
         $newProyek->laporan_menang = $dataProyek["laporan-menang"];
+
+        // form KALAH
+        $newProyek->kategori_kalah = $dataProyek["kategori-kalah"] ?? null;
 
         // form TERKONTRAK
         // $newProyek->jenis_proyek_terkontrak = $dataProyek["jenis-proyek-terkontrak"];

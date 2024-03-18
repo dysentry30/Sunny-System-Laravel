@@ -311,6 +311,9 @@ function checkGreenLine($proyek) {
                     } else {
                         $results->push(false);
                     }
+                    return $results->count() > 1 && $results->every(function ($item) {
+                        return $item === true;
+                    });
                 }
             } else {
                 return false;
