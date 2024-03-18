@@ -3631,9 +3631,10 @@ function createWordAssessmentPartner(App\Models\PorsiJO $porsi)
         $file_name = $now->format("dmYHis") . "_kriteria-partner_$porsi->kode_proyek";
 
         $collectKriteriaDetail = $porsi->PartnerSelection->sortBy('index')->values();
-        $masterLegalitasPerusahaan = LegalitasPerusahaan::where('is_active', true)->where('nota_rekomendasi', 'Nota Rekomendasi 2')->get()->sortBy('position');
-        $masterKriteriaPartner = KriteriaPenggunaJasa::where('is_active', true)->where('nota_rekomendasi', 'Nota Rekomendasi 2')->get()->sortBy('position');
+        $masterLegalitasPerusahaan = LegalitasPerusahaan::where('is_active', true)->where('nota_rekomendasi', 'Nota Rekomendasi 2')->get()->sortBy('position')->values();
+        $masterKriteriaPartner = KriteriaPenggunaJasa::where('is_active', true)->where('nota_rekomendasi', 'Nota Rekomendasi 2')->get()->sortBy('position')->values();
         $index = 0;
+        // dd($masterLegalitasPerusahaan, $masterKriteriaPartner);
 
         $totalScoreKriteria = $collectKriteriaDetail->sum('nilai') ?? 0;
 
@@ -3708,19 +3709,24 @@ function createWordAssessmentPartner(App\Models\PorsiJO $porsi)
                 $table->addCell(3000, ['gridSpan' => 6, 'bgColor' => 'FFFEA8'])->addText('REFERENSI', $cellFontStyle, $cellParagraphStyle);
                 foreach ($masterKriteriaPartner->where('kategori', 'Referensi') as $key => $mlp) {
                     $no = $key + 1;
-                    $kriteriaSelected = $collectKriteriaDetail[$index];
-                    $kriteriaItemSelected = '';
-                    switch ($kriteriaSelected->kriteria) {
+                    $kriteriaSelectedReferensi = $collectKriteriaDetail[$index];
+                    $kriteriaItemSelectedReferensi = '';
+                    switch ($kriteriaSelectedReferensi->kriteria) {
                         case 1:
-                            $kriteriaItemSelected = $mlp->kriteria_1;
+                            $kriteriaItemSelectedReferensi = $mlp->kriteria_1;
+                            break;
                         case 2:
-                            $kriteriaItemSelected = $mlp->kriteria_2;
+                            $kriteriaItemSelectedReferensi = $mlp->kriteria_2;
+                            break;
                         case 3:
-                            $kriteriaItemSelected = $mlp->kriteria_3;
+                            $kriteriaItemSelectedReferensi = $mlp->kriteria_3;
+                            break;
                         case 4:
-                            $kriteriaItemSelected = $mlp->kriteria_4;
+                            $kriteriaItemSelectedReferensi = $mlp->kriteria_4;
+                            break;
                         default:
-                            $kriteriaItemSelected = "Tidak Ada";
+                            $kriteriaItemSelectedReferensi = "Tidak Ada";
+                            break;
                     }
 
                     if ($mlp->kategori == "Referensi") {
@@ -3728,30 +3734,36 @@ function createWordAssessmentPartner(App\Models\PorsiJO $porsi)
                         $table->addCell(500)->addText($no, $cellFontStyle, $cellParagraphStyle2);
                         $table->addCell(2000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($mlp->item, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
                         $table->addCell(500)->addText($mlp->bobot, $cellFontStyle, $cellParagraphStyle2);
-                        $table->addCell(3000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($kriteriaItemSelected, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
-                        $table->addCell(500)->addText($kriteriaSelected->kriteria ?? '', $cellFontStyle, $cellParagraphStyle2);
-                        $table->addCell(500)->addText($kriteriaSelected->nilai ?? '0', $cellFontStyle, $cellParagraphStyle2);
-                        $table->addCell(5000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($kriteriaSelected->keterangan, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
+                        $table->addCell(3000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($kriteriaItemSelectedReferensi, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
+                        $table->addCell(500)->addText($kriteriaSelectedReferensi->kriteria ?? '', $cellFontStyle, $cellParagraphStyle2);
+                        $table->addCell(500)->addText($kriteriaSelectedReferensi->nilai ?? '0', $cellFontStyle, $cellParagraphStyle2);
+                        $table->addCell(5000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($kriteriaSelectedReferensi->keterangan, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
                     }
+                    $index++;
                 }
                 $table->addRow();
                 $table->addCell(500, ['bgColor' => 'FFFEA8']);
                 $table->addCell(3000, ['gridSpan' => 6, 'bgColor' => 'FFFEA8'])->addText('REPUTASI', $cellFontStyle, $cellParagraphStyle);
                 foreach ($masterKriteriaPartner->where('kategori', 'Reputasi') as $key => $mlp) {
                     $no = $key + 1;
-                    $kriteriaSelected = $collectKriteriaDetail[$index];
-                    $kriteriaItemSelected = '';
-                    switch ($kriteriaSelected->kriteria) {
+                    $kriteriaSelectedReputasi = $collectKriteriaDetail[$index];
+                    $kriteriaItemSelectedReputasi = '';
+                    switch ($kriteriaSelectedReputasi->kriteria) {
                         case 1:
-                            $kriteriaItemSelected = $mlp->kriteria_1;
+                            $kriteriaItemSelectedReputasi = $mlp->kriteria_1;
+                            break;
                         case 2:
-                            $kriteriaItemSelected = $mlp->kriteria_2;
+                            $kriteriaItemSelectedReputasi = $mlp->kriteria_2;
+                            break;
                         case 3:
-                            $kriteriaItemSelected = $mlp->kriteria_3;
+                            $kriteriaItemSelectedReputasi = $mlp->kriteria_3;
+                            break;
                         case 4:
-                            $kriteriaItemSelected = $mlp->kriteria_4;
+                            $kriteriaItemSelectedReputasi = $mlp->kriteria_4;
+                            break;
                         default:
-                            $kriteriaItemSelected = "Tidak Ada";
+                            $kriteriaItemSelectedReputasi = "Tidak Ada";
+                            break;
                     }
 
                     if ($mlp->kategori == "Reputasi") {
@@ -3759,30 +3771,36 @@ function createWordAssessmentPartner(App\Models\PorsiJO $porsi)
                         $table->addCell(500)->addText($no, $cellFontStyle, $cellParagraphStyle2);
                         $table->addCell(2000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($mlp->item, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
                         $table->addCell(500)->addText($mlp->bobot, $cellFontStyle, $cellParagraphStyle2);
-                        $table->addCell(3000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($kriteriaItemSelected, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
-                        $table->addCell(500)->addText($kriteriaSelected->kriteria ?? '', $cellFontStyle, $cellParagraphStyle2);
-                        $table->addCell(500)->addText($kriteriaSelected->nilai ?? '0', $cellFontStyle, $cellParagraphStyle2);
-                        $table->addCell(5000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($kriteriaSelected->keterangan, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
+                        $table->addCell(3000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($kriteriaItemSelectedReputasi, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
+                        $table->addCell(500)->addText($kriteriaSelectedReputasi->kriteria ?? '', $cellFontStyle, $cellParagraphStyle2);
+                        $table->addCell(500)->addText($kriteriaSelectedReputasi->nilai ?? '0', $cellFontStyle, $cellParagraphStyle2);
+                        $table->addCell(5000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($kriteriaSelectedReputasi->keterangan, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
                     }
+                    $index++;
                 }
                 $table->addRow();
                 $table->addCell(500, ['bgColor' => 'FFFEA8']);
                 $table->addCell(3000, ['gridSpan' => 6, 'bgColor' => 'FFFEA8'])->addText('FINANCIAL', $cellFontStyle, $cellParagraphStyle);
                 foreach ($masterKriteriaPartner->where('kategori', 'Financial') as $key => $mlp) {
                     $no = $key + 1;
-                    $kriteriaSelected = $collectKriteriaDetail[$index];
-                    $kriteriaItemSelected = '';
-                    switch ($kriteriaSelected->kriteria) {
+                    $kriteriaSelectedFinancial = $collectKriteriaDetail[$index];
+                    $kriteriaItemSelectedFinancial = '';
+                    switch ($kriteriaSelectedFinancial->kriteria) {
                         case 1:
-                            $kriteriaItemSelected = $mlp->kriteria_1;
+                            $kriteriaItemSelectedFinancial = $mlp->kriteria_1;
+                            break;
                         case 2:
-                            $kriteriaItemSelected = $mlp->kriteria_2;
+                            $kriteriaItemSelectedFinancial = $mlp->kriteria_2;
+                            break;
                         case 3:
-                            $kriteriaItemSelected = $mlp->kriteria_3;
+                            $kriteriaItemSelectedFinancial = $mlp->kriteria_3;
+                            break;
                         case 4:
-                            $kriteriaItemSelected = $mlp->kriteria_4;
+                            $kriteriaItemSelectedFinancial = $mlp->kriteria_4;
+                            break;
                         default:
-                            $kriteriaItemSelected = "Tidak Ada";
+                            $kriteriaItemSelectedFinancial = "Tidak Ada";
+                            break;
                     }
 
                     if ($mlp->kategori == "Financial") {
@@ -3790,11 +3808,12 @@ function createWordAssessmentPartner(App\Models\PorsiJO $porsi)
                         $table->addCell(500)->addText($no, $cellFontStyle, $cellParagraphStyle2);
                         $table->addCell(2000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($mlp->item, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
                         $table->addCell(500)->addText($mlp->bobot, $cellFontStyle, $cellParagraphStyle2);
-                        $table->addCell(3000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($kriteriaItemSelected, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
-                        $table->addCell(500)->addText($kriteriaSelected->kriteria ?? '', $cellFontStyle, $cellParagraphStyle2);
-                        $table->addCell(500)->addText($kriteriaSelected->nilai ?? '0', $cellFontStyle, $cellParagraphStyle2);
-                        $table->addCell(5000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($kriteriaSelected->keterangan, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
+                        $table->addCell(3000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($kriteriaItemSelectedFinancial, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
+                        $table->addCell(500)->addText($kriteriaSelectedFinancial->kriteria ?? '', $cellFontStyle, $cellParagraphStyle2);
+                        $table->addCell(500)->addText($kriteriaSelectedFinancial->nilai ?? '0', $cellFontStyle, $cellParagraphStyle2);
+                        $table->addCell(5000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($kriteriaSelectedFinancial->keterangan, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
                     }
+                    $index++;
                 }
                 $table->addRow();
                 $table->addCell(2500, ['gridSpan' => 2, 'bgColor' => '8496B0'])->addText('Total', $cellFontStyle, $cellParagraphStyle);
