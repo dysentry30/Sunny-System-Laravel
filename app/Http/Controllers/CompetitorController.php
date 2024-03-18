@@ -13,8 +13,19 @@ class CompetitorController extends Controller
      */
     public function view(Request $request)
     {
-        $customer = Customer::where('check_competitor', true)->get();
-        return view('20_Menu_Competitor', ['customer' => $customer]);
+        $filterBUMN = $request->get('filter-bumn');
+        $customer = Customer::where('check_competitor', true)
+            ->when(!empty($filterBUMN), function ($query) use ($filterBUMN) {
+                if ($filterBUMN == "BUMN") {
+                    $query->where('jenis_instansi', 'like', "%$filterBUMN%")
+                    ->orWhere('jenis_instansi', 'like', "BUMD");
+                } elseif ($filterBUMN == "Pemerintah") {
+                    $query->where('jenis_instansi', 'like', "%$filterBUMN%");
+                } else {
+                    $query->where('jenis_instansi', 'like', "%$filterBUMN%");
+                }
+            })->get();
+        return view('20_Menu_Competitor', ['customer' => $customer, 'filterBUMN' => $filterBUMN]);
     }
 
     /**

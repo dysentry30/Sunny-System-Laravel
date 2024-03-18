@@ -254,6 +254,18 @@
                                             @endif
                                         </select>
                                     </div>
+
+                                    <div id="filterKalah" class="d-flex align-items-center position-relative">
+                                        <select name="filter-kalah"
+                                            class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Kategori Kalah"
+                                            tabindex="-1" aria-hidden="true">
+                                            <option></option>
+                                            @foreach (\App\Models\KategoriKalah::all() as $item)
+                                                <option value="{{ $item->kategori }}" {{ $item->kategori == $filterKalah ? 'selected' : '' }}>{{ $item->kategori }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                     <!--end:: Input Filter-->
 
                                         {{-- <div id="filter" class="d-flex align-items-center position-relative">
@@ -363,6 +375,7 @@
                                         <th class="min-w-auto text-center"><small>Sistem Bayar</small></th>
                                         <th class="min-w-auto text-center"><small>Uang Muka</small></th>
                                         <th class="min-w-auto text-center"><small>SBU KBLI</small></th>
+                                        <th class="min-w-auto text-center"><small>Kategori Kalah</small></th>
                                         @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") || str_contains(auth()->user()->email, "@sunny"))
                                             <th class="min-w-auto text-center"><small>Action</small></th>
                                         @endif
@@ -693,6 +706,14 @@
                                                 </small>
                                             </td>
                                             <!--end::SBU KBLI-->
+                                            
+                                            <!--begin::Kategori Kalah-->
+                                            <td class="text-center">
+                                                <small>
+                                                    {{ $proyek->kategori_kalah ?? '-' }}
+                                                </small>
+                                            </td>
+                                            <!--end::Kategori Kalah-->
 
                                             @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") || str_contains(auth()->user()->email, "@sunny"))
                                                 <!--begin::Action-->
