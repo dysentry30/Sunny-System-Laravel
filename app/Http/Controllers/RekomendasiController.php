@@ -1569,7 +1569,7 @@ class RekomendasiController extends Controller
         $unit_kerjas = $is_super_user && str_contains(Auth::user()->name, "Admin") ? UnitKerja::addSelect(["divcode"])->get()->toArray() : (str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja))->toArray();
         $matriks_user = Auth::user()->Pegawai->MatriksApproval ?? null;
         $is_pic = Auth::user()->check_administrator ? true : (empty($matriks_user) || $matriks_user->isEmpty() ? true : false);
-        if ($matriks_user->isEmpty()) {
+        if ($is_pic) {
             $matriks_user = MatriksApprovalRekomendasi::all();
         }
         $matriks_category = [];
