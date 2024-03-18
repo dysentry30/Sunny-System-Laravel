@@ -1568,6 +1568,10 @@ class RekomendasiController extends Controller
         $is_super_user = str_contains(Auth::user()->name, "PIC") || Auth::user()->check_administrator;
         $unit_kerjas = $is_super_user && str_contains(Auth::user()->name, "Admin") ? UnitKerja::addSelect(["divcode"])->get()->toArray() : (str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja))->toArray();
         $matriks_user = Auth::user()->Pegawai->MatriksApproval ?? null;
+        $is_pic = !empty($matriks_user) && $matriks_user->isEmpty();
+        if ($is_pic) {
+            $matriks_user = MatriksApprovalRekomendasi::all();
+        }
         $matriks_category = [];
 
         if ($is_super_user) {
@@ -1607,9 +1611,9 @@ class RekomendasiController extends Controller
             });
         }
         if (!empty($rekomendasi_open)) {
-            return view('13_Rekomendasi', compact(["proyek_from_url", "nip", "all_super_user_counter", "rekomendasi_open", "is_user_exist_in_matriks_approval", "matriks_user", "matriks_category", "proyeks_rekomendasi_final", "proyeks_proses_rekomendasi"]));
+            return view('13_Rekomendasi', compact(["proyek_from_url", "nip", "all_super_user_counter", "rekomendasi_open", "is_user_exist_in_matriks_approval", "matriks_user", "matriks_category", "proyeks_rekomendasi_final", "proyeks_proses_rekomendasi", "is_pic"]));
         }
-        return view('13_Rekomendasi', compact(["proyek_from_url", "nip", "all_super_user_counter", "is_user_exist_in_matriks_approval", "matriks_user", "matriks_category", "proyeks_rekomendasi_final", "proyeks_proses_rekomendasi"]));
+        return view('13_Rekomendasi', compact(["proyek_from_url", "nip", "all_super_user_counter", "is_user_exist_in_matriks_approval", "matriks_user", "matriks_category", "proyeks_rekomendasi_final", "proyeks_proses_rekomendasi", "is_pic"]));
     }
 
     public function indexGreenLane(Request $request)

@@ -786,7 +786,7 @@
                                                             </div>
                                                         </td>
                                                         <td>-</td>
-                                                        @if (empty($matriks_user))
+                                                        @if ($is_pic)
                                                             <td>
                                                                 {{-- @if (!is_null($proyek->is_request_rekomendasi))
                                                                     @if ($proyek->is_request_rekomendasi && !$proyek->review_assessment)
@@ -863,9 +863,9 @@
                                                                                 @endif                                                                       
                                                                             @endif 
                                                                         @else
-                                                                            <a href="/proyek/view/{{ $proyek->kode_proyek }}"
+                                                                            {{-- <a href="/proyek/view/{{ $proyek->kode_proyek }}"
                                                                                 target="_blank"
-                                                                                class="btn btn-sm btn-primary text-white">Submit</a>
+                                                                                class="btn btn-sm btn-primary text-white">Submit</a> --}}
                                                                         @endif
                                                                     @endif
                                                             </td>
