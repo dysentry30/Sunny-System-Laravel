@@ -5384,9 +5384,9 @@
                     tipe = tipe.replaceAll(" ", "-");
                 }
                 if(filterGet) {
-                    getDataTable("#datatable-instansi-owner-realisasi", "#instansi-owner-realisasi", `/dashboard/instansi-owner-realisasi/${tipe}/${filterGet}`, tipe, 9);
+                    getDataTable("#datatable-instansi-owner-realisasi", "#instansi-owner-realisasi", `/dashboard/instansi-owner-realisasi/${tipe}/${filterGet}`, "Instansi"+tipe, 9);
                 } else {
-                    getDataTable("#datatable-instansi-owner-realisasi", "#instansi-owner-realisasi", `/dashboard/instansi-owner-realisasi/${tipe}`, tipe, 9);
+                    getDataTable("#datatable-instansi-owner-realisasi", "#instansi-owner-realisasi", `/dashboard/instansi-owner-realisasi/${tipe}`, "Instansi"+tipe, 9);
                 }
                 
             })
