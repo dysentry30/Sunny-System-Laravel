@@ -69,7 +69,9 @@ class DashboardTVController extends Controller
 
                     array_push($nilaiRkapArray, round($nilaiRkapForecast)); // Array Nilai RKAP Forecast
                 }
+            }
 
+            for ($i = 1; $i <= 12; $i++) {
                 foreach ($historyForecast as $forecast) {
                     //Untuk Forecast
                     if ($forecast->month_forecast == $i && !$forecast->is_cancel) {
@@ -81,7 +83,9 @@ class DashboardTVController extends Controller
                     array_push($nilaiForecastArray, round($nilaiForecast)); // Array Nilai Forecast
 
                 }
+            }
 
+            for ($i = 1; $i <= 12; $i++) {
                 foreach ($historyRealisasi as $forecast) {
                     //Untuk Realisasi
                     if ($forecast->month_realisasi == $i && !$forecast->is_cancel && $forecast->month_realisasi <= $month) {
@@ -89,11 +93,12 @@ class DashboardTVController extends Controller
                     } else {
                         $nilaiRealisasiForecast == 0;
                     }
-
+    
                     array_push($nilaiRealisasiArray, round($nilaiRealisasiForecast)); // Array Nilai Realisasi
-                }               
-                
+                }  
             }
+
+                
             
 
             $data = ["Success" => true, "NilaiRKAP" => $nilaiRkapArray, "NilaiForecast" => $nilaiForecastArray, "NilaiRealisasi" => $nilaiRealisasiArray];
