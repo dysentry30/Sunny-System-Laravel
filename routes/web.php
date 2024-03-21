@@ -48,6 +48,7 @@ use App\Http\Controllers\KonsultanPerencanaController;
 use App\Http\Controllers\KriteriaPenggunaJasaController;
 use App\Http\Controllers\PenilaianPenggunaJasaController;
 use App\Http\Controllers\CompetitorController;
+use App\Http\Controllers\DashboardTVController;
 use App\Models\AlatProyek;
 use App\Models\ContractChangeNotice;
 use App\Models\ContractChangeOrder;
@@ -4803,7 +4804,14 @@ Route::get('php-info', function () {
     phpinfo();
 });
 
-Route::get('test-email', function () {
-    $sendNotifEmail = sendNotifEmail("fathur.rohman2353@gmail.com", "Testing", "Testing", false);
-    dd($sendNotifEmail);
+Route::get('/tes-email', function () {
+    $email = sendNotifEmail("fathur.rohman2353@gmail.com", "Testing", "Testing", false, false);
+    dd($email);
 });
+
+Route::get('/dashboard-tv', function () {
+    return view('21_DashboardTV');
+});
+
+Route::get('/dashboard-tv/get-data-forecast', [DashboardTVController::class, 'getForecast']);
+Route::get('/dashboard-tv/get-event', [DashboardTVController::class, 'getSchedule']);

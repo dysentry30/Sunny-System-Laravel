@@ -13,6 +13,7 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         "api/*",
-        "/user/get-proyek-datatable"
+        "/user/get-proyek-datatable",
+        "/dashboard-tv"
     ];
 }
