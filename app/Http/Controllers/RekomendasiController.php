@@ -1782,14 +1782,15 @@ class RekomendasiController extends Controller
             // $hasil_assessment = collect(json_decode($proyek->hasil_assessment));
             $hasil_assessment = collect(json_decode($notaRekomendasi->hasil_assessment));
             try {
-                createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega, $request);
-                // sleep(5);
+                $generateForm = createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega, $request);
+                // sleep(30);
+                dd($generateForm);
                 // $file_persetujuan_old = $proyek->file_persetujuan;
                 // $file_persetujuan_old = $notaRekomendasi->file_persetujuan;
                 $pdfMerger = new PdfMerge();
-                $pdfMerger->add(public_path('file-persetujuan/' . $notaRekomendasi->file_persetujuan));
+                $pdfMerger->add(public_path('file-persetujuan' . '/' . $notaRekomendasi->file_persetujuan));
                 // $pdfMerger->add(public_path('file-profile-risiko' . '/' . $proyek->file_penilaian_risiko));
-                $pdfMerger->add(public_path('file-profile-risiko' . '/' . $notaRekomendasi->file_penilaian_risiko));
+                // $pdfMerger->add(public_path('file-profile-risiko' . '/' . $notaRekomendasi->file_penilaian_risiko));
 
                 $now = \Carbon\Carbon::now();
                 $file_name = $now->format("dmYHis") . "_nota-persetujuan_" . $proyek->kode_proyek;

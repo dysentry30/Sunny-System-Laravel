@@ -279,6 +279,14 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('/dashboard/sumber-dana-realisasi/{tipe}/{filter}', [DashboardController::class, "getDataSumberDanaRealisasi"]);
 
+    Route::get('/dashboard/instansi-owner-rkap/{tipe}', [DashboardController::class, "getDataInstansiOwnerRKAP"]);
+
+    Route::get('/dashboard/instansi-owner-rkap/{tipe}/{filter}', [DashboardController::class, "getDataInstansiOwnerRKAP"]);
+
+    Route::get('/dashboard/instansi-owner-realisasi/{tipe}', [DashboardController::class, "getDataInstansiOwnerRealisasi"]);
+
+    Route::get('/dashboard/instansi-owner-realisasi/{tipe}/{filter}', [DashboardController::class, "getDataInstansiOwnerRealisasi"]);
+
     Route::get('/dashboard/nilai-ok-per-divisi/{tipe}', [DashboardController::class, "getDataNilaiOK"]);
 
     // Route::get('/dashboard/nilai-ok-per-divisi/{tipe}/{filter}', [DashboardController::class, "getDataNilaiOK"]);
@@ -4793,4 +4801,9 @@ Route::get('/user/get-proyek-datatable', function (Request $request) {
 
 Route::get('php-info', function () {
     phpinfo();
+});
+
+Route::get('test-email', function () {
+    $sendNotifEmail = sendNotifEmail("fathur.rohman2353@gmail.com", "Testing", "Testing", false);
+    dd($sendNotifEmail);
 });

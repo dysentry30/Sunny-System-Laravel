@@ -805,6 +805,87 @@
                                     </div>
                                     <hr>
 
+                                    <div class="row">
+                                        <figure class="col-6 p-0 highcharts-figure">
+                                            <div class="" id="instansi-owner-rkap">
+                                                <!--begin::INDEX NILAI-->
+                                                <!--end::INDEX NILAI-->
+                                            </div>
+                                            <div class="" id="datatable-instansi-owner-rkap" style="display: none;">
+                                                <div class="text-center">
+                                                    <h2 id="title-table"></h2>
+                                                    <h4 id="total"></h4>
+                                                </div>
+                                                <div class="d-flex justify-content-end">
+                                                    <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
+                                                        onclick="hideTable('#datatable-instansi-owner-rkap','#instansi-owner-rkap')"><i class="bi bi-bar-chart-fill fs-6"></i> Show
+                                                        Chart</button>
+                                                    <a href="#" target="_blank" id="export-excel-btn" class="btn btn-sm btn-light btn-active-primary fs-6 me-3"><i class="bi bi-download"></i> Export Excel</a>
+                                                    <button class="btn btn-sm btn-light btn-active-danger fs-6"
+                                                        onclick="toggleFullscreen()" id="exit-fullscreen"><i
+                                                            class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
+                                                    {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
+                                                </div>
+                                                <br>
+                                                <div class="" style="max-height: 500px; overflow-y:scroll">
+                                                    <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                        <!--begin::Table head-->
+                                                        <thead id="table-line-head" class="bg-white" style="position: sticky; top: 0">
+                                                            {{-- THead Here --}}
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        <!--begin::Table body-->
+                                                        <tbody class="fw-bold" id="table-line-body">
+                                                            {{-- Data Here --}}
+                                                        </tbody>
+                                                        <!--end::Table body-->
+                                                    </table>
+                                                </div>
+                                                <!--end::Table Proyek-->
+                                            </div>
+                                        </figure>
+                                        {{-- <span class="vr" style="padding: 0.5px"></span> --}}
+                                        <figure class="col-6 p-0 highcharts-figure">
+                                            <div class="" id="instansi-owner-realisasi">
+                                                <!--begin::INDEX NILAI-->
+                                                <!--end::INDEX NILAI-->
+                                            </div>
+                                            <div class="" id="datatable-instansi-owner-realisasi" style="display: none;">
+                                                <div class="text-center">
+                                                    <h2 id="title-table"></h2>
+                                                    <h4 id="total"></h4>
+                                                </div>
+                                                <div class="d-flex justify-content-end">
+                                                    <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
+                                                        onclick="hideTable('#datatable-instansi-owner-realisasi','#instansi-owner-realisasi')"><i class="bi bi-bar-chart-fill fs-6"></i> Show
+                                                        Chart</button>
+                                                    <a href="#" target="_blank" id="export-excel-btn" class="btn btn-sm btn-light btn-active-primary fs-6 me-3"><i class="bi bi-download"></i> Export Excel</a>
+                                                    <button class="btn btn-sm btn-light btn-active-danger fs-6"
+                                                        onclick="toggleFullscreen()" id="exit-fullscreen"><i
+                                                            class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
+                                                    {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
+                                                </div>
+                                                <br>
+                                                <div class="" style="max-height: 500px; overflow-y:scroll">
+                                                    <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                        <!--begin::Table head-->
+                                                        <thead id="table-line-head" class="bg-white" style="position: sticky; top: 0">
+                                                            {{-- THead Here --}}
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        <!--begin::Table body-->
+                                                        <tbody class="fw-bold" id="table-line-body">
+                                                            {{-- Data Here --}}
+                                                        </tbody>
+                                                        <!--end::Table body-->
+                                                    </table>
+                                                </div>
+                                                <!--end::Table Proyek-->
+                                            </div>
+                                        </figure>
+                                    </div>
+                                    <hr>
+
                                     {{-- <figure class="highcharts-figure py-12">
                                         <div class="pt-12 pb-6" id="nilai-realisasi">
                                             <!--begin::NILAI REALISASI-->
@@ -2269,9 +2350,14 @@
                         drilldown: "Menang",
                     },
                     {
-                        name: "Kalah dan Cancel : " + {{ $kalah }},
+                        name: "Kalah: " + {{ $kalah }},
                         y: {{ $kalah }},
-                        drilldown: "Kalah dan Cancel",
+                        drilldown: "Kalah",
+                    },
+                    {
+                        name: "Cancel : " + {{ $cancel }},
+                        y: {{ $cancel }},
+                        drilldown: "Cancel",
                     },
                     {
                         name: "Prakualifikasi : " + {{ $prakualifikasi }},
@@ -2426,6 +2512,146 @@
         });
     </script>
     <!--end::SEBARAN SUMBER DANA-->
+
+    <!--begin::SEBARAN INSTANSI OWNER-->
+    <script>
+        const sebaranInstansiOwnerRKAP = JSON.parse('{!! $proyeksInstansiRKAPPie->toJson() !!}');
+        Highcharts.chart('instansi-owner-rkap', {
+            chart: {
+                type: 'pie',
+                options3d: {
+                    enabled: true,
+                    alpha: 25
+                }
+            },
+            title: {
+                align: 'center',
+                text: '<b class="h2">Sebaran Instansi Owner RKAP</b>'
+            },
+            subtitle: {
+                align: 'center',
+                text: '<b>Berdasarkan Jumlah</b>'
+            },
+            accessibility: {
+                announceNewData: {
+                    enabled: true
+                }
+            },
+            xAxis: {
+                type: 'category'
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                }
+                
+            },
+            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD", "#083AA9", "#CD104D", "#1C6758"],
+            plotOptions: {
+                pie: {
+                    innerSize: 75,
+                    depth: 25,
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        format: '{point.x}',
+                    },
+                    showInLegend: true
+                }
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                itemStyle: {
+                    fontSize:'15px',
+                },
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:11px"><b>{series.name}</b></span><br>',
+                pointFormat: '<span style="color:{point.color}"><b>{point.name}</b></span>'
+            },
+
+            series: [{
+                name: "",
+                colorByPoint: true,
+                data: sebaranInstansiOwnerRKAP,
+            }],
+            credits: {
+                enabled: false
+            },
+        });
+    </script>
+    <script>
+        const sebaranInstansiOwnerRealisasi = JSON.parse('{!! $proyeksInstansiRealisasiPie->toJson() !!}');
+        Highcharts.chart('instansi-owner-realisasi', {
+            chart: {
+                type: 'pie',
+                options3d: {
+                    enabled: true,
+                    alpha: 25
+                }
+            },
+            title: {
+                align: 'center',
+                text: '<b class="h2">Sebaran Instansi Owner Realisasi</b>'
+            },
+            subtitle: {
+                align: 'center',
+                text: '<b>Berdasarkan Jumlah</b>'
+            },
+            accessibility: {
+                announceNewData: {
+                    enabled: true
+                }
+            },
+            xAxis: {
+                type: 'category'
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                }
+                
+            },
+            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD", "#083AA9", "#CD104D", "#1C6758"],
+            plotOptions: {
+                pie: {
+                    innerSize: 75,
+                    depth: 25,
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        format: '{point.x}',
+                    },
+                    showInLegend: true
+                }
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                itemStyle: {
+                    fontSize:'15px',
+                },
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:11px"><b>{series.name}</b></span><br>',
+                pointFormat: '<span style="color:{point.color}"><b>{point.name}</b></span>'
+            },
+
+            series: [{
+                name: "",
+                colorByPoint: true,
+                data: sebaranInstansiOwnerRealisasi,
+            }],
+            credits: {
+                enabled: false
+            },
+        });
+    </script>
+    <!--end::SEBARAN INSTANSI OWNER-->
+
 
 
     <!--begin::TERENDAH vs TERKONTRAK-->
@@ -4460,7 +4686,7 @@
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
-            } else if(type.trim() == "Prakualifikasi" || type.trim() == "Menang" || type.trim() == "Tender Diikuti" || type.trim() == "Kalah dan Cancel") {
+            } else if(type.trim() == "Prakualifikasi" || type.trim() == "Menang" || type.trim() == "Tender Diikuti" || type.trim() == "Kalah" || type.trim() == "Cancel") {
                 let tbodyHTML = ``;
                 let totalNilaiLainnya = 0;
                 let textBulan = "Bulan RA";
@@ -4816,6 +5042,156 @@
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
+            } else if(type.trim() == "InstansiPemerintah" || type.trim() == "InstansiSwasta" || type.trim() == "InstansiBUMN"){
+                let tbodyHTML = ``;
+                let totalNilaiLainnya = 0;
+
+                let theadHTML =
+                '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
+                    '<th>Nama Proyek</th>' +
+                    '<th>Instansi Owner</th>' +
+                    '<th style="width:150px">Stage</th>' +
+                    '<th>Unit Kerja</th>' +
+                    `<th class="text-end">Nilai</th>`
+                '</tr>';
+                
+                [filterRes].forEach(filtering => {
+                    for(let filter in filtering) {
+                    filter = filtering[filter];
+                    let stage = "";
+                    if(filter.nilai_perolehan) {
+                        totalNilaiLainnya += Number(filter.nilai_perolehan ?? 0);
+                    } else {
+                        totalNilaiLainnya += Number(filter.nilai_rkap ?? 0);
+                    }
+                    switch (Number(filter.stage)) {
+                        case 0:
+                            stage = "Cancel";
+                            break;
+                        case 1:
+                            stage = "Pasar Dini";
+                            break;
+                        case 2:
+                            stage = "Pasar Potensial";
+                            break;
+                        case 3:
+                            stage = "Prakualifikasi";
+                            break;
+                        case 4:
+                            stage = "Tender Diikuti";
+                            break;
+                        case 5:
+                            stage = "Perolehan";
+                            break;
+                        case 6:
+                            stage = "Menang";
+                            break;
+                        case 7:
+                            stage = "Kalah";
+                            break;
+                        case 8:
+                            if (filter.tipe_proyek == 'R' || filter.tipe_proyek == 'Retail') {
+                                stage = "Terkontrak-Retail";
+                            } else {
+                                stage = "Terkontrak";
+                            }
+                            break;
+                        case 9:
+                            stage = "Terendah";
+                            break;
+                        case 10:
+                            stage = "Approval";
+                            break;
+                        default:
+                            break;
+                    }
+
+                    let bulan = "";
+                    let getBulanColumn = filter.bulan_pelaksanaan;
+                    let nilai = filter.nilai_perolehan ?? filter.nilai_rkap;
+                    switch (Number(getBulanColumn)) {
+                        case 1:
+                            bulan = "Januari";
+                            break;
+                        case 2:
+                            bulan = "Februari";
+                            break;
+                        case 3:
+                            bulan = "Maret";
+                            break;
+                        case 4:
+                            bulan = "April";
+                            break;
+                        case 5:
+                            bulan = "Mei";
+                            break;
+                        case 6:
+                            bulan = "Juni";
+                            break;
+                        case 7:
+                            bulan = "Juli";
+                            break;
+                        case 8:
+                            bulan = "Agustus";
+                            break;
+                        case 9:
+                            bulan = "September";
+                            break;
+                        case 10:
+                            bulan = "Oktober";
+                            break;
+                        case 11:
+                            bulan = "November";
+                            break;
+                        case 12:
+                            bulan = "Desember";
+                            break;
+                        default:
+                            bulan = "-"
+                            break;
+                    }
+                    const unitKerja = typeof filter.unit_kerja == "object" ? filter.unit_kerja.unit_kerja : filter.unit_kerja 
+                    tbodyHTML += `<tr>
+
+                            <!--begin::Email-->
+                            <td>
+                                <a target="_blank" href="/proyek/view/${ filter.kode_proyek }" id="click-name"
+                                    class="text-gray-800 text-hover-primary mb-1">${filter.nama_proyek}</a>
+                            </td>
+                            <!--end::Email-->
+                            <!--begin::Instansi-->
+                            <td>
+                                ${filter.proyek_berjalan.customer.jenis_instansi}
+                            </td>
+                            <!--end::Instansi-->
+                            <!--begin::Stage-->
+                            <td>
+                                ${stage}
+                            </td>
+                            <!--end::Stage-->
+
+                            <!--begin::Unit Kerja-->
+                            <td>
+                                ${unitKerja}
+                            </td>
+                            <!--end::Unit Kerja-->
+
+                            <!--begin::Nilai Forecast-->
+                            <td class="text-end">
+                                ${Intl.NumberFormat(["id"]).format(nilai)}
+                            </td>
+                            <!--end::Nilai Forecast-->
+                            </tr>`;
+                    }
+                });
+
+                thead.innerHTML = theadHTML;
+                tbody.innerHTML = tbodyHTML;
+                titleTable.innerHTML = `Nilai ${type}`;
+                total.innerHTML = `Total Nilai ${type} = <b>${Intl.NumberFormat((["id"])).format(totalNilaiLainnya)}</b>`;
+                table.style.display = "";
+                const chartLine = document.querySelector(chartElt);
+                chartLine.style.display = "none";
             }
             exportExcelBtn.setAttribute("href", `/download/${href}`);
         }
@@ -4969,6 +5345,48 @@
                     getDataTable("#datatable-sumber-dana-realisasi", "#sumber-dana-realisasi", `/dashboard/sumber-dana-realisasi/${tipe}/${filterGet}`, tipe, 9);
                 } else {
                     getDataTable("#datatable-sumber-dana-realisasi", "#sumber-dana-realisasi", `/dashboard/sumber-dana-realisasi/${tipe}`, tipe, 9);
+                }
+                
+            })
+        })
+    </script>
+    <!--End::Clickable Sumber Dana Realisasi -->
+
+    <!--Begin::Clickable Sumber Dana RKAP -->
+    <script>
+        const instansiOwnerRKAP = document.querySelectorAll("#instansi-owner-rkap .highcharts-point");
+        // console.log(instansiOwnerRKAP);
+        instansiOwnerRKAP.forEach(point => {
+            point.addEventListener("click", async e => {
+                let tipe = point.parentElement.getAttribute("aria-label").replaceAll(/[^a-z][^A-Z]|proyek stage|\./gi, "");
+                if(tipe.includes(" ")) {
+                    tipe = tipe.replaceAll(" ", "-");
+                }
+                if(filterGet) {
+                    getDataTable("#datatable-instansi-owner-rkap", "#instansi-owner-rkap", `/dashboard/instansi-owner-rkap/${tipe}/${filterGet}`, "Instansi"+tipe, 9);
+                } else {
+                    getDataTable("#datatable-instansi-owner-rkap", "#instansi-owner-rkap", `/dashboard/instansi-owner-rkap/${tipe}`, "Instansi"+tipe, 9);
+                }
+                
+            })
+        })
+    </script>
+    <!--End::Clickable Sumber Dana RKAP -->
+
+    <!--Begin::Clickable Sumber Dana Realisasi -->
+    <script>
+        const instansiOwnerRealisasi = document.querySelectorAll("#instansi-owner-realisasi .highcharts-point");
+        // console.log(instansiOwnerRealisasi);
+        instansiOwnerRealisasi.forEach(point => {
+            point.addEventListener("click", async e => {
+                let tipe = point.parentElement.getAttribute("aria-label").replaceAll(/[^a-z][^A-Z]|proyek stage|\./gi, "");
+                if(tipe.includes(" ")) {
+                    tipe = tipe.replaceAll(" ", "-");
+                }
+                if(filterGet) {
+                    getDataTable("#datatable-instansi-owner-realisasi", "#instansi-owner-realisasi", `/dashboard/instansi-owner-realisasi/${tipe}/${filterGet}`, tipe, 9);
+                } else {
+                    getDataTable("#datatable-instansi-owner-realisasi", "#instansi-owner-realisasi", `/dashboard/instansi-owner-realisasi/${tipe}`, tipe, 9);
                 }
                 
             })
