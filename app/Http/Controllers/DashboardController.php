@@ -224,44 +224,82 @@ class DashboardController extends Controller
 
         $per = 1000000; //Dibagi Dalam Jutaan
 
-
-        for ($i = 1; $i <= 12; $i++) {
+        for (
+            $i = 1;
+            $i <= 12;
+            $i++
+        ) {
             foreach ($historyForecast as $forecast) {
-                if ($forecast->month_forecast == $i && !$forecast->is_cancel) {
+                if ($forecast->is_rkap) {
+                    //Untuk OK
+                    if ($forecast->month_rkap == $i) {
+                        $nilaiRkapForecast += (int) $forecast->rkap_forecast / $per;
+                    } else {
+                        $nilaiRkapForecast == 0;
+                    }
+                }
+
+                if ($forecast->stage == 8 && !$forecast->is_cancel) {
+                    //Untuk Realisasi
+                    if ($forecast->month_realisasi == $i && !$forecast->is_cancel && $forecast->month_realisasi <= $month) {
+                        $nilaiRealisasiForecast += (int) $forecast->realisasi_forecast / $per;
+                    } else {
+                        $nilaiRealisasiForecast == 0;
+                    }
+                }
+
+                //Untuk Forecast
+                if (
+                    $forecast->month_forecast == $i && !$forecast->is_cancel
+                ) {
                     $nilaiForecast += $forecast->nilai_forecast / $per;
                 } else {
                     $nilaiForecast == 0;
                 }
             }
-            // dd();
-            array_push($nilaiForecastArray, round($nilaiForecast));
+            array_push($nilaiRkapArray, round($nilaiRkapForecast)); // Array Nilai RKAP Forecast
+            array_push($nilaiForecastArray, round($nilaiForecast)); // Array Nilai Forecast
+            array_push($nilaiRealisasiArray, round($nilaiRealisasiForecast)); // Array Nilai Realisasi
         }
 
-        for ($i = 1; $i <= 12; $i++) {
-            foreach ($historyRkap as $rkap) {
-                if ($rkap->month_rkap == $i) {
-                    $nilaiRkapForecast += (int) $rkap->rkap_forecast / $per;
-                } else {
-                    // dump($rkap->month_rkap, $rkap->rkap_forecast);
-                    $nilaiRkapForecast == 0;
-                }
-            }
-            array_push($nilaiRkapArray, round($nilaiRkapForecast));
+
+        // for ($i = 1; $i <= 12; $i++) {
+        //     foreach ($historyForecast as $forecast) {
+        //         if ($forecast->month_forecast == $i && !$forecast->is_cancel) {
+        //             $nilaiForecast += $forecast->nilai_forecast / $per;
+        //         } else {
+        //             $nilaiForecast == 0;
+        //         }
+        //     }
+        //     // dd();
+        //     array_push($nilaiForecastArray, round($nilaiForecast));
+        // }
+
+        // for ($i = 1; $i <= 12; $i++) {
+        //     foreach ($historyRkap as $rkap) {
+        //         if ($rkap->month_rkap == $i) {
+        //             $nilaiRkapForecast += (int) $rkap->rkap_forecast / $per;
+        //         } else {
+        //             // dump($rkap->month_rkap, $rkap->rkap_forecast);
+        //             $nilaiRkapForecast == 0;
+        //         }
+        //     }
+        //     array_push($nilaiRkapArray, round($nilaiRkapForecast));
         
-        }
-        for ($i = 1; $i <= 12; $i++) {
-            foreach ($historyRealisasi as $realisasi) {
-                if ($realisasi->month_realisasi == $i && !$realisasi->is_cancel && $realisasi->month_realisasi <= $month) {
-                    if ($i == 11) {
-                        // dump($realisasi);
-                    }
-                    $nilaiRealisasiForecast += (int) $realisasi->realisasi_forecast / $per;
-                } else {
-                    $nilaiRealisasiForecast == 0;
-                }
-            }
-            array_push($nilaiRealisasiArray, round($nilaiRealisasiForecast));
-        }
+        // }
+        // for ($i = 1; $i <= 12; $i++) {
+        //     foreach ($historyRealisasi as $realisasi) {
+        //         if ($realisasi->month_realisasi == $i && !$realisasi->is_cancel && $realisasi->month_realisasi <= $month) {
+        //             if ($i == 11) {
+        //                 // dump($realisasi);
+        //             }
+        //             $nilaiRealisasiForecast += (int) $realisasi->realisasi_forecast / $per;
+        //         } else {
+        //             $nilaiRealisasiForecast == 0;
+        //         }
+        //     }
+        //     array_push($nilaiRealisasiArray, round($nilaiRealisasiForecast));
+        // }
 
         // dump($nilaiRealisasiArray);
         // dd($nilaiRealisasiArray);
