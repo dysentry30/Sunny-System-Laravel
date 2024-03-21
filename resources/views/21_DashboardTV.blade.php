@@ -275,9 +275,23 @@
                 chart.series[1].setData(dataApi.NilaiForecast)
                 chart.series[2].setData(dataApi.NilaiRealisasi)
 
-                eltRKAP.innerHTML = "Rp. " + dataApi.NilaiRKAP[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-                eltForecast.innerHTML = "Rp. " + dataApi.NilaiForecast[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-                eltRealisasi.innerHTML = "Rp. " + dataApi.NilaiRealisasi[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                if (dataApi.NilaiRKAP.length > 0) {
+                    eltRKAP.innerHTML = "Rp. " + dataApi.NilaiRKAP[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                }else{
+                    eltRKAP.innerHTML = "Rp. 0"
+                }
+
+                if (dataApi.NilaiForecast.length > 0) {
+                    eltForecast.innerHTML = "Rp. " + dataApi.NilaiForecast[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                }else{
+                    eltForecast.innerHTML = "Rp. 0"
+                }
+
+                if (dataApi.NilaiRealisasi.length > 0) {
+                    eltRealisasi.innerHTML = "Rp. " + dataApi.NilaiRealisasi[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                } else {
+                    eltRealisasi.innerHTML = "Rp. 0"
+                }
             } else {
                 alert("Error => " + dataApi.Message)
             }
@@ -312,9 +326,23 @@
                         chart.series[1].setData(dataApi.NilaiForecast)
                         chart.series[2].setData(dataApi.NilaiRealisasi)
 
-                        eltRKAP.innerHTML = "Rp. " + dataApi.NilaiRKAP[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-                        eltForecast.innerHTML = "Rp. " + dataApi.NilaiForecast[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-                        eltRealisasi.innerHTML = "Rp. " + dataApi.NilaiRealisasi[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                        if (dataApi.NilaiRKAP.length > 0) {
+                            eltRKAP.innerHTML = "Rp. " + dataApi.NilaiRKAP[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                        }else{
+                            eltRKAP.innerHTML = "Rp. 0"
+                        }
+
+                        if (dataApi.NilaiForecast.length > 0) {
+                            eltForecast.innerHTML = "Rp. " + dataApi.NilaiForecast[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                        }else{
+                            eltForecast.innerHTML = "Rp. 0"
+                        }
+
+                        if (dataApi.NilaiRealisasi.length > 0) {
+                            eltRealisasi.innerHTML = "Rp. " + dataApi.NilaiRealisasi[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                        } else {
+                            eltRealisasi.innerHTML = "Rp. 0"
+                        }
                     } else {
                         alert("Error => " + dataApi.Message)
                     }
