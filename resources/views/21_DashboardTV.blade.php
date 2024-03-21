@@ -125,7 +125,7 @@
                                 <small style="color:#F7C13E">Klik</small>
                             </div>
                             <span>
-                                <p class="m-0"><b>Jadwal Tender</b></p>
+                                <p class="m-0"><b>Jadwal Pemasukan Tender</b></p>
                             </span>
                         </div>
                     </div>
