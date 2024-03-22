@@ -121,7 +121,7 @@
 
                                 <!--begin::Button-->    
                                 @if ($proyek->UnitKerja?->dop != "EA")
-                                    @if (is_null($proyek->is_request_rekomendasi) && !$check_green_line && $proyek->stage == 1 && is_null($proyek->is_disetujui))
+                                    @if (is_null($proyek->NotaRekomendasi->is_request_rekomendasi) && !$check_green_line && $proyek->stage == 1 && is_null($proyek->NotaRekomendasi->is_disetujui))
                                         <input type="button" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan"
                                             style="background-color:#00b48d">
                                     {{-- @elseif ($proyek->stage == 4 && $check_non_green_line_nota_2 && is_null($proyek->is_request_rekomendasi_2) && is_null($proyek->is_disetujui_rekomendasi_2))
@@ -380,7 +380,7 @@
                                                             Pasar Potensial
                                                         </a>
                                                     @else
-                                                        @if ($proyek->is_disetujui || $check_green_line || $proyek->UnitKerja?->dop == "EA")
+                                                        @if ($proyek->NotaRekomendasi->is_disetujui || $check_green_line || $proyek->UnitKerja?->dop == "EA")
                                                             <a href="#"
                                                                 class="stage-button stage-action color-is-default stage-is-not-active"
                                                                 style="outline: 0px; cursor: pointer;" stage="2">
@@ -1182,7 +1182,7 @@
                                                              </div><br>
                                                          @endif
                                                          <div class="form-check">
-                                                             @if ($proyek->is_disetujui)
+                                                             @if ($proyek->NotaRekomendasi->is_disetujui)
                                                              <span class="px-4 fs-4 badge badge-light-success">
                                                                  Nota Rekomendasi I Disetujui
                                                              </span>
