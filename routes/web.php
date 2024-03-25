@@ -413,6 +413,24 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         // dd($path);
         return response()->download($path, $document_kso->document_name . '.docx');
     });
+
+
+
+    Route::post('/contract-management/{kategori_file}/upload', [ContractManagementsController::class, 'uploadDokumenContract'
+    ]);
+
+    Route::post('/contract-management/{kategori_file}/{id_document}/edit', [ContractManagementsController::class, 'updateDokumenContract']);
+
+    Route::post('/contract-management/{kategori_file}/{id_document}/delete', [ContractManagementsController::class, 'deleteDokumenContract']);
+
+
+    //Download Dokumen Kebutuhan Claim
+    Route::get('/contract-management/{kategori_file}/{id_document}/download', [ContractManagementsController::class, 'downloadDokumenChangeManagements']);
+
+
+
+
+
     // end :: contract management
 
 
@@ -458,6 +476,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/claim-management/save', [ClaimController::class, 'save']);
 
     Route::post('/claim-management/delete', [ClaimController::class, 'claimDelete']);
+
+    Route::post("/claim-management/update/{id}", [ClaimController::class, "editClaim"]);
 
     Route::get('claim-management/view/{claim_management}', [ClaimController::class, 'show']);
 

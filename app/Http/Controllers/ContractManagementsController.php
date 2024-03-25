@@ -55,6 +55,7 @@ use App\Models\ProyekPIS;
 use App\Models\ProyekProgress;
 use App\Models\ReviewPembatalanKontrak;
 use App\Models\ProyekPISNew;
+use App\Models\DokumenAanwitjzingContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -1491,7 +1492,7 @@ class ContractManagementsController extends Controller
         //     // return Redirect::back();
         // }
         $file = $request->file("file-dokumen-instruction");
-        $id_document = date("His_") . $file->getClientOriginalName();
+        $id_document = date("dmYHis_") . str_replace(' ', '', $file->getClientOriginalName());
         $nama_file = $file->getClientOriginalName();
 
         if(isset($data['file-dokumen-instruction'])){
@@ -1516,7 +1517,7 @@ class ContractManagementsController extends Controller
         $siteInstruction->uraian_dokumen = $data["uraian-dokumen-instruction"];
         if ($siteInstruction->save() && $uploadFinal->save()) {
             // moveFileTemp($file, explode(".", $id_document)[0]);
-            $file->move(public_path('words'), $id_document);
+            $file->move(public_path('contract-managements/dokumen-site-instruction'), $id_document);
             Alert::success('Success', "Dokumen Site Instruction berhasil ditambahkan");
             return Redirect::back();
         }
@@ -1534,7 +1535,7 @@ class ContractManagementsController extends Controller
 
         $nama_file = $file->id_document;
         if ($file->delete()) {
-            File::delete(public_path("words/$nama_file"));
+            File::delete(public_path("contract-managements/dokumen-site-instruction/$nama_file"));
             return (object)[
                 'success' => true,
                 'message' => "Dokumen berhasil dihapus",
@@ -1584,7 +1585,7 @@ class ContractManagementsController extends Controller
         // }
         $file = $request->file("file-technical-form");
         $nama_file = $file->getClientOriginalName();
-        $id_document = date("His_") . $file->getClientOriginalName();
+        $id_document = date("dmYHis_") . str_replace(' ', '', $file->getClientOriginalName());
 
         if(isset($data['file-technical-form'])){
             $uploadFinal = new ContractUploadFinal();
@@ -1607,7 +1608,7 @@ class ContractManagementsController extends Controller
         $technicalForm->uraian_dokumen = $data["uraian-technical-form"];
         if ($technicalForm->save() && $uploadFinal->save()) {
             // moveFileTemp($file, explode(".", $id_document)[0]);
-            $file->move(public_path('words'), $id_document);
+            $file->move(public_path('contract-managements/dokumen-technical-form'), $id_document);
             Alert::success('Success', "Dokumen Technical Form berhasil ditambahkan");
             return Redirect::back();
         }
@@ -1625,7 +1626,7 @@ class ContractManagementsController extends Controller
 
         $nama_file = $file->id_document;
         if ($file->delete()) {
-            File::delete(public_path("words/$nama_file"));
+            File::delete(public_path("contract-managements/dokumen-technical-form/$nama_file"));
             return (object)[
                 'success' => true,
                 'message' => "Dokumen berhasil dihapus",
@@ -1676,7 +1677,7 @@ class ContractManagementsController extends Controller
         // }
         $file = $request->file("file-technical-query");
         $nama_file = $file->getClientOriginalName();
-        $id_document = date("His_") . $file->getClientOriginalName();
+        $id_document = date("dmYHis_") . str_replace(' ', '', $file->getClientOriginalName());
 
         if(isset($data['file-technical-query'])){
             $uploadFinal = new ContractUploadFinal();
@@ -1700,7 +1701,7 @@ class ContractManagementsController extends Controller
         $technicalQuery->profit_center = $data["profit-center"];
 
         if ($technicalQuery->save() && $uploadFinal->save()) {
-            $file->move(public_path('words'), $id_document);
+            $file->move(public_path('contract-managements/dokumen-technical-query'), $id_document);
             // moveFileTemp($file, explode(".", $id_document)[0]);
             Alert::success('Success', "Dokumen Technical Query berhasil ditambahkan");
             return Redirect::back();
@@ -1719,7 +1720,7 @@ class ContractManagementsController extends Controller
 
         $nama_file = $file->id_document;
         if ($file->delete()) {
-            File::delete(public_path("words/$nama_file"));
+            File::delete(public_path("contract-managements/dokumen-technical-query/$nama_file"));
             return (object)[
                 'success' => true,
                 'message' => "Dokumen berhasil dihapus",
@@ -1770,7 +1771,7 @@ class ContractManagementsController extends Controller
         // }
         $file = $request->file("file-field-design-change");
         $nama_file = $file->getClientOriginalName();
-        $id_document = date("His_") . $file->getClientOriginalName();
+        $id_document = date("His_") . str_replace(' ', '', $file->getClientOriginalName());
         if(isset($data['file-field-design-change'])){
             $uploadFinal = new ContractUploadFinal();
             $uploadFinal->id_contract = $data["id-contract"];
@@ -1792,7 +1793,7 @@ class ContractManagementsController extends Controller
         $fieldChange->profit_center = $data["profit-center"];
 
         if ($fieldChange->save() && $uploadFinal->save()) {
-            $file->move(public_path('words'), $id_document);
+            $file->move(public_path('contract-managements/dokumen-field-design-change'), $id_document);
             // moveFileTemp($file, explode(".", $id_document)[0]);
             Alert::success('Success', "Dokumen Field Design Change berhasil ditambahkan");
             return Redirect::back();
@@ -1811,7 +1812,7 @@ class ContractManagementsController extends Controller
 
         $nama_file = $file->id_document;
         if ($file->delete()) {
-            File::delete(public_path("words/$nama_file"));
+            File::delete(public_path("contract-managements/dokumen-field-design-change/$nama_file"));
             return (object)[
                 'success' => true,
                 'message' => "Dokumen berhasil dihapus",
@@ -1861,7 +1862,7 @@ class ContractManagementsController extends Controller
         // }
         $file = $request->file("file-contract-change-notice");
         $nama_file = $file->getClientOriginalName();
-        $id_document = date("His_") . $file->getClientOriginalName();
+        $id_document = date("dmYHis_") . str_replace(' ', '', $file->getClientOriginalName());
         if(isset($data['file-contract-change-notice'])){
             $uploadFinal = new ContractUploadFinal();
             $uploadFinal->id_contract = $data["id-contract"];
@@ -1884,7 +1885,7 @@ class ContractManagementsController extends Controller
         $changeNotice->profit_center = $data["profit-center"];
 
         if ($changeNotice->save() && $uploadFinal->save()) {
-            $file->move(public_path('words'), $id_document);
+            $file->move(public_path('contract-managements/dokumen-change-notice'), $id_document);
             // moveFileTemp($file, explode(".", $id_document)[0]);
             Alert::success('Success', "Dokumen Change Notice berhasil ditambahkan");
             return Redirect::back();
@@ -1903,7 +1904,7 @@ class ContractManagementsController extends Controller
 
         $nama_file = $file->id_document;
         if ($file->delete()) {
-            File::delete(public_path("words/$nama_file"));
+            File::delete(public_path("contract-managements/dokumen-change-notice/$nama_file"));
             return (object)[
                 'success' => true,
                 'message' => "Dokumen berhasil dihapus",
@@ -1953,7 +1954,7 @@ class ContractManagementsController extends Controller
         // }
         $file = $request->file("file-contract-change-order");
         $nama_file = $file->getClientOriginalName();
-        $id_document = date("His_") . $file->getClientOriginalName();
+        $id_document = date("dmYHis_") . str_replace(' ', '', $file->getClientOriginalName());
         if(isset($data['file-contract-change-order'])){
             $uploadFinal = new ContractUploadFinal();
             $uploadFinal->id_contract = $data["id-contract"];
@@ -1975,7 +1976,7 @@ class ContractManagementsController extends Controller
         $changeOrder->profit_center = $data["profit-center"];
 
         if ($changeOrder->save() && $uploadFinal->save()) {
-            $file->move(public_path('words'), $id_document);
+            $file->move(public_path('contract-managements/dokumen-change-order'), $id_document);
             // moveFileTemp($file, explode(".", $id_document)[0]);
             Alert::success('Success', "Dokumen Change Order berhasil ditambahkan");
             return Redirect::back();
@@ -1994,7 +1995,7 @@ class ContractManagementsController extends Controller
 
         $nama_file = $file->id_document;
         if ($file->delete()) {
-            File::delete(public_path("words/$nama_file"));
+            File::delete(public_path("contract-managements/dokumen-change-order/$nama_file"));
             return (object)[
                 'success' => true,
                 'message' => "Dokumen berhasil dihapus",
@@ -2044,7 +2045,7 @@ class ContractManagementsController extends Controller
         // }
         $file = $request->file("file-contract-change-proposal");
         $nama_file = $file->getClientOriginalName();
-        $id_document = date("His_") . $file->getClientOriginalName();
+        $id_document = date("dmYHis_") . str_replace(' ', '', $file->getClientOriginalName());
 
         if(isset($data['file-contract-change-proposal'])){
             $uploadFinal = new ContractUploadFinal();
@@ -2067,7 +2068,7 @@ class ContractManagementsController extends Controller
         $changeProposal->profit_center = $data["profit-center"];
 
         if ($changeProposal->save() && $uploadFinal->save()) {
-            $file->move(public_path('words'), $id_document);
+            $file->move(public_path('contract-managements/dokumen-change-proposal'), $id_document);
             // moveFileTemp($file, explode(".", $id_document)[0]);
             Alert::success('Success', "Dokumen Change Proposal berhasil ditambahkan");
             return Redirect::back();
@@ -2086,7 +2087,7 @@ class ContractManagementsController extends Controller
 
         $nama_file = $file->id_document;
         if ($file->delete()) {
-            File::delete(public_path("words/$nama_file"));
+            File::delete(public_path("contract-managements/dokumen-change-proposal/$nama_file"));
             return (object)[
                 'success' => true,
                 'message' => "Dokumen berhasil dihapus",
@@ -4766,6 +4767,238 @@ class ContractManagementsController extends Controller
             //     "message" => $e->getMessage()
             // ], 200);
             dd($e->getMessage());
+        }
+    }
+
+
+    //-------------------------------------------------------------------------------------------------------------------------//
+
+    public function uploadDokumenContract(Request $request, $kategori_file)
+    {
+        try {
+            $data = $request->all();
+
+            if (empty($data['file-document'])) {
+                Alert::error('Error', 'Input dokumen terlebih dahulu!');
+                return redirect()->back();
+            }
+
+            $contract = ContractManagements::where('profit_center', $data['profit-center'])->first();
+
+            if (empty($contract)) {
+                Alert::error('Error', 'Kontrak tidak ditemukan. Silahkan hubungi Admin!');
+                return redirect()->back();
+            }
+
+            $spk_intern_no = $contract->ProyekPisNew?->spk_intern_no;
+
+            switch ($kategori_file) {
+                case "dokumen-aanwitjzing":
+                    $modelClass = new DokumenAanwitjzingContract();
+                    break;
+
+                default:
+                    $modelClass = null;
+            }
+
+            if (empty($modelClass)) {
+                Alert::error('Error', "Kategori dokumen tidak ditemukan");
+                return redirect()->back();
+            }
+
+
+            DB::transaction(function () use ($modelClass, $spk_intern_no, $contract, $data, $kategori_file) {
+                foreach ($data['file-document'] as $file) {
+                    $namaFile = $file->getClientOriginalName();
+                    $idFile = date('dmYHis_') . str_replace(' ', '', $file->getClientOriginalName());
+
+                    $modelClass->spk_intern_no = $spk_intern_no;
+                    $modelClass->profit_center = $contract->profit_center;
+                    $modelClass->id_document = $idFile;
+                    $modelClass->nama_document = $namaFile;
+                    $modelClass->status = $data["status"];
+
+                    $modelClass->save();
+
+                    $file->move(public_path('contract-managements/' . $kategori_file), $idFile);
+                }
+            });
+
+            Alert::success('Success', "Upload Dokumen Berhasi");
+            return redirect()->back();
+        } catch (\Exception $e) {
+            Alert::error('Error', $e->getMessage());
+            return redirect()->back();
+        }
+    }
+
+    public function updateDokumenContract(Request $request, $kategori_file, $id)
+    {
+        try {
+            $data = $request->all();
+
+
+            if (!isset($data['file-document']) && empty($data['file-document'])) {
+                Alert::error('Error', 'Input dokumen terlebih dahulu!');
+                return redirect()->back();
+            }
+
+            $file = $data['file-document'];
+
+            $contract = ContractManagements::where('profit_center', $data['profit-center'])->first();
+
+            if (empty($contract)) {
+                Alert::error('Error', 'Kontrak tidak ditemukan. Silahkan hubungi Admin!');
+                return redirect()->back();
+            }
+
+            $spk_intern_no = $contract->ProyekPisNew?->spk_intern_no;
+
+            switch ($kategori_file) {
+                case "dokumen-aanwitjzing":
+                    $modelClass = new DokumenAanwitjzingContract();
+                    break;
+
+                default:
+                    $modelClass = null;
+            }
+
+            if (empty($modelClass)) {
+                Alert::error('Error', "Kategori dokumen tidak ditemukan");
+                return redirect()->back();
+            }
+
+
+            DB::transaction(function () use ($modelClass, $spk_intern_no, $contract, $data, $kategori_file, $file, $id) {
+
+                $dokumen = $modelClass->find($id);
+
+                $idDocumentOld = $dokumen->id_document;
+
+                $namaFile = $file->getClientOriginalName();
+                $idFile = date('dmYHis_') . str_replace(' ', '', $file->getClientOriginalName());
+
+                $dokumen->spk_intern_no = $spk_intern_no;
+                $dokumen->profit_center = $contract->profit_center;
+                $dokumen->id_document = $idFile;
+                $dokumen->nama_document = $namaFile;
+                $dokumen->status = $data["status"];
+
+                $dokumen->save();
+
+                if (File::delete(public_path('contract-managements/' . $kategori_file . '/' . $idDocumentOld))) {
+                    $file->move(public_path('contract-managements/' . $kategori_file), $idFile);
+                } else {
+                    Alert::error('Error', "Dokumen gagal diupdate. Hubungi Admin!");
+                    return redirect()->back();
+                }
+            });
+
+            Alert::success('Success', "Update Dokumen Berhasil");
+            return redirect()->back();
+        } catch (\Exception $e) {
+            Alert::error('Error', $e->getMessage());
+            return redirect()->back();
+        }
+    }
+
+    public function deleteDokumenContract(Request $request, $kategori_file, $id)
+    {
+        $data = $request->all();
+
+        try {
+            $contract = ContractManagements::where('profit_center', $data['id-contract'])->first();
+
+            if (empty($contract)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Kontrak tidak ditemukan. Silahkan hubungi Admin!'
+                ]);
+            }
+
+            switch ($kategori_file) {
+                case "dokumen-aanwitjzing":
+                    $modelClass = new DokumenAanwitjzingContract();
+                    break;
+
+                default:
+                    $modelClass = null;
+            }
+
+            DB::transaction(function () use ($modelClass, $kategori_file, $id) {
+                $dokumen = $modelClass->find($id);
+
+                if (empty($dokumen)) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Dokumen tidak ditemukan. Silahkan hubungi Admin!'
+                    ]);
+                }
+
+                $idDokumenOld = $dokumen->id_document;
+
+                if ($dokumen->delete()) {
+                    File::delete(public_path('contract-managements/' . $kategori_file . '/' . $idDokumenOld));
+                }
+            });
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Dokumen berhasil dihapus'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function downloadDokumenChangeManagements($kategori_file, $id)
+    {
+        try {
+            switch ($kategori_file) {
+                case "dokumen-site-instruction":
+                    $modelClass = new SiteInstruction();
+                    break;
+                case "dokumen-technical-form":
+                    $modelClass = new TechnicalForm();
+                    break;
+                case "dokumen-technical-query":
+                    $modelClass = new TechnicalQuery();
+                    break;
+                case "dokumen-field-design-change":
+                    $modelClass = new FieldChange();
+                    break;
+                case "dokumen-change-notice":
+                    $modelClass = new ContractChangeNotice();
+                    break;
+                case "dokumen-change-order":
+                    $modelClass = new ContractChangeOrder();
+                    break;
+                case "dokumen-change-proposal":
+                    $modelClass = new ContractChangeProposal();
+                    break;
+                default:
+                    $modelClass = null;
+            }
+
+            if (empty($modelClass)) {
+                Alert::error('Error', "Kategori tidak diitemukan, Hubungi Admin!");
+                return redirect()->back();
+            }
+
+            $file = $modelClass->where('id_document', $id)->first();
+
+            if (File::exists(public_path('contract-managements/' . $kategori_file . '/' . $id))) {
+                return response()->download(public_path('contract-managements/' . $kategori_file . '/' . $id), $file->nama_document);
+            } else {
+                Alert::error('Error', "File tidak diitemukan, Hubungi Admin!");
+                return redirect()->back();
+            }
+        } catch (\Exception $e) {
+            Alert::error('Error', $e->getMessage());
+            return redirect()->back();
         }
     }
 }

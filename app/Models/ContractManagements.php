@@ -205,6 +205,11 @@ class ContractManagements extends Model
         return $this->hasOne(ProyekPISNew::class, 'profit_center', 'profit_center');
     }
 
+    public function DokumenAanwitjzing()
+    {
+        return $this->hasMany(DokumenAanwitjzingContract::class, 'profit_center', 'profit_center');
+    }
+
     public function getAll()
     {
         $data = [];

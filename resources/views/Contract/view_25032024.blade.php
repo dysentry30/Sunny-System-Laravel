@@ -983,6 +983,9 @@
                                 <!--end::Table head-->
                                 
                                 <!--begin::Table body-->
+                                @php
+                                    $dokumen_aanwitjzing = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Aanwitjzing");
+                                @endphp
                                 <tbody class="fw-bold text-gray-400">
                                     {{-- @if (isset($contract))
                                         @forelse ($contract->questionsProjects as $questionProject)
@@ -1015,39 +1018,47 @@
                                         @endforelse
                                     @else    
                                     @endif --}}
-                                    @forelse ($contract->DokumenAanwitjzing as $dc)
-                                        <tr>
-                                            <!--begin::Column-->
-                                            <td>
-                                                <a href="/contract-management/dokumen-aanwitjzing/{{ $dc->id_document }}/download" class="text-hover-primary">
-                                                    {{ $dc->nama_document }}
-                                                </a>
-                                            </td>
-                                            <!--end::Column-->
-                                            <!--begin::Column-->
-                                            <td>
-                                                <p class="text-gray-600 mb-1">{{ Carbon\Carbon::parse($dc->created_at)->translatedFormat("d F Y") }}</p>
-                                            </td>
-                                            <!--end::Column-->
-                                            <!--begin::Action-->
-                                            <td class="text-center">
-                                                <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
-                                                    <a href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_create_aanwitjzing_{{ $dc->id }}"
-                                                        {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
-                                                        class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                    <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', 'dokumen-aanwitjzing')">Delete</button>
-                                                </div>
-                                            </td>
-                                            <!--end::Action-->
-                                        </tr>
-                                    @empty
+                                    @if (!empty($dokumen_aanwitjzing))
+                                        @forelse ($dokumen_aanwitjzing as $dc)
+                                            <tr>
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <a target="_blank" href="{{ asset('words/'.$dc->id_document) }}" class="text-hover-primary">
+                                                        {{ $dc->nama_document }}
+                                                    </a>
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Column-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ Carbon\Carbon::parse($dc->created_at)->translatedFormat("d F Y") }}</p>
+                                                </td>
+                                                <!--end::Column-->
+                                                <!--begin::Action-->
+                                                <td class="text-center">
+                                                    <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
+                                                        <a href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_create_aanwitjzing_{{ $dc->id }}"
+                                                            {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
+                                                            class="btn btn-sm btn-primary p-2 text-white">Edit</a>
+                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}')">Delete</button>
+                                                    </div>
+                                                </td>
+                                                <!--end::Action-->
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="5" class="text-center">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    @else
                                         <tr>
                                             <td colspan="5" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
-                                    @endforelse
+                                    @endif
                                 </tbody>
                                 <!--end::Table body-->
 
@@ -3998,10 +4009,9 @@
                                                 <!--end::Uraian-->
                                                 <!--begin::Nomor Dokumen-->
                                                 <td>
-                                                    <a href="/contract-management/dokumen-site-instruction/{{ $site_instruction->id_document }}/download" class="text-hover-primary">{{ $site_instruction->nama_document }}</a>
-                                                    {{-- <a target="_blank" href="{{ asset('words/'.$site_instruction->id_document) }}" class="text-hover-primary">
+                                                    <a target="_blank" href="{{ asset('words/'.$site_instruction->id_document) }}" class="text-hover-primary">
                                                         {{ $site_instruction->nama_document }}
-                                                    </a> --}}
+                                                    </a>
                                                 </td>
                                                 <!--end::Nomor Dokumen-->
                                                 <!--begin::Nomor Dokumen-->
@@ -4089,10 +4099,9 @@
                                             <!--end::Uraian-->
                                             <!--begin::Nomor Dokumen-->
                                             <td>
-                                                <a href="/contract-management/dokumen-technical-form/{{ $technical_form->id_document }}/download" class="text-hover-primary">{{ $technical_form->nama_document }}</a>
-                                                {{-- <a target="_blank" href="{{ asset('words/'.$technical_form->id_document) }}" class="text-hover-primary">
+                                                <a target="_blank" href="{{ asset('words/'.$technical_form->id_document) }}" class="text-hover-primary">
                                                     {{ $technical_form->id_document }}
-                                                </a> --}}
+                                                </a>
                                             </td>
                                             <!--end::Nomor Dokumen-->
                                             <!--begin::Nomor Dokumen-->
@@ -4179,10 +4188,9 @@
                                             <!--end::Uraian-->
                                             <!--begin::Nomor Dokumen-->
                                             <td>
-                                                <a href="/contract-management/dokumen-technical-query/{{ $technical_query->id_document }}/download" class="text-hover-primary">{{ $technical_query->nama_document }}</a>
-                                                {{-- <a target="_blank" href="{{ asset('words/'.$technical_query->id_document) }}" class="text-hover-primary">
+                                                <a target="_blank" href="{{ asset('words/'.$technical_query->id_document) }}" class="text-hover-primary">
                                                     {{ $technical_query->id_document }}
-                                                </a> --}}
+                                                </a>
                                             </td>
                                             <!--end::Nomor Dokumen-->
                                             <!--begin::Nomor Dokumen-->
@@ -4270,10 +4278,9 @@
                                             <!--end::Uraian-->
                                             <!--begin::Nomor Dokumen-->
                                             <td>
-                                                <a href="/contract-management/dokumen-field-design-change/{{ $field_change->id_document }}/download" class="text-hover-primary">{{ $field_change->nama_document }}</a>
-                                                {{-- <a target="_blank" href="{{ asset('words/'.$field_change->id_document) }}" class="text-hover-primary">
+                                                <a target="_blank" href="{{ asset('words/'.$field_change->id_document) }}" class="text-hover-primary">
                                                     {{ $field_change->id_document }}
-                                                </a> --}}
+                                                </a>
                                             </td>
                                             <!--end::Nomor Dokumen-->
                                             <!--begin::Nomor Dokumen-->
@@ -4360,10 +4367,9 @@
                                             <!--end::Uraian-->
                                             <!--begin::Nomor Dokumen-->
                                             <td>
-                                                <a href="/contract-management/dokumen-change-notice/{{ $change_notice->id_document }}/download" class="text-hover-primary">{{ $change_notice->nama_document }}</a>
-                                                {{-- <a target="_blank" href="{{ asset('words/'.$change_notice->id_document) }}" class="text-hover-primary">
+                                                <a target="_blank" href="{{ asset('words/'.$change_notice->id_document) }}" class="text-hover-primary">
                                                     {{ $change_notice->id_document }}
-                                                </a> --}}
+                                                </a>
                                             </td>
                                             <!--end::Nomor Dokumen-->
                                             <!--begin::Nomor Dokumen-->
@@ -4450,10 +4456,9 @@
                                             <!--end::Uraian-->
                                             <!--begin::Nomor Dokumen-->
                                             <td>
-                                                <a href="/contract-management/dokumen-change-proposal/{{ $change_proposal->id_document }}/download" class="text-hover-primary">{{ $change_proposal->nama_document }}</a>
-                                                {{-- <a target="_blank" href="{{ asset('words/'.$change_proposal->id_document) }}" class="text-hover-primary">
+                                                <a target="_blank" href="{{ asset('words/'.$change_proposal->id_document) }}" class="text-hover-primary">
                                                     {{ $change_proposal->id_document }}
-                                                </a> --}}
+                                                </a>
                                             </td>
                                             <!--end::Nomor Dokumen-->
                                             <!--begin::Nomor Dokumen-->
@@ -4540,10 +4545,9 @@
                                             <!--end::Uraian-->
                                             <!--begin::Nomor Dokumen-->
                                             <td>
-                                                <a href="/contract-management/dokumen-change-order/{{ $change_order->id_document }}/download" class="text-hover-primary">{{ $change_order->nama_document }}</a>
-                                                {{-- <a target="_blank" href="{{ asset('words/'.$change_order->id_document) }}" class="text-hover-primary">
+                                                <a target="_blank" href="{{ asset('words/'.$change_order->id_document) }}" class="text-hover-primary">
                                                     {{ $change_order->id_document }}
-                                                </a> --}}
+                                                </a>
                                             </td>
                                             <!--end::Nomor Dokumen-->
                                             <!--begin::Nomor Dokumen-->
@@ -15788,7 +15792,7 @@
             <!--begin::Modal body-->
             <div class="modal-body py-lg-6 px-lg-6">
                 <!--begin::Input group Website-->
-                <form action="/contract-management/dokumen-aanwitjzing/upload" method="POST"
+                <form action="/contract-management/final-dokumen/upload" method="POST"
                     enctype="multipart/form-data">
                     <div class="row">
                         @csrf
@@ -15799,11 +15803,13 @@
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="hidden" name="status" value="item">
-                            <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
+                            <input type="hidden" name="kategori" value="Dokumen Aanwitjzing">
+                            <input type="hidden" name="status" value="Final">
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->profit_center ?? 0 }}" id="profit-center" name="profit-center">
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
                     </div>
@@ -15822,7 +15828,8 @@
 </div>
 <!--end::Modal - Upload Questions-->
 <!--begin::Modal - Edit Questions-->
-    @foreach ($contract->DokumenAanwitjzing as $dokumen)
+@if (!empty($dokumen_aanwitjzing) || $dokumen_aanwitjzing->isNotEmpty())
+    @forelse ($dokumen_aanwitjzing as $dokumen)
     <div class="modal fade" id="kt_modal_create_aanwitjzing_{{ $dokumen->id }}" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered mw-500px">
@@ -15847,7 +15854,7 @@
                 <!--begin::Modal body-->
                 <div class="modal-body py-lg-6 px-lg-6">
                     <!--begin::Input group Website-->
-                    <form action="/contract-management/dokumen-aanwitjzing/{{ $dokumen->id }}/edit" method="POST"
+                    <form action="/contract-management/final-dokumen/{{ $dokumen->id }}/edit" method="POST"
                         enctype="multipart/form-data">
                         <div class="row">
                             @csrf
@@ -15858,7 +15865,8 @@
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="hidden" name="status" value="item">
+                                <input type="hidden" name="kategori" value="Dokumen Aanwitjzing">
+                                <input type="hidden" name="status" value="Final">
                                 <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                                 <label for="file-document">
                                     <small class="fs-8 text-primary">
@@ -15867,8 +15875,8 @@
                                 </label>
                                 <!--end::Input-->
                             </div>
-                                <input type="hidden" value="{{ $contract->profit_center ?? 0 }}" id="profit-center"
-                                    name="profit-center">
+                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                    name="id-contract">
                                 <input type="hidden" class="modal-name" name="modal-name">
                             </div>
                         </div>
@@ -15885,7 +15893,10 @@
         </div>
         <!--end::Modal dialog-->
     </div>
-    @endforeach
+    @empty
+        
+    @endforelse
+@endif
 <!--end::Modal - Edit Questions-->
 
 <!--begin::Modal - Upload Final Questions-->
@@ -15913,7 +15924,7 @@
             <!--begin::Modal body-->
             <div class="modal-body py-lg-6 px-lg-6">
                 <!--begin::Input group Website-->
-                <form action="/contract-management/dokumen-aanwitjzing/upload" method="POST"
+                <form action="/contract-management/final-dokumen/upload" method="POST"
                     enctype="multipart/form-data">
                     <div class="row">
                         @csrf
@@ -15924,12 +15935,13 @@
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="hidden" name="status" value="final">
-                            <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
+                            <input type="hidden" name="kategori" value="Aanwitjzing">
+                            <input type="hidden" name="status" value="Final">
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->profit_center ?? 0 }}" id="profit-center"
-                                name="profit-center">
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
                     </div>
@@ -18073,7 +18085,7 @@ aria-hidden="true">
 </script>
 
 <script>
-    async function confirmDeleteFinalDokumen(id, kategori = null) {
+    async function confirmDeleteFinalDokumen(id) {
         Swal.fire({
             title: '',
             text: "Apakah anda yakin?",
@@ -18088,30 +18100,20 @@ aria-hidden="true">
                 const formData = new FormData();
                 formData.append("_token", "{{ csrf_token() }}");
                 formData.append("id", id);
-                // formData.append("id-contract", "{{ !empty($contract->id_contract) && $contract->id_contract != 0 ? $contract->id_contract : $contract->profit_center }}");
-                formData.append("id-contract", "{{ $contract->profit_center }}");
-                let sendData;
-                if (kategori == null) {
-                    sendData = await fetch(`{{ url('/contract-management/final-dokumen') }}/${id}/delete`, {
-                        method: "POST",
-                        body: formData
-                    }).then(res => res.json());                    
-                } else {
-                    sendData = await fetch(`{{ url('/contract-management') }}/${kategori}/${id}/delete`, {
-                        method: "POST",
-                        body: formData
-                    }).then(res => res.json()); 
-                }
-                console.log(sendData);
+                formData.append("id-contract", "{{ $contract->id_contract }}");
+                const sendData = await fetch(`{{ url('/contract-management/final-dokumen') }}/${id}/delete`, {
+                    method: "POST",
+                    body: formData
+                }).then(res => res.json());
                 if (sendData.success) {
                     LOADING_BODY.release();
-                    Swal.fire({title: sendData.message, icon: 'success', confirmButtonColor: '#008CB4',}).then(()=>{
-                        window.location.reload();
+                    Swal.fire({title: sendData.message, icon: 'success'}).then(()=>{
+                        location.reload();
                     })
                 } else{
                     LOADING_BODY.release();
-                    Swal.fire({title: sendData.message, icon: 'error', confirmButtonColor: '#008CB4',}).then(()=>{
-                        window.location.reload();
+                    Swal.fire({title: sendData.message, icon: 'error'}).then(()=>{
+                        location.reload();
                     })
                 }
             }

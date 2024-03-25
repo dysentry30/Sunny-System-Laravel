@@ -51,13 +51,13 @@
                                 <!--begin::Button-->
                                 @if (isset($perubahan_kontrak->periode))
                                     @if ($perubahan_kontrak->is_locked != true)
-                                        <button class="btn btn-sm btn-danger" onclick="deleteAction('perubahan-kontrak/{{ $perubahan_kontrak->id_perubahan_kontrak }}/delete')">Delete</button>
+                                        <button class="btn btn-sm btn-danger" onclick="deleteAction('claim-management/{{ $perubahan_kontrak->id_perubahan_kontrak }}/delete')">Delete</button>
                                         <a href="#" data-bs-toggle="modal" class="btn btn-sm btn-primary" id="editButton" data-bs-target="#kt_modal_edit_perubahan"
                                             style="margin-left:10px;">
                                             Edit</a>
                                     @endif
                                 @else
-                                <button class="btn btn-sm btn-danger" onclick="deleteAction('perubahan-kontrak/{{ $perubahan_kontrak->id_perubahan_kontrak }}/delete')">Delete</button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteAction('claim-management/{{ $perubahan_kontrak->id_perubahan_kontrak }}/delete')">Delete</button>
                                 <a href="#" data-bs-toggle="modal" class="btn btn-sm btn-primary" id="editButton" data-bs-target="#kt_modal_edit_perubahan"
                                     style="margin-left:10px;">
                                     Edit</a>
@@ -928,7 +928,7 @@
                     <div class="modal-body py-lg-6 px-lg-6">
     
                         <!--begin::Input group Website-->
-                        <form action="/perubahan-kontrak/update/{{ $perubahan_kontrak->id_perubahan_kontrak }}" method="POST"
+                        <form action="/claim-management/update/{{ $perubahan_kontrak->id_perubahan_kontrak }}" method="POST"
                             enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" class="modal-name" name="modal-name">

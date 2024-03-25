@@ -1162,7 +1162,7 @@ class ClaimController extends Controller
         $perubahan_kontrak->proposal_klaim = $data["proposal-klaim"];
         $perubahan_kontrak->tanggal_pengajuan = $data["tanggal-pengajuan"];
         $perubahan_kontrak->biaya_pengajuan = !empty($data["biaya-pengajuan"]) ? str_replace(".", "", $data["biaya-pengajuan"]) : null;
-        $perubahan_kontrak->waktu_pengajuan = !empty($data["biaya-pengajuan"]) ? $data["waktu-pengajuan"] : null;
+        $perubahan_kontrak->waktu_pengajuan = !empty($data["waktu-pengajuan"]) ? $data["waktu-pengajuan"] : null;
         // dd($perubahan_kontrak);
         if ($perubahan_kontrak->save()) {
             Alert::success("Success", "Perubahan Kontrak berhasil diperbaharui");
