@@ -516,7 +516,7 @@
                                                             @endforeach
                                                             <td>
                                                                 <div class="d-flex flex-row align-items-center justify-content-center">
-                                                                    <button class="btn btn-sm btn-danger" onclick="deleteAction('jenis-dokumen/{{ $jd->id_jenis_dokumen }}/delete')">Delete</button>
+                                                                    <button class="btn btn-sm btn-danger" onclick="deleteAction('jenis-dokumen/{{ $jd->id_jenis_dokumen }}/delete', 'delete-dokumen')">Delete</button>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -1113,7 +1113,7 @@
     {{-- End :: Get Jenis Dokumen --}}
 
     <script>
-        async function deleteAction(url) {
+        async function deleteAction(url, kategori = null) {
             Swal.fire({
                 title: '',
                 text: "Apakah anda yakin?",
@@ -1137,7 +1137,11 @@
                     if (sendData.success) {
                         LOADING_BODY.release();
                         Swal.fire({title: sendData.message, icon: 'success'}).then(()=>{
-                            window.location = "{{ url('claim-management') }}"
+                            if (kategori == null) {
+                                window.location = "{{ url('claim-management') }}"
+                            }else{
+                                location.reload();
+                            }
                         })
                     } else{
                         LOADING_BODY.release();
