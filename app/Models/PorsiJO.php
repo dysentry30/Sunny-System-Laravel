@@ -32,7 +32,7 @@ class PorsiJO extends Model
 
     public function AssessmentPartnerJO()
     {
-        return $this->belongsTo(DokumenKelengkapanPartnerKSO::class, 'id_partner', 'id');
+        return $this->belongsTo(AssessmentPartnerSelection::class, 'id', 'partner_id');
     }
 
 }

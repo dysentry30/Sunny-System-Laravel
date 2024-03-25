@@ -365,28 +365,30 @@ class AssessmentPartnerSelectionController extends Controller
 
         try {
             $partnerKSO->each(function ($partner) use ($proyek, $request) {
-                $newAssessment = new AssessmentPartnerSelection();
-                $newAssessment->kode_proyek = $proyek->kode_proyek;
-                $newAssessment->partner_id = $partner->id;
-                $newAssessment->divisi_id = $proyek->UnitKerja->Divisi->id_divisi;
-                $newAssessment->departemen_id = $proyek->departemen_proyek;
-                $newAssessment->save();
+                if (empty($partner->AssessmentPartnerJO)) {
+                    $newAssessment = new AssessmentPartnerSelection();
+                    $newAssessment->kode_proyek = $proyek->kode_proyek;
+                    $newAssessment->partner_id = $partner->id;
+                    $newAssessment->divisi_id = $proyek->UnitKerja->Divisi->id_divisi;
+                    $newAssessment->departemen_id = $proyek->departemen_proyek;
+                    $newAssessment->save();
 
-                mergeDokumenKelengkapanPartnerKSO($partner);
+                    mergeDokumenKelengkapanPartnerKSO($partner);
 
-                $matriksSelected = self::getMatriksSelanjutnya($proyek->UnitKerja->Divisi->id_divisi, $proyek->departemen_proyek, 'Pengajuan');
+                    $matriksSelected = self::getMatriksSelanjutnya($proyek->UnitKerja->Divisi->id_divisi, $proyek->departemen_proyek, 'Pengajuan');
 
-                if (empty($matriksSelected)) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Matriks Approval Pengajuan Partner Selection tidak ada. Hubungi Admin!'
-                    ], 500);
-                }
+                    if (empty($matriksSelected)) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Matriks Approval Pengajuan Partner Selection tidak ada. Hubungi Admin!'
+                        ], 500);
+                    }
 
-                foreach ($matriksSelected as $user) {
-                    $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/assessment-partner-selection";
-                    $message = nl2br("Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan pengajuan Partner Selection untuk " . $partner->Company->name . " pada proyek $proyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
-                    sendNotifEmail($user->Pegawai, "Permohonan Pengajuan Approval Partner Selection", $message, $this->isNomorTargetActive);
+                    foreach ($matriksSelected as $user) {
+                        $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/assessment-partner-selection";
+                        $message = nl2br("Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan pengajuan Partner Selection untuk " . $partner->Company->name . " pada proyek $proyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
+                        sendNotifEmail($user->Pegawai, "Permohonan Pengajuan Approval Partner Selection", $message, $this->isNomorTargetActive);
+                    }                    
                 }
 
             });

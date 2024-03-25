@@ -536,13 +536,15 @@
                             <h2>Form Legalitas Penilaian Partner</h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
-                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                                <span class="svg-icon svg-icon-1">
-                                    <i class="bi bi-x-lg"></i>
-                                </span>
-                                <!--end::Svg Icon-->
-                            </div>
+                            @if (!empty($matriks_user))
+                                @if (!empty($matriks_user) && $matriks_user->where('divisi_id', $assessment->divisi_id)->where('departemen_code', $assessment->departemen_id)->where('kategori', 'Rekomendasi')->first() && ($assessment->is_penyusun_approved || $assessment->is_revisi))
+                                <button type="button" class="btn-close" data-bs-toggle="modal"
+                                data-bs-target="#rekomendasi_{{ $assessment->id }}"></button>
+                                @else
+                                <button type="button" class="btn-close" data-bs-toggle="modal"
+                                data-bs-target="#penyusun_{{ $assessment->id }}"></button>
+                                @endif
+                            @endif
                             <!--end::Close-->
                         </div>
                         <!--end::Modal header-->
@@ -651,13 +653,15 @@
                             <h2>Form Penilaian Partner</h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
-                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                                <span class="svg-icon svg-icon-1">
-                                    <i class="bi bi-x-lg"></i>
-                                </span>
-                                <!--end::Svg Icon-->
-                            </div>
+                            @if (!empty($matriks_user))
+                                @if (!empty($matriks_user) && $matriks_user->where('divisi_id', $assessment->divisi_id)->where('departemen_code', $assessment->departemen_id)->where('kategori', 'Rekomendasi')->first() && ($assessment->is_penyusun_approved || $assessment->is_revisi))
+                                <button type="button" class="btn-close" data-bs-toggle="modal"
+                                data-bs-target="#rekomendasi_{{ $assessment->id }}"></button>
+                                @else
+                                <button type="button" class="btn-close" data-bs-toggle="modal"
+                                data-bs-target="#penyusun_{{ $assessment->id }}"></button>
+                                @endif
+                            @endif
                             <!--end::Close-->
                         </div>
                         <!--end::Modal header-->
@@ -831,13 +835,15 @@
                                 <h2>Form Legalitas Penilaian Partner</h2>
                                 <!--end::Modal title-->
                                 <!--begin::Close-->
-                                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-toggle="modal" data-bs-target="#penyusun_{{ $assessment->id }}">
-                                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                                    <span class="svg-icon svg-icon-1">
-                                        <i class="bi bi-x-lg"></i>
-                                    </span>
-                                    <!--end::Svg Icon-->
-                                </div>
+                                @if (!empty($matriks_user))
+                                    @if (!empty($matriks_user) && $matriks_user->where('divisi_id', $assessment->divisi_id)->where('departemen_code', $assessment->departemen_id)->where('kategori', 'Rekomendasi')->first() && ($assessment->is_penyusun_approved || $assessment->is_revisi))
+                                    <button type="button" class="btn-close" data-bs-toggle="modal"
+                                    data-bs-target="#rekomendasi_{{ $assessment->id }}"></button>
+                                    @else
+                                    <button type="button" class="btn-close" data-bs-toggle="modal"
+                                    data-bs-target="#penyusun_{{ $assessment->id }}"></button>
+                                    @endif
+                                @endif
                                 <!--end::Close-->
                             </div>
                             <!--end::Modal header-->
@@ -1011,13 +1017,15 @@
                                 <h2>Form Penilaian Partner</h2>
                                 <!--end::Modal title-->
                                 <!--begin::Close-->
-                                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                                    <span class="svg-icon svg-icon-1">
-                                        <i class="bi bi-x-lg"></i>
-                                    </span>
-                                    <!--end::Svg Icon-->
-                                </div>
+                                @if (!empty($matriks_user))
+                                    @if (!empty($matriks_user) && $matriks_user->where('divisi_id', $assessment->divisi_id)->where('departemen_code', $assessment->departemen_id)->where('kategori', 'Rekomendasi')->first() && ($assessment->is_penyusun_approved || $assessment->is_revisi))
+                                    <button type="button" class="btn-close" data-bs-toggle="modal"
+                                    data-bs-target="#rekomendasi_{{ $assessment->id }}"></button>
+                                    @else
+                                    <button type="button" class="btn-close" data-bs-toggle="modal"
+                                    data-bs-target="#penyusun_{{ $assessment->id }}"></button>
+                                    @endif
+                                @endif
                                 <!--end::Close-->
                             </div>
                             <!--end::Modal header-->
@@ -1242,9 +1250,15 @@
                                 <!--begin::Close-->
                                 <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                                    <span class="svg-icon svg-icon-1">
-                                        <i class="bi bi-x-lg"></i>
-                                    </span>
+                                    @if (!empty($matriks_user))
+                                        @if (!empty($matriks_user) && $matriks_user->where('divisi_id', $assessment->divisi_id)->where('departemen_code', $assessment->departemen_id)->where('kategori', 'Rekomendasi')->first() && ($assessment->is_penyusun_approved || $assessment->is_revisi))
+                                        <button type="button" class="btn-close" data-bs-toggle="modal"
+                                        data-bs-target="#rekomendasi_{{ $assessment->id }}"></button>
+                                        @else
+                                        <button type="button" class="btn-close" data-bs-toggle="modal"
+                                        data-bs-target="#penyusun_{{ $assessment->id }}"></button>
+                                        @endif
+                                    @endif
                                     <!--end::Svg Icon-->
                                 </div>
                                 <!--end::Close-->
@@ -1386,9 +1400,15 @@
                                 <!--begin::Close-->
                                 <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                                    <span class="svg-icon svg-icon-1">
-                                        <i class="bi bi-x-lg"></i>
-                                    </span>
+                                    @if (!empty($matriks_user))
+                                        @if (!empty($matriks_user) && $matriks_user->where('divisi_id', $assessment->divisi_id)->where('departemen_code', $assessment->departemen_id)->where('kategori', 'Rekomendasi')->first() && ($assessment->is_penyusun_approved || $assessment->is_revisi))
+                                        <button type="button" class="btn-close" data-bs-toggle="modal"
+                                        data-bs-target="#rekomendasi_{{ $assessment->id }}"></button>
+                                        @else
+                                        <button type="button" class="btn-close" data-bs-toggle="modal"
+                                        data-bs-target="#penyusun_{{ $assessment->id }}"></button>
+                                        @endif
+                                    @endif
                                     <!--end::Svg Icon-->
                                 </div>
                                 <!--end::Close-->
@@ -1582,13 +1602,18 @@
                         <h2>Upload Dokumen Kelengkapan Partner KSO : {{ $partner->company_jo }}</h2>
                         <!--end::Modal title-->
                         <!--begin::Close-->
-                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                            <span class="svg-icon svg-icon-1">
-                                <i class="bi bi-x-lg"></i>
-                            </span>
-                            <!--end::Svg Icon-->
-                        </div>
+                        @if (!empty($matriks_user))
+                            @if (!empty($matriks_user) && $matriks_user->where('divisi_id', $assessment->divisi_id)->where('departemen_code', $assessment->departemen_id)->where('kategori', 'Rekomendasi')->first() && ($assessment->is_penyusun_approved || $assessment->is_revisi))
+                            <button type="button" class="btn-close" data-bs-toggle="modal"
+                            data-bs-target="#rekomendasi_{{ $assessment->id }}"></button>
+                            @elseif(!empty($matriks_user) && $matriks_user->where('divisi_id', $assessment->divisi_id)->where('departemen_code', $assessment->departemen_id)->where('kategori', 'Penyusun')->first() && $assessment->is_pengajuan_approved)
+                            <button type="button" class="btn-close" data-bs-toggle="modal"
+                            data-bs-target="#penyusun_{{ $assessment->id }}"></button>
+                            @elseif(!empty($matriks_user) && $matriks_user->where('divisi_id', $assessment->divisi_id)->where('departemen_code', $assessment->departemen_id)->where('kategori', 'Pengajuan')->first())
+                            <button type="button" class="btn-close" data-bs-toggle="modal"
+                            data-bs-target="#pengajuan_{{ $assessment->id }}"></button>
+                            @endif
+                        @endif
                         <!--end::Close-->
                     </div>
                     <!--end::Modal header-->

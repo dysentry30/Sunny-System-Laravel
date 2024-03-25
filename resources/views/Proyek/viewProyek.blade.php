@@ -121,7 +121,7 @@
 
                                 <!--begin::Button-->
                                 @if ($proyek->UnitKerja?->dop != "EA")
-                                    @if (is_null($proyek->is_request_rekomendasi) && !$check_green_line && $proyek->stage == 1 && is_null($proyek->is_disetujui))
+                                    @if (is_null($proyek->NotaRekomendasi?->is_request_rekomendasi) && !$check_green_line && $proyek->stage == 1 && is_null($proyek->NotaRekomendasi?->is_disetujui))
                                         <input type="button" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan"
                                             style="background-color:#00b48d">
                                     @elseif ($proyek->stage == 4 && !$check_green_line_nota_2 && is_null($proyek->is_request_rekomendasi_2) && is_null($proyek->is_disetujui_rekomendasi_2))
@@ -246,7 +246,7 @@
                     <!--end::Toolbar-->
                     
                     @canany(['super-admin', 'user-crm', 'approver-crm', 'admin-crm'])
-                        @if ($proyek->is_request_rekomendasi == false && !$check_green_line && $proyek->stage == 1)
+                        @if ($proyek->NotaRekomendasi?->is_request_rekomendasi == false && !$check_green_line && $proyek->stage == 1)
                         <!-- begin::modal confirm send wa-->
                         <div class="modal fade w-100" style="" id="modal-send-pengajuan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered mw-600px">
@@ -363,6 +363,7 @@
                                     <p>Uang Muka : <b class="{{ $proyek->is_uang_muka ?? "text-danger" }}">{{ $proyek->is_uang_muka ? "Ya" : "Tidak" }}</b></p>
                                     <p>Waktu Pelaksanaan Pekerjaan : <b class="{{ $proyek->waktu_pelaksanaan ?? "text-danger" }}">{{ $proyek->waktu_pelaksanaan . "Hari" ?? "*Belum Ditentukan" }}</b></p>
                                     <p>RA Klasifikasi Proyek  : <b class="{{ $proyek->klasifikasi_pasdin ?? "text-danger" }}">{{ $proyek->klasifikasi_pasdin ?? "*Belum Ditentukan" }}</b></p>
+                                    <p>Dokumen Persetujuan Pembentukan KSO  : <b class="{{ !empty($proyek->DokumenPersetujuanKSO) ?: "text-danger" }}">{{ !empty($proyek->DokumenPersetujuanKSO) ? 'Sudah' : "*Belum Ditentukan" }}</b></p>
                                     <br>
 
                                     
@@ -372,7 +373,8 @@
                                     !empty($proyek->nilaiok_awal) &&
                                     !empty($proyek->jenis_terkontrak) &&
                                     !empty($proyek->sistem_bayar) &&
-                                    !empty($proyek->waktu_pelaksanaan)
+                                    !empty($proyek->waktu_pelaksanaan) &&
+                                    !empty($proyek->DokumenPersetujuanKSO)
                                     )
                                         <input class="form-check-input" onclick="sendWa2(this)" id="confirm-send-wa" name="confirm-send-wa-2" type="checkbox">
                                         <i class="fs-6 text-primary">
@@ -446,7 +448,7 @@
                                                             Pasar Potensial
                                                         </a>
                                                     @else
-                                                        @if ($proyek->is_disetujui || $check_green_line || $proyek->UnitKerja?->dop == "EA")
+                                                        @if ($proyek->NotaRekomendasi?->is_disetujui || $check_green_line || $proyek->UnitKerja?->dop == "EA")
                                                             <a href="#"
                                                                 class="stage-button stage-action color-is-default stage-is-not-active"
                                                                 style="outline: 0px; cursor: pointer;" stage="2">
@@ -3515,7 +3517,8 @@
                                                                 }
                                                                 @endphp
                                                                 @canany(['super-admin', 'admin-crm', 'user-crm', 'approver-crm'])
-                                                                @if ($porsiJO->isNotEmpty() && $proyek->AssessmentPartnerSelection->isEmpty())
+                                                                {{-- @if ($porsiJO->isNotEmpty() && $proyek->AssessmentPartnerSelection->isEmpty()) --}}
+                                                                @if (($porsiJO->isNotEmpty() && $porsiJO->whereNull('is_hasil_assessment')->count() > 0))
                                                                     @if ($isDokumenFinish)
                                                                     <button type="button" id="approval-kso" class="btn btn-sm btn-primary" onclick="approvalKSO()"><b>Ajukan KSO</b></button>
                                                                     @endif
@@ -3783,7 +3786,19 @@
                                                                                             <!--end::Column-->
                                                                                             <!--begin::Column-->
                                                                                             <td class="text-center">
-                                                                                                <p class="m-0 badge rounded-pill {{ empty($porsi->is_hasil_assessment) ? 'text-bg-danger' : (!$porsi->is_hasil_assessment ? 'text-bg-danger' : 'text-bg-success') }}">{{ empty($porsi->is_hasil_assessment) ? "Belum ditentukan" : $porsi->hasil_assessment }}</p>
+                                                                                                @if (!empty($porsi->AssessmentPartnerJO))
+                                                                                                    @if (!is_null($porsi->AssessmentPartnerJO->is_rekomendasi_approved))
+                                                                                                        <p class="m-0 badge rounded-pill {{ !$porsi->AssessmentPartnerJO->is_rekomendasi_approved ? 'text-bg-danger' : 'text-bg-success' }}">{{ !$porsi->AssessmentPartnerJO->is_rekomendasi_approved ? 'Ditolak' : 'Disetujui'  }}</p>
+                                                                                                    @elseif(!is_null($porsi->AssessmentPartnerJO->is_penyusun_approved))
+                                                                                                        <p class="m-0 badge rounded-pill text-bg-primary">Proses Rekomendasi</p>
+                                                                                                    @elseif(!is_null($porsi->AssessmentPartnerJO->is_pengajuan_approved))
+                                                                                                        <p class="m-0 badge rounded-pill {{ !$porsi->AssessmentPartnerJO->is_pengajuan_approved ? 'text-bg-danger' : 'text-bg-primary' }}">{{ !$porsi->AssessmentPartnerJO->is_pengajuan_approved ? 'Proses Pengajuan Ditolak' : 'Proses Penyusunan'  }}</p>
+                                                                                                    @elseif(is_null($porsi->AssessmentPartnerJO->is_pengajuan_approved))
+                                                                                                        <p class="m-0 badge rounded-pill text-bg-primary">Proses Pengajuan</p>
+                                                                                                    @endif
+                                                                                                @else
+                                                                                                <p class="m-0 badge rounded-pill {{ !$porsi->is_greenlane ? 'text-bg-danger' : 'text-bg-success' }}">{{ !$porsi->is_greenlane ? 'Belum Diajukan' : 'Green Lane'  }}</p>
+                                                                                                @endif
                                                                                             </td>
                                                                                             <!--end::Column-->
                                                                                         @endif
@@ -3806,7 +3821,8 @@
                                                                                                     </p>
                                                                                                 </small>                                                                                                    
                                                                                                 @endif
-                                                                                                @if ($proyek->AssessmentPartnerSelection?->isEmpty() || $proyek->AssessmentPartnerSelection?->where('partner_id', $porsi->id)?->where('is_revisi', true)?->isNotEmpty())
+                                                                                                {{-- @if ($proyek->AssessmentPartnerSelection?->isEmpty() || $proyek->AssessmentPartnerSelection?->where('partner_id', $porsi->id)?->where('is_revisi', true)?->isNotEmpty()) --}}
+                                                                                                @if ($proyek->AssessmentPartnerSelection?->isEmpty() || empty($porsi->AssessmentPartnerJO) || (!empty($porsi->AssessmentPartnerJO) && !is_null($porsi->AssessmentPartnerJO->is_rekomendasi_approved) && $porsi->AssessmentPartnerJO->is_rekomendasi_approved == false))
                                                                                                 <small>
                                                                                                     <p data-bs-toggle="modal"
                                                                                                         data-bs-target="#kt_porsi_delete_{{ $porsi->id }}"
