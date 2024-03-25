@@ -399,6 +399,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post("/jenis-dokumen/upload", [AddendumContractController::class, "jenisDokumenUpload"]);
 
+    Route::post("/jenis-dokumen/{id}/delete", [AddendumContractController::class, "jenisDokumenUpload"]);
+
     Route::post("/addendum-contract/draft/update", [AddendumContractController::class, "draftUpdate"]);
 
     Route::get('change-request', [AddendumContractController::class, 'changeRequest']);
