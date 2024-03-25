@@ -468,43 +468,50 @@
                                                                         @case("Site Instruction")
                                                                                 @php
                                                                                     $lio = App\Models\SiteInstruction::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                                    $path = 'dokumen-site-instruction';
                                                                                 @endphp
                                                                             @break
                                                                         @case("Technical Form")
                                                                                 @php
                                                                                     $lio = App\Models\TechnicalForm::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                                    $path = 'dokumen-technical-form';
                                                                                 @endphp
                                                                             @break
                                                                         @case("Technical Query")
                                                                                 @php
                                                                                     $lio = App\Models\TechnicalQuery::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                                    $path = 'dokumen-site-query';
                                                                                 @endphp
                                                                             @break
                                                                         @case("Field Design Change")
                                                                                 @php
                                                                                     $lio = App\Models\FieldChange::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                                    $path = 'dokumen-field-design-change';
                                                                                 @endphp
                                                                             @break
                                                                         @case("Contract Change Notice")
                                                                                 @php
                                                                                     $lio = App\Models\ContractChangeNotice::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                                    $path = 'dokumen-change-notice';
                                                                                 @endphp
                                                                             @break
                                                                         @case("Contract Change Proposal")
                                                                                 @php
                                                                                     $lio = App\Models\ContractChangeProposal::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                                    $path = 'dokumen-change-proposal';
                                                                                 @endphp
                                                                             @break
                                                                         @case("Contract Change Order")
                                                                                 @php
                                                                                     $lio = App\Models\ContractChangeOrder::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                                    $path = 'dokumen-change-order';
                                                                                 @endphp
                                                                             @break
                                                                     @endswitch
                                                                     {{$lio->nomor_dokumen}}
                                                                 </td>
                                                                 <td>
-                                                                    <a target="blank" href="{{ asset("words/$lio->id_document"); }}">{{$lio->id_document}}</a> <br>
+                                                                    <a target="blank" href="/contract-management/{{ $path }}/{{ $lio->id_document }}/download">{{ $lio->id_document }}</a> <br>
                                                                 </td>
                                                             @endforeach
                                                             <td>
