@@ -477,7 +477,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post('/claim-management/save', [ClaimController::class, 'save']);
 
-    Route::post('/claim-management/delete', [ClaimController::class, 'claimDelete']);
+    Route::post('/claim-management/{id}/delete', [ClaimController::class, 'claimDelete']);
 
     Route::post("/claim-management/update/{id}", [ClaimController::class, "editClaim"]);
 
