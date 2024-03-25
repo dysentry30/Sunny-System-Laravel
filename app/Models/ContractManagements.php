@@ -196,17 +196,18 @@ class ContractManagements extends Model
         return $this->hasMany(ContractJaminan::class, "id_contract");
     }
 
-    // public function ContractApproval(){
-    //     return $this->hasMany(ContractApproval::class, "id_contract");
-    // }
-
     public function ContractApproval(){
-        return $this->hasMany(ContractApproval::class, "profit_center", "profit_center");
+        return $this->hasMany(ContractApproval::class, "id_contract");
     }
 
     public function ProyekPISNew()
     {
         return $this->hasOne(ProyekPISNew::class, 'profit_center', 'profit_center');
+    }
+
+    public function DokumenAanwitjzing()
+    {
+        return $this->hasMany(DokumenAanwitjzingContract::class, 'profit_center', 'profit_center');
     }
 
     public function getAll()
