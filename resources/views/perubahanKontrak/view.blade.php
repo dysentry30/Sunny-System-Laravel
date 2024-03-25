@@ -51,13 +51,13 @@
                                 <!--begin::Button-->
                                 @if (isset($perubahan_kontrak->periode))
                                     @if ($perubahan_kontrak->is_locked != true)
-                                        {{-- <button class="btn btn-sm btn-danger" onclick="deleteAction('perubahan-kontrak/{{ $perubahan_kontrak->id_perubahan_kontrak }}/delete')">Delete</button> --}}
+                                        <button class="btn btn-sm btn-danger" onclick="deleteAction('claim-management/{{ $perubahan_kontrak->id_perubahan_kontrak }}/delete')">Delete</button>
                                         <a href="#" data-bs-toggle="modal" class="btn btn-sm btn-primary" id="editButton" data-bs-target="#kt_modal_edit_perubahan"
                                             style="margin-left:10px;">
                                             Edit</a>
                                     @endif
                                 @else
-                                {{-- <button class="btn btn-sm btn-danger" onclick="deleteAction('perubahan-kontrak/{{ $perubahan_kontrak->id_perubahan_kontrak }}/delete')">Delete</button> --}}
+                                <button class="btn btn-sm btn-danger" onclick="deleteAction('claim-management/{{ $perubahan_kontrak->id_perubahan_kontrak }}/delete')">Delete</button>
                                 <a href="#" data-bs-toggle="modal" class="btn btn-sm btn-primary" id="editButton" data-bs-target="#kt_modal_edit_perubahan"
                                     style="margin-left:10px;">
                                     Edit</a>
@@ -468,48 +468,55 @@
                                                                         @case("Site Instruction")
                                                                                 @php
                                                                                     $lio = App\Models\SiteInstruction::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                                    $path = 'dokumen-site-instruction';
                                                                                 @endphp
                                                                             @break
                                                                         @case("Technical Form")
                                                                                 @php
                                                                                     $lio = App\Models\TechnicalForm::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                                    $path = 'dokumen-technical-form';
                                                                                 @endphp
                                                                             @break
                                                                         @case("Technical Query")
                                                                                 @php
                                                                                     $lio = App\Models\TechnicalQuery::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                                    $path = 'dokumen-site-query';
                                                                                 @endphp
                                                                             @break
                                                                         @case("Field Design Change")
                                                                                 @php
                                                                                     $lio = App\Models\FieldChange::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                                    $path = 'dokumen-field-design-change';
                                                                                 @endphp
                                                                             @break
                                                                         @case("Contract Change Notice")
                                                                                 @php
                                                                                     $lio = App\Models\ContractChangeNotice::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                                    $path = 'dokumen-change-notice';
                                                                                 @endphp
                                                                             @break
                                                                         @case("Contract Change Proposal")
                                                                                 @php
                                                                                     $lio = App\Models\ContractChangeProposal::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                                    $path = 'dokumen-change-proposal';
                                                                                 @endphp
                                                                             @break
                                                                         @case("Contract Change Order")
                                                                                 @php
                                                                                     $lio = App\Models\ContractChangeOrder::where("nomor_dokumen" , "=", $lio)->get()->first();
+                                                                                    $path = 'dokumen-change-order';
                                                                                 @endphp
                                                                             @break
                                                                     @endswitch
                                                                     {{$lio->nomor_dokumen}}
                                                                 </td>
                                                                 <td>
-                                                                    <a target="blank" href="{{ asset("words/$lio->id_document"); }}">{{$lio->id_document}}</a> <br>
+                                                                    <a target="blank" href="/contract-management/{{ $path }}/{{ $lio->id_document }}/download">{{ $lio->id_document }}</a> <br>
                                                                 </td>
                                                             @endforeach
                                                             <td>
                                                                 <div class="d-flex flex-row align-items-center justify-content-center">
-                                                                    <button class="btn btn-sm btn-danger" onclick="deleteAction('jenis-dokumen/{{ $jd->id_jenis_dokumen }}/delete')">Delete</button>
+                                                                    <button class="btn btn-sm btn-danger" onclick="deleteAction('jenis-dokumen/{{ $jd->id_jenis_dokumen }}/delete', 'delete-dokumen')">Delete</button>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -928,7 +935,7 @@
                     <div class="modal-body py-lg-6 px-lg-6">
     
                         <!--begin::Input group Website-->
-                        <form action="/perubahan-kontrak/update/{{ $perubahan_kontrak->id_perubahan_kontrak }}" method="POST"
+                        <form action="/claim-management/update/{{ $perubahan_kontrak->id_perubahan_kontrak }}" method="POST"
                             enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" class="modal-name" name="modal-name">
@@ -1106,7 +1113,7 @@
     {{-- End :: Get Jenis Dokumen --}}
 
     <script>
-        async function deleteAction(url) {
+        async function deleteAction(url, kategori = null) {
             Swal.fire({
                 title: '',
                 text: "Apakah anda yakin?",
@@ -1130,7 +1137,11 @@
                     if (sendData.success) {
                         LOADING_BODY.release();
                         Swal.fire({title: sendData.message, icon: 'success'}).then(()=>{
-                            window.location = "{{ url('claim-management') }}"
+                            if (kategori == null) {
+                                window.location = "{{ url('claim-management') }}"
+                            }else{
+                                location.reload();
+                            }
                         })
                     } else{
                         LOADING_BODY.release();

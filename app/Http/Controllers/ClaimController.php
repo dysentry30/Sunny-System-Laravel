@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\File;
 
 class ClaimController extends Controller
 {
@@ -239,10 +240,10 @@ class ClaimController extends Controller
 
                 $proyeks_all = $proyeks_all->map(function ($claim) {
                     $cat_vo = $claim->where(
-                        "jenis_perubahan",
-                        "=",
-                        "VO"
-                    );
+                            "jenis_perubahan",
+                            "=",
+                            "VO"
+                        );
                     $item_vo = $cat_vo->count();
                     // dd($item_vo, $jumlah_vo);
 
@@ -1161,7 +1162,7 @@ class ClaimController extends Controller
         $perubahan_kontrak->proposal_klaim = $data["proposal-klaim"];
         $perubahan_kontrak->tanggal_pengajuan = $data["tanggal-pengajuan"];
         $perubahan_kontrak->biaya_pengajuan = !empty($data["biaya-pengajuan"]) ? str_replace(".", "", $data["biaya-pengajuan"]) : null;
-        $perubahan_kontrak->waktu_pengajuan = !empty($data["biaya-pengajuan"]) ? $data["waktu-pengajuan"] : null;
+        $perubahan_kontrak->waktu_pengajuan = !empty($data["waktu-pengajuan"]) ? $data["waktu-pengajuan"] : null;
         // dd($perubahan_kontrak);
         if ($perubahan_kontrak->save()) {
             Alert::success("Success", "Perubahan Kontrak berhasil diperbaharui");
