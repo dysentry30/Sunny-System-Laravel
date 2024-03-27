@@ -558,6 +558,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/assessment-partner-selection/penyusun/approval', [AssessmentPartnerSelectionController::class, 'setApprovalPenyusun']);
     Route::post('/assessment-partner-selection/rekomendasi/approval', [AssessmentPartnerSelectionController::class, 'setApprovalRekomendasi']);
     Route::post('/assessment-partner-selection/pengajuan-revisi/approval', [AssessmentPartnerSelectionController::class, 'setApprovalRevisi']);
+    Route::get('/assessment-partner-selection/{partner}/generate-final', [AssessmentPartnerSelectionController::class, 'generateMergeAssessment']);
     //End::Assessment Partner Selection
 
     //Begin::Nota Rekomendasi 2
@@ -575,12 +576,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/nota-rekomendasi-2/{kode_proyek}/paparan', [Rekomendasi2Controller::class, 'ProyekPemaparan']);
     Route::post('/nota-rekomendasi-2/{kode_proyek}/paparan/upload', [Rekomendasi2Controller::class, 'paparanUploadFile']);
     Route::post('/nota-rekomendasi-2/{kode_proyek}/paparan/approval', [Rekomendasi2Controller::class, 'paparanApprove']);
-
-
+    
+    
     Route::post('/nota-rekomendasi-2/assessment-project-selection/detail/save', [KriteriaSelectionNonGreenlaneController::class, 'detailSave']);
     Route::post('/nota-rekomendasi-2/assessment-project-selection/detail/edit', [KriteriaSelectionNonGreenlaneController::class, 'detailEdit']);
     Route::post('/nota-rekomendasi-2/assessment-project-selection/delete-file', [KriteriaSelectionNonGreenlaneController::class, 'deleteFile']);
 
+    Route::post('/nota-rekomendasi-2/{kode_proyek}/upload-final', [Rekomendasi2Controller::class, 'UploadDokumenFinal']);
 
     Route::get('/proyek/{proyek}/kso/generate', function (Proyek $proyek) {
         if (empty($proyek)) {
@@ -6125,11 +6127,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     //Begin :: Integrasi Get Proyek PIS
     Route::get('/get-progress-pis/all', function () {
-        $login = Http::post('https://nasabah-dev.wika.co.id/services/auth', [
+        $login = Http::post('https://api.wika.co.id/services/services/auth', [
             "entitas" => "CRM",
             "skey" => "OAZvRmB7HKDdDkKF29DXZwgSmlv9KqQWZNDWV51SAAAb3nOvuA1AvZf5FnIBrLxC"
         ]);
-        // dd($login);
+        dd($login);
         if ($login->successful()) {
             // $login_response = $login->header("w-key");
             // dd($login_response);
@@ -6137,7 +6139,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
             if (!empty($token)) {
                 $response = Http::withHeaders(["w-access-token" => $token])
-                    ->get('https://nasabah-dev.wika.co.id/services/getproyek');
+                ->get('https://api.wika.co.id/services/getproyek');
                 if ($response->successful()) {
                     $data = $response->collect($key = 'data');
                     if (!empty($data)) {

@@ -7,6 +7,7 @@ use App\Models\KriteriaSelectionNonGreenlane;
 use App\Models\MatriksApprovalNotaRekomendasi2;
 use App\Models\NotaRekomendasi2;
 use App\Models\MasterCatatanNotaRekomendasi2;
+use App\Models\DokumenNotaRekomendasi2;
 use App\Models\MatriksApprovalPaparan;
 use App\Models\TimTender;
 use App\Models\UnitKerja;
@@ -74,7 +75,21 @@ class Rekomendasi2Controller extends Controller
             $unit_kerjas = ['H', 'G', 'P', 'J'];
             $collectDivisi = $matriks_user?->groupBy('divisi_id')?->keys()?->toArray();
             $collectDepartement = $matriks_user?->groupBy('departemen_code')?->keys()?->toArray();
+            $collectKlasifikasiPaparan = $matriks_paparan?->map(function ($item) {
+                return $item->klasifikasi_proyek;
+            })->toArray();
+
+            $collectDivisiPaparan = $matriks_paparan?->map(function ($item) {
+                return $item->divisi_id;
+            })->toArray();
+
+            $collectDepartementPaparan = $matriks_paparan?->map(function ($item) {
+                return $item->departemen_code;
+            })->toArray();
         } else {
+            $matriks_paparan = MatriksApprovalPaparan::all()->filter(function ($user) {
+                return $user->Pegawai->nama_pegawai == Auth::user()->name;
+            });
             if ($is_matriks_has_ktt) {
                 $matriks_user = $all_super_user_counter;
                 $collectKlasifikasi = $matriks_user?->map(function ($item) {
@@ -86,6 +101,18 @@ class Rekomendasi2Controller extends Controller
                 })->toArray();
 
                 $collectDepartement = $matriks_user?->map(function ($item) {
+                    return $item->departemen_code;
+                })->toArray();
+
+                $collectKlasifikasiPaparan = $matriks_paparan?->map(function ($item) {
+                    return $item->klasifikasi_proyek;
+                })->toArray();
+
+                $collectDivisiPaparan = $matriks_paparan?->map(function ($item) {
+                    return $item->divisi_id;
+                })->toArray();
+
+                $collectDepartementPaparan = $matriks_paparan?->map(function ($item) {
                     return $item->departemen_code;
                 })->toArray();
             } else {
@@ -101,15 +128,24 @@ class Rekomendasi2Controller extends Controller
                 $collectDepartement = $matriks_user?->map(function ($item) {
                     return $item->departemen_code;
                 })->toArray();
+
+                $collectKlasifikasiPaparan = $matriks_paparan?->map(function ($item) {
+                    return $item->klasifikasi_proyek;
+                })->toArray();
+
+                $collectDivisiPaparan = $matriks_paparan?->map(function ($item) {
+                    return $item->divisi_id;
+                })->toArray();
+
+                $collectDepartementPaparan = $matriks_paparan?->map(function ($item) {
+                    return $item->departemen_code;
+                })->toArray();
             }
-            $matriks_paparan = MatriksApprovalPaparan::all()->filter(function ($user) {
-                return $user->Pegawai->nama_pegawai == Auth::user()->name;
-            });
         }
 
 
         $proyeks = NotaRekomendasi2::all();
-        $proyeks_proses_paparan = $proyeks->whereIn("unit_kerja", $unit_kerjas)->whereIn('klasifikasi_proyek', $collectKlasifikasi)->whereIn('departemen_proyek', $collectDepartement)->whereIn('divisi_id', $collectDivisi)->whereNotNull('is_request_paparan')->whereNull('is_disetujui');
+        $proyeks_proses_paparan = $proyeks->whereIn("unit_kerja", $unit_kerjas)->whereIn('klasifikasi_proyek', $collectKlasifikasiPaparan)->whereIn('departemen_proyek', $collectDepartementPaparan)->whereIn('divisi_id', $collectDivisiPaparan)->whereNotNull('is_request_paparan')->whereNull('is_disetujui');
         $proyeks_proses_rekomendasi = $proyeks->whereIn("unit_kerja", $unit_kerjas)->whereIn('klasifikasi_proyek', $collectKlasifikasi)->whereIn('departemen_proyek', $collectDepartement)->whereIn('divisi_id', $collectDivisi)->whereNull('is_disetujui');
         $proyeks_rekomendasi_final = $proyeks->whereIn("unit_kerja", $unit_kerjas)->whereIn('klasifikasi_proyek', $collectKlasifikasi)->whereIn('departemen_proyek', $collectDepartement)->whereIn('divisi_id', $collectDivisi)->whereNotNull('is_disetujui');
 
@@ -118,7 +154,7 @@ class Rekomendasi2Controller extends Controller
         $kriteriaAssessmentProjectSelection = KriteriaSelectionNonGreenlane::where('nota_rekomendasi', '=', 'Nota Rekomendasi 2')->where('is_active', true)->get()->sortBy('position')->values();
         $kriteriaAssessmentProjectSelectionDetail = KriteriaProjectSelectionDetail::all();
 
-        $masterCatatanRekomendasi = MasterCatatanNotaRekomendasi2::all()->sortBy('urutan');
+        $masterCatatanRekomendasi = MasterCatatanNotaRekomendasi2::all()->sortBy('urutan')->values();
 
         return view('17_Nota_Rekomendasi_2', [
             "proyeks_proses_paparan" => $proyeks_proses_paparan,
@@ -256,9 +292,13 @@ class Rekomendasi2Controller extends Controller
             $urutan = null;
             $checked = false;
             if (!empty($request->get("master_selected_" . $key + 1))) {
-                $urutan = $request->get("master_selected_" . $key + 1);
+                $urutan = (int)$request->get("master_selected_" . $key + 1);
                 $checked = true;
+            } else {
+                $urutan = $key + 1;
+                $checked = false;
             }
+            
             $dataCatatanNota = $dataCatatanNota->push([
                 "urutan" => $urutan,
                 "checked" => $checked,
@@ -988,6 +1028,36 @@ class Rekomendasi2Controller extends Controller
 
         Alert::html("Error", $messageAllert, "error");
         return redirect()->back();
+    }
+
+    public function UploadDokumenFinal(Request $request, $kode_proyek)
+    {
+        $data = $request->all();
+
+        if (!isset($data['file-document'])) {
+            Alert::error('Error', "Mohon tambahkan file terlebih dahulu");
+            return redirect()->back();
+        }
+
+        try {
+            $file = $data['file-document'];
+
+            $nama_file = $file->getClientOriginalName();
+            $id_document = date('dmYHis_') . str_replace(' ', '', $file->getClientOriginalName());
+
+            $newDocument = new DokumenNotaRekomendasi2();
+            $newDocument->nama_document = $nama_file;
+            $newDocument->id_document = $id_document;
+
+            if ($newDocument->save()) {
+                $file->move(public_path('file-nota-rekomendasi-2/file-final-rekomendasi-2'), $id_document);
+                Alert::success('Success', "Dokumen Final Nota Rekomendasi 2 Berhasil ditambahkan");
+                return redirect()->back();
+            }
+        } catch (\Exception $e) {
+            Alert::error('Error', $e->getMessage());
+            return redirect()->back();
+        }
     }
 
 

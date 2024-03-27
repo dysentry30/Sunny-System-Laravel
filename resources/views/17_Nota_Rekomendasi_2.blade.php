@@ -871,6 +871,7 @@
                                                 <th class="min-w-auto">Level Risiko</th>
                                                 <th class="min-w-auto">Hasil NR 2</th>
                                                 <th class="min-w-auto">Action</th>
+                                                <th class="min-w-auto">Upload Dokumen Final</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -1065,6 +1066,13 @@
                                                             @endif
                                                             {{-- <a href="#kt_modal_view_dokumen_persetujuan_{{ $proyek->kode_proyek }}" class="btn btn-sm btn-primary text-white" data-bs-toggle="model">Download</a> --}}
                                                         </small>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        @if (empty($proyek->DokumenNotaRekomendasi2))
+                                                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#upload_dokumen_final_{{ $proyek->kode_proyek }}">Upload</button>
+                                                        @else
+                                                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#lihat_dokumen_final_{{ $proyek->kode_proyek }}">Lihat</button>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -1962,7 +1970,7 @@
                     @if (!empty($proyek->file_kelengkapan_merge))
                     <h5>Dokumen Kelengkapan Project: </h5>
                     <div class="text-center">
-                        <iframe src="{{ asset('file-nota-rekomendasi-2\\file-pengajuan' . '\\' . $proyek->file_kelengkapan_merge) }}"
+                        <iframe src="{{ asset('file-nota-rekomendasi-2\\file-kelengkapan-project' . '\\' . $proyek->file_kelengkapan_merge) }}"
                             width="800px" height="600px"></iframe>
                     </div>
                     @endif
@@ -1991,7 +1999,7 @@
                             $is_edit_penyusun = true;
                         }
 
-                        $catatan_master = collect(json_decode($proyek->catatan_master))?->sortBy('urutan')->values();
+                        $catatan_master = collect(json_decode($proyek->catatan_master))?->keyBy('urutan');
                     @endphp
                     @if (is_null($proyek->is_rekomendasi_approved))
                         <label for="note-rekomendasi" class="text-start">Self Assessment: </label>
@@ -2023,14 +2031,14 @@
                                             <td class="text-start align-middle">{{ $kategori->kategori }}</td>
                                             <td class="text-center align-middle">
                                                 @if ($catatan_master->isNotEmpty())
-                                                    <input class="form-check-input" type="checkbox" value="{{ $kategori->urutan }}" name="master_selected_{{ $kategori->urutan }}" id="master_selected_{{ $kategori->urutan }}" onchange="disabledTextArea(this)" {{ !empty($catatan_master) && $catatan_master[$key]->checked ? 'checked' : '' }} {{ $is_edit_penyusun ? '' : 'disabled' }}>
+                                                    <input class="form-check-input" type="checkbox" value="{{ $kategori->urutan }}" name="master_selected_{{ $kategori->urutan }}" id="master_selected_{{ $kategori->urutan }}" onchange="disabledTextArea(this)" {{ !empty($catatan_master) && $catatan_master[$key+1]->checked ? 'checked' : '' }} {{ $is_edit_penyusun ? '' : 'disabled' }}>
                                                 @else
                                                     <input class="form-check-input" type="checkbox" value="{{ $kategori->urutan }}" name="master_selected_{{ $kategori->urutan }}" id="master_selected_{{ $kategori->urutan }}" onchange="disabledTextArea(this)" {{ $is_edit_penyusun ? '' : 'disabled' }}>
                                                 @endif
                                             </td>
                                             <td>
                                                 @if ($catatan_master->isNotEmpty())
-                                                    <textarea name="catatan_nota_rekomendasi_master[]" id="catatan_nota_rekomendasi_master" class="form-control form-control-solid" readonly>{!! $catatan_master[$key]->checked ? $catatan_master[$key]->uraian : '' !!}</textarea>
+                                                    <textarea name="catatan_nota_rekomendasi_master[]" id="catatan_nota_rekomendasi_master" class="form-control form-control-solid" readonly>{!! $catatan_master[$key+1]->checked ? $catatan_master[$key+1]->uraian : '' !!}</textarea>
                                                 @else
                                                     <textarea name="catatan_nota_rekomendasi_master[]" id="catatan_nota_rekomendasi_master" class="form-control form-control-solid" readonly>{!! '' !!}</textarea>
                                                 @endif
@@ -2240,7 +2248,7 @@
                         @if (!empty($proyek->file_kelengkapan_merge))
                         <h5>Dokumen Kelengkapan Project: </h5>
                         <div class="text-center">
-                            <iframe src="{{ asset('file-nota-rekomendasi-2\\file-pengajuan' . '\\' . $proyek->file_kelengkapan_merge) }}"
+                            <iframe src="{{ asset('file-nota-rekomendasi-2\\file-kelengkapan-project' . '\\' . $proyek->file_kelengkapan_merge) }}"
                                 width="800px" height="600px"></iframe>
                         </div>
                         @endif
@@ -2475,7 +2483,7 @@
                         @if (!empty($proyek->file_kelengkapan_merge))
                         <h5>Dokumen Kelengkapan Project: </h5>
                         <div class="text-center">
-                            <iframe src="{{ asset('file-nota-rekomendasi-2\\file-pengajuan' . '\\' . $proyek->file_kelengkapan_merge) }}"
+                            <iframe src="{{ asset('file-nota-rekomendasi-2\\file-kelengkapan-project' . '\\' . $proyek->file_kelengkapan_merge) }}"
                                 width="800px" height="600px"></iframe>
                         </div>
                         @endif
@@ -2714,7 +2722,7 @@
                         @if (!empty($proyek->file_kelengkapan_merge))
                         <h5>Dokumen Kelengkapan Project: </h5>
                         <div class="text-center">
-                            <iframe src="{{ asset('file-nota-rekomendasi-2\\file-pengajuan' . '\\' . $proyek->file_kelengkapan_merge) }}"
+                            <iframe src="{{ asset('file-nota-rekomendasi-2\\file-kelengkapan-project' . '\\' . $proyek->file_kelengkapan_merge) }}"
                                 width="800px" height="600px"></iframe>
                         </div>
                         @endif
@@ -3160,6 +3168,64 @@
                             width="800px" height="600px"></iframe>
                     </div>
                 @endif
+                @if (!empty($proyek->file_kelengkapan_merge))
+                    {{-- <h5>Dokumen Persetujuan Nota Rekomendasi 1: </h5> --}}
+                    <div class="text-center">
+                        <iframe src="{{ asset('file-nota-rekomendasi-2\\file-kelengkapan-project' . '\\' . $proyek->file_kelengkapan_merge) }}"
+                            width="800px" height="600px"></iframe>
+                    </div>
+                @endif
+                @if (!empty($proyek->file_assessment_merge))
+                    {{-- <h5>Dokumen Persetujuan Nota Rekomendasi 1: </h5> --}}
+                    <div class="text-center">
+                        <iframe src="{{ asset('file-nota-rekomendasi-2\\file-kriteria-project-selection' . '\\' . $proyek->file_assessment_merge) }}"
+                            width="800px" height="600px"></iframe>
+                    </div>
+                @endif
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <form action="/nota-rekomendasi-2/{{ $proyek->kode_proyek }}/upload-final" method="post" enctype="multipart/form-data" onsubmit="addLoading(this)">
+        @csrf
+        <div class="modal fade" id="upload_dokumen_final_{{ $proyek->kode_proyek }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-md">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Upload Dokumen Final</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="file" name="file-document" class="form-control form-control-solid" accept=".pdf">
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                </div>
+              </div>
+            </div>
+        </div>    
+    </form>
+
+    <div class="modal fade" id="lihat_dokumen_final_{{ $proyek->kode_proyek }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Dokumen Final Nota Rekomendasi II</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if (!empty($proyek->DokumenNotaRekomendasi2))
+                    {{-- <h5>Dokumen Persetujuan Nota Rekomendasi 1: </h5> --}}
+                    <div class="text-center">
+                        <iframe src="{{ asset('file-nota-rekomendasi-2\\file-final-rekomendasi-2' . '\\' . $proyek->DokumenNotaRekomendasi2->id_document) }}"
+                            width="800px" height="600px"></iframe>
+                    </div>
+                @endif
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -3241,16 +3307,16 @@
 
             const eltCheckbox = e.querySelectorAll("input[type='radio']:checked");
 
-            if (eltCheckbox.length < 29) {
-                Swal.fire({
-                    title: 'Data Belum Lengkap',
-                    text: "Mohon periksa kembali",
-                    icon: 'error',
-                    confirmButtonColor: '#008CB4',
-                    confirmButtonText: 'Oke'
-                })
-                return false;
-            }
+            // if (eltCheckbox.length < 29) {
+            //     Swal.fire({
+            //         title: 'Data Belum Lengkap',
+            //         text: "Mohon periksa kembali",
+            //         icon: 'error',
+            //         confirmButtonColor: '#008CB4',
+            //         confirmButtonText: 'Oke'
+            //     })
+            //     return false;
+            // }
 
             const files = e.querySelectorAll("input[type='file']");
             let totalSizeFile = 0

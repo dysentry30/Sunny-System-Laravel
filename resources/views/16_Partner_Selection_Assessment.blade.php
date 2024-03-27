@@ -490,6 +490,11 @@
                                                                     data-bs-target="#pengajuan_{{ $assessment->id }}"
                                                                     data-bs-toggle="modal">{{ is_null($assessment->is_pengajuan_approved) ? "Ajukan" : "Lihat Detail" }}</button>
                                                             @endif
+
+                                                            @if ($assessment->is_rekomendasi_approved)
+                                                                {{-- <a href="/assessment-partner-selection/{{ $assessment->id }}/generate-final" class="btn btn-sm btn-primary text-white">Download</a> --}}
+                                                                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#generate_final_{{ $assessment->id }}">Lihat</button>
+                                                            @endif
                                                         @endcanany
                                                     </td>
                                                 </tr>
@@ -2401,6 +2406,127 @@
         </div>
     </div>
     <!--End::Modal Revisi Note-->
+
+    <!--Begin::Check File Final-->
+    <div class="modal fade" id="generate_final_{{ $assessment->id }}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Penyusun Partner KSO :</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+                    <div class="container">
+                        <table class="table display align-middle table-row-dashed fs-6">
+                            <thead>
+                                <tr>
+                                    <th class="min-w-auto">No.</th>
+                                    <th class="min-w-auto">Item</th>
+                                    <th class="min-w-auto">Uraian</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1.</td>
+                                    <td>Nama Perusahaan Partner</td>
+                                    <td>{{ $partner->Company->name }}</td>
+                                </tr>
+                                <tr>
+                                    <td>2.</td>
+                                    <td>Nama Proyek</td>
+                                    <td>{{ $partner->Proyek->nama_proyek }}</td>
+                                </tr>
+                                <tr>
+                                    <td>3.</td>
+                                    <td>Jenis Instansi</td>
+                                    <td>{{ $partner->Company->jenis_instansi }}</td>
+                                </tr>
+                                <tr>
+                                    <td>4.</td>
+                                    <td>Hasil Assessment Eksternal</td>
+                                    <td>
+                                        <p class="m-0 {{ empty($partner->score_pefindo_jo) ? "badge rounded-pill badge-danger" : "" }}">{{ $partner->score_pefindo_jo ?? "*Belum ditentukan" }}</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>5.</td>
+                                    <td>Risk Kategori Eksternal</td>
+                                    <td>
+                                        <p class="{{ $style }} m-0">{{ $partner->keterangan ?? "*Belum ditentukan" }}</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>6.</td>
+                                    <td>Dokumen Partner</td>
+                                    <td>
+                                        <a href="#"
+                                            data-bs-target="#kt_porsi_upload_dokumen_{{ $assessment->id }}"
+                                            data-bs-toggle="modal"
+                                            class="btn btn-sm btn-primary py-3 text-white">
+                                            Lihat Dokumen
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>7.</td>
+                                    <td>Assessment Internal</td>
+                                    <td>
+                                        @if (is_null($assessment->is_penyusun_approved))
+                                            <a href="#"
+                                                data-bs-target="#kt_modal_edit_assessment_{{ $assessment->id }}"
+                                                data-bs-toggle="modal"
+                                                class="btn btn-sm btn-primary text-white py-3">
+                                                Edit Detail
+                                            </a>
+                                        @else
+                                            <a href="#"
+                                                data-bs-target="#kt_modal_lihat_assessment_{{ $assessment->id }}"
+                                                data-bs-toggle="modal"
+                                                class="btn btn-sm btn-primary py-3 text-white">
+                                                Lihat Detail
+                                            </a>
+                                        @endif
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br>
+                        <hr>
+                        <h5>Dokumen Pendukung</h5>
+                        @if (!empty($assessment->PartnerJO?->file_kelengkapan_merge))
+                        <div class="text-center">
+                            <iframe src="{{ asset('file-kelengkapan-partner' . '\\' . $assessment->PartnerJO->file_kelengkapan_merge) }}"
+                                width="800px" height="600px"></iframe>
+                        </div>
+                        @endif
+                        <h5>Dokumen Assessment</h5>
+                        @if (!empty($assessment->PartnerJO?->file_assessment_merge))
+                        <div class="text-center">
+                            <iframe src="{{ asset('file-nota-rekomendasi-2'.'\\'.'file-kriteria-partner' . '\\' . $assessment->PartnerJO->file_assessment_merge) }}"
+                                width="800px" height="600px"></iframe>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End::Check File Final-->
     @endforeach
 
 @endsection

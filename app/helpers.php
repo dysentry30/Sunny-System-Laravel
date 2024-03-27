@@ -1034,7 +1034,7 @@ function createWordProfileRisikoNew($kode_proyek)
     // dd($customer);
     $now = Carbon\Carbon::now();
     $file_name = $now->format("dmYHis") . "_profile-risiko_" . $proyek->kode_proyek;
-    $kriteriaPenggunaJasaDetail = KriteriaPenggunaJasaDetail::where('kode_proyek', $kode_proyek)->get();
+    $kriteriaPenggunaJasaDetail = KriteriaPenggunaJasaDetail::where('kode_proyek', $kode_proyek)->orderBy('index')->get();
 
     $cellRowContinue = ['vMerge' => 'continue', 'bgColor' => '8496B0', 'borderSize' => 3, 'borderColor' => '000000', 'afterSpacing' => 0];
     $cellColSpanKriteria = ['gridSpan' => 4, 'valign' => 'center', 'bgColor' => '8496B0', 'borderSize' => 3, 'borderColor' => '000000', 'afterSpacing' => 0];
@@ -1050,7 +1050,7 @@ function createWordProfileRisikoNew($kode_proyek)
     $section->addText("Pengembangan Kriteria Untuk Pemilihan Pengguna Jasa", ['size' => 8, "bold" => true], ['align' => "center", 'spaceAfter' => 0]);
     $section->addText(htmlspecialchars($customer, ENT_QUOTES), ['size' => 12, "bold" => true], ['align' => "center", 'spaceAfter' => 0]);
 
-    $section->addTextBreak(1);
+    // $section->addTextBreak(1);
     // $table = $section->addTable('myOwnTableStyle', array('borderSize' => 1, 'borderColor' => '999999', 'afterSpacing' => 0, 'Spacing' => 0, 'cellMargin' => 0));
     // $table->addRow(-0.5, array('exactHeight' => -5));
 
@@ -1182,10 +1182,12 @@ function createWordProfileRisikoNew($kode_proyek)
 
     //Begin::Legalitas New
     $table->addRow();
-    $legalitasMasterSelect = LegalitasPerusahaan::where('nota_rekomendasi', '=', 'Nota Rekomendasi 1')->get()->sortBy('created_at')->each(function ($lp, $key) use ($table, $cellHCentered, $kriteriaPenggunaJasaDetail) {
+    $count = 0;
+    $legalitasMasterSelect = LegalitasPerusahaan::where('nota_rekomendasi', '=', 'Nota Rekomendasi 1')->get()->sortBy('created_at')->each(function ($lp, $key) use ($table, $cellHCentered, $kriteriaPenggunaJasaDetail, &$count) {
         $kriteriaIndex0 = $kriteriaPenggunaJasaDetail->where('index', 0)->first();
-
+        
         if (!empty($kriteriaIndex0) && $kriteriaIndex0->kriteria == $key + 1) {
+            $count++;
             $table->addCell(1000, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addText('1', ['size' => 8]); // Nomor
             $table->addCell(1000, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addText('Legalitas institusi / perusahaan', ['size' => 8]); // Parameter
             $table->addCell(1000, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000']); // Weight
@@ -1358,8 +1360,7 @@ function createWordProfileRisikoNew($kode_proyek)
     //     }
     // });
 
-    $kriteriaMasterData = KriteriaPenggunaJasa::where('nota_rekomendasi', '=', 'Nota Rekomendasi 1')->get()->sortBy('created_at')->groupBy('kategori')->each(function ($lp, $key) use ($table, $cellHCentered, $kriteriaPenggunaJasaDetail) {
-
+    $kriteriaMasterData = KriteriaPenggunaJasa::where('nota_rekomendasi', '=', 'Nota Rekomendasi 1')->get()->sortBy('created_at')->groupBy('kategori')->each(function ($lp, $key) use ($table, $cellHCentered, $kriteriaPenggunaJasaDetail, &$count) {
         if ($key != "Financial") {
             //REPUTASI PEMBERI KERJA
             $table->addRow();
@@ -1368,10 +1369,10 @@ function createWordProfileRisikoNew($kode_proyek)
                 'gridSpan' => 6, 'borderSize' => 2, 'borderColor' => '000000', 'bgColor' => 'FFFEA8', 'afterSpacing' => 0
             ])->addText('REPUTASI PEMBERI KERJA', ['size' => 8, 'bold' => true], ['spaceAfter' => 0]);
 
-            $kriteriaSelect = $lp->each(function ($ks, $k) use ($table, $cellHCentered, $kriteriaPenggunaJasaDetail) {
+            $kriteriaSelect = $lp->each(function ($ks, $k) use ($table, $cellHCentered, $kriteriaPenggunaJasaDetail, &$count) {
                 $table->addRow();
 
-                $kriteriaIndex = $kriteriaPenggunaJasaDetail->where('index', $k + 1)->first();
+                $kriteriaIndex = $kriteriaPenggunaJasaDetail->where('index', $count)->first();
                 $table->addCell(1000, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addText('1', ['size' => 8]);
                 $table->addCell(1000, ['borderSize' => 2, 'borderColor' => '000000'])->addText($ks->item, ['size' => 8]);
                 $table->addCell(1000, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addTextRun($cellHCentered)->addText($ks->bobot, ['size' => 8]);
@@ -1442,7 +1443,7 @@ function createWordProfileRisikoNew($kode_proyek)
                 } else {
                     $table->addCell(2000, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addTextRun(['spaceAfter' => 0]);
                 }
-
+                $count++;
                 //End::Keterangan Selection
             });
         } else {
@@ -1451,15 +1452,15 @@ function createWordProfileRisikoNew($kode_proyek)
             $table->addCell(1000, ['borderSize' => 2, 'borderColor' => '000000', 'bgColor' => 'FFFEA8'])->addTextRun(['spaceAfter' => 0]);
             $table->addCell(1000, ['gridSpan' => 6, 'borderSize' => 2, 'borderColor' => '000000', 'bgColor' => 'FFFEA8', 'afterSpacing' => 0])->addText('FINANCIAL', ['size' => 8, 'bold' => true], ['spaceAfter' => 0]);
 
-            $kriteriaSelect = $lp->each(function ($ks, $k) use ($table, $cellHCentered, $kriteriaPenggunaJasaDetail) {
+            $kriteriaSelect = $lp->each(function ($ks, $k) use ($table, $cellHCentered, $kriteriaPenggunaJasaDetail, &$count) {
                 $table->addRow();
 
-                $kriteriaIndex = $kriteriaPenggunaJasaDetail->where('index', $k + 1)->first();
+                $kriteriaIndex = $kriteriaPenggunaJasaDetail->where('index', $count)->first();
                 if ($ks->item == "Kepatuhan Pembayaran Pajak") {
-                    $kriteriaIndex = $kriteriaPenggunaJasaDetail->where('index', $k + 2)->first();
+                    $kriteriaIndex = $kriteriaPenggunaJasaDetail->where('index', $count)->first();
                 }
 
-                $table->addCell(1000, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addText($k + 1, ['size' => 8]);
+                $table->addCell(1000, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addText($count, ['size' => 8]);
                 $table->addCell(1000, ['borderSize' => 2, 'borderColor' => '000000'])->addText($ks->item, ['size' => 8]);
                 $table->addCell(1000, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addTextRun($cellHCentered)->addText($ks->bobot, ['size' => 8]);
 
@@ -1530,10 +1531,12 @@ function createWordProfileRisikoNew($kode_proyek)
                 } else {
                     $table->addCell(2000, ['valign' => 'center', 'borderSize' => 2, 'borderColor' => '000000'])->addTextRun(['spaceAfter' => 0]);
                 }
-
+                $count++;
                 //End::Keterangan Selection
             });
         }
+        
+
     });
 
     //End::Kriteria Pengguna Jasa
@@ -1558,7 +1561,7 @@ function createWordProfileRisikoNew($kode_proyek)
     //End::Total
 
     //Begin::Rumus
-    $section->addTextBreak(1);
+    // $section->addTextBreak(1);
     $section->addText("Catatan untuk skoring :", ['size' => 8, 'bold' => true], ['align' => 'left']);
     $section->addTextRun(['spaceAfter' => 0])->addText(htmlspecialchars("340 <= X <= 400         : Risiko Rendah"), ['size' => 8, 'bgColor' => $kriteriaFinal == "Risiko Rendah" ? 'FFB77D' : ''], ['align' => 'left']);
     $section->addTextRun(['spaceAfter' => 0])->addText(htmlspecialchars("260 <= X <= 240         : Risiko Moderat"), ['size' => 8, 'bgColor' => $kriteriaFinal == "Risiko Moderat" ? 'FFB77D' : ''], ['align' => 'left']);
@@ -3171,7 +3174,7 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
     $penyusun = collect(json_decode($proyekNotaRekomendasi->approved_verifikasi))->values()->toArray();
     $rekomendator = json_decode($proyekNotaRekomendasi->approved_rekomendasi);
     $penyetuju = json_decode($proyekNotaRekomendasi->approved_persetujuan);
-    $catatanAssessment = collect(json_decode($proyekNotaRekomendasi->catatan_master))->whereNotNull('urutan');
+    $catatanAssessment = collect(json_decode($proyekNotaRekomendasi->catatan_master))->where('checked', true)?->keyBy('urutan');
     $urutanCatatan = MasterCatatanNotaRekomendasi2::select(['kategori', 'urutan'])->where('is_active', true)->orderBy('urutan')->get()->toArray();
 
     try {
@@ -3309,7 +3312,7 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
 
                 $cell_1_note = $catatan_table->addCell(3000);
                 $cell_2_note = $catatan_table->addCell(6000);
-                $cell_1_note->addText(htmlspecialchars($urutanCatatan[$key + 1]['kategori'], ENT_QUOTES), ["bold" => true], ["align" => "center", "spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0]);
+                $cell_1_note->addText(htmlspecialchars($urutanCatatan[$key - 1]['kategori'], ENT_QUOTES), ["bold" => true], ["align" => "center", "spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0]);
                 $cell_2_note->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($p->uraian, ENT_QUOTES)), ["bold" => false], ["align" => "left", "spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0]);
             }
         }

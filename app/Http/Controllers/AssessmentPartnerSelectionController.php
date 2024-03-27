@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
+use Karriere\PdfMerge\PdfMerge;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class AssessmentPartnerSelectionController extends Controller
@@ -686,6 +687,52 @@ class AssessmentPartnerSelectionController extends Controller
         }
         Alert::error('Error', 'Partner gagal dikembalikan ke tahap Penyusun');
         return redirect()->back();
+    }
+
+    /**
+     * Merge Lampiran Assessment Partner
+     * @param \Illuminate\Support\Facade\Request $request
+     * @return \Illuminate\Support\Facade\Response 
+     */
+    public function generateMergeAssessment(Request $request, $partner)
+    {
+        $data = $request->all();
+        $assessmentSelection = AssessmentPartnerSelection::find($partner);
+        $porsiJO = PorsiJO::find($assessmentSelection->partner_id);
+        $file_name = date('dmYHis_') . 'dokumen_assessment_partner_final_' . $porsiJO->kode_proyek;
+
+        try {
+            $fileKelengkapanMerge = $porsiJO->file_kelengkapan_merge;
+            $fileAssessmentMerge = $porsiJO->file_assessment_merge;
+
+            $pdfMerge = new PdfMerge();
+
+            if (!empty($fileAssessmentMerge)) {
+                $pdfMerge->add(public_path('file-nota-rekomendasi-2/file-kriteria-partner/' . $fileAssessmentMerge));
+            }
+
+            if (!empty($fileKelengkapanMerge)) {
+                $pdfMerge->add(public_path('file-kelengkapan-partner/' . $fileKelengkapanMerge));
+            }
+
+            $pdfMerge->merge(public_path("file-nota-rekomendasi-2/file-kriteria-partner" . "/" . $file_name . ".pdf"));
+
+            $porsiJO->file_assessment_merge = $file_name . '.pdf';
+
+            if ($porsiJO->save()) {
+                $porsiJO->refresh();
+                $count = 0;
+                while (File::exists(public_path("file-nota-rekomendasi-2/file-kriteria-partner" . "/" . $file_name . ".pdf"))) {
+                    $count++;
+                }
+
+                File::delete(public_path("file-nota-rekomendasi-2/file-kriteria-partner/" . $fileAssessmentMerge));
+                return response()->download(public_path($porsiJO->file_assessment_merge));
+            }
+        } catch (\Exception $e) {
+            Alert::error('Error', $e->getMessage());
+            return redirect()->back();
+        }
     }
 
     /**

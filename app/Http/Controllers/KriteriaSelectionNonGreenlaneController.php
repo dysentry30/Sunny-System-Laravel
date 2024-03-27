@@ -139,8 +139,14 @@ class KriteriaSelectionNonGreenlaneController extends Controller
                     $array_files = collect();
 
                     $kriteriaSelectioDetail->parameter = $kriteriaMaster[(int)$urutan - 1]->parameter;
-                    $kriteriaSelectioDetail->is_true = $data["is_kriteria_" . $urutan] == 1 ? true : false;
-                    $kriteriaSelectioDetail->nilai = $data['nilai'][(int)$urutan - 1];
+                    if (isset($data["is_kriteria_" . $urutan])) {
+                        $kriteriaSelectioDetail->is_true = $data["is_kriteria_" . $urutan] == 1 ? true : false;
+                        $kriteriaSelectioDetail->nilai = $data['nilai'][(int)$urutan - 1];
+                    } else {
+                        $kriteriaSelectioDetail->is_true = false;
+                        $kriteriaSelectioDetail->nilai = 0;
+                    }
+                    
                     $kriteriaSelectioDetail->keterangan = $data["keterangan"][(int)$urutan - 1];
 
                     foreach ($files as $file) {
@@ -155,8 +161,13 @@ class KriteriaSelectionNonGreenlaneController extends Controller
                     $kriteriaSelectioDetail->index = $key;
                 } else {
                     $kriteriaSelectioDetail->parameter = $kriteriaMaster[(int)$urutan - 1]->parameter;
-                    $kriteriaSelectioDetail->is_true = $data["is_kriteria_" . $urutan] == 1 ? true : false;
-                    $kriteriaSelectioDetail->nilai = $data['nilai'][(int)$urutan - 1];
+                    if (isset($data["is_kriteria_" . $urutan])) {
+                        $kriteriaSelectioDetail->is_true = $data["is_kriteria_" . $urutan] == 1 ? true : false;
+                        $kriteriaSelectioDetail->nilai = $data['nilai'][(int)$urutan - 1];
+                    } else {
+                        $kriteriaSelectioDetail->is_true = false;
+                        $kriteriaSelectioDetail->nilai = 0;
+                    }
                     $kriteriaSelectioDetail->keterangan = $data["keterangan"][(int)$urutan - 1];
                     $kriteriaSelectioDetail->id_document = null;
                     $kriteriaSelectioDetail->urutan = $urutan;
@@ -174,8 +185,8 @@ class KriteriaSelectionNonGreenlaneController extends Controller
 
             Alert::error("Error", "Assessment Project Selection gagal dibuat!");
             return redirect()->back();
-        } catch (\Exception) {
-            Alert::error("Error", "Data tidak lengkap, mohon periksa kembali!");
+        } catch (\Exception $e) {
+            Alert::error("Error", $e->getMessage());
             return redirect()->back();
         }
 
@@ -197,8 +208,13 @@ class KriteriaSelectionNonGreenlaneController extends Controller
 
                 $urutan = $data['index'][$key];
                 $kriteriaSelectioDetail->parameter = $kriteriaMaster[(int)$urutan - 1]->parameter;
-                $kriteriaSelectioDetail->is_true = $data["is_kriteria_" . $urutan] == 1 ? true : false;
-                $kriteriaSelectioDetail->nilai = $data['nilai'][(int)$urutan - 1];
+                if (isset($data["is_kriteria_" . $urutan])) {
+                    $kriteriaSelectioDetail->is_true = $data["is_kriteria_" . $urutan] == 1 ? true : false;
+                    $kriteriaSelectioDetail->nilai = $data['nilai'][(int)$urutan - 1];
+                } else {
+                    $kriteriaSelectioDetail->is_true = false;
+                    $kriteriaSelectioDetail->nilai = 0;
+                }
                 $kriteriaSelectioDetail->keterangan = $data["keterangan"][(int)$urutan - 1];
 
                 $files = $data["dokumen_kriteria_$urutan"] ?? null;
