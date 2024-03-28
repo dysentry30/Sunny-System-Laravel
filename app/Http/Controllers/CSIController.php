@@ -30,7 +30,8 @@ class CSIController extends Controller
             return $unit->divcode;
         })->toArray();
         // $proyeks = Proyek::whereIn('unit_kerja', $unit_kerja_filter)->get();
-        $proyeks = ProyekPISNew::join('customers', 'pemberi_kerja_code', 'kode_nasabah')->where('entitas_proyek', '=', null)->get();
+        // $proyeks = ProyekPISNew::join('customers', 'pemberi_kerja_code', 'kode_nasabah')->where('entitas_proyek', '=', null)->get();
+        $proyeks = ProyekPISNew::with('Customer', 'Csi')->where('entitas_proyek', '=', null)->get();
         // $csi = Proyek::join("proyek_csi", "proyek_csi.no_spk", "=", "proyeks.kode_proyek")->get();
         // dd($proyeks->first());
         $csi = Csi::all();
