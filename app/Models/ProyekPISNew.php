@@ -27,7 +27,7 @@ class ProyekPISNew extends Model
 
     public function Csi()
     {
-        return $this->hasOne(Csi::class, "no_spk", "spk_intern_no");
+        return $this->hasMany(Csi::class, "no_spk", "spk_intern_no");
     }
 
     public function UnitKerja()

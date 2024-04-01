@@ -3653,13 +3653,32 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('/csi/customer-survey/{id}', [CSIController::class, "indexCustomer"]);
 
-    Route::post('/csi/send/new/{id}', [CSIController::class, "sendCsiNew"]);
+    // Route::post('/csi/send/{id}', [CSIController::class, "sendCsi"]);
 
-    Route::post('/csi/send/{id}', [CSIController::class, "sendCsi"]);
+    // Route::post('/csi/send/new/{id}', [CSIController::class, "sendCsiNew"]);
+
+    Route::post('/csi/send/new', [CSIController::class, "sendCsiNew"]);
 
     Route::post('/csi/get-progress/{kodeProyek}', [CSIController::class, "createCsi"]);
 
     Route::post('/csi/customer-survey-save', [CSIController::class, "saveSurvey"]);
+
+    Route::get('/csi/{profit_center}/get-progress', function ($profit_center) {
+        try {
+            $proyeks = ProyekPISNew::select('proyek_shortname', 'spk_intern_no')->where('profit_center', $profit_center)->first();
+            return response()->json([
+                'status' => 'success',
+                'data' => $proyeks->toArray(),
+                'message' => ''
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'success',
+                'data' => [],
+                'message' => $e->getMessage()
+            ], 400);
+        }
+    });
 
     // End CSI
 

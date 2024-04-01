@@ -19,6 +19,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 use DateTime;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 
 
@@ -30,7 +31,8 @@ class CSIController extends Controller
             return $unit->divcode;
         })->toArray();
         // $proyeks = Proyek::whereIn('unit_kerja', $unit_kerja_filter)->get();
-        $proyeks = ProyekPISNew::join('customers', 'pemberi_kerja_code', 'kode_nasabah')->where('entitas_proyek', '=', null)->get();
+        // $proyeks = ProyekPISNew::join('customers', 'pemberi_kerja_code', 'kode_nasabah')->where('entitas_proyek', '=', null)->get();
+        $proyeks = ProyekPISNew::with('Customer', 'Csi')->where('entitas_proyek', '=', null)->where('bast2_date', '>=', Carbon::now())->get();
         // $csi = Proyek::join("proyek_csi", "proyek_csi.no_spk", "=", "proyeks.kode_proyek")->get();
         // dd($proyeks->first());
         $csi = Csi::all();
@@ -43,14 +45,14 @@ class CSIController extends Controller
         if (!empty($id)) {
             $csi = Csi::find($id);
         } else {
-            $getStrukturFromEmailUser = StrukturCustomer::where('email_struktur', Auth::user()->email)->first();
+            $getStrukturFromEmailUser = StrukturCustomer::where('email_struktur', Auth::user()->email)->where('id_struktur_organisasi', Auth::user()->nip)->first();
             if (empty($getStrukturFromEmailUser)) {
                 Alert::error('Error', 'Survey tidak ditemukan');
                 return redirect('/csi-login');
             }
             $user = explode("-", $getStrukturFromEmailUser->id_struktur_organisasi);
             // $csi = Csi::where('no_spk', '=', $user[0])->where('id_customer', '=', $user[1])->where('id_struktur_organisasi', '=', $user[2])->first();
-            $csi = Csi::where('no_spk', '=', $user[0])->where('id_customer', '=', $user[1])->first();
+            $csi = Csi::where('no_spk', '=', $user[0])->where('id_customer', '=', $user[1])->where('id_struktur_organisasi', Auth::user()->nip)->first();
             // $csi = Csi::find($user[2]);
         }
 
@@ -64,17 +66,21 @@ class CSIController extends Controller
         $customer = Customer::where("id_customer", "=", $csi->id_customer)->first();
         // $proyek = Proyek::where("kode_proyek", "=", $csi->no_spk)->first();
         $proyek = ProyekPISNew::where("spk_intern_no", "=", $csi->no_spk)->first();
+        // $proyek = ProyekPISNew::where(function ($query) use ($csi) {
+        //     $query->where('profit_center', $csi->no_spk)
+        //         ->orWhere('spk_intern_no', $csi->no_spk);
+        // })->first();
 
         if (Gate::allows('user-csi') && !empty($csi->jawaban)) {
             $user = User::find(Auth::user()->id);
             // dd($user);
-            $user->is_active = false;
+            // $user->is_active = false;
             $user->save();
             Alert::success("Success", "Terimakasih Telah Mengisi Survey Kepuasan Pelanggan Untuk Proyek : " . $proyek->nama_proyek);
             Auth::logout();
             return redirect()->intended("/csi-login");
         }
-        $csi->save();
+        // $csi->save();
         // dd($csi);
         if (str_contains(Auth::user()->email, "@wika-customer")) {
             // Alert::html('To Whom It May Concern <br><br> Mr/Mrs : <b>' . $csi->Struktur->nama_struktur . '</b>  <br> Position : <b>' . $csi->Struktur->jabatan_struktur . '</b> <br> Project : <b>' . $csi->Proyek->nama_proyek . '</b>' , '<br> We kindly ask for your assistance in measuring the customer satisfaction index for the project which we are currently running. As part of our commitment to provide high-quality services, we believe it is essential to evaluate and understand our valuable customers level of satisfaction.' . '<br>  We hope that you are willing to provide information to help us with this project. We are looking forward to receiving your response and help to improve our customer satisfaction.' . '<br><br> Best regards, <br> SvP Strategic Marketing & Transformation', 'success')->autoClose(12000)->width(1000);
@@ -86,12 +92,17 @@ class CSIController extends Controller
         $data = $request->all();
         // dd(explode("-", Auth::user()->nip));
         $user = explode("-", Auth::user()->nip);
-        // $csi = Csi::where('no_spk', '=', $user[0])->where('id_customer', '=', $user[1])->where('id_struktur_organisasi', '=', $user[2])->first();
-        $csi = Csi::where('no_spk', '=', $user[0])->where('id_customer', '=', $user[1])->first();
+        $csi = Csi::where('no_spk', '=', $user[0])->where('id_customer', '=', $user[1])->where('id_struktur_organisasi', '=', Auth::user()->nip)->first();
+        // dd($csi);
+        // $csi = Csi::where('no_spk', '=', $user[0])->where('id_customer', '=', $user[1])->first();
         // $csi = Csi::find($user[2]);
         $customer = Customer::where("id_customer", "=", $csi->id_customer)->first();
         // $proyek = Proyek::where("kode_proyek", "=", $csi->no_spk)->first();
         $proyek = ProyekPISNew::where("spk_intern_no", "=", $csi->no_spk)->first();
+        // $proyek = ProyekPISNew::where(function ($query) use ($csi) {
+        //     $query->where('profit_center', $csi->no_spk)
+        //         ->orWhere('spk_intern_no', $csi->no_spk);
+        // })->first();
 
         // dd(collect($data)->count(),$data);
         if (!empty($data['tidak-setuju']) && $data['tidak-setuju'] == true) {
@@ -99,6 +110,7 @@ class CSIController extends Controller
             $csi->jawaban = json_encode($data);
             $csi->is_setuju = "f";
             $csi->status = "Done";
+            $csi->tanggal_submit = date('now');
             $csi->save();
         } else {
             $score_nps = (int) (((int) $data['answer_3']) / 1);
@@ -133,6 +145,7 @@ class CSIController extends Controller
             $csi->is_setuju = "t";
             $csi->kompetitor = $data['kompetitor'] ?? null;
             $csi->status = "Done";
+            $csi->tanggal_submit = Carbon::create('now');
             $csi->save();
         }
         // dd($data, $csi);
@@ -186,8 +199,8 @@ class CSIController extends Controller
     //     $csi->status = "Requested";
     //     $csi->id_struktur_organisasi = $user->nip;
     //     // dd($csi, $user);
-        
-        
+
+
     //     // $url = "https://crm-dev.wika.co.id/customer/view/". $data['id-pemberi-kerja']."/". str_replace(" ", "%20", $data['pemberi-kerja']);
     //     $url = "https://crm.wika.co.id/csi-login";
     //     $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
@@ -259,45 +272,59 @@ class CSIController extends Controller
 
         $findEmailDuplicate = User::where('email', $data['email'])->first();
 
-        if ($findEmailDuplicate) {
-            Alert::error('Error', 'Email telah digunakan');
-            return redirect('/csi-login');
-        }
+        // if ($findEmailDuplicate) {
+        //     Alert::error('Error', 'Email telah digunakan');
+        //     return redirect()->back();
+        // }
 
         $proyek = ProyekPISNew::where('spk_intern_no', $data['kode-proyek'])->first();
+        // $proyek = ProyekPISNew::where(function ($query) use ($data) {
+        //     $query->where('profit_center', $data['kode-proyek'])
+        //     ->orWhere('spk_intern_no', $data['kode-proyek']);
+        // })->first();
 
         $csi = new Csi();
 
-        $user = new User();
         $idCustomer = Str::random(12);
-        // $user->nip = $data['kode-proyek'] . "-" . $data['id-pemberi-kerja']."-" . $data['id-csi'] . "-" . $idCustomer;
-        $user->nip = $data['kode-proyek'] . "-" . $data['id-pemberi-kerja'] . "-" . $idCustomer;
-        // dd($data["nip"]);
-        $user->name = $data['nama-penerima'];
-        $user->email = $data['email'];
-        $user->no_hp = $data['nomor-penerima'];
-        $user->unit_kerja = null;
-        // $user->alamat = $data["alamat"];
-        $user->check_user_csi = true;
-        $user->check_user_sales = false;
-        $user->check_administrator = false;
-        $user->check_admin_kontrak = false;
-        $user->check_team_proyek = false;
-        $user->check_team_proyek = false;
 
-        $user->role_user = true;
-        $user->role_admin = false;
-        $user->role_approver = false;
-        $user->role_risk = false;
+        $user = User::where('email', $data['email'])->first();
 
-        // $user->password = Hash::make($password);
+        if (empty($user)) {
+            $user = new User();
+            // $user->nip = $data['kode-proyek'] . "-" . $data['id-pemberi-kerja']."-" . $data['id-csi'] . "-" . $idCustomer;
+            // $user->nip = $data['kode-proyek'] . "-" . $data['id-pemberi-kerja'] . "-" . $idCustomer;
+            // dd($data["nip"]);
+            $user->name = $data['nama-penerima'];
+            $user->email = $data['email'];
+            $user->no_hp = $data['nomor-penerima'];
+            $user->unit_kerja = null;
+            // $user->alamat = $data["alamat"];
+            $user->check_user_csi = true;
+            $user->check_user_sales = false;
+            $user->check_administrator = false;
+            $user->check_admin_kontrak = false;
+            $user->check_team_proyek = false;
+            $user->check_team_proyek = false;
+
+            $user->role_user = true;
+            $user->role_admin = false;
+            $user->role_approver = false;
+            $user->role_risk = false;
+
+            // $user->password = Hash::make($password);
+        }
         $user->is_active = true;
+
+        $user->nip = $data['kode-proyek'] . "-" . $data['id-pemberi-kerja'] . "-" . $idCustomer;
         $user->password = Hash::make($idCustomer);
 
         $csi->status = "Requested";
         $csi->id_struktur_organisasi = $user->nip;
         $csi->id_customer = $proyek->Customer?->id_customer;
         $csi->no_spk = $data['kode-proyek'];
+        $csi->kategori = $data['kategori'];
+        $csi->progress = $data['progress'];
+        $csi->tanggal_request = Carbon::create('now');
         // $csi->tanggal = $current;
         // $csi->status = "Not Sent";
         // $csi->progress = $calculate_progress;
@@ -306,7 +333,7 @@ class CSIController extends Controller
 
         // $url = "https://crm-dev.wika.co.id/customer/view/". $data['id-pemberi-kerja']."/". str_replace(" ", "%20", $data['pemberi-kerja']);
         $url = "https://crm.wika.co.id/csi-login";
-        $message = nl2br("Salam Hormat, " . $data['nama-penerima'] . " dari " . $data['pemberi-kerja'] . ".\nKami dari PT. Wijaya Karya (Persero) Tbk, membutuhkan bantuan Anda untuk perbaikan kinerja. Mohon tekan link di bawah ini untuk pengisian survey kepuasan pelanggan.\n\nGunakan User dan password dibawah ini untuk login :  \nUser : " . $user->email . "\nPassword : " . $idCustomer . "\n$url\n\n\nHi, " . $data['nama-penerima'] . " from " . $data['pemberi-kerja'] . ".\nWe are from PT. Wijaya Karya (Persero) Tbk, kindly need your help to improve our performance. Please click bellow link below to complete customer satisfaction survey.\n\nUse the username and password to log in:\nUser : " . $user->email . "\nPassword : " . $user->email . "\n$url");
+        $message = nl2br("Salam Hormat, " . $data['nama-penerima'] . " dari " . $data['pemberi-kerja'] . ".\nKami dari PT. Wijaya Karya (Persero) Tbk, membutuhkan bantuan Anda untuk perbaikan kinerja. Mohon tekan link di bawah ini untuk pengisian survey kepuasan pelanggan.\n\nGunakan User dan password dibawah ini untuk login :  \nUser : " . $user->email . "\nPassword : " . $idCustomer . "\n$url\n\n\nHi, " . $data['nama-penerima'] . " from " . $data['pemberi-kerja'] . ".\nWe are from PT. Wijaya Karya (Persero) Tbk, kindly need your help to improve our performance. Please click bellow link below to complete customer satisfaction survey.\n\nUse the username and password to log in:\nUser : " . $user->email . "\nPassword : " . $idCustomer . "\n$url");
         // $send_msg_to_wa = Http::post("https://wa-api.wika.co.id/send-message", [
         //     "api_key" => "p2QeApVsAUxG2fOJ2tX48BoipwuqZK",
         //     "sender" => env("NO_WHATSAPP_BLAST"),
@@ -332,7 +359,7 @@ class CSIController extends Controller
         //     return redirect()->back();
         // });
 
-        $emailNotification = sendNotifEmail($data['email'], "Permohonan Pengisian Survey Kepuasan Pelanggan", $message, true, false);
+        $emailNotification = sendNotifEmail($data['email'], "Permohonan Pengisian Survey Kepuasan Pelanggan", $message, false, false);
         if (!$emailNotification) {
             return redirect()->back();
         }
