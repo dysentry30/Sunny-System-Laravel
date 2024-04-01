@@ -152,26 +152,30 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                         </div>
                                         @php
                                             $unit_kerja = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
-                                            if (is_array($unit_kerja)) {
-                                                if (date('Y') >= 2023) {
-                                                    $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "P", "J"];
-                                                    $unit_kerja_collect = [];
-                                                    foreach ($unit_kerja as $key => $unit) {
-                                                        if (in_array($unit, $unit_kerja_code)) {
-                                                            $unit_kerja_collect[] = $unit;
+
+                                            if ($unit_kerja instanceof \Illuminate\Support\Collection) {
+                                                if (is_array($unit_kerja->toArray())) {
+                                                    if (date('Y') >= 2023) {
+                                                        $unit_kerja_code =  ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "P", "J"];
+                                                        $unit_kerja_collect = [];
+                                                        foreach ($unit_kerja as $key => $unit) {
+                                                            if (in_array($unit, $unit_kerja_code)) {
+                                                                $unit_kerja_collect[] = $unit;
+                                                            }
+                                                        }
+                                                    }else{
+                                                        $unit_kerja_code = ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "L", "F", "U", "O"];
+                                                        $unit_kerja_collect = [];
+                                                        foreach ($unit_kerja as $key => $unit) {
+                                                            if (in_array($unit, $unit_kerja_code)) {
+                                                                $unit_kerja_collect[] = $unit;
+                                                            }
                                                         }
                                                     }
-                                                }else{
-                                                    $unit_kerja_code = ["1", "2", "3", "4", "5", "6", "7", "8","B", "C", "D", "N", "L", "F", "U", "O"];
-                                                    $unit_kerja_collect = [];
-                                                    foreach ($unit_kerja as $key => $unit) {
-                                                        if (in_array($unit, $unit_kerja_code)) {
-                                                            $unit_kerja_collect[] = $unit;
-                                                        }
-                                                    }
+                                                    $unit_kerja = collect($unit_kerja_collect);
                                                 }
-                                                $unit_kerja = $unit_kerja_collect;
                                             }
+
                                         @endphp
 
                                         <div class="">

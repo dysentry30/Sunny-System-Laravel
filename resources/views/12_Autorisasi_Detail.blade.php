@@ -49,7 +49,9 @@
                                 <!--end::Title-->
                             </div>
                             <!--end::Page title-->
-                            @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
+                            @canany(['super-admin', 'admin-crm'])
+                                
+                            {{-- @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)")) --}}
                                 <!--begin::Actions-->
                                 {{-- <div class="d-flex align-items-center py-1">
 
@@ -97,7 +99,8 @@
 
                                 </div> --}}
                                 <!--end::Actions-->
-                            @endif
+                            {{-- @endif --}}
+                            @endcanany
                         </div>
                         <!--end::Container-->
                     </div>
@@ -111,7 +114,9 @@
 
                         <!--begin::Card body-->
                         <div class="card-body pt-6 pb-3 mb-0">
-                            @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
+                            @canany(['super-admin', 'admin-crm'])
+                                
+                            {{-- @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)")) --}}
 
                             <!--Begin :: Filter-->
                             <div class="card">
@@ -501,7 +506,8 @@
                             </table>
                             <!--end::Table-->
                             
-                            @endif
+                            {{-- @endif --}}
+                            @endcanany
                         </div>
                         <!--end::Card body-->
                         

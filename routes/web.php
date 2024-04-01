@@ -82,6 +82,7 @@ use App\Models\ExceptGreenlane;
 use App\Models\IntegrationLog;
 use App\Models\SKASKTProyek;
 use App\Models\MatriksApprovalRekomendasi;
+use App\Models\NotaRekomendasi;
 use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
 use Carbon\Carbon;
 use Illuminate\Routing\RouteGroup;
@@ -94,6 +95,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use Termwind\Components\Dd;
 use Faker\Core\Uuid;
+use Karriere\PdfMerge\PdfMerge;
 
 /*
 |--------------------------------------------------------------------------
@@ -3371,6 +3373,12 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::get('/history-autorisasi', function (Request $request) {
         $bulan = (int) date('m');
         $year = (int) date('Y');
+
+        $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
+        if (Auth::user()->check_administrator) {
+            $unit_kerja_user = collect(["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "P", "J", "L", "F", "U", "O"]);
+        }
+
         $filterTahun = $request->query("tahun-prognosa") ?? date('Y'); 
         if ($bulan == 1) {
             $periodeOtor = $request->query("periode-prognosa") ?? 12;
@@ -3400,7 +3408,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $history_forecasts = $history_forecasts->where("jenis_proyek", "!=", "I");
         }
         // dd($history_forecasts->select(["proyeks.kode_proyek","proyeks.unit_kerja", "unit_kerjas.unit_kerja", "periode_prognosa", "history_forecast.created_at", "nilaiok_review", "nilaiok_awal", "nilai_forecast", "realisasi_forecast"])->get()->first());
-        $history_forecasts = $history_forecasts->select(["proyeks.kode_proyek", "proyeks.unit_kerja", "unit_kerjas.unit_kerja", "unit_kerjas.divcode", "periode_prognosa", "history_forecast.created_at", "nilaiok_review", "nilaiok_awal", "rkap_forecast", "nilai_forecast", "month_realisasi", "realisasi_forecast", "month_forecast", "is_approved_1", "proyeks.stage", "is_rkap", "is_cancel"])->get()->groupBy("unit_kerja");
+        $history_forecasts = $history_forecasts->select(["proyeks.kode_proyek", "proyeks.unit_kerja", "unit_kerjas.unit_kerja", "unit_kerjas.divcode", "periode_prognosa", "history_forecast.created_at", "nilaiok_review", "nilaiok_awal", "rkap_forecast", "nilai_forecast", "month_realisasi", "realisasi_forecast", "month_forecast", "is_approved_1", "proyeks.stage", "is_rkap", "is_cancel"])->whereIn('proyeks.unit_kerja', $unit_kerja_user->toArray())->get()->groupBy("unit_kerja");
         // dump($history_forecasts->first()->first());
         // $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("stage", "!=", 7)->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja");
         // $history_forecasts = $history_forecasts->get()->groupBy("unit_kerja");
@@ -3856,13 +3864,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                                 $is_pegawai_exist->nama_pegawai = $pegawai["nm_peg"] ?? null;
                                 $is_pegawai_exist->handphone = $pegawai["telepon"] ?? null;
                                 $is_pegawai_exist->email = $pegawai["email"] ?? null;
-                                $is_pegawai_exist->kode_jabatan = (int)$pegawai["kd_kantor"] ?? null;
-                                $is_pegawai_exist->kode_jabatan_sap = (int)$pegawai["kd_jabatan"] ?? null;
-                                $is_pegawai_exist->kode_fungsi_bidang_sap = (int)$pegawai["kd_fungsi_bidang"];
-                                $is_pegawai_exist->kode_fungsi_bidang = (int)$pegawai["kd_posisi"] ?? null;
-                                $is_pegawai_exist->nama_fungsi_bidang = $pegawai["nm_fungsi_bidang"] ?? null;
-                                $is_pegawai_exist->kode_kantor_sap = $pegawai["cmp_id"] ?? null;
-                                $is_pegawai_exist->nama_kantor = $pegawai["jns_kantor"] ?? null;
+                                // $is_pegawai_exist->kode_jabatan = (int)$pegawai["kd_kantor"] ?? null;
+                                // $is_pegawai_exist->kode_jabatan_sap = (int)$pegawai["kd_jabatan"] ?? null;
+                                // $is_pegawai_exist->kode_fungsi_bidang_sap = (int)$pegawai["kd_fungsi_bidang"];
+                                // $is_pegawai_exist->kode_fungsi_bidang = (int)$pegawai["kd_posisi"] ?? null;
+                                // $is_pegawai_exist->nama_fungsi_bidang = $pegawai["nm_fungsi_bidang"] ?? null;
+                                // $is_pegawai_exist->kode_kantor_sap = $pegawai["cmp_id"] ?? null;
+                                // $is_pegawai_exist->nama_kantor = $pegawai["jns_kantor"] ?? null;
                                 $is_pegawai_exist->save();
                             } else {
                                 $new_pegawai = new Pegawai();
@@ -4828,6 +4836,42 @@ Route::get('php-info', function () {
 Route::get('/tes-email', function () {
     $email = sendNotifEmail("fathur.rohman2353@gmail.com", "Testing", "Testing", false, false);
     dd($email);
+});
+
+Route::get('/tes-nota', function () {
+    // createWordProfileRisikoNew('GNPD011');
+    $notaRekomendasi = NotaRekomendasi::where('kode_proyek', 'GNPD011')->first();
+    $mergeLampiran = mergeFileLampiranRisiko('GNPD011');
+    $profileResiko = createWordProfileRisikoNew('GNPD011');
+    // dd($profileResiko);
+    if (!empty($profileResiko)) {
+        // dd($mergeLampiran);
+        $pdfMerger = new PdfMerge();
+        if (!empty($mergeLampiran)) {
+            $pdfMerger->add(public_path('file-profile-risiko' . '/' . $profileResiko));
+            $pdfMerger->add(public_path('file-kriteria-pengguna-jasa' . '/' . $mergeLampiran));
+
+            $now = \Carbon\Carbon::now();
+            $file_name = $now->format("dmYHis") . "_profile-risiko-final_" . 'GNPD011';
+            sleep(10);
+            // File::delete(public_path('/file-profile-risiko//' . $profileResiko));
+            $pdfMerger->merge(public_path("file-profile-risiko" . "/" . $file_name . ".pdf"));
+            // dd($pdfMerger);
+            // $proyek->file_penilaian_risiko = $file_name . ".pdf";
+            $notaRekomendasi->file_penilaian_risiko = $file_name . ".pdf";
+        } else {
+            $pdfMerger->add(public_path('file-profile-risiko' . '/' . $profileResiko));
+            $now = \Carbon\Carbon::now();
+            $file_name = $now->format("dmYHis") . "_profile-risiko-final_" . 'GNPD011';
+            sleep(10);
+            // File::delete(public_path('/file-profile-risiko//' . $profileResiko));
+            $pdfMerger->merge(public_path("file-profile-risiko" . "/" . $file_name . ".pdf"));
+            // dd($pdfMerger);
+            // $proyek->file_penilaian_risiko = $file_name . ".pdf";
+            $notaRekomendasi->file_penilaian_risiko = $file_name . ".pdf";
+        }
+        $notaRekomendasi->save();
+    }
 });
 
 Route::get('/dashboard-tv', function () {

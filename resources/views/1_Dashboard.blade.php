@@ -2444,7 +2444,7 @@
     </script>
     <script>
         const sebaranSumberDanaRealisasi = JSON.parse('{!! $totalRealisasiSumberDana->toJson() !!}');
-        console.log(sebaranSumberDanaRealisasi);
+        // console.log(sebaranSumberDanaRealisasi);
         Highcharts.chart('sumber-dana-realisasi', {
             chart: {
                 type: 'pie',
@@ -2658,8 +2658,8 @@
     @php
         $nilaiAll = $nilaiTerendah + $nilaiTerkontrak;
     if ($nilaiAll != 0) {
-        $presentaseTerendah = round($nilaiTerendah / $nilaiAll * 100);
-        $presentaseTerkontrak = round($nilaiTerkontrak / $nilaiAll * 100);
+        $presentaseTerendah = round($nilaiTerendah / $nilaiAll * 100, 2);
+        $presentaseTerkontrak = round($nilaiTerkontrak / $nilaiAll * 100, 2);
     } else {
         $presentaseTerendah = 0;
         $presentaseTerkontrak = 0;
@@ -2750,9 +2750,9 @@
     @php
     $indexJumlahAll = $jumlahMenang + $jumlahKalah + $jumlahTerkontrakCompetitive;
     if ($indexJumlahAll != 0) {
-        $presentaseMenang = round($jumlahMenang / $indexJumlahAll * 100);
-        $presentaseTerkontrak = round($jumlahTerkontrakCompetitive / $indexJumlahAll * 100);
-        $presentaseKalah = round($jumlahKalah / $indexJumlahAll * 100);
+        $presentaseMenang = round($jumlahMenang / $indexJumlahAll * 100, 2);
+        $presentaseTerkontrak = round($jumlahTerkontrakCompetitive / $indexJumlahAll * 100, 2);
+        $presentaseKalah = round($jumlahKalah / $indexJumlahAll * 100, 2);
     } else {
         $presentaseMenang = 0;
         $presentaseKalah = 0;
@@ -2842,11 +2842,11 @@
         });
     </script>
     @php
-        $indexNilaiAll = $nilaiMenang + $nilaiKalah;
+        $indexNilaiAll = $nilaiMenang + $nilaiKalah + $nilaiTerkontrakCompetitive;
     if ($indexNilaiAll != 0) {
-        $presentaseNilaiMenang = round($nilaiMenang / $indexNilaiAll * 100);
-        $presentaseNilaiTerkontrak = round($nilaiTerkontrakCompetitive / $indexNilaiAll * 100);
-        $presentaseNilaiKalah = round($nilaiKalah / $indexNilaiAll * 100);
+        $presentaseNilaiMenang = round($nilaiMenang / $indexNilaiAll * 100, 2);
+        $presentaseNilaiTerkontrak = round($nilaiTerkontrakCompetitive / $indexNilaiAll * 100, 2);
+        $presentaseNilaiKalah = round($nilaiKalah / $indexNilaiAll * 100, 2);
     } else {
         $presentaseNilaiMenang = 0;
         $presentaseNilaiTerkontrak = 0;
@@ -5059,11 +5059,13 @@
                     for(let filter in filtering) {
                     filter = filtering[filter];
                     let stage = "";
-                    if(filter.nilai_perolehan) {
-                        totalNilaiLainnya += Number(filter.nilai_perolehan ?? 0);
-                    } else {
-                        totalNilaiLainnya += Number(filter.nilai_rkap ?? 0);
-                    }
+                    // if(filter.nilai_perolehan) {
+                    //     totalNilaiLainnya += Number(filter.nilai_perolehan ?? 0);
+                    // } else {
+                    //     totalNilaiLainnya += Number(filter.nilai_rkap ?? 0);
+                    // }
+                    totalNilaiLainnya += Number(filter.nilai_rkap ?? 0);
+
                     switch (Number(filter.stage)) {
                         case 0:
                             stage = "Cancel";
@@ -5108,7 +5110,9 @@
 
                     let bulan = "";
                     let getBulanColumn = filter.bulan_pelaksanaan;
-                    let nilai = filter.nilai_perolehan ?? filter.nilai_rkap;
+                    // let nilai = filter.nilai_perolehan ?? filter.nilai_rkap;
+                    let nilai = filter.nilai_rkap;
+
                     switch (Number(getBulanColumn)) {
                         case 1:
                             bulan = "Januari";
@@ -5352,7 +5356,7 @@
     </script>
     <!--End::Clickable Sumber Dana Realisasi -->
 
-    <!--Begin::Clickable Sumber Dana RKAP -->
+    <!--Begin::Clickable Instansi Owner RKAP -->
     <script>
         const instansiOwnerRKAP = document.querySelectorAll("#instansi-owner-rkap .highcharts-point");
         // console.log(instansiOwnerRKAP);
@@ -5371,9 +5375,9 @@
             })
         })
     </script>
-    <!--End::Clickable Sumber Dana RKAP -->
+    <!--End::Clickable Instansi Owner RKAP -->
 
-    <!--Begin::Clickable Sumber Dana Realisasi -->
+    <!--Begin::Clickable Instansi Owner Realisasi -->
     <script>
         const instansiOwnerRealisasi = document.querySelectorAll("#instansi-owner-realisasi .highcharts-point");
         // console.log(instansiOwnerRealisasi);
@@ -5392,7 +5396,7 @@
             })
         })
     </script>
-    <!--End::Clickable Sumber Dana Realisasi -->
+    <!--End::Clickable Instansi Owner Realisasi -->
 
     <!--Begin::Clickable Nilai Realisasi OK Per Divisi Biru -->
     <script>
