@@ -2202,8 +2202,8 @@
     @php
         $nilaiAll = $nilaiTerendah + $nilaiTerkontrak;
     if ($nilaiAll != 0) {
-        $presentaseTerendah = round($nilaiTerendah / $nilaiAll * 100);
-        $presentaseTerkontrak = round($nilaiTerkontrak / $nilaiAll * 100);
+        $presentaseTerendah = round($nilaiTerendah / $nilaiAll * 100, 2);
+        $presentaseTerkontrak = round($nilaiTerkontrak / $nilaiAll * 100, 2);
     } else {
         $presentaseTerendah = 0;
         $presentaseTerkontrak = 0;
@@ -2294,14 +2294,15 @@
     @php
     $indexJumlahAll = $jumlahMenang + $jumlahKalah + $jumlahTerkontrakCompetitive;
     if ($indexJumlahAll != 0) {
-        $presentaseMenang = round($jumlahMenang / $indexJumlahAll * 100);
-        $presentaseTerkontrak = round($jumlahTerkontrakCompetitive / $indexJumlahAll * 100);
-        $presentaseKalah = round($jumlahKalah / $indexJumlahAll * 100);
+        $presentaseMenang = round($jumlahMenang / $indexJumlahAll * 100, 2);
+        $presentaseTerkontrak = round($jumlahTerkontrakCompetitive / $indexJumlahAll * 100, 2);
+        $presentaseKalah = round($jumlahKalah / $indexJumlahAll * 100, 2) ;
     } else {
         $presentaseMenang = 0;
         $presentaseKalah = 0;
         $presentaseTerkontrak = 0;
     }
+
     @endphp
     <script>
         Highcharts.chart('index-jumlah', {
@@ -2386,11 +2387,11 @@
         });
     </script>
     @php
-        $indexNilaiAll = $nilaiMenang + $nilaiKalah;
+        $indexNilaiAll = $nilaiMenang + $nilaiKalah + $nilaiTerkontrakCompetitive;
     if ($indexNilaiAll != 0) {
-        $presentaseNilaiMenang = round($nilaiMenang / $indexNilaiAll * 100);
-        $presentaseNilaiTerkontrak = round($nilaiTerkontrakCompetitive / $indexNilaiAll * 100);
-        $presentaseNilaiKalah = round($nilaiKalah / $indexNilaiAll * 100);
+        $presentaseNilaiMenang = round($nilaiMenang / $indexNilaiAll * 100, 2);
+        $presentaseNilaiTerkontrak = round($nilaiTerkontrakCompetitive / $indexNilaiAll * 100, 2);
+        $presentaseNilaiKalah = round($nilaiKalah / $indexNilaiAll * 100, 2);
     } else {
         $presentaseNilaiMenang = 0;
         $presentaseNilaiTerkontrak = 0;

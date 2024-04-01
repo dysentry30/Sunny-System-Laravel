@@ -43,11 +43,11 @@
                 <!--begin::Card-->
                 <div class="card" Id="List-vv">
                     <!--begin::Card header-->
-                    <div class="card-header border-0 pt-">
+                    <div class="card-header border-0 pt-0">
                         <!--begin::Card title-->
                         <div class="card-title">
                             <!--begin::Panel-->
-                            <div class="d-flex align-items-center my-1" style="width: 100%;">
+                            <div class="d-flex align-items-center" style="width: 100%;">
 
                                 {{-- <ul
                                     class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
@@ -88,18 +88,18 @@
                                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                             <th class="min-w-auto text-center" rowspan="2">Profit Center</th>
                                             <th class="min-w-auto" rowspan="2">Nama Proyek</th>
-                                            <th class="min-w-auto text-center" rowspan="2">Nomor SPK</th>
+                                            <th class="min-w-auto" rowspan="2">Unit Kerja</th>
                                             <th class="min-w-auto text-center" rowspan="2">Progress</th>
-                                            <th class="min-w-auto text-center" colspan="2">Form Kepuasan Pelanggan</th>
-                                            <th class="min-w-auto text-center" colspan="2" rowspan="2">Nilai Akhir</th>
+                                            <th class="min-w-auto text-center" colspan="4">Form Kepuasan Pelanggan</th>
+                                            <th class="min-w-auto text-center" rowspan="2">Nilai Akhir</th>
                                             <th class="min-w-auto text-center" rowspan="2">Remarks</th>
                                             {{-- <th class="min-w-auto">ID Contract</th> --}}
                                         </tr>
                                         <!--end::Table row-->
                                         <!--begin::Table row-->
                                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                            <th class="min-w-auto text-center">20 - 40 % (a)</th>
-                                            <th class="min-w-auto text-center">95 - 100 % (b)</th>
+                                            <th class="min-w-200px text-center" colspan="2">20 - 40 % (a)</th>
+                                            <th class="min-w-200px text-center" colspan="2">95 - 100 % (b)</th>
                                         </tr>
                                         <!--end::Table row-->
                                     </thead>
@@ -136,79 +136,162 @@
                                                 }
                                             @endphp
                                             <tr>
-                                                {{-- <td>
-                                                    <a target="_blank"
-                                                        href="/customer/view/{{ $proyek->Customer->id_customer ?? null }}/{{ $proyek->Customer->name ?? '-' }}"
-                                                        class="text-gray-800 text-hover-primary">{{ $proyek->Customer->name ?? '-' }}</a>
-                                                </td> --}}
+                                                <!--Begin :: List Profit Center-->
                                                 <td class="text-center">{{ $proyek->profit_center ?? '-' }}</td>
-                                                <td>{{ $proyek->proyek_name }}</td>
-                                                <td class="text-center">{{ $proyek->spk_intern_no }}</td>
-                                                {{-- <td
-                                                    class="text-center {{ empty($proyek->Csi->progress) ? 'text-danger' : '' }}">
-                                                    {{ $proyek->Csi->progress ?? 'Belum Get Progress' }}
-                                                </td> --}}
+                                                <!--End :: List Profit Center-->
+
+                                                <!--Begin :: List Nama Proyek-->
+                                                <td>{{ $proyek->proyek_shortname }}</td>
+                                                <!--End :: List Nama Proyek-->
+
+                                                <!--Begin :: List Nama Proyek-->
+                                                <td class="text-center">{{ $proyek->UnitKerja->unit_kerja }}</td>
+                                                <!--End :: List Nama Proyek-->
+
+                                                <!--Begin :: List Progress-->
                                                 <td class="text-center">
                                                     {{ round($progress, 2) * 100 }}%
                                                 </td>
-                                                <td class="text-center">
-                                                    {{-- @empty(!$proyek->Csi)
-                                                        <span
-                                                            class="px-4 fs-7 badge {{ $proyek->Csi->status == 'Not Sent' ? 'badge-light-danger' : ($proyek->Csi->status == 'Requested' ? 'badge-light-primary' : 'badge-light-success') }} {{ $proyek->Csi->is_setuju == 'f' ? 'badge-light-danger' : '' }}">
-                                                            @if ($proyek->Csi->is_setuju == 'f')
-                                                                Rejected
-                                                            @else
-                                                                {{ $proyek->Csi->status }}
-                                                            @endif
-                                                        </span>
-                                                    @else
-                                                        <span class="px-4 fs-7 badge badge-light-warning">
-                                                            Not Sent
-                                                        </span>
-                                                    @endempty --}}
-                                                </td>
-                                                <td class="text-center">
-                                                    {{-- @if (!empty($proyek->Csi))
-                                                        @if ($proyek->Csi->status == 'Requested')
-                                                            <span class="px-4 fs-8 badge badge-light-warning">
-                                                                Waiting for Customer
-                                                            </span>
-                                                        @elseif($proyek->Csi->status == 'Done')
-                                                            <a target="_blank"
-                                                                href="/csi/customer-survey/{{ $proyek->Csi->id_csi }}"
-                                                                class="btn fs-8 btn-sm btn-light btn-active-primary text-hover-white">Cek
-                                                                CSI &nbsp; <i class="bi bi-search"></i></a>
-                                                        @endif
-                                                    @else
-                                                        <button class="btn btn-sm btn-light btn-active-primary"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#modal-send-{{ $proyek->spk_intern_no }}">Send</button>
-                                                    @endif --}}
-                                                    {{-- @if ($proyek->Csi?->is_setuju == 'f')
-                                                    <button class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal"
-                                                        data-bs-target="#modal-send-{{ $proyek->Csi?->id_csi }}">Send</button>
-                                                    @else
-                                                        @empty(!$proyek->Csi)
-                                                            @if ($proyek->Csi?->status == 'Done')
-                                                                <a target="_blank"
-                                                                    href="/csi/customer-survey/{{ $proyek->Csi?->id_csi }}"
-                                                                    class="btn fs-8 btn-sm btn-light btn-active-primary text-hover-white">Cek
-                                                                    CSI &nbsp; <i class="bi bi-search"></i></a>
-                                                            @elseif ($proyek->Csi?->status == 'Requested')
+                                                <!--End :: List Progress-->
+
+                                                <!--Begin :: List Score CSI 20% - 40%-->
+                                                <td class="text-center min-w-100px">
+                                                    @if ($proyek->Csi->isNotEmpty())
+                                                        @if ($proyek->Csi->where('kategori', 'A')->isNotEmpty())
+                                                            @if ($proyek->Csi->where('kategori', 'A')->first()->status == "Done")
+                                                                <span>{{ $proyek->Csi->where('kategori', 'A')->first()->score_csi }}</span>
+                                                            @elseif ($proyek->Csi->where('kategori', 'A')->first()->status == "Requested")
                                                                 <span class="px-4 fs-8 badge badge-light-warning">
                                                                     Waiting for Customer
                                                                 </span>
                                                             @else
-                                                                <button class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal"
-                                                                    data-bs-target="#modal-send-{{ $proyek->Csi?->id_csi }}">Send</button>
+                                                                <span>-</span>
+                                                                @endif
+                                                        @else
+                                                            <span>-</span>
+                                                        @endif
+                                                    @else
+                                                        <span>-</span>
+                                                    @endif
+                                                </td>
+                                                <!--End :: List Score CSI 20% - 40%-->
+
+                                                <!--Begin :: List Action CSI 20% - 40%-->
+                                                <td class="text-center min-w-100px">
+                                                    @if ($proyek->Csi->isNotEmpty())
+                                                        @if ($proyek->Csi->where('kategori', 'A')->isNotEmpty())
+                                                            @if ($proyek->Csi->where('kategori', 'A')->first()->status == "Done")
+                                                                <a target="_blank" href="/csi/customer-survey/{{ $proyek->Csi?->where('kategori', 'A')?->first()?->id_csi }}" class="btn fs-8 btn-sm btn-light btn-active-primary text-hover-white">Cek CSI &nbsp; <i class="bi bi-search"></i></a>
+                                                            @elseif ($proyek->Csi->where('kategori', 'A')->first()->status == "Requested")
+                                                                <span class="px-4 fs-8 badge badge-light-warning">
+                                                                    Waiting for Customer
+                                                                </span>
+                                                            @else
+                                                                <span>-</span>
                                                             @endif
                                                         @else
-                                                        @endempty
-                                                    @endif --}}
+                                                            @if ($progress >= 0.2 && $progress <= 0.4)
+                                                                <button type="button" class="btn btn-sm btn-light btn-active-primary" onclick="showModalCategory('{{ $proyek->unsetRelation('Csi') }}', 'A', '{{ round($progress, 2) * 100 }}')">Send</button>
+                                                            @else
+                                                                <span>-</span>
+                                                            @endif
+                                                        @endif
+                                                    @else
+                                                        @if ($progress >= 0.2)
+                                                            <button type="button" class="btn btn-sm btn-light btn-active-primary" onclick="showModalCategory('{{ $proyek->unsetRelation('Csi') }}', 'A', '{{ round($progress, 2) * 100 }}')">Send</button>
+                                                        @else
+                                                            <span>-</span>
+                                                        @endif
+                                                    @endif
                                                 </td>
+                                                <!--End :: List Action CSI 20% - 40%-->
+
+                                                <!--Begin :: List Score CSI 95% - 100%-->
+                                                <td class="text-center min-w-100px">
+                                                    @if ($proyek->Csi->isNotEmpty())
+                                                        @if ($proyek->Csi->where('kategori', 'B')->isNotEmpty())
+                                                            @if ($proyek->Csi->where('kategori', 'B')->first()->status == "Done")
+                                                                <span>{{ $proyek->Csi->where('kategori', 'B')->first()->score_csi }}</span>
+                                                            @elseif ($proyek->Csi->where('kategori', 'B')->first()->status == "Requested")
+                                                                <span class="px-4 fs-8 badge badge-light-warning">
+                                                                    Waiting for Customer
+                                                                </span>
+                                                            @else
+                                                                <span>-</span>
+                                                                @endif
+                                                        @else
+                                                            <span>-</span>
+                                                        @endif
+                                                    @else
+                                                        <span>-</span>
+                                                    @endif
+                                                </td>
+                                                <!--End :: List Score CSI 95% - 100%-->
+
+                                                <!--Begin :: List Action CSI 95% - 100%-->
+                                                <td class="text-center min-w-100px">
+                                                    @if ($proyek->Csi->isNotEmpty())
+                                                        @if ($proyek->Csi->where('kategori', 'B')->isNotEmpty())
+                                                            @if ($proyek->Csi->where('kategori', 'B')->first()->status == "Done")
+                                                                <a target="_blank" href="/csi/customer-survey/{{ $proyek->Csi?->where('kategori', 'B')?->first()?->id_csi }}" class="btn fs-8 btn-sm btn-light btn-active-primary text-hover-white">Cek CSI &nbsp; <i class="bi bi-search"></i></a>
+                                                            @elseif ($proyek->Csi->where('kategori', 'B')->first()->status == "Requested")
+                                                                <span class="px-4 fs-8 badge badge-light-warning">
+                                                                    Waiting for Customer
+                                                                </span>
+                                                            @else
+                                                                <span>-</span>
+                                                            @endif
+                                                        @else
+                                                            @if ($proyek->Csi->where('kategori', 'A')->isNotEmpty() && $proyek->Csi->where('kategori', 'A')->first()->status == "Done")
+                                                                @if ($progress >= 0.95)
+                                                                    <button type="button" class="btn btn-sm btn-light btn-active-primary" onclick="showModalCategory('{{ $proyek->unsetRelation('Csi') }}', 'B', '{{ round($progress, 2) * 100 }}')">Send</button>
+                                                                @else
+                                                                    <span>-</span>
+                                                                @endif
+                                                            @else
+                                                                <span>-</span>
+                                                            @endif
+                                                        @endif
+                                                    @else
+                                                        @if ($proyek->Csi->where('kategori', 'A')->isNotEmpty() && $proyek->Csi->where('kategori', 'A')->first()->status == "Done")
+                                                            @if ($progress >= 0.95)
+                                                                <button type="button" class="btn btn-sm btn-light btn-active-primary" onclick="showModalCategory('{{ $proyek->unsetRelation('Csi') }}', 'B', '{{ round($progress, 2) * 100 }}')">Send</button>
+                                                            @else
+                                                                <span>-</span>
+                                                            @endif
+                                                        @else
+                                                            <span>-</span>
+                                                            
+                                                        @endif
+                                                    @endif
+                                                </td>
+                                                <!--End :: List Action CSI 95% - 100%-->
+
+                                                <!--Begin::List Nilai Akhir-->
+                                                <td class="text-center">
+                                                    @php
+                                                        $nilaiAkhir = $proyek->Csi?->sortByDesc('created_at')?->filter(function($item){
+                                                            return $item->kategori == "B" || $item->kategori == "A";
+                                                        })->first();
+
+                                                        if (!empty($nilaiAkhir)) {
+                                                            $scoreTotal = $nilaiAkhir->score_csi;
+                                                        }else{
+                                                            $scoreTotal = "-";
+                                                        }
+                                                    @endphp
+
+                                                    {{ $scoreTotal }}
+                                                </td>
+                                                <!--End::List Nilai Akhir-->
+                                                
+                                                <!--Begin::List Remark-->
+                                                <td class="text-center"></td>
+                                                <!--End::List Remark-->
                                             </tr>
                                         @endforeach
                                     </tbody>
+                                    <!--begin::Table body-->
                                 </table>
                                 <!--end::Table CSI-->
                             </div>
@@ -232,234 +315,185 @@
 </div>
 <!--end::Root-->
 
-<!-- begin::modal confirm send wa New-->
-@foreach ($proyeks as $proyek)
-    <form action="/csi/send/new/{{ $proyek->spk_intern_no }}" method="post">
-        @csrf
-        <div class="modal fade w-100" style="margin-top: 120px" id="modal-send-{{ $proyek->spk_intern_no }}"
-            tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog mw-600px">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Kirim Survey CSI ?</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        {{-- @php
-                        $struktur = $c->Proyek->proyekBerjalan->customer->struktur
-                            ->where('proyek_struktur', '=', $c->no_spk)
-                            ->where('id_customer', '=', $c->id_customer)
-                            ->first();
-                        // dd($struktur);
-                    @endphp --}}
-                        <input type="hidden" name="id-pemberi-kerja"
-                            value="{{ $proyek->Customer?->id_customer }}" />
-                        <input type="hidden" name="pemberi-kerja" value="{{ $proyek->Customer?->name ?? '-' }}" />
-                        <input type="hidden" name="kode-proyek" value="{{ $proyek->spk_intern_no }}" />
-                        {{-- <input type="hidden" name="nama-penerima" value="{{ $struktur->nama_struktur }}" />
-                    <input type="hidden" name="nomor-penerima" value="{{ $struktur->phone_struktur }}" /> --}}
-
-                        {{-- <p>Nama Proyek : <b>{{ $c->Proyek->nama_proyek }}</b></p> --}}
-                        <p>Nama Proyek : <b>{{ $proyek->proyek_name }}</b></p>
-                        {{-- <p>Pemberi Kerja : <b>{{ $c->Proyek->proyekBerjalan->name_customer ?? '-' }}</b></p> --}}
-                        <p>Pemberi Kerja : <b>{{ $proyek->Customer?->name ?? '-' }}</b></p>
-                        {{-- <p>Nama Penerima : <b>{{ $struktur->nama_struktur }}</b></p>
-                    <p>Kontak Penerima Penerima : <b>{{ $struktur->phone_struktur }}</b></p> --}}
-
-                        <!--begin::Row-->
-                        <div class="row fv-row">
-                            <!--begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Nama</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid"
-                                        name="nama-penerima" placeholder="Nama" required />
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3 required">
-                                        <span>Kontak Nomor (WA)</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid"
-                                        name="nomor-penerima" placeholder="Kontak Nomor" required />
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
-                        </div>
-                        <!--End begin::Row-->
-
-                        <!--begin::Row-->
-                        <div class="row fv-row">
-                            <!--begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Email</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" name="email"
-                                        placeholder="Email" required />
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
-                        </div>
-                        <!--End begin::Row-->
-
-                        <!--begin::Row-->
-                        <div class="row fv-row">
-                            <!--begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Role</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--Begin::Input-->
-                                    <select onchange="pilihSegmen(this, '{{ $proyek->spk_intern_no }}')"
-                                        id="segmen-{{ $proyek->spk_intern_no }}" name="segmen"
-                                        class="form-select form-select-solid" data-control="select2"
-                                        data-hide-search="true" data-placeholder="Pilih Role" required>
-                                        <option></option>
-                                        <option value="Decision Maker">Decision Maker</option>
-                                        <option value="Influencer">Influencer</option>
-                                        <option value="Buyer">Buyer</option>
-                                        <option value="User">User</option>
-                                    </select>
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Jabatan</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <select id="jabatan-{{ $proyek->spk_intern_no }}" name="jabatan"
-                                        class="form-select form-select-solid" data-control="select2"
-                                        data-hide-search="true" data-placeholder="Pilih Jabatan">
-                                        <option value=""></option>
-                                    </select>
-                                    <script>
-                                        function pilihSegmen(e, id) {
-                                            let jabatan = document.getElementById(`jabatan-${id}`);
-                                            // console.log(e.value, jabatan);
-                                            if (e.value == 'Decision Maker') {
-                                                jabatan.innerHTML = `
-                                            <option value="Menteri">Menteri</option>
-                                            <option value="Eselon I">Eselon I</option>
-                                            <option value="Direktur Utama">Direktur Utama</option>`;
-                                            } else if (e.value == 'Influencer') {
-                                                jabatan.innerHTML = `
-                                            <option value="Eselon II">Eselon II</option>
-                                            <option value="Direksi">Direksi</option>`;
-                                            } else if (e.value == 'Buyer') {
-                                                jabatan.innerHTML = `
-                                            <option value="Kepala Balai">Kepala Balai</option>
-                                            <option value="Eselon III">Eselon III</option>
-                                            <option value="POKJA Pengadaan">POKJA Pengadaan</option>
-                                            <option value="Kepala Pengadaan">Kepala Pengadaan</option>`;
-                                            } else if (e.value == 'User') {
-                                                jabatan.innerHTML =
-                                                    `
-                                            <option value="Eselon IV">Eselon IV</option>
-                                            <option value="PPK/Pimro">PPK/Pimro</option>
-                                            <option value="Kepala Satker">Kepala Satker</option>
-                                            <option value="Kepala Unit Bisnis/Operasi">Kepala Unit Bisnis/Operasi</option>`;
-                                            } else {
-                                                jabatan.innerHTML = ``;
-                                            }
-                                            // console.log(e.value, jabatan, jabatan.value, jabatan.innerHTML);
-                                        }
-                                    </script>
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
-                        </div>
-                        <!--End begin::Row-->
-                    </div>
-
-                    <div class="modal-footer">
-                        {{-- <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Cancel</button> --}}
-                        <button type="submit" class="btn btn-success btn-sm">Send <i
-                                class="bi bi-send"></i></button>
-                    </div>
-
-                </div>
+<!--Begin :: Modal Dynamic CSI-->
+<form action="/csi/send/new" method="post" >
+@csrf
+<div class="modal fade w-100" style="margin-top: 120px" id="modal-send-csi-dynamic"
+    tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog mw-600px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Kirim Survey CSI ?</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        </div>
-    </form>
-@endforeach
-<!-- end::modal confirm send wa New-->
+            <div class="modal-body">
+                <p>Nama Proyek : <b id="nama-proyek"></b></p>
+                <p>Pemberi Kerja : <b id="pemberi-kerja"></b></p>
 
-<!-- begin::modal create CSI-->
-@foreach ($proyeks as $p)
-    <form action="/csi/get-progress/{{ $p->kode_proyek }}" method="post">
-        @csrf
-        <div class="modal fade w-100" style="margin-top: 120px" id="modal-create-{{ $p->kode_proyek }}"
-            tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog mw-600px">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Get Progress</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
+                <input type="hidden" name="id-pemberi-kerja" id="id-pemberi-kerja" />
+                <input type="hidden" name="pemberi-kerja" id="pemberi-kerja-input" />
+                <input type="hidden" name="kode-proyek" id="kode-proyek" />
+                <input type="hidden" name="kategori" id="kategori" />
+                <input type="hidden" name="progress" id="progress" />
+
+                <!--begin::Row-->
+                <div class="row fv-row">
+                    <!--begin::Col-->
+                    <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span class="required">Nama</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid"
+                                name="nama-penerima" placeholder="Nama" required />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
                     </div>
-                    <div class="modal-body">
-
-                        {{-- <input type="hidden" name="id-customer" value="{{ $p->proyekBerjalan->id_customer ?? null }}" /> --}}
-                        <input type="hidden" name="id-customer" value="{{ $p->Customer->id_customer ?? null }}" />
-                        {{-- <input type="hidden" name="kode-proyek" value="{{ $p->kode_proyek }}" /> --}}
-                        {{-- <input type="hidden" name="kode-spk" value="{{ $p->kode_spk ?? '' }}" /> --}}
-                        <input type="hidden" name="kode-spk" value="{{ $p->spk_intern_no ?? '' }}" />
-
-                        {{-- <p>Nama Proyek : <b>{{ $p->nama_proyek }}</b></p> --}}
-                        <p>Nama Proyek : <b>{{ $p->proyek_name }}</b></p>
-                        {{-- <p>Pemberi Kerja : <b>{{ $p->proyekBerjalan->name_customer ?? '-' }}</b></p> --}}
-                        <p>Pemberi Kerja : <b>{{ $p->Customer->name ?? '-' }}</b></p>
-
+                    <!--End begin::Col-->
+                    <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3 required">
+                                <span>Kontak Nomor (WA)</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid"
+                                name="nomor-penerima" placeholder="Kontak Nomor" required />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
                     </div>
-
-                    <div class="modal-footer">
-                        {{-- <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Cancel</button> --}}
-                        <button type="submit" class="btn btn-success btn-sm">Get Progress</button>
-                    </div>
-
+                    <!--End begin::Col-->
                 </div>
+                <!--End begin::Row-->
+
+                <!--begin::Row-->
+                <div class="row fv-row">
+                    <!--begin::Col-->
+                    <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span class="required">Email</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="email"
+                                placeholder="Email" required />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--End begin::Col-->
+                </div>
+                <!--End begin::Row-->
+
+                <!--begin::Row-->
+                <div class="row fv-row">
+                    <!--begin::Col-->
+                    <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span class="required">Role</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--Begin::Input-->
+                            <select onchange="pilihSegmen(this)"
+                                id="segmen-csi" name="segmen"
+                                class="form-select form-select-solid" data-control="select2"
+                                data-hide-search="true" data-placeholder="Pilih Role" required>
+                                <option></option>
+                                <option value="Decision Maker">Decision Maker</option>
+                                <option value="Influencer">Influencer</option>
+                                <option value="Buyer">Buyer</option>
+                                <option value="User">User</option>
+                            </select>
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--End begin::Col-->
+                    <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span class="required">Jabatan</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select id="jabatan-csi" name="jabatan"
+                                class="form-select form-select-solid" data-control="select2"
+                                data-hide-search="true" data-placeholder="Pilih Jabatan">
+                                <option value=""></option>
+                            </select>
+                            <script>
+                                function pilihSegmen(e) {
+                                    let jabatan = document.getElementById('jabatan-csi');
+                                    // console.log(e.value, jabatan);
+                                    if (e.value == 'Decision Maker') {
+                                        jabatan.innerHTML = `
+                                    <option value="Menteri">Menteri</option>
+                                    <option value="Eselon I">Eselon I</option>
+                                    <option value="Direktur Utama">Direktur Utama</option>`;
+                                    } else if (e.value == 'Influencer') {
+                                        jabatan.innerHTML = `
+                                    <option value="Eselon II">Eselon II</option>
+                                    <option value="Direksi">Direksi</option>`;
+                                    } else if (e.value == 'Buyer') {
+                                        jabatan.innerHTML = `
+                                    <option value="Kepala Balai">Kepala Balai</option>
+                                    <option value="Eselon III">Eselon III</option>
+                                    <option value="POKJA Pengadaan">POKJA Pengadaan</option>
+                                    <option value="Kepala Pengadaan">Kepala Pengadaan</option>`;
+                                    } else if (e.value == 'User') {
+                                        jabatan.innerHTML =
+                                            `
+                                    <option value="Eselon IV">Eselon IV</option>
+                                    <option value="PPK/Pimro">PPK/Pimro</option>
+                                    <option value="Kepala Satker">Kepala Satker</option>
+                                    <option value="Kepala Unit Bisnis/Operasi">Kepala Unit Bisnis/Operasi</option>`;
+                                    } else {
+                                        jabatan.innerHTML = ``;
+                                    }
+                                    // console.log(e.value, jabatan, jabatan.value, jabatan.innerHTML);
+                                }
+                            </script>
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--End begin::Col-->
+                </div>
+                <!--End begin::Row-->
             </div>
+
+            <div class="modal-footer">
+                {{-- <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Cancel</button> --}}
+                <button type="submit" class="btn btn-success btn-sm">Send <i
+                        class="bi bi-send"></i></button>
+            </div>
+
         </div>
-    </form>
-@endforeach
-<!-- end::modal create CSI-->
+    </div>
+</div>
+</form>
+<!--End :: Modal Dynamic CSI-->
+
+<script>
+    
+
+</script>
 
 @endsection
 
@@ -477,24 +511,38 @@
 <script>
     $(document).ready(function() {
         $("#csi-table").DataTable({
-            // dom: '<"float-start"f><"#example"t>rtip',
+            dom: '<"float-start"f><"#example"t>rtip',
             // dom: 'Brti',
-            dom: 'frtip',
+            // dom: 'frtip',
             pageLength: 20,
         });
     });
 </script>
 
+<script>
+    function showModalCategory(proyekPIS, kategori, progress) {
+        const proyek = JSON.parse(proyekPIS);
 
-{{-- <script>
-        const modals = document.querySelectorAll(".modal");
-        setTimeout(() => {
-            modals.forEach(modal => {
-                const inputs = modal.querySelectorAll(".modal-dialog .modal-content .modal-body input, .modal-dialog .modal-content .modal-body select, .modal-dialog .modal-content .modal-body textarea");
-                inputs.forEach(input => {
-                    input.setAttribute("readonly", true);
-                })
-            });
-        }, 500);
-    </script> --}}
+        $('#modal-send-csi-dynamic').modal('show');
+
+        const namaProyekEl = document.getElementById('nama-proyek')
+        const pemberiKerjaEL = document.getElementById('pemberi-kerja')
+        const inputIdPemberiKerjaEl = document.getElementById('id-pemberi-kerja')
+        const inputPemberiKerjaEl = document.getElementById('pemberi-kerja-input')
+        const inputKodeProyekEl = document.getElementById('kode-proyek')
+        const inputKategoriEl = document.getElementById('kategori')
+        const inputProgressEl = document.getElementById('progress')
+
+        namaProyekEl.innerHTML = proyek.proyek_shortname;
+        pemberiKerjaEL.innerHTML = proyek.customer.name;
+
+        inputIdPemberiKerjaEl.value = proyek.customer.id_customer;
+        inputPemberiKerjaEl.value = proyek.customer.name;
+        // inputKodeProyekEl.value = proyek.profit_center != null ? proyek.profit_center : proyek.spk_intern_no;
+        inputKodeProyekEl.value = proyek.spk_intern_no;
+        inputKategoriEl.value = kategori;
+        inputProgressEl.value = progress;
+    }
+</script>
+
 @endsection

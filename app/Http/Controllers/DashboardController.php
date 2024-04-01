@@ -446,6 +446,7 @@ class DashboardController extends Controller
                 }
             };
         };
+        // dd($jumlahMenang, $jumlahTerkontrakCompetitive, $jumlahKalah);
         $sumProyekCompetitive = $proyeks->where(
                 'is_cancel',
                 '!=',

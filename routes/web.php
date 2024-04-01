@@ -527,13 +527,31 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('/csi/customer-survey/{id}', [CSIController::class, "indexCustomer"]);
 
-    Route::post('/csi/send/{id}', [CSIController::class, "sendCsi"]);
+    // Route::post('/csi/send/{id}', [CSIController::class, "sendCsi"]);
 
-    Route::post('/csi/send/new/{id}', [CSIController::class, "sendCsiNew"]);
+    // Route::post('/csi/send/new/{id}', [CSIController::class, "sendCsiNew"]);
+    Route::post('/csi/send/new', [CSIController::class, "sendCsiNew"]);
 
     Route::post('/csi/get-progress/{kodeProyek}', [CSIController::class, "createCsi"]);
 
     Route::post('/csi/customer-survey-save', [CSIController::class, "saveSurvey"]);
+
+    Route::get('/csi/{profit_center}/get-progress', function ($profit_center) {
+        try {
+            $proyeks = ProyekPISNew::select('proyek_shortname', 'spk_intern_no')->where('profit_center', $profit_center)->first();
+            return response()->json([
+                'status' => 'success',
+                'data' => $proyeks->toArray(),
+                'message' => ''
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'success',
+                'data' => [],
+                'message' => $e->getMessage()
+            ], 400);
+        }
+    });
 
     // End CSI
 
@@ -6078,18 +6096,18 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                     if (!empty($pegawaiData)) {
                         $pegawaiData->each(function ($pegawai) {
                             $is_pegawai_exist = Pegawai::where('nip', $pegawai["nip"])->first();
-                            dd($is_pegawai_exist, $pegawai);
+                            // dd($is_pegawai_exist, $pegawai);
                             if (!empty($is_pegawai_exist)) {
                                 $is_pegawai_exist->nip = $pegawai["nip"] ?? null;
                                 $is_pegawai_exist->nama_pegawai = $pegawai["nm_peg"] ?? null;
                                 $is_pegawai_exist->handphone = $pegawai["telepon"] ?? null;
                                 $is_pegawai_exist->email = $pegawai["email"] ?? null;
-                                $is_pegawai_exist->kode_jabatan = (int)$pegawai["kd_kantor"] ?? null;
-                                $is_pegawai_exist->kode_jabatan_sap = (int)$pegawai["kd_jabatan"] ?? null;
-                                $is_pegawai_exist->kode_fungsi_bidang_sap = (int)$pegawai["kd_fungsi_bidang"];
-                                $is_pegawai_exist->kode_fungsi_bidang = (int)$pegawai["kd_posisi"] ?? null;
-                                $is_pegawai_exist->nama_fungsi_bidang = $pegawai["nm_fungsi_bidang"] ?? null;
-                                $is_pegawai_exist->kode_kantor_sap = $pegawai["cmp_id"] ?? null;
+                                // $is_pegawai_exist->kode_jabatan = (int)$pegawai["kd_kantor"] ?? null;
+                                // $is_pegawai_exist->kode_jabatan_sap = (int)$pegawai["kd_jabatan"] ?? null;
+                                // $is_pegawai_exist->kode_fungsi_bidang_sap = (int)$pegawai["kd_fungsi_bidang"];
+                                // $is_pegawai_exist->kode_fungsi_bidang = (int)$pegawai["kd_posisi"] ?? null;
+                                // $is_pegawai_exist->nama_fungsi_bidang = $pegawai["nm_fungsi_bidang"] ?? null;
+                                // $is_pegawai_exist->kode_kantor_sap = $pegawai["cmp_id"] ?? null;
                                 $is_pegawai_exist->nama_kantor = $pegawai["jns_kantor"] ?? null;
                                 $is_pegawai_exist->save();
                             } else {
@@ -6108,6 +6126,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                                 $new_pegawai->save();
                             }
                         });
+                        return response()->json([
+                            "success" => false,
+                            "message" => "Success"
+                        ]);
                     } else {
                         break;
                     }
