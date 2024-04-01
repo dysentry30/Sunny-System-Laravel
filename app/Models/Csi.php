@@ -18,7 +18,7 @@ class Csi extends Model
 
     public function ProyekPIS()
     {
-        return $this->hasOne(ProyekPISNew::class, "spk_intern_no", "no_spk");
+        return $this->belongsTo(ProyekPISNew::class, "no_spk", "spk_intern_no");
     }
 
     public function Struktur()

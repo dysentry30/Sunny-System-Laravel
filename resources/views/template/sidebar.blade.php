@@ -1192,22 +1192,67 @@
                         @endcanany
                         
                         @canany(['super-admin', 'csi'])
-                        {{-- @if (auth()->user()->check_administrator || $adminPIC) --}}
-                            <div class="menu-item">
-                                <a class="menu-link " href="/csi"
-                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'csi') ? 'background-color:#008CB4' : '' }}">
+                        <div class="menu-item">
+                            <a class="menu-link"
+                                data-bs-toggle="collapse" href="#csi-collapse" role="button"
+                                aria-expanded="false" aria-controls="csi-collapse"
+                                style="color:white; padding-left:20px; {{ str_contains(Request::url(), '/csi') ||
+                                str_contains(Request::url(), '/dashboard/csi') ||
+                                str_contains(Request::url(), '/csi/report')
+                                 ? 'background-color:#008CB4' : '' }}">
+                                <span class="menu-icon">
+                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                    <span class="svg-icon svg-icon-2">
+                                        <i class="bi bi-rulers text-white"
+                                            style="font-size: 18px; margin-left:7px"></i>
+                                    </span>
+                                    <!--end::Svg Icon-->
+                                </span>
+                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">CSI</span>
+                                <span><i class="bi bi-caret-down-fill text-white"></i></span>
+                            </a>
+                        </div>
+                        <div class="collapse" id="csi-collapse">
+                            <!--begin::Menu Colapse-->
+                            <div id="#kt_aside_menu" class="p-5" data-kt-menu="true"
+                                style="background-color:#0ca1c6; {{ Request::Path() == 'dashboard/csi' ? 'background-color:#008CB4' : '' }}">
+                                <a class="menu-link" href="/dashboard/csi" style="color:white; padding-left:30px;">
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                        <span class="svg-icon svg-icon-2">
-                                            <i class="bi bi-rulers text-white"
-                                                style="font-size: 18px; margin-left:7px"></i>
-                                        </span>
+                                        <i class="bi bi-building text-white"></i>
                                         <!--end::Svg Icon-->
                                     </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">CSI</span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Dashboard</span>
                                 </a>
                             </div>
-                        {{-- @endif                             --}}
+                            <!--end::Menu Colapse-->
+                            <!--begin::Menu Colapse-->
+                            <div id="#kt_aside_menu" class="p-5" data-kt-menu="true"
+                                style="background-color:#0ca1c6; {{ Request::Path() == 'csi' ? 'background-color:#008CB4' : '' }}">
+                                <a class="menu-link" href="/csi" style="color:white; padding-left:30px;">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <i class="bi bi-wallet text-white"></i>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">List CSI</span>
+                                </a>
+                            </div>
+                            <!--end::Menu Colapse-->
+                            <!--begin::Menu Colapse-->
+                            <div id="#kt_aside_menu" class="p-5" data-kt-menu="true"
+                                style="background-color:#0ca1c6; {{ Request::Path() == 'csi/report' ? 'background-color:#008CB4' : '' }}">
+                                <a class="menu-link" href="/csi/report" style="color:white; padding-left:30px;">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <i class="bi bi-wallet text-white"></i>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Report CSI</span>
+                                </a>
+                            </div>
+                            <!--end::Menu Colapse-->
+                        </div>
                         @endcanany
 
                         <br><br><br>
