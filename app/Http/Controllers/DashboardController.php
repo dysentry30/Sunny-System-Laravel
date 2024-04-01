@@ -813,11 +813,12 @@ class DashboardController extends Controller
             $total_RKAP_keseluruhan += $total_rkap;
             $totalRKAPSumberDana->push([
                 "name" => $sumber_dana,
-                "y" => round($total_rkap),
+                "y" => round($total_rkap, 2),
             ]);
         }
         $totalRKAPSumberDana = $totalRKAPSumberDana->map(function ($item) use ($total_RKAP_keseluruhan) {
-            $nilai_persen = (int) Percentage::fromFractionAndTotal($item["y"], $total_RKAP_keseluruhan)->asFloat();
+            // $nilai_persen = (int) Percentage::fromFractionAndTotal($item["y"], $total_RKAP_keseluruhan)->asFloat();
+            $nilai_persen = $total_RKAP_keseluruhan != 0 ? round($item["y"] / $total_RKAP_keseluruhan * 100, 2) : 0;
             $item["x"] = $item["name"] . ": " . $nilai_persen . "%";
             $item["name"] = $item["name"] . ": " . $nilai_persen . "%";
             $item["y"] = $nilai_persen;
@@ -846,14 +847,15 @@ class DashboardController extends Controller
             // ]);
             $totalRealisasiSumberDana->push([
                 "name" => $sumber_dana,
-                "y" => (int) round($total_realisasi),
+                "y" => (int) round($total_realisasi, 2),
             ]);
         }
         $totalRealisasiSumberDana = $totalRealisasiSumberDana->map(function ($item) use ($total_realisasi_keseluruhan) {
-            $nilai_persen = (int) Percentage::fromFractionAndTotal($item["y"], $total_realisasi_keseluruhan)->asFloat();
+            // $nilai_persen = (int) Percentage::fromFractionAndTotal($item["y"], $total_realisasi_keseluruhan)->asFloat();
+            $nilai_persen = $total_realisasi_keseluruhan != 0 ? round($item["y"] / $total_realisasi_keseluruhan * 100, 2) : 0;
             $item["x"] = $item["name"] . ": " . $nilai_persen . "%";
             $item["name"] = $item["name"] . ": " . $nilai_persen . "%";
-            $item["y"] = $nilai_persen;
+            $item["y"] = round($nilai_persen, 2);
             return $item;
         });
         // dump($month);
@@ -920,10 +922,11 @@ class DashboardController extends Controller
         });
 
         $proyeksInstansiRKAPPie = $totalRKAPInstansiOwner->map(function ($item) use ($total_RKAP_instansi_all) {
-            $nilai_persen = ($total_RKAP_instansi_all != 0) ? (int) Percentage::fromFractionAndTotal(
-                $item["y"],
-                $total_RKAP_instansi_all
-            )->asFloat() : 0;
+            // $nilai_persen = ($total_RKAP_instansi_all != 0) ? (int) Percentage::fromFractionAndTotal(
+            //     $item["y"],
+            //     $total_RKAP_instansi_all
+            // )->asFloat() : 0;
+            $nilai_persen = $total_RKAP_instansi_all != 0 ? round($item["y"] / $total_RKAP_instansi_all * 100, 2) : 0;
             $item["x"] = $item["name"] . ": " . $nilai_persen . "%";
             $item["name"] = $item["name"] . ": " . $nilai_persen . "%";
             $item["y"] = $nilai_persen;
@@ -972,10 +975,11 @@ class DashboardController extends Controller
             }
         });
         $proyeksInstansiRealisasiPie = $totalRealisasiInstansiOwner->map(function ($item) use ($total_realisasi_instansi_all) {
-            $nilai_persen = ($total_realisasi_instansi_all != 0) ? (int) Percentage::fromFractionAndTotal(
-                $item["y"],
-                $total_realisasi_instansi_all
-            )->asFloat() : 0;
+            // $nilai_persen = ($total_realisasi_instansi_all != 0) ? (int) Percentage::fromFractionAndTotal(
+            //     $item["y"],
+            //     $total_realisasi_instansi_all
+            // )->asFloat() : 0;
+            $nilai_persen = $total_realisasi_instansi_all != 0 ? round($item["y"] / $total_realisasi_instansi_all * 100, 2) : 0;
             $item["x"] = $item["name"] . ": " . $nilai_persen . "%";
             $item["name"] = $item["name"] . ": " . $nilai_persen . "%";
             $item["y"] = $nilai_persen;

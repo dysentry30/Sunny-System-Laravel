@@ -292,7 +292,7 @@ class ContractManagementsController extends Controller
                 'start_year',
                 '<=',
                 $filterTahun
-            )->whereIn('proyek_pis_new.spk_intern_no', $proyekSelected)->get();
+            )->whereIn('proyek_pis_new.profit_center', $proyekSelected)->get();
         }
         $proyeks_perolehan = $proyeks_all->whereIn("stage", [2, 3, 4, 5, 6])->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
         // $proyeks_pelaksanaan = $proyeks_all->where("stage", ">=", 8)->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);

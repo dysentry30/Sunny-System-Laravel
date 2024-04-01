@@ -918,6 +918,19 @@ class ClaimController extends Controller
     {
         $data = $request->all();
         $file = $request->file("dokumen-approve");
+
+        $validateInput = validateInput($data, [
+            'nilai-disetujui' => 'required|string',
+            'tanggal-disetujui' => 'required|date',
+            'waktu-disetujui' => 'required|date',
+            'dokumen-approve' => 'required|file',
+        ]);
+
+        if (!empty($validateInput)) {
+            Alert::html("Error", "Pastikan field <b>$validateInput</b> terisi!", "error");
+            return redirect()->back();
+        }
+        
         $id_document = date("His_") . $file->getClientOriginalName();
         $nama_file = $file->getClientOriginalName();
 

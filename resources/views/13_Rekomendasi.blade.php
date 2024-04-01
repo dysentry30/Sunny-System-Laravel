@@ -2805,11 +2805,11 @@
                     </div>
                     <div class="modal-body">
                         @php
-                            $approved_pengajuan = collect(json_decode($nota_rekomendasi->approved_rekomendasi));
+                            $approved_pengajuan = collect(json_decode($nota_rekomendasi_finish->approved_rekomendasi));
                             // $approved_penyusun = collect(json_decode($proyek->approved_penyusun));
-                            $approved_verifikasi = collect(json_decode($nota_rekomendasi->approved_verifikasi));
-                            $approved_rekomendasi = collect(json_decode($nota_rekomendasi->approved_rekomendasi_final));
-                            $approved_persetujuan = collect(json_decode($nota_rekomendasi->approved_persetujuan));
+                            $approved_verifikasi = collect(json_decode($nota_rekomendasi_finish->approved_verifikasi));
+                            $approved_rekomendasi = collect(json_decode($nota_rekomendasi_finish->approved_rekomendasi_final));
+                            $approved_persetujuan = collect(json_decode($nota_rekomendasi_finish->approved_persetujuan));
                             $data_approved_merged = collect();
                             if ($approved_pengajuan->isNotEmpty() || $approved_verifikasi->isNotEmpty() || $approved_rekomendasi->isNotEmpty() || $approved_persetujuan->isNotEmpty()) {
                                 $data_approved_merged = collect()->mergeRecursive(['Pengajuan' => $approved_pengajuan->flatten(), 'Penyusun' => $approved_verifikasi->flatten(), 'Rekomendasi' => $approved_rekomendasi->flatten(), 'Persetujuan' => $approved_persetujuan->flatten()]);
@@ -2861,7 +2861,8 @@
 
                                                                         @if (!empty($d->tanggal))
                                                                             Tanggal:
-                                                                            <b>{{ Carbon\Carbon::create($d->tanggal)->translatedFormat('d F Y H:i:s') }}</b>
+                                                                            {{-- <b>{{ Carbon\Carbon::parse($d->tanggal)->setTimezone('UTC')->translatedFormat('d F Y H:i:s') }}</b> --}}
+                                                                            <b>{{ Carbon\Carbon::parse(date('d M Y H:i:s', strtotime($d->tanggal)))->translatedFormat('d F Y H:i:s') }}</b>
                                                                             <br>
                                                                         @endif
 
@@ -2953,7 +2954,8 @@
                                                             <b>{{ App\Models\User::find($data->user_id)->Pegawai->Jabatan?->nama_jabatan }}</b><br>
                                                             @if (!empty($data->tanggal))
                                                                 Tanggal:
-                                                                <b>{{ Carbon\Carbon::create($data->tanggal)->translatedFormat('d F Y H:i:s') }}</b><br>
+                                                                {{-- <b>{{ Carbon\Carbon::create($data->tanggal)->translatedFormat('d F Y H:i:s') }}</b><br> --}}
+                                                                <b>{{ Carbon\Carbon::parse(date('d M Y H:i:s', strtotime($d->tanggal)))->translatedFormat('d F Y H:i:s') }}</b>
                                                             @endif
                                                             @if (!empty($data->catatan))
                                                                 Catatan:
@@ -3022,7 +3024,8 @@
                                                             <b>{{ App\Models\User::find($data->user_id)->Pegawai->Jabatan?->nama_jabatan }}</b><br>
                                                             @if (!empty($data->tanggal))
                                                                 Tanggal:
-                                                                <b>{{ Carbon\Carbon::create($data->tanggal)->translatedFormat('d F Y H:i:s') }}</b><br>
+                                                                {{-- <b>{{ Carbon\Carbon::create($data->tanggal)->translatedFormat('d F Y H:i:s') }}</b><br> --}}
+                                                                <b>{{ Carbon\Carbon::parse(date('d M Y H:i:s', strtotime($d->tanggal)))->translatedFormat('d F Y H:i:s') }}</b>
                                                             @endif
                                                             @if (!empty($data->catatan))
                                                                 Catatan:
@@ -3118,7 +3121,8 @@
 
                                                                     @if (!empty($d->tanggal))
                                                                         Tanggal:
-                                                                        <b>{{ Carbon\Carbon::create($d->tanggal)->translatedFormat('d F Y H:i:s') }}</b>
+                                                                        {{-- <b>{{ Carbon\Carbon::create($d->tanggal)->translatedFormat('d F Y H:i:s') }}</b> --}}
+                                                                        <b>{{ Carbon\Carbon::parse(date('d M Y H:i:s', strtotime($d->tanggal)))->translatedFormat('d F Y H:i:s') }}</b>
                                                                         <br>
                                                                     @endif
 
