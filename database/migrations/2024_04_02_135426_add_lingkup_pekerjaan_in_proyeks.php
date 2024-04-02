@@ -13,12 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('dokumen_tenders')) {
-            Schema::create('jenis_proyeks', function (Blueprint $table) {
-                $table->id();
-                $table->string("jenis_proyek");
-                $table->string("kode_jenis");
-                $table->timestamps();
+        if (!Schema::hasColumn('proyeks', 'lingkup_pekerjaan')) {
+            Schema::table('proyeks', function (Blueprint $table) {
+                $table->string('lingkup_pekerjaan')->nullable();
             });
         }
     }
@@ -30,6 +27,10 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('jenis_proyeks');
+        if (Schema::hasColumn('proyeks', 'lingkup_pekerjaan')) {
+            Schema::table('proyeks', function (Blueprint $table) {
+                $table->dropColumn('lingkup_pekerjaan');
+            });
+        }
     }
 };

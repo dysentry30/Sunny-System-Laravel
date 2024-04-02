@@ -13,13 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('dokumen_nota_rekomendasi_1', function (Blueprint $table) {
-            $table->id();
-            $table->string('kode_proyek');
-            $table->string('nama_dokumen');
-            $table->string('id_document');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('dokumen_nota_rekomendasi_1')) {
+            Schema::create('dokumen_nota_rekomendasi_1', function (Blueprint $table) {
+                $table->id();
+                $table->string('kode_proyek');
+                $table->string('nama_dokumen');
+                $table->string('id_document');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

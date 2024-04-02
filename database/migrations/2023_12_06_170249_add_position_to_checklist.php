@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('checklist_calon_mitra_kso', function (Blueprint $table) {
-            $table->integer('posisi')->nullable();
-        });
+        if (!Schema::hasColumn('checklist_calon_mitra_kso', 'posisi')) {
+            Schema::table('checklist_calon_mitra_kso', function (Blueprint $table) {
+                $table->integer('posisi')->nullable();
+            });
+        }
     }
 
     /**
@@ -25,8 +27,10 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('checklist_calon_mitra_kso', function (Blueprint $table) {
-            $table->integer('posisi');
-        });
+        if (Schema::hasColumn('checklist_calon_mitra_kso', 'posisi')) {
+            Schema::table('checklist_calon_mitra_kso', function (Blueprint $table) {
+                $table->dropColumn('posisi');
+            });
+        }
     }
 };

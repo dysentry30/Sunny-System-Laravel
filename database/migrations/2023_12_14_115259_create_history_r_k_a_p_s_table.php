@@ -13,14 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('history_rkap', function (Blueprint $table) {
-            $table->id();
-            $table->string('unit_kerja');
-            $table->string('profit_center');
-            $table->integer('tahun_pelaksanaan');
-            $table->boolean('is_locked');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('history_rkap')) {
+            Schema::create('history_rkap', function (Blueprint $table) {
+                $table->id();
+                $table->string('unit_kerja');
+                $table->string('profit_center');
+                $table->integer('tahun_pelaksanaan');
+                $table->boolean('is_locked');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

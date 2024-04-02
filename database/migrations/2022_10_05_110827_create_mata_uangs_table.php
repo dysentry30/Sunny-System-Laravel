@@ -13,12 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('mata_uangs', function (Blueprint $table) {
-            $table->id();
-            $table->string("mata_uang");
-            $table->integer("kurs")->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('dokumen_tenders')) {
+            Schema::create('mata_uangs', function (Blueprint $table) {
+                $table->id();
+                $table->string("mata_uang");
+                $table->integer("kurs")->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**

@@ -13,14 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('dokumen_tenders', function (Blueprint $table) {
-            $table->id('id_dokumen_tender');
-            $table->text("kode_proyek");
-            $table->longText("nama_dokumen");
-            $table->longText("id_document");
-            $table->string("created_by");
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('dokumen_tenders')) {
+            Schema::create('dokumen_tenders', function (Blueprint $table) {
+                $table->id('id_dokumen_tender');
+                $table->text("kode_proyek");
+                $table->longText("nama_dokumen");
+                $table->longText("id_document");
+                $table->string("created_by");
+                $table->timestamps();
+            });
+        }
     }
 
     /**

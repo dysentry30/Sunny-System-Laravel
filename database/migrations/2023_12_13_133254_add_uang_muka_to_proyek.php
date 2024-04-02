@@ -13,10 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('proyeks', function (Blueprint $table) {
-            $table->boolean('is_uang_muka')->nullable();
-            $table->string('uang_muka')->nullable();
-        });
+        if (!Schema::hasColumns('proyeks', ['is_uang_muka', 'uang_muka'])) {
+            Schema::table('proyeks', function (Blueprint $table) {
+                $table->boolean('is_uang_muka')->nullable();
+                $table->string('uang_muka')->nullable();
+            });
+        }
     }
 
     /**
@@ -26,8 +28,10 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('proyeks', function (Blueprint $table) {
-            $table->dropColumn(['is_uang_muka', 'uang_muka']);
-        });
+        if (Schema::hasColumns('proyeks', ['is_uang_muka', 'uang_muka'])) {
+            Schema::table('proyeks', function (Blueprint $table) {
+                $table->dropColumn(['is_uang_muka', 'uang_muka']);
+            });
+        }
     }
 };

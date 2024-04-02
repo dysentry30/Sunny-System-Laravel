@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('checklist_calon_mitra_kso', function (Blueprint $table) {
-            $table->enum('opsi', ['pilihan', 'isian', 'kombinasi'])->nullable();
-        });
+        if (!Schema::hasColumn('checklist_calon_mitra_kso', 'opsi')) {
+            Schema::table('checklist_calon_mitra_kso', function (Blueprint $table) {
+                $table->enum('opsi', ['pilihan', 'isian', 'kombinasi'])->nullable();
+            });
+        }
     }
 
     /**
@@ -25,8 +27,10 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('checklist_calon_mitra_kso', function (Blueprint $table) {
-            $table->enum('opsi', ['pilihan', 'isian', 'kombinasi']);
-        });
+        if (Schema::hasColumn('checklist_calon_mitra_kso', 'opsi')) {
+            Schema::table('checklist_calon_mitra_kso', function (Blueprint $table) {
+                $table->enum('opsi', ['pilihan', 'isian', 'kombinasi']);
+            });
+        }
     }
 };

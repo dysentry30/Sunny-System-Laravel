@@ -13,13 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('struktur_attachments', function (Blueprint $table) {
-            $table->id('id_struktur_attachment');
-            $table->text("id_customer");
-            $table->longText("nama_dokumen");
-            $table->longText("id_document");
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('dokumen_tenders')) {
+            Schema::create('struktur_attachments', function (Blueprint $table) {
+                $table->id('id_struktur_attachment');
+                $table->text("id_customer");
+                $table->longText("nama_dokumen");
+                $table->longText("id_document");
+                $table->timestamps();
+            });
+        }
     }
 
     /**

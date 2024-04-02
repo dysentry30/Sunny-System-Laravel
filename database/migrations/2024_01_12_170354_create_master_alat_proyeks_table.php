@@ -13,14 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('master_alat_proyeks', function (Blueprint $table) {
-            $table->id();
-            $table->string('nomor_rangka');
-            $table->string('nama_alat');
-            $table->text('spesifikasi');
-            $table->string('kategori');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('master_alat_proyeks')) {
+            Schema::create('master_alat_proyeks', function (Blueprint $table) {
+                $table->id();
+                $table->string('nomor_rangka');
+                $table->string('nama_alat');
+                $table->text('spesifikasi');
+                $table->string('kategori');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

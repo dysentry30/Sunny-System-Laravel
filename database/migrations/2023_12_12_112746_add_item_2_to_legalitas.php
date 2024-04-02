@@ -13,10 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('legalitas_perusahaan', function (Blueprint $table) {
-            $table->text('item_2')->nullable();
-            $table->integer('position')->nullable();
-        });
+        if (!Schema::hasColumns('legalitas_perusahaan', ['item_2', 'position'])) {
+            Schema::table('legalitas_perusahaan', function (Blueprint $table) {
+                $table->text('item_2')->nullable();
+                $table->integer('position')->nullable();
+            });
+        }
     }
 
     /**
@@ -26,8 +28,10 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('legalitas_perusahaan', function (Blueprint $table) {
-            $table->dropColumn(['item_2', 'position']);
-        });
+        if (Schema::hasColumns('legalitas_perusahaan', ['item_2', 'position'])) {
+            Schema::table('legalitas_perusahaan', function (Blueprint $table) {
+                $table->dropColumn(['item_2', 'position']);
+            });
+        }
     }
 };
