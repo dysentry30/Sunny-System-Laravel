@@ -505,6 +505,15 @@
                                                                                                                     class="d-flex flex-row justify-content-evenly align-items-center w-100">
                                                                                                                     <button type="button"
                                                                                                                         class="btn btn-sm btn-danger text-white disabled">Approval ditolak</button>
+                                                                                                                    <form action=""></form>
+                                                                                                                    <form action="/forecast/set-unlock"class="mt-4" method="POST">
+                                                                                                                        @csrf
+                                                                                                                        <input type="hidden" name="unit_kerja" value="{{$unit_kerja}}">
+                                                                                                                        <input type="hidden" name="periode-prognosa" value="{{$history->periode_prognosa}}">
+                                                                                                                        <button type="submit"
+                                                                                                                        class="btn btn-sm btn-active-primary text-white"
+                                                                                                                        style="background-color:#008CB4;">Hapus History</button>
+                                                                                                                    </form>
                                                                                                                 </div>
                                                                                                             @else
                                                                                                                 <div

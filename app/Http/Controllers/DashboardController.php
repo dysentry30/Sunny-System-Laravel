@@ -116,11 +116,47 @@ class DashboardController extends Controller
                 // dd($nilaiHistoryForecast);
             }
             if (!empty($request->get("dop"))) {
-                $nilaiHistoryForecast = $nilaiHistoryForecast->where("dop", $request->get("dop"));
-                $claims = $claims->where("dop", $request->get("dop"));
-                $proyeks = $proyeks->where("dop", $request->get("dop"));
-                $contracts = $contracts->where("dop", $request->get("dop"));
-                $paretoProyeks = $paretoProyeks->where("dop", $request->get("dop"));
+                // $nilaiHistoryForecast = $nilaiHistoryForecast->where("dop", $request->get("dop"));
+                // $claims = $claims->where("dop", $request->get("dop"));
+                // $proyeks = $proyeks->where("dop", $request->get("dop"));
+                // $contracts = $contracts->where("dop", $request->get("dop"));
+                // $paretoProyeks = $paretoProyeks->where("dop", $request->get("dop"));
+
+                $nilaiHistoryForecast = $nilaiHistoryForecast->filter(function ($history) use ($request) {
+                    if ($request->get("dop") == "PUSAT") {
+                        return $history->dop == "DOP 1" || $history->dop == "DOP 2" || $history->dop == "DOP 3";
+                    } else {
+                        return $history->dop == $request->get("dop");
+                    }
+                });
+                $claims = $claims->filter(function ($claim) use ($request) {
+                    if ($request->get("dop") == "PUSAT") {
+                        return $claim->dop == "DOP 1" || $claim->dop == "DOP 2" || $claim->dop == "DOP 3";
+                    } else {
+                        return $claim->dop == $request->get("dop");
+                    }
+                });
+                $proyeks = $proyeks->filter(function ($proyek) use ($request) {
+                    if ($request->get("dop") == "PUSAT") {
+                        return $proyek->dop == "DOP 1" || $proyek->dop == "DOP 2" || $proyek->dop == "DOP 3";
+                    } else {
+                        return $proyek->dop == $request->get("dop");
+                    }
+                });
+                $contracts = $contracts->filter(function ($contract) use ($request) {
+                    if ($request->get("dop") == "PUSAT") {
+                        return $contract->dop == "DOP 1" || $contract->dop == "DOP 2" || $contract->dop == "DOP 3";
+                    } else {
+                        return $contract->dop == $request->get("dop");
+                    }
+                });
+                $paretoProyeks = $paretoProyeks->filter(function ($pareto) use ($request) {
+                    if ($request->get("dop") == "PUSAT") {
+                        return $pareto->dop == "DOP 1" || $pareto->dop == "DOP 2" || $pareto->dop == "DOP 3";
+                    } else {
+                        return $pareto->dop == $request->get("dop");
+                    }
+                });
                 // dd($proyeks);
                 // dd($nilaiHistoryForecast, $claims, $proyeks, $contracts);
             }
@@ -167,11 +203,47 @@ class DashboardController extends Controller
                 $contracts = $contracts->where("unit_kerja", $request->get("unit-kerja"));
                 $paretoProyeks = $paretoProyeks->where("unit_kerja", $request->get("unit-kerja"));
             } else if (!empty($request->get("dop"))) {
-                $nilaiHistoryForecast = $nilaiHistoryForecast->where("dop", $request->get("dop"));
-                $claims = $claims->where("dop", $request->get("dop"));
-                $proyeks = $proyeks->where("dop", $request->get("dop"));
-                $contracts = $contracts->where("dop", $request->get("dop"));
-                $paretoProyeks = $paretoProyeks->where("dop", $request->get("dop"));
+                // $nilaiHistoryForecast = $nilaiHistoryForecast->where("dop", $request->get("dop"));
+                // $claims = $claims->where("dop", $request->get("dop"));
+                // $proyeks = $proyeks->where("dop", $request->get("dop"));
+                // $contracts = $contracts->where("dop", $request->get("dop"));
+                // $paretoProyeks = $paretoProyeks->where("dop", $request->get("dop"));
+
+                $nilaiHistoryForecast = $nilaiHistoryForecast->filter(function ($history) use ($request) {
+                    if ($request->get("dop") == "PUSAT") {
+                        return $history->dop == "DOP 1" || $history->dop == "DOP 2" || $history->dop == "DOP 3";
+                    } else {
+                        return $history->dop == $request->get("dop");
+                    }
+                });
+                $claims = $claims->filter(function ($claim) use ($request) {
+                    if ($request->get("dop") == "PUSAT") {
+                        return $claim->dop == "DOP 1" || $claim->dop == "DOP 2" || $claim->dop == "DOP 3";
+                    } else {
+                        return $claim->dop == $request->get("dop");
+                    }
+                });
+                $proyeks = $proyeks->filter(function ($proyek) use ($request) {
+                    if ($request->get("dop") == "PUSAT") {
+                        return $proyek->dop == "DOP 1" || $proyek->dop == "DOP 2" || $proyek->dop == "DOP 3";
+                    } else {
+                        return $proyek->dop == $request->get("dop");
+                    }
+                });
+                $contracts = $contracts->filter(function ($contract) use ($request) {
+                    if ($request->get("dop") == "PUSAT") {
+                        return $contract->dop == "DOP 1" || $contract->dop == "DOP 2" || $contract->dop == "DOP 3";
+                    } else {
+                        return $contract->dop == $request->get("dop");
+                    }
+                });
+                $paretoProyeks = $paretoProyeks->filter(function ($pareto) use ($request) {
+                    if ($request->get("dop") == "PUSAT") {
+                        return $pareto->dop == "DOP 1" || $pareto->dop == "DOP 2" || $pareto->dop == "DOP 3";
+                    } else {
+                        return $pareto->dop == $request->get("dop");
+                    }
+                });
                 // dd($proyeks);
                 // dd($nilaiHistoryForecast, $claims, $proyeks, $contracts);
             } else {
@@ -398,6 +470,8 @@ class DashboardController extends Controller
         $kalah = 0;
         $cancel = 0;
         $prakualifikasi = 0;
+        $tidakLulusPQ = 0;
+        $terkontrakMonitoring = 0;
         foreach ($proyeks as $p) {
             if ($p->tipe_proyek == 'P') {
                 if ($p->is_cancel) {
@@ -410,10 +484,14 @@ class DashboardController extends Controller
                     $prakualifikasi++;
                 } else if (($stg == 4 || $stg == 5) && (!$p->is_tidak_lulus_pq && !$p->is_cancel)) {
                     $proses++;
-                } else if (($stg == 6 || $stg == 8) && (!$p->is_tidak_lulus_pq && !$p->is_cancel)) {
+                } else if ($stg == 6 && (!$p->is_tidak_lulus_pq && !$p->is_cancel)) {
                     $menang++;
                 } else if ($stg == 7) {
                     $kalah++;
+                } elseif ($stg == 3 && ($p->is_tidak_lulus_pq)) {
+                    $tidakLulusPQ++;
+                } elseif ($stg == 8 && (!$p->is_tidak_lulus_pq && !$p->is_cancel)) {
+                    $terkontrakMonitoring++;
                 } else {
                     $menang++;  
                 };
@@ -503,12 +581,12 @@ class DashboardController extends Controller
             )->count();
         $sumNilaiProyekCompetitive = $proyeks->where('is_cancel', '!=', true)->where('is_tidak_lulus_pq', '!=', true)->where("nilai_perolehan", '!=', 0)->where('jenis_proyek', '!=', "I")->sum('nilai_perolehan');
         if ($sumProyekCompetitive > 0) {
-            $winRateJumlahCompetitive = ($jumlahMenang + $jumlahTerkontrakCompetitive) / $sumProyekCompetitive;
+            $winRateJumlahCompetitive = round(($jumlahMenang + $jumlahTerkontrakCompetitive) / $sumProyekCompetitive, 2);
         } else {
             $winRateJumlahCompetitive = 0;
         }
         if ($sumNilaiProyekCompetitive > 0) {
-            $winRateNilaiCompetitive = ($nilaiMenang + $nilaiTerkontrakCompetitive) / $sumNilaiProyekCompetitive;
+            $winRateNilaiCompetitive = round(($nilaiMenang + $nilaiTerkontrakCompetitive) / $sumNilaiProyekCompetitive, 2);
         } else {
             $winRateNilaiCompetitive = 0;
         }
@@ -987,7 +1065,7 @@ class DashboardController extends Controller
         });
         // dd($proyeksInstansiRKAPPie, $proyeksInstansiRealisasiPie);
         // End :: INSTANSI OWNER RKAP
-        return view('1_Dashboard', compact(["totalNilaiSisaPareto", "totalNilaiRealisasiPareto", "realisasiForecast", "sisaForecast", "pasarDini", "pasarPotensial", "stagePrakualifikasi", "stageTender", "stagePerolehan", "stageMenang", "stageKalah", "stageTerkontrak", "top_proyeks_close_this_month", "proyek_kalah_cancel_tidak_lulus_pq", "totalRealisasiSumberDana", "totalRKAPSumberDana", "claim_status_array", "anti_claim_status_array", "claim_asuransi_status_array", "nilaiForecastArray", "nilaiRkapArray", "nilaiRealisasiArray", "nilaiForecastTriwunalArray", "year", "month", "proses", "menang", "kalah", "prakualifikasi", "prosesTender", "terkontrak", "pelaksanaan", "serahTerima", "closing", "proyeks", "paretoClaim", "paretoAntiClaim", "paretoAsuransi", "kategoriunitKerja", "nilaiOkKumulatif", "nilaiRealisasiKumulatif", "nilaiTerkontrak", "nilaiTerendah", "jumlahMenang", "jumlahKalah", "nilaiMenang", "nilaiKalah", "unitKerja", "unit_kerja_get", "dop_get", "dops", "nilaiTerkontrakCompetitive", "jumlahTerkontrakCompetitive", "winRateJumlahCompetitive", "winRateNilaiCompetitive", "proyeksInstansiRKAPPie", "proyeksInstansiRealisasiPie", "cancel"]));
+        return view('1_Dashboard', compact(["totalNilaiSisaPareto", "totalNilaiRealisasiPareto", "realisasiForecast", "sisaForecast", "pasarDini", "pasarPotensial", "stagePrakualifikasi", "stageTender", "stagePerolehan", "stageMenang", "stageKalah", "stageTerkontrak", "top_proyeks_close_this_month", "proyek_kalah_cancel_tidak_lulus_pq", "totalRealisasiSumberDana", "totalRKAPSumberDana", "claim_status_array", "anti_claim_status_array", "claim_asuransi_status_array", "nilaiForecastArray", "nilaiRkapArray", "nilaiRealisasiArray", "nilaiForecastTriwunalArray", "year", "month", "proses", "menang", "kalah", "prakualifikasi", "prosesTender", "terkontrak", "pelaksanaan", "serahTerima", "closing", "proyeks", "paretoClaim", "paretoAntiClaim", "paretoAsuransi", "kategoriunitKerja", "nilaiOkKumulatif", "nilaiRealisasiKumulatif", "nilaiTerkontrak", "nilaiTerendah", "jumlahMenang", "jumlahKalah", "nilaiMenang", "nilaiKalah", "unitKerja", "unit_kerja_get", "dop_get", "dops", "nilaiTerkontrakCompetitive", "jumlahTerkontrakCompetitive", "winRateJumlahCompetitive", "winRateNilaiCompetitive", "proyeksInstansiRKAPPie", "proyeksInstansiRealisasiPie", "cancel", "tidakLulusPQ", "terkontrakMonitoring"]));
     }
 
     public function dashboard_perolehan_kontrak(Request $request)
@@ -4166,9 +4244,16 @@ class DashboardController extends Controller
                 $stage = 3;
                 $column_to_sort = "bulan_pelaksanaan";
                 break;
+                
             case "Kalah":
                 // $stage = [0, 7];
                 $stage = [3, 7];
+                $column_to_sort = "bulan_pelaksanaan";
+                break;
+
+            case "Tidak Lulus PQ":
+                // $stage = [0, 7];
+                $stage = 3;
                 $column_to_sort = "bulan_pelaksanaan";
                 break;
 
@@ -4179,7 +4264,13 @@ class DashboardController extends Controller
 
             case "Menang":
                 $is_menang = true;
-                $stage = [6, 8];
+                $stage = 6;
+                $column_to_sort = "bulan_pelaksanaan";
+                break;
+
+            case "Terkontrak":
+                $is_menang = true;
+                $stage = 8;
                 $column_to_sort = "bulan_pelaksanaan";
                 break;
 
@@ -4202,10 +4293,14 @@ class DashboardController extends Controller
             $proyeks = $proyeks->where('is_tidak_lulus_pq', false)->values();
         } elseif ($tipe == "Kalah") {
             $proyeks = $proyeks->filter(function ($proyek) {
-                return $proyek->stage == 7 || ($proyek->stage == 3 && $proyek->is_tidak_lulus_pq);
+                return $proyek->stage == 7;
             })->values();
         } elseif ($tipe == "Cancel") {
             $proyeks = $proyeks->where('is_cancel', true)->values();
+        } elseif ($tipe == "Tidak Lulus PQ") {
+            $proyeks = $proyeks->filter(function ($proyek) {
+                return $proyek->is_tidak_lulus_pq;
+            });
         }
 
         $row = 2;

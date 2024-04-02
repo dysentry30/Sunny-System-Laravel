@@ -2310,7 +2310,7 @@
                 }
                 
             },
-            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
+            colors: ["#00b2ff", "#9656a2", "#0acc81", "#f4895f", "#1f3442", "#f8e16f", "#de324c"],
             plotOptions: {
                 pie: {
                     innerSize: 75,
@@ -2350,6 +2350,11 @@
                         drilldown: "Menang",
                     },
                     {
+                        name: "Terkontrak : " + {{ $terkontrakMonitoring }},
+                        y: {{ $terkontrakMonitoring }},
+                        drilldown: "Menang",
+                    },
+                    {
                         name: "Kalah: " + {{ $kalah }},
                         y: {{ $kalah }},
                         drilldown: "Kalah",
@@ -2363,6 +2368,11 @@
                         name: "Prakualifikasi : " + {{ $prakualifikasi }},
                         y: {{ $prakualifikasi }},
                         drilldown: "Prakualifikasi",
+                    },
+                    {
+                        name: "Tidak Lulus PQ : " + {{ $tidakLulusPQ }},
+                        y: {{ $tidakLulusPQ }},
+                        drilldown: "Tidak Lulus PQ",
                     }
                 ]
             }],
@@ -2774,7 +2784,7 @@
             },
             subtitle: {
                 align: 'center',
-                text: '<b>Berdasarkan Jumlah |  Win Rate : {{ round($winRateJumlahCompetitive) }}%</b>'
+                text: '<b>Berdasarkan Jumlah |  Win Rate : {{ round($winRateJumlahCompetitive, 2) }}%</b>'
             },
             accessibility: {
                 announceNewData: {
@@ -2868,7 +2878,7 @@
             },
             subtitle: {
                 align: 'center',
-                text: '<b>Berdasarkan Nilai |  Win Rate : {{ round($winRateNilaiCompetitive) }}%</b>'
+                text: '<b>Berdasarkan Nilai |  Win Rate : {{ round($winRateNilaiCompetitive, 2) }}%</b>'
             },
             accessibility: {
                 announceNewData: {
