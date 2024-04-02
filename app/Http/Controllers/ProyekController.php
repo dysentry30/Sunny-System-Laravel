@@ -766,6 +766,7 @@ class ProyekController extends Controller
         $newProyek->hps_pagu = (int) str_replace('.', '', $dataProyek["hps-pagu"]);
         $newProyek->porsi_jo = $dataProyek["porsi-jo"];
         $newProyek->ketua_tender = $dataProyek["ketua-tender"];
+        $newProyek->lingkup_pekerjaan = $dataProyek["lingkup-pekerjaan"];
 
         $isExistPorsiJO = PorsiJO::where('kode_proyek', $dataProyek["kode-proyek"])->get();
         if (!empty($isExistPorsiJO)) {
@@ -3149,6 +3150,7 @@ class ProyekController extends Controller
             Alert::success('Success', "Dokumen berhasil diupload");
             return redirect()->back();
         } catch (\Exception $e) {
+            dd($e->getMessage());
             Alert::error('Error', $e->getMessage());
             return redirect()->back();
         }

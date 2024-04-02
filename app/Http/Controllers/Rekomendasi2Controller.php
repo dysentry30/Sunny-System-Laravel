@@ -145,9 +145,15 @@ class Rekomendasi2Controller extends Controller
 
 
         $proyeks = NotaRekomendasi2::all();
-        $proyeks_proses_paparan = $proyeks->whereIn("unit_kerja", $unit_kerjas)->whereIn('klasifikasi_proyek', $collectKlasifikasiPaparan)->whereIn('departemen_proyek', $collectDepartementPaparan)->whereIn('divisi_id', $collectDivisiPaparan)->whereNotNull('is_request_paparan')->whereNull('is_disetujui');
-        $proyeks_proses_rekomendasi = $proyeks->whereIn("unit_kerja", $unit_kerjas)->whereIn('klasifikasi_proyek', $collectKlasifikasi)->whereIn('departemen_proyek', $collectDepartement)->whereIn('divisi_id', $collectDivisi)->whereNull('is_disetujui');
-        $proyeks_rekomendasi_final = $proyeks->whereIn("unit_kerja", $unit_kerjas)->whereIn('klasifikasi_proyek', $collectKlasifikasi)->whereIn('departemen_proyek', $collectDepartement)->whereIn('divisi_id', $collectDivisi)->whereNotNull('is_disetujui');
+        $proyeks_proses_paparan = $proyeks->whereIn("unit_kerja", $unit_kerjas)->whereIn('klasifikasi_proyek', $collectKlasifikasiPaparan)->whereIn('departemen_proyek', $collectDepartementPaparan)->whereIn('divisi_id', $collectDivisiPaparan)->whereNotNull('is_request_paparan')->whereNull('is_disetujui')->filter(function ($p) {
+            return !$p->Proyek->is_cancel;
+        });
+        $proyeks_proses_rekomendasi = $proyeks->whereIn("unit_kerja", $unit_kerjas)->whereIn('klasifikasi_proyek', $collectKlasifikasi)->whereIn('departemen_proyek', $collectDepartement)->whereIn('divisi_id', $collectDivisi)->whereNull('is_disetujui')->filter(function ($p) {
+            return !$p->Proyek->is_cancel;
+        });
+        $proyeks_rekomendasi_final = $proyeks->whereIn("unit_kerja", $unit_kerjas)->whereIn('klasifikasi_proyek', $collectKlasifikasi)->whereIn('departemen_proyek', $collectDepartement)->whereIn('divisi_id', $collectDivisi)->filter(function ($p) {
+            return !is_null($p->is_disetujui) || !$p->Proyek->is_cancel;
+        });
 
         $matriks_category = MatriksApprovalNotaRekomendasi2::all()->groupBy(['klasifikasi_proyek', 'kategori', 'departemen_code']);
 

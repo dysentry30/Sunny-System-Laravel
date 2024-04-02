@@ -8,9 +8,6 @@ use Ramsey\Uuid\Uuid;
 
 class DokumenKelengkapanPartnerKSO extends Model
 {
-    use HasFactory;
     protected $table = "dokumen_kelengkapan_partner_kso";
-    protected $casts = [
-        'id' => 'string'
-    ];
+    public $incrementing = false;
 }

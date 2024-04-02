@@ -3255,6 +3255,25 @@
                                                     </div>
                                                     <!--End begin::Row-->
                                                     <br>
+                                                    <!--Begin::Row-->
+                                                    <div class="row fv-row">
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3 required">
+                                                                    <span>Lingkup Pekerjaan</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="text" name="lingkup-pekerjaan" class="form-control form-control-solid" id="lingkup-pekerjaan" value="{{ $proyek->lingkup_pekerjaan }}">
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                    </div>
+                                                    <!--End::Row-->
+                                                    <br>
                                                     @if ($proyek->jenis_proyek == 'J')
                                                         {{-- @can('super-admin') --}}
                                                             <!--Begin::Title Biru Form: Alasan KSO-->
@@ -4980,7 +4999,7 @@
                                                             <!--begin::Input group Website-->
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
-                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                <label class="fs-6 fw-bold form-label mt-3 required">
                                                                     <span>Jenis Kontrak</span>
                                                                 </label>
                                                                 <!--end::Label-->
@@ -5025,7 +5044,7 @@
                                                             <!--begin::Input group Website-->
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
-                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                <label class="fs-6 fw-bold form-label mt-3 required">
                                                                     <span>Sistem Pembayaran</span>
                                                                 </label>
                                                                 <!--end::Label-->
@@ -5056,7 +5075,7 @@
                                                             <!--begin::Input group Website-->
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
-                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                <label class="fs-6 fw-bold form-label mt-3 required">
                                                                     <span>Uang Muka (%)</span>
                                                                 </label>
                                                                 <!--end::Label-->
@@ -5122,7 +5141,7 @@
                                                             <!--begin::Input group Website-->
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
-                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                <label class="fs-6 fw-bold form-label mt-3 required">
                                                                     <span>Waktu Pelaksanaan Proyek (Hari)</span>
                                                                 </label>
                                                                 <!--end::Label-->
@@ -5146,7 +5165,7 @@
                                                             <!--begin::Input group Website-->
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
-                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                <label class="fs-6 fw-bold form-label mt-3 required">
                                                                     <span>Pekerjaan Utama</span>
                                                                 </label>
                                                                 <!--end::Label-->
@@ -11422,7 +11441,7 @@
         <!--end::DELETE PORSI JO-->
         
         <!--begin::UPLOAD DOKUMEN PARTNER JO-->
-        <form action="/proyek/porsi-jo/upload/{{ $porsi->id }}" method="post" enctype="multipart/form-data">
+        <form action="/proyek/porsi-jo/upload/{{ $porsi->id }}" method="post" enctype="multipart/form-data" onsubmit="return addLoading(this)">
             @csrf
             <input type="hidden" value="{{ $porsi->kode_proyek }}">
             <div class="modal fade" id="kt_porsi_upload_dokumen_{{ $porsi->id }}" tabindex="-1" aria-hidden="true">
@@ -13109,6 +13128,10 @@
         const LOADING_BODY = new KTBlockUI(document.querySelector('#kt_body'), {
             message: '<div class="blockui-message"><span class="spinner-border text-primary"></span> Loading...</div>',
         })
+        function addLoading(params) {
+            LOADING_BODY.block();
+            return params.form.submit();
+        }
         const perPage = 10;
         $(document).ready(function() {
             $("#nama_pegawai").select2({

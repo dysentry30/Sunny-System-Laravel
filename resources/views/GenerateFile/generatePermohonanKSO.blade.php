@@ -146,7 +146,7 @@
             <td style="width: 2%" valign="top">
                 <p style="margin: 0; padding:0; font-size:0.5rem">:</p>
             </td>
-            <td style="width: 80%"><p style="font-size: 0.5rem; margin:0; padding:0px">{!! nl2br($proyek->pekerjaan_utama) !!}</p></td>
+            <td style="width: 80%"><p style="font-size: 0.5rem; margin:0; padding:0px">{!! nl2br($proyek->lingkup_pekerjaan) !!}</p></td>
         </tr>
         <tr style="margin:0; padding:0">
             <td style="width: 2%" valign="top">
