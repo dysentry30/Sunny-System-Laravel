@@ -369,7 +369,7 @@ function validateInput($data, $rules) {
 
 function createWordRekomendasi(App\Models\Proyek $proyek, \Illuminate\Support\Collection $hasil_assessment = new \Illuminate\Support\Collection(), $is_proyek_mega) {
     $phpWord = new \PhpOffice\PhpWord\PhpWord();
-    $customer = $proyek->proyekBerjalan->Customer;
+    $customer = $proyek->proyekBerjalan->customer;
     $target_path = "file-rekomendasi";
     $now = Carbon\Carbon::now();
     $file_name = $now->format("dmYHis") . "_nota-rekomendasi_$proyek->kode_proyek.pdf";
@@ -423,7 +423,7 @@ function createWordRekomendasi(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $nama_proyek = str_replace("&", "dan", $proyek->nama_proyek);
     
     $section->addText("Hasil Assessment", ['size'=>12, "bold" => true], ['align' => "center"]);
-    $section->addText($nama_proyek, ['size' => 12, "bold" => true], ['align' => "center"]);
+    $section->addText(htmlspecialchars($customer->name), ['size' => 12, "bold" => true], ['align' => "center"]);
 
     $section->addTextBreak(1);
     $table = $section->addTable('myOwnTableStyle',array('borderSize' => 1, 'borderColor' => '999999', 'afterSpacing' => 0, 'Spacing'=> 0, 'cellMargin'=>0  ));
