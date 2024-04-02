@@ -269,6 +269,7 @@ class RekomendasiController extends Controller
                 $notaRekomendasi->is_recommended = false;
                 $notaRekomendasi->is_request_rekomendasi = false;
                 $notaRekomendasi->is_disetujui = false;
+                $proyek->is_disetujui = false;
             }
             // $proyek->approved_rekomendasi = $data->toJson();
             $notaRekomendasi->approved_rekomendasi = $data->toJson();
@@ -276,7 +277,7 @@ class RekomendasiController extends Controller
             //     Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> ditolak", "success");
             //     return redirect()->back();
             // }
-            if ($notaRekomendasi->save()) {
+            if ($notaRekomendasi->save() && $proyek->save()) {
                 Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> ditolak", "success");
                 return redirect()->back();
             }
@@ -1138,6 +1139,7 @@ class RekomendasiController extends Controller
             $notaRekomendasi->approved_verifikasi = $approved_verifikasi->toJson();
             $notaRekomendasi->is_verifikasi_approved = false;
             $notaRekomendasi->is_disetujui = false;
+            $proyek->is_disetujui = false;
 
             // $hasil_assessment = collect(json_decode($proyek->hasil_assessment));
             $hasil_assessment = collect(json_decode($notaRekomendasi->hasil_assessment));
@@ -1150,7 +1152,7 @@ class RekomendasiController extends Controller
             //     Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> telah ditolak oleh tim Penyusun melalui <b>Tahap Nota Rekomendasi 1</b>", "success");
             //     return redirect()->back();
             // }
-            if ($notaRekomendasi->save()) {
+            if ($notaRekomendasi->save() && $proyek->save()) {
                 createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega, $request);
                 // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_mega);
                 Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> telah ditolak oleh tim Penyusun melalui <b>Tahap Nota Rekomendasi 1</b>", "success");
@@ -1187,7 +1189,7 @@ class RekomendasiController extends Controller
                 if ($is_checked) {
                     if ($is_has_not_recommended) {
                         // $proyek->is_recommended = false;
-                        // $proyek->is_disetujui = false;
+                        $proyek->is_disetujui = false;
                         $notaRekomendasi->is_recommended = false;
                         $notaRekomendasi->is_disetujui = false;
 
@@ -1289,7 +1291,7 @@ class RekomendasiController extends Controller
                 if ($is_checked) {
                     if ($is_has_not_recommended) {
                         // $proyek->is_recommended = false;
-                        // $proyek->is_disetujui = false;
+                        $proyek->is_disetujui = false;
                         $notaRekomendasi->is_recommended = false;
                         $notaRekomendasi->is_disetujui = false;
 
@@ -1305,7 +1307,7 @@ class RekomendasiController extends Controller
                 //     Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> ditolak oleh tim Rekomendasi", "success");
                 //     return redirect()->back();
                 // }
-                if ($notaRekomendasi->save()) {
+                if ($notaRekomendasi->save() && $proyek->save()) {
                     Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> ditolak oleh tim Rekomendasi", "success");
                     return redirect()->back();
                 }
@@ -1326,7 +1328,7 @@ class RekomendasiController extends Controller
                 if ($is_checked) {
                     if ($is_has_not_recommended) {
                         // $proyek->is_recommended = false;
-                        // $proyek->is_disetujui = false;
+                        $proyek->is_disetujui = false;
                         $notaRekomendasi->is_recommended = false;
                         $notaRekomendasi->is_disetujui = false;
 
@@ -1417,7 +1419,7 @@ class RekomendasiController extends Controller
             //     Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> telah disetujui oleh tim Rekomendasi melalui <b>Tahap Nota Rekomendasi 1</b>", "success");
             //     return redirect()->back();
             // }
-            if ($notaRekomendasi->save()) {
+            if ($notaRekomendasi->save() && $proyek->save()) {
                 Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> telah disetujui oleh tim Rekomendasi melalui <b>Tahap Nota Rekomendasi 1</b>", "success");
                 return redirect()->back();
             }
@@ -1432,15 +1434,16 @@ class RekomendasiController extends Controller
                 "tanggal" => \Carbon\Carbon::now(),
                 "catatan" => $request["alasan-ditolak"],
             ]);
-            $proyek->approved_rekomendasi_final = $approved_verifikasi->toJson();
+            $notaRekomendasi->approved_rekomendasi_final = $approved_verifikasi->toJson();
 
-            $proyek->is_recommended = false;
+            $notaRekomendasi->is_recommended = false;
             $proyek->is_disetujui = false;
+            $notaRekomendasi->is_disetujui = false;
             $hasil_assessment = collect(json_decode($proyek->hasil_assessment));
             $is_proyek_mega = str_contains($proyek->klasifikasi_pasdin, "Mega") ? true : false;
             $is_proyek_besar = str_contains($proyek->klasifikasi_pasdin, "Besar") ? true : false;
             // $proyek->recommended_with_note = $data["note-rekomendasi"];
-            if ($proyek->save()) {
+            if ($proyek->save() && $notaRekomendasi->save()) {
                 createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega, $request);
                 // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_mega);
                 Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> telah ditolak oleh tim Rekomendasi melalui <b>Tahap Nota Rekomendasi 1</b>", "success");
@@ -1520,7 +1523,7 @@ class RekomendasiController extends Controller
             //     Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> telah ditolak oleh tim Persetujuan melalui <b>Tahap Nota Rekomendasi 1</b>", "success");
             //     return redirect()->back();
             // }
-            if ($proyek->save()) {
+            if ($proyek->save() && $notaRekomendasi->save()) {
                 createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_besar, $is_proyek_mega, $request);
                 // createWordPersetujuan($proyek, $hasil_assessment, $is_proyek_mega);
                 Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyek->nama_proyek</b> telah ditolak oleh tim Persetujuan melalui <b>Tahap Nota Rekomendasi 1</b>", "success");
@@ -1592,17 +1595,20 @@ class RekomendasiController extends Controller
             //     return $p->is_recommended;
             // });
 
-            $proyeks_proses_rekomendasi = NotaRekomendasi::whereIn("unit_kerja", $unit_kerjas)->where('is_request_rekomendasi', '!=', null)->where('is_disetujui', '=', null)->get();
+            $proyeks_proses_rekomendasi = NotaRekomendasi::whereIn("unit_kerja", $unit_kerjas)->where('is_request_rekomendasi', '!=', null)->where('is_disetujui', '=', null)->get()?->filter(function ($p) {
+                return !$p->Proyek->is_cancel;
+            });
             $proyeks_rekomendasi_final = NotaRekomendasi::whereIn("unit_kerja", $unit_kerjas)->get()->filter(function ($p) use ($matriks_user) {
-                return $p->is_recommended == true && $p->is_disetujui;
+                // return $p->is_recommended == true && !is_null($p->is_disetujui);
+                return !is_null($p->is_disetujui) || $p->Proyek->is_cancel;
             });
             $matriks_category = MatriksApprovalRekomendasi::all()->groupBy(['klasifikasi_proyek', 'kategori']);
         } else {
             $proyeks_rekomendasi_final = NotaRekomendasi::whereIn('unit_kerja', $unit_kerjas)->where('is_request_rekomendasi', '!=', null)->get()->filter(function ($p) use ($matriks_user) {
-                return !is_null($p->is_disetujui) && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0;
+                return (!is_null($p->is_disetujui) && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0) || $p->Proyek->is_cancel;
             });
             $proyeks_proses_rekomendasi = NotaRekomendasi::whereIn('unit_kerja', $unit_kerjas)->where('is_request_rekomendasi', '!=', null)->get()->filter(function ($p) use ($matriks_user) {
-                return is_null($p->is_disetujui) && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0;
+                return (is_null($p->is_disetujui) && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0) || !$p->Proyek->is_cancel;
             });
             $matriks_category = MatriksApprovalRekomendasi::all()->groupBy(['klasifikasi_proyek', 'kategori', 'departemen']);
             // dd($matriks_category);

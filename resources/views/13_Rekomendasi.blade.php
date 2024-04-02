@@ -752,7 +752,7 @@
                                                                 {{ $text }}
                                                             </small>
                                                         </td>
-                                                        <td>
+                                                        <td class="text-center">
                                                             @php
                                                                 if (!empty($nota_rekomendasi->approved_rekomendasi_final)) {
                                                                     $check_data = collect(json_decode($nota_rekomendasi->approved_rekomendasi_final));
@@ -785,7 +785,9 @@
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        <td>-</td>
+                                                        <td class="text-center">
+                                                            <span class="badge badge-sm {{ $proyek->is_cancel ? "text-bg-danger" : "" }}">{{ $proyek->is_cancel ? "Proyek Cancel" : "" }}</span>
+                                                        </td>
                                                         @if ($is_pic)
                                                             <td>
                                                                 {{-- @if (!is_null($proyek->is_request_rekomendasi))
@@ -1022,7 +1024,7 @@
                                                             </small>
                                                         </td>
 
-                                                        <td class="text-center align-middle">
+                                                        <td class="text-center align-center">
                                                             @php
                                                                 if (!empty($nota_rekomendasi->approved_rekomendasi_final)) {
                                                                     $check_data = collect(json_decode($nota_rekomendasi->approved_rekomendasi_final));
@@ -1062,10 +1064,8 @@
                                                                 {{-- <a href="#kt_modal_view_dokumen_persetujuan_{{ $proyek->kode_proyek }}" class="btn btn-sm btn-primary text-white" data-bs-toggle="model">Download</a> --}}
                                                             </small>
                                                         </td>
-                                                        <td>
-                                                            @if ($proyek->is_cancel)
-                                                                <small class="badge badge-primary">Cancel</small>
-                                                            @endif
+                                                        <td class="text-center">
+                                                            <span class="badge badge-sm {{ $proyek->is_cancel ? "text-bg-danger" : "" }}">{{ $proyek->is_cancel ? "Proyek Cancel" : "" }}</span>
                                                         </td>
                                                         <td class="text-center">
                                                             @if (($matriks_user?->contains('kategori', 'Pengajuan') && $matriks_user?->where('kategori', 'Pengajuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first()) ||
@@ -2023,7 +2023,7 @@
                             <input type="button" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_view_proyek_tolak_pengajuan_{{ $proyek->kode_proyek }}"
                                 name="tolak" value="Tolak" class="btn btn-sm btn-danger">
-                            <input type="submit" name="setuju" value="Setujui" class="btn btn-sm btn-success">
+                            <input type="submit" name="setuju" value="Setujui" class="btn btn-sm btn-success" onclick="return addLoading(this)">
                         </form>
                     @elseif(!empty($is_user_id_exist))
                     @endif
@@ -2053,7 +2053,7 @@
                         </div>
                         <div class="modal-footer">
                             <input type="submit" name="tolak" class="btn btn-sm btn-danger"
-                                value="Ditolak dengan alasan">
+                                value="Ditolak dengan alasan" onclick="return addLoading(this)">
                         </div>
                     </form>
                 </div>
@@ -2081,7 +2081,7 @@
                         </div>
                         <div class="modal-footer">
                             <input type="submit" name="verifikasi-revisi" class="btn btn-sm btn-primary"
-                                value="Revisi">
+                                value="Revisi" onclick="return addLoading(this)">
                         </div>
                     </form>
                 </div>
@@ -2109,7 +2109,7 @@
                         </div>
                         <div class="modal-footer">
                             <input type="submit" name="revisi-pengajuan" class="btn btn-sm btn-primary"
-                                value="Revisi">
+                                value="Revisi" onclick="return addLoading(this)">
                         </div>
                     </form>
                 </div>
@@ -2143,7 +2143,7 @@
             <div class="modal-dialog modal-dialog-centered modal-xl">
                 <div class="modal-content">
                     @if (is_null($nota_rekomendasi->is_draft_recommend_note) || $nota_rekomendasi->is_draft_recommend_note)
-                        <form action="" method="GET" onsubmit="addLoading(this)">
+                        <form action="" method="GET">
                     @endif
                     <div class="modal-header">
                         <h5 class="modal-title">Detail Proyek</h5>
@@ -2315,9 +2315,9 @@
                                 @if ((is_null($nota_rekomendasi->is_draft_recommend_note) || $nota_rekomendasi->is_draft_recommend_note) && !empty($matriks_user) && $matriks_user?->contains('kategori', 'Penyusun') && $matriks_user?->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '=', 1)?->first())
                                     @if (!collect(json_decode($nota_rekomendasi->approved_penyusun))->contains('status', 'approved'))
                                     <input type="submit" name="save-draft-note-rekomendasi" value="Simpan Sebagai Draft"
-                                        class="btn btn-sm btn-primary">
+                                        class="btn btn-sm btn-primary" onclick="return addLoading(this)">
                                     @endif
-                                    <input type="submit" name="input-rekomendasi-with-note" value="Submit"
+                                    <input type="submit" onclick="return addLoading(this)" name="input-rekomendasi-with-note" value="Submit"
                                         class="btn btn-sm btn-success" {{ collect(json_decode($nota_rekomendasi->approved_penyusun))->where('user_id', auth()->user()->id)->first()?->status == "approved" ? 'disabled' : '' }}>
                                     <input type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_view_proyek_revisi_pengajuan_{{ $proyek->kode_proyek }}"
                                         class="btn btn-sm btn-danger" value="Ajukan Revisi">
@@ -2325,11 +2325,11 @@
                             @else
                                     @if ($matriks_user?->contains('kategori', 'Penyusun') && $matriks_user?->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '=', 1)?->first())
                                         @if (!collect(json_decode($nota_rekomendasi->approved_penyusun))->contains('status', 'approved'))
-                                            <input type="submit" name="save-draft-note-rekomendasi" value="Simpan Sebagai Draft"
+                                            <input type="submit" onclick="return addLoading(this)" name="save-draft-note-rekomendasi" value="Simpan Sebagai Draft"
                                                 class="btn btn-sm btn-primary">
                                         @endif
                                         @if (empty($nota_rekomendasi->approved_penyusun) || collect(json_decode($nota_rekomendasi->approved_penyusun))?->contains('status', 'draft'))
-                                            <input type="submit" name="input-rekomendasi-with-note" value="Submit"
+                                            <input type="submit" onclick="return addLoading(this)" name="input-rekomendasi-with-note" value="Submit"
                                                 class="btn btn-sm btn-success" {{ collect(json_decode($nota_rekomendasi->approved_penyusun))->where('user_id', auth()->user()->id)->first()?->status == "approved" ? 'disabled' : '' }}>
                                             <input type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_view_proyek_revisi_pengajuan_{{ $proyek->kode_proyek }}"
                                                 class="btn btn-sm btn-danger" value="Ajukan Revisi">
@@ -2338,7 +2338,7 @@
                                         @if (empty(collect(json_decode($nota_rekomendasi->approved_penyusun))->where('user_id', auth()->user()->id)->first()) && !is_null($nota_rekomendasi->approved_penyusun) && !collect(json_decode($nota_rekomendasi->approved_penyusun))->contains('status', 'draft'))
                                             <input type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_view_proyek_revisi_{{ $proyek->kode_proyek }}"
                                                 class="btn btn-sm btn-primary" value="Ajukan Revisi">
-                                            <input type="submit" name="input-rekomendasi-with-note" value="Submit"
+                                            <input type="submit" onclick="return addLoading(this)" name="input-rekomendasi-with-note" value="Submit"
                                                 class="btn btn-sm btn-success" {{ collect(json_decode($nota_rekomendasi->approved_penyusun))->where('user_id', auth()->user()->id)->first()?->status == "approved" ? 'disabled' : '' }}>
                                         @endif
                                     @endif
@@ -2519,7 +2519,7 @@
                                         <input type="hidden" value="{{ $proyek->kode_proyek }}" name="kode-proyek"
                                             id="kode-proyek">
 
-                                        <input type="submit" name="verifikasi-setujui" value="Setujui"
+                                        <input type="submit" onclick="return addLoading(this)" name="verifikasi-setujui" value="Setujui"
                                             class="btn btn-sm btn-success">
                                         
                                         {{-- @if ($matriks_user->contains('kategori', 'Verifikasi') && $matriks_user->where('kategori', 'Verifikasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '=', 1)?->first()) --}}
@@ -2527,7 +2527,7 @@
                                                 class="btn btn-sm btn-primary" value="Ajukan Revisi">
                                         {{-- @endif --}}
                                             
-                                        <input type="submit" name="verifikasi-tolak" value="Ditolak" class="btn btn-sm btn-danger">
+                                        <input type="submit" onclick="return addLoading(this)" name="verifikasi-tolak" value="Ditolak" class="btn btn-sm btn-danger">
                                     </form>
                                 @else
                                     
@@ -2576,7 +2576,7 @@
                                         </span></label>
                                     <textarea name="alasan-ditolak" id="alasan-ditolak-{{ $proyek->kode_proyek }}" class="form-control form-control-solid"cols="1" rows="5" disabled></textarea>
                                     <br>
-                                    <input type="submit" class="btn btn-sm btn-success" name="rekomendasi-setujui"
+                                    <input type="submit" onclick="return addLoading(this)" class="btn btn-sm btn-success" name="rekomendasi-setujui"
                                         value="Submit">
                                 </form>
                             @elseif (is_null($nota_rekomendasi->is_disetujui) &&
@@ -2625,7 +2625,7 @@
                                     <label for="" class="text-start"><span class="required">Catatan:
                                         </span></label>
                                     <textarea name="catatan-persetujuan" class="form-control form-control-solid"cols="1" rows="5"></textarea>
-                                    <input type="submit" name="persetujuan-setujui" value="Disetujui"
+                                    <input type="submit" onclick="return addLoading(this)" name="persetujuan-setujui" value="Disetujui"
                                         class="btn btn-sm btn-success">
                                     <input type="button" data-bs-toggle="modal"
                                         data-bs-target="#kt_modal_view_proyek_tolak_persetujuan_{{ $proyek->kode_proyek }}"
@@ -2781,7 +2781,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <input type="submit" name="persetujuan-tolak" class="btn btn-sm btn-danger"
+                            <input type="submit" onclick="return addLoading(this)" name="persetujuan-tolak" class="btn btn-sm btn-danger"
                                 value="Ditolak dengan alasan">
                         </div>
                     </form>
@@ -2955,7 +2955,7 @@
                                                             @if (!empty($data->tanggal))
                                                                 Tanggal:
                                                                 {{-- <b>{{ Carbon\Carbon::create($data->tanggal)->translatedFormat('d F Y H:i:s') }}</b><br> --}}
-                                                                <b>{{ Carbon\Carbon::parse(date('d M Y H:i:s', strtotime($d->tanggal)))->translatedFormat('d F Y H:i:s') }}</b>
+                                                                <b>{{ Carbon\Carbon::parse(date('d M Y H:i:s', strtotime($data->tanggal)))->translatedFormat('d F Y H:i:s') }}</b>
                                                             @endif
                                                             @if (!empty($data->catatan))
                                                                 Catatan:
@@ -3196,7 +3196,7 @@
         </div>
     </div>
     <!--Begin::Modal Upload Final File-->
-    <form action="/rekomendasi/dokumen-final/{{ $proyek->kode_proyek }}/upload" method="post" enctype="multipart/form-data">
+    <form action="/rekomendasi/dokumen-final/{{ $proyek->kode_proyek }}/upload" method="post" enctype="multipart/form-data" onsubmit="addLoading(this)">
         @csrf
         <div class="modal fade" id="kt_modal_upload_final_file_{{ $proyek->kode_proyek }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-md">
@@ -3396,7 +3396,7 @@
         })
         function addLoading(elt) {
             LOADING_BODY.block();
-            elt.form.submit();
+            return true;
         }
         async function generateFile(kode_proyek) {
             Swal.fire({
