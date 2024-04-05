@@ -1325,8 +1325,9 @@
                                 data-bs-toggle="collapse" href="#csi-collapse" role="button"
                                 aria-expanded="false" aria-controls="csi-collapse"
                                 style="color:white; padding-left:20px; {{ str_contains(Request::url(), '/csi') ||
-                                str_contains(Request::url(), '/dashboard/csi') ||
-                                str_contains(Request::url(), '/csi/report')
+                                str_contains(Request::url(), '/csi/dashboard') ||
+                                str_contains(Request::url(), '/csi/report') ||
+                                str_contains(Request::url(), '/csi/mamster-data')
                                  ? 'background-color:#008CB4' : '' }}">
                                 <span class="menu-icon">
                                     <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
@@ -1343,8 +1344,8 @@
                         <div class="collapse" id="csi-collapse">
                             <!--begin::Menu Colapse-->
                             <div id="#kt_aside_menu" class="p-5" data-kt-menu="true"
-                                style="background-color:#0ca1c6; {{ Request::Path() == 'dashboard/csi' ? 'background-color:#008CB4' : '' }}">
-                                <a class="menu-link" href="/dashboard/csi" style="color:white; padding-left:30px;">
+                                style="background-color:#0ca1c6; {{ Request::Path() == '/csi/dashboard' ? 'background-color:#008CB4' : '' }}">
+                                <a class="menu-link" href="/csi/dashboard" style="color:white; padding-left:30px;">
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                         <i class="bi bi-building text-white"></i>
@@ -1378,6 +1379,52 @@
                                     </span>
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">Report CSI</span>
                                 </a>
+                            </div>
+                            <!--end::Menu Colapse-->
+                            <!--begin::Menu Colapse-->
+                            <div id="#kt_aside_menu" class="p-5" data-kt-menu="true"
+                                style="background-color:#0ca1c6; {{ Request::Path() == 'csi/master-data' ? 'background-color:#008CB4' : '' }}">
+                                <a class="menu-link"
+                                    data-bs-toggle="collapse" href="#csi-master-collapse" role="button"
+                                    aria-expanded="false" aria-controls="csi-master-collapse"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::url(), '/csi/mamster-data')
+                                    ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <i class="bi bi-folder-fill text-white" style="font-size: 18px; margin-left:7px"></i>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Master Data</span>
+                                    <span><i class="bi bi-caret-down-fill text-white"></i></span>
+                                </a>
+                            </div>
+                            <div class="collapse" id="csi-master-collapse">
+                                <!--begin::Menu Colapse-->
+                                <div id="#kt_aside_menu" class="p-5" data-kt-menu="true" style="background-color:#0ca1c6; {{ Request::Path() == '/csi/master-data/master-pertanyaan' ? 'background-color:#008CB4' : '' }}">
+                                    <a class="menu-link" href="/csi/master-data/master-pertanyaan" style="color:white; padding-left:30px;">
+                                        <span class="menu-icon">
+                                            <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                            <i class="bi bi-card-list text-white"></i>
+                                            <!--end::Svg Icon-->
+                                        </span>
+                                        <span class="menu-title" style="font-size: 12px; padding-left: 10px">Master Pertanyaan</span>
+                                    </a>
+                                </div>
+                                <!--end::Menu Colapse-->
+                                <!--begin::Menu Colapse-->
+                                <div id="#kt_aside_menu" class="p-5" data-kt-menu="true" style="background-color:#0ca1c6; {{ Request::Path() == '/csi/master-data/master-tingkat-kepuasan' ? 'background-color:#008CB4' : '' }}">
+                                    <a class="menu-link" href="/csi/master-data/master-tingkat-kepuasan" style="color:white; padding-left:30px;">
+                                        <span class="menu-icon">
+                                            <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                            <i class="bi bi-hand-thumbs-up-fill text-white"></i>
+                                            <!--end::Svg Icon-->
+                                        </span>
+                                        <span class="menu-title" style="font-size: 12px; padding-left: 10px">Master Tingkat Kepuasan</span>
+                                    </a>
+                                </div>
+                                <!--end::Menu Colapse-->
                             </div>
                             <!--end::Menu Colapse-->
                         </div>

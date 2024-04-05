@@ -3673,10 +3673,14 @@
                                                                                             @php
                                                                                                 $files = json_decode($porsi->file_consent_npwp);
                                                                                             @endphp
+                                                                                            @if (!empty($files))
                                                                                             @foreach ($files as $file)
                                                                                             <a href="{{ asset('consent-npwp/').$file }}" class="text-hover-primary">{{ $file }}</a>
                                                                                             <hr>
-                                                                                            @endforeach
+                                                                                            @endforeach                                                                                                
+                                                                                            @else
+                                                                                                <p class="m-0"></p>
+                                                                                            @endif
                                                                                         </td>
                                                                                         <!--begin::Column-->
                                                                                         @if ($porsi->is_greenlane)
