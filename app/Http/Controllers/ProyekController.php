@@ -2481,7 +2481,7 @@ class ProyekController extends Controller
         // $validation->validate();
 
         $editTender = PesertaTender::find($id);
-        $editTender->peserta_tender = $data["edit-peserta-tender"];
+        // $editTender->peserta_tender = $data["edit-peserta-tender"];
         $editTender->kode_proyek = $data["tender-kode-proyek"];
 
         if ($data["stage-proyek"] >= 5) {
