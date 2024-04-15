@@ -75,8 +75,8 @@ class CSIDashboardController extends Controller
                     $totalPerDivisi += $item->count();
                 }
             });
-            $averagePerDivisi = round($sumPerDivisi / $totalPerDivisi, 2);
-            $persentasePerDivisi = round($averagePerDivisi / $masterTingkatKepuasan->count() * 100, 2);
+            $averagePerDivisi = $totalPerDivisi != 0 ? round($sumPerDivisi / $totalPerDivisi, 2) : 0;
+            $persentasePerDivisi = $averagePerDivisi != 0 || $masterTingkatKepuasan->count() != 0 ? round($averagePerDivisi / $masterTingkatKepuasan->count() * 100, 2) : 0;
 
             $keteranganPerDivisi = $masterTingkatKepuasan->filter(function ($item) use ($persentasePerDivisi) {
                 return $item->dari <= $persentasePerDivisi && $item->sampai >= $persentasePerDivisi;
