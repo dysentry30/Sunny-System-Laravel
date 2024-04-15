@@ -38,6 +38,7 @@ use App\Http\Controllers\DraftContractController;
 use App\Http\Controllers\KriteriaPasarController;
 use App\Http\Controllers\AddendumContractController;
 use App\Http\Controllers\ContractManagementsController;
+use App\Http\Controllers\CSIDashboardController;
 use App\Http\Controllers\ContractApprovalController;
 use App\Http\Controllers\CSIController;
 use App\Http\Controllers\JenisProyekController;
@@ -3680,6 +3681,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         }
     });
 
+    /**
+     * Begin::Master Data CSI
+     */
     Route::get('/csi/master-data/master-pertanyaan', [CSIController::class, "MasterDataPertanyaanCSIIndex"]);
     Route::get('/csi/master-data/master-pertanyaan/{id}/get-data', [CSIController::class, "MasterDataPertanyaanCSIGetData"]);
     Route::post('/csi/master-data/master-pertanyaan/save', [CSIController::class, "MasterDataPertanyaanCSINew"]);
@@ -3691,7 +3695,14 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/csi/master-data/master-tingkat-kepuasan/save', [CSIController::class, "MasterDataTingkatKepuasanCSINew"]);
     Route::post('/csi/master-data/master-tingkat-kepuasan/{id}/edit', [CSIController::class, "MasterDataTingkatKepuasanCSIUpdate"]);
     Route::post('/csi/master-data/master-tingkat-kepuasan/delete', [CSIController::class, "MasterDataTingkatKepuasanCSIDelete"]);
+    /**
+     * End::Master Data CSI
+     */
 
+    /**
+     * Begin::Dashboard CSI
+     */
+    Route::get('/csi/dashboard', [CSIDashboardController::class, "index"]);
     // End CSI
 
     // begin RKAP
