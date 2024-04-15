@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Csi;
+use App\Models\CsiMasterGroupParentPertanyaan;
+use App\Models\CsiMasterKategoriPertanyaan;
+use App\Models\CsiMasterPertanyaan;
+use App\Models\CsiMasterTingkatKepuasan;
 use App\Models\User;
 use App\Models\Proyek;
 use App\Models\ProyekProgress;
@@ -359,7 +363,7 @@ class CSIController extends Controller
         //     return redirect()->back();
         // });
 
-        $emailNotification = sendNotifEmail($data['email'], "Permohonan Pengisian Survey Kepuasan Pelanggan", $message, true, false);
+        $emailNotification = sendNotifEmail($data['email'], "Permohonan Pengisian Survey Kepuasan Pelanggan", $message, false, false);
         if (!$emailNotification) {
             return redirect()->back();
         }
@@ -539,6 +543,397 @@ class CSIController extends Controller
             'driver' => 'single',
             'path' => storage_path("logs/$file.log"),
         ])->info("$message", $data);
+    }
+
+
+
+
+
+    //---------------------------------//
+    // Begin Master Data
+    //---------------------------------//
+
+    /**
+     * Master Data Pertanyaan
+     */
+    public function MasterDataPertanyaanCSIIndex(Request $request)
+    {
+        $masterPertanyaanCsi = CsiMasterPertanyaan::all();
+        $masterKategoriPertanyaan = CsiMasterKategoriPertanyaan::select(['code', 'kategori'])->where('is_active', true)->orderBy('posisi')->get();
+        $masterGroupParentPertanyaan = CsiMasterGroupParentPertanyaan::select(['code', 'kategori'])->where('is_active', true)->get();
+        return view('Csi.masterData.master_pertanyaan', ['data' => $masterPertanyaanCsi, "masterKategori" => $masterKategoriPertanyaan, "masterParent" => $masterGroupParentPertanyaan]);
+    }
+
+    /**
+     * Get Master Data Pertanyaan
+     */
+    public function MasterDataPertanyaanCSIGetData($id)
+    {
+        try {
+            $masterPertanyaan = CsiMasterPertanyaan::with(['CsiMasterKategoriPertanyaan', 'CsiMasterGroupParentPertanyaan'])->where('id', $id)->first();
+            $masterKategoriPertanyaan = CsiMasterKategoriPertanyaan::select(['code', 'kategori'])->where('is_active', true)->orderBy('posisi')->get();
+            $masterGroupParentPertanyaan = CsiMasterGroupParentPertanyaan::select(['code', 'kategori'])->where('is_active', true)->get();
+
+            $masterGroupSubParentPertanyaan = [
+                "Kepentingan",
+                "Kepuasan"
+            ];
+
+            $masterPilihanInput = [
+                "pilihan",
+                "text"
+            ];
+
+            $masterJumlahInput = [1, 2, 3, 4, 5];
+
+            $masterKategoriJawaban = [
+                "Sangat Penting / Sangat Tidak Penting",
+                "Sangat Puas / Sangat Tidak Puas",
+                "Sangat Setuju / Sangat Tidak Setuju",
+                "Lebih Baik / Sama / Lebih Buruk",
+                "Ya / Tidak",
+            ];
+
+            // $data = [];
+
+            // $data[] = [
+            //     'data' => $masterPertanyaan,
+            //     'masterKategoriPertanyaan' => $masterKategoriPertanyaan,
+            //     'masterGroupParentPertanyaan' => $masterGroupParentPertanyaan,
+            //     'masterGroupSubParentPertanyaan' => collect($masterGroupSubParentPertanyaan),
+            //     'masterPilihanInput' => collect($masterPilihanInput),
+            //     'masterJumlahInput' => collect($masterJumlahInput),
+            //     'masterPilihanInput' => collect($masterPilihanInput),
+            // ];
+
+            if (empty($masterPertanyaan)) {
+                $response = [
+                    'success' => false,
+                    'message' => 'Data tidak ditemukan!',
+                    'data' => []
+                ];
+            } else {
+                $response = [
+                    'success' => true,
+                    'message' => 'Success',
+                    'data' => [
+                        'masterPertanyaan' => $masterPertanyaan,
+                        'masterKategoriPertanyaan' => $masterKategoriPertanyaan,
+                        'masterGroupParentPertanyaan' => $masterGroupParentPertanyaan,
+                        'masterGroupSubParentPertanyaan' => collect($masterGroupSubParentPertanyaan),
+                        'masterPilihanInput' => collect($masterPilihanInput),
+                        'masterJumlahInput' => collect($masterJumlahInput),
+                        'masterKategoriJawaban' => collect($masterKategoriJawaban),
+                    ],
+                ];
+            }
+            return response()->json([$response]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+                'data' => []
+            ]);
+        }
+    }
+
+    /**
+     * Tambah Master Data Pertanyaan
+     */
+    public function MasterDataPertanyaanCSINew(Request $request)
+    {
+        try {
+            $data = $request->all();
+
+            $rules = [
+                'start-periode' => 'required|date',
+                'kategori' => 'required|string',
+                // 'parent' => 'string',
+                // 'sub-parent' => 'string',
+                'pertanyaan-indonesia' => 'required|string',
+                'pertanyaan-inggris' => 'required|string',
+                'tipe-input' => 'required|string',
+                'jumlah-pilihan' => 'integer',
+                'pilihan-jawaban' => 'required|string',
+                'bobot' => 'required|integer',
+                'posisi' => 'required|integer',
+                // 'is-active' => 'required|boolean',
+                // 'finish-periode' => 'date',
+            ];
+
+            $validateInput = validateInput($data, $rules);
+
+            if (!empty($validateInput)) {
+                Alert::html("Error", "Field <b>$validateInput</b> harus terisi!", "error");
+                return redirect()->back()->withInput()->with("modal", $data["modal"]);
+            }
+
+            $masterPertanyaan = new CsiMasterPertanyaan();
+            $masterPertanyaan->start_periode = $data['start-periode'];
+            $masterPertanyaan->kategori = $data['kategori'];
+            $masterPertanyaan->parent = $data['parent'];
+            $masterPertanyaan->sub_parent = $data['sub-parent'];
+            $masterPertanyaan->pertanyaan_indonesia = $data['pertanyaan-indonesia'];
+            $masterPertanyaan->pertanyaan_inggris = $data['pertanyaan-inggris'];
+            $masterPertanyaan->tipe_input = $data['tipe-input'];
+            $masterPertanyaan->jumlah_pilihan = $data['jumlah-pilihan'];
+            $masterPertanyaan->pilihan_jawaban = $data['pilihan-jawaban'];
+            $masterPertanyaan->bobot = $data['bobot'];
+            $masterPertanyaan->posisi = $data['posisi'];
+            $masterPertanyaan->is_active = isset($data['is-active']) ? true : false;
+            $masterPertanyaan->finish_periode = $data['finish-periode'];
+
+            if ($masterPertanyaan->save()) {
+                Alert::success('Success', 'Data Berhasil Disimpan');
+                return redirect()->back();
+            }
+            Alert::error('Terjadi Kesalahan!', 'Data Gagal Disimpan');
+            return redirect()->back();
+        } catch (\Exception $e) {
+            Alert::error('Terjadi Kesalahan!', $e->getMessage());
+            return redirect()->back();
+        }
+    }
+
+    /**
+     * Update Master Data Pertanyaan
+     */
+    public function MasterDataPertanyaanCSIUpdate(Request $request, $id)
+    {
+        try {
+            $data = $request->all();
+
+            $rules = [
+                'start-periode' => 'required|date',
+                'kategori' => 'required|string',
+                // 'parent' => 'string',
+                // 'sub-parent' => 'string',
+                'pertanyaan-indonesia' => 'required|string',
+                'pertanyaan-inggris' => 'required|string',
+                'tipe-input' => 'required|string',
+                'jumlah-pilihan' => 'integer',
+                'pilihan-jawaban' => 'required|string',
+                'bobot' => 'required|integer',
+                'posisi' => 'required|integer',
+                // 'is-active' => 'required|boolean',
+                // 'finish-periode' => 'date',
+            ];
+
+            $validateInput = validateInput($data, $rules);
+
+            if (!empty($validateInput)) {
+                Alert::html("Error", "Field <b>$validateInput</b> harus terisi!", "error");
+                return redirect()->back()->withInput()->with("modal", $data["modal"]);
+            }
+
+            $masterPertanyaan = CsiMasterPertanyaan::find($id);
+
+            if (empty($masterPertanyaan)) {
+                Alert::error('Error', "Data tidak ditemukan!");
+                return redirect()->back();
+            }
+
+            $masterPertanyaan->start_periode = $data['start-periode'];
+            $masterPertanyaan->kategori = $data['kategori'];
+            $masterPertanyaan->parent = $data['parent'];
+            $masterPertanyaan->sub_parent = $data['sub-parent'];
+            $masterPertanyaan->pertanyaan_indonesia = $data['pertanyaan-indonesia'];
+            $masterPertanyaan->pertanyaan_inggris = $data['pertanyaan-inggris'];
+            $masterPertanyaan->tipe_input = $data['tipe-input'];
+            $masterPertanyaan->jumlah_pilihan = $data['jumlah-pilihan'];
+            $masterPertanyaan->pilihan_jawaban = $data['pilihan-jawaban'];
+            $masterPertanyaan->bobot = $data['bobot'];
+            $masterPertanyaan->posisi = $data['posisi'];
+            $masterPertanyaan->is_active = isset($data['is-active']) ? true : false;
+            $masterPertanyaan->finish_periode = !isset($data['is-active']) ? $data['finish-periode'] : '';
+
+            if ($masterPertanyaan->save()) {
+                Alert::success('Success', 'Data Berhasil Disimpan');
+                return redirect()->back();
+            }
+            Alert::error('Terjadi Kesalahan!', 'Data Gagal Disimpan');
+            return redirect()->back();
+        } catch (\Exception $e) {
+            Alert::error('Terjadi Kesalahan!', $e->getMessage());
+            return redirect()->back();
+        }
+    }
+
+    /**
+     * Delete Master Data Pertanyaan
+     */
+    public function MasterDataPertanyaanCSIDelete(Request $request)
+    {
+        $data = CsiMasterPertanyaan::find($request->get('id'));
+        if (empty($data)) {
+            return response()->json([
+                'success' => false,
+                'message' => "Data gagal dihapus. Mohon Hubungi Admin!"
+            ]);
+        }
+
+        if ($data->delete()) {
+            return response()->json([
+                'success' => true,
+                'message' => "Data Berhasil Dihapus"
+            ]);
+        }
+    }
+
+    /**
+     * Master Data Tingkat Kepuasan
+     */
+    public function MasterDataTingkatKepuasanCSIIndex(Request $request)
+    {
+        $masterTingkatKepuasanCsi = CsiMasterTingkatKepuasan::all();
+        return view('Csi.masterData.master_tingkat_kepuasan', ['data' => $masterTingkatKepuasanCsi]);
+    }
+
+    /**
+     * Get Master Data Tingkat Kepuasan
+     */
+    public function MasterDataTingkatKepuasanGetData($id)
+    {
+        try {
+            $data = CsiMasterTingkatKepuasan::find($id);
+            $kategori = [
+                'Tidak Puas / Not Satisfied',
+                'Kurang Puas / Less Satisfied',
+                'Cukup Puas / Quiet Satisfied',
+                'Puas / Satisfied',
+                'Sangat Puas / Very Satisfied',
+            ];
+            return response()->json([
+                'success' => true,
+                'message' => 'Success',
+                'data' => [
+                    'data' => $data,
+                    'kategori' => $kategori
+
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+                'data' => []
+            ]);
+        }
+    }
+
+    /**
+     * Tambah Master Data Tingkat Kepuasan
+     */
+    public function MasterDataTingkatKepuasanCSINew(Request $request)
+    {
+        try {
+            $data = $request->all();
+
+            $rules = [
+                'start-periode' => 'required|date',
+                'kategori' => 'required|string',
+                'dari-nilai' => 'required|integer',
+                'sampai-nilai' => 'required|integer',
+                // 'finish-periode' => 'date',
+                // 'is-active' => 'required|boolean',
+            ];
+
+            $validateInput = validateInput($data, $rules);
+
+            if (!empty($validateInput)) {
+                Alert::html("Error", "Field <b>$validateInput</b> harus terisi!", "error");
+                return redirect()->back()->withInput()->with("modal", $data["modal"]);
+            }
+
+            $masterTingkatKepuasan = new CsiMasterTingkatKepuasan();
+            $masterTingkatKepuasan->start_periode = $data['start-periode'];
+            $masterTingkatKepuasan->kategori = $data['kategori'];
+            $masterTingkatKepuasan->dari = $data['dari-nilai'];
+            $masterTingkatKepuasan->sampai = $data['sampai-nilai'];
+            $masterTingkatKepuasan->is_active = isset($data['is-active']) ? true : false;
+            $masterTingkatKepuasan->finish_periode = $data['finish-periode'];
+
+            if ($masterTingkatKepuasan->save()) {
+                Alert::success('Success', 'Data Berhasil Disimpan');
+                return redirect()->back();
+            }
+            Alert::error('Terjadi Kesalahan!', 'Data Gagal Disimpan');
+            return redirect()->back();
+        } catch (\Exception $e) {
+            Alert::error('Terjadi Kesalahan!', $e->getMessage());
+            return redirect()->back();
+        }
+    }
+
+    /**
+     * Update Master Data Tingkat Kepuasan
+     */
+    public function MasterDataTingkatKepuasanCSIUpdate(Request $request, $id)
+    {
+        try {
+            $data = $request->all();
+
+            $rules = [
+                'start-periode' => 'required|date',
+                'kategori' => 'required|string',
+                'dari-nilai' => 'required|integer',
+                'sampai-nilai' => 'required|integer',
+                // 'finish-periode' => 'date',
+                // 'is-active' => 'required|boolean',
+            ];
+
+            $validateInput = validateInput($data, $rules);
+
+            if (!empty($validateInput)) {
+                Alert::html("Error", "Field <b>$validateInput</b> harus terisi!", "error");
+                return redirect()->back()->withInput()->with("modal", $data["modal"]);
+            }
+
+            $masterTingkatKepuasan = CsiMasterTingkatKepuasan::find($id);
+
+            if (empty($masterTingkatKepuasan)) {
+                Alert::error('Error', "Data tidak ditemukan!");
+                return redirect()->back();
+            }
+
+            $masterTingkatKepuasan->start_periode = $data['start-periode'];
+            $masterTingkatKepuasan->kategori = $data['kategori'];
+            $masterTingkatKepuasan->dari = $data['dari-nilai'];
+            $masterTingkatKepuasan->sampai = $data['sampai-nilai'];
+            $masterTingkatKepuasan->is_active = isset($data['is-active']) ? true : false;
+            $masterTingkatKepuasan->finish_periode = $data['finish-periode'];
+
+            if ($masterTingkatKepuasan->save()) {
+                Alert::success('Success', 'Data Berhasil Disimpan');
+                return redirect()->back();
+            }
+            Alert::error('Terjadi Kesalahan!', 'Data Gagal Disimpan');
+            return redirect()->back();
+        } catch (\Exception $e) {
+            Alert::error('Terjadi Kesalahan!', $e->getMessage());
+            return redirect()->back();
+        }
+    }
+
+    /**
+     * Delete Master Data Tingkat Kepuasan
+     */
+    public function MasterDataTingkatKepuasanCSIDelete(Request $request)
+    {
+        $data = CsiMasterTingkatKepuasan::find($request->get('id'));
+        if (empty($data)) {
+            return response()->json([
+                'success' => false,
+                'message' => "Data gagal dihapus. Mohon Hubungi Admin!"
+            ]);
+        }
+
+        if ($data->delete()) {
+            return response()->json([
+                'success' => true,
+                'message' => "Data Berhasil Dihapus"
+            ]);
+        }
     }
 
 }
