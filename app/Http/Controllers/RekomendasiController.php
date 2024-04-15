@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Gate;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Models\MatriksApprovalRekomendasi;
 use App\Models\KriteriaPenggunaJasaDetail;
@@ -1568,8 +1569,9 @@ class RekomendasiController extends Controller
             }
         }
 
-        $is_super_user = str_contains(Auth::user()->name, "PIC") || Auth::user()->check_administrator;
-        $unit_kerjas = $is_super_user && str_contains(Auth::user()->name, "Admin") ? UnitKerja::addSelect(["divcode"])->get()->toArray() : (str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja))->toArray();
+        // $is_super_user = str_contains(Auth::user()->name, "PIC") || Auth::user()->check_administrator || Gate::any(['super-admin']);
+        $is_super_user = Gate::any(['super-admin']);
+        $unit_kerjas = $is_super_user || str_contains(Auth::user()->name, "Admin") ? UnitKerja::addSelect(["divcode"])->get()->toArray() : (str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja))->toArray();
         $matriks_user = Auth::user()->Pegawai->MatriksApproval ?? null;
         $is_pic = Auth::user()->check_administrator ? true : (empty($matriks_user) || $matriks_user->isEmpty() ? true : false);
         if ($is_pic) {
