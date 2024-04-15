@@ -3680,6 +3680,18 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         }
     });
 
+    Route::get('/csi/master-data/master-pertanyaan', [CSIController::class, "MasterDataPertanyaanCSIIndex"]);
+    Route::get('/csi/master-data/master-pertanyaan/{id}/get-data', [CSIController::class, "MasterDataPertanyaanCSIGetData"]);
+    Route::post('/csi/master-data/master-pertanyaan/save', [CSIController::class, "MasterDataPertanyaanCSINew"]);
+    Route::post('/csi/master-data/master-pertanyaan/{id}/edit', [CSIController::class, "MasterDataPertanyaanCSIUpdate"]);
+    Route::post('/csi/master-data/master-pertanyaan/delete', [CSIController::class, "MasterDataPertanyaanCSIDelete"]);
+
+    Route::get('/csi/master-data/master-tingkat-kepuasan', [CSIController::class, "MasterDataTingkatKepuasanCSIIndex"]);
+    Route::get('/csi/master-data/master-tingkat-kepuasan/{id}/get-data', [CSIController::class, "MasterDataTingkatKepuasanGetData"]);
+    Route::post('/csi/master-data/master-tingkat-kepuasan/save', [CSIController::class, "MasterDataTingkatKepuasanCSINew"]);
+    Route::post('/csi/master-data/master-tingkat-kepuasan/{id}/edit', [CSIController::class, "MasterDataTingkatKepuasanCSIUpdate"]);
+    Route::post('/csi/master-data/master-tingkat-kepuasan/delete', [CSIController::class, "MasterDataTingkatKepuasanCSIDelete"]);
+
     // End CSI
 
     // begin RKAP
