@@ -576,6 +576,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
      * Begin::Dashboard CSI
      */
     Route::get('/csi/dashboard', [CSIDashboardController::class, "index"]);
+    Route::get('/csi/dashboard/{unit_kerja}', [CSIDashboardController::class, "detail"]);
 
     // End CSI
 
