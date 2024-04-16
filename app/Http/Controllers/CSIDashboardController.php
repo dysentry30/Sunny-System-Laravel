@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Csi;
 use App\Models\CsiMasterTingkatKepuasan;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CSIDashboardController extends Controller
@@ -13,8 +14,22 @@ class CSIDashboardController extends Controller
      */
     public function index(Request $request)
     {
+        //-----------------------------------------//
+        // Filter Dashboard
+        //-----------------------------------------//
+
+        $getYear = $request->get('get-year') ?? date('Y');
+        $getMonth = $request->get('get-month') ?? '';
+
+        $CSIFinish = Csi::select(['id_csi', 'id_customer', 'no_spk', 'status', 'score_csi', 'is_setuju'])->with(['ProyekPIS'])->where('status', 'Done')->where('is_setuju', 't')->whereYear('tanggal_submit', $getYear)->get();
+
+        if (!empty($getMonth)) {
+            $CSIFinish = $CSIFinish->filter(function ($csi) use ($getMonth) {
+                return Carbon::parse($csi->tanggal_submit)->format('m') == $getMonth;
+            });
+        }
+
         $kategoriCSI = CsiMasterTingkatKepuasan::all();
-        $CSIFinish = Csi::select(['id_csi', 'id_customer', 'no_spk', 'status', 'score_csi', 'is_setuju'])->with(['ProyekPIS'])->where('status', 'Done')->where('is_setuju', 't')->get();
         $masterTingkatKepuasan = CsiMasterTingkatKepuasan::all();
 
         $CSIGroupByProyek = $CSIFinish->groupBy('no_spk');
@@ -37,9 +52,9 @@ class CSIDashboardController extends Controller
             });
             $totalCountCSI = $CSIGetLastProgress->count();
 
-            $totalAverageScoreCsi = round($totalNilaiCsi / $totalCountCSI, 2);
+            $totalAverageScoreCsi = $totalNilaiCsi != 0 || $totalCountCSI != 0 ? round($totalNilaiCsi / $totalCountCSI, 2) : 0;
 
-            $totalAveragePersentaseCsi = round($totalAverageScoreCsi / $masterTingkatKepuasan->count() * 100, 2);
+            $totalAveragePersentaseCsi = $totalAverageScoreCsi != 0 || $masterTingkatKepuasan->count() != 0 ? round($totalAverageScoreCsi / $masterTingkatKepuasan->count() * 100, 2) : 0;
         }
 
         $tingkatKepuasanTotal = $masterTingkatKepuasan->filter(function ($item) use ($totalAveragePersentaseCsi) {
@@ -72,7 +87,7 @@ class CSIDashboardController extends Controller
                     $sumPerDivisi = $item->sum(function ($i) {
                         return (float)$i->score_csi;
                     });
-                    $totalPerDivisi += $item->count();
+                    $totalPerDivisi = $item->count();
                 }
             });
             $averagePerDivisi = $totalPerDivisi != 0 ? round($sumPerDivisi / $totalPerDivisi, 2) : 0;
@@ -85,6 +100,29 @@ class CSIDashboardController extends Controller
             return ['key' => $value, 'sumPerDivisi' => round($sumPerDivisi, 2), 'totalPerDivisi' => $totalPerDivisi, 'persentasePerDivisi' => $persentasePerDivisi, 'keteranganPerDivisi' => $keteranganPerDivisi];
         });
 
-        return view("Csi.dashboard.index", ["kategoriCSI" => $kategoriCSI, 'dataAverageTotalCsi' => $dataAverageTotalCsi, 'tingkatKepuasanTotal' => $tingkatKepuasanTotal, 'dataAveragePerDivisiCsi' => $dataAveragePerDivisiCsi]);
+        return view("Csi.dashboard.index", ["kategoriCSI" => $kategoriCSI, 'dataAverageTotalCsi' => $dataAverageTotalCsi, 'tingkatKepuasanTotal' => $tingkatKepuasanTotal, 'dataAveragePerDivisiCsi' => $dataAveragePerDivisiCsi, 'getYear' => $getYear, 'getMonth' => $getMonth]);
+    }
+
+    /**
+     * Tampilan Detail Dashboard Per Divisi
+     */
+    public function detail(Request $request, $unit_kerja)
+    {
+        //----------------------------//
+        // Filter Dashboard
+        //----------------------------//
+        $getYear = $request->get('get-year') ?? date('Y');
+        $getMonth = $request->get('get-month') ?? '';
+
+        $nilaiRadarKanan = collect([]);
+        for ($i = 0; $i < 7; $i++) {
+            $nilaiRadarKanan->push(round(rand(30 * 10, 100 * 10) / 10, 2));
+        }
+
+        $nilaiRadarKiri = collect([]);
+        for ($i = 0; $i < 5; $i++) {
+            $nilaiRadarKiri->push(round(rand(30 * 10, 100 * 10) / 10, 2));
+        }
+        return view('Csi.dashboard.detail', ['unitKerja' => $unit_kerja, 'nilaiRadarKiri' => $nilaiRadarKiri, 'nilaiRadarKanan' => $nilaiRadarKanan, 'getYear' => $getYear, 'getMonth' => $getMonth]);
     }
 }

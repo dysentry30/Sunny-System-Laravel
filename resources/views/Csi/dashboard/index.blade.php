@@ -49,9 +49,43 @@
                         <!--begin::Card header-->
                         <div class="card-header border-0 py-2">
                             <!--begin::Card title-->
-                            <div class="card-title"></div>
-                            <!--begin::Card title-->
+                            <div class="card-title">
+                                <form action="" class="d-flex flex-row gap-4">
+                                    <select name="get-year" id="get-year"
+                                    class="form-select form-select-solid select2-hidden-accessible"
+                                    data-control="select2" data-hide-search="true"
+                                    data-placeholder="Pilh Tahun"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value="" selected></option>
+                                    <option value="2023" {{ $getYear == '2023' ? 'selected' : '' }}>2023</option>
+                                    <option value="2024" {{ $getYear == '2024' ? 'selected' : '' }}>2024</option>
+                                    </select>
+                                    
+                                    <select name="get-month" id="get-month"
+                                    class="form-select form-select-solid select2-hidden-accessible"
+                                    data-control="select2" data-hide-search="true"
+                                    data-placeholder="Pilh Bulan"
+                                    tabindex="-1" aria-hidden="true">
+                                    <option value="" selected></option>
+                                    <option value="1" {{ $getMonth == '1' ? 'selected' : '' }}>Januari</option>
+                                    <option value="2" {{ $getMonth == '2' ? 'selected' : '' }}>Februari</option>
+                                    <option value="3" {{ $getMonth == '3' ? 'selected' : '' }}>Maret</option>
+                                    <option value="4" {{ $getMonth == '4' ? 'selected' : '' }}>April</option>
+                                    <option value="5" {{ $getMonth == '5' ? 'selected' : '' }}>Mei</option>
+                                    <option value="6" {{ $getMonth == '6' ? 'selected' : '' }}>Juni</option>
+                                    <option value="7" {{ $getMonth == '7' ? 'selected' : '' }}>Juli</option>
+                                    <option value="8" {{ $getMonth == '8' ? 'selected' : '' }}>Agustus</option>
+                                    <option value="9" {{ $getMonth == '9' ? 'selected' : '' }}>September</option>
+                                    <option value="10" {{ $getMonth == '10' ? 'selected' : '' }}>Oktober</option>
+                                    <option value="11" {{ $getMonth == '11' ? 'selected' : '' }}>November</option>
+                                    <option value="12" {{ $getMonth == '12' ? 'selected' : '' }}>Desember</option>
+                                    </select>
 
+                                    <button type="submit" class="btn btn-sm btn-primary">Search</button>
+                                    <a href="/csi/dashboard" class="btn btn-sm btn-secondary align-middle">Reset</a>
+                                </form>
+                            </div>
+                            <!--begin::Card title-->
                         </div>
                         <!--end::Card header-->
 
@@ -130,7 +164,13 @@
                                         <tbody class="fw-bold text-gray-600">
                                             @foreach ($dataAveragePerDivisiCsi as $item)
                                             <tr>
-                                                <td class="text-center align-center">{{ $item['key'] }}</td>
+                                                <td class="text-center align-center">
+                                                    @if (!empty($getMonth))
+                                                        <a class="text-hover-primary" href="/csi/dashboard/{{ $item['key'] }}?get-year={{ $getYear }}&get-month={{ $getMonth }}">{{ $item['key'] }}</a>
+                                                    @else
+                                                        <a class="text-hover-primary" href="/csi/dashboard/{{ $item['key'] }}">{{ $item['key'] }}</a>
+                                                    @endif
+                                                </td>
                                                 <td class="text-center align-center">{{ $item['sumPerDivisi'] }}</td>
                                                 <td class="text-center align-center">{{ $item['persentasePerDivisi'] }}%</td>
                                                 <td class="text-center align-center">{{ $item['keteranganPerDivisi'] }}</td>
@@ -201,7 +241,7 @@
     const mappingDataPerDivisiForHighchart = dataPersentaseDivisiCSI.map(function(item){
         return {
             "name" : item.key,
-            "data" : [item.sumPerDivisi],
+            "data" : [item.persentasePerDivisi],
             "total" : item.totalPerDivisi
         }
     });
