@@ -25,7 +25,7 @@ class CSIDashboardController extends Controller
 
         if (!empty($getMonth)) {
             $CSIFinish = $CSIFinish->filter(function ($csi) use ($getMonth) {
-                return Carbon::parse($csi->tanggal_submit)->format('m') == $getMonth;
+                return Carbon::parse($csi->tanggal_submit)->format('m') <= $getMonth;
             });
         }
 
