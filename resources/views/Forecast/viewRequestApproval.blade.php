@@ -596,6 +596,9 @@
 {{-- begin:: JS script --}}
 @section('js-script')
     <script>
+        const LOADING_BODY = new KTBlockUI(document.querySelector('#kt_body'), {
+            message: '<div class="blockui-message"><span class="spinner-border text-primary"></span> Loading...</div>',
+        })
         let socketId = "";
         const socket = new WebSocket("ws://127.0.0.1:6001/testing-websocket");
 
@@ -630,6 +633,7 @@
                 formData.append("periode_prognosa", periode);
                 formData.append("_token", "{{ csrf_token() }}");
                 if (result.isConfirmed) {
+                    LOADING_BODY.block();
                     const setLockRes = await fetch("/forecast/set-lock/unit-kerja", {
                         method: "POST",
                         header: {
@@ -638,6 +642,7 @@
                         body: formData,
                     }).then(res => res.json());
                     if(isApproved) {
+                        LOADING_BODY.release();
                         e.parentElement.innerHTML = `<button type="button"
                                                         class="btn btn-sm btn-success text-white disabled"
                                                         style="background-color: rgb(17, 179, 17)">Approved</button>`;
@@ -658,6 +663,7 @@
                         });
                         
                     } else {
+                        LOADING_BODY.release();
                         e.parentElement.innerHTML = `
                         <button type="button"
                         class="btn btn-sm btn-danger text-white disabled">Approval ditolak</button>`;

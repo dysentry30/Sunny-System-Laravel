@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Gate;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Models\MatriksApprovalRekomendasi;
 use App\Models\KriteriaPenggunaJasaDetail;
@@ -22,10 +23,12 @@ use Karriere\PdfMerge\PdfMerge;
 
 class RekomendasiController extends Controller
 {
-    public $isnomorTargetActive = true;
-    // public $isnomorTargetActive = false;
-    // public $nomorDefault = "6285376444701";
-    public $nomorDefault = "085881028391";
+    public $isnomorTargetActive;
+
+    public function __construct()
+    {
+        $this->isnomorTargetActive = env('NR_ACTIVE');
+    }
 
     public function index(Request $request)
     {
@@ -1568,8 +1571,9 @@ class RekomendasiController extends Controller
             }
         }
 
-        $is_super_user = str_contains(Auth::user()->name, "PIC") || Auth::user()->check_administrator;
-        $unit_kerjas = $is_super_user && str_contains(Auth::user()->name, "Admin") ? UnitKerja::addSelect(["divcode"])->get()->toArray() : (str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja))->toArray();
+        // $is_super_user = str_contains(Auth::user()->name, "PIC") || Auth::user()->check_administrator || Gate::any(['super-admin']);
+        $is_super_user = Gate::any(['super-admin']);
+        $unit_kerjas = $is_super_user || str_contains(Auth::user()->name, "Admin") ? UnitKerja::addSelect(["divcode"])->get()->toArray() : (str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja))->toArray();
         $matriks_user = Auth::user()->Pegawai->MatriksApproval ?? null;
         $is_pic = Auth::user()->check_administrator ? true : (empty($matriks_user) || $matriks_user->isEmpty() ? true : false);
         if ($is_pic) {
@@ -1608,7 +1612,7 @@ class RekomendasiController extends Controller
                 return (!is_null($p->is_disetujui) && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0) || $p->Proyek->is_cancel;
             });
             $proyeks_proses_rekomendasi = NotaRekomendasi::whereIn('unit_kerja', $unit_kerjas)->where('is_request_rekomendasi', '!=', null)->get()->filter(function ($p) use ($matriks_user) {
-                return (is_null($p->is_disetujui) && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0 && !$p->Proyek->is_cancel);
+                return (is_null($p->is_disetujui) && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0) || !$p->Proyek->is_cancel;
             });
             $matriks_category = MatriksApprovalRekomendasi::all()->groupBy(['klasifikasi_proyek', 'kategori', 'departemen']);
             // dd($matriks_category);

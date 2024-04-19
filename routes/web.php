@@ -1351,6 +1351,23 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $h->is_approved_1 = (bool) $data["is_approved"] ? "t" : "f";
             $customers_attractivness = IndustryOwner::all();
 
+            // Begin :: Duplicate Forecast Next Periode Prognosa
+            if ((bool) $data["is_approved"]) {
+                $new_periode_forecast = new Forecast();
+                $new_periode_forecast->kode_proyek = $h->kode_proyek;
+                $new_periode_forecast->nilai_forecast = $h->nilai_forecast;
+                $new_periode_forecast->month_forecast = $h->month_forecast;
+                $new_periode_forecast->rkap_forecast = $h->rkap_forecast;
+                $new_periode_forecast->month_rkap = $h->month_rkap;
+                $new_periode_forecast->realisasi_forecast = $h->realisasi_forecast;
+                $new_periode_forecast->month_realisasi = $h->month_realisasi;
+                $new_periode_forecast->periode_prognosa = $h->periode_prognosa != 12 ? $h->periode_prognosa + 1 : 1;
+                $new_periode_forecast->tahun = $h->tahun;
+                $new_periode_forecast->save();
+            }
+
+            // End :: Duplicate Forecast Next Periode Prognosa
+
             // Begin :: Kirim data Forecast ke SAP
             if((bool) $data["is_approved"]) {
                 // $data_send_to_sap = collect([
@@ -1580,6 +1597,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                         $history_forecast->realisasi_forecast = "0";
                     } else {
                         if (($forecast->periode_prognosa == $forecast->month_realisasi)) {
+                            $forecast->nilai_forecast = $forecast->realisasi_forecast;
+
                             $history_forecast->nilai_forecast = $forecast->realisasi_forecast ?? "0";
                             $history_forecast->realisasi_forecast = $forecast->realisasi_forecast ?? "0";
                         } else {
@@ -1608,7 +1627,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                     } else {
                         $history_forecast->tahun = (int) date("Y");
                     }
-                    
+
+                    $forecast->save();
                     $history_forecast->save();
                 }
             } else {
@@ -1842,6 +1862,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         if (isset($data["unit_kerja"])) {
             $unit_kerja = UnitKerja::where("unit_kerja", "=", $data["unit_kerja"])->first();
             $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $data["periode-prognosa"])->where("proyeks.unit_kerja", $unit_kerja->divcode)->select("history_forecast.*")->get();
+            $forecast_next_prognosa = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("periode_prognosa", "=", $data["periode-prognosa"] != 12 ? $data["periode-prognosa"] + 1 : 1)->where("proyeks.unit_kerja", $unit_kerja->divcode)->select("forecasts.*");
         } else {
             $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(
                 ",",
@@ -1849,8 +1870,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             )) : Auth::user()->unit_kerja;
             if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
                 $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $data["periode-prognosa"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                $forecast_next_prognosa = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("periode_prognosa", "=", $data["periode-prognosa"] != 12 ? $data["periode-prognosa"] + 1 : 1)->whereIn("unit_kerja", $unit_kerja_user->toArray())->select("forecasts.*");
             } else {
                 $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $data["periode-prognosa"])->where("proyeks.unit_kerja", $unit_kerja_user);
+                $forecast_next_prognosa = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("periode_prognosa", "=", $data["periode-prognosa"] != 12 ? $data["periode-prognosa"] + 1 : 1)->where("proyeks.unit_kerja", $unit_kerja_user)->select("forecasts.*");
             }
         }
         // if (Auth::user()->check_administrator) {
@@ -1859,6 +1882,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         // } else {
         //     $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $request->periode_prognosa)->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
         // }
+        $forecast_next_prognosa->delete();
         $history_forecasts = $history_forecasts->filter(function ($h) {
             return $h->is_approved_1 == "f" || $h->is_request_unlock == "t";
         });
@@ -1868,6 +1892,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         foreach ($history_forecasts as $history_forecast) {
             $history_forecast->delete();
         }
+
+
         if ($request->ajax()) {
             return response()->json([
                 "status" => "success",
