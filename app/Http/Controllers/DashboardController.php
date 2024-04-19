@@ -3933,13 +3933,13 @@ class DashboardController extends Controller
         $files = File::allFiles(public_path("excel"));
         foreach ($files as $file) {
             $file = File::lastModified($file);
-            try {
-                $file_modified = date_create(strtotime($file));
-            } catch (\Exception $e) {
-                $file_modified = date_create($file);
-            }
+            // try {
+            //     $file_modified = date_create(strtotime($file));
+            // } catch (\Exception $e) {
+            //     $file_modified = date_create($file);
+            // }
             // $file_modified = date_create(strtotime($file));
-            // $file_modified = date_create($file);
+            $file_modified = date_create($file);
             $now = date_create("now");
             if ($now->diff($file_modified)->i > 1) {
                 File::delete(public_path("excel/$file"));
@@ -3967,7 +3967,7 @@ class DashboardController extends Controller
         // dd($type, $prognosa, $month, $unit_`kerja);
         if ($type == "Forecast") {
             $month = array_search($month, $arrNamaBulan);
-            if (Auth::user()->check_administrator || str_contains(Auth::user()->name, "(PIC)")) {
+            if (Auth::user()->check_administrator || Gate::allows(['admin-crm'])) {
 
                 $history_forecasts = Proyek::with(["proyekBerjalan"])->select("proyeks.*", "history_forecast.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $year)->where("periode_prognosa", "=", $prognosa)->where("month_forecast", "!=", 0)->get()->where("is_cancel", "!=", true)->sortBy("month_forecast", SORT_NUMERIC);
                 $countUnitKerjaFromHistory = $history_forecasts->groupBy('unit_kerja')->count();
@@ -4043,7 +4043,7 @@ class DashboardController extends Controller
             // dd($data);
         } elseif ($type == "NilaiOKRKAP") {
             $month = array_search($month, $arrNamaBulan);
-            if (Auth::user()->check_administrator || str_contains(Auth::user()->name, "(PIC)")) {
+            if (Auth::user()->check_administrator || Gate::allows(['admin-crm'])) {
                 $history_rkap = Proyek::with(["proyekBerjalan"])->select("proyeks.*", "history_forecast.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $year)->where("periode_prognosa", "=", $prognosa)->where("month_rkap", "!=", 0)->get()->sortBy("month_rkap", SORT_NUMERIC);
                 $countUnitKerjaFromHistory = $history_rkap->groupBy('unit_kerja')->count();
                 if ($history_rkap->count() < 1 || $countUnitKerjaFromHistory < 11) {
@@ -4124,7 +4124,7 @@ class DashboardController extends Controller
         } else {
             $month = array_search($month, $arrNamaBulan);
 
-            if (Auth::user()->check_administrator || str_contains(Auth::user()->name, "(PIC)")) {
+            if (Auth::user()->check_administrator || Gate::allows(['admin-crm'])) {
                 $history_realisasi = Proyek::with(["proyekBerjalan"])->select("proyeks.*", "history_forecast.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.stage", "=", 8)->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $year)->where("periode_prognosa", "=", $prognosa)->where("month_realisasi", "!=", 0)->get()->where("is_cancel", "!=", true)->sortBy("month_realisasi", SORT_NUMERIC);
                 $countUnitKerjaFromHistory = $history_realisasi->groupBy('unit_kerja')->count();
                 if ($history_realisasi->count() < 1 || $countUnitKerjaFromHistory < 11) {
