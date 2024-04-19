@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Csi;
+use App\Models\CsiKalkulasiJawaban;
 use App\Models\CsiMasterGroupParentPertanyaan;
 use App\Models\CsiMasterKategoriPertanyaan;
 use App\Models\CsiMasterPertanyaan;
@@ -123,20 +124,34 @@ class CSIController extends Controller
             $score_csi_b = (int) (((int) $data['answer_2_2'] + (int) $data['answer_2_3']) / 2);
             $total_kepentingan = (int) $data['answer_4_1_2'] + (int) $data['answer_4_2_2'] + (int) $data['answer_4_3_2'] + (int) $data['answer_4_4_1_b'] + (int) $data['answer_4_4_2_b'] + (int) $data['answer_4_4_3_b'] + (int) $data['answer_4_4_4_b'] + (int) $data['answer_5_1_2'] + (int) $data['answer_5_2_2'] + (int) $data['answer_5_3_2'] + (int) $data['answer_5_4_2'] + (int) $data['answer_5_5_2'];
             $total_kepuasan = (int) $data['answer_4_1_1'] + (int) $data['answer_4_2_1'] + (int) $data['answer_4_3_1'] + (int) $data['answer_4_4_1_a'] + (int) $data['answer_4_4_2_a'] + (int) $data['answer_4_4_3_a'] + (int) $data['answer_4_4_4_a'] + (int) $data['answer_5_1_1'] + (int) $data['answer_5_2_1'] + (int) $data['answer_5_3_1'] + (int) $data['answer_5_4_1'] + (int) $data['answer_5_5_1'];
-            $wis_1 = (int) (((int) $data['answer_4_1_2'] / (int) $total_kepentingan) * (int) $data['answer_4_1_1']);
-            $wis_2 = (int) (((int) $data['answer_4_2_2'] / (int) $total_kepentingan) * (int) $data['answer_4_2_1']);
-            $wis_3 = (int) (((int) $data['answer_4_3_2'] / (int) $total_kepentingan) * (int) $data['answer_4_3_1']);
-            $wis_4 = (int) (((int) $data['answer_4_4_1_b'] / (int) $total_kepentingan) * (int) $data['answer_4_4_1_a']);
-            $wis_5 = (int) (((int) $data['answer_4_4_2_b'] / (int) $total_kepentingan) * (int) $data['answer_4_4_2_a']);
-            $wis_6 = (int) (((int) $data['answer_4_4_3_b'] / (int) $total_kepentingan) * (int) $data['answer_4_4_3_a']);
-            $wis_7 = (int) (((int) $data['answer_4_4_4_b'] / (int) $total_kepentingan) * (int) $data['answer_4_4_4_a']);
-            $wis_8 = (int) (((int) $data['answer_5_1_2'] / (int) $total_kepentingan) * (int) $data['answer_5_1_1']);
-            $wis_9 = (int) (((int) $data['answer_5_2_2'] / (int) $total_kepentingan) * (int) $data['answer_5_2_1']);
-            $wis_10 = (int) (((int) $data['answer_5_3_2'] / (int) $total_kepentingan) * (int) $data['answer_5_3_1']);
-            $wis_11 = (int) (((int) $data['answer_5_4_2'] / (int) $total_kepentingan) * (int) $data['answer_5_4_1']);
-            $wis_12 = (int) (((int) $data['answer_5_5_2'] / (int) $total_kepentingan) * (int) $data['answer_5_5_1']);
-            $total_wis = $wis_1 + $wis_2 + $wis_3 + $wis_4 + $wis_5 + $wis_6 + $wis_7 + $wis_8 + $wis_9 + $wis_10 + $wis_11 + $wis_12;
+            $wis_1 = round((((int) $data['answer_4_1_2'] / (int) $total_kepentingan) * (int) $data['answer_4_1_1']), 2);
+            $wis_2 = round((((int) $data['answer_4_2_2'] / (int) $total_kepentingan) * (int) $data['answer_4_2_1']), 2);
+            $wis_3 = round((((int) $data['answer_4_3_2'] / (int) $total_kepentingan) * (int) $data['answer_4_3_1']), 2);
+            $wis_4 = round((((int) $data['answer_4_4_1_b'] / (int) $total_kepentingan) * (int) $data['answer_4_4_1_a']), 2);
+            $wis_5 = round((((int) $data['answer_4_4_2_b'] / (int) $total_kepentingan) * (int) $data['answer_4_4_2_a']), 2);
+            $wis_6 = round((((int) $data['answer_4_4_3_b'] / (int) $total_kepentingan) * (int) $data['answer_4_4_3_a']), 2);
+            $wis_7 = round((((int) $data['answer_4_4_4_b'] / (int) $total_kepentingan) * (int) $data['answer_4_4_4_a']), 2);
+            $wis_8 = round((((int) $data['answer_5_1_2'] / (int) $total_kepentingan) * (int) $data['answer_5_1_1']), 2);
+            $wis_9 = round((((int) $data['answer_5_2_2'] / (int) $total_kepentingan) * (int) $data['answer_5_2_1']), 2);
+            $wis_10 = round((((int) $data['answer_5_3_2'] / (int) $total_kepentingan) * (int) $data['answer_5_3_1']), 2);
+            $wis_11 = round((((int) $data['answer_5_4_2'] / (int) $total_kepentingan) * (int) $data['answer_5_4_1']), 2);
+            $wis_12 = round((((int) $data['answer_5_5_2'] / (int) $total_kepentingan) * (int) $data['answer_5_5_1']), 2);
+            $total_wis = round($wis_1, 2) + round($wis_2, 2) + round($wis_3, 2) + round($wis_4, 2) + round($wis_5, 2) + round($wis_6, 2) + round($wis_7, 2) + round($wis_8, 2) + round($wis_9, 2) + round($wis_10, 2) + round($wis_11, 2) + round($wis_12, 2);
             $score_csi_c = (int) $total_wis / 5;
+
+            for ($i = 1; $i < 13; $i++) {
+                $variableName = 'wis_' . $i;
+
+                $newCsiJawaban = new CsiKalkulasiJawaban();
+                $newCsiJawaban->csi_id = $csi->id_csi;
+                $newCsiJawaban->no_spk = $csi->no_spk;
+                $newCsiJawaban->nilai = $$variableName;
+                $newCsiJawaban->index = $i;
+                $newCsiJawaban->kategori = 'wis';
+                $newCsiJawaban->keterangan = $variableName;
+                // dd($newCsiJawaban);
+                $newCsiJawaban->save();
+            }
 
             // $csi->score_csi = ($score_csi_a + $score_csi_b + $score_csi_b) / 3;
             $csi->score_csi = $total_wis;
