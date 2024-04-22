@@ -495,13 +495,19 @@ class ForecastController extends Controller
 
         $year = $year != "" ? (int) $year : (int) date("Y");
         $unitKerjas = UnitKerja::all();
-        
-        $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $periode)->where("tahun", "=", $year)->where("proyeks.tahun_perolehan", "=", $year)->where("proyeks.is_cancel", "=", false);
+
+        $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $periode)->where(
+            "tahun",
+            "=",
+            $year
+        )->where("proyeks.tahun_perolehan", "=", $year)->where("proyeks.is_cancel", "=", false);
         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
-        if($historyForecast->get()->isNotEmpty()) {
+        if ($historyForecast->get()->isNotEmpty()) {
             $selectForecast = $historyForecast;
         } else {
-            $selectForecast = Forecast::with(['Proyek'])->join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->select(["proyeks.stage", "proyeks.nama_proyek", "proyeks.kode_proyek", "proyeks.unit_kerja", "proyeks.jenis_proyek", "proyeks.tipe_proyek", "proyeks.dop", "proyeks.tahun_perolehan", "proyeks.is_cancel", "proyeks.is_rkap", "forecasts.month_forecast", "forecasts.nilai_forecast", "forecasts.month_rkap", "forecasts.rkap_forecast", "forecasts.month_realisasi", "forecasts.realisasi_forecast", "forecasts.periode_prognosa", "forecasts.tahun", "forecasts.created_at"])->where("forecasts.periode_prognosa", "=", $periode)->where("forecasts.tahun", "=", $year)->where("proyeks.tahun_perolehan", "=", $year);
+            $selectForecast = Forecast::with(['Proyek'])->join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->select([
+                "proyeks.stage", "proyeks.nama_proyek", "proyeks.kode_proyek", "proyeks.unit_kerja", "proyeks.jenis_proyek", "proyeks.tipe_proyek", "proyeks.dop", "proyeks.tahun_perolehan", "proyeks.is_cancel", "proyeks.is_rkap", "forecasts.month_forecast", "forecasts.nilai_forecast", "forecasts.month_rkap", "forecasts.rkap_forecast", "forecasts.month_realisasi", "forecasts.realisasi_forecast", "forecasts.periode_prognosa", "forecasts.tahun", "forecasts.created_at"
+            ])->where("forecasts.periode_prognosa", "=", $periode)->where("forecasts.tahun", "=", $year)->where("proyeks.tahun_perolehan", "=", $year);
         }
         if (Auth::user()->check_administrator) {
 
@@ -765,8 +771,8 @@ class ForecastController extends Controller
         if (!empty($periode)) {
             if (!Auth::user()->check_administrator) {
                 // if ($unit_kerja_user instanceof Collection) {
-                    // $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "proyeks.stage", "proyeks.is_cancel", "proyeks.is_rkap"])->where("periode_prognosa", "=", $periode)->get()->whereIn("divcode", $unit_kerja_user->toArray())->groupBy(["dop", "unit_kerja", "periode_prognosa"]);
-                    $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->where("history_forecast.tahun", "=", $year)->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "proyeks.stage", "proyeks.is_cancel", "proyeks.is_rkap"])->where("periode_prognosa", "=", $periode)->get()->whereIn("divcode", $unit_kerja_user->toArray())->groupBy(["dop", "unit_kerja", "periode_prognosa"]);
+                // $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "proyeks.stage", "proyeks.is_cancel", "proyeks.is_rkap"])->where("periode_prognosa", "=", $periode)->get()->whereIn("divcode", $unit_kerja_user->toArray())->groupBy(["dop", "unit_kerja", "periode_prognosa"]);
+                $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->where("history_forecast.tahun", "=", $year)->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "proyeks.stage", "proyeks.is_cancel", "proyeks.is_rkap"])->where("periode_prognosa", "=", $periode)->get()->whereIn("divcode", $unit_kerja_user->toArray())->groupBy(["dop", "unit_kerja", "periode_prognosa"]);
                 // } else {
                 //     $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*", "proyeks.stage", "proyeks.is_cancel"])->where("periode_prognosa", "=", $periode)->get()->where("divcode", "=", $unit_kerja_user)->groupBy(["dop", "unit_kerja", "periode_prognosa"]);
                 // }
@@ -817,7 +823,7 @@ class ForecastController extends Controller
                 return $histories->map(function ($ph) use ($periode) {
                     $newClass = new stdClass();
                     $newClass->rkap_forecast = $ph->sum(function($f) {
-                        if($f->is_rkap == true) {
+                        if ($f->is_rkap == true) {
                             return (int) $f->rkap_forecast;
                         }
                     });
