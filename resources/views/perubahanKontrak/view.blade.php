@@ -351,7 +351,7 @@
                                                                     </label><br>
                                                                         <span style="font-weight: normal">
                                                                             <b class="badge {{ (int) $perubahan_kontrak->biaya_pengajuan != 0 ? 'badge-primary' : 'badge-danger' }}">{{ (int) $perubahan_kontrak->biaya_pengajuan != 0 ? 'Yes' : 'No' }}</b>
-                                                                            <b class="{{$perubahan_kontrak->jenis_perubahan == 'Anti Klaim' ? 'text-danger ' : ''}}">{{ !empty($perubahan_kontrak->biaya_pengajuan) ? number_format($perubahan_kontrak->biaya_pengajuan, 0, ".", ".") : '-' }}</b>
+                                                                            <b class="{{$perubahan_kontrak->jenis_perubahan == 'Anti Klaim' || $perubahan_kontrak->nilai_negatif ? 'text-danger ' : ''}}">{{ !empty($perubahan_kontrak->biaya_pengajuan) ? number_format(str_replace('-', '', $perubahan_kontrak->biaya_pengajuan), 0, ".", ".") : '-' }}</b>
                                                                         </span>
                                                                     {{-- <input type="text" name="biaya-pengajuan" value="{{ number_format($perubahan_kontrak->biaya_pengajuan, 0, ".", ".") }}" class="form-control form-control-solid reformat" /> --}}
                                                                 </div>
@@ -845,6 +845,10 @@
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label mt-3">
                                     <span style="font-weight: normal">Nilai Disetujui</span>
+                                    <div class="form-check form-switch {{ $perubahan_kontrak->jenis_perubahan == 'VO' ? '' : 'd-none' }}" id="div-nilai-negatif">
+                                        <input class="form-check-input" type="checkbox" name="nilai-negatif" role="switch" id="nilai-negatif">
+                                        <label class="form-check-label" for="nilai-negatif">Nilai Negatif</label>
+                                    </div>
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
@@ -935,7 +939,7 @@
                     <div class="modal-body py-lg-6 px-lg-6">
     
                         <!--begin::Input group Website-->
-                        <form action="/claim-management/update/{{ $perubahan_kontrak->id_perubahan_kontrak }}" method="POST"
+                        <form action="/claim-management/update/{{ $perubahan_kontrak->id_perubahan_kontrak }}" method="POST" onsubmit="nilaiMinusChecked()"
                             enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" class="modal-name" name="modal-name">
@@ -990,10 +994,14 @@
                                     <input type="date" name="tanggal-pengajuan" class="form-control form-control-solid" value="{{ !empty($perubahan_kontrak->tanggal_pengajuan) ? Carbon\Carbon::parse($perubahan_kontrak->tanggal_pengajuan)->translatedFormat('Y-m-d') : '' }}"/>
                                 </div>
                                 <div class="col mt-3">
-                                    <label class="fs-6 fw-bold form-label">
+                                    <label class="fs-6 fw-bold form-label d-flex flex-row justify-content-between">
                                         <span style="font-weight: normal">Dampak Biaya</span>
+                                        <div class="form-check form-switch {{ $perubahan_kontrak->jenis_perubahan == 'VO' ? '' : 'd-none' }}" id="div-nilai-negatif">
+                                            <input class="form-check-input" type="checkbox" name="nilai-negatif" role="switch" id="nilai-negatif" {{ $perubahan_kontrak->nilai_negatif ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="nilai-negatif">Nilai Negatif</label>
+                                        </div>
                                     </label>
-                                    <input type="text" name="biaya-pengajuan" class="form-control form-control-solid reformat" value="{{ $perubahan_kontrak->biaya_pengajuan }}"/>
+                                    <input type="text" name="biaya-pengajuan" id="biaya-pengajuan" class="form-control form-control-solid reformat" value="{{ $perubahan_kontrak->biaya_pengajuan }}"/>
                                 </div>
                                 <div class="col">
                                     <label class="fs-6 fw-bold form-150pxbel">
@@ -1153,6 +1161,29 @@
     
             })
         }
+    </script>
+
+    <script>
+        // function nilaiMinusChecked() {
+        //     LOADING_BODY.block();
+
+        //     const checkedElt = document.querySelector('#nilai-minus');
+        //     const nilaiDampakBiaya = document.querySelector('#biaya-pengajuan');
+
+        //     if (checkedElt.checked) {
+        //         nilaiDampakBiaya.value = '-' + nilaiDampakBiaya.value;
+        //     }else{
+        //         if (nilaiDampakBiaya.value.includes("-")) {
+        //             nilaiDampakBiaya.value = nilaiDampakBiaya.value.replace('-', '');
+        //         }else{
+        //             nilaiDampakBiaya.value = nilaiDampakBiaya.value;
+        //         }
+        //     }
+
+        //     LOADING_BODY.release();
+
+        //     return true;
+        // }
     </script>
 
 @endsection
