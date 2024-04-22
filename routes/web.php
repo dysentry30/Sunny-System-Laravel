@@ -50,6 +50,7 @@ use App\Http\Controllers\KriteriaPenggunaJasaController;
 use App\Http\Controllers\PenilaianPenggunaJasaController;
 use App\Http\Controllers\CompetitorController;
 use App\Http\Controllers\DashboardTVController;
+use App\Http\Controllers\MobileController;
 use App\Models\AlatProyek;
 use App\Models\ContractChangeNotice;
 use App\Models\ContractChangeOrder;
@@ -4923,3 +4924,8 @@ Route::get('/dashboard-tv', function () {
 
 Route::get('/dashboard-tv/get-data-forecast', [DashboardTVController::class, 'getForecast']);
 Route::get('/dashboard-tv/get-event', [DashboardTVController::class, 'getSchedule']);
+
+Route::group(['prefix' => 'v1'], function () {
+    Route::get('/get-forecast', [MobileController::class, 'GetDataForecast']);
+    Route::get('/get-monitoring-proyek', [MobileController::class, 'GetMonitoringProyek']);
+});
