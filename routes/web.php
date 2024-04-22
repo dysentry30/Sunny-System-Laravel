@@ -1035,17 +1035,19 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
             // Begin :: Duplicate Forecast Next Periode Prognosa
             if ((bool) $data["is_approved"]) {
-                $new_periode_forecast = new Forecast();
-                $new_periode_forecast->kode_proyek = $h->kode_proyek;
-                $new_periode_forecast->nilai_forecast = $h->nilai_forecast;
-                $new_periode_forecast->month_forecast = $h->month_forecast;
-                $new_periode_forecast->rkap_forecast = $h->rkap_forecast;
-                $new_periode_forecast->month_rkap = $h->month_rkap;
-                $new_periode_forecast->realisasi_forecast = $h->realisasi_forecast;
-                $new_periode_forecast->month_realisasi = $h->month_realisasi;
-                $new_periode_forecast->periode_prognosa = $h->periode_prognosa != 12 ? $h->periode_prognosa + 1 : 1;
-                $new_periode_forecast->tahun = $h->tahun;
-                $new_periode_forecast->save();
+                if ($h->periode_prognosa != 12) {
+                    $new_periode_forecast = new Forecast();
+                    $new_periode_forecast->kode_proyek = $h->kode_proyek;
+                    $new_periode_forecast->nilai_forecast = $h->nilai_forecast;
+                    $new_periode_forecast->month_forecast = $h->month_forecast;
+                    $new_periode_forecast->rkap_forecast = $h->rkap_forecast;
+                    $new_periode_forecast->month_rkap = $h->month_rkap;
+                    $new_periode_forecast->realisasi_forecast = $h->realisasi_forecast;
+                    $new_periode_forecast->month_realisasi = $h->month_realisasi;
+                    $new_periode_forecast->periode_prognosa = $h->periode_prognosa + 1;
+                    $new_periode_forecast->tahun = $h->tahun;
+                    $new_periode_forecast->save();
+                }
             }
 
             // End :: Duplicate Forecast Next Periode Prognosa
