@@ -2714,7 +2714,7 @@
                                                                 data-select2-id="select2-subklasifikasi-sbu" tabindex="-1" aria-hidden="true">
                                                                 <option value=""></option>
                                                                 @foreach ($subKBLI as $sub)
-                                                                    <option value="{{ $sub->kbli_2020 }}" {{ $proyek->kode_kbli_2020 == $sub->kbli_2020 ? "selected" : "" }}>{{ $sub->subklasifikasi }}</option>                                                                    
+                                                                    <option value="{{ $sub->kbli_2020 }}" {{ $proyek->kode_kbli_2020 == $sub->kbli_2020 ? "selected" : "" }}>{{ $sub->kbli_2020 }} - {{ $sub->subklasifikasi }}</option>                                                                    
                                                                 @endforeach
                                                             </select>
                                                             <!--end::Input-->

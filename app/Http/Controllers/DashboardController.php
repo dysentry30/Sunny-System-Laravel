@@ -36,7 +36,7 @@ class DashboardController extends Controller
     {
 
         // Begin :: Copy Data Forecast If current month not exists
-        self::copyDataForecast();
+        // self::copyDataForecast();
         // End :: Copy Data Forecast If current month not exists
 
         // begin :: Delete Old Excel Files
