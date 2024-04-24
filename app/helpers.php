@@ -670,11 +670,11 @@ function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Coll
     $table->addCell(2500, $TstyleCell)->addText("Item", $TfontStyle);
     $table->addCell(6000, $TstyleCell)->addText('Uraian', $TfontStyle);
 
-    $nama_proyek = str_replace("&", "dan", $proyek->nama_proyek);
+    // $nama_proyek = str_replace("&", "dan", $proyek->nama_proyek);
     $table->addRow();
     $table->addCell(500, $styleCell)->addText('1', $fontStyle);
     $table->addCell(2500, $styleCell)->addText("Nama Proyek", $fontStyle);
-    $table->addCell(6000, $styleCell)->addText($nama_proyek, $fontStyle);
+    $table->addCell(6000, $styleCell)->addText(htmlspecialchars($proyek->nama_proyek, ENT_QUOTES), $fontStyle);
     $table->addRow();
     $table->addCell(500, $styleCell)->addText('2', $fontStyle);
     $table->addCell(2500, $styleCell)->addText("Lokasi Proyek", $fontStyle);
@@ -682,7 +682,7 @@ function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Coll
     $table->addRow();
     $table->addCell(500, $styleCell)->addText('3', $fontStyle);
     $table->addCell(2500, $styleCell)->addText("Nama Pengguna Jasa", $fontStyle);
-    $table->addCell(6000, $styleCell)->addText($proyek->proyekBerjalan->name_customer, $fontStyle);
+    $table->addCell(6000, $styleCell)->addText(htmlspecialchars($proyek->proyekBerjalan->name_customer, ENT_QUOTES), $fontStyle);
     $table->addRow();
     $table->addCell(500, $styleCell)->addText('4', $fontStyle);
     $table->addCell(2500, $styleCell)->addText("Instansi Pengguna Jasa", $fontStyle);
@@ -711,8 +711,8 @@ function createWordPengajuan(App\Models\Proyek $proyek, \Illuminate\Support\Coll
     $section->addTextBreak(1);
     // $section->addText("$" . "{tandaTangan}", ["bold" => false], ["align" => "center"]);
     $section->addTextBreak(1);
-    $section->addText("( " . Auth::user()->name . " )", ["bold" => true, "size" => 7], ["align" => "center"]);
-    $section->addText(Auth::user()->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    $section->addText("( " . htmlspecialchars(Auth::user()->name, ENT_QUOTES) . " )", ["bold" => true, "size" => 7], ["align" => "center"]);
+    $section->addText(htmlspecialchars(Auth::user()->Pegawai->Jabatan?->nama_jabatan, ENT_QUOTES), ["bold" => true], ["align" => "center"]);
     $section->addTextBreak(5);
     $section->addText("Catatan :");
     $section->addText("Dokumen Pemilihan atau dokumen pendukung lainnya harap di upload dalam aplikasi CRM.");
