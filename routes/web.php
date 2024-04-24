@@ -4738,7 +4738,8 @@ Route::get('/dashboard-tv', function () {
 });
 
 Route::get('/dashboard-tv/get-data-forecast', [DashboardTVController::class, 'getForecast']);
-Route::get('/dashboard-tv/get-event', [DashboardTVController::class, 'getSchedule']);
+Route::get('/dashboard-tv/get-event-prakualifikasi', [DashboardTVController::class, 'getSchedulePrakualifikasi']);
+Route::get('/dashboard-tv/get-event-tender', [DashboardTVController::class, 'getScheduleTender']);
 
 Route::group(['prefix' => 'v1'], function () {
     Route::get('/get-forecast', [MobileController::class, 'GetDataForecast']);

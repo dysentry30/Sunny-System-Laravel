@@ -104,7 +104,7 @@ class DashboardTVController extends Controller
      * @param \Illuminate\Support\Facades\Request
      * @return \Illuminate\Support\Facades\Response
      */
-    public function getSchedule(Request $request)
+    public function getSchedulePrakualifikasi(Request $request)
     {
         $start = Carbon::create($request->get('start'));
         $end = Carbon::create($request->get('end'));
@@ -115,32 +115,51 @@ class DashboardTVController extends Controller
 
         $proyeks = Proyek::select('kode_proyek', 'nama_proyek', 'stage', 'jadwal_pq', 'jadwal_tender')->where('tipe_proyek', 'P')->where('is_cancel', false)->where('tahun_perolehan', $year)->where('is_tidak_lulus_pq', false)->whereIn('stage', [1, 2, 3, 4, 5, 6, 8]);
 
-        if ($category == "jadwal-pq") {
-            $proyeks = $proyeks->whereBetween('jadwal_pq', [$start, $end])->get();
-            if (!empty($proyeks)) {
-                $result = $proyeks->map(function ($proyek) {
-                    $newClass = new stdClass();
-                    $newClass->title = $proyek->kode_proyek . ' - ' . $proyek->nama_proyek;
-                    $newClass->start = !empty($proyek->jadwal_pq) ? Carbon::create($proyek->jadwal_pq)->toDateString() : null;
-                    $newClass->setAllDay = true;
-                    return $newClass;
-                })->toArray();
-            } else {
-                $result = [];
-            }
-        } elseif ($category == "jadwal-tender") {
-            $proyeks = $proyeks->whereBetween('jadwal_tender', [$start, $end])->get();
-            if (!empty($proyeks)) {
-                $result = $proyeks->map(function ($proyek) {
-                    $newClass = new stdClass();
-                    $newClass->title = $proyek->kode_proyek . ' - ' . $proyek->nama_proyek;
-                    $newClass->start = !empty($proyek->jadwal_tender) ? Carbon::create($proyek->jadwal_tender)->toDateString() : null;
-                    $newClass->setAllDay = true;
-                    return $newClass;
-                })->toArray();
-            } else {
-                $result = [];
-            }
+        $proyeks = $proyeks->whereBetween('jadwal_pq', [$start, $end])->get();
+        if (!empty($proyeks)) {
+            $result = $proyeks->map(function ($proyek) {
+                $newClass = new stdClass();
+                $newClass->title = $proyek->kode_proyek . ' - ' . $proyek->nama_proyek;
+                $newClass->start = !empty($proyek->jadwal_pq) ? Carbon::create($proyek->jadwal_pq)->toDateString() : null;
+                $newClass->setAllDay = true;
+                return $newClass;
+            })->toArray();
+        } else {
+            $result = [];
+        }
+
+        // dd($result);
+
+        return response()->json($result);
+    }
+
+    /**
+     * Get Schedule
+     * @param \Illuminate\Support\Facades\Request
+     * @return \Illuminate\Support\Facades\Response
+     */
+    public function getScheduleTender(Request $request)
+    {
+        $start = Carbon::create($request->get('start'));
+        $end = Carbon::create($request->get('end'));
+
+        $category = $request->get('category');
+
+        $year = date('Y');
+
+        $proyeks = Proyek::select('kode_proyek', 'nama_proyek', 'stage', 'jadwal_pq', 'jadwal_tender')->where('tipe_proyek', 'P')->where('is_cancel', false)->where('tahun_perolehan', $year)->where('is_tidak_lulus_pq', false)->whereIn('stage', [1, 2, 3, 4, 5, 6, 8]);
+
+        $proyeks = $proyeks->whereBetween('jadwal_tender', [$start, $end])->get();
+        if (!empty($proyeks)) {
+            $result = $proyeks->map(function ($proyek) {
+                $newClass = new stdClass();
+                $newClass->title = $proyek->kode_proyek . ' - ' . $proyek->nama_proyek;
+                $newClass->start = !empty($proyek->jadwal_tender) ? Carbon::create($proyek->jadwal_tender)->toDateString() : null;
+                $newClass->setAllDay = true;
+                return $newClass;
+            })->toArray();
+        } else {
+            $result = [];
         }
 
         // dd($result);
