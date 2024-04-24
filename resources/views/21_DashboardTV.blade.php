@@ -382,25 +382,25 @@
                     weekday: 'long'
                 },
                 eventSources: [{
-                        url: '/dashboard-tv/get-event',
+                        url: '/dashboard-tv/get-event-prakualifikasi',
                         method: 'GET',
                         extraParams: {
                             category: 'jadwal-pq',
                         },
                         failure: function(err) {
-                            alert(err);
+                            window.location.reload();
                         },
                         color: '#46AAF5',
                         textColor: 'white'
                     },
                     {
-                        url: '/dashboard-tv/get-event',
+                        url: '/dashboard-tv/get-event-tender',
                         method: 'GET',
                         extraParams: {
                             category: 'jadwal-tender',
                         },
                         failure: function(err) {
-                            alert(err);
+                            window.location.reload();
                         },
                         color: '#F7C13E',
                         textColor: 'white'
