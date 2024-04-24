@@ -139,7 +139,7 @@ class CSIController extends Controller
             $score_csi_c = (int) $total_wis / 5;
 
             // $csi->score_csi = ($score_csi_a + $score_csi_b + $score_csi_b) / 3;
-            $csi->score_csi = $total_wis;
+            $csi->score_csi = $score_csi_c;
             $csi->score_cli = $score_cli;
             $csi->score_nps = $score_nps;
             $csi->score_total = ($csi->score_csi + $csi->score_cli + $csi->score_nps) / 3;
