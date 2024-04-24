@@ -5151,7 +5151,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
         $kriteria_penilaian = KriteriaPenilaianPefindo::all()
         ->filter(function ($item) use ($data) {
-            return $item->dari_nilai <= (int)$data["score"] && $item->sampai_nilai > (int)$data["score"];
+            return $item->dari_nilai <= (int)$data["score"] && $item->sampai_nilai >= (int)$data["score"];
         })
         ->first();
 

@@ -30,7 +30,7 @@ class Rekomendasi2Controller extends Controller
     {
         $this->matriks_approvals = MatriksApprovalNotaRekomendasi2::where("is_active", true)->get();
         $this->matriks_approvals = $this->matriks_approvals->first();
-        $this->isnomorTargetActive = false;
+        $this->isnomorTargetActive = env('NR2_ACTIVE');
         $this->nomorDefault = "085881028391";
         // $this->nomorDefault = "6285376444701";
     }

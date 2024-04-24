@@ -31,6 +31,8 @@ use PhpOffice\PhpWord\TemplateProcessor;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Request;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 function url_encode($url) {
     return urlencode(urlencode($url));
@@ -3024,6 +3026,8 @@ function createWordPengajuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekomen
     $now = Carbon\Carbon::now();
     $file_name = $now->format("dmYHis") . "_nota-pengajuan_$proyek->kode_proyek";
 
+    $QrName = generateQrCode($proyek->kode_proyek, Auth::user()->nip, Request::schemeAndHttpHost() . "?nip=" . Auth::user()->nip . "&redirectTo=/dashboard-tv", 2);
+
     $section = $phpWord->addSection();
 
     $section->addText("NOTA REKOMENDASI TAHAP II", ['size' => 12, "bold" => true], ['align' => "center"]);
@@ -3113,12 +3117,12 @@ function createWordPengajuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekomen
     // $section->addTextBreak();
 
     // $cell_2_ttd->addText($now->translatedFormat("l, d F Y"), ["bold" => true], ["align" => "center"]);
-    $section->addTextBreak(3);
+    $section->addTextBreak();
     $section->addText($now->translatedFormat("d F Y"), ["bold" => true], ["align" => "center"]);
     $section->addTextBreak(3);
-    $section->addText("( " . Auth::user()->name . " )", ["bold" => true, "size" => 7], ["align" => "center"]);
+    $section->addText("( " . Auth::user()->name . " )", ["bold" => true, "size" => 10], ["align" => "center"]);
     $section->addText(Auth::user()->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
-    $section->addTextBreak(5);
+    $section->addTextBreak(2);
     $section->addText("Catatan :");
     $section->addText("Dokumen Pemilihan atau dokumen pendukung lainnya harap di upload dalam aplikasi CRM.");
     // End :: Footer
@@ -3133,10 +3137,10 @@ function createWordPengajuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekomen
     // Begin :: SIGNED Template docx
     $templateProcessor = new TemplateProcessor($target_path . "/" . $file_name . ".docx");
     //Pake Barcode
-    // $templateProcessor->setImageValue('tandaTangan', ["path" => public_path('qr-code/' . $fileQrCode), "height" => 75, "ratio" => false]);
+    $templateProcessor->setImageValue('tandaTangan', ["path" => public_path('/file-nota-rekomendasi-2/qr-code/' . $QrName), "height" => 75, "ratio" => false]);
 
     //Pake TTD
-    $templateProcessor->setImageValue('tandaTangan', ["path" => public_path('file-ttd/ttd.png'), "width" => 10, "ratio" => true]);
+    // $templateProcessor->setImageValue('tandaTangan', ["path" => public_path('file-ttd/ttd.png'), "width" => 10, "ratio" => true]);
     // $templateProcessor->setValue('tandaTangan', '<img src="' . public_path('\qr-code' . '\\' . $proyek->kode_proyek . '.svg') . '" width="300" height="300" />');
     $ttdFileName = $now->format("dmYHis") . "_signed-nota-pengajuan_$proyek->kode_proyek";
     $templateProcessor->saveAs(public_path($target_path . "/" . $ttdFileName . ".docx"));
@@ -4141,6 +4145,19 @@ function sendNotifEmail($user, $subject, $message, $activatedEmailToUser, $isNot
         Alert::error('Error', $e->getMessage());
         return false;
     }
+}
+
+function generateQrCode($kode_proyek, $nip, $url, $nota_rekomendasi)
+{
+    $now = Carbon\Carbon::now();
+    $imageName = $now->format("dmYHis") . "_$nip" . "_$kode_proyek" . ".png";
+    if ($nota_rekomendasi == 1) {
+        $qrcode = QrCode::format('png')->size(100)->errorCorrection('H')->generate($url, public_path('qr-code/' . $imageName));
+    } else {
+        $qrcode = QrCode::format('png')->size(100)->errorCorrection('H')->generate($url, public_path('file-nota-rekomendasi-2/qr-code/' . $imageName));
+    }
+
+    return $imageName;
 }
 
 

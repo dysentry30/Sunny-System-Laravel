@@ -1350,6 +1350,10 @@ class ProyekController extends Controller
 
     private function uploadDokumenPendukungPasdin(UploadedFile $uploadedFile, $kode_proyek)
     {
+        if ($uploadedFile->getClientOriginalExtension() != 'pdf') {
+            Alert::error("Error", "File Dokumen Pendukung Pasar Dini Wajib PDF");
+            return redirect()->back();
+        }
         $dokumen = new DokumenPendukungPasdin();
         $file_name = $uploadedFile->getClientOriginalName();
         $id_document = date("dmYHis_") . str_replace(" ", "-", $file_name);
