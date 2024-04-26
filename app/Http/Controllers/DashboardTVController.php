@@ -104,7 +104,7 @@ class DashboardTVController extends Controller
      * @param \Illuminate\Support\Facades\Request
      * @return \Illuminate\Support\Facades\Response
      */
-    public function getSchedulePrakualifikasi(Request $request)
+    public function getSchedulePrakualifikasi(Request $request, $kategoriProyek)
     {
         $start = Carbon::create($request->get('start'));
         $end = Carbon::create($request->get('end'));
@@ -114,6 +114,13 @@ class DashboardTVController extends Controller
         $year = date('Y');
 
         $proyeks = Proyek::select('kode_proyek', 'nama_proyek', 'stage', 'jadwal_pq', 'jadwal_tender')->where('tipe_proyek', 'P')->where('is_cancel', false)->where('tahun_perolehan', $year)->where('is_tidak_lulus_pq', false)->whereIn('stage', [1, 2, 3, 4, 5, 6, 8]);
+
+        if ($kategoriProyek == "eksternal") {
+            $proyeks = $proyeks->where("dop", "!=", "EA");
+        } else {
+            $proyeks = $proyeks->where("dop", "EA");
+        }
+        
 
         $proyeks = $proyeks->whereBetween('jadwal_pq', [$start, $end])->get();
         if (!empty($proyeks)) {
@@ -138,7 +145,7 @@ class DashboardTVController extends Controller
      * @param \Illuminate\Support\Facades\Request
      * @return \Illuminate\Support\Facades\Response
      */
-    public function getScheduleTender(Request $request)
+    public function getScheduleTender(Request $request, $kategoriProyek)
     {
         $start = Carbon::create($request->get('start'));
         $end = Carbon::create($request->get('end'));
@@ -148,6 +155,12 @@ class DashboardTVController extends Controller
         $year = date('Y');
 
         $proyeks = Proyek::select('kode_proyek', 'nama_proyek', 'stage', 'jadwal_pq', 'jadwal_tender')->where('tipe_proyek', 'P')->where('is_cancel', false)->where('tahun_perolehan', $year)->where('is_tidak_lulus_pq', false)->whereIn('stage', [1, 2, 3, 4, 5, 6, 8]);
+
+        if ($kategoriProyek == "eksternal") {
+            $proyeks = $proyeks->where("dop", "!=", "EA");
+        } else {
+            $proyeks = $proyeks->where("dop", "EA");
+        }
 
         $proyeks = $proyeks->whereBetween('jadwal_tender', [$start, $end])->get();
         if (!empty($proyeks)) {

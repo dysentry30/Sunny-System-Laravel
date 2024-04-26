@@ -60,7 +60,13 @@
                 <!--begin:::Tab Item Schedule-->
                 <li class="nav-item">
                     <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
-                        href="#kt_user_view_overview_schedule" style="font-size:14px;">Schedule</a>
+                        href="#kt_user_view_overview_schedule_eksternal" style="font-size:14px;">Schedule Eksternal</a>
+                </li>
+                <!--end:::Tab Item Schedule-->
+                <!--begin:::Tab Item Schedule-->
+                <li class="nav-item">
+                    <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
+                        href="#kt_user_view_overview_schedule_internal" style="font-size:14px;">Schedule Internal</a>
                 </li>
                 <!--end:::Tab Item Schedule-->
             </ul>
@@ -107,10 +113,37 @@
             </div>
             <!--End::Tab Dashboard-->
             <!--Begin::Tab Schedule-->
-            <div class="tab-pane fade" id="kt_user_view_overview_schedule" role="tabpanel">
+            <div class="tab-pane fade" id="kt_user_view_overview_schedule_eksternal" role="tabpanel">
                 <!--begin::Page-->
                 <div class="page row pt-5">
-                    <div id='calendar'></div>
+                    <div id='calendar-eksternal'></div>
+                    <div class="d-flex flex-row align-items-center justify-content-center my-4 gap-5">
+                        <div class="d-flex flex-row align-items-center justify-content-center gap-3">
+                            <div class="circle"
+                                style="height:25px; width:25px; border-radius:50%;background-color: #46AAF5">
+                                <small style="color:#46AAF5">Klik</small>
+                            </div>
+                            <p class="m-0"><b>Jadwal Prakualifikasi</b></p>
+                        </div>
+                        <div class="d-flex flex-row align-items-center justify-content-center gap-3">
+                            <div class="circle"
+                                style="height:25px; width:25px; border-radius:50%;background-color: #F7C13E">
+                                <small style="color:#F7C13E">Klik</small>
+                            </div>
+                            <span>
+                                <p class="m-0"><b>Jadwal Pemasukan Tender</b></p>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!--end::Page-->
+            </div>
+            <!--End::Tab Schedule-->
+            <!--Begin::Tab Schedule-->
+            <div class="tab-pane fade" id="kt_user_view_overview_schedule_internal" role="tabpanel">
+                <!--begin::Page-->
+                <div class="page row pt-5">
+                    <div id='calendar-internal'></div>
                     <div class="d-flex flex-row align-items-center justify-content-center my-4 gap-5">
                         <div class="d-flex flex-row align-items-center justify-content-center gap-3">
                             <div class="circle"
@@ -355,14 +388,15 @@
             }
 
             // Automatically switch tabs every 1 minutes
-            setInterval(switchToNextTab, 0.2*60*1000);
+            // setInterval(switchToNextTab, 0.2*60*1000);
+            setInterval(switchToNextTab, 1*60*1000);
         });
     </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            let calendarEl = document.getElementById('calendar');
-            let calendar = new FullCalendar.Calendar(calendarEl, {
+            let calendarEksternalEl = document.getElementById('calendar-eksternal');
+            let calendarEksternal = new FullCalendar.Calendar(calendarEksternalEl, {
                 locale: 'id',
                 initialView: 'dayGridMonth',
                 aspectRatio: 2.8,
@@ -382,7 +416,7 @@
                     weekday: 'long'
                 },
                 eventSources: [{
-                        url: '/dashboard-tv/get-event-prakualifikasi',
+                        url: '/dashboard-tv/get-event-prakualifikasi/eksternal',
                         method: 'GET',
                         extraParams: {
                             category: 'jadwal-pq',
@@ -394,7 +428,7 @@
                         textColor: 'white'
                     },
                     {
-                        url: '/dashboard-tv/get-event-tender',
+                        url: '/dashboard-tv/get-event-tender/eksternal',
                         method: 'GET',
                         extraParams: {
                             category: 'jadwal-tender',
@@ -410,7 +444,58 @@
 
 
             });
-            calendar.render();
+            calendarEksternal.render();
+
+            let calendarInternalEl = document.getElementById('calendar-internal');
+            let calendarInternal = new FullCalendar.Calendar(calendarInternalEl, {
+                locale: 'id',
+                initialView: 'dayGridMonth',
+                aspectRatio: 2.8,
+                handleWindowResize: true,
+                weekends: true,
+                themeSystem: 'bootstrap5',
+                headerToolbar: {
+                    start: '',
+                    center: 'title',
+                    end: ''
+                },
+                titleFormat: {
+                    year: 'numeric',
+                    month: 'long',
+                },
+                dayHeaderFormat: {
+                    weekday: 'long'
+                },
+                eventSources: [{
+                        url: '/dashboard-tv/get-event-prakualifikasi/internal',
+                        method: 'GET',
+                        extraParams: {
+                            category: 'jadwal-pq',
+                        },
+                        failure: function(err) {
+                            window.location.reload();
+                        },
+                        color: '#46AAF5',
+                        textColor: 'white'
+                    },
+                    {
+                        url: '/dashboard-tv/get-event-tender/internal',
+                        method: 'GET',
+                        extraParams: {
+                            category: 'jadwal-tender',
+                        },
+                        failure: function(err) {
+                            window.location.reload();
+                        },
+                        color: '#F7C13E',
+                        textColor: 'white'
+                    },
+
+                ]
+
+
+            });
+            calendarInternal.render();
         });
     </script>
 
