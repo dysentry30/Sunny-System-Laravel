@@ -3193,7 +3193,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
         if (Auth::user()->check_administrator) {
-            $unit_kerja_user = collect(["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "P", "J", "L", "F", "U", "O"]);
+            $unit_kerja_user = collect(["1", "2", "3", "4", "5", "6", "7", "8", "B", "C", "D", "N", "H", "G", "P", "J", "L", "F", "U", "O"]);
         }
 
         $filterTahun = $request->query("tahun-prognosa") ?? date('Y'); 
