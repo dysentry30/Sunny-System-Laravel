@@ -683,7 +683,7 @@
                                                                     <div class="fv-row mb-7">
                                                                         <!--begin::Label-->
                                                                         <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span class="required">Kota / Kabupaten</span>
+                                                                            <span class="{{ !empty($customer->negara) && $customer->negara != "ID" ? "" : "required"  }}">Kota / Kabupaten</span>
                                                                         </label>
                                                                         <!--end::Label-->
                                                                         <!--begin::Input-->

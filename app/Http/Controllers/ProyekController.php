@@ -1818,7 +1818,7 @@ class ProyekController extends Controller
                     if (empty($customer->provinsi)) {
                         $error_msg->push("Provinsi");
                     }
-                    if (empty($customer->kota_kabupaten)) {
+                    if (empty($customer->kota_kabupaten) && $proyekStage->UnitKerja->dop != 'EA') {
                         $error_msg->push("Kota/Kabupaten");
                     }
                     if (empty($customer->npwp_company)) {

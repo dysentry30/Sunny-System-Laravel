@@ -2310,7 +2310,7 @@
                 }
                 
             },
-            colors: ["#00b2ff", "#9656a2", "#0acc81", "#f4895f", "#1f3442", "#f8e16f", "#de324c"],
+            colors: ["#00b2ff", "#F3D0D7", "#9656a2", "#0acc81", "#f4895f", "#1f3442", "#f8e16f", "#de324c"],
             plotOptions: {
                 pie: {
                     innerSize: 75,
@@ -2343,6 +2343,11 @@
                         name: "Tender Diikuti : " + {{ $proses }},
                         y: {{ $proses }},
                         drilldown: "Tender Diikuti",
+                    },
+                    {
+                        name: "Perolehan : " + {{ $perolehan }},
+                        y: {{ $perolehan }},
+                        drilldown: "Perolehan",
                     },
                     {
                         name: "Menang : " + {{ $menang }},
@@ -4533,7 +4538,7 @@
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
-            } else if(type.trim() == "Prakualifikasi" || type.trim() == "Menang" || type == "Tender Diikuti" || type.trim() == "Kalah" || type.trim() == "Cancel" || type == "Tidak Lolos PQ") {
+            } else if(type.trim() == "Prakualifikasi" || type == "Perolehan" || type.trim() == "Menang" || type == "Tender Diikuti" || type.trim() == "Kalah" || type.trim() == "Cancel" || type == "Tidak Lolos PQ") {
                 let tbodyHTML = ``;
                 let totalNilaiLainnya = 0;
                 let textBulan = "Bulan RA";
@@ -4640,6 +4645,9 @@
                         //         }
                         //     }
                         //     break;
+                        case "Perolehan" :
+                            nilai = filter.nilai_perolehan;
+                            break;
                         case "Menang" :
                             nilai = filter.nilai_perolehan;
                             break;

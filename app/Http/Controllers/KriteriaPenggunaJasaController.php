@@ -151,8 +151,13 @@ class KriteriaPenggunaJasaController extends Controller
                 $array_files = collect();
                 $kriteria_detail->kode_proyek = $data['kode_proyek'];
                 if ($key == 0) {
-                    $kriteria_detail->item = null;
-                    $kriteria_detail->kriteria = $data['is_legalitas'];
+                    if (!isset($data['is_legalitas'])) {
+                        $kriteria_detail->item = null;
+                        $kriteria_detail->kriteria = null;
+                    } else {
+                        $kriteria_detail->item = null;
+                        $kriteria_detail->kriteria = $data['is_legalitas'];
+                    }
                 } else {
                     if ($key <= 5) {
                         if (isset($data['is_kriteria_' . $key])) {
@@ -179,8 +184,13 @@ class KriteriaPenggunaJasaController extends Controller
             } else {
                 $kriteria_detail->kode_proyek = $data['kode_proyek'];
                 if ($key == 0) {
-                    $kriteria_detail->item = null;
-                    $kriteria_detail->kriteria = $data['is_legalitas'];
+                    if (!isset($data['is_legalitas'])) {
+                        $kriteria_detail->item = null;
+                        $kriteria_detail->kriteria = null;
+                    } else {
+                        $kriteria_detail->item = null;
+                        $kriteria_detail->kriteria = $data['is_legalitas'];
+                    }
                 } else {
                     if ($key <= 5) {
                         if (isset($data['is_kriteria_' . $key])) {
@@ -230,8 +240,13 @@ class KriteriaPenggunaJasaController extends Controller
 
                 $kriteria_detail->kode_proyek = $data['kode_proyek'];
                 if ($key == 0) {
-                    $kriteria_detail->item = null;
-                    $kriteria_detail->kriteria = $data['is_legalitas'];
+                    if (!isset($data['is_legalitas'])) {
+                        $kriteria_detail->item = null;
+                        $kriteria_detail->kriteria = null;
+                    } else {
+                        $kriteria_detail->item = null;
+                        $kriteria_detail->kriteria = $data['is_legalitas'];
+                    }
                 } else {
                     if ($key != 5) {
                         if (isset($data['is_kriteria_' . $key])) {
