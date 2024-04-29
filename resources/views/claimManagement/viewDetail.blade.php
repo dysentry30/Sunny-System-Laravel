@@ -317,7 +317,7 @@
                                                                         {{ (int) $vo->biaya_pengajuan != 0 ? 'Yes' : 'No' }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ number_format($vo->biaya_pengajuan, 0, ".", ".") }}
+                                                                        <p class="m-0 {{ $vo->nilai_negatif ? 'text-danger' : '' }}">{{ $vo->nilai_negatif ? '(-)' : '' }} {{ number_format($vo->biaya_pengajuan, 0, ".", ".") }}</p>
                                                                     </td>
                                                                     <!--end::Dampak Biaya-->
                                                                     <!--begin::Dampak Waktu-->
@@ -543,7 +543,7 @@
                                                                         {{ (int) $anti_klaim->biaya_pengajuan != 0 ? 'Yes' : 'No' }}
                                                                     </td>
                                                                     <td class="text-danger">
-                                                                        ( {{ number_format($anti_klaim->biaya_pengajuan, 0, ".", ".") }} )
+                                                                        (-) {{ number_format($anti_klaim->biaya_pengajuan, 0, ".", ".") }}
                                                                     </td>
                                                                     <!--end::Dampak Biaya-->
                                                                     <!--begin::Dampak Waktu-->
@@ -887,7 +887,7 @@
                                             <span style="font-weight: normal">Jenis Perubahan</span>
                                         </label>
                                         <select name="jenis-perubahan" id="jenis-perubahan" class="form-select form-select-solid"
-                                            data-control="select2" data-hide-search="true" data-placeholder="Pilih Jenis Perubahan" tabindex="-1" aria-hidden="true">
+                                            data-control="select2" data-hide-search="true" data-placeholder="Pilih Jenis Perubahan" tabindex="-1" aria-hidden="true" onchange="checkJenisPerubahan(this)">
                                             <option value=""></option>
                                             <option value="VO">Variation Order (VO)</option>
                                             <option value="Klaim">Klaim</option>
@@ -937,10 +937,14 @@
                                         <input type="date" name="tanggal-pengajuan" class="form-control form-control-solid"/>
                                     </div>
                                     <div class="col mt-3">
-                                        <label class="fs-6 fw-bold form-label">
+                                        <label class="fs-6 fw-bold form-label d-flex flex-row justify-content-between">
                                             <span style="font-weight: normal">Dampak Biaya</span>
+                                            <div class="form-check form-switch d-none" id="div-nilai-negatif">
+                                                <input class="form-check-input" type="checkbox" name="nilai-negatif" role="switch" id="nilai-negatif">
+                                                <label class="form-check-label" for="nilai-nilai-negatif">Nilai Negatif</label>
+                                            </div>
                                         </label>
-                                        <input type="text" name="biaya-pengajuan" class="form-control form-control-solid reformat"/>
+                                        <input type="text" name="biaya-pengajuan" id="biaya-pengajuan" class="form-control form-control-solid reformat"/>
                                     </div>
                                     <div class="col">
                                         <label class="fs-6 fw-bold form-150pxbel">
@@ -1189,5 +1193,16 @@
                     ]
             } );
         });
+    </script>
+    <script>
+        function checkJenisPerubahan(elt) {
+            const jenisPerubahanSelected = elt.value;
+            const eltDivNilaiNegatif = document.querySelector('#div-nilai-negatif');
+            if (jenisPerubahanSelected == "VO") {
+                eltDivNilaiNegatif.classList.remove('d-none');
+            }else{
+                eltDivNilaiNegatif.classList.add('d-none');
+            }            
+        }
     </script>
 @endsection

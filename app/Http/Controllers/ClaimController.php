@@ -947,6 +947,7 @@ class ClaimController extends Controller
         $perubahan_kontrak->tanggal_disetujui = $data["tanggal-disetujui"];
         $perubahan_kontrak->waktu_disetujui = $data["waktu-disetujui"];
         $perubahan_kontrak->id_dokumen = $id_document;
+        $perubahan_kontrak->nilai_negatif = isset($data['nilai-negatif']);
         $perubahan_kontrak->dokumen_approve = $nama_file;
 
         $perubahan_kontrak->save();
@@ -1112,6 +1113,7 @@ class ClaimController extends Controller
         $perubahan_kontrak->tanggal_pengajuan = $data["tanggal-pengajuan"];
         $perubahan_kontrak->biaya_pengajuan = !empty($data["biaya-pengajuan"]) ? str_replace(".", "", $data["biaya-pengajuan"]) : null;
         $perubahan_kontrak->waktu_pengajuan = !empty($data["biaya-pengajuan"]) ? $data["waktu-pengajuan"] : null;
+        $perubahan_kontrak->nilai_negatif = isset($data["nilai-negatif"]);
         $perubahan_kontrak->stage = 1;
         // dd($perubahan_kontrak);
         if ($perubahan_kontrak->save()) {
@@ -1176,6 +1178,7 @@ class ClaimController extends Controller
         $perubahan_kontrak->tanggal_pengajuan = $data["tanggal-pengajuan"];
         $perubahan_kontrak->biaya_pengajuan = !empty($data["biaya-pengajuan"]) ? str_replace(".", "", $data["biaya-pengajuan"]) : null;
         $perubahan_kontrak->waktu_pengajuan = !empty($data["waktu-pengajuan"]) ? $data["waktu-pengajuan"] : null;
+        $perubahan_kontrak->nilai_negatif = isset($data["nilai-negatif"]);
         // dd($perubahan_kontrak);
         if ($perubahan_kontrak->save()) {
             Alert::success("Success", "Perubahan Kontrak berhasil diperbaharui");
