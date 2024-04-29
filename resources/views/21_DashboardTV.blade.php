@@ -19,7 +19,7 @@
             color: white
         }
 
-        .fc-daygrid-day-number{
+        .fc-daygrid-day-number {
             color: black !important;
         }
     </style>
@@ -36,8 +36,8 @@
             <a class="navbar-brand" href="#">
                 <div class="d-flex flex-row align-items-center justify-content-center gap-3">
                     {{-- <a class="d-inline-block align-text-top" href="#" onclick="toggleFullscreen()"> --}}
-                        <img src="{{ asset('/media/logos/Logo2.png') }}" onclick="toggleFullscreen()" alt="Logo" width="80"
-                            class="d-inline-block align-text-top">
+                    <img src="{{ asset('/media/logos/Logo2.png') }}" onclick="toggleFullscreen()" alt="Logo"
+                        width="80" class="d-inline-block align-text-top">
                     {{-- </a> --}}
                     <p class="m-0"><b>Customer Relationship Management</b></p>
                 </div>
@@ -60,25 +60,29 @@
                 <!--begin:::Tab Item Schedule-->
                 <li class="nav-item">
                     <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
-                        href="#kt_user_view_overview_schedule_eksternal" style="font-size:14px;">Schedule Eksternal ({{ \Carbon\Carbon::parse('now')->translatedFormat('M') }})</a>
+                        href="#kt_user_view_overview_schedule_eksternal" style="font-size:14px;">Schedule Eksternal
+                        ({{ \Carbon\Carbon::parse('now')->translatedFormat('M') }})</a>
                 </li>
                 <!--end:::Tab Item Schedule-->
                 <!--begin:::Tab Item Schedule-->
                 <li class="nav-item">
                     <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
-                        href="#kt_user_view_overview_schedule_eksternal_next" style="font-size:14px;">Schedule Eksternal ({{ \Carbon\Carbon::parse('now')->addMonth(1)->translatedFormat('M') }})</a>
+                        href="#kt_user_view_overview_schedule_eksternal_next" style="font-size:14px;">Schedule Eksternal
+                        ({{ \Carbon\Carbon::parse('now')->addMonth(1)->translatedFormat('M') }})</a>
                 </li>
                 <!--end:::Tab Item Schedule-->
                 <!--begin:::Tab Item Schedule-->
                 <li class="nav-item">
                     <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
-                        href="#kt_user_view_overview_schedule_internal" style="font-size:14px;">Schedule Internal ({{ \Carbon\Carbon::parse('now')->translatedFormat('M') }})</a>
+                        href="#kt_user_view_overview_schedule_internal" style="font-size:14px;">Schedule Internal
+                        ({{ \Carbon\Carbon::parse('now')->translatedFormat('M') }})</a>
                 </li>
                 <!--end:::Tab Item Schedule-->
                 <!--begin:::Tab Item Schedule-->
                 <li class="nav-item">
                     <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
-                        href="#kt_user_view_overview_schedule_internal_next" style="font-size:14px;">Schedule Internal ({{ \Carbon\Carbon::parse('now')->addMonth(1)->translatedFormat('M') }})</a>
+                        href="#kt_user_view_overview_schedule_internal_next" style="font-size:14px;">Schedule Internal
+                        ({{ \Carbon\Carbon::parse('now')->addMonth(1)->translatedFormat('M') }})</a>
                 </li>
                 <!--end:::Tab Item Schedule-->
             </ul>
@@ -347,56 +351,112 @@
         });
 
 
+        // async function getDataChartForecast() {
+        //     try {
+        //         const response = await fetch('/dashboard-tv/get-data-forecast', {
+        //             method: 'GET'
+        //         }).then(res => res.json());
+        //         return response
+        //     } catch (error) {
+        //         return {
+        //             Success: false,
+        //             Message: error
+        //         }
+        //     }
+        // }
+
         async function getDataChartForecast() {
             try {
+                chart.showLoading();
                 const response = await fetch('/dashboard-tv/get-data-forecast', {
                     method: 'GET'
-                }).then(res => res.json());
+                }).then(res => res.json()).then(data => {
+                    console.log(data);
+                    const responseParse = data;
+                    const eltRKAP = document.querySelector('#nilai-rkap');
+                    const eltForecast = document.querySelector('#nilai-forecast');
+                    const eltRealisasi = document.querySelector('#nilai-realisasi');
+
+                    chart.hideLoading()
+                    if (responseParse.Success) {
+                        chart.series[0].setData(responseParse.NilaiRKAP)
+                        chart.series[1].setData(responseParse.NilaiForecast)
+                        chart.series[2].setData(responseParse.NilaiRealisasi)
+
+                        if (responseParse.NilaiRKAP.length > 0) {
+                            eltRKAP.innerHTML = "Rp. " + responseParse.NilaiRKAP[11].toString().replace(
+                                /\B(?=(\d{3})+(?!\d))/g, ".")
+                        } else {
+                            eltRKAP.innerHTML = "Rp. 0"
+                        }
+
+                        if (responseParse.NilaiForecast.length > 0) {
+                            eltForecast.innerHTML = "Rp. " + responseParse.NilaiForecast[11].toString().replace(
+                                /\B(?=(\d{3})+(?!\d))/g, ".")
+                        } else {
+                            eltForecast.innerHTML = "Rp. 0"
+                        }
+
+                        if (responseParse.NilaiRealisasi.length > 0) {
+                            eltRealisasi.innerHTML = "Rp. " + responseParse.NilaiRealisasi[11].toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                        } else {
+                            eltRealisasi.innerHTML = "Rp. 0"
+                        }
+                    } else {
+                        alert("Error => " + responseParse.Message);
+                        // window.location.reload();
+                    }
+                });
                 return response
             } catch (error) {
-                return {
-                    Success: false,
-                    Message: error
-                }
+                // return {
+                //     Success: false,
+                //     Message: error
+                // }
+                alert("Error => " + error);
             }
         }
 
-        async function getChat() {
-            chart.showLoading()
-            const dataApi = await getDataChartForecast();
-            const eltRKAP = document.querySelector('#nilai-rkap');
-            const eltForecast = document.querySelector('#nilai-forecast');
-            const eltRealisasi = document.querySelector('#nilai-realisasi');
+        // async function getChat() {
+        //     chart.showLoading()
+        //     const dataApi = await getDataChartForecast();
+        //     const eltRKAP = document.querySelector('#nilai-rkap');
+        //     const eltForecast = document.querySelector('#nilai-forecast');
+        //     const eltRealisasi = document.querySelector('#nilai-realisasi');
 
-            chart.hideLoading()
-            if (dataApi.Success) {
-                chart.series[0].setData(dataApi.NilaiRKAP)
-                chart.series[1].setData(dataApi.NilaiForecast)
-                chart.series[2].setData(dataApi.NilaiRealisasi)
+        //     chart.hideLoading()
+        //     if (dataApi.Success) {
+        //         chart.series[0].setData(dataApi.NilaiRKAP)
+        //         chart.series[1].setData(dataApi.NilaiForecast)
+        //         chart.series[2].setData(dataApi.NilaiRealisasi)
 
-                if (dataApi.NilaiRKAP.length > 0) {
-                    eltRKAP.innerHTML = "Rp. " + dataApi.NilaiRKAP[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-                }else{
-                    eltRKAP.innerHTML = "Rp. 0"
-                }
+        //         if (dataApi.NilaiRKAP.length > 0) {
+        //             eltRKAP.innerHTML = "Rp. " + dataApi.NilaiRKAP[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+        //         } else {
+        //             eltRKAP.innerHTML = "Rp. 0"
+        //         }
 
-                if (dataApi.NilaiForecast.length > 0) {
-                    eltForecast.innerHTML = "Rp. " + dataApi.NilaiForecast[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-                }else{
-                    eltForecast.innerHTML = "Rp. 0"
-                }
+        //         if (dataApi.NilaiForecast.length > 0) {
+        //             eltForecast.innerHTML = "Rp. " + dataApi.NilaiForecast[11].toString().replace(
+        //                 /\B(?=(\d{3})+(?!\d))/g, ".")
+        //         } else {
+        //             eltForecast.innerHTML = "Rp. 0"
+        //         }
 
-                if (dataApi.NilaiRealisasi.length > 0) {
-                    eltRealisasi.innerHTML = "Rp. " + dataApi.NilaiRealisasi[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-                } else {
-                    eltRealisasi.innerHTML = "Rp. 0"
-                }
-            } else {
-                // alert("Error => " + dataApi.Message);
-                window.location.reload();
-            }
-        }
-        getChat();
+        //         if (dataApi.NilaiRealisasi.length > 0) {
+        //             eltRealisasi.innerHTML = "Rp. " + dataApi.NilaiRealisasi[11].toString().replace(
+        //                 /\B(?=(\d{3})+(?!\d))/g, ".")
+        //         } else {
+        //             eltRealisasi.innerHTML = "Rp. 0"
+        //         }
+        //     } else {
+        //         // alert("Error => " + dataApi.Message);
+        //         window.location.reload();
+        //     }
+        // }
+        // getChat();
+        getDataChartForecast();
     </script>
 
     <script>
@@ -415,38 +475,39 @@
                 const eltRealisasi = document.querySelector('#nilai-realisasi');
 
                 activeWorkPlace.style.display = 'none';
-                
+
                 // If next tab is not available, switch to the first tab
                 if (!nextTab && !nextWorkPlace) {
                     // chart.showLoading()
-                    const dataApi = await getDataChartForecast();
-                    if (dataApi.Success) {
-                        // chart.hideLoading()
-                        chart.series[0].setData(dataApi.NilaiRKAP)
-                        chart.series[1].setData(dataApi.NilaiForecast)
-                        chart.series[2].setData(dataApi.NilaiRealisasi)
+                    // const dataApi = await getDataChartForecast();
+                    // if (dataApi.Success) {
+                    //     // chart.hideLoading()
+                    //     chart.series[0].setData(dataApi.NilaiRKAP)
+                    //     chart.series[1].setData(dataApi.NilaiForecast)
+                    //     chart.series[2].setData(dataApi.NilaiRealisasi)
 
-                        if (dataApi.NilaiRKAP.length > 0) {
-                            eltRKAP.innerHTML = "Rp. " + dataApi.NilaiRKAP[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-                        }else{
-                            eltRKAP.innerHTML = "Rp. 0"
-                        }
+                    //     if (dataApi.NilaiRKAP.length > 0) {
+                    //         eltRKAP.innerHTML = "Rp. " + dataApi.NilaiRKAP[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                    //     }else{
+                    //         eltRKAP.innerHTML = "Rp. 0"
+                    //     }
 
-                        if (dataApi.NilaiForecast.length > 0) {
-                            eltForecast.innerHTML = "Rp. " + dataApi.NilaiForecast[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-                        }else{
-                            eltForecast.innerHTML = "Rp. 0"
-                        }
+                    //     if (dataApi.NilaiForecast.length > 0) {
+                    //         eltForecast.innerHTML = "Rp. " + dataApi.NilaiForecast[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                    //     }else{
+                    //         eltForecast.innerHTML = "Rp. 0"
+                    //     }
 
-                        if (dataApi.NilaiRealisasi.length > 0) {
-                            eltRealisasi.innerHTML = "Rp. " + dataApi.NilaiRealisasi[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-                        } else {
-                            eltRealisasi.innerHTML = "Rp. 0"
-                        }
-                    } else {
-                        // alert("Error => " + dataApi.Message)
-                        window.location.reload();
-                    }
+                    //     if (dataApi.NilaiRealisasi.length > 0) {
+                    //         eltRealisasi.innerHTML = "Rp. " + dataApi.NilaiRealisasi[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                    //     } else {
+                    //         eltRealisasi.innerHTML = "Rp. 0"
+                    //     }
+                    // } else {
+                    //     // alert("Error => " + dataApi.Message)
+                    //     window.location.reload();
+                    // }
+                    getDataChartForecast();
                     nextTab = document.querySelector('.nav-tabs .nav-link:first-child');
                     nextWorkPlace = document.querySelector('.tab-pane.fade .page');
                 }
@@ -456,8 +517,8 @@
             }
 
             // Automatically switch tabs every 1 minutes
-            // setInterval(switchToNextTab, 0.2*60*1000);
-            setInterval(switchToNextTab, 1*60*1000);
+            setInterval(switchToNextTab, 0.1*60*1000);
+            // setInterval(switchToNextTab, 1 * 60 * 1000);
         });
     </script>
 
