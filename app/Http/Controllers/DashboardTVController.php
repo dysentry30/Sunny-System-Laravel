@@ -179,4 +179,66 @@ class DashboardTVController extends Controller
 
         return response()->json($result);
     }
+
+    /**
+     * Get Schedule
+     * @param \Illuminate\Support\Facades\Request
+     * @return \Illuminate\Support\Facades\Response
+     */
+    public function getScheduleCampur(Request $request, $kategoriProyek)
+    {
+        $start = Carbon::parse($request->get('start'));
+        $end = Carbon::parse($request->get('end'));
+
+        $category = $request->get('category');
+
+        $year = date('Y');
+
+        $proyeksPrakualifikasi = Proyek::select('kode_proyek', 'nama_proyek', 'stage', 'jadwal_pq', 'jadwal_tender')->where('tipe_proyek', 'P')->where('is_cancel', false)->where('tahun_perolehan', $year)->where('is_tidak_lulus_pq', false)->whereIn('stage', [1, 2, 3, 4, 5, 6, 8]);
+        $proyeksTender = Proyek::select('kode_proyek', 'nama_proyek', 'stage', 'jadwal_pq', 'jadwal_tender')->where('tipe_proyek', 'P')->where('is_cancel', false)->where('tahun_perolehan', $year)->where('is_tidak_lulus_pq', false)->whereIn('stage', [1, 2, 3, 4, 5, 6, 8]);
+
+        if ($kategoriProyek == "eksternal") {
+            $proyeksPrakualifikasi = $proyeksPrakualifikasi->where("dop", "!=", "EA");
+            $proyeksTender = $proyeksTender->where("dop", "!=", "EA");
+        } else {
+            $proyeksPrakualifikasi = $proyeksPrakualifikasi->where("dop", "EA");
+            $proyeksTender = $proyeksTender->where("dop", "EA");
+        }
+
+        $proyeksPrakualifikasi = $proyeksPrakualifikasi->whereBetween('jadwal_pq', [$start, $end])->get();
+        $proyeksTender = $proyeksTender->whereBetween('jadwal_tender', [$start, $end])->get();
+
+        if (!empty($proyeksPrakualifikasi)) {
+            $resultPrakualifikasi = $proyeksPrakualifikasi->map(function ($proyek) {
+                $newClass = new stdClass();
+                $newClass->title = $proyek->kode_proyek . ' - ' . $proyek->nama_proyek;
+                $newClass->start = !empty($proyek->jadwal_pq) ? Carbon::create($proyek->jadwal_pq)->toDateString() : null;
+                $newClass->color = "#46AAF5";
+                $newClass->textColoe = "white";
+                $newClass->setAllDay = true;
+                return $newClass;
+            })->toArray();
+        } else {
+            $resultPrakualifikasi = [];
+        }
+
+        if (!empty($proyeksTender)) {
+            $resultTender = $proyeksTender->map(function ($proyek) {
+                $newClass = new stdClass();
+                $newClass->title = $proyek->kode_proyek . ' - ' . $proyek->nama_proyek;
+                $newClass->start = !empty($proyek->jadwal_tender) ? Carbon::create($proyek->jadwal_tender)->toDateString() : null;
+                $newClass->color = "#F7C13E";
+                $newClass->textColoe = "white";
+                $newClass->setAllDay = true;
+                return $newClass;
+            })->toArray();
+        } else {
+            $resultTender = [];
+        }
+
+        $result = array_merge($resultPrakualifikasi, $resultTender);
+        // dd($result);
+
+        return response()->json($result);
+    }
 }

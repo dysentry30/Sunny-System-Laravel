@@ -371,7 +371,6 @@
                 const response = await fetch('/dashboard-tv/get-data-forecast', {
                     method: 'GET'
                 }).then(res => res.json()).then(data => {
-                    console.log(data);
                     const responseParse = data;
                     const eltRKAP = document.querySelector('#nilai-rkap');
                     const eltForecast = document.querySelector('#nilai-forecast');
@@ -517,8 +516,8 @@
             }
 
             // Automatically switch tabs every 1 minutes
-            setInterval(switchToNextTab, 0.1*60*1000);
-            // setInterval(switchToNextTab, 1 * 60 * 1000);
+            // setInterval(switchToNextTab, 0.1*60*1000);
+            setInterval(switchToNextTab, 1 * 60 * 1000);
         });
     </script>
 
@@ -544,34 +543,33 @@
                 dayHeaderFormat: {
                     weekday: 'long'
                 },
-                eventSources: [{
-                        url: '/dashboard-tv/get-event-prakualifikasi/eksternal',
-                        method: 'GET',
-                        extraParams: {
-                            category: 'jadwal-pq',
-                        },
-                        failure: function(err) {
-                            window.location.reload();
-                        },
-                        color: '#46AAF5',
-                        textColor: 'white'
-                    },
-                    {
-                        url: '/dashboard-tv/get-event-tender/eksternal',
-                        method: 'GET',
-                        extraParams: {
-                            category: 'jadwal-tender',
-                        },
-                        failure: function(err) {
-                            window.location.reload();
-                        },
-                        color: '#F7C13E',
-                        textColor: 'white'
-                    },
+                // eventSources: [{
+                //         url: '/dashboard-tv/get-event-prakualifikasi/eksternal',
+                //         method: 'GET',
+                //         extraParams: {
+                //             category: 'jadwal-pq',
+                //         },
+                //         failure: function(err) {
+                //             window.location.reload();
+                //         },
+                //         color: '#46AAF5',
+                //         textColor: 'white'
+                //     },
+                //     {
+                //         url: '/dashboard-tv/get-event-tender/eksternal',
+                //         method: 'GET',
+                //         extraParams: {
+                //             category: 'jadwal-tender',
+                //         },
+                //         failure: function(err) {
+                //             window.location.reload();
+                //         },
+                //         color: '#F7C13E',
+                //         textColor: 'white'
+                //     },
 
-                ]
-
-
+                // ]
+                events: '/dashboard-tv/get-event/eksternal'
             });
             calendarEksternal.render();
 
@@ -595,32 +593,33 @@
                 dayHeaderFormat: {
                     weekday: 'long'
                 },
-                eventSources: [{
-                        url: '/dashboard-tv/get-event-prakualifikasi/eksternal',
-                        method: 'GET',
-                        extraParams: {
-                            category: 'jadwal-pq',
-                        },
-                        failure: function(err) {
-                            window.location.reload();
-                        },
-                        color: '#46AAF5',
-                        textColor: 'white'
-                    },
-                    {
-                        url: '/dashboard-tv/get-event-tender/eksternal',
-                        method: 'GET',
-                        extraParams: {
-                            category: 'jadwal-tender',
-                        },
-                        failure: function(err) {
-                            window.location.reload();
-                        },
-                        color: '#F7C13E',
-                        textColor: 'white'
-                    },
+                // eventSources: [{
+                //         url: '/dashboard-tv/get-event-prakualifikasi/eksternal',
+                //         method: 'GET',
+                //         extraParams: {
+                //             category: 'jadwal-pq',
+                //         },
+                //         failure: function(err) {
+                //             window.location.reload();
+                //         },
+                //         color: '#46AAF5',
+                //         textColor: 'white'
+                //     },
+                //     {
+                //         url: '/dashboard-tv/get-event-tender/eksternal',
+                //         method: 'GET',
+                //         extraParams: {
+                //             category: 'jadwal-tender',
+                //         },
+                //         failure: function(err) {
+                //             window.location.reload();
+                //         },
+                //         color: '#F7C13E',
+                //         textColor: 'white'
+                //     },
 
-                ]
+                // ]
+                events: '/dashboard-tv/get-event/eksternal'
 
 
             });
@@ -647,32 +646,33 @@
                 dayHeaderFormat: {
                     weekday: 'long'
                 },
-                eventSources: [{
-                        url: '/dashboard-tv/get-event-prakualifikasi/internal',
-                        method: 'GET',
-                        extraParams: {
-                            category: 'jadwal-pq',
-                        },
-                        failure: function(err) {
-                            window.location.reload();
-                        },
-                        color: '#46AAF5',
-                        textColor: 'white'
-                    },
-                    {
-                        url: '/dashboard-tv/get-event-tender/internal',
-                        method: 'GET',
-                        extraParams: {
-                            category: 'jadwal-tender',
-                        },
-                        failure: function(err) {
-                            window.location.reload();
-                        },
-                        color: '#F7C13E',
-                        textColor: 'white'
-                    },
+                // eventSources: [{
+                //         url: '/dashboard-tv/get-event-prakualifikasi/internal',
+                //         method: 'GET',
+                //         extraParams: {
+                //             category: 'jadwal-pq',
+                //         },
+                //         failure: function(err) {
+                //             window.location.reload();
+                //         },
+                //         color: '#46AAF5',
+                //         textColor: 'white'
+                //     },
+                //     {
+                //         url: '/dashboard-tv/get-event-tender/internal',
+                //         method: 'GET',
+                //         extraParams: {
+                //             category: 'jadwal-tender',
+                //         },
+                //         failure: function(err) {
+                //             window.location.reload();
+                //         },
+                //         color: '#F7C13E',
+                //         textColor: 'white'
+                //     },
 
-                ]
+                // ]
+                events: '/dashboard-tv/get-event/internal'
 
 
             });
@@ -698,32 +698,33 @@
                 dayHeaderFormat: {
                     weekday: 'long'
                 },
-                eventSources: [{
-                        url: '/dashboard-tv/get-event-prakualifikasi/internal',
-                        method: 'GET',
-                        extraParams: {
-                            category: 'jadwal-pq',
-                        },
-                        failure: function(err) {
-                            window.location.reload();
-                        },
-                        color: '#46AAF5',
-                        textColor: 'white'
-                    },
-                    {
-                        url: '/dashboard-tv/get-event-tender/internal',
-                        method: 'GET',
-                        extraParams: {
-                            category: 'jadwal-tender',
-                        },
-                        failure: function(err) {
-                            window.location.reload();
-                        },
-                        color: '#F7C13E',
-                        textColor: 'white'
-                    },
+                // eventSources: [{
+                //         url: '/dashboard-tv/get-event-prakualifikasi/internal',
+                //         method: 'GET',
+                //         extraParams: {
+                //             category: 'jadwal-pq',
+                //         },
+                //         failure: function(err) {
+                //             window.location.reload();
+                //         },
+                //         color: '#46AAF5',
+                //         textColor: 'white'
+                //     },
+                //     {
+                //         url: '/dashboard-tv/get-event-tender/internal',
+                //         method: 'GET',
+                //         extraParams: {
+                //             category: 'jadwal-tender',
+                //         },
+                //         failure: function(err) {
+                //             window.location.reload();
+                //         },
+                //         color: '#F7C13E',
+                //         textColor: 'white'
+                //     },
 
-                ]
+                // ]
+                events: '/dashboard-tv/get-event/internal'
 
 
             });
