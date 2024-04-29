@@ -457,7 +457,7 @@
 
             // Automatically switch tabs every 1 minutes
             // setInterval(switchToNextTab, 0.2*60*1000);
-            setInterval(switchToNextTab, 0.1*60*1000);
+            setInterval(switchToNextTab, 1*60*1000);
         });
     </script>
 
