@@ -4738,6 +4738,7 @@ Route::get('/dashboard-tv', function () {
 });
 
 Route::get('/dashboard-tv/get-data-forecast', [DashboardTVController::class, 'getForecast']);
+Route::get('/dashboard-tv/get-event/{kategori}', [DashboardTVController::class, 'getScheduleCampur']);
 Route::get('/dashboard-tv/get-event-prakualifikasi/{kategori}', [DashboardTVController::class, 'getSchedulePrakualifikasi']);
 Route::get('/dashboard-tv/get-event-tender/{kategori}', [DashboardTVController::class, 'getScheduleTender']);
 
@@ -4745,3 +4746,5 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('/get-forecast', [MobileController::class, 'GetDataForecast']);
     Route::get('/get-monitoring-proyek', [MobileController::class, 'GetMonitoringProyek']);
 });
+
+Route::get('/tes-tv/{tes}', [DashboardTVController::class, 'getScheduleCampur']);
