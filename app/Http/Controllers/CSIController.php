@@ -365,7 +365,7 @@ class CSIController extends Controller
         //     return redirect()->back();
         // });
 
-        $emailNotification = sendNotifEmail($data['email'], "Permohonan Pengisian Survey Kepuasan Pelanggan", $message, false, false);
+        $emailNotification = sendNotifEmail($data['email'], "Permohonan Pengisian Survey Kepuasan Pelanggan", $message, env('IS_SEND_EMAIL'), false);
         if (!$emailNotification) {
             return redirect()->back();
         }
