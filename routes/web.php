@@ -86,6 +86,9 @@ use App\Models\PenilaianPartnerSelection;
 use App\Models\PenilaianChecklistProjectSelection;
 use App\Models\MatriksApprovalPartnerSelection;
 use App\Models\MatriksApprovalPaparan;
+use App\Models\MatriksApprovalPersetujuanPartner;
+use App\Models\MatriksApprovalVerifikasiPartner;
+use App\Models\MatriksApprovalVerifikasiProyekNota2;
 use App\Models\MatriksApprovalNotaRekomendasi2;
 use App\Models\MasterCatatanNotaRekomendasi2;
 use App\Models\MasterKlasifikasiProyek;
@@ -3787,7 +3790,289 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         )->get()->groupBy('MasterKlasifikasiSBU.klasifikasi');
         return response()->json($dataKlasifikasiSBU);
     });
+    //End::Get Master Klasifikasi KBLI SBU
 
+    //Begin::Master Matriks Approval Verifikasi Partner
+    Route::get('/matriks-approval-varifikasi-partner', function () {
+        $matriks_all = MatriksApprovalVerifikasiPartner::with(["Pegawai", "Divisi"])
+        ->where('is_active', true)
+        ->orderBy('updated_at')
+        ->get();
+
+        $divisi_all = Divisi::all();
+        $pegawai_all = Pegawai::pluck('nama_pegawai', 'nip');
+        $departemens = Departemen::all();
+        // dd($matriks_all);
+        return view("MasterData/MatriksApprovalVerifikasiPartner", compact([
+            "matriks_all", "divisi_all", "pegawai_all", "departemens"
+        ]));
+    });
+
+    Route::post('/matriks-approval-varifikasi-partner/save', function (Request $request) {
+        $data = $request->all();
+        // dd($data);
+        $rules = [
+            "tahun_start" => "required|numeric",
+            "bulan_start" => "required|numeric",
+            "nama-pegawai" => "required",
+            "unit-kerja" => "required",
+            // "klasifikasi-proyek" => "required",
+            "departemen" => "required",
+            "kategori" => "required",
+            "kode-unit" => "required",
+            "urutan" => "required",
+        ];
+        // $is_validate = $request->validateWithBag("post", [
+        //     "start_tahun" => "required|numeric",
+        //     "jabatan" => "required",
+        //     "unit-kerja" => "required",
+        // ]);
+        $is_invalid = validateInput($data, $rules);
+
+        if (!empty($is_invalid)) {
+            Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
+            return redirect()->back()->with("modal", $data["modal"]);
+        }
+
+        $namaPegawai = Pegawai::where(
+            'nip',
+            $data["nama-pegawai"]
+        )->first()->nama_pegawai;
+
+        $matriks = new MatriksApprovalVerifikasiPartner();
+        $matriks->start_tahun = $data["tahun_start"];
+        $matriks->start_bulan = $data["bulan_start"];
+        if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
+            $matriks->finish_tahun = $data["tahun_finish"];
+            $matriks->finish_bulan = $data["bulan_finish"];
+        }
+        $matriks->is_active = isset($data["isActive"]) ? true : false;
+        // $matriks->jabatan = $data["jabatan"];
+        $matriks->nama_pegawai = $data["nama-pegawai"];
+        $matriks->title = $namaPegawai;
+        $matriks->divisi_id = $data["unit-kerja"];
+        // $matriks->klasifikasi_proyek = $data["klasifikasi-proyek"];
+        $matriks->kategori = $data["kategori"];
+        $matriks->departemen_code = $data["departemen"];
+        $matriks->kode_unit_kerja = $data["kode-unit"];
+        $matriks->urutan = $data["urutan"];
+
+        if ($matriks->save()) {
+            Alert::success('Success', "Matriks Approval Partner berhasil ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Matriks Approval Partner gagal ditambahkan");
+        return redirect()->back();
+    });
+
+    Route::post('/matriks-approval-varifikasi-partner/update', function (Request $request) {
+        $data = $request->all();
+        $rules = [
+            "tahun_start" => "required|numeric",
+            "bulan_start" => "required|numeric",
+            "nama-pegawai" => "required",
+            "unit-kerja" => "required",
+            // "klasifikasi-proyek" => "required",
+            "kategori" => "required",
+            "kode-unit" => "required",
+            "urutan" => "required",
+            "departemen" => "required"
+        ];
+        // $is_validate = $request->validateWithBag("post", [
+        //     "tahun" => "required|numeric",
+        //     "jabatan" => "required",
+        //     "unit-kerja" => "required",
+        // ]);
+        $is_invalid = validateInput($data, $rules);
+
+        if (!empty($is_invalid)) {
+            Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
+            return redirect()->back()->with("modal", $data["modal"]);
+        }
+
+        $matriks = MatriksApprovalVerifikasiPartner::find($data["id-matriks-approval"]);
+        $namaPegawai = Pegawai::where('nip', $data["nama-pegawai"])->first()->nama_pegawai;
+
+        $matriks->start_bulan = $data["bulan_start"];
+        $matriks->start_tahun = $data["tahun_start"];
+        if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
+            $matriks->finish_tahun = $data["tahun_finish"];
+            $matriks->finish_bulan = $data["bulan_finish"];
+        }
+        $matriks->is_active = isset($data["isActive"]) ? true : false;
+        // $matriks->jabatan = $data["jabatan"];
+        $matriks->nama_pegawai = $data["nama-pegawai"];
+        $matriks->title = $namaPegawai;
+        $matriks->divisi_id = $data["unit-kerja"];
+        // $matriks->klasifikasi_proyek = $data["klasifikasi-proyek"];
+        $matriks->kategori = $data["kategori"];
+        $matriks->departemen_code = $data["departemen"];
+        $matriks->kode_unit_kerja = $data["kode-unit"];
+        $matriks->urutan = $data["urutan"];
+        // dd($matriks);
+
+        if ($matriks->save()) {
+            Alert::success('Success', "Matriks Approval Partner berhasil diperbarui");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Matriks Approval Partner gagal diperbarui");
+        return redirect()->back();
+    });
+
+    Route::post('/matriks-approval-varifikasi-partner/delete', function (Request $request) {
+        $data = $request->all();
+        $approval_partner = MatriksApprovalVerifikasiPartner::find($data["id-matriks-approval"]);
+
+        if ($approval_partner->delete()) {
+            Alert::success('Success', "Matriks Approval Partner berhasil dihapus");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Matriks Approval Partner gagal dihapus");
+        return redirect()->back();
+    });
+    //End::Master Matriks Approval Verifikasi Partner
+
+    //Begin::Master Matriks Approval Persetujuan Partner
+    Route::get('/matriks-approval-persetujuan-partner', function () {
+        $matriks_all = MatriksApprovalPersetujuanPartner::with(["Pegawai", "Divisi"])
+        ->where('is_active', true)
+        ->orderBy('updated_at')
+        ->get();
+
+        $divisi_all = Divisi::all();
+        $pegawai_all = Pegawai::pluck('nama_pegawai', 'nip');
+        $departemens = Departemen::all();
+        // dd($matriks_all);
+        return view("MasterData/MatriksApprovalPersetujuanPartner", compact([
+            "matriks_all", "divisi_all", "pegawai_all", "departemens"
+        ]));
+    });
+
+    Route::post('/matriks-approval-persetujuan-partner/save', function (Request $request) {
+        $data = $request->all();
+        // dd($data);
+        $rules = [
+            "tahun_start" => "required|numeric",
+            "bulan_start" => "required|numeric",
+            "nama-pegawai" => "required",
+            "unit-kerja" => "required",
+            // "klasifikasi-proyek" => "required",
+            "departemen" => "required",
+            "kategori" => "required",
+            "kode-unit" => "required",
+            "urutan" => "required",
+        ];
+        // $is_validate = $request->validateWithBag("post", [
+        //     "start_tahun" => "required|numeric",
+        //     "jabatan" => "required",
+        //     "unit-kerja" => "required",
+        // ]);
+        $is_invalid = validateInput($data, $rules);
+
+        if (!empty($is_invalid)) {
+            Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
+            return redirect()->back()->with("modal", $data["modal"]);
+        }
+
+        $namaPegawai = Pegawai::where(
+            'nip',
+            $data["nama-pegawai"]
+        )->first()->nama_pegawai;
+
+        $matriks = new MatriksApprovalPersetujuanPartner();
+        $matriks->start_tahun = $data["tahun_start"];
+        $matriks->start_bulan = $data["bulan_start"];
+        if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
+            $matriks->finish_tahun = $data["tahun_finish"];
+            $matriks->finish_bulan = $data["bulan_finish"];
+        }
+        $matriks->is_active = isset($data["isActive"]) ? true : false;
+        // $matriks->jabatan = $data["jabatan"];
+        $matriks->nama_pegawai = $data["nama-pegawai"];
+        $matriks->title = $namaPegawai;
+        $matriks->divisi_id = $data["unit-kerja"];
+        // $matriks->klasifikasi_proyek = $data["klasifikasi-proyek"];
+        $matriks->kategori = $data["kategori"];
+        $matriks->departemen_code = $data["departemen"];
+        $matriks->kode_unit_kerja = $data["kode-unit"];
+        $matriks->urutan = $data["urutan"];
+
+        if ($matriks->save()) {
+            Alert::success('Success', "Matriks Approval Partner berhasil ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Matriks Approval Partner gagal ditambahkan");
+        return redirect()->back();
+    });
+
+    Route::post('/matriks-approval-persetujuan-partner/update', function (Request $request) {
+        $data = $request->all();
+        $rules = [
+            "tahun_start" => "required|numeric",
+            "bulan_start" => "required|numeric",
+            "nama-pegawai" => "required",
+            "unit-kerja" => "required",
+            // "klasifikasi-proyek" => "required",
+            "kategori" => "required",
+            "kode-unit" => "required",
+            "urutan" => "required",
+            "departemen" => "required"
+        ];
+        // $is_validate = $request->validateWithBag("post", [
+        //     "tahun" => "required|numeric",
+        //     "jabatan" => "required",
+        //     "unit-kerja" => "required",
+        // ]);
+        $is_invalid = validateInput($data, $rules);
+
+        if (!empty($is_invalid)) {
+            Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
+            return redirect()->back()->with("modal", $data["modal"]);
+        }
+
+        $matriks = MatriksApprovalPersetujuanPartner::find($data["id-matriks-approval"]);
+        $namaPegawai = Pegawai::where('nip', $data["nama-pegawai"])->first()->nama_pegawai;
+
+        $matriks->start_bulan = $data["bulan_start"];
+        $matriks->start_tahun = $data["tahun_start"];
+        if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
+            $matriks->finish_tahun = $data["tahun_finish"];
+            $matriks->finish_bulan = $data["bulan_finish"];
+        }
+        $matriks->is_active = isset($data["isActive"]) ? true : false;
+        // $matriks->jabatan = $data["jabatan"];
+        $matriks->nama_pegawai = $data["nama-pegawai"];
+        $matriks->title = $namaPegawai;
+        $matriks->divisi_id = $data["unit-kerja"];
+        // $matriks->klasifikasi_proyek = $data["klasifikasi-proyek"];
+        $matriks->kategori = $data["kategori"];
+        $matriks->departemen_code = $data["departemen"];
+        $matriks->kode_unit_kerja = $data["kode-unit"];
+        $matriks->urutan = $data["urutan"];
+        // dd($matriks);
+
+        if ($matriks->save()) {
+            Alert::success('Success', "Matriks Approval Partner berhasil diperbarui");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Matriks Approval Partner gagal diperbarui");
+        return redirect()->back();
+    });
+
+    Route::post('/matriks-approval-persetujuan-partner/delete', function (Request $request) {
+        $data = $request->all();
+        $approval_partner = MatriksApprovalPersetujuanPartner::find($data["id-matriks-approval"]);
+
+        if ($approval_partner->delete()) {
+            Alert::success('Success', "Matriks Approval Partner berhasil dihapus");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Matriks Approval Partner gagal dihapus");
+        return redirect()->back();
+    });
+    //End::Master Matriks Approval Persetujuan Partner
+
+    //Begin::Master Matriks Approval Partner Selection
     Route::get('/matriks-approval-partner', function () {
         $matriks_all = MatriksApprovalPartnerSelection::with(["Pegawai", "Divisi"])
         ->where('is_active', true)
@@ -3926,6 +4211,150 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         return redirect()->back();
     });
     //End::Master Matriks Approval Partner Selection
+
+    //Begin::Master Matriks Approval Verifikasi Partner
+    Route::get('/matriks-approval-varifikasi-proyek', function () {
+        $matriks_all = MatriksApprovalVerifikasiProyekNota2::with(["Pegawai", "Divisi"])
+        ->where('is_active', true)
+        ->orderBy('updated_at')
+        ->get();
+
+        $divisi_all = Divisi::all();
+        $pegawai_all = Pegawai::pluck('nama_pegawai', 'nip');
+        $departemens = Departemen::all();
+        // dd($matriks_all);
+        return view("MasterData/MatriksApprovalVerifikasiProyekNota2", compact([
+            "matriks_all", "divisi_all", "pegawai_all", "departemens"
+        ]));
+    });
+
+    Route::post('/matriks-approval-varifikasi-proyek/save', function (Request $request) {
+        $data = $request->all();
+        // dd($data);
+        $rules = [
+            "tahun_start" => "required|numeric",
+            "bulan_start" => "required|numeric",
+            "nama-pegawai" => "required",
+            "unit-kerja" => "required",
+            // "klasifikasi-proyek" => "required",
+            "departemen" => "required",
+            "kategori" => "required",
+            "kode-unit" => "required",
+            "urutan" => "required",
+        ];
+        // $is_validate = $request->validateWithBag("post", [
+        //     "start_tahun" => "required|numeric",
+        //     "jabatan" => "required",
+        //     "unit-kerja" => "required",
+        // ]);
+        $is_invalid = validateInput($data, $rules);
+
+        if (!empty($is_invalid)) {
+            Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
+            return redirect()->back()->with("modal", $data["modal"]);
+        }
+
+        $namaPegawai = Pegawai::where(
+            'nip',
+            $data["nama-pegawai"]
+        )->first()->nama_pegawai;
+
+        $matriks = new MatriksApprovalVerifikasiProyekNota2();
+        $matriks->start_tahun = $data["tahun_start"];
+        $matriks->start_bulan = $data["bulan_start"];
+        if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
+            $matriks->finish_tahun = $data["tahun_finish"];
+            $matriks->finish_bulan = $data["bulan_finish"];
+        }
+        $matriks->is_active = isset($data["isActive"]) ? true : false;
+        // $matriks->jabatan = $data["jabatan"];
+        $matriks->nama_pegawai = $data["nama-pegawai"];
+        $matriks->title = $namaPegawai;
+        $matriks->divisi_id = $data["unit-kerja"];
+        // $matriks->klasifikasi_proyek = $data["klasifikasi-proyek"];
+        $matriks->kategori = $data["kategori"];
+        $matriks->departemen_code = $data["departemen"];
+        $matriks->kode_unit_kerja = $data["kode-unit"];
+        $matriks->urutan = $data["urutan"];
+
+        if ($matriks->save()) {
+            Alert::success('Success', "Matriks Approval Verifikasi Proyek berhasil ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Matriks Approval Verifikasi Proyek gagal ditambahkan");
+        return redirect()->back();
+    });
+
+    Route::post('/matriks-approval-varifikasi-proyek/update',
+        function (Request $request) {
+            $data = $request->all();
+            $rules = [
+                "tahun_start" => "required|numeric",
+                "bulan_start" => "required|numeric",
+                "nama-pegawai" => "required",
+                "unit-kerja" => "required",
+                // "klasifikasi-proyek" => "required",
+                "kategori" => "required",
+                "kode-unit" => "required",
+                "urutan" => "required",
+                "departemen" => "required"
+            ];
+            // $is_validate = $request->validateWithBag("post", [
+            //     "tahun" => "required|numeric",
+            //     "jabatan" => "required",
+            //     "unit-kerja" => "required",
+            // ]);
+            $is_invalid = validateInput($data, $rules);
+
+            if (!empty($is_invalid)) {
+                Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
+                return redirect()->back()->with("modal", $data["modal"]);
+            }
+
+            $matriks = MatriksApprovalVerifikasiProyekNota2::find($data["id-matriks-approval"]);
+            $namaPegawai = Pegawai::where('nip', $data["nama-pegawai"])->first()->nama_pegawai;
+
+            $matriks->start_bulan = $data["bulan_start"];
+            $matriks->start_tahun = $data["tahun_start"];
+            if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
+                $matriks->finish_tahun = $data["tahun_finish"];
+                $matriks->finish_bulan = $data["bulan_finish"];
+            }
+            $matriks->is_active = isset($data["isActive"]) ? true : false;
+            // $matriks->jabatan = $data["jabatan"];
+            $matriks->nama_pegawai = $data["nama-pegawai"];
+            $matriks->title = $namaPegawai;
+            $matriks->divisi_id = $data["unit-kerja"];
+            // $matriks->klasifikasi_proyek = $data["klasifikasi-proyek"];
+            $matriks->kategori = $data["kategori"];
+            $matriks->departemen_code = $data["departemen"];
+            $matriks->kode_unit_kerja = $data["kode-unit"];
+            $matriks->urutan = $data["urutan"];
+            // dd($matriks);
+
+            if ($matriks->save()) {
+                Alert::success('Success', "Matriks Approval Verifikasi Proyek berhasil diperbarui");
+                return redirect()->back();
+            }
+            Alert::error('Error', "Matriks Approval Verifikasi Proyek gagal diperbarui");
+            return redirect()->back();
+        }
+    );
+
+    Route::post('/matriks-approval-varifikasi-proyek/delete',
+        function (Request $request) {
+            $data = $request->all();
+            $approval_partner = MatriksApprovalVerifikasiProyekNota2::find($data["id-matriks-approval"]);
+
+            if ($approval_partner->delete()) {
+                Alert::success('Success', "Matriks Approval Verifikasi Proyek berhasil dihapus");
+                return redirect()->back();
+            }
+            Alert::error('Error', "Matriks Approval Verifikasi Proyek gagal dihapus");
+            return redirect()->back();
+        }
+    );
+    //End::Master Matriks Approval Verifikasi Partner
 
     //Begin::Master Matriks Approval Paparan
     Route::get('/matriks-approval-paparan', function () {

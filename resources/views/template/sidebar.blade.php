@@ -388,6 +388,9 @@
                             str_contains(Request::Path(), 'matriks-approval-rekomendasi') ||
                             str_contains(Request::Path(), 'matriks-approval-rekomendasi-2') ||
                             str_contains(Request::Path(), 'matriks-approval-partner') ||
+                            str_contains(Request::Path(), 'matriks-approval-verifikasi-partner') ||
+                            str_contains(Request::Path(), 'matriks-approval-persetujuan-partner') ||
+                            str_contains(Request::Path(), 'matriks-approval-verifikasi-proyek') ||
                             str_contains(Request::Path(), 'matriks-approval-paparan') ||
                             str_contains(Request::Path(), 'provinsi') ||
                             str_contains(Request::Path(), 'otomasi-approval') ||
@@ -738,6 +741,23 @@
                                     @can('super-admin')
                                         <!--begin::Menu Colapse-->
                                         <div id="#kt_aside_menu" data-kt-menu="true"
+                                            style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'matriks-approval-varifikasi-proyek' ? 'background-color:#008CB4' : '' }}">
+                                            <a class="menu-link " href="/matriks-approval-varifikasi-proyek" style="color:white; padding-left:20px;">
+                                                <span class="menu-icon">
+                                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                    {{-- <i class="bi bi-buildings text-white"></i> --}}
+                                                    <i class="bi bi-person-fill-lock text-white"></i>
+                                                    <!--end::Svg Icon-->
+                                                </span>
+                                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Matriks Approval Verifikasi Proyek</span>
+                                            </a>
+                                        </div>
+                                        <!--end::Menu Colapse-->
+                                    @endcan
+
+                                    @can('super-admin')
+                                        <!--begin::Menu Colapse-->
+                                        <div id="#kt_aside_menu" data-kt-menu="true"
                                             style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'matriks-approval-partner' ? 'background-color:#008CB4' : '' }}">
                                             <a class="menu-link " href="/matriks-approval-partner" style="color:white; padding-left:20px;">
                                                 <span class="menu-icon">
@@ -746,7 +766,41 @@
                                                     <i class="bi bi-person-fill-lock text-white"></i>
                                                     <!--end::Svg Icon-->
                                                 </span>
-                                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Matriks Approval Partner</span>
+                                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Matriks Approval Assessment Partner</span>
+                                            </a>
+                                        </div>
+                                        <!--end::Menu Colapse-->
+                                    @endcan
+
+                                    @can('super-admin')
+                                        <!--begin::Menu Colapse-->
+                                        <div id="#kt_aside_menu" data-kt-menu="true"
+                                            style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'matriks-approval-verifikasi-partner' ? 'background-color:#008CB4' : '' }}">
+                                            <a class="menu-link " href="/matriks-approval-verifikasi-partner" style="color:white; padding-left:20px;">
+                                                <span class="menu-icon">
+                                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                    {{-- <i class="bi bi-buildings text-white"></i> --}}
+                                                    <i class="bi bi-person-fill-lock text-white"></i>
+                                                    <!--end::Svg Icon-->
+                                                </span>
+                                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Matriks Approval Verifikasi Partner</span>
+                                            </a>
+                                        </div>
+                                        <!--end::Menu Colapse-->
+                                    @endcan
+
+                                    @can('super-admin')
+                                        <!--begin::Menu Colapse-->
+                                        <div id="#kt_aside_menu" data-kt-menu="true"
+                                            style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'matriks-approval-persetujuan-partner' ? 'background-color:#008CB4' : '' }}">
+                                            <a class="menu-link " href="/matriks-approval-persetujuan-partner" style="color:white; padding-left:20px;">
+                                                <span class="menu-icon">
+                                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                    {{-- <i class="bi bi-buildings text-white"></i> --}}
+                                                    <i class="bi bi-person-fill-lock text-white"></i>
+                                                    <!--end::Svg Icon-->
+                                                </span>
+                                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Matriks Approval Persetujuan Partner</span>
                                             </a>
                                         </div>
                                         <!--end::Menu Colapse-->
