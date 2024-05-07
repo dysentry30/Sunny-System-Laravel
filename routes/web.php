@@ -590,6 +590,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::get('rekomendasi/dokumen-final/{id_document}/download', [RekomendasiController::class, 'downloadFileNotaRekomendasiFinal']);
     Route::get("/green-lane", [RekomendasiController::class, "indexGreenLane"]);
     Route::get("/non-green-lane", [RekomendasiController::class, "indexNonGreenLane"]);
+    Route::get('/rekomendasi/{kode_proyek}/{nip}/view-qr', [RekomendasiController::class, 'viewProyekQrCode']);
     // End Rekomendasi
 
     //Begin::Assessment Partner Selection
@@ -626,6 +627,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/nota-rekomendasi-2/assessment-project-selection/delete-file', [KriteriaSelectionNonGreenlaneController::class, 'deleteFile']);
 
     Route::post('/nota-rekomendasi-2/{kode_proyek}/upload-final', [Rekomendasi2Controller::class, 'UploadDokumenFinal']);
+
+    Route::get('/nota-rekomendasi-2/{kode_proyek}/view-qr', [Rekomendasi2Controller::class, 'viewProyekQrCode']);
 
     Route::get('/proyek/{proyek}/kso/generate', function (Proyek $proyek) {
         if (empty($proyek)) {
@@ -7392,13 +7395,15 @@ Route::get('/test-file', function (Request $request) {
     // return mergeFileLampiranRisiko('GNPC361');
 });
 
-Route::get('/tesss', function () {
-    $notaRekomendasi = NotaRekomendasi2::where('kode_proyek', 'HJPD004')->first();
-    // return createWordPersetujuanNota2($notaRekomendasi);
-    // return createWordKriteriaProjectSelection($notaRekomendasi);
-    $porsiJO = App\Models\PorsiJO::find(103);
-    // createWordKriteriaProjectSelection($notaRekomendasi);
-    return mergeFileDokumenAssessmentPartnerKSO($porsiJO);
+Route::get('/tesss', function (Request $request) {
+    $notaRekomendasi = NotaRekomendasi2::where('kode_proyek', 'PJPD002')->first();
+    return createWordPersetujuanNota2($notaRekomendasi, $request->schemeAndHttpHost());
+    // // return createWordPersetujuanNota2($notaRekomendasi);
+    // // return createWordKriteriaProjectSelection($notaRekomendasi);
+    // $porsiJO = App\Models\PorsiJO::find(103);
+    // // createWordKriteriaProjectSelection($notaRekomendasi);
+    // return mergeFileDokumenAssessmentPartnerKSO($porsiJO);
+    // return createWordProfileRisikoNew("PJPD012");
 });
 
 Route::get('/tes-generate', function () {
@@ -7424,4 +7429,10 @@ Route::get('/tes-email', function () {
     // $user = User::find(52);
     $email = sendNotifEmail($user, "Testing", "Testing", false, false);
     dd($email);
+});
+
+Route::get('/test-persetujuan-nota-2', function (Request $request) {
+    $notaRekomendasi = \App\Models\NotaRekomendasi::where('kode_proyek', 'PJPD012')->first();
+    // return createWordPersetujuanNota2($notaRekomendasi, $request->schemeAndHttpHost());
+    // return createWordNotaRekomendasiSetuju($notaRekomendasi, $request);
 });

@@ -354,7 +354,7 @@
                                         <!--begin::Table body-->
                                         <tbody>
                                             <!--begin::Table row-->
-                                            @foreach ($customers as $assessment)
+                                            @foreach ($customers->sortByDesc('updated_at') as $assessment)
                                                 @php
                                                     $partner = $assessment->PartnerJO;
                                                     switch ($partner->keterangan) {
@@ -457,7 +457,9 @@
                                                     </td>
                                                     <td class="text-center">
                                                         @canany(['admin-crm','approver-crm', 'risk-crm'])
-                                                            @if (!empty($matriks_user) && $matriks_user->where('divisi_id', $assessment->divisi_id)->where('departemen_code', $assessment->departemen_id)->where('kategori', 'Rekomendasi')->first() && $assessment->is_penyusun_approved)
+                                                            @if($assessment->is_rekomendasi_approved)
+                                                                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#generate_final_{{ $assessment->id }}">Lihat</button>
+                                                            @elseif (!empty($matriks_user) && $matriks_user->where('divisi_id', $assessment->divisi_id)->where('departemen_code', $assessment->departemen_id)->where('kategori', 'Rekomendasi')->first() && $assessment->is_penyusun_approved)
                                                                 @if (is_null($assessment->is_rekomendasi_approved))
                                                                 <button type="button" class="btn btn-sm btn-primary"
                                                                     data-bs-target="#rekomendasi_{{ $assessment->id }}"
@@ -491,10 +493,10 @@
                                                                     data-bs-toggle="modal">{{ is_null($assessment->is_pengajuan_approved) ? "Ajukan" : "Lihat Detail" }}</button>
                                                             @endif
 
-                                                            @if ($assessment->is_rekomendasi_approved)
+                                                            {{-- @if ($assessment->is_rekomendasi_approved) --}}
                                                                 {{-- <a href="/assessment-partner-selection/{{ $assessment->id }}/generate-final" class="btn btn-sm btn-primary text-white">Download</a> --}}
-                                                                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#generate_final_{{ $assessment->id }}">Lihat</button>
-                                                            @endif
+                                                                {{-- <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#generate_final_{{ $assessment->id }}">Lihat</button> --}}
+                                                            {{-- @endif --}}
                                                         @endcanany
                                                     </td>
                                                 </tr>
@@ -1990,6 +1992,9 @@
                             </table>
                             <br>
                             <hr>
+                            <h5>Catatan Assessment</h5>
+                            <textarea name="catatan-assessment" class="form-control form-control-solid" id="catatan-assessment" rows="5" {{ !is_null($assessment->is_penyusun_approved) ? 'disabled' : '' }}>{!! $assessment->catatan_assessment ?? "" !!}</textarea>
+                            <br>
                             <h5>Dokumen Pendukung</h5>
                             @if (!empty($assessment->PartnerJO?->file_kelengkapan_merge))
                             <div class="text-center">
@@ -2039,7 +2044,7 @@
                         <!--begin::Modal header-->
                         <div class="modal-header">
                             <!--begin::Modal title-->
-                            <h2>Penyusun Partner KSO :</h2>
+                            <h2>Rekomendasi Partner KSO :</h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
                             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -2126,6 +2131,13 @@
                                                 @endif
                                             </td>
                                         </tr>
+                                        <tr>
+                                            <td>8.</td>
+                                            <td>Catatan Assessment</td>
+                                            <td>
+                                                <p class="m-0">{!! $assessment->catatan_assessment !!}</p>
+                                            </td>
+                                        </tr> 
                                     </tbody>
                                 </table>
                                 <br>
@@ -2259,9 +2271,9 @@
                                                     <div class="card-body">
                                                         <small>
                                                             Nama:
-                                                            <b>{{ App\Models\User::find($data->user_id)->name }}</b><br>
+                                                            <b>{{ App\Models\User::find($data->user_id)->name ?? "-" }}</b><br>
                                                             Jabatan:
-                                                            <b>{{ App\Models\User::find($data->user_id)->Pegawai->Jabatan?->nama_jabatan }}</b><br>
+                                                            <b>{{ App\Models\User::find($data->user_id)->Pegawai->Jabatan?->nama_jabatan ?? "-" }}</b><br>
                                                             @if (!empty($data->tanggal))
                                                                 Tanggal:
                                                                 <b>{{ Carbon\Carbon::create($data->tanggal)->translatedFormat('d F Y H:i:s') }}</b><br>
@@ -2345,9 +2357,9 @@
                                                         <div class="card-body">
                                                             <small>
                                                                 Nama:
-                                                                <b>{{ App\Models\User::find($d->user_id)->name }}</b><br>
+                                                                <b>{{ App\Models\User::find($d->user_id)->name ?? "-" }}</b><br>
                                                                 Jabatan:
-                                                                <b>{{ App\Models\User::find($d->user_id)->Pegawai->Jabatan?->nama_jabatan }}</b><br>
+                                                                <b>{{ App\Models\User::find($d->user_id)->Pegawai->Jabatan?->nama_jabatan ?? "-" }}</b><br>
                                                                 Status Approval:
                                                                 @if ($d->status == 'approved')
                                                                     <span><b
@@ -2507,6 +2519,8 @@
                         </table>
                         <br>
                         <hr>
+                        <h5>Catatan Assessment</h5>
+                        <textarea name="catatan-assessment" class="form-control form-control-solid" id="catatan-assessment" rows="5" disabled>{!! $assessment->catatan_assessment ?? "" !!}</textarea>
                         <h5>Dokumen Pendukung</h5>
                         @if (!empty($assessment->PartnerJO?->file_kelengkapan_merge))
                         <div class="text-center">
@@ -2561,9 +2575,7 @@
         $('#assessment-partner').DataTable({
             dom: 'Bfrtip',
             pageLength: 20,
-            order: [
-                [0, 'desc']
-            ],
+            order: false,
             buttons: [
                 'excel'
             ]

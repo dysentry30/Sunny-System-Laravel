@@ -11,6 +11,7 @@ use App\Models\DokumenNotaRekomendasi2;
 use App\Models\MatriksApprovalPaparan;
 use App\Models\TimTender;
 use App\Models\UnitKerja;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,7 +31,7 @@ class Rekomendasi2Controller extends Controller
     {
         $this->matriks_approvals = MatriksApprovalNotaRekomendasi2::where("is_active", true)->get();
         $this->matriks_approvals = $this->matriks_approvals->first();
-        $this->isnomorTargetActive = env('NR2_ACTIVE');
+        $this->isnomorTargetActive = env('IS_SEND_EMAIL');
         $this->nomorDefault = "085881028391";
         // $this->nomorDefault = "6285376444701";
     }
@@ -220,24 +221,25 @@ class Rekomendasi2Controller extends Controller
                     foreach ($matriks_paparan as $user) {
                         $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_req_paparan_$proyekSelected->kode_proyek";
                         $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan pengajuan tanggal paparan untuk Nota Rekomendasi II, " . $proyekSelected->ProyekBerjalan->name_customer . " untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                        $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Pengajuan Waktu Paparan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
-                        if (!$sendEmailUser) {
-                            return redirect()->back();
-                        }
+                        // $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Pengajuan Waktu Paparan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                        // if (!$sendEmailUser) {
+                        //     return redirect()->back();
+                        // }
                     }
                 } else {
                     $nomorTarget = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Penyusun")->where('urutan', '=', 1);
                     foreach ($nomorTarget as $target) {
                         $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_proyek_rekomendasi_" . $proyekPengajuan->kode_proyek;
                         $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan hasil revisi untuk proyek " . $proyekSelected->nama_proyek . " untuk permohonan pengajuan rekomendasi tahap II.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                        $sendEmailUser = sendNotifEmail($target->Pegawai, "Pemberitahuan Hasil Revisi Pengajuan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
-                        if (!$sendEmailUser) {
-                            return redirect()->back();
-                        }
+                        // $sendEmailUser = sendNotifEmail($target->Pegawai, "Pemberitahuan Hasil Revisi Pengajuan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                        // if (!$sendEmailUser) {
+                        //     return redirect()->back();
+                        // }
                     }
                 }
 
                 createWordPengajuanNota2($proyekPengajuan);
+                mergeDokumenKelengkapanProject($proyekPengajuan);
                 $proyekPengajuan->is_pengajuan_approved = true;
                 $proyekPengajuan->is_request_rekomendasi = false;
                 $proyekPengajuan->is_request_paparan = true;
@@ -742,7 +744,7 @@ class Rekomendasi2Controller extends Controller
             $proyekVerifikasi->is_verifikasi_approved = false;
             $proyekVerifikasi->is_disetujui = false;
 
-            createWordPersetujuanNota2($proyekVerifikasi);
+            createWordPersetujuanNota2($proyekVerifikasi, $request->schemeAndHttpHost());
 
             if ($proyekVerifikasi->save()) {
                 Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyekSelected->nama_proyek</b> telah ditolak oleh tim Penyusun melalui <b>Tahap Nota Rekomendasi 2</b>", "success");
@@ -913,7 +915,7 @@ class Rekomendasi2Controller extends Controller
             if ($is_checked) {
                 $proyekPersetujuan->is_disetujui = true;
                 $proyekPersetujuan->persetujuan_note = $request["catatan-persetujuan"];
-                createWordPersetujuanNota2($proyekPersetujuan);
+                createWordPersetujuanNota2($proyekPersetujuan, $request->schemeAndHttpHost());
             }
             if ($proyekPersetujuan->save()) {
                 Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyekPersetujuan->nama_proyek</b> telah disetujui oleh tim Persetujuan melalui <b>Tahap Nota Rekomendasi 2</b>", "success");
@@ -936,7 +938,7 @@ class Rekomendasi2Controller extends Controller
             $proyekPersetujuan->is_disetujui = false;
 
             if ($proyekPersetujuan->save()) {
-                createWordPersetujuanNota2($proyekPersetujuan);
+                createWordPersetujuanNota2($proyekPersetujuan, $request->schemeAndHttpHost());
                 Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyekSelected->nama_proyek</b> telah ditolak oleh tim Persetujuan melalui <b>Tahap Nota Rekomendasi 1</b>", "success");
                 return redirect()->back();
             }
@@ -1063,6 +1065,53 @@ class Rekomendasi2Controller extends Controller
         } catch (\Exception $e) {
             Alert::error('Error', $e->getMessage());
             return redirect()->back();
+        }
+    }
+
+    public function viewProyekQrCode(Request $request, $kode_proyek, $nip)
+    {
+        try {
+            $ProyekNotaQrSelected = NotaRekomendasi2::where('kode_proyek', $kode_proyek)->first();
+            $proyekSelected = $ProyekNotaQrSelected->Proyek;
+
+            $kategori = $request->get("kategori");
+
+            switch ($kategori) {
+                case 'pengajuan':
+                    $collectPenandatangan = collect(json_decode($ProyekNotaQrSelected->approved_pengajuan));
+                    break;
+                case 'penyusun':
+                    $collectPenandatangan = collect(json_decode($ProyekNotaQrSelected->approved_verifikasi));
+                    break;
+                case 'rekomendasi':
+                    $collectPenandatangan = collect(json_decode($ProyekNotaQrSelected->approved_rekomendasi));
+                    break;
+                case 'persetujuan':
+                    $collectPenandatangan = collect(json_decode($ProyekNotaQrSelected->approved_persetujuan));
+                    break;
+
+                default:
+                    $collectPenandatangan = null;
+                    break;
+            }
+
+            $userSelected = User::where('nip', $nip)->first();
+
+            $penandatanganSelected = $collectPenandatangan->where('user_id', $userSelected->id)->first();
+
+            $penandatanganSelected["user_id"] = $userSelected->name;
+
+            $penandatanganSelected["jabatan"] = $userSelected->Pegawai?->Jabatan?->nama_jabatan ?? null;
+
+            $penandatanganSelected["tanggal"] = Carbon::parse($penandatanganSelected["tanggal"])->translatedFormat('d F Y, H:i:s');
+
+            return view('22_View_TTD_Barcode_Nota_2', ["penandatanganSelected" => $penandatanganSelected, "dataNotaRekomendasi" => $ProyekNotaQrSelected, "proyek" => $proyekSelected]);
+        } catch (\Exception $e) {
+            if ($e->getMessage() == 'Attempt to read property "id" on null') {
+                throw new \Exception('Pegawai tidak ditemukan. Mohon Hubungi Admin!', 0, $e);
+            } else {
+                throw $e;
+            }
         }
     }
 

@@ -3025,7 +3025,7 @@
                                                             @if (!empty($data->tanggal))
                                                                 Tanggal:
                                                                 {{-- <b>{{ Carbon\Carbon::create($data->tanggal)->translatedFormat('d F Y H:i:s') }}</b><br> --}}
-                                                                <b>{{ Carbon\Carbon::parse(date('d M Y H:i:s', strtotime($d->tanggal)))->translatedFormat('d F Y H:i:s') }}</b>
+                                                                <b>{{ Carbon\Carbon::parse(date('d M Y H:i:s', strtotime($data->tanggal)))->translatedFormat('d F Y H:i:s') }}</b>
                                                             @endif
                                                             @if (!empty($data->catatan))
                                                                 Catatan:

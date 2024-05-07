@@ -25,7 +25,7 @@ class AssessmentPartnerSelectionController extends Controller
 
     public function __construct()
     {
-        $this->isNomorTargetActive = false;
+        $this->isNomorTargetActive = env('IS_SEND_EMAIL');
     }
 
 
@@ -65,7 +65,7 @@ class AssessmentPartnerSelectionController extends Controller
             ];
         }
 
-        $partnerApprovalAll = AssessmentPartnerSelection::with('PartnerJO')->whereIn('divisi_id', $collectDivisiMatriksUser)?->whereIn('departemen_id', $collectDepartemenMatriksUser)?->get();
+        $partnerApprovalAll = AssessmentPartnerSelection::with('PartnerJO')->whereIn('divisi_id', $collectDivisiMatriksUser)?->whereIn('departemen_id', $collectDepartemenMatriksUser)?->orderByDesc('updated_at')->get();
         // dd($partnerApprovalAll);
         $customers = $partnerApprovalAll
             ->where(function ($query) {
@@ -535,10 +535,12 @@ class AssessmentPartnerSelectionController extends Controller
             $assessmentSelection->is_penyusun_approved = false;
             $assessmentSelection->hasil_rekomendasi_final = "Tidak Disetujui";
             $assessmentSelection->is_rekomendasi_approved = false;
+            $assessmentSelection->catatan_assessment = $data["catatan-assessment"] ?? null;
             $porsiJO->is_hasil_assessment = false;
             $porsiJO->hasil_assessment = "Tidak Disetujui";
         } else {
             $assessmentSelection->is_penyusun_approved = true;
+            $assessmentSelection->catatan_assessment = $data["catatan-assessment"] ?? null;
             $matriksSelected = self::getMatriksSelanjutnya($proyek->UnitKerja->Divisi->id_divisi, $proyek->departemen_proyek, 'Rekomendasi');
 
             createWordAssessmentPartner($porsiJO);

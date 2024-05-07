@@ -1262,9 +1262,10 @@
                                             <br>
                                             @foreach ($proyek->Proyek->PorsiJO as $partner)
                                                 <p class="m-0">Nama Partner : {{ $partner->company_jo }} - (Porsi : {{ $partner->porsi_jo }}%)</p>
-                                                <p class="m-0">WIKA : {{ (int)$partner->porsi_jo < (int)$proyek->Proyek->porsi_jo ? "Leader" : "Member" }}</p>
                                             @endforeach
                                         @endif
+                                        <br>
+                                        <p class="m-0">Posisi WIKA : {{ (int)$proyek->Proyek->porsi_jo < 50 ? "Member" : "Leader" }}</p>
                                     </td>
                                 </tr>
                                 <tr>
@@ -3092,9 +3093,9 @@
                                                             <div class="card-body">
                                                                 <small>
                                                                     Nama:
-                                                                    <b>{{ App\Models\User::find($d->user_id)->name }}</b><br>
+                                                                    <b>{{ App\Models\User::find($d->user_id)?->name }}</b><br>
                                                                     Jabatan:
-                                                                    <b>{{ App\Models\User::find($d->user_id)->Pegawai?->Jabatan?->nama_jabatan }}</b><br>
+                                                                    <b>{{ App\Models\User::find($d->user_id)?->Pegawai?->Jabatan?->nama_jabatan }}</b><br>
                                                                     Status Approval:
                                                                     @if ($d->status == 'approved')
                                                                         <span><b

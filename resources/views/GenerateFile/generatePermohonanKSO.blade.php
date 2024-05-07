@@ -247,6 +247,7 @@
             </td>
         </tr>
     </table>
+    <br>
     <p style="font-size: 0.7rem; margin:5px 0px 5px 0px; padding:0"><b>B. DATA MITRA TERSELEKSI</b> <small style="font-size: 0.5rem"><i>(lihat hasil seleksi & klarifikasi terlampir)</i></small></p>
     <table style="width: 100%">
         @php
@@ -425,6 +426,7 @@
             </td>
         </tr>
     </table>
+    <br>
     <p style="font-size: 0.7rem; margin:5px 0px 5px 0px; padding:0"><b>C. ASSESSMENT MITRA KSO</b></p>
     <p style="font-size: 0.5rem"><b>Assessment ini dilakukan untuk Calon Mitra KSO yang berada di area <i>Non Green Lane</i></b></p>
     @php
@@ -480,19 +482,20 @@
             <td style="width: 80%"><p style="margin: 0; padding:0; font-size:0.5rem">{{ $partner->keterangan }}</p></td>
         </tr>
     </table>
-    <br>       
-    @endforeach
-    @endif
     <table style="width: 100%">
         <tr>
             <td style="width: 13%" valign="top"><p style="margin: 0; padding:0; font-size:0.5rem"><b>Catatan</b></p></td>
             <td style="width: 3%" valign="top"><p style="margin: 0; padding:0; font-size:0.5rem"><b>:</b></p></td>
-            <td style="width: 80%"><textarea id="catatan" cols="30" rows="10" style="border: 0px solid black; font-size:0.5rem; font-family: Arial, Helvetica, sans-serif; margin:0; padding: 0"></textarea></td>
+            <td style="width: 80%"><p style="margin: 0; padding:0; font-size:0.5rem">{{ $partner->AssessmentPartnerJO->catatan_assessment }}</p></td>
         </tr>
     </table>
-    @if ($proyek->PorsiJO->count() > 1)
-    <div class="" style="page-break-before: always;">        
+    <br>       
+    @endforeach
     @endif
+    {{-- @if ($proyek->PorsiJO->count() > 1) --}}
+    <div class="" style="page-break-before: always;">        
+    {{-- @endif --}}
+        <br>
         <p style="font-size: 0.7rem; margin:5px 0px 5px 0px; padding:0"><b>D. PERSETUJUAN PENGGUNAAN FASILITAS NON CASH LOAN (NCL)</b></p>
         <table style="width: 80%">
             <tr>
@@ -565,9 +568,9 @@
                 </td>
             </tr>
         </table>
-    @if ($proyek->PorsiJO->count() > 1)
+    {{-- @if ($proyek->PorsiJO->count() > 1) --}}
     </div>
-    @endif
+    {{-- @endif --}}
 
     
     {{-- <footer>*Dokumen ini dibuat oleh sistem CRM</footer> --}}
