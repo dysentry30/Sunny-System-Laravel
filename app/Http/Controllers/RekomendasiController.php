@@ -1916,19 +1916,19 @@ class RekomendasiController extends Controller
                     break;
             }
 
-            // if ($kategori != "pengajuan") {
-            //     $hasil_assessment = collect($ProyekNotaQrSelected->hasil_assessment);
-            //     $assessmentInternal = $hasil_assessment->sum(function ($ra) {
-            //         if ($ra->kategori == "Internal") {
-            //             return $ra->score;
-            //         }
-            //     });
-            //     $assessmentEksternal = $hasil_assessment->sum(function ($ra) {
-            //         if ($ra->kategori == "Eksternal") {
-            //             return $ra->score;
-            //         }
-            //     });
-            // }
+            if ($kategori != "pengajuan") {
+                $hasil_assessment = collect(json_decode($ProyekNotaQrSelected->hasil_assessment));
+                $assessmentInternal = $hasil_assessment->sum(function ($ra) {
+                    if ($ra->kategori == "Internal") {
+                        return $ra->score;
+                    }
+                });
+                $assessmentEksternal = $hasil_assessment->sum(function ($ra) {
+                    if ($ra->kategori == "Eksternal") {
+                        return $ra->score;
+                    }
+                });
+            }
 
             $userSelected = User::where('nip', $nip)->first();
 

@@ -3790,7 +3790,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         )->get()->groupBy('MasterKlasifikasiSBU.klasifikasi');
         return response()->json($dataKlasifikasiSBU);
     });
-    //End::Get Master Klasifikasi KBLI SBU
+//End::Get Master Klasifikasi KBLI SBU
 
     //Begin::Master Matriks Approval Verifikasi Partner
     Route::get('/matriks-approval-varifikasi-partner', function () {
@@ -4211,7 +4211,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         return redirect()->back();
     });
     //End::Master Matriks Approval Partner Selection
-
+    
     //Begin::Master Matriks Approval Verifikasi Partner
     Route::get('/matriks-approval-varifikasi-proyek', function () {
         $matriks_all = MatriksApprovalVerifikasiProyekNota2::with(["Pegawai", "Divisi"])
@@ -7862,6 +7862,7 @@ Route::get('/tes-email', function () {
 
 Route::get('/test-persetujuan-nota-2', function (Request $request) {
     $notaRekomendasi = \App\Models\NotaRekomendasi::where('kode_proyek', 'PJPD012')->first();
+    $hasil_assessment = collect(json_decode($notaRekomendasi->hasil_assessment));
     // return createWordPersetujuanNota2($notaRekomendasi, $request->schemeAndHttpHost());
-    // return createWordNotaRekomendasiSetuju($notaRekomendasi, $request);
+    return createWordNotaRekomendasiSetuju($notaRekomendasi, $hasil_assessment, $request);
 });

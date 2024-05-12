@@ -5233,16 +5233,16 @@ function createWordNotaRekomendasiSetuju(\App\Models\NotaRekomendasi $proyekReko
             $templateProcessor = new TemplateProcessor(storage_path("/template/DokumenNota1/Persetujuan/Nota Persetujuan Proyek Mega.docx"));
         }
 
-        // $internal_score = $hasil_assessment->sum(function ($ra) {
-        //     if ($ra->kategori == "Internal") {
-        //         return $ra->score;
-        //     }
-        // });
-        // $eksternal_score = $hasil_assessment->sum(function ($ra) {
-        //     if ($ra->kategori == "Eksternal") {
-        //         return $ra->score;
-        //     }
-        // });
+        $internal_score = $hasil_assessment->sum(function ($ra) {
+            if ($ra->kategori == "Internal") {
+                return $ra->score;
+            }
+        });
+        $eksternal_score = $hasil_assessment->sum(function ($ra) {
+            if ($ra->kategori == "Eksternal") {
+                return $ra->score;
+            }
+        });
 
         $variables = $templateProcessor->getVariables();
         // dd($variables);
@@ -5288,24 +5288,26 @@ function createWordNotaRekomendasiSetuju(\App\Models\NotaRekomendasi $proyekReko
                 $templateProcessor->setValue("jabatanTandaTanganRekomendasi$key", User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan ?? "-");
                 $templateProcessor->setValue("tanggalTandaTanganRekomendasi$key", Carbon\Carbon::parse($p->tanggal)->translatedFormat("d F Y") ?? "-");
 
+                $templateProcessor->setValue("catatanRekomendasi$key", !empty($p->catatan) ? htmlspecialchars($p->catatan, ENT_QUOTES) : "Tidak Ada");
+
 
                 if ($p->status == "approved" && empty($p->catatan)) {
                     // $templateProcessor->setCheckbox("checkbox$key"."1", true);
-                    $templateProcessor->setValue("checkbox$key" . "1", htmlspecialchars("✅", ENT_QUOTES));
-                    $templateProcessor->setValue("checkbox$key" . "2", "&#x2611;");
-                    $templateProcessor->setValue("checkbox$key" . "3", "&#x2611;");
+                    $templateProcessor->setValue("checkbox$key" . "1", "☑");
+                    $templateProcessor->setValue("checkbox$key" . "2", "□");
+                    $templateProcessor->setValue("checkbox$key" . "3", "□");
                     // $templateProcessor->setValue("hasilRekomendasi$key", "Direkomendasikan");
                 } elseif ($p->status == "approved" && !empty($p->catatan)) {
                     // $templateProcessor->setCheckbox("checkbox$key"."2", true);
-                    $templateProcessor->setValue("checkbox$key" . "2", "&#9745;");
-                    $templateProcessor->setValue("checkbox$key" . "1", "&#x2611;");
-                    $templateProcessor->setValue("checkbox$key" . "3", "&#x2611;");
+                    $templateProcessor->setValue("checkbox$key" . "2", "☑");
+                    $templateProcessor->setValue("checkbox$key" . "1", "□");
+                    $templateProcessor->setValue("checkbox$key" . "3", "□");
                     // $templateProcessor->setValue("hasilRekomendasi$key", "Direkomendasikan dengan catatan");
                 } else {
                     // $templateProcessor->setCheckbox("checkbox$key"."3", true);
-                    $templateProcessor->setValue("checkbox$key" . "3", "&#9745;");
-                    $templateProcessor->setValue("checkbox$key" . "1", "&#x2611;");
-                    $templateProcessor->setValue("checkbox$key" . "2", "&#x2611;");
+                    $templateProcessor->setValue("checkbox$key" . "3", "☑");
+                    $templateProcessor->setValue("checkbox$key" . "1", "□");
+                    $templateProcessor->setValue("checkbox$key" . "2", "□");
                     // $templateProcessor->setValue("hasilRekomendasi$key", "Tidak Direkomendasikan");
                 }
 
@@ -5325,18 +5327,19 @@ function createWordNotaRekomendasiSetuju(\App\Models\NotaRekomendasi $proyekReko
                 $templateProcessor->setValue("jabatanTandaTanganSetuju$key", User::find($p->user_id)->Pegawai->Jabatan?->nama_jabatan ?? "-");
                 $templateProcessor->setValue("tanggalTandaTanganSetuju$key", Carbon\Carbon::parse($p->tanggal)->translatedFormat("d F Y") ?? "-");
 
+                $templateProcessor->setValue("catatanSetuju$key", !empty($p->catatan) ? htmlspecialchars($p->catatan, ENT_QUOTES) : "Tidak Ada");
+
                 if ($p->status == "approved") {
-                    $templateProcessor->setValue("hasilPersetujuan$key", "Disetujui");
+                    $templateProcessor->setValue("checkboxSetuju$key" . "1", "☑");
+                    $templateProcessor->setValue("checkboxSetuju$key" . "2", "□");
                 } else {
-                    $templateProcessor->setValue("hasilPersetujuan$key", "Tidak Disetujui");
+                    $templateProcessor->setValue("checkboxSetuju$key" . "2", "☑");
+                    $templateProcessor->setValue("checkboxSetuju$key" . "1", "□");
                 }
 
                 File::delete($qrPath);
             }
         }
-
-        $fontStyle = new \PhpOffice\PhpWord\Style\Font();
-        $fontStyle->setName('DejaVu Sans, sans-serif');
 
         $templateProcessor->saveAs(storage_path('template/temp/' . $file_name . '.docx'));
         // dd("Finish");
@@ -5350,9 +5353,10 @@ function createWordNotaRekomendasiSetuju(\App\Models\NotaRekomendasi $proyekReko
         $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($templatePhpWord, 'PDF');
         // $xmlWriter->save(storage_path('template/temp/' . $file_name . '.pdf'));
         $xmlWriter->save(public_path($target_path . "/" . $file_name . ".pdf"));
+        File::delete(storage_path('template/temp/' . $file_name . '.docx'));
 
-        // $proyekRekomendasi->file_persetujuan = $file_name . ".pdf";
-        // $proyekRekomendasi->save();
+        $proyekRekomendasi->file_persetujuan = $file_name . ".pdf";
+        $proyekRekomendasi->save();
     } catch (\Exception $e) {
         throw $e;
     }
