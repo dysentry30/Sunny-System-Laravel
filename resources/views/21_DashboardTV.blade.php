@@ -60,28 +60,28 @@
                 <!--begin:::Tab Item Schedule-->
                 <li class="nav-item">
                     <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
-                        href="#kt_user_view_overview_schedule_eksternal" style="font-size:14px;">Schedule Eksternal
+                        href="#kt_user_view_overview_schedule_eksternal" style="font-size:14px;">Schedule WIKA Induk
                         ({{ \Carbon\Carbon::parse('now')->translatedFormat('M') }})</a>
                 </li>
                 <!--end:::Tab Item Schedule-->
                 <!--begin:::Tab Item Schedule-->
                 <li class="nav-item">
                     <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
-                        href="#kt_user_view_overview_schedule_eksternal_next" style="font-size:14px;">Schedule Eksternal
+                        href="#kt_user_view_overview_schedule_eksternal_next" style="font-size:14px;">Schedule WIKA Induk
                         ({{ \Carbon\Carbon::parse('now')->addMonth(1)->translatedFormat('M') }})</a>
                 </li>
                 <!--end:::Tab Item Schedule-->
                 <!--begin:::Tab Item Schedule-->
                 <li class="nav-item">
                     <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
-                        href="#kt_user_view_overview_schedule_internal" style="font-size:14px;">Schedule Internal
+                        href="#kt_user_view_overview_schedule_internal" style="font-size:14px;">Schedule Entitas Anak
                         ({{ \Carbon\Carbon::parse('now')->translatedFormat('M') }})</a>
                 </li>
                 <!--end:::Tab Item Schedule-->
                 <!--begin:::Tab Item Schedule-->
                 <li class="nav-item">
                     <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
-                        href="#kt_user_view_overview_schedule_internal_next" style="font-size:14px;">Schedule Internal
+                        href="#kt_user_view_overview_schedule_internal_next" style="font-size:14px;">Schedule Entitas Anak
                         ({{ \Carbon\Carbon::parse('now')->addMonth(1)->translatedFormat('M') }})</a>
                 </li>
                 <!--end:::Tab Item Schedule-->
@@ -139,7 +139,7 @@
                                 style="height:25px; width:25px; border-radius:50%;background-color: #46AAF5">
                                 <small style="color:#46AAF5">Klik</small>
                             </div>
-                            <p class="m-0"><b>Jadwal Prakualifikasi</b></p>
+                            <p class="m-0"><b>Jadwal Pemasukan Prakualifikasi</b></p>
                         </div>
                         <div class="d-flex flex-row align-items-center justify-content-center gap-3">
                             <div class="circle"
@@ -166,7 +166,7 @@
                                 style="height:25px; width:25px; border-radius:50%;background-color: #46AAF5">
                                 <small style="color:#46AAF5">Klik</small>
                             </div>
-                            <p class="m-0"><b>Jadwal Prakualifikasi</b></p>
+                            <p class="m-0"><b>Jadwal Pemasukan Prakualifikasi</b></p>
                         </div>
                         <div class="d-flex flex-row align-items-center justify-content-center gap-3">
                             <div class="circle"
@@ -193,7 +193,7 @@
                                 style="height:25px; width:25px; border-radius:50%;background-color: #46AAF5">
                                 <small style="color:#46AAF5">Klik</small>
                             </div>
-                            <p class="m-0"><b>Jadwal Prakualifikasi</b></p>
+                            <p class="m-0"><b>Jadwal Pemasukan Prakualifikasi</b></p>
                         </div>
                         <div class="d-flex flex-row align-items-center justify-content-center gap-3">
                             <div class="circle"
@@ -220,7 +220,7 @@
                                 style="height:25px; width:25px; border-radius:50%;background-color: #46AAF5">
                                 <small style="color:#46AAF5">Klik</small>
                             </div>
-                            <p class="m-0"><b>Jadwal Prakualifikasi</b></p>
+                            <p class="m-0"><b>Jadwal Pemasukan Prakualifikasi</b></p>
                         </div>
                         <div class="d-flex flex-row align-items-center justify-content-center gap-3">
                             <div class="circle"

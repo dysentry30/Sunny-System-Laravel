@@ -117,26 +117,26 @@ class CSIController extends Controller
             $csi->tanggal_submit = date('now');
             $csi->save();
         } else {
-            $score_nps = (int) (((int) $data['answer_3']) / 1);
-            $score_cli = (int) (((int) $data['answer_1_1'] + (int) $data['answer_1_2']) / 2);
-            $score_csi_a = (int) (((int) $data['answer_2_1']) / 1);
-            $score_csi_b = (int) (((int) $data['answer_2_2'] + (int) $data['answer_2_3']) / 2);
+            $score_nps = round(((int) $data['answer_3']) / 1, 2);
+            $score_cli = round(((int) $data['answer_1_1'] + (int) $data['answer_1_2']) / 2, 2);
+            $score_csi_a = round(((int) $data['answer_2_1']) / 1, 2);
+            $score_csi_b = round(((int) $data['answer_2_2'] + (int) $data['answer_2_3']) / 2, 2);
             $total_kepentingan = (int) $data['answer_4_1_2'] + (int) $data['answer_4_2_2'] + (int) $data['answer_4_3_2'] + (int) $data['answer_4_4_1_b'] + (int) $data['answer_4_4_2_b'] + (int) $data['answer_4_4_3_b'] + (int) $data['answer_4_4_4_b'] + (int) $data['answer_5_1_2'] + (int) $data['answer_5_2_2'] + (int) $data['answer_5_3_2'] + (int) $data['answer_5_4_2'] + (int) $data['answer_5_5_2'];
             $total_kepuasan = (int) $data['answer_4_1_1'] + (int) $data['answer_4_2_1'] + (int) $data['answer_4_3_1'] + (int) $data['answer_4_4_1_a'] + (int) $data['answer_4_4_2_a'] + (int) $data['answer_4_4_3_a'] + (int) $data['answer_4_4_4_a'] + (int) $data['answer_5_1_1'] + (int) $data['answer_5_2_1'] + (int) $data['answer_5_3_1'] + (int) $data['answer_5_4_1'] + (int) $data['answer_5_5_1'];
-            $wis_1 = (int) (((int) $data['answer_4_1_2'] / (int) $total_kepentingan) * (int) $data['answer_4_1_1']);
-            $wis_2 = (int) (((int) $data['answer_4_2_2'] / (int) $total_kepentingan) * (int) $data['answer_4_2_1']);
-            $wis_3 = (int) (((int) $data['answer_4_3_2'] / (int) $total_kepentingan) * (int) $data['answer_4_3_1']);
-            $wis_4 = (int) (((int) $data['answer_4_4_1_b'] / (int) $total_kepentingan) * (int) $data['answer_4_4_1_a']);
-            $wis_5 = (int) (((int) $data['answer_4_4_2_b'] / (int) $total_kepentingan) * (int) $data['answer_4_4_2_a']);
-            $wis_6 = (int) (((int) $data['answer_4_4_3_b'] / (int) $total_kepentingan) * (int) $data['answer_4_4_3_a']);
-            $wis_7 = (int) (((int) $data['answer_4_4_4_b'] / (int) $total_kepentingan) * (int) $data['answer_4_4_4_a']);
-            $wis_8 = (int) (((int) $data['answer_5_1_2'] / (int) $total_kepentingan) * (int) $data['answer_5_1_1']);
-            $wis_9 = (int) (((int) $data['answer_5_2_2'] / (int) $total_kepentingan) * (int) $data['answer_5_2_1']);
-            $wis_10 = (int) (((int) $data['answer_5_3_2'] / (int) $total_kepentingan) * (int) $data['answer_5_3_1']);
-            $wis_11 = (int) (((int) $data['answer_5_4_2'] / (int) $total_kepentingan) * (int) $data['answer_5_4_1']);
-            $wis_12 = (int) (((int) $data['answer_5_5_2'] / (int) $total_kepentingan) * (int) $data['answer_5_5_1']);
+            $wis_1 = round(((int) $data['answer_4_1_2'] / (int) $total_kepentingan) * (int) $data['answer_4_1_1'], 2);
+            $wis_2 = round(((int) $data['answer_4_2_2'] / (int) $total_kepentingan) * (int) $data['answer_4_2_1'], 2);
+            $wis_3 = round(((int) $data['answer_4_3_2'] / (int) $total_kepentingan) * (int) $data['answer_4_3_1'], 2);
+            $wis_4 = round(((int) $data['answer_4_4_1_b'] / (int) $total_kepentingan) * (int) $data['answer_4_4_1_a'], 2);
+            $wis_5 = round(((int) $data['answer_4_4_2_b'] / (int) $total_kepentingan) * (int) $data['answer_4_4_2_a'], 2);
+            $wis_6 = round(((int) $data['answer_4_4_3_b'] / (int) $total_kepentingan) * (int) $data['answer_4_4_3_a'], 2);
+            $wis_7 = round(((int) $data['answer_4_4_4_b'] / (int) $total_kepentingan) * (int) $data['answer_4_4_4_a'], 2);
+            $wis_8 = round(((int) $data['answer_5_1_2'] / (int) $total_kepentingan) * (int) $data['answer_5_1_1'], 2);
+            $wis_9 = round(((int) $data['answer_5_2_2'] / (int) $total_kepentingan) * (int) $data['answer_5_2_1'], 2);
+            $wis_10 = round(((int) $data['answer_5_3_2'] / (int) $total_kepentingan) * (int) $data['answer_5_3_1'], 2);
+            $wis_11 = round(((int) $data['answer_5_4_2'] / (int) $total_kepentingan) * (int) $data['answer_5_4_1'], 2);
+            $wis_12 = round(((int) $data['answer_5_5_2'] / (int) $total_kepentingan) * (int) $data['answer_5_5_1'], 2);
             $total_wis = $wis_1 + $wis_2 + $wis_3 + $wis_4 + $wis_5 + $wis_6 + $wis_7 + $wis_8 + $wis_9 + $wis_10 + $wis_11 + $wis_12;
-            $score_csi_c = (int) $total_wis / 5;
+            $score_csi_c = (int) $total_wis;
 
             // $csi->score_csi = ($score_csi_a + $score_csi_b + $score_csi_b) / 3;
             $csi->score_csi = $score_csi_c;
@@ -365,7 +365,7 @@ class CSIController extends Controller
         //     return redirect()->back();
         // });
 
-        $emailNotification = sendNotifEmail($data['email'], "Permohonan Pengisian Survey Kepuasan Pelanggan", $message, env('IS_SEND_EMAIL'), false);
+        $emailNotification = sendNotifEmail($data['email'], "Permohonan Pengisian Survey Kepuasan Pelanggan", $message, true, false);
         if (!$emailNotification) {
             return redirect()->back();
         }
