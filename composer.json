@@ -23,8 +23,9 @@
         "league/flysystem-aws-s3-v3": "^3.0",
         "mpdf/mpdf": "^6.1",
         "phpoffice/phpspreadsheet": "^1.18",
-        "phpoffice/phpword": "^0.18.3",
+        "phpoffice/phpword": "dev-master",
         "realrashid/sweet-alert": "^5.1",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "twbs/bootstrap-icons": "^1.9"
     },
     "require-dev": {
