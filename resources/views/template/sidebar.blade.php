@@ -166,8 +166,11 @@
                             </div>
                         @endif --}}
                         @canany(['super-admin', 'crm'])
+                        @php
+                            $month = date('d') < 5 ? date('m') - 1 : date('m');
+                        @endphp
                             <div class="menu-item">
-                                <a class="menu-link " href="/forecast/{{ (int) date("m") }}/{{ (int) date("Y") }}"
+                                <a class="menu-link " href="/forecast/{{ (int)$month }}/{{ (int) date("Y") }}"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'forecast') ? 'background-color:#008CB4' : '' }}">
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->

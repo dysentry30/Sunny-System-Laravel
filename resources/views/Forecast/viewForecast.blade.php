@@ -112,18 +112,21 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                     </h1>
                                     <div class="row">
                                         <div class="col">
+                                            @php
+                                             $month = date('d') < 5 ? date('m') - 1 : date('m');   
+                                            @endphp
                                             <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold">
                                                 <!--begin:::Tab item Forecast Bulanan-->
                                                 <li class="nav-item">
                                                     <a class="nav-link text-active-primary pb-4 {{isset($is_forecast) ? "active" : ""}}"
-                                                        href="/forecast/{{ (int) date("m") }}/{{ (int) date("Y") }}"
+                                                        href="/forecast/{{ (int)$month }}/{{ (int) date("Y") }}"
                                                         style="font-size:14px;">Forecast Eksternal Bulanan</a>
                                                 </li>
                                                 <!--end:::Tab item Forecast Bulanan-->
 
                                                 <!--begin:::Tab item Forecast Internal-->
                                                 <li class="nav-item">
-                                                    <a class="nav-link text-active-primary pb-4 {{isset($is_forecast) ? "" : "active"}}" href="/forecast-internal/{{ (int) date("m") }}/{{ (int) date("Y") }}"
+                                                    <a class="nav-link text-active-primary pb-4 {{isset($is_forecast) ? "" : "active"}}" href="/forecast-internal/{{ (int) $month }}/{{ (int) date("Y") }}"
                                                         style="font-size:14px;">Forecast Bulanan Include Internal</a>
                                                 </li>
                                                 <!--end:::Tab item Forecast Internal-->
