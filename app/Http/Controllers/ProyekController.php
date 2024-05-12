@@ -575,7 +575,7 @@ class ProyekController extends Controller
             $departemen = $newProyek->departemen_proyek;
             // dump($divisi);
             $klasifikasi_proyek = $newProyek->klasifikasi_pasdin;
-            $isnomorTargetActive = true;
+            $isnomorTargetActive = env('IS_SEND_EMAIL');
             // $matriks_approval = MatriksApprovalRekomendasi::where("unit_kerja", "=", $divisi)->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where("departemen", $departemen)->where("kategori", "=", "Pengajuan")->get();
             // // dd($matriks_approval);
             // // $nomorDefault = "6285376444701";
@@ -626,6 +626,12 @@ class ProyekController extends Controller
             //     // "url" => $url
             // ]);
             // dd($send_msg_to_wa, "send");
+            $request_pengajuan = collect([
+                "user_id" => $pegawaiKAM->User->id,
+                "status" => "request",
+                "tanggal" => \Carbon\Carbon::now(),
+            ]);
+
             $newNotaRekomendasi = new NotaRekomendasi();
             $newNotaRekomendasi->kode_proyek = $newProyek->kode_proyek;
             $newNotaRekomendasi->unit_kerja = $newProyek->unit_kerja;
@@ -633,6 +639,7 @@ class ProyekController extends Controller
             $newNotaRekomendasi->departemen_code = $departemen;
             $newNotaRekomendasi->klasifikasi_pasdin = $newProyek->klasifikasi_pasdin;
             $newNotaRekomendasi->is_request_rekomendasi = true;
+            $newNotaRekomendasi->request_pengajuan = $request_pengajuan->toJson();
 
             if (!$newNotaRekomendasi->save()) {
                 Alert::error('Error', "Proyek Gagal Diajukan");
