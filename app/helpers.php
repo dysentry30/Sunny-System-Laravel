@@ -5264,7 +5264,8 @@ function createWordNotaRekomendasiSetuju(\App\Models\NotaRekomendasi $proyekReko
             foreach ($penyusun as $key => $p) {
                 $qrNamePenyusun = date('dmYHis_') . "penyusun_" . User::find($p->user_id)->nip . "-" . $proyek->kode_proyek . ".png";
                 $qrPath = storage_path("template/temp/" . $qrNamePenyusun);
-                $urlPenyusun = $request->schemeAndHttpHost() . "?nip=" . User::find($p->user_id)->nip . "&redirectTo=/rekomendasi/" . $proyek->kode_proyek . "/" . User::find($p->user_id)->nip . "/view-qr?kategori=penyusun";
+                // $urlPenyusun = $request->schemeAndHttpHost() . "?nip=" . User::find($p->user_id)->nip . "&redirectTo=/rekomendasi/" . $proyek->kode_proyek . "/" . User::find($p->user_id)->nip . "/view-qr?kategori=penyusun";
+                $urlPenyusun = $request->schemeAndHttpHost() . "/rekomendasi/" . $proyek->kode_proyek . "/" . User::find($p->user_id)->nip . "/view-qr?kategori=penyusun";
                 $generateQRPenyusun = generateQrCode($qrNamePenyusun, $qrPath, $urlPenyusun);
 
                 $templateProcessor->setImageValue("tandaTanganPenyusun$key", ["path" => $qrPath, "height" => 90, "ratio" => false]);
@@ -5280,7 +5281,8 @@ function createWordNotaRekomendasiSetuju(\App\Models\NotaRekomendasi $proyekReko
             foreach ($rekomendator as $key => $p) {
                 $qrNameRekomendasi = date('dmYHis_') . "rekomendasi_" . User::find($p->user_id)->nip . "-" . $proyek->kode_proyek . ".png";
                 $qrPath = storage_path("template/temp/" . $qrNameRekomendasi);
-                $urlRekomendasi = $request->schemeAndHttpHost() . "?nip=" . User::find($p->user_id)->nip . "&redirectTo=/rekomendasi/" . $proyek->kode_proyek . "/" . User::find($p->user_id)->nip . "/view-qr?kategori=rekomendasi";
+                // $urlRekomendasi = $request->schemeAndHttpHost() . "?nip=" . User::find($p->user_id)->nip . "&redirectTo=/rekomendasi/" . $proyek->kode_proyek . "/" . User::find($p->user_id)->nip . "/view-qr?kategori=rekomendasi";
+                $urlRekomendasi = $request->schemeAndHttpHost() . "/rekomendasi/" . $proyek->kode_proyek . "/" . User::find($p->user_id)->nip . "/view-qr?kategori=rekomendasi";
                 $generateQRRekomendasi = generateQrCode($qrNameRekomendasi, $qrPath, $urlRekomendasi);
 
                 $templateProcessor->setImageValue("tandaTanganRekomendasi$key", ["path" => $qrPath, "height" => 90, "ratio" => false]);
@@ -5319,7 +5321,8 @@ function createWordNotaRekomendasiSetuju(\App\Models\NotaRekomendasi $proyekReko
             foreach ($penyetuju as $key => $p) {
                 $qrNamePersetujuan = date('dmYHis_') . "persetujuan_" . User::find($p->user_id)->nip . "-" . $proyek->kode_proyek . ".png";
                 $qrPath = storage_path("template/temp/" . $qrNamePersetujuan);
-                $urlPersetujuan = $request->schemeAndHttpHost() . "?nip=" . User::find($p->user_id)->nip . "&redirectTo=/rekomendasi/" . $proyek->kode_proyek . "/" . User::find($p->user_id)->nip . "/view-qr?kategori=persetujuan";
+                // $urlPersetujuan = $request->schemeAndHttpHost() . "?nip=" . User::find($p->user_id)->nip . "&redirectTo=/rekomendasi/" . $proyek->kode_proyek . "/" . User::find($p->user_id)->nip . "/view-qr?kategori=persetujuan";
+                $urlPersetujuan = $request->schemeAndHttpHost() . "/rekomendasi/" . $proyek->kode_proyek . "/" . User::find($p->user_id)->nip . "/view-qr?kategori=persetujuan";
                 $generateQRPersetujuan = generateQrCode($qrNamePersetujuan, $qrPath, $urlPersetujuan);
 
                 $templateProcessor->setImageValue("tandaTanganSetuju$key", ["path" => $qrPath, "height" => 90, "ratio" => false]);

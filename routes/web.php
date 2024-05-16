@@ -593,7 +593,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::get('rekomendasi/dokumen-final/{id_document}/download', [RekomendasiController::class, 'downloadFileNotaRekomendasiFinal']);
     Route::get("/green-lane", [RekomendasiController::class, "indexGreenLane"]);
     Route::get("/non-green-lane", [RekomendasiController::class, "indexNonGreenLane"]);
-    Route::get('/rekomendasi/{kode_proyek}/{nip}/view-qr', [RekomendasiController::class, 'viewProyekQrCode']);
+    // Route::get('/rekomendasi/{kode_proyek}/{nip}/view-qr', [RekomendasiController::class, 'viewProyekQrCode']);
     // End Rekomendasi
 
     //Begin::Assessment Partner Selection
@@ -7866,3 +7866,5 @@ Route::get('/test-persetujuan-nota-2', function (Request $request) {
     // return createWordPersetujuanNota2($notaRekomendasi, $request->schemeAndHttpHost());
     return createWordNotaRekomendasiSetuju($notaRekomendasi, $hasil_assessment, $request);
 });
+
+Route::get('/rekomendasi/{kode_proyek}/{nip}/view-qr', [RekomendasiController::class, 'viewProyekQrCode']);

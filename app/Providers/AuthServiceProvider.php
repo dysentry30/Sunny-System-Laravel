@@ -69,33 +69,53 @@ class AuthServiceProvider extends ServiceProvider
             return $user->check_user_sales == true && $user->role_approver == true;
         });
 
-        Gate::define('risk-crm', function (User $user) {
-            return $user->check_user_sales == true && $user->role_risk == true;
-        });
+        // Gate::define('risk-crm',
+        //     function (User $user) {
+        //         return $user->check_user_sales == true && $user->role_risk == true;
+        //     }
+        // );
 
-        Gate::define('admin-ccm', function (User $user) {
-            return  $user->check_admin_kontrak == true && $user->role_admin == true;
-        });
+        Gate::define(
+            'risk-crm',
+            function (User $user) {
+                return !empty($user->Pegawai?->kode_kantor_sap) && $user->Pegawai->kode_kantor_sap == 'A112';
+            }
+        );
 
-        Gate::define('user-ccm', function (User $user) {
-            return $user->check_admin_kontrak == true && $user->role_user == true;
-        });
+        Gate::define(
+            'admin-ccm',
+            function (User $user) {
+                return  $user->check_admin_kontrak == true && $user->role_admin == true;
+            }
+        );
+
+        Gate::define(
+            'user-ccm',
+            function (User $user) {
+                return $user->check_admin_kontrak == true && $user->role_user == true;
+            }
+        );
 
         Gate::define('approver-ccm', function (User $user) {
             return $user->check_admin_kontrak == true && $user->role_approver == true;
         });
 
-        Gate::define('risk-ccm', function (User $user) {
-            return $user->check_admin_kontrak == true && $user->role_risk == true;
-        });
+        Gate::define(
+            'risk-ccm',
+            function (User $user) {
+                return $user->check_admin_kontrak == true && $user->role_risk == true;
+            }
+        );
 
-        Gate::define('admin-csi',
+        Gate::define(
+            'admin-csi',
             function (User $user) {
                 return  $user->check_user_csi == true && $user->role_admin == true;
             }
         );
 
-        Gate::define('user-csi',
+        Gate::define(
+            'user-csi',
             function (User $user) {
                 return  $user->check_user_csi == true && $user->role_user == true;
             }

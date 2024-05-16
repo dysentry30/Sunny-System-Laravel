@@ -898,7 +898,7 @@
                                                 {{-- <th class="min-w-auto">File Penilaian Risiko</th> --}}
                                                 <th class="min-w-auto">Hasil NR I</th>
                                                 <th class="min-w-auto">Is Cancel</th>
-                                                <th class="min-w-auto">Upload Dokumen Final</th>
+                                                {{-- <th class="min-w-auto">Upload Dokumen Final</th> --}}
                                             </tr>
                                         </thead>
                                         @php
@@ -1067,7 +1067,7 @@
                                                         <td class="text-center">
                                                             <span class="badge badge-sm {{ $proyek->is_cancel ? "text-bg-danger" : "" }}">{{ $proyek->is_cancel ? "Proyek Cancel" : "" }}</span>
                                                         </td>
-                                                        <td class="text-center">
+                                                        {{-- <td class="text-center">
                                                             @if (($matriks_user?->contains('kategori', 'Pengajuan') && $matriks_user?->where('kategori', 'Pengajuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first()) ||
                                                             ($matriks_user?->contains('kategori', 'Penyusun') && $matriks_user?->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '>', 1)?->first()))
                                                             @else
@@ -1077,7 +1077,7 @@
                                                                     </button>
                                                                 @endif
                                                             @endif
-                                                        </td>
+                                                        </td> --}}
                                                     </tr>
                                                 @endforeach
                                             @endif
@@ -3025,7 +3025,7 @@
                                                             @if (!empty($data->tanggal))
                                                                 Tanggal:
                                                                 {{-- <b>{{ Carbon\Carbon::create($data->tanggal)->translatedFormat('d F Y H:i:s') }}</b><br> --}}
-                                                                <b>{{ Carbon\Carbon::parse(date('d M Y H:i:s', strtotime($data->tanggal)))->translatedFormat('d F Y H:i:s') }}</b>
+                                                                <b>{{ Carbon\Carbon::parse(date('d M Y H:i:s', strtotime($d->tanggal)))->translatedFormat('d F Y H:i:s') }}</b>
                                                             @endif
                                                             @if (!empty($data->catatan))
                                                                 Catatan:

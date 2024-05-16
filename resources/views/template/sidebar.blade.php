@@ -225,7 +225,7 @@
                         </div>
                         @endcanany
                         {{-- @endif --}}
-                        @canany(['super-admin', 'admin-crm', 'approver-crm'])
+                        @canany(['super-admin', 'admin-crm', 'approver-crm', 'risk-crm'])
                             @if (str_contains(Request::url(), '/rekomendasi')||
                                 str_contains(Request::url(), '/green-lane') ||
                                 str_contains(Request::url(), '/non-green-lane')
@@ -296,7 +296,7 @@
                             @endif
                         @endcanany
 
-                        @canany(['super-admin', 'approver-crm', 'user-crm'])                        
+                        @canany(['super-admin', 'approver-crm', 'user-crm', 'risk-crm'])                        
                         <div class="menu-item">
                             <a class="menu-link " href="/nota-rekomendasi-2"
                                 style="color:white; padding-left:20px; {{ str_contains(Request::url(), 'nota-rekomendasi-2') ? 'background-color:#008CB4' : '' }}">
@@ -363,7 +363,7 @@
                             </div>
                         @endcanany
 
-                        @canany(['super-admin', 'admin-crm'])
+                        @canany(['super-admin', 'admin-crm', 'risk-crm'])
                             
                             <!--Begin::Master Data Expand-->
                             <div class="menu-item" 
@@ -422,6 +422,7 @@
                                     </a>
                                 <!--begin::Colapse #0db0d9-->
                                 <div class="collapse" id="collapseExample">
+                                    @cannot('risk-crm')
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
                                         style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'company' ? 'background-color:#008CB4' : '' }}">
@@ -591,6 +592,8 @@
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
+                                    @endcannot
+                                    @canany(['super-admin', 'risk-crm'])
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
                                         style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'industry-attractivness' ? 'background-color:#008CB4' : '' }}">
@@ -602,8 +605,9 @@
                                             </span>
                                             <span class="menu-title" style="font-size: 16px; padding-left: 10px">Industri Attractiveness</span>
                                         </a>
-                                    </div>
+                                    </div>                                    
                                     <!--end::Menu Colapse-->
+                                    @endcanany
                                     @can('super-admin')
                                         <!--begin::Menu Colapse-->
                                         <div id="#kt_aside_menu" data-kt-menu="true"
@@ -654,7 +658,7 @@
                                         <!--end::Menu Colapse-->
                                     @endcan
 
-                                    @can('super-admin')
+                                    @canany(['super-admin', 'risk-crm'])
                                         <!--begin::Menu Colapse-->
                                         <div id="#kt_aside_menu" data-kt-menu="true"
                                             style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'kriteria-green-line' ? 'background-color:#008CB4' : '' }}">
@@ -668,9 +672,9 @@
                                                 <span class="menu-title" style="font-size: 16px; padding-left: 10px">Kriteria Green Line</span>
                                             </a>
                                         </div>
-                                    @endcan
+                                    @endcanany
                                     
-                                    @can('super-admin')
+                                    @canany(['super-admin', 'risk-crm'])
                                         <!--begin::Menu Colapse-->
                                         <div id="#kt_aside_menu" data-kt-menu="true"
                                             style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'kriteria-assessment' ? 'background-color:#008CB4' : '' }}">
@@ -685,7 +689,7 @@
                                             </a>
                                         </div>
                                         <!--end::Menu Colapse-->
-                                    @endcan
+                                    @endcanany
 
                                     @can('super-admin')
                                         <!--begin::Menu Colapse-->
@@ -823,7 +827,7 @@
                                         <!--end::Menu Colapse-->
                                     @endcan
                                    
-                                    @can('super-admin')
+                                    @canany(['super-admin', 'risk-crm'])
                                         <!--begin::Menu Colapse-->
                                         <div id="#kt_aside_menu" data-kt-menu="true"
                                             style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'except-greenlane' ? 'background-color:#008CB4' : '' }}">
@@ -838,9 +842,9 @@
                                             </a>
                                         </div>
                                         <!--end::Menu Colapse-->
-                                    @endcan
+                                    @endcanany
 
-                                    @can('super-admin')
+                                    @canany(['super-admin', 'risk-crm'])
                                         <!--begin::Menu Colapse-->
                                         <div id="#kt_aside_menu" data-kt-menu="true"
                                             style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'piutang' ? 'background-color:#008CB4' : '' }}">
@@ -855,7 +859,7 @@
                                             </a>
                                         </div>
                                         <!--end::Menu Colapse-->
-                                    @endcan
+                                    @endcanany
 
                                     @can('super-admin')
                                         <!--begin::Menu Colapse-->
@@ -939,7 +943,7 @@
                                         <!--end::Menu Colapse-->
                                     @endcan
                                     
-                                    @can('super-admin')
+                                    @canany(['super-admin', 'risk-crm'])
                                         <!--begin::Menu Colapse-->
                                         <div id="#kt_aside_menu" data-kt-menu="true"
                                             style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'kriteria-pengguna-jasa' ? 'background-color:#008CB4' : '' }}">
@@ -954,9 +958,9 @@
                                             </a>
                                         </div>
                                         <!--end::Menu Colapse-->
-                                    @endcan
+                                    @endcanany
                                     
-                                    @can('super-admin')
+                                    @canany(['super-admin', 'risk-crm'])
                                         <!--begin::Menu Colapse-->
                                         <div id="#kt_aside_menu" data-kt-menu="true"
                                             style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'legalitas-perusahaan' ? 'background-color:#008CB4' : '' }}">
@@ -971,9 +975,9 @@
                                             </a>
                                         </div>
                                         <!--end::Menu Colapse-->
-                                    @endcan
+                                    @endcanany
 
-                                    @can('super-admin')
+                                    @canany(['super-admin', 'risk-crm'])
                                         <!--begin::Menu Colapse-->
                                         <div id="#kt_aside_menu" data-kt-menu="true"
                                             style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'kriteria-selection-non-greenlane' ? 'background-color:#008CB4' : '' }}">
@@ -988,9 +992,9 @@
                                             </a>
                                         </div>
                                         <!--end::Menu Colapse-->
-                                    @endcan
+                                    @endcanany
                                     
-                                    @can('super-admin')
+                                    @canany(['super-admin', 'risk-crm'])
                                         <!--begin::Menu Colapse-->
                                         <div id="#kt_aside_menu" data-kt-menu="true"
                                             style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'penilaian-pengguna-jasa' ? 'background-color:#008CB4' : '' }}">
@@ -1005,7 +1009,7 @@
                                             </a>
                                         </div>
                                         <!--end::Menu Colapse-->
-                                    @endcan
+                                    @endcanany
                                     
                                     @can('super-admin')
                                         <!--begin::Menu Colapse-->
@@ -1058,7 +1062,7 @@
                                         <!--end::Menu Colapse-->
                                     @endcan
 
-                                    @can('super-admin')
+                                    @canany(['super-admin', 'risk-crm'])
                                         <!--begin::Menu Colapse-->
                                         <div id="#kt_aside_menu" data-kt-menu="true"
                                             style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'kriteria-penilaian-pefindo' ? 'background-color:#008CB4' : '' }}">
@@ -1073,9 +1077,9 @@
                                             </a>
                                         </div>
                                         <!--end::Menu Colapse-->
-                                    @endcan
+                                    @endcanany
 
-                                    @can('super-admin')
+                                    @canany(['super-admin', 'risk-crm'])
                                         <!--begin::Menu Colapse-->
                                         <div id="#kt_aside_menu" data-kt-menu="true"
                                             style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'kriteria-greenlane-partner' ? 'background-color:#008CB4' : '' }}">
@@ -1090,9 +1094,9 @@
                                             </a>
                                         </div>
                                         <!--end::Menu Colapse-->
-                                    @endcan
+                                    @endcanany
 
-                                    @can('super-admin')
+                                    @canany(['super-admin', 'risk-crm'])
                                         <!--begin::Menu Colapse-->
                                         <div id="#kt_aside_menu" data-kt-menu="true"
                                             style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'penilaian-partner-selection' ? 'background-color:#008CB4' : '' }}">
@@ -1107,9 +1111,9 @@
                                             </a>
                                         </div>
                                         <!--end::Menu Colapse-->
-                                    @endcan
+                                    @endcanany
 
-                                    @can('super-admin')
+                                    @canany(['super-admin', 'risk-crm'])
                                         <!--begin::Menu Colapse-->
                                         <div id="#kt_aside_menu" data-kt-menu="true"
                                             style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'penilaian-checklist-project-selection' ? 'background-color:#008CB4' : '' }}">
@@ -1124,9 +1128,9 @@
                                             </a>
                                         </div>
                                         <!--end::Menu Colapse-->
-                                    @endcan
+                                    @endcanany
 
-                                    @can('super-admin')
+                                    @canany(['super-admin', 'risk-crm'])
                                         <!--begin::Menu Colapse-->
                                         <div id="#kt_aside_menu" data-kt-menu="true"
                                             style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'master-klasifikasi-proyek' ? 'background-color:#008CB4' : '' }}">
@@ -1141,9 +1145,9 @@
                                             </a>
                                         </div>
                                         <!--end::Menu Colapse-->
-                                    @endcan
+                                    @endcanany
 
-                                    @can('super-admin')
+                                    @canany(['super-admin', 'risk-crm'])
                                         <!--begin::Menu Colapse-->
                                         <div id="#kt_aside_menu" data-kt-menu="true"
                                             style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'master-klasifikasi-omzet' ? 'background-color:#008CB4' : '' }}">
@@ -1158,9 +1162,9 @@
                                             </a>
                                         </div>
                                         <!--end::Menu Colapse-->
-                                    @endcan
+                                    @endcanany
 
-                                    @can('super-admin')
+                                    @canany(['super-admin', 'risk-crm'])
                                         <!--begin::Menu Colapse-->
                                         <div id="#kt_aside_menu" data-kt-menu="true"
                                             style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'master-klasifikasi-produksi' ? 'background-color:#008CB4' : '' }}">
@@ -1175,7 +1179,7 @@
                                             </a>
                                         </div>
                                         <!--end::Menu Colapse-->
-                                    @endcan
+                                    @endcanany
                                     
                                     @canany(['super-admin', 'admin-crm'])
                                         <!--begin::Menu Colapse-->

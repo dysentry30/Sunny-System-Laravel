@@ -139,6 +139,11 @@
                                 <td>Tanggal Approve</td>
                                 <td>{{ $penandatanganSelected->tanggal }}</td>
                             </tr>
+                            <tr>
+                                <td class="text-center">{{ $kategori != "pengajuan" ? "14" : "11" }}</td>
+                                <td>Catatan Approver</td>
+                                <td>{!! nl2br($penandatanganSelected->catatan) !!}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -149,12 +154,6 @@
     <!--end::Root-->
 
 
-
-
-
-    <script src="{{ asset('/bootstrap/popper.min.js') }}"
-        integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous">
-    </script>
     <script src="{{ asset('/js/app.js') }}"></script>
     <script src="{{ asset('/plugins/global/plugins.bundle.js') }}"></script>
     <script src="{{ asset('/js/scripts.bundle.js') }}"></script>
