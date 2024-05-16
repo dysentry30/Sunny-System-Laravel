@@ -2668,6 +2668,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::get('rekomendasi/dokumen-final/{id_document}/download', [RekomendasiController::class, 'downloadFileNotaRekomendasiFinal']);
     Route::get("/green-lane", [RekomendasiController::class, "indexGreenLane"]);
     Route::get("/non-green-lane", [RekomendasiController::class, "indexNonGreenLane"]);
+    
     // End Rekomendasi
 
 
@@ -4748,3 +4749,10 @@ Route::group(['prefix' => 'v1'], function () {
 });
 
 Route::get('/tes-tv/{tes}', [DashboardTVController::class, 'getScheduleCampur']);
+Route::get('/rekomendasi/{kode_proyek}/{nip}/view-qr', [RekomendasiController::class, 'viewProyekQrCode']);
+
+Route::get('/testing-qr', function (Request $request) {
+    $notaRekomendasi = \App\Models\NotaRekomendasi::where('kode_proyek', "GNPD008")->first();
+    $hasil_assessment = collect(json_decode($notaRekomendasi->hasil_assessment));
+    return createWordNotaRekomendasiSetuju($notaRekomendasi, $hasil_assessment, $request);
+});

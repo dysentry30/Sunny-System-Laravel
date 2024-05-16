@@ -551,7 +551,7 @@
                                 </div>
                         @endif --}}
 
-                        @canany(['super-admin', 'admin-crm'])
+                        @canany(['super-admin', 'admin-crm', 'risk-crm'])
                         {{-- @if (auth()->user()->check_administrator || $adminPIC) --}}
                             <!--Begin::Master Data Expand-->
                             {{-- <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#008CB4;margin-top:8px;"> --}}
@@ -592,6 +592,7 @@
                                     </a>
                                 <!--begin::Colapse #0db0d9-->
                                 <div class="collapse" id="collapseExample">
+                                    @canany(['super-admin', 'admin-crm'])
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
                                         style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'company' ? 'background-color:#008CB4' : '' }}">
@@ -644,6 +645,7 @@
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
+                                    @endcanany
                                     
                                     @canany(['super-admin', 'admin-crm'])
                                     {{-- @if (auth()->user()->check_administrator) --}}
@@ -678,7 +680,7 @@
                                     </div>
                                     {{-- @endif --}}
                                     @endcanany
-                                    
+                                    @canany(['super-admin', 'admin-crm'])
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
                                         style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'unit-kerja' ? 'background-color:#008CB4' : '' }}">
@@ -719,6 +721,7 @@
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
+                                    @endcanany
                                     {{-- @endif --}}
                                     @canany(['super-admin', 'admin-crm'])
                                     {{-- @if (auth()->user()->check_administrator || $adminPIC) --}}
@@ -737,6 +740,7 @@
                                         <!--end::Menu Colapse-->
                                     {{-- @endif                                         --}}
                                     @endcanany
+                                    @canany(['super-admin', 'admin-crm'])
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
                                         style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'mata-uang' ? 'background-color:#008CB4' : '' }}">
@@ -807,7 +811,7 @@
                                     </div>
                                     <!--end::Menu Colapse-->
                                     {{-- @endif --}}
-
+                                    @endcanany
                                     @canany(['super-admin'])
                                     {{-- @if (auth()->user()->check_administrator) --}}
                                     <!--begin::Menu Colapse-->
@@ -864,7 +868,7 @@
                                     {{-- @endif                                         --}}
                                     @endcanany
 
-                                    @canany(['super-admin'])
+                                    @canany(['super-admin', 'risk-crm'])
                                     {{-- @if (auth()->user()->check_administrator) --}}
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
@@ -882,7 +886,7 @@
                                     {{-- @endif                                         --}}
                                     @endcanany
                                     
-                                    @canany(['super-admin'])
+                                    @canany(['super-admin', 'risk-crm'])
                                     {{-- @if (auth()->user()->check_administrator) --}}
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
@@ -901,7 +905,7 @@
                                     {{-- @endif                                         --}}
                                     @endcanany
                                     
-                                    @canany(['super-admin'])
+                                    @canany(['super-admin', 'risk-crm'])
                                     {{-- @if (auth()->user()->check_administrator) --}}
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"

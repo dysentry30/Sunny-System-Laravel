@@ -1524,7 +1524,7 @@ class RekomendasiController extends Controller
             // $proyek->is_disetujui = false;
             $notaRekomendasi->persetujuan_note = $request["catatan-persetujuan"];
             $notaRekomendasi->is_disetujui = false;
-            $proyek->is_disetujui = false;
+            // $proyek->is_disetujui = false;
             // if($is_checked) {
             //     $is_proyek_mega = str_contains($proyek->klasifikasi_pasdin, "Mega") ? true : false;
             //     $is_proyek_besar = str_contains($proyek->klasifikasi_pasdin, "Besar") ? true : false;
@@ -1613,19 +1613,19 @@ class RekomendasiController extends Controller
             // });
 
             $proyeks_proses_rekomendasi = NotaRekomendasi::whereIn("unit_kerja", $unit_kerjas)->where('is_request_rekomendasi', '!=', null)->where('is_disetujui', '=', null)->get()?->filter(function ($p) {
-                return !$p->Proyek->is_cancel;
+                return is_null($p->is_disetujui) || !$p->Proyek->is_cancel;
             });
             $proyeks_rekomendasi_final = NotaRekomendasi::whereIn("unit_kerja", $unit_kerjas)->get()->filter(function ($p) use ($matriks_user) {
-                // return $p->is_recommended == true && !is_null($p->is_disetujui);
-                return !is_null($p->is_disetujui) || $p->Proyek->is_cancel;
+                return $p->is_disetujui == true && !is_null($p->is_disetujui) || $p->Proyek->is_cancel;
+                // return !is_null($p->is_disetujui) || $p->Proyek->is_cancel;
             });
             $matriks_category = MatriksApprovalRekomendasi::all()->groupBy(['klasifikasi_proyek', 'kategori']);
         } else {
             $proyeks_rekomendasi_final = NotaRekomendasi::whereIn('unit_kerja', $unit_kerjas)->where('is_request_rekomendasi', '!=', null)->get()->filter(function ($p) use ($matriks_user) {
-                return (!is_null($p->is_disetujui) && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0) || (!is_null($p->is_disetujui) && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0 && $p->Proyek->is_cancel);
+                return (!is_null($p->is_disetujui) && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0 || $p->Proyek->is_cancel);
             });
             $proyeks_proses_rekomendasi = NotaRekomendasi::whereIn('unit_kerja', $unit_kerjas)->where('is_request_rekomendasi', '!=', null)->get()->filter(function ($p) use ($matriks_user) {
-                return (is_null($p->is_disetujui) && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0) || (is_null($p->is_disetujui) && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0 && !$p->Proyek->is_cancel);
+                return (is_null($p->is_disetujui) && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0 && !$p->Proyek->is_cancel);
             });
             $matriks_category = MatriksApprovalRekomendasi::all()->groupBy(['klasifikasi_proyek', 'kategori', 'departemen']);
             // dd($matriks_category);
@@ -1905,7 +1905,7 @@ class RekomendasiController extends Controller
                     $collectPenandatangan = collect(json_decode($ProyekNotaQrSelected->approved_verifikasi));
                     break;
                 case 'rekomendasi':
-                    $collectPenandatangan = collect(json_decode($ProyekNotaQrSelected->approved_rekomendasi));
+                    $collectPenandatangan = collect(json_decode($ProyekNotaQrSelected->approved_rekomendasi_final));
                     break;
                 case 'persetujuan':
                     $collectPenandatangan = collect(json_decode($ProyekNotaQrSelected->approved_persetujuan));
@@ -1916,29 +1916,29 @@ class RekomendasiController extends Controller
                     break;
             }
 
-            // if ($kategori != "pengajuan") {
-            //     $hasil_assessment = collect($ProyekNotaQrSelected->hasil_assessment);
-            //     $assessmentInternal = $hasil_assessment->sum(function ($ra) {
-            //         if ($ra->kategori == "Internal") {
-            //             return $ra->score;
-            //         }
-            //     });
-            //     $assessmentEksternal = $hasil_assessment->sum(function ($ra) {
-            //         if ($ra->kategori == "Eksternal") {
-            //             return $ra->score;
-            //         }
-            //     });
-            // }
+            if ($kategori != "pengajuan") {
+                $hasil_assessment = collect(json_decode($ProyekNotaQrSelected->hasil_assessment));
+                $assessmentInternal = $hasil_assessment->sum(function ($ra) {
+                    if ($ra->kategori == "Internal") {
+                        return $ra->score;
+                    }
+                });
+                $assessmentEksternal = $hasil_assessment->sum(function ($ra) {
+                    if ($ra->kategori == "Eksternal") {
+                        return $ra->score;
+                    }
+                });
+            }
 
             $userSelected = User::where('nip', $nip)->first();
 
             $penandatanganSelected = $collectPenandatangan->where('user_id', $userSelected->id)->first();
 
-            $penandatanganSelected["user_id"] = $userSelected->name;
+            $penandatanganSelected->user_id = $userSelected->name;
 
-            $penandatanganSelected["jabatan"] = $userSelected->Pegawai?->Jabatan?->nama_jabatan ?? null;
+            $penandatanganSelected->jabatan = $userSelected->Pegawai?->Jabatan?->nama_jabatan ?? null;
 
-            $penandatanganSelected["tanggal"] = \Carbon\Carbon::parse($penandatanganSelected["tanggal"])->translatedFormat('d F Y, H:i:s');
+            $penandatanganSelected->tanggal = \Carbon\Carbon::parse(date('d M Y H:i:s', strtotime($penandatanganSelected->tanggal)))->translatedFormat('d F Y, H:i:s');
 
             return view('22_View_TTD_Barcode_Nota_1', ["penandatanganSelected" => $penandatanganSelected, "dataNotaRekomendasi" => $ProyekNotaQrSelected, "proyek" => $proyekSelected, "kategori" => $kategori, "assessmentInternal" => $assessmentInternal, "assessmentEksternal" => $assessmentEksternal]);
         } catch (\Exception $e) {

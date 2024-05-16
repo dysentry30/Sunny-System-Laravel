@@ -69,9 +69,15 @@ class AuthServiceProvider extends ServiceProvider
             return $user->check_user_sales == true && $user->role_approver == true;
         });
 
+        // Gate::define('risk-crm',
+        //     function (User $user) {
+        //         return $user->check_user_sales == true && $user->role_risk == true;
+        //     }
+        // );
+
         Gate::define('risk-crm',
             function (User $user) {
-                return $user->check_user_sales == true && $user->role_risk == true;
+                return !empty($user->Pegawai?->kode_kantor_sap) && $user->Pegawai->kode_kantor_sap == 'A112';
             }
         );
 

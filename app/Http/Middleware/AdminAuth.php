@@ -131,7 +131,7 @@ class AdminAuth
         ]);
         $allowed_url_team_proyek = join(" ", ["dashboard", "proyek", "contract-management", "review-contract", "draft-contract", "issue-project", "question", "input-risk", "laporan-bulanan", "serah-terima", "claim-management", "approval-claim", "detail-claim", "claim", "document", "user"]);
         $concat_allowed_url = "";
-        if (Gate::any(['super-admin', 'admin-ccm', 'admin-crm', 'approver-crm', 'admin-csi'])) {
+        if (Gate::any(['super-admin', 'admin-ccm', 'admin-crm', 'approver-crm', 'admin-csi', 'risk-crm'])) {
             return $next($request);
         }
         if (Gate::allows('ccm')) {
