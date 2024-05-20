@@ -595,12 +595,11 @@
                                                                     <div class="fv-row mb-7">
                                                                         <!--begin::Label-->
                                                                         <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span class="required">Group Tier</span>
+                                                                            <span class="required">Group Tier<i class="bi bi-lock" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Data diperoleh dari menu Group Tier BUMN"></i></span>
                                                                         </label>
                                                                         <!--end::Label-->
                                                                         <!--begin::Input-->
-                                                                        <select name="group-tier" id="group-tier" {{!empty($title_tooltip) ? "readonly" : ""}} class="form-select form-select-solid" data-control="select2" data-hide-search="true"
-                                                                            {{-- onchange="selectNegara(this)" --}}
+                                                                        <select name="group-tier" id="group-tier" readonly class="form-select form-select-solid" data-control="select2" data-hide-search="true"
                                                                             data-placeholder="Pilih Group Tier">
                                                                             <option value=""></option>
                                                                             <option value="Tier A" {{$is_instansi_BUMN && $customer->group_tier  == "Tier A" ? "selected" : ""}}>Tier A</option>

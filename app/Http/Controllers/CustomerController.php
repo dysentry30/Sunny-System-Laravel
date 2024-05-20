@@ -158,11 +158,13 @@ class CustomerController extends Controller
         // dd($data); 
         $messages = [
             "required" => "This field is required",
+            "integer" => "Only accept number only",
         ];
         $rules = [
             "name-customer" => "required",
             "email" => "required",
-            "phone-number" => "required",
+            "phone-number" => "required|numeric",
+            "npwp-company" => "required|numeric"
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
@@ -171,10 +173,18 @@ class CustomerController extends Controller
             $request->old("name-customer");
             $request->old("email");
             $request->old("phone-number");
+            $request->old("npwp-company");
             redirect()->back()->with("modal", $data["modal-name"]);
         }
 
         $validation->validate();
+
+        $is_exist_npwp = Customer::where('npwp_company', $data["npwp-company"])->first();
+
+        if (!empty($is_exist_npwp)) {
+            Alert::html("Error", "Pelanggan tidak dapat ditambahkan karena NPWP telah digunakan pada pelanggan :<br/><b>$is_exist_npwp->name</b>", 'error');
+            return redirect()->back();
+        }
 
         $newCustomer->name = $data["name-customer"];
         $newCustomer->check_customer = $request->has("check-customer"); //boolean check
@@ -463,14 +473,16 @@ class CustomerController extends Controller
         $data = $request->all();
         $messages = [
             "required" => "This field is required",
+            "integer" => "Only accept number only",
         ];
         $rules = [
             "name-customer" => "required",
+            "npwp-company" => "required|numeric"
             // "email" => "required",
             // "phone-number" => "required",
         ];
         $validation = Validator::make($data, $rules, $messages);
-        $validation->validate();
+        
         if ($validation->fails()) {
             // Alert::error('Error', "Pelanggan Gagal Dibuat, Periksa Kembali !");
             $request->old("name-customer");
@@ -479,6 +491,8 @@ class CustomerController extends Controller
             return redirect()->back();
         }
 
+        $validation->validate();
+
         // if ($data["customer-loyalty-rate"] > 5 || $data["net-promoter-score"] > 5 || $data["customer-satisfaction-index"] > 5) {
         //     Alert::error('Error', "CSI tidak boleh lebih dari 5 !");
         //     return back();
@@ -486,6 +500,14 @@ class CustomerController extends Controller
 
 
         $editCustomer = Customer::find($data["id-customer"]);
+        $is_exist_npwp = Customer::where('npwp_company', $data["npwp-company"])->first();
+        // dd($is_exist_npwp);
+
+        if ($editCustomer->npwp_company != $data["npwp-company"] && !empty($is_exist_npwp)) {
+            Alert::html("Error", "No NPWP telah digunakan pada pelanggan :<br/><b>$is_exist_npwp->name</b>", 'error');
+            return redirect()->back();
+        }
+
         $editCustomer->name = $data["name-customer"];
         $editCustomer->handphone = $data["handphone"];
         $editCustomer->check_customer = $request->has("check-customer"); //boolean check
