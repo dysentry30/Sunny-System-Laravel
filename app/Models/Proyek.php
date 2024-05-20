@@ -199,7 +199,7 @@ class Proyek extends Model
 
     public function DokumenPendukungPasarDini()
     {
-        return $this->hasOne(DokumenPendukungPasdin::class, 'kode_proyek', 'kode_proyek');
+        return $this->hasMany(DokumenPendukungPasdin::class, 'kode_proyek', 'kode_proyek');
     }
 
     public function NotaRekomendasi()
