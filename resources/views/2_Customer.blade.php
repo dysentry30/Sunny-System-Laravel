@@ -396,7 +396,7 @@
                             <div class="fv-row mb-7">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="">Email</span>
+                                    <span class="required">Email</span>
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
@@ -421,7 +421,7 @@
                             <div class="fv-row mb-7">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="">Phone Number</span>
+                                    <span class="required">Phone Number</span>
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
@@ -489,7 +489,7 @@
                             <div class="fv-row mb-7">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label mt-3">
-                                    <span>Address Line 1</span>
+                                    <span class="required">Address Line 1</span>
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
@@ -518,31 +518,39 @@
                         <!--begin::Input group Kode Pos-->
                         <div class="fv-row mb-7">
                             <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3 ">
-                                    <span>Kode Pos</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid" placeholder="Kode Pos" name="kode-pos"/>
-                                <!--end::Input-->
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3 ">
+                                        <span>Kode Pos</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" placeholder="Kode Pos" name="kode-pos"/>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group Website-->
                             </div>
 
                             <div class="col">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3 ">
-                                    <span class="">Industry Sector</span>
-                                </label>
-                                <!--end::Label-->
-                                <select name="industry-sector" id="industry-sector" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
-                                        data-placeholder="Pilih Industry Sector">
-                                    <option value="" selected></option>
-                                    @foreach ($industrySectors as $is)
-                                        <option value="{{ $is->id_industry_sector }}">
-                                            {{ ucwords(strtolower($is->description)) }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3 ">
+                                        <span class="required">Industry Sector</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <select name="industry-sector" id="industry-sector" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
+                                            data-placeholder="Pilih Industry Sector">
+                                        <option value="" selected></option>
+                                        @foreach ($industrySectors as $is)
+                                            <option value="{{ $is->id_industry_sector }}">
+                                                {{ ucwords(strtolower($is->description)) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <!--end::Input group Website-->
                             </div>
                         </div>
                         <!--begin::Row-->
@@ -552,13 +560,15 @@
                                 <!--begin::Input group Website-->
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
+                                    <label class="fs-6 fw-bold form-label mt-3 required">
                                         <span class="">No NPWP</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" name="npwp-company"
-                                        placeholder="NPWP" />
+                                    <input type="text" class="form-control form-control-solid" name="npwp-company" value="{{ old('npwp-company') }}" placeholder="NPWP" />
+                                    @error('npwp-company')
+                                    <h6 class="text-danger fw-normal">{{ $message }}</h6>
+                                    @enderror
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -575,8 +585,7 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <textarea class="form-control form-control-solid" name="npwp-address"
-                                        placeholder="Alamat NPWP"></textarea>
+                                    <textarea class="form-control form-control-solid" name="npwp-address" placeholder="Alamat NPWP"></textarea>
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->

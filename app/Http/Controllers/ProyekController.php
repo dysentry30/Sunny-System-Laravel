@@ -74,6 +74,8 @@ use App\Models\CashFlowProyek;
 use App\Models\DokumenOtherProyek;
 use App\Models\DokumenPersetujuanKSO;
 use App\Models\DokumenSCurvesProyek;
+use App\Models\MasterKlasifikasiSBU;
+use App\Models\MasterSubKlasifikasiSBU;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -434,6 +436,12 @@ class ProyekController extends Controller
         // $data_negara = $data_negara;
         // dd($proyek); //tes log hasil 
         if ($proyek->tipe_proyek == "P") {
+            $klasifikasiSBU = MasterKlasifikasiSBU::all();
+            if (!empty($proyek->klasifikasi_sbu_kbli)) {
+                $subKBLI = MasterSubKlasifikasiSBU::where('klasifikasi_id', $proyek->klasifikasi_sbu_kbli)->get();
+            } else {
+                $subKBLI = [];
+            }
             $konsultan_perencana = KonsultanPerencana::all();
             // dd($teamProyek, $kriteriaProyek, $porsiJO, $pesertatender, $proyekberjalans, $departemen);
             $isExistPorsiJO = PorsiJO::where('kode_proyek', $proyek->kode_proyek)->get();
@@ -469,7 +477,7 @@ class ProyekController extends Controller
             return view(
                 'Proyek/viewProyek',
                 ["proyek" => $proyek, "proyeks" => Proyek::all()],
-                compact(['companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'mataUang', "provinsi", "departemen", "konsultan_perencana"])
+                compact(['companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'mataUang', "provinsi", "departemen", "konsultan_perencana", "klasifikasiSBU", "subKBLI"])
                 // [
                 //     'companies' => Company::all(),
                 //     'sumberdanas' => SumberDana::all(),
@@ -593,6 +601,15 @@ class ProyekController extends Controller
         $newProyek->klasifikasi_pasdin = $dataProyek["ra-klasifikasi-proyek"];
         $newProyek->negara = $dataProyek["negara"];
         $newProyek->provinsi = $dataProyek["provinsi"];
+        // if ($dataProyek["tipe-proyek"] == "P" && $newProyek->stage > 2) {
+        //     if (!empty($dataProyek["klasifikasi-kbli-sbu"]) || !empty($dataProyek["sub-klasifikasi-kbli"])) {
+        //         $newProyek->klasifikasi_sbu_kbli = $dataProyek["klasifikasi-kbli-sbu"];
+        //         $newProyek->kode_kbli_2020 = $dataProyek["sub-klasifikasi-kbli"];
+        //     } else {
+        //         Alert::error("SBU KBLI dan Sub Klasifikasi SBU KBLI Belum Diisi", "Mohon isi terlebih dahulu");
+        //         return redirect()->back();
+        //     }
+        // }
         // if ($newProyek->jenis_proyek == "J") {
         //     $newProyek->jenis_jo = $dataProyek["jo-category"];
         // } else {
@@ -763,6 +780,8 @@ class ProyekController extends Controller
         $newProyek->status_pasar = $dataProyek["status-pasar"];
         $newProyek->sub_klasifikasi = $dataProyek["sub-klasifikasi"];
         $newProyek->proyek_strategis = $request->has("proyek-strategis");
+        $newProyek->klasifikasi_sbu_kbli = $dataProyek["klasifikasi-kbli"];
+        $newProyek->kode_kbli_2020 = $dataProyek["sub-klasifikasi-kbli"];
         // $newProyek->dop = $dataProyek["dop"];
         // $newProyek->company = $dataProyek["company"];
         $newProyek->laporan_kualitatif_paspot = $dataProyek["laporan-kualitatif-paspot"];
@@ -976,7 +995,7 @@ class ProyekController extends Controller
         $newProyek->rugi = str_replace('.', '', $dataProyek["rugi-performance"]);
         $newProyek->latitude = $dataProyek["latitude"];
         $newProyek->longitude = $dataProyek["longitude"];
-        $newProyek->kode_kbli_2020 = $dataProyek["klasifikasi-kbli-sbu"];
+        // $newProyek->kode_kbli_2020 = $dataProyek["klasifikasi-kbli-sbu"];
 
         //Begin::Waktu Pelaksanaan
         $newProyek->waktu_pelaksanaan = $dataProyek["waktu_pelaksanaan"];
@@ -2330,6 +2349,487 @@ class ProyekController extends Controller
         return redirect('excel/' . $file_name);
     }
 
+    // public function stage(Request $request)
+    // {
+    //     // $url = $request->url;
+    //     // dd($url);
+    //     $kodeProyek = $request->kode_proyek;
+    //     $proyekStage = Proyek::find($kodeProyek);
+    //     $proyekAttach = $proyekStage->AttachmentMenang;
+    //     $dokumenTender = $proyekStage->DokumenTender;
+    //     $periode = (int) date('m');
+    //     $years = (int) date('Y');
+    //     $forecasts = Forecast::where("kode_proyek", "=", $kodeProyek)->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years)->first();
+    //     // $forecasts = $proyekStage->Forecasts->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years)->first();
+    //     dd($request->all());
+    //     if ($request->stage == 4) {
+    //         if ($proyekStage->hps_pagu == 0) {
+    //             Alert::error("Error", "HPS Pagu Belum Diisi !");
+    //             $request->stage = 3;
+    //         } else {
+    //             $request->stage = 4;
+    //         }
+
+    //         if ($proyekStage->DokumenPrakualifikasi->isEmpty()) {
+    //             Alert::error("Error", "Dokumen Prakualifikasi wajib diisi !");
+    //             $request->stage = 3;
+    //         } else {
+    //             $request->stage = 4;
+    //         }
+    //     } else if ($request->stage == 5) {
+    //         // if ($dokumenTender->count() == 0) {
+    //         //     // dd($dokumenTender);
+    //         //     Alert::error("Error", "Silahkan Isi Dokumen Tender Terlebih Dahulu !");
+    //         //     // return redirect()->back();
+    //         // } else {
+    //         //     $request->stage = 5;
+    //         // }
+    //         if ($proyekStage->penawaran_tender == 0 && $dokumenTender->count() == 0) {
+    //             Alert::error("Error", "Silahkan Isi Nilai Penawaran dan Dokumen Tender Terlebih Dahulu !");
+    //             $request->stage = 4;
+    //         } else if ($proyekStage->penawaran_tender == 0) {
+    //             Alert::error("Error", "Silahkan Isi Nilai Penawaran Terlebih Dahulu !");
+    //             $request->stage = 4;
+    //         } else if ($dokumenTender->count() == 0) {
+    //             Alert::error("Error", "Silahkan Isi Dokumen Tender Terlebih Dahulu !");
+    //             $request->stage = 4;
+    //         } else {
+    //             $request->stage = 5;
+    //         }
+    //     };
+
+    //     if (!$request->is_ajax) {
+    //         $data = $request->all();
+
+    //         // Check kalo variable di bawah ini ada
+    //         if (!empty($data["stage-menang"]) && $data["stage-menang"] == "Menang") {
+    //             if ($proyekStage->nilai_perolehan == 0) {
+    //                 Alert::error("Error", "Nilai Perolehan Belum Diisi !");
+    //                 return redirect()->back();
+    //             } else {
+    //                 $request->stage = 6;
+    //             }
+    //         } elseif (!empty($data["stage-kalah"]) && $data["stage-kalah"] == "Kalah") {
+    //             $proyekStage->nilai_perolehan = 0;
+    //             $proyekStage->save();
+
+    //             if (!empty($forecasts)) {
+    //                 $forecasts->realisasi_forecast = 0;
+    //                 $forecasts->save();
+    //             }
+
+    //             $request->stage = 7;
+    //         } elseif (!empty($data["stage-terkontrak"]) && $data["stage-terkontrak"] == "Terkontrak") {
+    //             $customer = $proyekStage->ProyekBerjalan->Customer ?? null;
+    //             if (!empty($customer)) {
+    //                 $error_msg = collect();
+    //                 if (empty($customer->kode_nasabah)) {
+    //                     $error_msg->push("Kode Nasabah");
+    //                 }
+    //                 if (empty($customer->email)) {
+    //                     $error_msg->push("Email");
+    //                 }
+    //                 if (empty($customer->address_1)) {
+    //                     $error_msg->push("Alamat");
+    //                 }
+    //                 if (empty($customer->kode_pos)) {
+    //                     $error_msg->push("Kode Pos");
+    //                 }
+    //                 if (empty($customer->fax)) {
+    //                     $error_msg->push("Fax");
+    //                 }
+    //                 if (empty($customer->phone_number)) {
+    //                     $error_msg->push("No Telp");
+    //                 }
+    //                 if (empty($customer->handphone)) {
+    //                     $error_msg->push("Handphone");
+    //                 }
+    //                 if (empty($customer->industry_sector)) {
+    //                     $error_msg->push("Industry Sector");
+    //                 }
+    //                 if (empty($customer->jenis_instansi)) {
+    //                     $error_msg->push("Instansi");
+    //                 }
+    //                 if (empty($customer->jenis_perusahaan)) {
+    //                     $error_msg->push("Jenis Perusahaan");
+    //                 }
+    //                 if (empty($customer->provinsi)) {
+    //                     $error_msg->push("Provinsi");
+    //                 }
+    //                 if (empty($customer->kota_kabupaten)) {
+    //                     $error_msg->push("Kota/Kabupaten");
+    //                 }
+    //                 if (empty($customer->npwp_company)) {
+    //                     $error_msg->push("NPWP");
+    //                 }
+    //                 if (empty($customer->syarat_pembayaran)) {
+    //                     $error_msg->push("Term Payment");
+    //                 }
+    //                 if (empty($proyekStage->Departemen)) {
+    //                     $error_msg->push("Departemen");
+    //                 }
+    //                 if ($customer->tax == null) {
+    //                     $error_msg->push("Tax");
+    //                 }
+    //                 if ($error_msg->isNotEmpty()) {
+    //                     Alert::html("Error - Pelanggan !", "Untuk pindah ke stage terkontrak, pastikan data <b>Pelanggan</b> dengan field <b>" . $error_msg->join(", ", " </b>dan<b> ") . "</b> sudah terisi!", "error")->autoClose(10000);
+    //                     return redirect()->back();
+    //                 }
+    //             } else if (empty($customer)) {
+    //                 Alert::html("Error - Proyek !", "Untuk pindah ke stage terkontrak, pastikan field <b>Pelanggan</b> pada stage Pasar Dini sudah terpilih!", "error")->autoClose(10000);
+    //                 return redirect()->back();
+    //             }
+    //             $sap = $customer->sap;
+    //             $pic = $customer->pic->filter( function ($p) {
+    //                 return (!empty($p->nama_pic) && !empty($p->jabatan_pic) && !empty($p->email_pic) && !empty($p->phone_pic));
+    //             })->first();
+
+    //             if (empty($pic)) {
+    //                 Alert::html("Error - PIC Pelanggan !", "Untuk pindah ke stage terkontrak, pastikan mengisi minimal <b>1 PIC Pelanggan</b> !", "error")->autoClose(10000);
+    //                 return redirect()->back();
+    //             }
+
+    //             // dump($sap, $pic);
+    //             // dd();
+    //             if (empty($customer)) {
+    //                 Alert::error("Error", "Pastikan Data Pelanggan sudah terisi!")->autoClose(10000);
+    //                 return redirect()->back();
+    //             }
+    //             // http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev
+    //             // Begin :: Ngirim data ke nasabah online WIKA
+    //             $provinsi = Provinsi::where("province_name", "=", $customer->provinsi)->first() ?? Provinsi::find($customer->provinsi);
+    //             if (empty($provinsi)) {
+    //                 Alert::html("Error", "Pastikan <b>Provinsi</b> pada Field <b>Pelanggan</b> sudah terisi!", "error")->autoClose(10000);
+    //                 return redirect()->back();
+    //             }
+    //             // dd($customer);
+    //             $grouping = "";
+    //             $kdgrp = "";
+    //             $ktgrd = "";
+    //             $cust_akont = "";
+    //             $witht = "";
+    //             if($customer->jenis_instansi == "Kementrian / Pemerintah Pusat" || $customer->jenis_instansi == "Pemerintah Provinsi" || $customer->jenis_instansi == "Pemerintah Kota / Kabupaten") {
+    //                 $kdgrp = "03";
+    //                 $grouping = "ZN01";
+    //                 $ktgrd = "Z1";
+    //                 $cust_akont = "1104111000";
+    //                 $witht = "J7";
+    //             } else if($customer->jenis_instansi == "BUMN") {
+    //                 $kdgrp = "04";
+    //                 $grouping = "ZN01";
+    //                 $ktgrd = "Z1";
+    //                 $cust_akont = "1104111000";
+    //                 $witht = "J7";
+    //             } else if($customer->jenis_instansi == "BUMD" || $customer->jenis_instansi == "Swasta Nasional") {
+    //                 $kdgrp = "05";
+    //                 $grouping = "ZN02";
+    //                 $ktgrd = "Z2";
+    //                 $cust_akont = "1104211000";
+    //                 $witht = "J7";
+    //             } else if($customer->jenis_instansi == "Pemerintah Asing" || $customer->jenis_instansi == "Swasta Asing") {
+    //                 $kdgrp = "06";
+    //                 $grouping = "ZN02";
+    //                 $ktgrd = "Z2";
+    //                 $cust_akont = "1104211000";
+    //                 $witht = "J7";
+    //             } else if($customer->jenis_instansi == "Perusahaan JO") {
+    //                 $kdgrp = "08";
+    //                 $grouping = "ZN05";
+    //                 $ktgrd = "Z4";
+    //                 $cust_akont = "";
+    //                 $witht = "";
+    //             }
+    //             $data_nasabah_online = collect([
+    //                 "nmnasabah" => "$customer->name",
+    //                 "alamat" => "$customer->address_1",
+    //                 "kota" => "$customer->kota_kabupaten",
+    //                 "email" => "$customer->email",
+    //                 "ext" => "-",
+    //                 "telepon" => "$customer->phone_number",
+    //                 "fax" => "$customer->fax",
+    //                 "npwp" => "$customer->npwp_company",
+    //                 "nama_kontak" => $pic->nama_pic ?? "",
+    //                 "jenisperusahaan" => "$customer->jenis_instansi",
+    //                 "jabatan" => $pic->jabatan_pic ?? "",
+    //                 "email1" => $pic->email_pic ?? "",
+    //                 "telpon1" => $pic->phone_pic ?? "",
+    //                 "handphone" => $pic->phone_pic ?? "",
+    //                 "tipe_perusahaan" => "$customer->jenis_perusahaan",
+    //                 "tipe_lain_perusahaan" => "-",
+    //                 "cotid" => "11",
+    //                 "dtsap" => [
+    //                     [
+    //                         "devid" => "YMMI002",
+    //                         "packageid" => $this->GUID(),
+    //                         "cocode" => "A000",
+    //                         "prctr" => "",
+    //                         // "timestamp" => "20221013100000",
+    //                         "timestamp" => date("y") . date("m") . date("d") . "10000",
+    //                         "data" => [
+    //                             [
+    //                                 "BPARTNER" => "$customer->kode_nasabah",
+        
+    //                                 "GROUPING" => "$grouping",
+        
+    //                                 "LVORM" => "",
+        
+    //                                 "TITLE" => "Z001",
+        
+    //                                 "NAME" => "$customer->name",
+        
+    //                                 "TITLELETTER" => "",
+        
+    //                                 "SEARCHTERM1" => substr($customer->name, 0, 40) ?? "",
+        
+    //                                 "SEARCHTERM2" => substr($customer->name, 0, 40) ?? "",
+        
+    //                                 "STREET" => $sap->street ?? "",
+        
+    //                                 "HOUSE_NO" => "",
+        
+    //                                 "POSTL_COD1" => "$customer->kode_pos",
+        
+    //                                 "CITY" => explode("-", $provinsi->province_id)[1],
+        
+    //                                 // "ADDR_COUNTRY" => $provinsi->country_id ?? "ID",
+    //                                 "ADDR_COUNTRY" => "ID",
+        
+    //                                 "REGION" => explode("-", $provinsi->province_id)[1],
+        
+    //                                 "PO_BOX" => "",
+        
+    //                                 "POSTL_COD3" => "",
+        
+    //                                 "LANGU" => "E",
+        
+    //                                 "TELEPHONE" => "$customer->phone_number",
+        
+    //                                 "PHONE_EXTENSION" => "",
+        
+    //                                 "MOBPHONE" => "$customer->handphone",
+        
+    //                                 "FAX" => "$customer->fax",
+        
+    //                                 "FAX_EXTENSION" => "",
+        
+    //                                 "E_MAIL" => "$customer->email",
+        
+    //                                 "VALIDFROMDATE" => now()->translatedFormat("d-m-Y"),
+        
+    //                                 "VALIDTODATE" => now()->addMonths(5)->translatedFormat("d-m-Y"),
+        
+    //                                 "IDENTIFICATION" => [
+    //                                     [
+        
+    //                                         // "TAXTYPE" => "$sap->tax_number_category",
+    //                                         "TAXTYPE" => $provinsi->country_id == "ID" ? "ID1" : "ID2",
+            
+    //                                         "TAXNUMBER" => "$customer->npwp_company"
+    //                                     ]
+    //                                 ],
+        
+    //                                 "BANK" => [
+    //                                     [
+    //                                         "BANK_DET_ID" => "",
+            
+    //                                         "BANK_CTRY" => "",
+            
+    //                                         "BANK_KEY" => "",
+            
+    //                                         "BANK_ACCT" => "",
+            
+    //                                         "BK_CTRL_KEY" => "",
+            
+    //                                         "BANK_REF" => "",
+            
+    //                                         "EXTERNALBANKID" => "",
+            
+    //                                         "ACCOUNTHOLDER" => "",
+            
+    //                                         "BANKACCOUNTNAME" => ""
+    //                                     ]
+    //                                 ],
+        
+    //                                 "CUST_BUKRS" => "",
+        
+    //                                 "KUNNR" => "",
+        
+    //                                 "CUST_AKONT" => "$cust_akont",
+        
+    //                                 "CUST_C_ZTERM" => "$customer->syarat_pembayaran",
+        
+    //                                 "CUST_WTAX" => [
+    //                                     [
+        
+    //                                         "WITHT" => "$witht",
+            
+    //                                         "WT_AGENT" => "",
+            
+    //                                         "WT_AGTDF" => "",
+            
+    //                                         "WT_AGTDT" => ""
+    //                                     ]
+    //                                 ],
+        
+    //                                 "VKORG" => "",
+        
+    //                                 "VTWEG" => "",
+        
+    //                                 "SPART" => "",
+        
+    //                                 "KDGRP" => $kdgrp,
+        
+    //                                 "CUST_WAERS" => "IDR",
+        
+    //                                 "KALKS" => "",
+        
+    //                                 "VERSG" => "",
+        
+    //                                 "VSBED" => "",
+        
+    //                                 "INCO1" => "",
+        
+    //                                 "INCO2_L" => "",
+        
+    //                                 "CUST_S_ZTERM" => "$customer->syarat_pembayaran",
+        
+    //                                 "KTGRD" => "$ktgrd",
+        
+    //                                 "TAXKD" => "$customer->tax",
+        
+    //                                 "VEND_BUKRS" => "",
+        
+    //                                 "LIFNR" => "",
+        
+    //                                 "VEND_AKONT" => "",
+        
+    //                                 "VEND_C_ZTERM" => "",
+        
+    //                                 "REPRF" => "X",
+        
+    //                                 "VEND_WTAX" => [[]],
+    //                                 // "VEND_WTAX" => [
+        
+    //                                 //     "WITHT" => "J3",
+        
+    //                                 //     "WT_SUBJCT" => "X"
+        
+    //                                 // ],
+        
+    //                                 "EKORG" => "",
+        
+    //                                 "VEND_P_ZTERM" => "",
+        
+    //                                 "WEBRE" => "",
+        
+    //                                 "VEND_WAERS" => "",
+        
+    //                                 "LEBRE" => "",
+
+    //                                 "BRAN2" => $customer->IndustrySector->id_industry_sector,
+    //                             ]
+    //                         ]
+    //                     ]
+    //                 ]
+    //             ]);
+    //             // dd($data_nasabah_online);
+    //             // End :: Ngirim data ke nasabah online WIKA
+
+    //             // dd($proyekStage->nilai_perolehan, $proyekStage->porsi_jo, $proyekStage->nilai_kontrak_keseluruhan);
+    //             if ($proyekStage->nilai_perolehan != null && $proyekStage->porsi_jo != null) {
+    //                 $nilaiPerolehan = (int) str_replace('.', '', $proyekStage->nilai_perolehan);
+    //                 $kontrakKeseluruhan = ($nilaiPerolehan * 100) / (float) $proyekStage->porsi_jo;
+
+    //                 $proyekStage->nilai_kontrak_keseluruhan = round($kontrakKeseluruhan);
+    //                 $proyekStage->save();
+    //             }
+    //             if ($proyekAttach->count() == 0) {
+    //                 Alert::error("Error", "Silahkan Isi Attachment Menang Terlebih Dahulu !");
+    //                 return redirect()->back();
+    //             } else {
+    //                 $contractManagements = ContractManagements::get()->where("project_id", "=", $proyekStage->kode_proyek)->first();
+    //                 if (str_contains(URL::full() , 'crm.wika.co.id')) {
+    //                     $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm", $data_nasabah_online)->json();
+    //                     // dd($nasabah_online_response);
+    //                     if (!$nasabah_online_response["status"] && !str_contains($nasabah_online_response["msg"], "sudah ada dalam nasabah online")) {
+    //                         Alert::error("Error", $nasabah_online_response["msg"]);
+    //                         return redirect()->back();
+    //                     }
+    //                     // $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev", $data_nasabah_online)->json();
+    //                     $request->stage = 8;
+    //                     if (!empty($contractManagements)) {
+    //                             $contractManagements->stages = (int) 2;
+    //                         $contractManagements->save();
+    //                     }
+    //                 } else {
+    //                     $request->stage = 8;
+    //                     if (!empty($contractManagements)) {
+    //                             $contractManagements->stages = (int) 2;
+    //                         $contractManagements->save();
+    //                     }
+    //                 }
+    //             }
+    //         } elseif (!empty($data["stage-terendah"]) && $data["stage-terendah"] == "Terendah") {
+    //             if ($proyekAttach->count() == 0) {
+    //                 Alert::error("Error", "Silahkan Isi Attachment Menang Lebih Dahulu !");
+    //                 return redirect()->back();
+    //             } else {
+    //                 $request->stage = 9;
+    //             }
+    //         } else if (isset($data["stage-tidak-lulus-pq"])) {
+    //             $proyekStage->is_tidak_lulus_pq = true;
+    //             $request->stage = 3;
+    //         } else if (isset($data["stage-prakualifikasi"])) {
+    //             $proyekStage->is_tidak_lulus_pq = false;
+    //             if (empty($proyekStage->klasifikasi_sbu_kbli) || empty($proyekStage->kbli_2020)) {
+    //                 Alert::error("Error", "Klasifikasi SBU KBLI dan Sub Klasifikasi SBU KBLI wajib diisi!");
+    //                 $request->stage = 2;
+    //             } else {
+    //                 $request->stage = 3;
+    //             }
+    //         }
+    //     }
+    //     $proyekStage->stage = $request->stage;
+
+    //     $teamProyek = TeamProyek::where('kode_proyek', "=", $proyekStage->kode_proyek)->get();
+    //     if ($teamProyek != null) {
+    //         $teamProyek->each(function ($stage) use ($proyekStage) {
+    //             if ($proyekStage->stage > 8) {
+    //                 $stage->proyek_selesai = true;
+    //                 $stage->save();
+    //             }
+    //         });
+    //     }
+
+    //     $proyekBerjalans = ProyekBerjalans::where('kode_proyek', "=", $proyekStage->kode_proyek)->get()->first();
+    //     if ($proyekBerjalans == null) {
+    //         $proyekStage->save();
+    //         if ($request->is_ajax) {
+    //             return response()->json([
+    //                 "status" => "success",
+    //                 "link" => true,
+    //             ]);
+    //         }
+    //         Alert::success("Success", "Stage berhasil diperbarui");
+    //         return back();
+    //     } else {
+    //         $proyekBerjalans->stage = $request->stage;
+    //         $proyekBerjalans->save();
+    //         $proyekStage->save();
+    //         if ($request->is_ajax) {
+    //             return response()->json([
+    //                 "status" => "success",
+    //                 "link" => true,
+    //             ]);
+    //         }
+    //         Alert::success("Success", "Stage berhasil diperbarui");
+    //         return back();
+    //     }
+
+    //     Alert::error("Error", "Stage gagal diperbarui");
+    //     return back();
+    // }
+
     public function stage(Request $request)
     {
         // $url = $request->url;
@@ -2342,6 +2842,13 @@ class ProyekController extends Controller
         $years = (int) date('Y');
         $forecasts = Forecast::where("kode_proyek", "=", $kodeProyek)->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years)->first();
         // $forecasts = $proyekStage->Forecasts->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years)->first();
+        if ($request->stage >= 2 && empty($proyekStage->departemen_proyek)) {
+            // $request->stage = 1;
+            Alert::error("Error", "Departemen Pada Pasar Dini Belum Diisi !");
+        } else if ($request->stage == 2 && $proyekStage->departemen_proyek) {
+            $request->stage = 2;
+            Alert::success("Success", "Stage berhasil diperbarui");
+        }
         if ($request->stage == 4) {
             if ($proyekStage->hps_pagu == 0) {
                 Alert::error("Error", "HPS Pagu Belum Diisi !");
@@ -2349,13 +2856,10 @@ class ProyekController extends Controller
             } else {
                 $request->stage = 4;
             }
-
-            if ($proyekStage->DokumenPrakualifikasi->isEmpty()) {
-                Alert::error("Error", "Dokumen Prakualifikasi wajib diisi !");
-                $request->stage = 3;
-            } else {
-                $request->stage = 4;
-            }
+            // if ($proyekStage->DokumenPrakualifikasi->isEmpty()) {
+            //     Alert::error("Error", "Dokumen Prakualifikasi wajib diisi !");
+            //     $request->stage = 3;
+            // }
         } else if ($request->stage == 5) {
             // if ($dokumenTender->count() == 0) {
             //     // dd($dokumenTender);
@@ -2403,7 +2907,7 @@ class ProyekController extends Controller
                 $customer = $proyekStage->ProyekBerjalan->Customer ?? null;
                 if (!empty($customer)) {
                     $error_msg = collect();
-                    if (empty($customer->kode_nasabah)) {
+                    if (empty($customer->kode_nasabah) && $proyekStage->UnitKerja->dop != 'EA') {
                         $error_msg->push("Kode Nasabah");
                     }
                     if (empty($customer->email)) {
@@ -2436,17 +2940,17 @@ class ProyekController extends Controller
                     if (empty($customer->provinsi)) {
                         $error_msg->push("Provinsi");
                     }
-                    if (empty($customer->kota_kabupaten)) {
+                    if (empty($customer->kota_kabupaten) && $proyekStage->UnitKerja->dop != 'EA') {
                         $error_msg->push("Kota/Kabupaten");
                     }
                     if (empty($customer->npwp_company)) {
                         $error_msg->push("NPWP");
                     }
+                    // if (empty($proyekStage->Departemen)) {
+                    //     $error_msg->push("Departemen");
+                    // }
                     if (empty($customer->syarat_pembayaran)) {
                         $error_msg->push("Term Payment");
-                    }
-                    if (empty($proyekStage->Departemen)) {
-                        $error_msg->push("Departemen");
                     }
                     if ($customer->tax == null) {
                         $error_msg->push("Tax");
@@ -2519,199 +3023,202 @@ class ProyekController extends Controller
                     $cust_akont = "";
                     $witht = "";
                 }
-                $data_nasabah_online = collect([
-                    "nmnasabah" => "$customer->name",
-                    "alamat" => "$customer->address_1",
-                    "kota" => "$customer->kota_kabupaten",
-                    "email" => "$customer->email",
-                    "ext" => "-",
-                    "telepon" => "$customer->phone_number",
-                    "fax" => "$customer->fax",
-                    "npwp" => "$customer->npwp_company",
-                    "nama_kontak" => $pic->nama_pic ?? "",
-                    "jenisperusahaan" => "$customer->jenis_instansi",
-                    "jabatan" => $pic->jabatan_pic ?? "",
-                    "email1" => $pic->email_pic ?? "",
-                    "telpon1" => $pic->phone_pic ?? "",
-                    "handphone" => $pic->phone_pic ?? "",
-                    "tipe_perusahaan" => "$customer->jenis_perusahaan",
-                    "tipe_lain_perusahaan" => "-",
-                    "cotid" => "11",
-                    "dtsap" => [
-                        [
-                            "devid" => "YMMI002",
-                            "packageid" => $this->GUID(),
-                            "cocode" => "A000",
-                            "prctr" => "",
-                            // "timestamp" => "20221013100000",
-                            "timestamp" => date("y") . date("m") . date("d") . "10000",
-                            "data" => [
-                                [
-                                    "BPARTNER" => "$customer->kode_nasabah",
-        
-                                    "GROUPING" => "$grouping",
-        
-                                    "LVORM" => "",
-        
-                                    "TITLE" => "Z001",
-        
-                                    "NAME" => "$customer->name",
-        
-                                    "TITLELETTER" => "",
-        
-                                    "SEARCHTERM1" => substr($customer->name, 0, 40) ?? "",
-        
-                                    "SEARCHTERM2" => substr($customer->name, 0, 40) ?? "",
-        
-                                    "STREET" => $sap->street ?? "",
-        
-                                    "HOUSE_NO" => "",
-        
-                                    "POSTL_COD1" => "$customer->kode_pos",
-        
-                                    "CITY" => explode("-", $provinsi->province_id)[1],
-        
-                                    // "ADDR_COUNTRY" => $provinsi->country_id ?? "ID",
-                                    "ADDR_COUNTRY" => "ID",
-        
-                                    "REGION" => explode("-", $provinsi->province_id)[1],
-        
-                                    "PO_BOX" => "",
-        
-                                    "POSTL_COD3" => "",
-        
-                                    "LANGU" => "E",
-        
-                                    "TELEPHONE" => "$customer->phone_number",
-        
-                                    "PHONE_EXTENSION" => "",
-        
-                                    "MOBPHONE" => "$customer->handphone",
-        
-                                    "FAX" => "$customer->fax",
-        
-                                    "FAX_EXTENSION" => "",
-        
-                                    "E_MAIL" => "$customer->email",
-        
-                                    "VALIDFROMDATE" => now()->translatedFormat("d-m-Y"),
-        
-                                    "VALIDTODATE" => now()->addMonths(5)->translatedFormat("d-m-Y"),
-        
-                                    "IDENTIFICATION" => [
-                                        [
-        
-                                            // "TAXTYPE" => "$sap->tax_number_category",
-                                            "TAXTYPE" => $provinsi->country_id == "ID" ? "ID1" : "ID2",
-            
-                                            "TAXNUMBER" => "$customer->npwp_company"
-                                        ]
-                                    ],
-        
-                                    "BANK" => [
-                                        [
-                                            "BANK_DET_ID" => "",
-            
-                                            "BANK_CTRY" => "",
-            
-                                            "BANK_KEY" => "",
-            
-                                            "BANK_ACCT" => "",
-            
-                                            "BK_CTRL_KEY" => "",
-            
-                                            "BANK_REF" => "",
-            
-                                            "EXTERNALBANKID" => "",
-            
-                                            "ACCOUNTHOLDER" => "",
-            
-                                            "BANKACCOUNTNAME" => ""
-                                        ]
-                                    ],
-        
-                                    "CUST_BUKRS" => "",
-        
-                                    "KUNNR" => "",
-        
-                                    "CUST_AKONT" => "$cust_akont",
-        
-                                    "CUST_C_ZTERM" => "$customer->syarat_pembayaran",
-        
-                                    "CUST_WTAX" => [
-                                        [
-        
-                                            "WITHT" => "$witht",
-            
-                                            "WT_AGENT" => "",
-            
-                                            "WT_AGTDF" => "",
-            
-                                            "WT_AGTDT" => ""
-                                        ]
-                                    ],
-        
-                                    "VKORG" => "",
-        
-                                    "VTWEG" => "",
-        
-                                    "SPART" => "",
-        
-                                    "KDGRP" => $kdgrp,
-        
-                                    "CUST_WAERS" => "IDR",
-        
-                                    "KALKS" => "",
-        
-                                    "VERSG" => "",
-        
-                                    "VSBED" => "",
-        
-                                    "INCO1" => "",
-        
-                                    "INCO2_L" => "",
-        
-                                    "CUST_S_ZTERM" => "$customer->syarat_pembayaran",
-        
-                                    "KTGRD" => "$ktgrd",
-        
-                                    "TAXKD" => "$customer->tax",
-        
-                                    "VEND_BUKRS" => "",
-        
-                                    "LIFNR" => "",
-        
-                                    "VEND_AKONT" => "",
-        
-                                    "VEND_C_ZTERM" => "",
-        
-                                    "REPRF" => "X",
-        
-                                    "VEND_WTAX" => [[]],
-                                    // "VEND_WTAX" => [
-        
-                                    //     "WITHT" => "J3",
-        
-                                    //     "WT_SUBJCT" => "X"
-        
-                                    // ],
-        
-                                    "EKORG" => "",
-        
-                                    "VEND_P_ZTERM" => "",
-        
-                                    "WEBRE" => "",
-        
-                                    "VEND_WAERS" => "",
-        
-                                    "LEBRE" => "",
 
-                                    "BRAN2" => $customer->IndustrySector->id_industry_sector,
+                if ($proyekStage->UnitKerja->dop != 'EA') {
+                    $data_nasabah_online = collect([
+                        "nmnasabah" => "$customer->name",
+                        "alamat" => "$customer->address_1",
+                        "kota" => "$customer->kota_kabupaten",
+                        "email" => "$customer->email",
+                        "ext" => "-",
+                        "telepon" => "$customer->phone_number",
+                        "fax" => "$customer->fax",
+                        "npwp" => "$customer->npwp_company",
+                        "nama_kontak" => $pic->nama_pic ?? "",
+                        "jenisperusahaan" => "$customer->jenis_instansi",
+                        "jabatan" => $pic->jabatan_pic ?? "",
+                        "email1" => $pic->email_pic ?? "",
+                        "telpon1" => $pic->phone_pic ?? "",
+                        "handphone" => $pic->phone_pic ?? "",
+                        "tipe_perusahaan" => "$customer->jenis_perusahaan",
+                        "tipe_lain_perusahaan" => "-",
+                        "cotid" => "11",
+                        "dtsap" => [
+                            [
+                                "devid" => "YMMI002",
+                                "packageid" => $this->GUID(),
+                                "cocode" => "A000",
+                                "prctr" => "",
+                                // "timestamp" => "20221013100000",
+                                "timestamp" => date("y") . date("m") . date("d") . "10000",
+                                "data" => [
+                                    [
+                                        "BPARTNER" => "$customer->kode_nasabah",
+
+                                        "GROUPING" => "$grouping",
+
+                                        "LVORM" => "",
+
+                                        "TITLE" => "Z001",
+
+                                        "NAME" => "$customer->name",
+
+                                        "TITLELETTER" => "",
+
+                                        "SEARCHTERM1" => substr($customer->name, 0, 40) ?? "",
+
+                                        "SEARCHTERM2" => substr($customer->name, 0, 40) ?? "",
+
+                                        "STREET" => $sap->street ?? "",
+
+                                        "HOUSE_NO" => "",
+
+                                        "POSTL_COD1" => "$customer->kode_pos",
+
+                                        "CITY" => explode("-", $provinsi->province_id)[1],
+
+                                        // "ADDR_COUNTRY" => $provinsi->country_id ?? "ID",
+                                        "ADDR_COUNTRY" => "ID",
+
+                                        "REGION" => explode("-", $provinsi->province_id)[1],
+
+                                        "PO_BOX" => "",
+
+                                        "POSTL_COD3" => "",
+
+                                        "LANGU" => "E",
+
+                                        "TELEPHONE" => "$customer->phone_number",
+
+                                        "PHONE_EXTENSION" => "",
+
+                                        "MOBPHONE" => "$customer->handphone",
+
+                                        "FAX" => "$customer->fax",
+
+                                        "FAX_EXTENSION" => "",
+
+                                        "E_MAIL" => "$customer->email",
+
+                                        "VALIDFROMDATE" => now()->translatedFormat("d-m-Y"),
+
+                                        "VALIDTODATE" => now()->addMonths(5)->translatedFormat("d-m-Y"),
+
+                                        "IDENTIFICATION" => [
+                                            [
+
+                                                // "TAXTYPE" => "$sap->tax_number_category",
+                                                "TAXTYPE" => $provinsi->country_id == "ID" ? "ID1" : "ID2",
+
+                                                "TAXNUMBER" => "$customer->npwp_company"
+                                            ]
+                                        ],
+
+                                        "BANK" => [
+                                            [
+                                                "BANK_DET_ID" => "",
+
+                                                "BANK_CTRY" => "",
+
+                                                "BANK_KEY" => "CRM",
+
+                                                "BANK_ACCT" => "",
+
+                                                "BK_CTRL_KEY" => "",
+
+                                                "BANK_REF" => "",
+
+                                                "EXTERNALBANKID" => "",
+
+                                                "ACCOUNTHOLDER" => "",
+
+                                                "BANKACCOUNTNAME" => ""
+                                            ]
+                                        ],
+
+                                        "CUST_BUKRS" => "",
+
+                                        "KUNNR" => "",
+
+                                        "CUST_AKONT" => "$cust_akont",
+
+                                        "CUST_C_ZTERM" => "$customer->syarat_pembayaran",
+
+                                        "CUST_WTAX" => [
+                                            [
+
+                                                "WITHT" => "$witht",
+
+                                                "WT_AGENT" => "",
+
+                                                "WT_AGTDF" => "",
+
+                                                "WT_AGTDT" => ""
+                                            ]
+                                        ],
+
+                                        "VKORG" => "",
+
+                                        "VTWEG" => "",
+
+                                        "SPART" => "",
+
+                                        "KDGRP" => $kdgrp,
+
+                                        "CUST_WAERS" => "IDR",
+
+                                        "KALKS" => "",
+
+                                        "VERSG" => "",
+
+                                        "VSBED" => "",
+
+                                        "INCO1" => "",
+
+                                        "INCO2_L" => "",
+
+                                        "CUST_S_ZTERM" => "$customer->syarat_pembayaran",
+
+                                        "KTGRD" => "$ktgrd",
+
+                                        "TAXKD" => "$customer->tax",
+
+                                        "VEND_BUKRS" => "",
+
+                                        "LIFNR" => "",
+
+                                        "VEND_AKONT" => "",
+
+                                        "VEND_C_ZTERM" => "",
+
+                                        "REPRF" => "X",
+
+                                        "VEND_WTAX" => [[]],
+                                        // "VEND_WTAX" => [
+
+                                        //     "WITHT" => "J3",
+
+                                        //     "WT_SUBJCT" => "X"
+
+                                        // ],
+
+                                        "EKORG" => "",
+
+                                        "VEND_P_ZTERM" => "",
+
+                                        "WEBRE" => "",
+
+                                        "VEND_WAERS" => "",
+
+                                        "LEBRE" => "",
+
+                                        "BRAN2" => $customer->IndustrySector->id_industry_sector,
+                                    ]
                                 ]
                             ]
                         ]
-                    ]
-                ]);
+                    ]);
+                }
                 // dd($data_nasabah_online);
                 // End :: Ngirim data ke nasabah online WIKA
 
@@ -2729,13 +3236,16 @@ class ProyekController extends Controller
                 } else {
                     $contractManagements = ContractManagements::get()->where("project_id", "=", $proyekStage->kode_proyek)->first();
                     if (str_contains(URL::full() , 'crm.wika.co.id')) {
-                        $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm", $data_nasabah_online)->json();
-                        // dd($nasabah_online_response);
-                        if (!$nasabah_online_response["status"] && !str_contains($nasabah_online_response["msg"], "sudah ada dalam nasabah online")) {
-                            Alert::error("Error", $nasabah_online_response["msg"]);
-                            return redirect()->back();
+                        // setLogging();
+                        if ($proyekStage->UnitKerja->dop != 'EA') {
+                            $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm", $data_nasabah_online)->json();
+                            // dd($nasabah_online_response);
+                            if (!$nasabah_online_response["status"] && !str_contains($nasabah_online_response["msg"], "sudah ada dalam nasabah online")) {
+                                Alert::error("Error", $nasabah_online_response["msg"]);
+                                return redirect()->back();
+                            }
+                            // $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev", $data_nasabah_online)->json();
                         }
-                        // $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev", $data_nasabah_online)->json();
                         $request->stage = 8;
                         if (!empty($contractManagements)) {
                                 $contractManagements->stages = (int) 2;
@@ -2757,11 +3267,23 @@ class ProyekController extends Controller
                     $request->stage = 9;
                 }
             } else if (isset($data["stage-tidak-lulus-pq"])) {
-                $proyekStage->is_tidak_lulus_pq = true;
-                $request->stage = 3;
+                if (empty($proyekStage->klasifikasi_sbu_kbli) || empty($proyekStage->kode_kbli_2020)) {
+                    Alert::error("Error", "Klasifikasi SBU KBLI dan Sub Klasifikasi SBU KBLI wajib diisi!");
+                    // $request->stage = 2;
+                    return redirect()->back();
+                } else {
+                    $proyekStage->is_tidak_lulus_pq = true;
+                    $request->stage = 3;
+                }
             } else if (isset($data["stage-prakualifikasi"])) {
-                $proyekStage->is_tidak_lulus_pq = false;
-                $request->stage = 3;
+                if (empty($proyekStage->klasifikasi_sbu_kbli) || empty($proyekStage->kode_kbli_2020)) {
+                    Alert::error("Error", "Klasifikasi SBU KBLI dan Sub Klasifikasi SBU KBLI wajib diisi!");
+                    // $request->stage = 2;
+                    return redirect()->back();
+                } else {
+                    $proyekStage->is_tidak_lulus_pq = false;
+                    $request->stage = 3;
+                }
             }
         }
         $proyekStage->stage = $request->stage;

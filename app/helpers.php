@@ -5207,6 +5207,17 @@ function createWordNotaRekomendasiPengajuan(\App\Models\NotaRekomendasi $proyekR
         // $xmlWriter->save(storage_path('template/temp/' . $file_name . '.pdf'));
         $xmlWriter->save(public_path($target_path . "/" . $file_name . ".pdf"));
 
+        $pdfMerge = new PdfMerge();
+        $pdfMerge->add(public_path($target_path . "/" . $file_name . ".pdf"));
+
+        if (!empty($proyek->DokumenPendukungPasarDini)) {
+            foreach ($proyek->DokumenPendukungPasarDini as $dokumen) {
+                $pdfMerge->add(public_path('file-pendukung-pasdin/' . $dokumen->id_document));
+            }
+        }
+
+        $pdfMerge->merge(public_path($target_path . "/" . $file_name . ".pdf"));
+
         $proyekRekomendasi->file_pengajuan = $file_name . ".pdf";
     } catch (\Exception $e) {
         throw $e;

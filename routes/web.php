@@ -58,6 +58,7 @@ use App\Http\Controllers\KonsultanPerencanaController;
 use App\Http\Controllers\AssessmentPartnerSelectionController;
 use App\Http\Controllers\Rekomendasi2Controller;
 use App\Http\Controllers\MasalahHukumController;
+use App\Http\Controllers\PiutangController;
 use App\Http\Controllers\CompetitorController;
 use App\Models\ChecklistCalonMitraKSO;
 use App\Models\ContractChangeNotice;
@@ -723,6 +724,18 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         Route::post('/save', [MasalahHukumController::class, 'save']);
         Route::post('/{id}/edit', [MasalahHukumController::class, 'edit']);
         Route::post('/{id}/delete', [MasalahHukumController::class, 'delete']);
+    });
+
+    /**
+     * Piutang
+     */
+    Route::group(['prefix' => 'piutang'], function () {
+        Route::get('/', [
+            PiutangController::class, 'index'
+        ]);
+        Route::post('/save', [PiutangController::class, 'save']);
+        Route::post('/{piutang}/edit', [PiutangController::class, 'edit']);
+        Route::post('/{piutang}/delete', [PiutangController::class, 'delete']);
     });
 
 
@@ -3777,20 +3790,46 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     //End::Get Proyek By Pelanggan
 
     //Begin::Get Master Klasifikasi KBLI SBU
+    // Route::get('/proyek/get-klasifikasi-sbu', function (Request $request) {
+    //     $search = $request->input('search');
+
+    //     $dataKlasifikasiSBU = MasterSubKlasifikasiSBU::with('MasterKlasifikasiSBU')->when(
+    //         !empty($search),
+    //         function ($query) use ($search) {
+    //             $query->where('subklasifikasi', 'like', '%' . strtoupper($search) . '%')
+    //                 ->orWhere('kode_subklasifikasi', 'like', '%' . strtoupper($search) . '%')
+    //                 ->orWhere('kbli_2020', 'like', '%' . strtoupper($search) . '%');
+    //         }
+    //     )->get()->groupBy('MasterKlasifikasiSBU.klasifikasi');
+    //     return response()->json($dataKlasifikasiSBU);
+    // });
     Route::get('/proyek/get-klasifikasi-sbu', function (Request $request) {
         $search = $request->input('search');
+        $page = $request->input('page', 1);
+        $perPage = 10;
 
-        $dataKlasifikasiSBU = MasterSubKlasifikasiSBU::with('MasterKlasifikasiSBU')->when(
-            !empty($search),
-            function ($query) use ($search) {
-                $query->where('subklasifikasi', 'like', '%' . strtoupper($search) . '%')
-                    ->orWhere('kode_subklasifikasi', 'like', '%' . strtoupper($search) . '%')
-                    ->orWhere('kbli_2020', 'like', '%' . strtoupper($search) . '%');
-            }
-        )->get()->groupBy('MasterKlasifikasiSBU.klasifikasi');
-        return response()->json($dataKlasifikasiSBU);
+        $dataKlasifikasiSBU = MasterKlasifikasiSBU::select('id_klasifikasi', 'klasifikasi')->when(!empty($search), function ($query) use ($search) {
+            $query->where('klasifikasi', 'like', '%' . $search . '%');
+        });
+        $data = $dataKlasifikasiSBU->paginate($perPage, ['*'], 'page', $page);
+        return response()->json($data);
     });
-//End::Get Master Klasifikasi KBLI SBU
+    Route::get('/proyek/get-subklasifikasi-sbu/{klasifikasi_id}', function (Request $request, $klasifikasi_id) {
+        $search = $request->input('search');
+        $page = $request->input('page', 1);
+        $perPage = 10;
+
+        $dataSubKlasifikasiSBU = MasterSubKlasifikasiSBU::select(
+            'klasifikasi_id',
+            'subklasifikasi',
+            'kbli_2020'
+        )->where('klasifikasi_id', $klasifikasi_id)->when(!empty($search), function ($query) use ($search) {
+            $query->where('klasifikasi', 'like', '%' . $search . '%');
+        });
+        $data = $dataSubKlasifikasiSBU->paginate($perPage, ['*'], 'page', $page);
+        return response()->json($data);
+    });
+    //End::Get Master Klasifikasi KBLI SBU
 
     //Begin::Master Matriks Approval Verifikasi Partner
     Route::get('/matriks-approval-varifikasi-partner', function () {
@@ -5724,7 +5763,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $groupTier->nama_pelanggan = $pelanggan->name;
         $groupTier->kategori = $data["kategori"];
 
-        if ($groupTier->save()) {
+        $pelanggan->group_tier = $data["kategori"];
+
+        if ($groupTier->save() && $pelanggan->save()) {
             Alert::success('Success', "Group Tier BUMN Berhasil Ditambahkan");
             return redirect()->back();
         }
@@ -5763,7 +5804,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             } else {
                 Alert::error(
                     'Error',
-                    "Fortune Rank gagal ditambahkan. Periksa Kembali!"
+                    "Group Tier gagal ditambahkan. Periksa Kembali!"
                 );
                 return redirect()->back();
             }
@@ -5773,11 +5814,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         // dd($data);
         $pelanggan = Customer::find($data['nama_pelanggan']);
         $groupTier = MasterGrupTierBUMN::find($id);
-        $groupTier->nama_pelanggan = $pelanggan->id_customer;
+        $groupTier->id_pelanggan = $pelanggan->id_customer;
         $groupTier->nama_pelanggan = $pelanggan->name;
         $groupTier->kategori = $data["kategori"];
 
-        if ($groupTier->save()) {
+        $pelanggan->group_tier = $data["kategori"];
+
+        if ($groupTier->save() && $pelanggan->save()) {
             Alert::success('Success', "Group Tier BUMN Berhasil Diubah");
             return redirect()->back();
         }
@@ -5790,7 +5833,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             return redirect()->back();
         }
 
+        $pelanggan = Customer::find($tier->id_pelanggan);
+
         if ($tier->delete()) {
+            $pelanggan->group_tier = null;
+            $pelanggan->save();
             // Alert::success('Success', "Checklist Calon Mitra KSO Berhasil Dihapus");
             // return redirect()->back();
 

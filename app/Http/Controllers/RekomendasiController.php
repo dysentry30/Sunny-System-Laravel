@@ -1816,6 +1816,12 @@ class RekomendasiController extends Controller
                 // $pdfMerger->add(public_path('file-profile-risiko' . '/' . $proyek->file_penilaian_risiko));
                 $pdfMerger->add(public_path('file-profile-risiko' . '/' . $notaRekomendasi->file_penilaian_risiko));
 
+                if (!empty($proyek->DokumenPendukungPasarDini)) {
+                    foreach ($proyek->DokumenPendukungPasarDini as $dokumen) {
+                        $pdfMerger->add(public_path('dokumen-pendukung-pasdin' . '/' . $dokumen->id_document));
+                    }
+                }
+
                 $now = \Carbon\Carbon::now();
                 $file_name = $now->format("dmYHis") . "_nota-persetujuan_" . $proyek->kode_proyek;
                 $pdfMerger->merge(public_path("file-persetujuan" . "/" . $file_name . ".pdf"));

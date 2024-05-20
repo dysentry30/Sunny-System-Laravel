@@ -1948,88 +1948,92 @@
                                                                 <!--End begin::Col-->
                                                     </div>
 
-                                                    <!--Begin::Row Kanan+Kiri-->
-                                                    <div class="row fv-row">
-                                                        <!--begin::Input group Website-->
-                                                        <div class="fv-row mb-7">
-                                                            <!--Begin::Dokumen Nota Rekomendasi 1-->
-                                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                                                Dokumen Pendukung
-                                                            </h3>
-                                                            @canany(['super-admin', 'user-crm'])
-                                                            @if (empty($proyek->DokumenPendukungPasarDini))
-                                                            <br>
-                                                            <div class="w-50">
-                                                                <input type="file"
-                                                                    class="form-control form-control-sm form-input-solid"
-                                                                    name="dokumen-pendukung-pasar-dini" accept=".pdf">
-                                                            </div>
-                                                            <h6 id="error-dokumen-pendukung-pasar-dini" class="text-danger fw-normal"
-                                                                style="display: none">*File
-                                                                terlalu besar ! Max Size 50Mb</h6>
-                                                            @endif
-                                                            @endcanany
-                                                            <br>
-                                                            <!--begin::Table-->
-                                                            <table class="table align-middle table-row-dashed w-50 fs-6 gy-2"
-                                                                id="kt_customers_table">
-                                                                <!--begin::Table head-->
-                                                                <thead>
-                                                                    <!--begin::Table row-->
-                                                                    <tr
-                                                                        class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                        <th class="w-50px text-center">No.</th>
-                                                                        <th class="w-auto">Nama Document</th>
-                                                                        <th class="w-auto">Modified On</th>
-                                                                        <th class="w-auto text-center"></th>
-                                                                    </tr>
-                                                                    <!--end::Table row-->
-                                                                </thead>
-                                                                <!--end::Table head-->
-                                                                <!--begin::Table body-->
-                                                                <tbody class="fw-bold text-gray-600">
-                                                                    @if (!empty($proyek->DokumenPendukungPasarDini))
+                                                 <!--Begin::Row Kanan+Kiri-->
+                                                 <div class="row fv-row">
+                                                     <!--begin::Input group Website-->
+                                                     <div class="fv-row mb-7">
+                                                         <!--Begin::Dokumen Nota Rekomendasi 1-->
+                                                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                             Dokumen Pendukung
+                                                         </h3>
+                                                         @canany(['super-admin', 'approver-crm', 'user-crm', 'admin-crm'])
+                                                         {{-- @if (empty($proyek->DokumenPendukungPasarDini)) --}}
+                                                         <br>
+                                                         <div class="w-50">
+                                                             <input type="file"
+                                                                 class="form-control form-control-sm form-input-solid"
+                                                                 name="dokumen-pendukung-pasar-dini" accept=".pdf">
+                                                         </div>
+                                                         <h6 id="error-dokumen-pendukung-pasar-dini" class="text-danger fw-normal"
+                                                             style="display: none">*File
+                                                             terlalu besar ! Max Size 50Mb</h6>
+                                                         {{-- @endif --}}
+                                                         @endcanany
+                                                         <br>
+                                                         <!--begin::Table-->
+                                                         <table class="table align-middle table-row-dashed w-50 fs-6 gy-2"
+                                                             id="kt_customers_table">
+                                                             <!--begin::Table head-->
+                                                             <thead>
+                                                                 <!--begin::Table row-->
+                                                                 <tr
+                                                                     class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                     <th class="w-50px text-center">No.</th>
+                                                                     <th class="w-auto">Nama Document</th>
+                                                                     <th class="w-auto">Modified On</th>
+                                                                     <th class="w-auto text-center"></th>
+                                                                 </tr>
+                                                                 <!--end::Table row-->
+                                                             </thead>
+                                                             <!--end::Table head-->
+                                                             <!--begin::Table body-->
+                                                             <tbody class="fw-bold text-gray-600">
+                                                                 @if (!empty($proyek->DokumenPendukungPasarDini))
+                                                                 @foreach ($proyek->DokumenPendukungPasarDini as $key => $dokumen)
                                                                     <tr>
                                                                         <!--begin::Nomor-->
                                                                         <td class="text-center">
-                                                                            1.
+                                                                            {{ ++$key }}
                                                                         </td>
                                                                         <!--end::Nomor-->
                                                                         <!--begin::Name-->
                                                                         <td>
                                                                             <a target="_blank"
-                                                                                href="{{ asset('dokumen-pendukung-pasdin/' . $proyek->DokumenPendukungPasarDini->id_document) }}"
-                                                                                class="text-hover-primary">{{ $proyek->DokumenPendukungPasarDini->nama_document }}</a>
+                                                                                href="{{ asset('dokumen-pendukung-pasdin/' . $dokumen->id_document) }}"
+                                                                                class="text-hover-primary">{{ $dokumen->nama_document }}</a>
                                                                         </td>
                                                                         <!--end::Name-->
                                                                         <!--begin::Column-->
                                                                         <td>
-                                                                            {{ Carbon\Carbon::parse($proyek->DokumenPendukungPasarDini->created_at)->translatedFormat('d F Y') }}
+                                                                            {{ Carbon\Carbon::parse($dokumen->created_at)->translatedFormat('d F Y') }}
                                                                         </td>
                                                                         <!--end::Column-->
                                                                         <!--begin::Action-->
-                                                                        <td class="text-center">
-                                                                            <small>
-                                                                                <p data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_dokumen_pendukung_pasdin_delete_{{ $proyek->DokumenPendukungPasarDini->id }}"
-                                                                                    id="modal-delete"
-                                                                                    class="btn btn-sm btn-light btn-active-primary">
-                                                                                    Delete
-                                                                                </p>
-                                                                            </small>
+                                                                        <td class="text-center align-middle">
+                                                                            @canany(['super-admin', 'user-crm'])
+                                                                                <small>
+                                                                                    <p data-bs-toggle="modal"
+                                                                                        data-bs-target="#kt_dokumen_pendukung_pasdin_delete_{{ $dokumen->id }}"
+                                                                                        id="modal-delete"
+                                                                                        class="btn btn-sm btn-light btn-active-primary">
+                                                                                        Delete
+                                                                                    </p>
+                                                                                </small>                                                                            
+                                                                            @endcanany
                                                                         </td>
                                                                         <!--end::Action-->
-                                                                    </tr>
-                                                                    @endif
-                                                                </tbody>
-                                                                <!--end::Table body-->
-                                                            </table>
-                                                            <!--end::Table-->
-                                                            <!--End::Dokumen Nota Rekomendasi 1-->
-                                                        </div>
-                                                        <!--End::Input group Website-->
-                                                    </div>
-                                                    <!--End::Row Kanan+Kiri-->
+                                                                    </tr>                                                                     
+                                                                 @endforeach
+                                                                 @endif
+                                                             </tbody>
+                                                             <!--end::Table body-->
+                                                         </table>
+                                                         <!--end::Table-->
+                                                         <!--End::Dokumen Nota Rekomendasi 1-->
+                                                     </div>
+                                                     <!--End::Input group Website-->
+                                                 </div>
+                                                 <!--End::Row Kanan+Kiri-->
 
 
                                                     <!--Begin::Title Biru Form: Nilai RKAP Awal-->
@@ -2879,14 +2883,33 @@
                                                     <div class="row fv-row">
                                                         <div class="col-6">
                                                             <label class="fs-6 fw-bold form-label mt-3">
-                                                                <span>Klasifikasi SBU</span>
+                                                                <span class="required">SBU KBLI</span>
                                                             </label>
                                                             <!--begin::Input-->
-                                                            <select id="klasifikasi-kbli-sbu" name="klasifikasi-kbli-sbu"
+                                                            <select id="klasifikasi_sbu" name="klasifikasi-kbli"
                                                                 class="form-select form-select-solid select2-hidden-accessible"
-                                                                data-control="select2" data-hide-search="false" data-placeholder="Pilih Klasifikasi SBU"
-                                                                data-select2-id="select2-klasifikasi" tabindex="-1" aria-hidden="true">
-                                                                <option value="{{ $proyek->kode_kbli_2020 }}">{{ $proyek->MasterSubKlasifikasiSBU?->subklasifikasi }}</option>
+                                                                data-control="select2" data-hide-search="false" data-placeholder="Pilih Klasifikasi"
+                                                                data-select2-id="select2-klasifikasi-sbu" tabindex="-1" aria-hidden="true">
+                                                                <option value=""></option>
+                                                                @foreach ($klasifikasiSBU as $klasifikasi)
+                                                                    <option value="{{ $klasifikasi->id_klasifikasi }}" {{ $proyek->klasifikasi_sbu_kbli == $klasifikasi->id_klasifikasi ? "selected" : "" }}>{{ $klasifikasi->klasifikasi }}</option>                                                                    
+                                                                @endforeach
+                                                            </select>
+                                                            <!--end::Input-->
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                                <span class="required">Sub Klasifikasi SBU KBLI</span>
+                                                            </label>
+                                                            <!--begin::Input-->
+                                                            <select id="sub_subklasifikasi_sbu" name="sub-klasifikasi-kbli"
+                                                                class="form-select form-select-solid select2-hidden-accessible"
+                                                                data-control="select2" data-hide-search="false" data-placeholder="Pilih Sub Klasifikasi"
+                                                                data-select2-id="select2-subklasifikasi-sbu" tabindex="-1" aria-hidden="true">
+                                                                <option value=""></option>
+                                                                @foreach ($subKBLI as $sub)
+                                                                    <option value="{{ $sub->kbli_2020 }}" {{ $proyek->kode_kbli_2020 == $sub->kbli_2020 ? "selected" : "" }}>{{ $sub->kbli_2020 }} - {{ $sub->subklasifikasi }}</option>                                                                    
+                                                                @endforeach
                                                             </select>
                                                             <!--end::Input-->
                                                         </div>
@@ -9529,7 +9552,10 @@
                                                 <option value="Manager Proyek">Manager Proyek</option>
                                                 <option value="Pelaksana Utama">Pelaksana Utama</option>
                                                 <option value="Engineering">Engineering</option>
-                                                <option value="Keuangan">Keuangan</option>
+                                                <option value="K3">K3</option>
+                                                <option value="QA / QC">QA / QC</option>
+                                                <option value="Pengadaan">Pengadaan</option>
+                                                <option value="Komersial">Komersial</option>
                                             </select>
                                             <!--end::Input-->
                                         </div>
@@ -9624,6 +9650,10 @@
                                                     <option value="Pelaksana Utama" {{ $personel->kategori == "Pelaksana Utama" ? "selected" : "" }}>Pelaksana Utama</option>
                                                     <option value="Engineering" {{ $personel->kategori == "Engineering" ? "selected" : "" }}>Engineering</option>
                                                     <option value="Keuangan" {{ $personel->kategori == "Keuangan" ? "selected" : "" }}>Keuangan</option>
+                                                    <option value="K3" {{ $personel->kategori == "K3" ? "selected" : "" }}>K3</option>
+                                                    <option value="QA / QC" {{ $personel->kategori == "QA / QC" ? "selected" : "" }}>QA / QC</option>
+                                                    <option value="Pengadaan" {{ $personel->kategori == "Pengadaan" ? "selected" : "" }}>Pengadaan</option>
+                                                    <option value="Komersial" {{ $personel->kategori == "Komersial" ? "selected" : "" }}>Komersial</option>
                                                 </select>
                                                 <!--end::Input-->
                                             </div>
@@ -12483,11 +12513,12 @@
 
     <!--begin::DELETE DOKUMEN PENDUKUNG PASAR DINI-->
     @if (!empty($proyek->DokumenPendukungPasarDini))
-    <form action="/proyek/dokumen-pendukung-pasdin/{{ $proyek->DokumenPendukungPasarDini->id }}/delete" method="post"
+    @foreach ($proyek->DokumenPendukungPasarDini as $dokumen)
+    <form action="/proyek/dokumen-pendukung-pasdin/{{ $dokumen->id }}/delete" method="post"
         enctype="multipart/form-data">
         @method('delete')
         @csrf
-        <div class="modal fade" id="kt_dokumen_pendukung_pasdin_delete_{{ $proyek->DokumenPendukungPasarDini->id }}" tabindex="-1"
+        <div class="modal fade" id="kt_dokumen_pendukung_pasdin_delete_{{ $dokumen->id }}" tabindex="-1"
             aria-hidden="true">
             <!--begin::Modal dialog-->
             <div class="modal-dialog modal-dialog-centered mw-800px">
@@ -12496,7 +12527,7 @@
                     <!--begin::Modal header-->
                     <div class="modal-header">
                         <!--begin::Modal title-->
-                        <h2>Hapus : {{ $proyek->DokumenPendukungPasarDini->nama_document }}</h2>
+                        <h2>Hapus : {{ $dokumen->nama_document }}</h2>
                         <!--end::Modal title-->
                         <!--begin::Close-->
                         <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -12526,7 +12557,8 @@
         </div>
         <!--end::Modal dialog-->
         </div>
-    </form>
+    </form>        
+    @endforeach
     @endif
     <!--end::DELETE DOKUMEN PENDUKUNG PASAR DINI-->
 
@@ -13332,7 +13364,7 @@
                 }
 
             });
-            $("#klasifikasi-kbli-sbu").select2({
+            $("#klasifikasi_sbu").select2({
                 ajax: {
                     url: '/proyek/get-klasifikasi-sbu',
                     dataType: 'json',
@@ -13343,25 +13375,65 @@
                         };
                     },
                     processResults: function (data, params) {
-                        const optionData = Object.keys(data);
-                        const options = optionData.map((item) => {
+                        params.page = params.page || 1
+                        const isPagination = data.hasOwnProperty('data') && Array.isArray(data.data) ? true : false
+                        const optionData = isPagination ? data.data : data;
+                        const options = optionData.map(item => {
+                            console.log(item);
                             return {
-                                text: item,
-                                children:data[item]?.map(val => {
-                                    return {
-                                        id: val.kbli_2020,
-                                        text:val.subklasifikasi
-                                    }
-                                })
+                                id: item.id_klasifikasi, 
+                                text: item.klasifikasi
                             }
                         })
                         return {
-                            results: options
+                            results: options,
+                            pagination: {
+                                more: isPagination ? (params.page * (perPage || 10)) < data.total : false
+                            }
                         }
                     },
                     cache: true,
                     minimumResultsForSearch: 0
                 },
+            }).on('select2:select', async function (e) {
+                let data = e.params.data;
+
+                $('#sub_subklasifikasi_sbu').val(null).trigger('change');
+
+                if (typeof(data) == "object") {
+                    const idKlasifikasi = data.id;
+                    $("#sub_subklasifikasi_sbu").select2({
+                        ajax: {
+                            url: `/proyek/get-subklasifikasi-sbu/${idKlasifikasi}`,
+                            dataType: 'json',
+                            delay: 250,
+                            data: function (params) {
+                                return {
+                                    search: params.term
+                                };
+                            },
+                            processResults: function (data, params) {
+                                params.page = params.page || 1
+                                const isPagination = data.hasOwnProperty('data') && Array.isArray(data.data) ? true : false
+                                const optionData = isPagination ? data.data : data;
+                                const options = optionData.map(item => {
+                                    return {
+                                        id: item.kbli_2020, 
+                                        text: item.subklasifikasi
+                                    }
+                                })
+                                return {
+                                    results: options,
+                                    pagination: {
+                                        more: isPagination ? (params.page * (perPage || 10)) < data.total : false
+                                    }
+                                }
+                            },
+                            cache: true,
+                            minimumResultsForSearch: 0
+                        },
+                    })
+                }
             })
         });
 

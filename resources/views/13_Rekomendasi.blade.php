@@ -1953,8 +1953,10 @@
                             <hr>
                             <h5>File Preview Pendukung Pasar Dini: </h5>
                             <div class="text-center">
-                                <iframe src="{{ asset('dokumen-pendukung-pasdin' . '\\' . $proyek->DokumenPendukungPasarDini->id_document) }}"
+                                @foreach ($proyek->DokumenPendukungPasarDini as $dokumen)
+                                <iframe src="{{ asset('dokumen-pendukung-pasdin' . '\\' . $dokumen->id_document) }}"
                                     width="800px" height="600px"></iframe>
+                                @endforeach
                             </div>
                         @endif
                         @if (!empty($nota_rekomendasi->file_pengajuan))
@@ -2279,8 +2281,10 @@
                         @if (!empty($proyek->DokumenPendukungPasarDini))
                             <h5>File Preview Pendukung Pasar Dini: </h5>
                             <div class="text-center">
-                                <iframe src="{{ asset('dokumen-pendukung-pasdin' . '\\' . $proyek->DokumenPendukungPasarDini->id_document) }}"
+                                @foreach ($proyek->DokumenPendukungPasarDini as $dokumen)
+                                <iframe src="{{ asset('dokumen-pendukung-pasdin' . '\\' . $dokumen->id_document) }}"
                                     width="800px" height="600px"></iframe>
+                                @endforeach
                             </div>
                             <hr>
                         @endif

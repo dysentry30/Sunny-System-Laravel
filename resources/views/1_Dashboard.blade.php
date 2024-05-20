@@ -3689,185 +3689,7 @@
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
-            } else if(type == "Proyek Menang Tender" || type == "Proyek Terkontrak Tender" ||type == "Proyek Kalah Tender" ) {
-                let tbodyHTML = ``;
-                let totalNilaiLainnya = 0;
-
-                let theadHTML =
-                '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
-                    '<th>Nama Proyek</th>' +
-                    '<th>Status Pasar</th>' +
-                    '<th style="width:150px">Stage</th>' +
-                    '<th>Unit Kerja</th>' +
-                    '<th>Bulan</th>' +
-                    `<th class="text-end">Nilai ${type}</th>`
-                '</tr>';
-                // console.log(filterRes);
-                [filterRes].forEach(filtering => {
-                    for(let filter in filtering) {
-                    filter = filtering[filter];
-                    let stage = "";
-                    if(type == "Proyek Menang Tender") {
-                        totalNilaiLainnya += Number(filter.nilai_perolehan);
-                    }if(type == "Proyek Terkontrak Tender") {
-                        totalNilaiLainnya += Number(filter.nilai_perolehan);
-                    } else {
-                        totalNilaiLainnya += Number(filter.hps_pagu);
-                    }
-                    // if(filter.tipe == "Proyek Menang") {
-                    // } else {
-                    //     totalNilaiLainnya += Number(filter.nilai_rkap);
-                    // }
-                    // totalNilaiLainnya += Number(filter.nilai_perolehan ?? filter.nilai_rkap);
-                    switch (Number(filter.stage)) {
-                        case 0:
-                            stage = "Cancel";
-                            break;
-                        case 1:
-                            stage = "Pasar Dini";
-                            break;
-                        case 2:
-                            stage = "Pasar Potensial";
-                            break;
-                        case 3:
-                            stage = "Prakualifikasi";
-                            break;
-                        case 4:
-                            stage = "Tender Diikuti";
-                            break;
-                        case 5:
-                            stage = "Perolehan";
-                            break;
-                        case 6:
-                            stage = "Menang";
-                            break;
-                        case 7:
-                            stage = "Kalah";
-                            break;
-                        case 8:
-                            if (filter.tipe_proyek == 'R' || filter.tipe_proyek == 'Retail') {
-                                stage = "Terkontrak-Retail";
-                            } else {
-                                stage = "Terkontrak";
-                            }
-                            break;
-                        case 9:
-                            stage = "Terendah";
-                            break;
-                        case 10:
-                            stage = "Approval";
-                            break;
-                        default:
-                            break;
-                    }
-                    let getMonth = filter.bulan_pelaksanaan;
-                    let bulan = "";
-                    if(type == "Proyek Menang Tender") {
-                        getMonth = filter.bulan_ri_perolehan;
-                    }if(type == "Proyek Terkontrak Tender") {
-                        getMonth = filter.bulan_ri_perolehan;
-                    } else {
-                        getMonth = filter.bulan_pelaksanaan;
-                    }
-                    // console.log(filter.bulan_pelaksanaan, filter);
-                    switch (Number(getMonth)) {
-                        case 1:
-                            bulan = "Januari";
-                            break;
-                        case 2:
-                            bulan = "Februari";
-                            break;
-                        case 3:
-                            bulan = "Maret";
-                            break;
-                        case 4:
-                            bulan = "April";
-                            break;
-                        case 5:
-                            bulan = "Mei";
-                            break;
-                        case 6:
-                            bulan = "Juni";
-                            break;
-                        case 7:
-                            bulan = "Juli";
-                            break;
-                        case 8:
-                            bulan = "Agustus";
-                            break;
-                        case 9:
-                            bulan = "September";
-                            break;
-                        case 10:
-                            bulan = "Oktober";
-                            break;
-                        case 11:
-                            bulan = "November";
-                            break;
-                        case 12:
-                            bulan = "Desember";
-                            break;
-                        default:
-                            bulan = "-"
-                            break;
-                    }
-                    let nilai = 0;
-                    if(type == "Proyek Menang Tender") {
-                        nilai = filter.nilai_perolehan;
-                    } else if(type == "Proyek Terkontrak Tender"){
-                        nilai = filter.nilai_perolehan;
-                    } else {
-                        nilai = filter.hps_pagu;
-                    }
-                    const unitKerja = typeof filter.unit_kerja == "object" ? filter.unit_kerja.unit_kerja : filter.unit_kerja 
-                    tbodyHTML += `<tr>
-
-                            <!--begin::Email-->
-                            <td>
-                                <a target="_blank" href="/proyek/view/${ filter.kode_proyek }" id="click-name"
-                                    class="text-gray-800 text-hover-primary mb-1">${filter.nama_proyek}</a>
-                            </td>
-                            <!--end::Email-->
-                            <!--begin::Name-->
-                            <td>
-                                ${filter.status_pasdin == null ? "-" : filter.status_pasdin}
-                            </td>
-                            <!--end::Name-->
-                            <!--begin::Stage-->
-                            <td>
-                                ${stage}
-                            </td>
-                            <!--end::Stage-->
-
-                            <!--begin::Unit Kerja-->
-                            <td>
-                                ${unitKerja}
-                            </td>
-                            <!--end::Unit Kerja-->
-
-                            <!--begin::Bulan-->
-                            <td>
-                                ${bulan}
-                            </td>
-                            <!--end::Bulan-->
-
-                            <!--begin::Nilai Forecast-->
-                            <td class="text-end">
-                                ${Intl.NumberFormat(["id"]).format(nilai)}
-                            </td>
-                            <!--end::Nilai Forecast-->
-                            </tr>`;
-                    }
-                });
-
-                thead.innerHTML = theadHTML;
-                tbody.innerHTML = tbodyHTML;
-                titleTable.innerHTML = `Nilai ${type}`;
-                total.innerHTML = `Total Nilai ${type} = <b>${Intl.NumberFormat((["id"])).format(totalNilaiLainnya)}</b>`;
-                table.style.display = "";
-                const chartLine = document.querySelector(chartElt);
-                chartLine.style.display = "none";
-            } else if(type == "Nilai Menang Tender" || type == "Nilai Terkontrak Tender" || type == "Nilai Kalah Tender" ) {
+            } else if(type == "Menang Tender" || type == "Terkontrak Tender" || type == "Kalah Tender" || type == "Tidak Lolos PQ Tender" ) {
                 let tbodyHTML = ``;
                 let totalNilaiLainnya = 0;
 
@@ -4070,6 +3892,7 @@
                     filter = filtering[filter];
                     let stage = "";
                     totalNilaiLainnya += Number(filter.nilai_perolehan);
+                    
                     switch (Number(filter.stage)) {
                         case 0:
                             stage = "Cancel";
@@ -4160,14 +3983,14 @@
                             break;
                     }
                     let tipeProyek = "";
-                    // switch(filter.tipe_proyek) {
-                    //     case "P":
-                    //         tipeProyek = "Non-Retail"
-                    //         break;
-                    //     case "R":
-                    //         tipeProyek = "Retail"
-                    //         break;
-                    // }
+                    switch(filter.tipe_proyek) {
+                        case "P":
+                            tipeProyek = "Non-Retail"
+                            break;
+                        case "R":
+                            tipeProyek = "Retail"
+                            break;
+                    }
                     // let nilai = 0;
                     // if(type.trim() == "Terkontrak") {
                     //     nilai = 0;
@@ -4196,13 +4019,13 @@
 
                             <!--begin::Unit Kerja-->
                             <td>
-                                ${filter.unitKerja}
+                                ${stage}
                             </td>
                             <!--end::Unit Kerja-->
 
                             <!--begin::Unit Kerja-->
                             <td>
-                                ${filter.tipe_proyek}
+                                ${tipeProyek}
                             </td>
                             <!--end::Unit Kerja-->
 
@@ -4228,7 +4051,7 @@
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
-            } else if(type.trim() == "Prakualifikasi" || type.trim() == "Menang" || type.trim() == "Tender Diikuti" || type.trim() == "Kalah dan Cancel") {
+            } else if(type.trim() == "Prakualifikasi" || type == "Perolehan" || type.trim() == "Menang" || type == "Tender Diikuti" || type.trim() == "Kalah" || type.trim() == "Cancel" || type == "Tidak Lolos PQ") {
                 let tbodyHTML = ``;
                 let totalNilaiLainnya = 0;
                 let textBulan = "Bulan RA";
@@ -4248,7 +4071,7 @@
                     for(let filter in filtering) {
                     filter = filtering[filter];
                     let stage = "";
-                    if (type.trim() == "Prakualifikasi" || type.trim() == "Tender Diikuti" || type.trim() == "Kalah dan Cancel") {
+                    if (type.trim() == "Prakualifikasi" || type.trim() == "Tender Diikuti" || type.trim() == "Kalah" || type.trim() == "Cancel" || type == "Tidak Lolos PQ") {
                         totalNilaiLainnya += Number(filter.hps_pagu);
                     } else {
                         totalNilaiLainnya += Number(filter.nilai_perolehan);
@@ -4307,30 +4130,42 @@
                             if(filter.tipe_proyek == "R") continue;
                             nilai = filter.hps_pagu ?? 0;
                             break;
-                        case "Kalah dan Cancel":
+                        case "Kalah":
                             nilai = filter.hps_pagu ?? 0;
                             break;
-                        case "Menang":
-                            const forecasts = filter.forecasts?.sort((a, b) => {
-                                return a.month_realisasi - b.month_realisasi;
-                            });
-                            let forecastLength = forecasts.length ?? 0;
-                            // forecasts.reduce((prev, next) => console.log({prev, next}));
-                            getBulanColumn = forecasts[forecastLength - 1]?.month_realisasi ?? 0;
-                            if(filter.tipe_proyek == "R") {
-                                // menghitung total nilai realisasi
-                                forecasts.forEach((item) => {
-                                    if(item.periode_prognosa == periode) {
-                                        nilai += Number(item.realisasi_forecast);
-                                    }
-                                });
-                            } else {
-                                if (forecasts[forecastLength - 1]) {
-                                    nilai = forecasts[forecastLength - 1].realisasi_forecast ?? 0;
-                                } else {
-                                    nilai = 0;
-                                }
-                            }
+                        case "Cancel":
+                            nilai = filter.hps_pagu ?? 0;
+                            break;
+                        case "Tidak Lolos PQ" :
+                            nilai = filter.hps_pagu ?? 0;
+                            break;
+                        // case "Menang":
+                        //     const forecasts = filter.forecasts?.sort((a, b) => {
+                        //         return a.month_realisasi - b.month_realisasi;
+                        //     });
+                        //     let forecastLength = forecasts.length ?? 0;
+                        //     // forecasts.reduce((prev, next) => console.log({prev, next}));
+                        //     getBulanColumn = forecasts[forecastLength - 1]?.month_realisasi ?? 0;
+                        //     if(filter.tipe_proyek == "R") {
+                        //         // menghitung total nilai realisasi
+                        //         forecasts.forEach((item) => {
+                        //             if(item.periode_prognosa == periode) {
+                        //                 nilai += Number(item.realisasi_forecast);
+                        //             }
+                        //         });
+                        //     } else {
+                        //         if (forecasts[forecastLength - 1]) {
+                        //             nilai = forecasts[forecastLength - 1].realisasi_forecast ?? 0;
+                        //         } else {
+                        //             nilai = 0;
+                        //         }
+                        //     }
+                        //     break;
+                        case "Perolehan" :
+                            nilai = filter.nilai_perolehan;
+                            break;
+                        case "Menang" :
+                            nilai = filter.nilai_perolehan;
                             break;
                         default:
                             nilai = 0;
@@ -4556,6 +4391,160 @@
                                     class="text-gray-800 text-hover-primary mb-1">${filter.nama_proyek}</a>
                             </td>
                             <!--end::Email-->
+                            <!--begin::Stage-->
+                            <td>
+                                ${stage}
+                            </td>
+                            <!--end::Stage-->
+
+                            <!--begin::Unit Kerja-->
+                            <td>
+                                ${unitKerja}
+                            </td>
+                            <!--end::Unit Kerja-->
+
+                            <!--begin::Nilai Forecast-->
+                            <td class="text-end">
+                                ${Intl.NumberFormat(["id"]).format(nilai)}
+                            </td>
+                            <!--end::Nilai Forecast-->
+                            </tr>`;
+                    }
+                });
+
+                thead.innerHTML = theadHTML;
+                tbody.innerHTML = tbodyHTML;
+                titleTable.innerHTML = `Nilai ${type}`;
+                total.innerHTML = `Total Nilai ${type} = <b>${Intl.NumberFormat((["id"])).format(totalNilaiLainnya)}</b>`;
+                table.style.display = "";
+                const chartLine = document.querySelector(chartElt);
+                chartLine.style.display = "none";
+            } else if(type.trim() == "InstansiPemerintah" || type.trim() == "InstansiSwasta" || type.trim() == "InstansiBUMN"){
+                let tbodyHTML = ``;
+                let totalNilaiLainnya = 0;
+
+                let theadHTML =
+                '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
+                    '<th>Nama Proyek</th>' +
+                    '<th>Instansi Owner</th>' +
+                    '<th style="width:150px">Stage</th>' +
+                    '<th>Unit Kerja</th>' +
+                    `<th class="text-end">Nilai</th>`
+                '</tr>';
+                
+                [filterRes].forEach(filtering => {
+                    for(let filter in filtering) {
+                    filter = filtering[filter];
+                    let stage = "";
+                    // if(filter.nilai_perolehan) {
+                    //     totalNilaiLainnya += Number(filter.nilai_perolehan ?? 0);
+                    // } else {
+                    //     totalNilaiLainnya += Number(filter.nilai_rkap ?? 0);
+                    // }
+                    totalNilaiLainnya += Number(filter.nilai_rkap ?? 0);
+
+                    switch (Number(filter.stage)) {
+                        case 0:
+                            stage = "Cancel";
+                            break;
+                        case 1:
+                            stage = "Pasar Dini";
+                            break;
+                        case 2:
+                            stage = "Pasar Potensial";
+                            break;
+                        case 3:
+                            stage = "Prakualifikasi";
+                            break;
+                        case 4:
+                            stage = "Tender Diikuti";
+                            break;
+                        case 5:
+                            stage = "Perolehan";
+                            break;
+                        case 6:
+                            stage = "Menang";
+                            break;
+                        case 7:
+                            stage = "Kalah";
+                            break;
+                        case 8:
+                            if (filter.tipe_proyek == 'R' || filter.tipe_proyek == 'Retail') {
+                                stage = "Terkontrak-Retail";
+                            } else {
+                                stage = "Terkontrak";
+                            }
+                            break;
+                        case 9:
+                            stage = "Terendah";
+                            break;
+                        case 10:
+                            stage = "Approval";
+                            break;
+                        default:
+                            break;
+                    }
+
+                    let bulan = "";
+                    let getBulanColumn = filter.bulan_pelaksanaan;
+                    // let nilai = filter.nilai_perolehan ?? filter.nilai_rkap;
+                    let nilai = filter.nilai_rkap;
+
+                    switch (Number(getBulanColumn)) {
+                        case 1:
+                            bulan = "Januari";
+                            break;
+                        case 2:
+                            bulan = "Februari";
+                            break;
+                        case 3:
+                            bulan = "Maret";
+                            break;
+                        case 4:
+                            bulan = "April";
+                            break;
+                        case 5:
+                            bulan = "Mei";
+                            break;
+                        case 6:
+                            bulan = "Juni";
+                            break;
+                        case 7:
+                            bulan = "Juli";
+                            break;
+                        case 8:
+                            bulan = "Agustus";
+                            break;
+                        case 9:
+                            bulan = "September";
+                            break;
+                        case 10:
+                            bulan = "Oktober";
+                            break;
+                        case 11:
+                            bulan = "November";
+                            break;
+                        case 12:
+                            bulan = "Desember";
+                            break;
+                        default:
+                            bulan = "-"
+                            break;
+                    }
+                    const unitKerja = typeof filter.unit_kerja == "object" ? filter.unit_kerja.unit_kerja : filter.unit_kerja 
+                    tbodyHTML += `<tr>
+
+                            <!--begin::Email-->
+                            <td>
+                                <a target="_blank" href="/proyek/view/${ filter.kode_proyek }" id="click-name"
+                                    class="text-gray-800 text-hover-primary mb-1">${filter.nama_proyek}</a>
+                            </td>
+                            <!--end::Email-->
+                            <!--begin::Instansi-->
+                            <td>
+                                ${filter.proyek_berjalan.customer.jenis_instansi}
+                            </td>
+                            <!--end::Instansi-->
                             <!--begin::Stage-->
                             <td>
                                 ${stage}
