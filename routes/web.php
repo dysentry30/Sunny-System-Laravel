@@ -51,6 +51,7 @@ use App\Http\Controllers\PenilaianPenggunaJasaController;
 use App\Http\Controllers\CompetitorController;
 use App\Http\Controllers\DashboardTVController;
 use App\Http\Controllers\MobileController;
+use App\Http\Controllers\PiutangController;
 use App\Models\AlatProyek;
 use App\Models\ContractChangeNotice;
 use App\Models\ContractChangeOrder;
@@ -520,6 +521,18 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     //End::Alat
 
     //End::Tender
+
+    /**
+     * Piutang
+     */
+    Route::group(['prefix' => 'piutang'], function () {
+        Route::get('/', [PiutangController::class, 'index'
+        ]);
+        Route::post('/save', [PiutangController::class, 'save']);
+        Route::post('/{piutang}/edit', [PiutangController::class, 'edit']);
+        Route::post('/{piutang}/delete', [PiutangController::class, 'delete']);
+    });
+
 
 
     // DELETE data customer pada dasboard customer by ID 
@@ -2832,20 +2845,43 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $perPage = 10;
             $maxResults = 10;
 
-            $dataCustomer = Customer::when(
-                !empty($search),
-                function ($query) use ($search) {
-                    $query->where('name', 'like', '%' . $search . '%');
-                }
-            );
-            $data = $dataCustomer->paginate($perPage, ['*'], 'page', $page);
+        $dataCustomer = Customer::when(
+            !empty($search),
+            function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%');
+            }
+        );
+        $data = $dataCustomer->paginate($perPage, ['*'], 'page', $page);
 
-            // $data->pagination['more'] = ($page * $perPage) < $maxResults;
+        // $data->pagination['more'] = ($page * $perPage) < $maxResults;
 
-            return response()->json($data);
-        }
-    );
+        return response()->json($data);
+    });
     //End::Get Pelanggan
+    //Begin::Get Proyek By Pelanggan
+    Route::get('/masalah-hukum/get-proyek-customer/{id_customer}', function (Request $request, $id_customer) {
+        $search = $request->input('search');
+        $page = $request->input(
+            'page',
+            1
+        );
+        $perPage = 10;
+        $maxResults = 10;
+
+        $dataProyek = ProyekBerjalans::where('id_customer', $id_customer)->when(
+            !empty($search),
+            function ($query) use ($search) {
+                $query->where('kode_proyek', 'like', '%' . $search . '%')
+                ->orWhere('nama_proyek', 'like', '%' . $search . '%');
+            }
+        );
+        $data = $dataProyek->paginate($perPage, ['*'], 'page', $page);
+
+        // $data->pagination['more'] = ($page * $perPage) < $maxResults;
+
+        return response()->json($data);
+    });
+    //End::Get Proyek By Pelanggan
 
     // Route::get('/proyek/get-klasifikasi-sbu', function (Request $request) {
     //     $search = $request->input('search');

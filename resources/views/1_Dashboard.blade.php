@@ -4623,6 +4623,9 @@
                         case "Cancel":
                             nilai = filter.hps_pagu ?? 0;
                             break;
+                        case "Tidak Lolos PQ" :
+                            nilai = filter.hps_pagu ?? 0;
+                            break;
                         // case "Menang":
                         //     const forecasts = filter.forecasts?.sort((a, b) => {
                         //         return a.month_realisasi - b.month_realisasi;
