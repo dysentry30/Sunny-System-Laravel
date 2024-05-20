@@ -4914,12 +4914,39 @@ Route::get('/tes-nota', function () {
     }
 });
 
+Route::get('/dashboard-tv/unit-kerja/{unit_kerja}', function ($unitKerja) {
+    try {
+        switch ($unitKerja) {
+            case "G":
+                $path = "DashboardTVDivisi/DashboardTVInfra1";
+                break;
+            case "H":
+                $path = "DashboardTVDivisi/DashboardTVInfra2";
+                break;
+            case "J":
+                $path = "DashboardTVDivisi/DashboardTVBGLN";
+                break;
+            case "P":
+                $path = "DashboardTVDivisi/DashboardTVEPCC";
+                break;
+            default:
+                $path = "21_DashboardTV";
+                break;
+        }
+        return view($path);
+    } catch (\Exception $e) {
+        throw $e;
+    }
+});
+
 Route::get('/dashboard-tv', function () {
     return view('21_DashboardTV');
 });
 
 Route::get('/dashboard-tv/get-data-forecast', [DashboardTVController::class, 'getForecast']);
+Route::get('/dashboard-tv/get-data-forecast/{unit_kerja}', [DashboardTVController::class, 'getForecast']);
 Route::get('/dashboard-tv/get-event/{kategori}', [DashboardTVController::class, 'getScheduleCampur']);
+Route::get('/dashboard-tv/get-event/{kategori}/{unit_kerja}', [DashboardTVController::class, 'getScheduleCampur']);
 Route::get('/dashboard-tv/get-event-prakualifikasi/{kategori}', [DashboardTVController::class, 'getSchedulePrakualifikasi']);
 Route::get('/dashboard-tv/get-event-tender/{kategori}', [DashboardTVController::class, 'getScheduleTender']);
 

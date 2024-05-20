@@ -25,10 +25,9 @@ class DashboardTVController extends Controller
      * 
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getForecast()
+    public function getForecast($unitKerja = null)
     {
         $per = 1000000; //Dibagi Dalam Jutaan
-
         $year = (int) date("Y");
 
         if ((int)date('d') < 5) {
@@ -38,11 +37,16 @@ class DashboardTVController extends Controller
         }
 
         try {
+
             $nilaiHistoryForecast = HistoryForecast::select('proyeks.kode_proyek', 'proyeks.is_rkap', 'proyeks.is_cancel', 'proyeks.unit_kerja', 'proyeks.stage', 'rkap_forecast', 'nilai_forecast', 'realisasi_forecast', 'month_rkap', 'month_forecast', 'month_realisasi')->join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year)->where("history_forecast.periode_prognosa", "=", $month != "" ? (string) $month : (int) date("m"))->where("history_forecast.tahun", "=", $year)->get();
             $countUnitKerjaFromHistory = $nilaiHistoryForecast->groupBy('unit_kerja')->count();
 
             if ($nilaiHistoryForecast->count() < 1 || $countUnitKerjaFromHistory < 11) {
                 $nilaiHistoryForecast = Forecast::select('proyeks.kode_proyek', 'proyeks.is_rkap', 'proyeks.is_cancel', 'proyeks.unit_kerja', 'proyeks.stage', 'rkap_forecast', 'nilai_forecast', 'realisasi_forecast', 'month_rkap', 'month_forecast', 'month_realisasi')->join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year)->where("forecasts.periode_prognosa", "=", $month != "" ? (string) $month : (int) date("m"))->where("forecasts.tahun", "=", $year)->get();
+            }
+
+            if (!empty($unitKerja)) {
+                $nilaiHistoryForecast = $nilaiHistoryForecast->where("unit_kerja", $unitKerja);
             }
 
             $historyForecast = $nilaiHistoryForecast->sortBy("month_forecast");
@@ -185,7 +189,7 @@ class DashboardTVController extends Controller
      * @param \Illuminate\Support\Facades\Request
      * @return \Illuminate\Support\Facades\Response
      */
-    public function getScheduleCampur(Request $request, $kategoriProyek)
+    public function getScheduleCampur(Request $request, $kategoriProyek, $unitKerja = null)
     {
         $start = Carbon::parse($request->get('start'));
         $end = Carbon::parse($request->get('end'));
@@ -203,6 +207,11 @@ class DashboardTVController extends Controller
         } else {
             $proyeksPrakualifikasi = $proyeksPrakualifikasi->where("dop", "EA");
             $proyeksTender = $proyeksTender->where("dop", "EA");
+        }
+
+        if (!empty($unitKerja)) {
+            $proyeksPrakualifikasi = $proyeksPrakualifikasi->where("unit_kerja", $unitKerja);
+            $proyeksTender = $proyeksTender->where("unit_kerja", $unitKerja);
         }
 
         $proyeksPrakualifikasi = $proyeksPrakualifikasi->whereBetween('jadwal_pq', [$start, $end])->get();
