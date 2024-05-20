@@ -83,6 +83,7 @@ use App\Models\MasterKlasifikasiSBU;
 use App\Models\MasterSubKlasifikasiSBU;
 use App\Models\ExceptGreenlane;
 use App\Models\IntegrationLog;
+use App\Models\MasterGrupTierBUMN;
 use App\Models\SKASKTProyek;
 use App\Models\MatriksApprovalRekomendasi;
 use App\Models\NotaRekomendasi;
@@ -3207,6 +3208,149 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         }
     });
     //End::Master Sub Klasifikasi SBU
+    Route::get('/master-group-tier', function (Request $request) {
+        $customer = Customer::select(['id_customer', 'name', 'jenis_instansi'])->where('jenis_instansi', 'BUMN')->get();
+        return view('MasterData/MasterGroupTierBUMN', ['customer' => $customer, 'data' => MasterGrupTierBUMN::all()]);
+    });
+    Route::post('/master-group-tier/save', function (Request $request) {
+        $data = $request->all();
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+        ];
+        $rules = [
+                "nama_pelanggan" => 'required|string',
+                "kategori" => 'required|string',
+            ];
+        $validation = Validator::make(
+            $data,
+            $rules,
+            $messages
+        );
+
+        if ($validation->fails()) {
+            $error = collect($validation->errors());
+            if ($error->has("kategori")) {
+                Alert::error(
+                    'Error',
+                    "Kategori wajib diisi. Periksa Kembali!"
+                );
+                return redirect()->back();
+            } elseif ($error->has("nama_pelanggan")) {
+                Alert::error(
+                    'Error',
+                    "Nama Pelanggan wajib diisi. Periksa Kembali!"
+                );
+                return redirect()->back();
+            } else {
+                Alert::error(
+                    'Error',
+                    "LQ Rank gagal ditambahkan. Periksa Kembali!"
+                );
+                return redirect()->back();
+            }
+        }
+
+        $validation->validate();
+        // dd($data);
+        $pelanggan = Customer::find($data['nama_pelanggan']);
+
+        $groupTier = new MasterGrupTierBUMN();
+        $groupTier->id_pelanggan = $pelanggan->id_customer;
+        $groupTier->nama_pelanggan = $pelanggan->name;
+        $groupTier->kategori = $data["kategori"];
+
+        $pelanggan->group_tier = $data["kategori"];
+
+        if ($groupTier->save() && $pelanggan->save()) {
+            Alert::success('Success', "Group Tier BUMN Berhasil Ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Group Tier BUMN Gagal Ditambahkan");
+        return redirect()->back();
+    });
+    Route::post('/master-group-tier/{id}/edit', function (Request $request, $id) {
+        $data = $request->all();
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+        ];
+        $rules = [
+                "nama_pelanggan" => 'required|string',
+                "kategori" => 'required|string',
+            ];
+        $validation = Validator::make(
+            $data,
+            $rules,
+            $messages
+        );
+
+        if ($validation->fails()) {
+            $error = collect($validation->errors());
+            if ($error->has("kategori")) {
+                Alert::error(
+                    'Error',
+                    "Kategori wajib diisi. Periksa Kembali!"
+                );
+                return redirect()->back();
+            } elseif ($error->has("nama_pelanggan")) {
+                Alert::error(
+                    'Error',
+                    "Nama Pelanggan wajib diisi. Periksa Kembali!"
+                );
+                return redirect()->back();
+            } else {
+                Alert::error(
+                    'Error',
+                    "Group Tier gagal ditambahkan. Periksa Kembali!"
+                );
+                return redirect()->back();
+            }
+        }
+
+        $validation->validate();
+        // dd($data);
+        $pelanggan = Customer::find($data['nama_pelanggan']);
+        $groupTier = MasterGrupTierBUMN::find($id);
+        $groupTier->id_pelanggan = $pelanggan->id_customer;
+        $groupTier->nama_pelanggan = $pelanggan->name;
+        $groupTier->kategori = $data["kategori"];
+
+        $pelanggan->group_tier = $data["kategori"];
+
+        if ($groupTier->save() && $pelanggan->save()) {
+            Alert::success('Success', "Group Tier BUMN Berhasil Diubah");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Group Tier BUMN Diubah");
+        return redirect()->back();
+    });
+    Route::post('/master-group-tier/{tier}/delete', function (MasterGrupTierBUMN $tier) {
+        if (empty($tier)) {
+            Alert::success("Error", "Group Tier BUMN Tidak Ditemukan");
+            return redirect()->back();
+        }
+
+        $pelanggan = Customer::find($tier->id_pelanggan);
+
+        if ($tier->delete()) {
+            $pelanggan->group_tier = null;
+            $pelanggan->save();
+            // Alert::success('Success', "Checklist Calon Mitra KSO Berhasil Dihapus");
+            // return redirect()->back();
+
+            return response()->json([
+                "Success" => true,
+                "Message" => "Group Tier BUMN Berhasil Dihapus"
+            ]);
+        }
+
+        // Alert::error('Error', "Checklist Calon Mitra KSO Gagal Dihapus");
+        // return redirect()->back();
+        return response()->json([
+            "Success" => false,
+            "Message" => "Group Tier BUMN Gagal Dihapus"
+        ]);
+    });
+    //End::Master Group Tier
 
     
     //End :: Master Data

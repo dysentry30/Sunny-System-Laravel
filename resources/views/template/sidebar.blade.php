@@ -1178,6 +1178,38 @@
                             <!--end::Menu Colapse-->
                         @endcanany
 
+                        @canany(['super-admin', 'admin-crm', 'risk-crm'])
+                        {{-- @if (auth()->user()->check_administrator || $adminPIC) --}}
+                            <div class="menu-item">
+                                <a class="menu-link " href="/piutang"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'piutang') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <i class="bi bi-wallet-fill text-white" style="font-size: 20px"></i>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Piutang</span>
+                                </a>
+                            </div>
+                        {{-- @endif                             --}}
+                        @endcanany
+
+                        @canany(['super-admin', 'admin-crm', 'risk-crm'])
+                        {{-- @if (auth()->user()->check_administrator || $adminPIC) --}}
+                            <div class="menu-item">
+                                <a class="menu-link " href="/master-group-tier"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'master-group-tier') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <i class="bi bi-collection-fill text-white" style="font-size: 20px"></i>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Group Tier BUMN</span>
+                                </a>
+                            </div>
+                        {{-- @endif                             --}}
+                        @endcanany
+
 
                         @canany(['super-admin', 'admin-crm'])
                         {{-- @if (auth()->user()->check_administrator || $adminPIC) --}}
