@@ -1867,7 +1867,7 @@
                                                              Dokumen Pendukung
                                                          </h3>
                                                          @canany(['super-admin', 'approver-crm', 'user-crm', 'admin-crm'])
-                                                         @if (empty($proyek->DokumenPendukungPasarDini))
+                                                         {{-- @if (empty($proyek->DokumenPendukungPasarDini)) --}}
                                                          <br>
                                                          <div class="w-50">
                                                              <input type="file"
@@ -1877,7 +1877,7 @@
                                                          <h6 id="error-dokumen-pendukung-pasar-dini" class="text-danger fw-normal"
                                                              style="display: none">*File
                                                              terlalu besar ! Max Size 50Mb</h6>
-                                                         @endif
+                                                         {{-- @endif --}}
                                                          @endcanany
                                                          <br>
                                                          <!--begin::Table-->
@@ -1899,39 +1899,41 @@
                                                              <!--begin::Table body-->
                                                              <tbody class="fw-bold text-gray-600">
                                                                  @if (!empty($proyek->DokumenPendukungPasarDini))
-                                                                 <tr>
-                                                                     <!--begin::Nomor-->
-                                                                     <td class="text-center">
-                                                                         1.
-                                                                     </td>
-                                                                     <!--end::Nomor-->
-                                                                     <!--begin::Name-->
-                                                                     <td>
-                                                                         <a target="_blank"
-                                                                             href="{{ asset('dokumen-pendukung-pasdin/' . $proyek->DokumenPendukungPasarDini->id_document) }}"
-                                                                             class="text-hover-primary">{{ $proyek->DokumenPendukungPasarDini->nama_document }}</a>
-                                                                     </td>
-                                                                     <!--end::Name-->
-                                                                     <!--begin::Column-->
-                                                                     <td>
-                                                                         {{ Carbon\Carbon::parse($proyek->DokumenPendukungPasarDini->created_at)->translatedFormat('d F Y') }}
-                                                                     </td>
-                                                                     <!--end::Column-->
-                                                                     <!--begin::Action-->
-                                                                     <td class="text-center align-middle">
-                                                                        @canany(['super-admin', 'user-crm'])
-                                                                            <small>
-                                                                                <p data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_dokumen_pendukung_pasdin_delete_{{ $proyek->DokumenPendukungPasarDini->id }}"
-                                                                                    id="modal-delete"
-                                                                                    class="btn btn-sm btn-light btn-active-primary">
-                                                                                    Delete
-                                                                                </p>
-                                                                            </small>                                                                            
-                                                                        @endcanany
-                                                                     </td>
-                                                                     <!--end::Action-->
-                                                                 </tr>
+                                                                 @foreach ($proyek->DokumenPendukungPasarDini as $key => $dokumen)
+                                                                    <tr>
+                                                                        <!--begin::Nomor-->
+                                                                        <td class="text-center">
+                                                                            {{ ++$key }}
+                                                                        </td>
+                                                                        <!--end::Nomor-->
+                                                                        <!--begin::Name-->
+                                                                        <td>
+                                                                            <a target="_blank"
+                                                                                href="{{ asset('dokumen-pendukung-pasdin/' . $dokumen->id_document) }}"
+                                                                                class="text-hover-primary">{{ $dokumen->nama_document }}</a>
+                                                                        </td>
+                                                                        <!--end::Name-->
+                                                                        <!--begin::Column-->
+                                                                        <td>
+                                                                            {{ Carbon\Carbon::parse($dokumen->created_at)->translatedFormat('d F Y') }}
+                                                                        </td>
+                                                                        <!--end::Column-->
+                                                                        <!--begin::Action-->
+                                                                        <td class="text-center align-middle">
+                                                                            @canany(['super-admin', 'user-crm'])
+                                                                                <small>
+                                                                                    <p data-bs-toggle="modal"
+                                                                                        data-bs-target="#kt_dokumen_pendukung_pasdin_delete_{{ $dokumen->id }}"
+                                                                                        id="modal-delete"
+                                                                                        class="btn btn-sm btn-light btn-active-primary m-0">
+                                                                                        Delete
+                                                                                    </p>
+                                                                                </small>                                                                            
+                                                                            @endcanany
+                                                                        </td>
+                                                                        <!--end::Action-->
+                                                                    </tr>                                                                     
+                                                                 @endforeach
                                                                  @endif
                                                              </tbody>
                                                              <!--end::Table body-->
@@ -2689,7 +2691,7 @@
                                                     <div class="row fv-row">
                                                         <div class="col-6">
                                                             <label class="fs-6 fw-bold form-label mt-3">
-                                                                <span>SBU KBLI</span>
+                                                                <span class="required">SBU KBLI</span>
                                                             </label>
                                                             <!--begin::Input-->
                                                             <select id="klasifikasi_sbu" name="klasifikasi-kbli"
@@ -2705,7 +2707,7 @@
                                                         </div>
                                                         <div class="col-6">
                                                             <label class="fs-6 fw-bold form-label mt-3">
-                                                                <span>Sub Klasifikasi SBU KBLI</span>
+                                                                <span class="required">Sub Klasifikasi SBU KBLI</span>
                                                             </label>
                                                             <!--begin::Input-->
                                                             <select id="sub_subklasifikasi_sbu" name="sub-klasifikasi-kbli"
@@ -7814,6 +7816,10 @@
                                                 <option value="Pelaksana Utama">Pelaksana Utama</option>
                                                 <option value="Engineering">Engineering</option>
                                                 <option value="Keuangan">Keuangan</option>
+                                                <option value="K3">K3</option>
+                                                <option value="QA / QC">QA / QC</option>
+                                                <option value="Pengadaan">Pengadaan</option>
+                                                <option value="Komersial">Komersial</option>
                                             </select>
                                             <!--end::Input-->
                                         </div>
@@ -7908,6 +7914,10 @@
                                                     <option value="Pelaksana Utama" {{ $personel->kategori == "Pelaksana Utama" ? "selected" : "" }}>Pelaksana Utama</option>
                                                     <option value="Engineering" {{ $personel->kategori == "Engineering" ? "selected" : "" }}>Engineering</option>
                                                     <option value="Keuangan" {{ $personel->kategori == "Keuangan" ? "selected" : "" }}>Keuangan</option>
+                                                    <option value="K3" {{ $personel->kategori == "K3" ? "selected" : "" }}>K3</option>
+                                                    <option value="QA / QC" {{ $personel->kategori == "QA / QC" ? "selected" : "" }}>QA / QC</option>
+                                                    <option value="Pengadaan" {{ $personel->kategori == "Pengadaan" ? "selected" : "" }}>Pengadaan</option>
+                                                    <option value="Komersial" {{ $personel->kategori == "Komersial" ? "selected" : "" }}>Komersial</option>
                                                 </select>
                                                 <!--end::Input-->
                                             </div>
@@ -9980,11 +9990,12 @@
 
     <!--begin::DELETE DOKUMEN PENDUKUNG PASAR DINI-->
     @if (!empty($proyek->DokumenPendukungPasarDini))
-    <form action="/proyek/dokumen-pendukung-pasdin/{{ $proyek->DokumenPendukungPasarDini->id }}/delete" method="post"
+    @foreach ($proyek->DokumenPendukungPasarDini as $dokumen)
+    <form action="/proyek/dokumen-pendukung-pasdin/{{ $dokumen->id }}/delete" method="post"
         enctype="multipart/form-data">
         @method('delete')
         @csrf
-        <div class="modal fade" id="kt_dokumen_pendukung_pasdin_delete_{{ $proyek->DokumenPendukungPasarDini->id }}" tabindex="-1"
+        <div class="modal fade" id="kt_dokumen_pendukung_pasdin_delete_{{ $dokumen->id }}" tabindex="-1"
             aria-hidden="true">
             <!--begin::Modal dialog-->
             <div class="modal-dialog modal-dialog-centered mw-800px">
@@ -9993,7 +10004,7 @@
                     <!--begin::Modal header-->
                     <div class="modal-header">
                         <!--begin::Modal title-->
-                        <h2>Hapus : {{ $proyek->DokumenPendukungPasarDini->nama_document }}</h2>
+                        <h2>Hapus : {{ $dokumen->nama_document }}</h2>
                         <!--end::Modal title-->
                         <!--begin::Close-->
                         <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -10023,7 +10034,8 @@
         </div>
         <!--end::Modal dialog-->
         </div>
-    </form>
+    </form>        
+    @endforeach
     @endif
     <!--end::DELETE DOKUMEN PENDUKUNG PASAR DINI-->
 
