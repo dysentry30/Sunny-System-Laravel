@@ -21,10 +21,13 @@ return new class extends Migration
                 $table->string('kode_proyek');
                 $table->foreign('kode_proyek')->references('kode_proyek')->on('proyeks')->onDelete('cascade');
                 $table->integer('kategori');
-                $table->string('created_by');
-                $table->foreign('created_by')->references('nip')->on('users')->onDelete('cascade');
-                $table->string('updated_by');
-                $table->foreign('updated_by')->references('nip')->on('users')->onDelete('cascade');
+                $table->integer('under_90_day');
+                $table->integer('between_90_120_day');
+                $table->integer('upper_120_day');
+                // $table->string('created_by');
+                // $table->foreign('created_by')->references('nip')->on('users')->onDelete('cascade');
+                // $table->string('updated_by');
+                // $table->foreign('updated_by')->references('nip')->on('users')->onDelete('cascade');
                 $table->timestamps();
             });
         }

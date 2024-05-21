@@ -1813,6 +1813,7 @@ class RekomendasiController extends Controller
                 // $file_persetujuan_old = $notaRekomendasi->file_persetujuan;
                 $pdfMerger = new PdfMerge();
                 $pdfMerger->add(public_path('file-persetujuan' . '/' . $notaRekomendasi->file_persetujuan));
+                $pdfMerger->add(public_path('file-rekomendasi' . '/' . $notaRekomendasi->file_rekomendasi));
                 // $pdfMerger->add(public_path('file-profile-risiko' . '/' . $proyek->file_penilaian_risiko));
                 $pdfMerger->add(public_path('file-profile-risiko' . '/' . $notaRekomendasi->file_penilaian_risiko));
 
