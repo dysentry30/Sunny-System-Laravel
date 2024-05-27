@@ -2851,11 +2851,11 @@
                         y: {{ $jumlahKalah }},
                         x: "Kalah : " + {{ $presentaseKalah }},
                     },
-                    {
-                        name: "Tidak Lolos PQ Tender : " + {{ $jumlahTidakLulusPQ }},
-                        y: {{ $jumlahTidakLulusPQ }},
-                        x: "Tidak Lolos PQ : " + {{ $presentaseTidakLolosPQ }},
-                    }
+                    // {
+                    //     name: "Tidak Lolos PQ Tender : " + {{ $jumlahTidakLulusPQ }},
+                    //     y: {{ $jumlahTidakLulusPQ }},
+                    //     x: "Tidak Lolos PQ : " + {{ $presentaseTidakLolosPQ }},
+                    // }
                 ]
             }],
             credits: {
@@ -2952,11 +2952,11 @@
                         y: {{ $nilaiKalah }},
                         x: "Kalah : " + {{ $presentaseNilaiKalah }},
                     },
-                    {
-                        name: "Tidak Lolos PQ Tender : " + "{{ number_format( ((int) $nilaiTidakLulusPQ / 1000000 ), 0, '.' , '.' ) }}",
-                        y: {{ $nilaiTidakLulusPQ }},
-                        x: "Tidak Lolos PQ : " + {{ $presentaseNilaiTidakLolosPQ }},
-                    }
+                    // {
+                    //     name: "Tidak Lolos PQ Tender : " + "{{ number_format( ((int) $nilaiTidakLulusPQ / 1000000 ), 0, '.' , '.' ) }}",
+                    //     y: {{ $nilaiTidakLulusPQ }},
+                    //     x: "Tidak Lolos PQ : " + {{ $presentaseNilaiTidakLolosPQ }},
+                    // }
                 ]
             }],
             credits: {
@@ -4195,11 +4195,11 @@
                     filter = filtering[filter];
                     let stage = "";
                     if(type == "Nilai Menang Tender") {
-                        totalNilaiLainnya += Number(filter.nilai_perolehan);
+                        totalNilaiLainnya += Number(filter.penawaran_tender);
                     }else if(type == "Nilai Terkontrak Tender") {
-                        totalNilaiLainnya += Number(filter.nilai_perolehan);
+                        totalNilaiLainnya += Number(filter.penawaran_tender);
                     } else {
-                        totalNilaiLainnya += Number(filter.hps_pagu);
+                        totalNilaiLainnya += Number(filter.penawaran_tender);
                     }
                     // if(filter.tipe == "Proyek Menang") {
                     // } else {
@@ -4299,11 +4299,11 @@
                     }
                     let nilai = 0;
                     if(type == "Nilai Menang Tender") {
-                        nilai = filter.nilai_perolehan;
+                        nilai = filter.penawaran_tender;
                     } if(type == "Nilai Terkontrak Tender") {
-                        nilai = filter.nilai_perolehan;
+                        nilai = filter.penawaran_tender;
                     } else {
-                        nilai = filter.hps_pagu;
+                        nilai = filter.penawaran_tender;
                     }
                     const unitKerja = typeof filter.unit_kerja == "object" ? filter.unit_kerja.unit_kerja : filter.unit_kerja 
                     tbodyHTML += `<tr>

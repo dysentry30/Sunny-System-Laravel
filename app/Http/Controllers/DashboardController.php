@@ -583,24 +583,24 @@ class DashboardController extends Controller
         foreach ($proyeks->where('is_cancel', '!=', true) as $proyek) {
             $stg = $proyek->stage;
             if ($stg == 6) {
-                if ($proyek->tipe_proyek == "P" && $proyek->nilai_perolehan != 0 && $proyek->jenis_proyek != "I") {
+                if ($proyek->tipe_proyek == "P" && $proyek->penawaran_tender != 0 && $proyek->jenis_proyek != "I") {
                     $jumlahMenang++;
-                    $nilaiMenang += (int) str_replace(".", "", $proyek->nilai_perolehan);
+                    $nilaiMenang += (int) str_replace(".", "", $proyek->penawaran_tender);
                 }
             } else if ($stg == 7) {
-                if ($proyek->tipe_proyek == "P" && $proyek->hps_pagu != 0 && $proyek->jenis_proyek != "I") {
+                if ($proyek->tipe_proyek == "P" && $proyek->penawaran_tender != 0 && $proyek->jenis_proyek != "I") {
                     $jumlahKalah++;
-                    $nilaiKalah += (int) str_replace(".", "", $proyek->hps_pagu);
+                    $nilaiKalah += (int) str_replace(".", "", $proyek->penawaran_tender);
                 }
             } else if ($stg == 3 && $proyek->is_tidak_lulus_pq) {
-                if ($proyek->tipe_proyek == "P" && $proyek->hps_pagu != 0 && $proyek->jenis_proyek != "I") {
+                if ($proyek->tipe_proyek == "P" && $proyek->penawaran_tender != 0 && $proyek->jenis_proyek != "I") {
                     $jumlahTidakLulusPQ++;
-                    $nilaiTidakLulusPQ += (int) str_replace(".", "", $proyek->hps_pagu);
+                    $nilaiTidakLulusPQ += (int) str_replace(".", "", $proyek->penawaran_tender);
                 }
             } else if ($stg == 8) {
-                if ($proyek->tipe_proyek == "P" && $proyek->nilai_perolehan != 0 && $proyek->jenis_proyek != "I") {
+                if ($proyek->tipe_proyek == "P" && $proyek->penawaran_tender != 0 && $proyek->jenis_proyek != "I") {
                     $jumlahTerkontrakCompetitive++;
-                    $nilaiTerkontrakCompetitive += (int) str_replace(".", "", $proyek->nilai_perolehan);
+                    $nilaiTerkontrakCompetitive += (int) str_replace(".", "", $proyek->penawaran_tender);
                 }
             };
         };
@@ -4697,16 +4697,16 @@ class DashboardController extends Controller
                 }
             } else {
                 if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
-                    $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("jenis_proyek", "!=", "I")->where("tipe_proyek", "!=", "R")->where("is_cancel", "!=", true)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tahun_perolehan", "jenis_proyek"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                    $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("jenis_proyek", "!=", "I")->where("tipe_proyek", "!=", "R")->where("is_cancel", "!=", true)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "penawaran_tender", "tahun_perolehan", "jenis_proyek"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
                 } else {
-                    $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("jenis_proyek", "!=", "I")->where("tipe_proyek", "!=", "R")->where("is_cancel", "!=", true)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tahun_perolehan", "jenis_proyek"])->where("unit_kerja", $unit_kerja_user);
+                    $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("jenis_proyek", "!=", "I")->where("tipe_proyek", "!=", "R")->where("is_cancel", "!=", true)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "penawaran_tender", "tahun_perolehan", "jenis_proyek"])->where("unit_kerja", $unit_kerja_user);
                 }
             }
         } else {
             if ($filter != false) {
-                $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("jenis_proyek", "!=", "I")->where("tipe_proyek", "!=", "R")->where("is_cancel", "!=", true)->where("unit_kerja", "=", $filter)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tahun_perolehan", "jenis_proyek"]);
+                $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("jenis_proyek", "!=", "I")->where("tipe_proyek", "!=", "R")->where("is_cancel", "!=", true)->where("unit_kerja", "=", $filter)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "penawaran_tender", "tahun_perolehan", "jenis_proyek"]);
             } else {
-                $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("jenis_proyek", "!=", "I")->where("tipe_proyek", "!=", "R")->where("is_cancel", "!=", true)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tahun_perolehan", "jenis_proyek"]);
+                $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("jenis_proyek", "!=", "I")->where("tipe_proyek", "!=", "R")->where("is_cancel", "!=", true)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "penawaran_tender", "tahun_perolehan", "jenis_proyek"]);
             }
         }
         $proyeks = $proyeks->where("is_cancel", "=", false)->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year);
@@ -4714,22 +4714,22 @@ class DashboardController extends Controller
             case "Terkontrak Tender":
                 $proyeks = $proyeks->where("stage", 8)->sortBy([
                     ["bulan_pelaksanaan", "asc"],
-                ])->values()->where("nilai_perolehan", "!=", 0);
+                ])->values()->where("penawaran_tender", "!=", 0);
                 break;
             case "Menang Tender":
                 $proyeks = $proyeks->where("stage", 6)->sortBy([
                     ["bulan_pelaksanaan", "asc"],
-                ])->values()->where("nilai_perolehan", "!=", 0);
+                ])->values()->where("penawaran_tender", "!=", 0);
                 break;
             case "Kalah Tender":
                 $proyeks = $proyeks->where(function ($p) {
                     return $p->stage == 7;
-                })->sortBy("bulan_pelaksanaan")->values()->where("hps_pagu", "!=", 0);
+                })->sortBy("bulan_pelaksanaan")->values()->where("penawaran_tender", "!=", 0);
                 break;
             case "Tidak Lolos PQ Tender":
                 $proyeks = $proyeks->where(function ($p) {
                     return $p->is_tidak_lulus_pq;
-                })->sortBy("bulan_pelaksanaan")->values()->where("hps_pagu", "!=", 0);
+                })->sortBy("bulan_pelaksanaan")->values()->where("penawaran_tender", "!=", 0);
                 break;
         }
         $row = 2;
@@ -4740,13 +4740,13 @@ class DashboardController extends Controller
             $sheet->setCellValue('D' . $row, $this->getUnitKerjaProyek($p->unit_kerja));
             if ($tipe == "Proyek Menang Tender") {
                 $sheet->setCellValue('E' . $row, $p->bulan_ri_perolehan);
-                $sheet->setCellValue('F' . $row, $p->nilai_perolehan);
+                $sheet->setCellValue('F' . $row, $p->penawaran_tender);
             } elseif ($tipe == "Proyek Terkontrak Tender") {
                 $sheet->setCellValue('E' . $row, $p->bulan_ri_perolehan);
-                $sheet->setCellValue('F' . $row, $p->nilai_perolehan);
+                $sheet->setCellValue('F' . $row, $p->penawaran_tender);
             } else {
                 $sheet->setCellValue('E' . $row, $p->bulan_pelaksanaan);
-                $sheet->setCellValue('F' . $row, $p->hps_pagu);
+                $sheet->setCellValue('F' . $row, $p->penawaran_tender);
             }
             $row++;
         });
@@ -4794,34 +4794,34 @@ class DashboardController extends Controller
                 }
             } else {
                 if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
-                    $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("jenis_proyek", "!=", "I")->where("tipe_proyek", "!=", "R")->where("is_cancel", "!=", true)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tahun_perolehan", "jenis_proyek"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                    $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("jenis_proyek", "!=", "I")->where("tipe_proyek", "!=", "R")->where("is_cancel", "!=", true)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "penawaran_tender", "tahun_perolehan", "jenis_proyek"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
                 } else {
-                    $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("jenis_proyek", "!=", "I")->where("tipe_proyek", "!=", "R")->where("is_cancel", "!=", true)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tahun_perolehan", "jenis_proyek"])->where("unit_kerja", $unit_kerja_user);
+                    $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("jenis_proyek", "!=", "I")->where("tipe_proyek", "!=", "R")->where("is_cancel", "!=", true)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "penawaran_tender", "tahun_perolehan", "jenis_proyek"])->where("unit_kerja", $unit_kerja_user);
                 }
             }
         } else {
             if ($filter != false) {
-                $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("jenis_proyek", "!=", "I")->where("tipe_proyek", "!=", "R")->where("is_cancel", "!=", true)->where("unit_kerja", "=", $filter)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tahun_perolehan", "jenis_proyek"]);
+                $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("jenis_proyek", "!=", "I")->where("tipe_proyek", "!=", "R")->where("is_cancel", "!=", true)->where("unit_kerja", "=", $filter)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "penawaran_tender", "tahun_perolehan", "jenis_proyek"]);
             } else {
-                $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("jenis_proyek", "!=", "I")->where("tipe_proyek", "!=", "R")->where("is_cancel", "!=", true)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tahun_perolehan", "jenis_proyek"]);
+                $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("jenis_proyek", "!=", "I")->where("tipe_proyek", "!=", "R")->where("is_cancel", "!=", true)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "penawaran_tender", "tahun_perolehan", "jenis_proyek"]);
             }
         }
         $proyeks = $proyeks->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year);
         $stage = null;
         switch ($tipe) {
             case "Terkontrak Tender":
-                $proyeks = $proyeks->where("stage", 8)->sortBy("bulan_pelaksanaan", SORT_NUMERIC)->values()->where("nilai_perolehan", "!=", 0);
+                $proyeks = $proyeks->where("stage", 8)->sortBy("bulan_pelaksanaan", SORT_NUMERIC)->values()->where("penawaran_tender", "!=", 0);
                 break;
             case "Menang Tender":
-                $proyeks = $proyeks->where("stage", 6)->sortBy("bulan_pelaksanaan", SORT_NUMERIC)->values()->where("nilai_perolehan", "!=", 0);
+                $proyeks = $proyeks->where("stage", 6)->sortBy("bulan_pelaksanaan", SORT_NUMERIC)->values()->where("penawaran_tender", "!=", 0);
                 break;
             case "Kalah Tender":
                 $stage = 7;
-                $proyeks = $proyeks->where("stage", "=", $stage)->sortBy("bulan_pelaksanaan", SORT_NUMERIC)->values()->where("hps_pagu", "!=", 0);
+                $proyeks = $proyeks->where("stage", "=", $stage)->sortBy("bulan_pelaksanaan", SORT_NUMERIC)->values()->where("penawaran_tender", "!=", 0);
                 break;
             case "Tidak Lolos PQ Tender":
                 // $stage = 3;
-                $proyeks = $proyeks->where("is_tidak_lulus_pq", "=", true)->sortBy("bulan_pelaksanaan", SORT_NUMERIC)->values()->where("hps_pagu", "!=", 0);
+                $proyeks = $proyeks->where("is_tidak_lulus_pq", "=", true)->sortBy("bulan_pelaksanaan", SORT_NUMERIC)->values()->where("penawaran_tender", "!=", 0);
                 break;
         }
         // dd($proyeks);
@@ -4834,16 +4834,16 @@ class DashboardController extends Controller
             $sheet->setCellValue('E' . $row, $p->bulan_pelaksanaan);
             switch ($tipe) {
                 case "Terkontrak Tender":
-                    $sheet->setCellValue('F' . $row, $p->nilai_perolehan);
+                    $sheet->setCellValue('F' . $row, $p->penawaran_tender);
                     break;
                 case "Menang Tender":
-                    $sheet->setCellValue('F' . $row, $p->nilai_perolehan);
+                    $sheet->setCellValue('F' . $row, $p->penawaran_tender);
                     break;
                 case "Kalah Tender":
-                    $sheet->setCellValue('F' . $row, $p->hps_pagu);
+                    $sheet->setCellValue('F' . $row, $p->penawaran_tender);
                     break;
                 case "Tidak Lolos PQ Tender":
-                    $sheet->setCellValue('F' . $row, $p->hps_pagu);
+                    $sheet->setCellValue('F' . $row, $p->penawaran_tender);
                     break;
             }
             $row++;
