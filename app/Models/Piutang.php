@@ -29,13 +29,13 @@ class Piutang extends Model
         return $this->hasOne(Customer::class, "id_customer", "customer_id");
     }
 
-    public function UserCreated()
-    {
-        return $this->hasOne(User::class, "nip", "created_by");
-    }
+    // public function UserCreated()
+    // {
+    //     return $this->hasOne(User::class, "nip", "created_by");
+    // }
 
-    public function UserUpdated()
-    {
-        return $this->hasOne(User::class, "nip", "updated_by");
-    }
+    // public function UserUpdated()
+    // {
+    //     return $this->hasOne(User::class, "nip", "updated_by");
+    // }
 }
