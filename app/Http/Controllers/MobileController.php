@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Forecast;
 use App\Models\HistoryForecast;
 use App\Models\Proyek;
+use App\Models\UnitKerja;
 use Illuminate\Http\Request;
 use stdClass;
 
@@ -90,6 +91,124 @@ class MobileController extends Controller
     }
 
     /**
+     * Get Data Forecast
+     * 
+     * @return Illuminate\Http\Response JSON
+     */
+    public function GetDataForecastNew(Request $request, $unitKerja = null, $yearFilter, $monthFilter)
+    {
+        $per = 1_000_000; //Dibagi Dalam Jutaan
+        // $per = 1_000_000_000; //Dibagi Dalam Jutaan
+
+        $year = (int)date("m") == 1 && (int)date("d") < 5 ? (int) date("Y") : (int) date("Y") - 1;
+
+        if (!empty($yearFilter)) {
+            $year = $yearFilter;
+        }
+
+        if ((int)date('d') < 5) {
+            $month = (int) date("m") - 1;
+        } else {
+            $month = (int) date("m");
+        }
+
+        if (!empty($monthFilter)) {
+            $month = $monthFilter;
+        }
+
+        try {
+            $nilaiHistoryForecast = HistoryForecast::select('proyeks.kode_proyek', 'proyeks.is_rkap', 'proyeks.is_cancel', 'proyeks.unit_kerja', 'proyeks.stage', 'rkap_forecast', 'nilai_forecast', 'realisasi_forecast', 'month_rkap', 'month_forecast', 'month_realisasi')->join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year)->where("history_forecast.periode_prognosa", "=", $month != "" ? (string) $month : (int) date("m"))->where("history_forecast.tahun", "=", $year)->get();
+            $countUnitKerjaFromHistory = $nilaiHistoryForecast->groupBy('unit_kerja')->count();
+
+            if ($nilaiHistoryForecast->count() < 1 || $countUnitKerjaFromHistory < 11) {
+                $nilaiHistoryForecast = Forecast::select('proyeks.kode_proyek', 'proyeks.is_rkap', 'proyeks.is_cancel', 'proyeks.unit_kerja', 'proyeks.stage', 'rkap_forecast', 'nilai_forecast', 'realisasi_forecast', 'month_rkap', 'month_forecast', 'month_realisasi')->join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year)->where("forecasts.periode_prognosa", "=", $month != "" ? (string) $month : (int) date("m"))->where("forecasts.tahun", "=", $year)->get();
+            }
+
+            if (!empty($unitKerja)) {
+                $nilaiHistoryForecast = $nilaiHistoryForecast->where("unit_kerja", $unitKerja);
+            }
+
+
+            $historyForecast = $nilaiHistoryForecast->sortBy("month_forecast");
+
+            $nilaiForecast = 0;
+            $nilaiForecastArray = [];
+
+            $nilaiRkapForecast = 0;
+            $nilaiRkapArray = [];
+
+            $nilaiRealisasiForecast = 0;
+            $nilaiRealisasiArray = [];
+
+            $collectDataDashboardForecast = collect([]);
+
+            for ($i = 1; $i <= 12; $i++) {
+                foreach ($historyForecast as $forecast) {
+                    if ($forecast->is_rkap) {
+                        //Untuk OK
+                        if ($forecast->month_rkap == $i) {
+                            $nilaiRkapForecast += (int) $forecast->rkap_forecast / $per;
+                        } else {
+                            $nilaiRkapForecast == 0;
+                        }
+                    }
+
+                    if ($forecast->stage == 8 && !$forecast->is_cancel) {
+                        //Untuk Realisasi
+                        if ($forecast->month_realisasi == $i && !$forecast->is_cancel && $forecast->month_realisasi <= $month) {
+                            $nilaiRealisasiForecast += (int) $forecast->realisasi_forecast / $per;
+                        } else {
+                            $nilaiRealisasiForecast == 0;
+                        }
+                    }
+
+                    //Untuk Forecast
+                    if ($forecast->month_forecast == $i && !$forecast->is_cancel) {
+                        $nilaiForecast += $forecast->nilai_forecast / $per;
+                    } else {
+                        $nilaiForecast == 0;
+                    }
+                }
+
+                // array_push($nilaiRkapArray, round($nilaiRkapForecast)); // Array Nilai RKAP Forecast
+                // array_push($nilaiForecastArray, round($nilaiForecast)); // Array Nilai Forecast
+                // array_push($nilaiRealisasiArray, round($nilaiRealisasiForecast)); // Array Nilai Realisasi
+
+                $stdClass = new stdClass();
+                $stdClass->nilaiRKAPPerBulan = round($nilaiRkapForecast);
+                $stdClass->nilaiForecastPerBulan = round($nilaiForecast);
+                $stdClass->nilaiRealisasiPerBulan = round($nilaiRealisasiForecast);
+
+                $collectDataDashboardForecast->push($stdClass);
+            }
+
+            // $data = ["Success" => true, "NilaiRKAP" => $nilaiRkapArray, "NilaiForecast" => $nilaiForecastArray, "NilaiRealisasi" => $nilaiRealisasiArray];
+
+            $data = [
+                "tahun" => $year,
+                "periodePrognosa" => $month,
+                "unitKerja" => UnitKerja::where("divcode", $unitKerja)->first()?->unit_kerja,
+                "data" => $collectDataDashboardForecast->toArray(),
+                "success" => true,
+                "message" => null
+            ];
+
+            return response()->json($data, 200);
+        } catch (\Exception $e) {
+            // $data = ["Status" => false, "Message" => $e->getMessage()];
+            $data = [
+                "tahun" => null,
+                "periodePrognosa" => null,
+                "unitKerja" => UnitKerja::where("divcode", $unitKerja)->first()?->unit_kerja,
+                "data" => [],
+                "success" => false,
+                "message" => $e->getMessage()
+            ];
+            return response()->json($data, 400);
+        }
+    }
+
+    /**
      * Get Data Monitoring Proyek
      * 
      * @return Illuminate\Http\Response JSON
@@ -145,6 +264,28 @@ class MobileController extends Controller
             $data = ["Status" => false, "Message" => $e->getMessage(), "data" => []];
             return response()->json($data);
         }
+    }
+
+    /**
+     * Get Unit Kerja
+     * 
+     * @return 
+     */
+    public function GetUnitKerja(string $departemen)
+    {
+        $curYear = 2022;
+        $unit_kerjas = UnitKerja::with(["proyeks"])->get()->map(function ($unit_kerja) {
+            $new_class = new stdClass();
+            $new_class->divcode = $unit_kerja->divcode;
+            $new_class->unit_kerja = $unit_kerja->unit_kerja;
+            $new_class->direktorat = $unit_kerja->dop;
+            $new_class->tahun = $unit_kerja->proyeks->isNotEmpty() ? $unit_kerja->proyeks->groupBy("tahun_perolehan")->keys()->max() : 0;
+            return $new_class;
+        })->whereNotIn("divcode", ["C", "B", "D", "8"]);
+        if ($departemen != "All Direktorat") {
+            $unit_kerjas = $unit_kerjas->where("direktorat", "=", $departemen);
+        }
+        return response()->json($unit_kerjas->values());
     }
 
 
