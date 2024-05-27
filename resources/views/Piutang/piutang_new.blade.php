@@ -97,8 +97,8 @@
                                         <th class="min-w-auto">Kategori Piutang</th>
                                         <th class="min-w-auto">Tanggal Create</th>
                                         <th class="min-w-auto">Tanggal Update</th>
-                                        <th class="min-w-auto">Created By</th>
-                                        <th class="min-w-auto">Updated By</th>
+                                        {{-- <th class="min-w-auto">Created By</th>
+                                        <th class="min-w-auto">Updated By</th> --}}
                                         <th class="min-w-auto">Action</th>
                                     </tr>
                                     <!--end::Table row-->
@@ -115,11 +115,11 @@
                                             <td class="text-start">{{ $piutang->Customer->name ?? "-" }}</td>
                                             <td class="text-center">{{ $piutang->Proyek->kode_proyek ?? "-" }}</td>
                                             <td class="text-start">{{ $piutang->Proyek->nama_proyek ?? "-" }}</td>
-                                            <td class="text-center">{{ $piutang->kategori == 3 ? "Piutang > 3 Bulan" : ($piutang->kategori == 2 ? "Piutang < 3 Bulan" : "Tidak ada Piutang") }}</td>
+                                            <td class="text-center">{{ $piutang->kategori == 3 ? "Tidak Ada Piutang" : ($piutang->kategori == 2 ? "Piutang < 3 Bulan" : "Tidak ada Piutang") }}</td>
                                             <td class="text-center">{{ \Carbon\Carbon::create($piutang->created_at)->translatedFormat('d F Y') }}</td>
                                             <td class="text-center">{{ \Carbon\Carbon::create($piutang->updated_at)->translatedFormat('d F Y') }}</td>
-                                            <td class="text-center">{{ $piutang->UserCreated->name }}</td>
-                                            <td class="text-center">{{ $piutang->UserUpdated->name }}</td>
+                                            {{-- <td class="text-center">{{ $piutang->UserCreated->name }}</td>
+                                            <td class="text-center">{{ $piutang->UserUpdated->name }}</td> --}}
                                             <td class="text-center">
                                                 <a href="#" data-bs-target="#kt_modal_edit_{{ $piutang->id }}"
                                                 data-bs-toggle="modal" class="btn btn-sm btn-primary text-white">
@@ -267,7 +267,7 @@
     <!--end::Modals-->
     
     <!--begin::Modal EDIT-->
-    @foreach ($piutangs as $key => $piutang)
+    @foreach ($piutangs as $piutang)
     <form action="/piutang/{{ $piutang->id }}/edit" method="post" enctype="multipart/form-data">
         @csrf
         <!--begin::Modal - Create Proyek-->
@@ -339,7 +339,7 @@
                                         </label>
                                         <!--Begin::Select-->
                                         <div id="div-status">
-                                            <select name="status" id="status-{{ $key }}" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                            <select name="status" id="status" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
                                                 data-placeholder="Pilih status">
                                                 <option value=""></option>                                                                            
                                                 <option value="1" {{ $piutang->kategori == "1" ? "selected" : "" }}>Tidak Ada Piutang</option>                                                                          

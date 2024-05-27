@@ -41,8 +41,8 @@ class PiutangController extends Controller
             $piutang->customer_id = $data['nama_pelanggan'];
             $piutang->kode_proyek = $data['kode_proyek'];
             $piutang->kategori = $data['status'];
-            $piutang->created_by = Auth::user()->nip;
-            $piutang->updated_by = Auth::user()->nip;
+            // $piutang->created_by = Auth::user()->nip;
+            // $piutang->updated_by = Auth::user()->nip;
             $piutang->save();
 
             Alert::success("Success", "Data Piutang Berhasil Dibuat!");
@@ -77,7 +77,7 @@ class PiutangController extends Controller
             }
 
             $piutang->kategori = $data['status'];
-            $piutang->updated_by = Auth::user()->nip;
+            // $piutang->updated_by = Auth::user()->nip;
             $piutang->save();
 
             Alert::success("Success", "Data Piutang Berhasil Diubah!");
