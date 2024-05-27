@@ -8,6 +8,7 @@ use App\Models\CsiMasterGroupParentPertanyaan;
 use App\Models\CsiMasterKategoriPertanyaan;
 use App\Models\CsiMasterPertanyaan;
 use App\Models\CsiMasterTingkatKepuasan;
+use App\Models\CsiPerhitunganDetail;
 use App\Models\User;
 use App\Models\Proyek;
 use App\Models\ProyekProgress;
@@ -142,15 +143,24 @@ class CSIController extends Controller
             for ($i = 1; $i < 13; $i++) {
                 $variableName = 'wis_' . $i;
 
-                $newCsiJawaban = new CsiKalkulasiJawaban();
-                $newCsiJawaban->csi_id = $csi->id_csi;
-                $newCsiJawaban->no_spk = $csi->no_spk;
-                $newCsiJawaban->nilai = $$variableName;
-                $newCsiJawaban->index = $i;
-                $newCsiJawaban->kategori = 'wis';
-                $newCsiJawaban->keterangan = $variableName;
-                // dd($newCsiJawaban);
-                $newCsiJawaban->save();
+                $newPerhitunganCSI = new CsiPerhitunganDetail();
+                $newPerhitunganCSI->csi_id = $csi->id_csi;
+                $newPerhitunganCSI->no_spk = $csi->no_spk;
+                $newPerhitunganCSI->unit_kerja = $csi->ProyekPIS->kd_divisi;
+                $newPerhitunganCSI->parameter = $variableName;
+                $newPerhitunganCSI->nilai = $$variableName;
+
+                $newPerhitunganCSI->save();
+
+                // $newCsiJawaban = new CsiKalkulasiJawaban();
+                // $newCsiJawaban->csi_id = $csi->id_csi;
+                // $newCsiJawaban->no_spk = $csi->no_spk;
+                // $newCsiJawaban->nilai = $$variableName;
+                // $newCsiJawaban->index = $i;
+                // $newCsiJawaban->kategori = 'wis';
+                // $newCsiJawaban->keterangan = $variableName;
+                // // dd($newCsiJawaban);
+                // $newCsiJawaban->save();
             }
 
             // $csi->score_csi = ($score_csi_a + $score_csi_b + $score_csi_b) / 3;
