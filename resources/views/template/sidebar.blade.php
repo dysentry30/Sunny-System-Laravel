@@ -934,22 +934,83 @@
                             </div>
                         @endif --}}
 
-                        @canany(['super-admin', 'crm', 'ccm'])
-                            <div class="menu-item">
-                                <a class="menu-link " href="/knowledge-base"
-                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'knowledge-base') ? 'background-color:#008CB4' : '' }}">
+                        @canany(['super-admin', 'admin-crm', 'risk-crm'])
+                            <!--Begin::Knowladge Base Expand-->
+                            <div class="menu-item"
+                                style="{{ 
+                                Request::url() == "/knowladge-base/peraturan" ||
+                                Request::url() == "/knowladge-base/company-profile" ||
+                                Request::url() == "/knowladge-base/portofolio" ||
+                                // str_contains(Request::Path(), 'instansi') ||
+                                str_contains(Request::Path(), 'team-proyek')
+                                    ? 'background-color:#008CB4'
+                                    : '' }}">
+
+                                <a class="menu-link" id="collapse-button" style="color:white; padding-left:20px;"
+                                    data-bs-toggle="collapse" href="#knowladge-collaps" role="button"
+                                    aria-expanded="false" aria-controls="collapseExample">
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                         <span class="svg-icon svg-icon-2">
-                                            <img alt="Logo" src="/media/icons/duotune/creatio/knowledge_base.svg"
-                                                class="h-30px logo" />
+                                            <i class="bi bi-archive-fill text-white" style="font-size: 18px; margin-left:7px"></i>
                                         </span>
                                         <!--end::Svg Icon-->
                                     </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Knowledge
-                                        Base</span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Knowladge Base <i
+                                            class="bi bi-caret-down-fill text-white"></i></span>
+                                </a>
+                                <!--begin::Colapse #0db0d9-->
+                                <div class="collapse" id="knowladge-collaps">
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::url() == '/knowladge-base/peraturan' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/knowladge-base/peraturan" style="color:white; padding-left:20px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M200-800v241-1 400-640 200-200Zm80 400h140q9-23 22-43t30-37H280v80Zm0 160h127q-5-20-6.5-40t.5-40H280v80ZM200-80q-33 0-56.5-23.5T120-160v-640q0-33 23.5-56.5T200-880h320l240 240v100q-19-8-39-12.5t-41-6.5v-41H480v-200H200v640h241q16 24 36 44.5T521-80H200Zm460-120q42 0 71-29t29-71q0-42-29-71t-71-29q-42 0-71 29t-29 71q0 42 29 71t71 29ZM864-40 756-148q-21 14-45.5 21t-50.5 7q-75 0-127.5-52.5T480-300q0-75 52.5-127.5T660-480q75 0 127.5 52.5T840-300q0 26-7 50.5T812-204L920-96l-56 56Z"/></svg>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title"
+                                                style="font-size: 16px; padding-left: 10px">Peraturan</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::url() == '/knowladge-base/company-profile' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/knowladge-base/company-profile" style="color:white; padding-left:20px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M160-80q-33 0-56.5-23.5T80-160v-440q0-33 23.5-56.5T160-680h200v-120q0-33 23.5-56.5T440-880h80q33 0 56.5 23.5T600-800v120h200q33 0 56.5 23.5T880-600v440q0 33-23.5 56.5T800-80H160Zm0-80h640v-440H600q0 33-23.5 56.5T520-520h-80q-33 0-56.5-23.5T360-600H160v440Zm80-80h240v-18q0-17-9.5-31.5T444-312q-20-9-40.5-13.5T360-330q-23 0-43.5 4.5T276-312q-17 8-26.5 22.5T240-258v18Zm320-60h160v-60H560v60Zm-200-60q25 0 42.5-17.5T420-420q0-25-17.5-42.5T360-480q-25 0-42.5 17.5T300-420q0 25 17.5 42.5T360-360Zm200-60h160v-60H560v60ZM440-600h80v-200h-80v200Zm40 220Z"/></svg>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title"
+                                                style="font-size: 16px; padding-left: 10px">Company Profile</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::url() == '/knowladge-base/portofolio' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/knowladge-base/portofolio" style="color:white; padding-left:20px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M440-280h320v-22q0-45-44-71.5T600-400q-72 0-116 26.5T440-302v22Zm160-160q33 0 56.5-23.5T680-520q0-33-23.5-56.5T600-600q-33 0-56.5 23.5T520-520q0 33 23.5 56.5T600-440ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Z"/></svg>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title"
+                                                style="font-size: 16px; padding-left: 10px">Portofolio</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                </div>
+                                <!--end::Colapse-->
+                                <!--end::Svg Icon-->
+                                </span>
                                 </a>
                             </div>
+                            {{-- </div> --}}
+                            <!--end::Knowladge Base Expand-->
                         @endcanany
 
                         @canany(['super-admin', 'ccm'])

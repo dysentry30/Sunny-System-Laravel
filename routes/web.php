@@ -60,6 +60,7 @@ use App\Http\Controllers\Rekomendasi2Controller;
 use App\Http\Controllers\MasalahHukumController;
 use App\Http\Controllers\PiutangController;
 use App\Http\Controllers\CompetitorController;
+use App\Http\Controllers\KnowladgeBaseController;
 use App\Models\ChecklistCalonMitraKSO;
 use App\Models\ContractChangeNotice;
 use App\Models\ContractChangeOrder;
@@ -4831,18 +4832,27 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         }
     });
     //End::Master Sub Klasifikasi SBU
-    
+
     //End :: Master Data
 
 
     //Begin :: FAQ - KnowledgeBase
-    Route::get('/knowledge-base',  [FaqsController::class, 'index']);
+    // Route::get('/knowledge-base',  [FaqsController::class, 'index']);
 
-    Route::post('/knowledge-base/new',  [FaqsController::class, 'create']);
+    // Route::post('/knowledge-base/new',  [FaqsController::class, 'create']);
 
-    Route::post('/knowledge-base/update',  [FaqsController::class, 'update']);
+    // Route::post('/knowledge-base/update',  [FaqsController::class, 'update']);
 
-    Route::delete('/knowledge-base/delete/{id}',  [FaqsController::class, 'delete']);
+    // Route::delete('/knowledge-base/delete/{id}',  [FaqsController::class, 'delete']);
+    Route::group(['prefix' => 'knowladge-base'], function () {
+        Route::get('/{kategori}', [KnowladgeBaseController::class, 'view']);
+        Route::post('/{kategori}/save', [KnowladgeBaseController::class, 'save']);
+        Route::post('/{kategori}/{id}/edit', [KnowladgeBaseController::class, 'edit']);
+        Route::post('/{kategori}/{id}/delete', [KnowladgeBaseController::class, 'delete']);
+        Route::get('/{kategori}/{id}/get-data', [KnowladgeBaseController::class, 'getData']);
+        Route::get('/{kategori}/{id}/{id_document}/download', [KnowladgeBaseController::class, 'downloadDocument']);
+        Route::post('/{kategori}/{id}/{id_document}/delete-document', [KnowladgeBaseController::class, 'deleteDocument']);
+    });
     //End :: FAQ - KnowledgeBase
 
 
