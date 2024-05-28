@@ -239,10 +239,14 @@
                                                 </td>
                                                 <td>{{ $claim['nama_proyek'] }}</td>
                                                 <td>{{ $claim['unit_kerja'] }}</td>
-                                                <td class="text-center">{{ $claim['total_vo'] }}</td>
+                                                {{-- <td class="text-center">{{ $claim['total_vo'] }}</td>
                                                 <td class="text-center">{{ $claim['total_klaim'] }}</td>
                                                 <td class="text-center">{{ $claim['total_anti_klaim'] }}</td>
-                                                <td class="text-center">{{ $claim['total_klaim_asuransi'] }}</td>
+                                                <td class="text-center">{{ $claim['total_klaim_asuransi'] }}</td> --}}
+                                                <td class="text-center">{{ number_format($claim['total_vo'], 0, ".", ".") }}</td>
+                                                <td class="text-center">{{ number_format($claim['total_klaim'], 0, ".", ".") }}</td>
+                                                <td class="text-center">{{ number_format($claim['total_anti_klaim'], 0, ".", ".") }}</td>
+                                                <td class="text-center">{{ number_format($claim['total_klaim_asuransi'], 0, ".", ".") }}</td>
                                                 {{-- <td>
                                                     <a href="/contract-management/view/{{ $claim->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim->id_contract }}</a>
                                                 </td> --}}
@@ -258,10 +262,10 @@
                                         <tfoot>
                                             <tr>
                                                 <td colspan="3" class="text-center text-white" style="background-color: #0DB0D9"><b>Total</b></td>
-                                                <td class="text-center">{{ $totalVOAll }}</td>
-                                                <td class="text-center">{{ $totalClaimAll }}</td>
-                                                <td class="text-center">{{ $totalAntiClaimAll }}</td>
-                                                <td class="text-center">{{ $totalClaimAsuransiAll }}</td>
+                                                <td class="text-center">{{ number_format($totalVOAll, 0, ".", ".") }}</td>
+                                                <td class="text-center">{{ number_format($totalClaimAll, 0, ".", ".") }}</td>
+                                                <td class="text-center">{{ number_format($totalAntiClaimAll, 0, ".", ".") }}</td>
+                                                <td class="text-center">{{ number_format($totalClaimAsuransiAll, 0, ".", ".") }}</td>
                                             </tr>
                                         </tfoot>
                                     </table>
