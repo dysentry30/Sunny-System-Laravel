@@ -44,4 +44,9 @@ class ProyekPISNew extends Model
     {
         return $this->hasMany(PerubahanKontrak::class, "profit_center", "profit_center");
     }
+
+    public function SumberDana()
+    {
+        return $this->hasOne(SumberDana::class, "kode_sumber", "sumber_dana");
+    }
 }

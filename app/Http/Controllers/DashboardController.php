@@ -2424,7 +2424,8 @@ class DashboardController extends Controller
 
         $get_jenis_proyek = $proyeks->map(function($p){
             $new_class = new stdClass;
-            if($p->jenis_proyek == "J"){
+            // if ($p->jenis_proyek == "JO") {
+            if ($p->type_code == "JO") {
                 $new_class->jenis_proyek = "JO"; 
             }else{
                 $new_class->jenis_proyek = "Non JO";
@@ -2447,9 +2448,11 @@ class DashboardController extends Controller
         // $change_status = $proyeks->map(function($item){
         //     return PerubahanKontrak::where("id_contract", "=", $item->ContractManagements->id_contract)->get();
         // });
-        $change_status = ProyekPISNew::all()->map(function ($item) {
-            return PerubahanKontrak::where("profit_center", "=", $item->profit_center)->get();
-        });
+        $change_status = $proyeks->where(function ($item) {
+            return $item->PerubahanKontrak->isNotEmpty();
+        })->map(function ($item) {
+            return $item->PerubahanKontrak;
+        })->values();
         // dd($change_status);
         $change_status = $change_status->map(function ($pcs) {
             // dd($pcs);
@@ -2460,17 +2463,17 @@ class DashboardController extends Controller
                         $new_class->perubahan = "Draft";
                     } else if ($p->stage == 2) {
                         $new_class->perubahan = "Sub";
-                } else if ($p->stage == 3) {
-                    $new_class->perubahan = "Revisi";
-                } else if ($p->stage == 4) {
-                    $new_class->perubahan = "Negosiasi";
-                } else if ($p->stage == 5) {
-                    $new_class->perubahan = "Approve";
-                } else if ($p->stage == 6 && $p->is_dispute == true) {
-                    $new_class->perubahan = "Dispute";
-                } else if ($p->stage == 6) {
-                    $new_class->perubahan = "Reject";
-                };
+                    } else if ($p->stage == 3) {
+                        $new_class->perubahan = "Revisi";
+                    } else if ($p->stage == 4) {
+                        $new_class->perubahan = "Negosiasi";
+                    } else if ($p->stage == 5) {
+                        $new_class->perubahan = "Approve";
+                    } else if ($p->stage == 6 && $p->is_dispute == true) {
+                        $new_class->perubahan = "Dispute";
+                    } else if ($p->stage == 6) {
+                        $new_class->perubahan = "Reject";
+                    };
                 return $new_class;
                 }
             }
@@ -2496,18 +2499,61 @@ class DashboardController extends Controller
         // Begin :: Jenis Kontrak
         $get_jenis_kontrak = $proyeks->map(function ($p) {
             // dd($p);
-            if (!empty($p->jenis_terkontrak)) {
-                if ($p->jenis_terkontrak == "Design & Build") {
-                    $p->jenis_terkontrak = "Lumpsum";
-                }else if ($p->jenis_terkontrak == "OM") {
-                    $p->jenis_terkontrak = "Unit Price";
+            switch ($p->jenis_kontrak) {
+                case "JKT01":
+                    $jenis_terkontrak = "Cost-Plus/Provisional Sum";
+                    break;
+                case "JKT02":
+                    $jenis_terkontrak = "Turnkey";
+                    break;
+                case "JKT06":
+                    $jenis_terkontrak = "Design & Build";
+                    break;
+                case "JKT05":
+                    $jenis_terkontrak = "OM";
+                    break;
+                case "JKT05":
+                    $jenis_terkontrak = "Unit Price";
+                    break;
+                case "JKT06":
+                    $jenis_terkontrak = "Lumpsum";
+                    break;
+                case "JKT05":
+                    $jenis_terkontrak = "Fixed Price";
+                    break;
+                case "JKT08":
+                    $jenis_terkontrak = "Lumsump+Unit Price";
+                    break;
+                default:
+                    $jenis_terkontrak = '';
+                    break;
+            };
+            if (!empty($jenis_terkontrak)) {
+                if ($jenis_terkontrak == "Design & Build") {
+                    $jenis_terkontrak = "Lumpsum";
+                } else if ($jenis_terkontrak == "OM") {
+                    $jenis_terkontrak = "Unit Price";
                 } else {
-                    $p->jenis_terkontrak = $p->jenis_terkontrak;
+                    $jenis_terkontrak = $jenis_terkontrak;
                 }
             } else {
-                $p->jenis_terkontrak = "Uncategorized";
+                $jenis_terkontrak = "Uncategorized";
             }
-            return $p;
+            // if (!empty($p->jenis_terkontrak)) {
+            //     if ($p->jenis_terkontrak == "Design & Build") {
+            //         $p->jenis_terkontrak = "Lumpsum";
+            //     }else if ($p->jenis_terkontrak == "OM") {
+            //         $p->jenis_terkontrak = "Unit Price";
+            //     } else {
+            //         $p->jenis_terkontrak = $p->jenis_terkontrak;
+            //     }
+            // } else {
+            //     $p->jenis_terkontrak = "Uncategorized";
+            // }
+            // return $p;
+            $new_class = new stdClass;
+            $new_class->jenis_terkontrak = $jenis_terkontrak;
+            return $new_class;
         });
 
         $jenis_kontrak = $get_jenis_kontrak->groupBy("jenis_terkontrak")->map(function ($p, $key) use($get_jenis_kontrak){
@@ -3654,7 +3700,8 @@ class DashboardController extends Controller
 
         $get_jenis_proyek = $proyeks->map(function ($p) {
             $new_class = new stdClass;
-            if ($p->jenis_proyek == "J") {
+            // if ($p->jenis_proyek == "J") {
+            if ($p->jenis_proyek == "JO") {
                 $new_class->jenis_proyek = "JO";
             } else {
                 $new_class->jenis_proyek = "Non JO";
@@ -3677,9 +3724,11 @@ class DashboardController extends Controller
         // $change_status = $proyeks->map(function ($item) {
         //     return PerubahanKontrak::where("id_contract", "=", $item->ContractManagements->id_contract)->get();
         // });
-        $change_status = $proyeks->map(function ($item) {
-            return PerubahanKontrak::where("profit_center", "=", $item->profit_center)->get();
-        });
+        $change_status = $proyeks->where(function ($item) {
+            return $item->PerubahanKontrak->isNotEmpty();
+        })->map(function ($item) {
+            return $item->PerubahanKontrak;
+        })->values();
         // dd($change_status);
         $change_status = $change_status->map(function ($pcs) {
             // dd($pcs);
@@ -3726,18 +3775,61 @@ class DashboardController extends Controller
         // Begin :: Jenis Kontrak
         $get_jenis_kontrak = $proyeks->map(function ($p) {
             // dd($p);
-            if (!empty($p->jenis_terkontrak)) {
-                if ($p->jenis_terkontrak == "Design & Build") {
-                    $p->jenis_terkontrak = "Lumpsum";
-                } else if ($p->jenis_terkontrak == "OM") {
-                    $p->jenis_terkontrak = "Unit Price";
+            switch ($p->jenis_kontrak) {
+                case "JKT01":
+                    $jenis_terkontrak = "Cost-Plus/Provisional Sum";
+                    break;
+                case "JKT02":
+                    $jenis_terkontrak = "Turnkey";
+                    break;
+                case "JKT06":
+                    $jenis_terkontrak = "Design & Build";
+                    break;
+                case "JKT05":
+                    $jenis_terkontrak = "OM";
+                    break;
+                case "JKT05":
+                    $jenis_terkontrak = "Unit Price";
+                    break;
+                case "JKT06":
+                    $jenis_terkontrak = "Lumpsum";
+                    break;
+                case "JKT05":
+                    $jenis_terkontrak = "Fixed Price";
+                    break;
+                case "JKT08":
+                    $jenis_terkontrak = "Lumsump+Unit Price";
+                    break;
+                default:
+                    $jenis_terkontrak = '';
+                    break;
+            };
+            if (!empty($jenis_terkontrak)) {
+                if ($jenis_terkontrak == "Design & Build") {
+                    $jenis_terkontrak = "Lumpsum";
+                } else if ($jenis_terkontrak == "OM") {
+                    $jenis_terkontrak = "Unit Price";
                 } else {
-                    $p->jenis_terkontrak = $p->jenis_terkontrak;
+                    $jenis_terkontrak = $jenis_terkontrak;
                 }
             } else {
-                $p->jenis_terkontrak = "Uncategorized";
+                $jenis_terkontrak = "Uncategorized";
             }
-            return $p;
+            // if (!empty($p->jenis_terkontrak)) {
+            //     if ($p->jenis_terkontrak == "Design & Build") {
+            //         $p->jenis_terkontrak = "Lumpsum";
+            //     }else if ($p->jenis_terkontrak == "OM") {
+            //         $p->jenis_terkontrak = "Unit Price";
+            //     } else {
+            //         $p->jenis_terkontrak = $p->jenis_terkontrak;
+            //     }
+            // } else {
+            //     $p->jenis_terkontrak = "Uncategorized";
+            // }
+            // return $p;
+            $new_class = new stdClass;
+            $new_class->jenis_terkontrak = $jenis_terkontrak;
+            return $new_class;
         });
 
         $jenis_kontrak = $get_jenis_kontrak->groupBy("jenis_terkontrak")->map(function ($p, $key) use ($get_jenis_kontrak) {
