@@ -255,6 +255,15 @@
                                                 </tr>
                                             @endforelse
                                         </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="3" class="text-center text-white" style="background-color: #0DB0D9"><b>Total</b></td>
+                                                <td class="text-center">{{ $totalVOAll }}</td>
+                                                <td class="text-center">{{ $totalClaimAll }}</td>
+                                                <td class="text-center">{{ $totalAntiClaimAll }}</td>
+                                                <td class="text-center">{{ $totalClaimAsuransiAll }}</td>
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                     <!--end::Table -->
                                 </div>
@@ -320,6 +329,9 @@
                 dom: '<"float-start"f><"#example"t>rtip',
                 pageLength : 10,
                 ordering: false,
+                fixedHeader: {
+                    footer: true
+                }
             } );
         });
     </script>
