@@ -551,7 +551,7 @@
                                 </div>
                         @endif --}}
 
-                        @canany(['super-admin', 'admin-crm', 'risk-crm'])
+                        @canany(['super-admin', 'admin-crm'])
                         {{-- @if (auth()->user()->check_administrator || $adminPIC) --}}
                             <!--Begin::Master Data Expand-->
                             {{-- <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#008CB4;margin-top:8px;"> --}}
@@ -566,14 +566,7 @@
                             str_contains(Request::Path(), 'kriteria-pasar') ||
                             str_contains(Request::Path(), 'industry-attractivness') ||
                             str_contains(Request::Path(), 'industry-sector') ||
-                            str_contains(Request::Path(), 'kriteria-green-line') ||
-                            str_contains(Request::Path(), 'kriteria-assessment') ||
                             str_contains(Request::Path(), 'konsultan-perencana') ||
-                            str_contains(Request::Path(), 'kriteria-pengguna-jasa') ||
-                            str_contains(Request::Path(), 'legalitas-perusahaan') ||
-                            str_contains(Request::Path(), 'penilaian-pengguna-jasa') ||
-                            str_contains(Request::Path(), 'matriks-approval-rekomendasi') ||
-                            str_contains(Request::Path(), 'except-greenlane') ||
                             str_contains(Request::Path(), 'team-proyek') ? 'background-color:#008CB4' : '' }}">
 
                                     <a class="menu-link" id="collapse-button" style="color:white; padding-left:20px;"
@@ -868,62 +861,6 @@
                                     {{-- @endif                                         --}}
                                     @endcanany
 
-                                    @canany(['super-admin', 'risk-crm'])
-                                    {{-- @if (auth()->user()->check_administrator) --}}
-                                    <!--begin::Menu Colapse-->
-                                    <div id="#kt_aside_menu" data-kt-menu="true"
-                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'kriteria-green-line' ? 'background-color:#008CB4' : '' }}">
-                                        <a class="menu-link " href="/kriteria-green-line" style="color:white; padding-left:20px;">
-                                            <span class="menu-icon">
-                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                                {{-- <i class="bi bi-buildings text-white"></i> --}}
-                                                <i class="bi bi-award-fill text-white"></i>
-                                                <!--end::Svg Icon-->
-                                            </span>
-                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Kriteria Green Line</span>
-                                        </a>
-                                    </div>
-                                    {{-- @endif                                         --}}
-                                    @endcanany
-                                    
-                                    @canany(['super-admin', 'risk-crm'])
-                                    {{-- @if (auth()->user()->check_administrator) --}}
-                                    <!--begin::Menu Colapse-->
-                                    <div id="#kt_aside_menu" data-kt-menu="true"
-                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'kriteria-assessment' ? 'background-color:#008CB4' : '' }}">
-                                        <a class="menu-link " href="/kriteria-assessment" style="color:white; padding-left:20px;">
-                                            <span class="menu-icon">
-                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                                {{-- <i class="bi bi-buildings text-white"></i> --}}
-                                                <i class="bi bi-award-fill text-white"></i>
-                                                <!--end::Svg Icon-->
-                                            </span>
-                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Kriteria Assessment</span>
-                                        </a>
-                                    </div>
-                                    <!--end::Menu Colapse-->
-                                    {{-- @endif                                         --}}
-                                    @endcanany
-                                    
-                                    @canany(['super-admin', 'risk-crm'])
-                                    {{-- @if (auth()->user()->check_administrator) --}}
-                                    <!--begin::Menu Colapse-->
-                                    <div id="#kt_aside_menu" data-kt-menu="true"
-                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'except-greenlane' ? 'background-color:#008CB4' : '' }}">
-                                        <a class="menu-link " href="/except-greenlane" style="color:white; padding-left:20px;">
-                                            <span class="menu-icon">
-                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                                {{-- <i class="bi bi-buildings text-white"></i> --}}
-                                                <i class="bi bi-award-fill text-white"></i>
-                                                <!--end::Svg Icon-->
-                                            </span>
-                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Except Greenlane</span>
-                                        </a>
-                                    </div>
-                                    <!--end::Menu Colapse-->
-                                    {{-- @endif                                         --}}
-                                    @endcanany
-
                                     @canany(['super-admin', 'admin-crm'])
                                     {{-- @if (auth()->user()->check_administrator) --}}
                                     <!--begin::Menu Colapse-->
@@ -960,56 +897,7 @@
                                     {{-- @endif --}}
                                     @endcanany
 
-                                    @can('super-admin')
-                                        <!--begin::Menu Colapse-->
-                                        <div id="#kt_aside_menu" data-kt-menu="true"
-                                            style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'matriks-approval-rekomendasi' ? 'background-color:#008CB4' : '' }}">
-                                            <a class="menu-link " href="/matriks-approval-rekomendasi" style="color:white; padding-left:20px;">
-                                                <span class="menu-icon">
-                                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                                    {{-- <i class="bi bi-buildings text-white"></i> --}}
-                                                    <i class="bi bi-person-fill-lock text-white"></i>
-                                                    <!--end::Svg Icon-->
-                                                </span>
-                                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Matriks Approval Rekomendasi</span>
-                                            </a>
-                                        </div>
-                                        <!--end::Menu Colapse-->
-                                    @endcan
-
-                                    @can('super-admin')
-                                        <!--begin::Menu Colapse-->
-                                        <div id="#kt_aside_menu" data-kt-menu="true"
-                                            style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'kriteria-pengguna-jasa' ? 'background-color:#008CB4' : '' }}">
-                                            <a class="menu-link " href="/kriteria-pengguna-jasa" style="color:white; padding-left:20px;">
-                                                <span class="menu-icon">
-                                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                                    {{-- <i class="bi bi-buildings text-white"></i>                                                     --}}
-                                                    <i class="bi bi-type text-white" style="font-size: 20px"></i>
-                                                    <!--end::Svg Icon-->
-                                                </span>
-                                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Kriteria Pengguna Jasa</span>
-                                            </a>
-                                        </div>
-                                        <!--end::Menu Colapse-->
-                                    @endcan
                                     
-                                    @can('super-admin')
-                                        <!--begin::Menu Colapse-->
-                                        <div id="#kt_aside_menu" data-kt-menu="true"
-                                            style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'legalitas-perusahaan' ? 'background-color:#008CB4' : '' }}">
-                                            <a class="menu-link " href="/legalitas-perusahaan" style="color:white; padding-left:20px;">
-                                                <span class="menu-icon">
-                                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                                    {{-- <i class="bi bi-buildings text-white"></i>                                                     --}}
-                                                    <i class="bi bi-type text-white" style="font-size: 20px"></i>
-                                                    <!--end::Svg Icon-->
-                                                </span>
-                                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Legalitas Perusahaan</span>
-                                            </a>
-                                        </div>
-                                        <!--end::Menu Colapse-->
-                                    @endcan
                                 </div>
                                 <!--end::Colapse-->
                                 <!--end::Svg Icon-->
@@ -1021,7 +909,7 @@
                         {{-- @endif --}}
                         @endcanany
 
-                        @canany(['super-admin', 'risk-crm'])
+                        @canany(['super-admin', 'admin-crm', 'risk-crm'])
                             <div class="menu-item"
                                 style="color:white; {{ Request::Path() == 'matriks-approval-rekomendasi' ||
                                 Request::Path() == 'matriks-approval-rekomendasi-2' ||
@@ -1049,7 +937,7 @@
                                 Request::Path() == 'master-klasifikasi-produksi' ||
                                 Request::Path() == 'master-fortune-rank' ||
                                 Request::Path() == 'master-lq-rank' ||
-                                Request::Path() == 'master-masalah-hukum' ||
+                                Request::Path() == 'masalah-hukum' ||
                                 Request::Path() == 'master-pefindo' ||
                                 Request::Path() == 'master-group-tier'
                                     ? 'background-color:#008CB4'
@@ -1558,8 +1446,8 @@
                                 @canany(['super-admin', 'risk-crm'])
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
-                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'master-masalah-hukum' ? 'background-color:#008CB4' : '' }}">
-                                        <a class="menu-link d-flex flex-row align-items-center" href="/master-masalah-hukum"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'masalah-hukum' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link d-flex flex-row align-items-center" href="/masalah-hukum"
                                             style="color:white; padding-left:10px;">
                                             <span class="menu-icon">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
@@ -1850,38 +1738,6 @@
                                 </a>
                             </div>
                             <!--end::Menu Colapse-->
-                        @endcanany
-
-                        @canany(['super-admin', 'admin-crm', 'risk-crm'])
-                        {{-- @if (auth()->user()->check_administrator || $adminPIC) --}}
-                            <div class="menu-item">
-                                <a class="menu-link " href="/piutang"
-                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'piutang') ? 'background-color:#008CB4' : '' }}">
-                                    <span class="menu-icon">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                        <i class="bi bi-wallet-fill text-white" style="font-size: 20px"></i>
-                                        <!--end::Svg Icon-->
-                                    </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Piutang</span>
-                                </a>
-                            </div>
-                        {{-- @endif                             --}}
-                        @endcanany
-
-                        @canany(['super-admin', 'admin-crm', 'risk-crm'])
-                        {{-- @if (auth()->user()->check_administrator || $adminPIC) --}}
-                            <div class="menu-item">
-                                <a class="menu-link " href="/master-group-tier"
-                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'master-group-tier') ? 'background-color:#008CB4' : '' }}">
-                                    <span class="menu-icon">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                        <i class="bi bi-collection-fill text-white" style="font-size: 20px"></i>
-                                        <!--end::Svg Icon-->
-                                    </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Group Tier BUMN</span>
-                                </a>
-                            </div>
-                        {{-- @endif                             --}}
                         @endcanany
 
 

@@ -16,5 +16,10 @@ class MasalahHukum extends Model
         return $this->hasOne(Proyek::class, "kode_proyek", "kode_proyek");
     }
 
+    public function Customer()
+    {
+        return $this->hasOne(Customer::class, "id_customer", "id_customer");
+    }
+
 
 }
