@@ -478,10 +478,34 @@ class ClaimController extends Controller
             //         // dd("test");
             //     }
             // }
+
+            $totalVOAll = 0;
+            $totalClaimAll = 0;
+            $totalAntiClaimAll = 0;
+            $totalClaimAsuransiAll = 0;
+
             if ($filterBulan == (int) date("m") && $filterTahun == (int) date("Y")) {
                 // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->whereIn("unit_kerja", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->get();
                 $proyeks_all = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->whereIn("kd_divisi", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->where('contract_managements.profit_center', '!=', null)->get();
 
+                $proyeks_all->each(function ($proyek) use (&$totalVOAll, &$totalClaimAll, &$totalAntiClaimAll, &$totalClaimAsuransiAll) {
+                    if ($proyek->PerubahanKontrak->isNotEmpty()) {
+                        $claimsPerProyek = $proyek->PerubahanKontrak;
+
+                        $countVO = $claimsPerProyek->where("jenis_perubahan", "=", "VO")->count();
+                        $totalVOAll += $countVO;
+
+                        $countClaim = $claimsPerProyek->where("jenis_perubahan", "=", "Klaim")->count();
+                        $totalClaimAll += $countClaim;
+
+                        $countAntiClaim = $claimsPerProyek->where("jenis_perubahan", "=", "Anti Klaim")->count();
+                        $totalAntiClaimAll += $countAntiClaim;
+
+                        $countClaimAsuransi = $claimsPerProyek->where("jenis_perubahan", "=", "Klaim Asuransi")->count();
+                        $totalClaimAsuransiAll += $countClaimAsuransi;
+                    }
+                });
+                
                 $proyeks_all = $proyeks_all->map(function ($proyek) {
                     $result = [];
                     // $result['kode_proyek'] = $proyek->kode_proyek;
@@ -533,6 +557,23 @@ class ClaimController extends Controller
                     $filterTahun
                 )->get()->groupBy('kode_proyek');
 
+                $proyeks_all->each(function ($proyek) use (&$totalVOAll, &$totalClaimAll, &$totalAntiClaimAll, &$totalClaimAsuransiAll) {
+                    if ($proyek->PerubahanKontrak->isNotEmpty()) {
+                        $claimsPerProyek = $proyek->PerubahanKontrak;
+
+                        $countVO = $claimsPerProyek->where("jenis_perubahan", "=", "VO")->count();
+                        $totalVOAll += $countVO;
+
+                        $countClaim = $claimsPerProyek->where("jenis_perubahan", "=", "Klaim")->count();
+                        $totalClaimAll += $countClaim;
+
+                        $countAntiClaim = $claimsPerProyek->where("jenis_perubahan", "=", "Anti Klaim")->count();
+                        $totalAntiClaimAll += $countAntiClaim;
+
+                        $countClaimAsuransi = $claimsPerProyek->where("jenis_perubahan", "=", "Klaim Asuransi")->count();
+                        $totalClaimAsuransiAll += $countClaimAsuransi;
+                    }
+                });
 
                 $proyeks_all = $proyeks_all->map(function ($claim) {
                     $cat_vo = $claim->where(
@@ -617,9 +658,33 @@ class ClaimController extends Controller
             //     }
             // }
 
+
+            $totalVOAll = 0;
+            $totalClaimAll = 0;
+            $totalAntiClaimAll = 0;
+            $totalClaimAsuransiAll = 0;
+
             if ($filterBulan == (int) date("m") && $filterTahun == (int) date("Y")) {
                 // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->whereIn("unit_kerja", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->get();
                 $proyeks_all = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->whereIn("kd_divisi", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->where('contract_managements.profit_center', '!=', null)->get();
+
+                $proyeks_all->each(function ($proyek) use (&$totalVOAll, &$totalClaimAll, &$totalAntiClaimAll, &$totalClaimAsuransiAll) {
+                    if ($proyek->PerubahanKontrak->isNotEmpty()) {
+                        $claimsPerProyek = $proyek->PerubahanKontrak;
+
+                        $countVO = $claimsPerProyek->where("jenis_perubahan", "=", "VO")->count();
+                        $totalVOAll += $countVO;
+
+                        $countClaim = $claimsPerProyek->where("jenis_perubahan", "=", "Klaim")->count();
+                        $totalClaimAll += $countClaim;
+
+                        $countAntiClaim = $claimsPerProyek->where("jenis_perubahan", "=", "Anti Klaim")->count();
+                        $totalAntiClaimAll += $countAntiClaim;
+
+                        $countClaimAsuransi = $claimsPerProyek->where("jenis_perubahan", "=", "Klaim Asuransi")->count();
+                        $totalClaimAsuransiAll += $countClaimAsuransi;
+                    }
+                });
 
                 $proyeks_all = $proyeks_all->map(function ($proyek) {
                     $result = [];
@@ -684,6 +749,25 @@ class ClaimController extends Controller
                 )->get()->groupBy('kode_proyek');
 
 
+                $proyeks_all->each(function ($proyek) use (&$totalVOAll, &$totalClaimAll, &$totalAntiClaimAll, &$totalClaimAsuransiAll) {
+                    if ($proyek->PerubahanKontrak->isNotEmpty()) {
+                        $claimsPerProyek = $proyek->PerubahanKontrak;
+
+                        $countVO = $claimsPerProyek->where("jenis_perubahan", "=", "VO")->count();
+                        $totalVOAll += $countVO;
+
+                        $countClaim = $claimsPerProyek->where("jenis_perubahan", "=", "Klaim")->count();
+                        $totalClaimAll += $countClaim;
+
+                        $countAntiClaim = $claimsPerProyek->where("jenis_perubahan", "=", "Anti Klaim")->count();
+                        $totalAntiClaimAll += $countAntiClaim;
+
+                        $countClaimAsuransi = $claimsPerProyek->where("jenis_perubahan", "=", "Klaim Asuransi")->count();
+                        $totalClaimAsuransiAll += $countClaimAsuransi;
+                    }
+                });
+
+
                 $proyeks_all = $proyeks_all->map(function ($claim) {
                     $cat_vo = $claim->where(
                         "jenis_perubahan",
@@ -735,7 +819,7 @@ class ClaimController extends Controller
         return view(
             "5_Claim",
             compact([
-                "claims", "filterUnitKerja", "filterJenis", "unitkerjas", "tahun_proyeks", "filterTahun", "month", "filterBulan", "unit_kerjas_select"
+                "claims", "filterUnitKerja", "filterJenis", "unitkerjas", "tahun_proyeks", "filterTahun", "month", "filterBulan", "unit_kerjas_select", "totalVOAll", "totalClaimAll", "totalAntiClaimAll", "totalClaimAsuransiAll"
             ])
         );
     }
