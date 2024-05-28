@@ -223,8 +223,9 @@
                                                         aria-hidden="true">
                                                         <option value="" selected></option>
                                                         @foreach ($contract_pelaksanaan_new as $kontrak)
-                                                            <option value="{{ $kontrak->project_id }}" {{ $proyek_get == $kontrak->project_id ? 'selected' : '' }} >{{ $kontrak->project->nama_proyek }} ({{ $kontrak->project_id }})</option>
-                                                            {{-- <option value="{{ $proyek->kode_proyek }}" >{{ $proyek->nama_proyek }} ({{$proyek->kode_proyek}})</option> --}}
+                                                        {{-- <option value="{{ $kontrak->project_id }}" {{ $proyek_get == $kontrak->project_id ? 'selected' : '' }} >{{ $kontrak->project->nama_proyek }} ({{ $kontrak->project_id }})</option> --}}
+                                                        {{-- <option value="{{ $proyek->kode_proyek }}" >{{ $proyek->nama_proyek }} ({{$proyek->kode_proyek}})</option> --}}
+                                                        <option value="{{ $kontrak->profit_center }}" {{ $proyek_get == $kontrak->profit_center ? 'selected' : '' }} >{{ $kontrak->ProyekPISNew->proyek_name }} ({{ $kontrak->profit_center }})</option>
                                                         @endforeach
                                                 </select>
                                             </div>
@@ -288,7 +289,8 @@
                                 {{-- @dd($proyek) --}}
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">{{ "SP00".sprintf("%02d", mt_rand(0, 99)) }} &nbsp; - &nbsp; {{ $proyek->UnitKerja->unit_kerja }} &nbsp; - &nbsp; {{ $proyek->nama_proyek }}</h2>
+                                    {{-- <h2 class="m-0 text-center">{{ "SP00".sprintf("%02d", mt_rand(0, 99)) }} &nbsp; - &nbsp; {{ $proyek->UnitKerja->unit_kerja }} &nbsp; - &nbsp; {{ $proyek->nama_proyek }}</h2> --}}
+                                    <h2 class="m-0 text-center">{{ "SP00".sprintf("%02d", mt_rand(0, 99)) }} &nbsp; - &nbsp; {{ $proyek->UnitKerja->unit_kerja }} &nbsp; - &nbsp; {{ $proyek->proyek_name }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -299,7 +301,8 @@
                             <div class="col-12">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">Pemilik Pekerjaan : {{ $proyek->proyekBerjalan->name_customer ?? 'NA' }} &nbsp; - &nbsp; Nilai Kontrak : Rp {{ number_format($proyek->nilai_perolehan, 0, ".", ".") }}</h2>
+                                    {{-- <h2 class="m-0 text-center">Pemilik Pekerjaan : {{ $proyek->proyekBerjalan->name_customer ?? 'NA' }} &nbsp; - &nbsp; Nilai Kontrak : Rp {{ number_format($proyek->nilai_perolehan, 0, ".", ".") }}</h2> --}}
+                                    <h2 class="m-0 text-center">Pemilik Pekerjaan : {{ $proyek->pemberi_kerja_name ?? 'NA' }} &nbsp; - &nbsp; Nilai Kontrak : Rp {{ number_format($proyek->contract_value_idr, 0, ".", ".") }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -868,7 +871,7 @@
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $table["potensial"] ?? 0 }}</h2>
@@ -879,7 +882,7 @@
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $table["subs"] ?? 0 }}</h2>
@@ -890,7 +893,7 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $table["revisi"] ?? 0 }}</h2>
@@ -901,7 +904,7 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $table["nego"] ?? 0 }}</h2>
@@ -912,7 +915,7 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $table["setuju"] ?? 0 }}</h2>
@@ -923,7 +926,7 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $table["tolak"] ?? 0 }}</h2>
@@ -934,7 +937,7 @@
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $table["dispute"] ?? 0 }}</h2>
@@ -956,7 +959,7 @@
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $potensial_total_item ?? 0 }}</h2>
@@ -967,7 +970,7 @@
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $submission_total_item ?? 0 }}</h2>
@@ -978,7 +981,7 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $revision_total_item ?? 0 }}</h2>
@@ -989,7 +992,7 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $negotiation_total_item ?? 0 }}</h2>
@@ -1000,7 +1003,7 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $approve_total_item ?? 0 }}</h2>
@@ -1011,7 +1014,7 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $reject_total_item ?? 0 }}</h2>
@@ -1022,7 +1025,7 @@
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $dispute_total_item ?? 0 }}</h2>
@@ -1110,7 +1113,7 @@
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && (!empty($table["potensial_value"]) && $table["potensial_value"] != 0) ? 'text-danger' : '' }}">{{ !empty($table["potensial_value"]) ? number_format($table["potensial_value"]/1000000, 0, ".", ".") : 0 }}</h2>
@@ -1121,7 +1124,7 @@
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && (!empty($table["subs_value"]) && $table["subs_value"] != 0) ? 'text-danger' : '' }}">{{ !empty($table["subs_value"]) ? number_format($table["subs_value"]/1000000, 0, ".", ".") : 0 }}</h2>
@@ -1132,7 +1135,7 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && (!empty($table["revisi_value"]) && $table["revisi_value"] != 0) ? 'text-danger' : '' }}">{{ !empty($table["revisi_value"]) ? number_format($table["revisi_value"]/1000000, 0, ".", ".") : 0 }}</h2>
@@ -1143,7 +1146,7 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && (!empty($table["nego_value"]) && $table["nego_value"] != 0) ? 'text-danger' : '' }}">{{ !empty($table["nego_value"]) ? number_format($table["nego_value"]/1000000, 0, ".", ".") : 0 }}</h2>
@@ -1154,7 +1157,7 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && (!empty($table["setuju_value"]) && $table["setuju_value"] != 0) ? 'text-danger' : '' }}">{{ !empty($table["setuju_value"]) ? number_format($table["setuju_value"]/1000000, 0, ".", ".") : 0 }}</h2>
@@ -1165,7 +1168,7 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && (!empty($table["tolak_value"]) && $table["tolak_value"] != 0) ? 'text-danger' : '' }}">{{ !empty($table["tolak_value"]) ? number_format($table["tolak_value"]/1000000, 0, ".", ".") : 0 }}</h2>
@@ -1176,7 +1179,7 @@
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && (!empty($table["dispute_value"]) && $table["dispute_value"] != 0) ? 'text-danger' : '' }}">{{ !empty($table["dispute_value"]) ? number_format($table["dispute_value"]/1000000, 0, ".", ".") : 0 }}</h2>
@@ -1198,7 +1201,7 @@
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ number_format($potensial_total_value/1000000, 0, ',', '.') ?? 0 }}</h2>
@@ -1209,7 +1212,7 @@
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ number_format($submission_total_value/1000000, 0, ',', '.') ?? 0 }}</h2>
@@ -1220,7 +1223,7 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ number_format($revision_total_value/1000000, 0, ',', '.') ?? 0 }}</h2>
@@ -1231,7 +1234,7 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ number_format($negotiation_total_value/1000000, 0, ',', '.') ?? 0 }}</h2>
@@ -1242,7 +1245,7 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ number_format($approve_total_value/1000000, 0, ',', '.') ?? 0 }}</h2>
@@ -1253,7 +1256,7 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ number_format($reject_total_value/1000000, 0, ',', '.') ?? 0 }}</h2>
@@ -1264,7 +1267,7 @@
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ number_format($dispute_total_value/1000000, 0, ',', '.') ?? 0 }}</h2>
@@ -1286,13 +1289,13 @@
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         @if($potensial_total_value == 0)
                                             <h2 class="m-0 text-center">0%</h2>
                                         @else
-                                            <h2 class="m-0 text-center">{{ $potensial_total_value != 0 && $proyek->nilai_perolehan != 0 ? number_format((($potensial_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" : 0 }}</h2>
+                                            <h2 class="m-0 text-center">{{ $potensial_total_value != 0 && (int)$proyek->contract_value_idr != 0 ? number_format((($potensial_total_value / (int)$proyek->contract_value_idr) * 100), 2, ".", ".") . "%" : 0 }}</h2>
                                         @endif
                                     </div>
                                     <!--end::Title body-->
@@ -1301,13 +1304,13 @@
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         @if($submission_total_value == 0)
                                             <h2 class="m-0 text-center">0%</h2>
                                         @else
-                                            <h2 class="m-0 text-center">{{ $submission_total_value != 0 && $proyek->nilai_perolehan != 0 ? number_format((($submission_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" : 0 }}</h2>
+                                            <h2 class="m-0 text-center">{{ $submission_total_value != 0 && (int)$proyek->contract_value_idr != 0 ? number_format((($submission_total_value / (int)$proyek->contract_value_idr) * 100), 2, ".", ".") . "%" : 0 }}</h2>
                                         @endif
                                     </div>
                                     <!--end::Title body-->
@@ -1316,13 +1319,13 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         @if($revision_total_value == 0)
                                             <h2 class="m-0 text-center">0%</h2>
                                         @else
-                                            <h2 class="m-0 text-center">{{ $revision_total_value != 0 && $proyek->nilai_perolehan != 0 ? number_format((($revision_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" : 0 }}</h2>
+                                            <h2 class="m-0 text-center">{{ $revision_total_value != 0 && (int)$proyek->contract_value_idr != 0 ? number_format((($revision_total_value / (int)$proyek->contract_value_idr) * 100), 2, ".", ".") . "%" : 0 }}</h2>
                                         @endif
                                     </div>
                                     <!--end::Title body-->
@@ -1331,13 +1334,13 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         @if($negotiation_total_value == 0)
                                             <h2 class="m-0 text-center">0%</h2>
                                         @else
-                                            <h2 class="m-0 text-center">{{ $negotiation_total_value != 0 && $proyek->nilai_perolehan != 0 ? number_format((($negotiation_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" : 0 }}</h2>
+                                            <h2 class="m-0 text-center">{{ $negotiation_total_value != 0 && (int)$proyek->contract_value_idr != 0 ? number_format((($negotiation_total_value / (int)$proyek->contract_value_idr) * 100), 2, ".", ".") . "%" : 0 }}</h2>
                                         @endif
                                     </div>
                                     <!--end::Title body-->
@@ -1346,13 +1349,13 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         @if($approve_total_value == 0)
                                             <h2 class="m-0 text-center">0%</h2>
                                         @else
-                                            <h2 class="m-0 text-center">{{ $approve_total_value != 0 && $proyek->nilai_perolehan != 0 ? number_format((($approve_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" : 0 }}</h2>
+                                            <h2 class="m-0 text-center">{{ $approve_total_value != 0 && (int)$proyek->contract_value_idr != 0 ? number_format((($approve_total_value / (int)$proyek->contract_value_idr) * 100), 2, ".", ".") . "%" : 0 }}</h2>
                                         @endif
                                     </div>
                                     <!--end::Title body-->
@@ -1361,13 +1364,13 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         @if($reject_total_value == 0)
                                             <h2 class="m-0 text-center">0%</h2>
                                         @else
-                                            <h2 class="m-0 text-center">{{ $reject_total_value != 0 && $proyek->nilai_perolehan != 0 ? number_format((($reject_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" : 0 }}</h2>
+                                            <h2 class="m-0 text-center">{{ $reject_total_value != 0 && (int)$proyek->contract_value_idr != 0 ? number_format((($reject_total_value / (int)$proyek->contract_value_idr) * 100), 2, ".", ".") . "%" : 0 }}</h2>
                                         @endif
                                     </div>
                                     <!--end::Title body-->
@@ -1376,13 +1379,13 @@
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $proyek->ContractManagements->id_contract }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         @if($dispute_total_value == 0)
                                             <h2 class="m-0 text-center">0%</h2>
                                         @else
-                                            <h2 class="m-0 text-center">{{ $potential_total_value != 0 && $proyek->nilai_perolehan != 0 ? number_format((($dispute_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" : 0 }}</h2>
+                                            <h2 class="m-0 text-center">{{ $potential_total_value != 0 && (int)$proyek->contract_value_idr != 0 ? number_format((($dispute_total_value / (int)$proyek->contract_value_idr) * 100), 2, ".", ".") . "%" : 0 }}</h2>
                                         @endif
                                     </div>
                                     <!--end::Title body-->
