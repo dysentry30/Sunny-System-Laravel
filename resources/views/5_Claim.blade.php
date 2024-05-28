@@ -318,7 +318,7 @@
             $('#claim-management').DataTable( {
                 // dom: 'Bfrtip',
                 dom: '<"float-start"f><"#example"t>rtip',
-                pageLength : 25,
+                pageLength : 10,
                 ordering: false,
             } );
         });
