@@ -265,8 +265,9 @@
                                                     aria-hidden="true">
                                                     <option value="" selected></option>
                                                     @foreach ($proyeks as $proyek)
-                                                        <option value="{{ $proyek->project_id }}" {{ $proyek_get == $proyek->project_id ? 'selected' : '' }} >{{ $proyek->nama_proyek }}</option>
+                                                        {{-- <option value="{{ $proyek->project_id }}" {{ $proyek_get == $proyek->project_id ? 'selected' : '' }} >{{ $proyek->nama_proyek }}</option> --}}
                                                         {{-- <option value="{{ $proyek->kode_proyek }}" >{{ $proyek->nama_proyek }} ({{$proyek->kode_proyek}})</option> --}}
+                                                        <option value="{{ $proyek->profit_center }}" {{ $proyek_get == $proyek->profit_center ? 'selected' : '' }} >{{ $proyek->proyek_name }}</option>
                                                     @endforeach
                                             </select>
                                         </div>
