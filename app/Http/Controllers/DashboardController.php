@@ -1573,14 +1573,14 @@ class DashboardController extends Controller
         // }
 
         if (!empty($bulan_get) && $tahun_get >= 2023) {
-            $proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->where("start_year", "<=", $tahun_get)->whereIn("kd_divisi", $unit_kerja_get)->whereMonth("start_date", "<=", $bulan_get)->get();
+            $proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->where("start_year", "<=", $tahun_get)->whereIn("kd_divisi", $unit_kerja_get)->get();
         } else {
             if ($tahun_get < 2023 && $bulan_get) {
-                $proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->where("start_year", "<=", $tahun_get)->whereIn("kd_divisi", $unit_kerja_get)->whereMonth("start_date", "<=", $bulan_get)->get();
+                $proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->where("start_year", "<=", $tahun_get)->whereIn("kd_divisi", $unit_kerja_get)->get();
             } elseif ($tahun_get < 2023 && empty($bulan_get)) {
-                $proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->where("start_year", "<=", $tahun_get)->whereIn("kd_divisi", $unit_kerja_get)->whereMonth("start_date", "<=", 12)->get();
+                $proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->where("start_year", "<=", $tahun_get)->whereIn("kd_divisi", $unit_kerja_get)->get();
             } else {
-                $proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->where("start_year", "<=", $tahun_get)->whereIn("kd_divisi", $unit_kerja_get)->whereMonth("start_date", "<=", 12)->get();
+                $proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->where("start_year", "<=", $tahun_get)->whereIn("kd_divisi", $unit_kerja_get)->get();
             }
         }
         
@@ -1730,9 +1730,10 @@ class DashboardController extends Controller
             })->values();
             // dd($detail_perubahan_kontrak);
 
-            $totalKontrakFull = $proyeks->map(function ($p) {
-                return $p->ContractManagements;
-            })->sum("value");
+            // $totalKontrakFull = $proyeks->map(function ($p) {
+            //     return $p->ContractManagements;
+            // })->sum("value");
+            $totalKontrakFull = $proyeks->sum("contract_value_idr");
             $total_pengajuan = $proyek->PerubahanKontrak?->sum("biaya_pengajuan");
             if (!empty($proyek->contract_value_idr) && !empty($total_pengajuan)) {
                 $persentasePerubahan = Percentage::fromFractionAndTotal($total_pengajuan, $proyek->contract_value_idr)->asString();
@@ -2212,7 +2213,7 @@ class DashboardController extends Controller
 
             //Begin::Asuransi
             $kategori_asuransi = collect(["CAR/EAR", "Third Party Liability", "Professional Indemnity", "Heavy Equipment", "CECR"]);
-            $contract_asuransi = $proyek->ContractManagements->Asuransi->groupBy("kategori_asuransi")->sortByDesc("created_at");
+            $contract_asuransi = $proyek->ContractManagements?->Asuransi->groupBy("kategori_asuransi")->sortByDesc("created_at");
             // dd($contract_asuransi);
             if (!empty($contract_asuransi->toArray())) {
                 $asuransi_proyek = $kategori_asuransi->map(function ($ka) use ($contract_asuransi) {
@@ -2254,7 +2255,7 @@ class DashboardController extends Controller
             //Begin::Janminan
             // $kategori_jaminan = $proyek->jenis_proyek == "J" ? collect(["Advance Payment", "Performance", "Warranty", "Partner"]) : collect(["Advance Payment", "Performance", "Warranty"]);
             $kategori_jaminan = collect(["Advance Payment", "Performance", "Warranty", "Partner"]);
-            $contract_jaminan = $proyek->ContractManagements->Jaminan->groupBy("kategori_jaminan")->sortByDesc("created_at");
+            $contract_jaminan = $proyek->ContractManagements?->Jaminan->groupBy("kategori_jaminan")->sortByDesc("created_at");
             // dd($contract_asuransi);
             if (!empty($contract_jaminan->toArray())) {
                 $jaminan_proyek = $kategori_jaminan->map(function ($ka) use ($contract_jaminan) {
@@ -2381,7 +2382,7 @@ class DashboardController extends Controller
         //     return PerubahanKontrak::where("id_contract", "=", $item->ContractManagements->id_contract)->get();
         // })->flatten();
 
-        $claims = ProyekPISNew::all()->map(function ($item) {
+        $claims = $proyeks->map(function ($item) {
             return PerubahanKontrak::where("profit_center", "=", $item->profit_center)->get();
         })->flatten();
         // dd($claims);
@@ -2854,14 +2855,14 @@ class DashboardController extends Controller
         // }
 
         if (!empty($bulan_get) && $tahun_get >= 2023) {
-            $proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->where("contract_managements.stages", 3)->where("start_year", "<=", $tahun_get)->whereIn("kd_divisi", $unit_kerja_get)->whereMonth("start_date", "<=", $bulan_get)->get();
+            $proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->where("contract_managements.stages", 3)->where("start_year", "<=", $tahun_get)->whereIn("kd_divisi", $unit_kerja_get)->get();
         } else {
             if ($tahun_get < 2023 && $bulan_get) {
-                $proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->where("contract_managements.stages", 3)->where("start_year", "<=", $tahun_get)->whereIn("kd_divisi", $unit_kerja_get)->whereMonth("start_date", "<=", $bulan_get)->get();
+                $proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->where("contract_managements.stages", 3)->where("start_year", "<=", $tahun_get)->whereIn("kd_divisi", $unit_kerja_get)->get();
             } elseif ($tahun_get < 2023 && empty($bulan_get)) {
-                $proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->where("contract_managements.stages", 3)->where("start_year", "<=", $tahun_get)->whereIn("kd_divisi", $unit_kerja_get)->whereMonth("start_date", "<=", 12)->get();
+                $proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->where("contract_managements.stages", 3)->where("start_year", "<=", $tahun_get)->whereIn("kd_divisi", $unit_kerja_get)->get();
             } else {
-                $proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->where("contract_managements.stages", 3)->where("start_year", "<=", $tahun_get)->whereIn("kd_divisi", $unit_kerja_get)->whereMonth("start_date", "<=", 12)->get();
+                $proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->where("contract_managements.stages", 3)->where("start_year", "<=", $tahun_get)->whereIn("kd_divisi", $unit_kerja_get)->get();
             }
         }
 
@@ -3006,7 +3007,7 @@ class DashboardController extends Controller
             // $totalKontrakFull = $proyeks->map(function($p){
             //     return $p->ContractManagements;
             // })->sum("value");
-            $totalKontrakFull = $contracts_pemeliharaan->sum("value");
+            $totalKontrakFull = $proyeks->sum("contract_value_idr");
             $total_pengajuan = $proyek->PerubahanKontrak->sum("biaya_pengajuan");
             if (!empty($proyek->nilai_perolehan)) {
                 // $persentasePerubahan = Percentage::fromFractionAndTotal($total_pengajuan, (int)$proyek->nilai_perolehan)->asString();
