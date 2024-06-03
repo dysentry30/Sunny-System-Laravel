@@ -52,15 +52,29 @@
                                 @if (isset($perubahan_kontrak->periode))
                                     @if ($perubahan_kontrak->is_locked != true)
                                         <button class="btn btn-sm btn-danger" onclick="deleteAction('claim-management/{{ $perubahan_kontrak->id_perubahan_kontrak }}/delete')">Delete</button>
-                                        <a href="#" data-bs-toggle="modal" class="btn btn-sm btn-primary" id="editButton" data-bs-target="#kt_modal_edit_perubahan"
-                                            style="margin-left:10px;">
-                                            Edit</a>
+                                        @if ($perubahan_kontrak->stage < 5)
+                                            <a href="#" data-bs-toggle="modal" class="btn btn-sm btn-primary" id="editButton" data-bs-target="#kt_modal_edit_perubahan"
+                                                style="margin-left:10px;">
+                                                Edit</a>                                            
+                                        @else
+                                            <a href="#" data-bs-toggle="modal" class="btn btn-sm btn-primary" id="editButton" data-bs-target="#kt_modal_input_approve_claim"
+                                                style="margin-left:10px;">
+                                                Edit</a>                                            
+                                            
+                                        @endif
                                     @endif
                                 @else
                                 <button class="btn btn-sm btn-danger" onclick="deleteAction('claim-management/{{ $perubahan_kontrak->id_perubahan_kontrak }}/delete')">Delete</button>
-                                <a href="#" data-bs-toggle="modal" class="btn btn-sm btn-primary" id="editButton" data-bs-target="#kt_modal_edit_perubahan"
-                                    style="margin-left:10px;">
-                                    Edit</a>
+                                @if ($perubahan_kontrak->stage < 5)
+                                            <a href="#" data-bs-toggle="modal" class="btn btn-sm btn-primary" id="editButton" data-bs-target="#kt_modal_edit_perubahan"
+                                                style="margin-left:10px;">
+                                                Edit</a>                                            
+                                        @else
+                                            <a href="#" data-bs-toggle="modal" class="btn btn-sm btn-primary" id="editButton" data-bs-target="#kt_modal_input_approve_claim"
+                                                style="margin-left:10px;">
+                                                Edit</a>                                            
+                                            
+                                        @endif
                                 @endif
                                 <a href="/claim-management/proyek/{{ $contract->profit_center }}" class="btn btn-sm btn-primary" id="cloedButton"
                                     style="background-color:#f3f6f9;margin-left:10px;color: black;">
@@ -381,7 +395,7 @@
                                                                     <label class="fs-6 fw-bold form-label">
                                                                         <span style="font-weight: normal">Biaya Disetujui</span>
                                                                     </label><br>
-                                                                    <b>{{ !empty($perubahan_kontrak->nilai_disetujui) ? number_format($perubahan_kontrak->nilai_disetujui, 0, ".", ".") : '-' }}</b>
+                                                                    <b class="{{$perubahan_kontrak->jenis_perubahan == 'Anti Klaim' || $perubahan_kontrak->nilai_negatif ? 'text-danger ' : ''}}">{{ !empty($perubahan_kontrak->nilai_disetujui) ? number_format($perubahan_kontrak->nilai_disetujui, 0, ".", ".") : '-' }}</b>
                                                                 </div>
                                                                 <div class="col">
                                                                     <label class="fs-6 fw-bold form-label">
@@ -815,7 +829,7 @@
                     <!--begin::Modal header-->
                     <div class="modal-header">
                         <!--begin::Modal title-->
-                        <h2>Add Attachment | Nilai Disetujui </h2>
+                        <h2>Input Nilai Disetujui </h2>
                         <!--end::Modal title-->
                         <!--begin::Close-->
                         <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -838,6 +852,7 @@
                                 <!--begin::Input-->
                                 <input type="hidden" class="modal-name" name="modal-name">
                                 <input type="hidden" class="id_contract" name="id_contract" value="{{ $contract->id_contract }}">
+                                <input type="hidden" class="profit-center" name="profit-center" value="{{ $contract->profit_center }}">
                                 <input type="hidden" class="stage" name="stage" value="5">
                                 <input type="hidden" value="{{ $perubahan_kontrak->id_perubahan_kontrak ?? 0 }}" id="id-perubahan-kontrak"
                                     name="id-perubahan-kontrak">
@@ -846,13 +861,13 @@
                                 <label class="fs-6 fw-bold form-label mt-3">
                                     <span style="font-weight: normal">Nilai Disetujui</span>
                                     <div class="form-check form-switch {{ $perubahan_kontrak->jenis_perubahan == 'VO' ? '' : 'd-none' }}" id="div-nilai-negatif">
-                                        <input class="form-check-input" type="checkbox" name="nilai-negatif" role="switch" id="nilai-negatif">
+                                        <input class="form-check-input" type="checkbox" name="nilai-negatif" role="switch" id="nilai-negatif" {{ $perubahan_kontrak->nilai_negatif ? "checked" : "" }}>
                                         <label class="form-check-label" for="nilai-negatif">Nilai Negatif</label>
                                     </div>
                                 </label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input type="text" name="nilai-disetujui" class="form-control form-control-solid reformat"/>
+                                <input type="text" name="nilai-disetujui" class="form-control form-control-solid reformat" value="{{ $perubahan_kontrak->nilai_disetujui }}"/>
                                 <!--end::Input-->
                                 
                                 <div class="tanggal-disetujui">
@@ -865,7 +880,7 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="date" name="tanggal-disetujui" class="form-control form-control-solid"/>
+                                    <input type="date" name="tanggal-disetujui" value="{{ $perubahan_kontrak->tanggal_disetujui ?? null }}" class="form-control form-control-solid"/>
                                     <!--end::Input-->
                                 </div>
                                 
@@ -879,7 +894,7 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="date" name="waktu-disetujui" class="form-control form-control-solid"/>
+                                    <input type="date" name="waktu-disetujui" value="{{ $perubahan_kontrak->waktu_disetujui ?? null }}" class="form-control form-control-solid"/>
                                     <!--end::Input-->
                                 </div>
                                 
