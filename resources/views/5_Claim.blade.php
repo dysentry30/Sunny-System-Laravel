@@ -210,9 +210,20 @@
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                                 {{-- <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th> --}}
+                                                <th colspan="3" class="min-w-auto"></th>
+                                                <th colspan="4" class="min-w-auto text-center">Nilai Submitted</th>
+                                                <th colspan="4" class="min-w-auto text-center">Nilai Approved</th>
+                                                {{-- <th class="min-w-auto">@sortablelink('id_contract','ID Contract')</th> --}}
+                                            </tr>
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                {{-- <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th> --}}
                                                 <th class="min-w-auto">Profit Center</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
+                                                <th class="min-w-auto text-center">VO</th>
+                                                <th class="min-w-auto text-center">Klaim</th>
+                                                <th class="min-w-auto text-center">Anti Klaim</th>
+                                                <th class="min-w-auto text-center">Klaim Asuransi</th>
                                                 <th class="min-w-auto text-center">VO</th>
                                                 <th class="min-w-auto text-center">Klaim</th>
                                                 <th class="min-w-auto text-center">Anti Klaim</th>
@@ -239,10 +250,18 @@
                                                 </td>
                                                 <td>{{ $claim['nama_proyek'] }}</td>
                                                 <td>{{ $claim['unit_kerja'] }}</td>
-                                                <td class="text-center">{{ $claim['total_vo'] }}</td>
+                                                {{-- <td class="text-center">{{ $claim['total_vo'] }}</td>
                                                 <td class="text-center">{{ $claim['total_klaim'] }}</td>
                                                 <td class="text-center">{{ $claim['total_anti_klaim'] }}</td>
-                                                <td class="text-center">{{ $claim['total_klaim_asuransi'] }}</td>
+                                                <td class="text-center">{{ $claim['total_klaim_asuransi'] }}</td> --}}
+                                                <td class="text-center">{{ number_format($claim['total_vo'], 0, ".", ".") }}</td>
+                                                <td class="text-center">{{ number_format($claim['total_klaim'], 0, ".", ".") }}</td>
+                                                <td class="text-center">{{ number_format($claim['total_anti_klaim'], 0, ".", ".") }}</td>
+                                                <td class="text-center">{{ number_format($claim['total_klaim_asuransi'], 0, ".", ".") }}</td>
+                                                <td class="text-center">{{ number_format($claim['total_vo_approved'], 0, ".", ".") }}</td>
+                                                <td class="text-center">{{ number_format($claim['total_klaim_approved'], 0, ".", ".") }}</td>
+                                                <td class="text-center">{{ number_format($claim['total_anti_klaim_approved'], 0, ".", ".") }}</td>
+                                                <td class="text-center">{{ number_format($claim['total_klaim_asuransi_approved'], 0, ".", ".") }}</td>
                                                 {{-- <td>
                                                     <a href="/contract-management/view/{{ $claim->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim->id_contract }}</a>
                                                 </td> --}}
@@ -255,6 +274,19 @@
                                                 </tr>
                                             @endforelse
                                         </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="3" class="text-center text-white" style="background-color: #0DB0D9"><b>Total</b></td>
+                                                <td class="text-center">{{ number_format($totalVOAll, 0, ".", ".") }}</td>
+                                                <td class="text-center">{{ number_format($totalClaimAll, 0, ".", ".") }}</td>
+                                                <td class="text-center">{{ number_format($totalAntiClaimAll, 0, ".", ".") }}</td>
+                                                <td class="text-center">{{ number_format($totalClaimAsuransiAll, 0, ".", ".") }}</td>
+                                                <td class="text-center">{{ number_format($totalVOAllApproved, 0, ".", ".") }}</td>
+                                                <td class="text-center">{{ number_format($totalClaimAllApproved, 0, ".", ".") }}</td>
+                                                <td class="text-center">{{ number_format($totalAntiClaimAllApproved, 0, ".", ".") }}</td>
+                                                <td class="text-center">{{ number_format($totalClaimAsuransiAllApproved, 0, ".", ".") }}</td>
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                     <!--end::Table -->
                                 </div>
@@ -317,9 +349,12 @@
         $(document).ready(function() {
             $('#claim-management').DataTable( {
                 // dom: 'Bfrtip',
-                dom: '<"float-start"f><"#example"t>rti',
-                pageLength : 50,
+                dom: '<"float-start"f><"#example"t>rtip',
+                pageLength : 10,
                 ordering: false,
+                fixedHeader: {
+                    footer: true
+                }
             } );
         });
     </script>
