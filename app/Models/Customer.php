@@ -95,13 +95,32 @@ class Customer extends Model
         return $this->hasMany(KaryaInovasi::class, "id_customer", "id_customer");
     }
     
+    // public function Piutang() {
+    //     return $this->hasMany(Piutang::class, "debitor", "kode_nasabah");
+    // }
+
     public function Piutang() {
-        return $this->hasMany(Piutang::class, "debitor", "kode_nasabah");
+        return $this->hasMany(Piutang::class, "customer_id", "id_customer");
+    }
+
+    public function PorsiSaham()
+    {
+        return $this->hasMany(PorsiSaham::class, "id_customer", "id_customer");
     }
 
     public function Provinsi()
     {
         return $this->hasOne(Provinsi::class, "province_id", "provinsi");
+    }
+
+    public function CompanyProfile()
+    {
+        return $this->hasMany(CompanyProfile::class, "id_customer");
+    }
+
+    public function LaporanKeuangan()
+    {
+        return $this->hasMany(LaporanKeuangan::class, "id_customer");
     }
 
     public function AHU()

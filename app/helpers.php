@@ -284,8 +284,27 @@ function checkGreenLine($proyek) {
                         if (!empty($proyek->negara) && ($proyek->negara == 'ID' || $proyek->negara == 'Indonesia')) {
                             if ($proyek->sumber_dana == "APBD" || $proyek->sumber_dana == "BUMN") {
                                 $results->push(App\Models\KriteriaGreenLine::where("isi", "=", $proyek->sumber_dana)->where("item", "=", "Sumber Dana")->where(function ($query) use ($proyek, $customer) {
-                                    $query->where('sub_isi', '=', $proyek->provinsi)
-                                        ->orWhere('sub_isi', '=', $customer->group_tier);
+                                    if ($proyek->sumber_data == "APBD") {
+                                        $query->where('sub_isi', '=', $proyek->provinsi);
+                                    } else {
+                                        // if(!empty($customer->nama_holding)){
+                                        //     $holding = Customer::find($customer->nama_holding);
+                                        //     $query->where('sub_isi', '=', $holding->group_tier);
+                                        // }else{
+                                        //     $query->where('sub_isi', '=', $customer->group_tier);
+                                        // }
+                                        if (!empty($customer->nama_holding)) {
+                                            $tier_bumn = App\Models\MasterGrupTierBUMN::where("id_pelanggan", $customer->nama_holding)->orderBy("updated_at")->first();
+                                            if (!empty($tier_bumn)) {
+                                                $query->where('sub_isi', '=', $proyek->provinsi)->orWhere('sub_isi', '=', $tier_bumn->kategori);
+                                            }
+                                        } else {
+                                            $tier_bumn = App\Models\MasterGrupTierBUMN::where("id_pelanggan", $customer->id_customer)->orderBy("updated_at")->first();
+                                            if (!empty($tier_bumn)) {
+                                                $query->where('sub_isi', '=', $proyek->provinsi)->orWhere('sub_isi', '=', $tier_bumn->kategori);
+                                            }
+                                        }
+                                    }
                                 })->count() > 0);
                             } else {
                                 $results->push(App\Models\KriteriaGreenLine::where("isi", "=", $proyek->sumber_dana)->where("item", "=", "Sumber Dana")->count() > 0);
@@ -422,9 +441,9 @@ function createWordRekomendasi(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $footer = $section->addFooter();
     $footer->addText("*Dokumen ini dibuat oleh sistem CRM", ['size' => 10, 'bold' => true], ['align' => 'right']);
     $nama_proyek = str_replace("&", "dan", $proyek->nama_proyek);
-    
-    $section->addText("Hasil Assessment", ['size'=>12, "bold" => true], ['align' => "center"]);
-    $section->addText(htmlspecialchars($customer->name), ['size' => 12, "bold" => true], ['align' => "center"]);
+
+    $section->addText("Tabel Kriteria Penilaian Pemberi Kerja", ['size' => 12, "bold" => true], ['align' => "center"]);
+    $section->addText(htmlspecialchars($customer->name, ENT_QUOTES), ['size' => 12, "bold" => true], ['align' => "center"]);
 
     $section->addTextBreak(1);
     $table = $section->addTable('myOwnTableStyle',array('borderSize' => 1, 'borderColor' => '999999', 'afterSpacing' => 0, 'Spacing'=> 0, 'cellMargin'=>0  ));
@@ -3332,19 +3351,23 @@ function performAssessment(App\Models\Customer $customer, App\Models\Proyek $pro
                     $is_assessment_piutang_exist = $result_assessments->where("kriteria_penilaian", "=", $kriteria)->count() > 0;
                     // dump($is_assessment_piutang_exist);
                     if(!$is_assessment_piutang_exist) {
-                        if($customer->Piutang->count() > 0) {
-                            $is_piutang_91_day_exist = $customer->Piutang->where("day_91", ">", 0)->count() > 0;
+                        // if($customer->Piutang->count() > 0) {
+                        // $is_piutang_91_day_exist = $customer->Piutang->where("day_91", ">", 0)->count() > 0;
+                        $is_piutang_91_day_exist = $customer->Piutang->where("kategori", 3)->count() > 0;
                             if($is_piutang_91_day_exist) {
                                 $result = collect(["kategori" => "Internal", "kriteria_penilaian" => $kriteria, "score" => (float) 5]);
                                 $result_assessments->push($result);
-                            } else {
+                        } elseif ($customer->Piutang->where("kategori", 2)->count() > 0) {
                                 $result = collect(["kategori" => "Internal", "kriteria_penilaian" => $kriteria, "score" => (float) 7.5]);
-                                $result_assessments->push($result);
-                            }
+                            $result_assessments->push($result);
                         } else {
                             $result = collect(["kategori" => "Internal", "kriteria_penilaian" => $kriteria, "score" => (float) 10]);
                             $result_assessments->push($result);
                         }
+                        // } else {
+                            // $result = collect(["kategori" => "Internal", "kriteria_penilaian" => $kriteria, "score" => (float) 10]);
+                            // $result_assessments->push($result);
+                        // }
                     }
                 } else if($kriteria == "Bowheer Bermasalah") {
                     if($customer->MasalahHukum->isNotEmpty()) {
@@ -3637,7 +3660,7 @@ function createWordNotaRekomendasiPengajuan(\App\Models\NotaRekomendasi $proyekR
 
         if (!empty($proyek->DokumenPendukungPasarDini)) {
             foreach ($proyek->DokumenPendukungPasarDini as $dokumen) {
-                $pdfMerge->add(public_path('file-pendukung-pasdin/' . $dokumen->id_document));
+                $pdfMerge->add(public_path('dokumen-pendukung-pasdin/' . $dokumen->id_document));
             }
         }
 

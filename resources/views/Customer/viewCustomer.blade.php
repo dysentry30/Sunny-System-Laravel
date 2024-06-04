@@ -1063,6 +1063,157 @@
                                                         </table>
                                                         <!--end::Table-->
 
+                                                        <!--begin::Data Porsi Saham-->
+                                                        <div id="container-porsi-saham" style="display: ">
+                                                            <!--begin::INPUT PIC-->
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                                Porsi Saham
+                                                                <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_input_porsi_saham">+</a>
+                                                            </h3>
+                                                            <!--end::INPUT PIC-->
+                                                            <!--begin::Table-->
+                                                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_porsi_saham">
+                                                                <!--begin::Table head-->
+                                                                <thead>
+                                                                    <!--begin::Table row-->
+                                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                        <th class="text-center">No</th>
+                                                                        <th class="min-w-auto">Nama</th>
+                                                                        <th class="min-w-auto">Porsi Saham</th>
+                                                                        <th class="min-w-auto">Kategori</th>
+                                                                        <th class="min-w-auto">Action</th>
+                                                                    </tr>
+                                                                    <!--end::Table row-->
+                                                                </thead>
+                                                                <!--end::Table head-->
+                                                                <!--begin::Table body-->
+                                                                @php
+                                                                    $no = 1;
+                                                                @endphp
+                                                                <tbody class="fw-bold text-gray-600">
+                                                                    @foreach ($customer->PorsiSaham as $key => $item)
+                                                                        <tr>
+                                                                            <td class="text-center">
+                                                                                {{ $key + 1 }}
+                                                                            </td>
+                                                                            <td>
+                                                                                <a href="#" class="text-gray-800 text-hover-primary" data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_edit_porsi_saham_{{ $item->id }}">{{ $item->nama}} </a>
+                                                                            </td>
+                                                                            <td class="text-center">{{ $item->porsi_saham }} %</td>
+                                                                            <td class="text-center">{{ $item->kategori_porsi }}</td>
+                                                                            <td class="text-center">
+                                                                                <button type="button" class="btn btn-sm btn-light btn-active-danger" data-bs-toggle="modal" data-bs-target="#kt_porsi_saham_delete_{{ $item->id }}">Delete</button>
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                </tbody>
+                                                                <!--end::Table body-->
+                                                            </table>
+                                                            <!--end::Table-->
+                                                        </div>
+                                                        <!--end::Data Porsi Saham-->
+
+                                                        <br>
+                                                        <!--begin::Data Company Profile-->
+                                                        <div id="container-company-profile" style="display: ">
+                                                            <!--begin::INPUT PIC-->
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                                Company Profile
+                                                                <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_input_company_profile">+</a>
+                                                            </h3>
+                                                            <!--end::INPUT PIC-->
+                                                            <!--begin::Table-->
+                                                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_company_profile">
+                                                                <!--begin::Table head-->
+                                                                <thead>
+                                                                    <!--begin::Table row-->
+                                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                        <th class="text-center">No</th>
+                                                                        <th class="min-w-auto">Nama File</th>
+                                                                        <th class="min-w-auto">Tanggal Upload</th>
+                                                                        <th class="min-w-auto">Action</th>
+                                                                    </tr>
+                                                                    <!--end::Table row-->
+                                                                </thead>
+                                                                <!--end::Table head-->
+                                                                <!--begin::Table body-->
+                                                                @php
+                                                                    $no = 1;
+                                                                @endphp
+                                                                <tbody class="fw-bold text-gray-600">
+                                                                    @foreach ($customer->CompanyProfile as $key => $item)
+                                                                        <tr>
+                                                                            <td class="text-center">
+                                                                                {{ $key + 1 }}
+                                                                            </td>
+                                                                            <td class="text-center"><a target="_blank"
+                                                                                href="{{ asset('customer-file/' . $item->file_document) }}"
+                                                                                class="text-hover-primary">{{ $item->nama_file }}</a></td>
+                                                                            <td class="text-center">{{ $item->updated_at }}</td>
+                                                                            <td class="text-center">
+                                                                                <button type="button" class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_edit_company_profile_{{ $item->id }}">Edit</button>
+                                                                                <button type="button" class="btn btn-sm btn-light btn-danger" data-bs-toggle="modal" data-bs-target="#kt_company_profile_delete_{{ $item->id }}">Delete</button>
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                </tbody>
+                                                                <!--end::Table body-->
+                                                            </table>
+                                                            <!--end::Table-->
+                                                        </div>
+                                                        <!--end::Data Company Profile-->
+
+                                                        <br>
+                                                        <!--begin::Data Laporan Keuangan-->
+                                                        <div id="container-laporan-keuangan" style="display: ">
+                                                            <!--begin::INPUT PIC-->
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                                Laporan Keuangan
+                                                                <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_input_laporan_keuangan">+</a>
+                                                            </h3>
+                                                            <!--end::INPUT PIC-->
+                                                            <!--begin::Table-->
+                                                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_laporan_keuangan">
+                                                                <!--begin::Table head-->
+                                                                <thead>
+                                                                    <!--begin::Table row-->
+                                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                        <th class="text-center">No</th>
+                                                                        <th class="min-w-auto">Nama File</th>
+                                                                        <th class="min-w-auto">Tanggal Upload</th>
+                                                                        <th class="min-w-auto">Action</th>
+                                                                    </tr>
+                                                                    <!--end::Table row-->
+                                                                </thead>
+                                                                <!--end::Table head-->
+                                                                <!--begin::Table body-->
+                                                                @php
+                                                                    $no = 1;
+                                                                @endphp
+                                                                <tbody class="fw-bold text-gray-600">
+                                                                    @foreach ($customer->LaporanKeuangan as $key => $item)
+                                                                        <tr>
+                                                                            <td class="text-center">
+                                                                                {{ $key + 1 }}
+                                                                            </td>
+                                                                            <td class="text-center"><a target="_blank"
+                                                                                href="{{ asset('customer-file/' . $item->file_document) }}"
+                                                                                class="text-hover-primary">{{ $item->nama_file }}</a></td>
+                                                                            <td class="text-center">{{ $item->updated_at }}</td>
+                                                                            <td class="text-center">
+                                                                                <button type="button" class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_edit_laporan_keuangan_{{ $item->id }}">Edit</button>
+                                                                                <button type="button" class="btn btn-sm btn-light btn-danger" data-bs-toggle="modal" data-bs-target="#kt_laporan_keuangan_delete_{{ $item->id }}">Delete</button>
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                </tbody>
+                                                                <!--end::Table body-->
+                                                            </table>
+                                                            <!--end::Table-->
+                                                        </div>
+                                                        <!--end::Data Laporan Keuangan-->
+
                                                         <!--begin::Data Laporan Keuangan-->
                                                         <div id="container-laporan-keuangan" style="display: ">
                                                             <!--begin::INPUT PIC-->
@@ -5503,6 +5654,509 @@
     @endforeach
 </div>
 <!--End:: Modal Karya Inovasi-->
+
+<!--Begin:: Modal Porsi Saham New-->
+<div class="pop-up porsi-saham-new">
+    <form action="/customer/porsi-saham/save" method="POST">
+        @csrf
+        <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}">
+        <div class="modal fade" id="kt_modal_input_porsi_saham" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-500px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Add Porsi Saham</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6" style="overflow:hidden;">
+                        <!--Begin:Nama Proyek-->
+                        <div class="row">
+                            <div class="d-flex flex-column">
+                                <p>Nama</p>
+                                <input type="text" name="name-porsi-saham" class="form-control form-control-sm form-control-solid">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="d-flex flex-column">
+                                <p>Porsi</p>
+                                <input type="text" name="porsi" oninput="digitsOnly(this, 3)" class="form-control form-control-sm form-control-solid">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="d-flex flex-column">
+                                <p>Kategori</p>
+                                <select name="kategori-porsi" id="kategori-porsi" class="form-select form-select-sm form-select-solid" data-hide-search="true" data-control="select2"
+                                data-placeholder="Pilih kategori" tabindex="-1">
+                                    <option value=""></option>
+                                    <option value="Holding">Holding</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                    <!--end::Input group-->
+    
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+        </div>
+    </form>
+</div>
+<!--End:: Modal Porsi Saham New-->
+
+<!--Begin:: Modal Porsi Saham Edit-->
+@foreach ($customer->PorsiSaham as $item)
+<div class="pop-up porsi-saham-edit">
+    <form action="/customer/porsi-saham/edit" method="POST">
+        @csrf
+        <input type="hidden" name="id-porsi" value="{{ $item->id }}">
+        <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}">
+        <div class="modal fade" id="kt_modal_edit_porsi_saham_{{ $item->id }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-500px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Edit Porsi Saham</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6" style="overflow:hidden;">
+                        <!--Begin:Nama Proyek-->
+                        <div class="row">
+                            <div class="d-flex flex-column">
+                                <p>Nama</p>
+                                <input type="text" name="name-porsi-saham" value="{{ $item->nama }}" class="form-control form-control-sm form-control-solid">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="d-flex flex-column">
+                                <p>Porsi</p>
+                                <input type="text" name="porsi" value="{{ $item->porsi_saham}}" oninput="digitsOnly(this, 3)" class="form-control form-control-sm form-control-solid">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <p>Kategori</p>
+                            <select name="kategori-porsi" id="kategori-porsi" data-select2-id="select2-klasifikasi-proyek-{{ $item->id }}" class="form-select form-select-sm form-select-solid" data-hide-search="true" data-control="select2"
+                            data-placeholder="Pilih kategori" tabindex="-1">
+                                <option value=""></option>
+                                <option value="Holding" {{ $item->kategori_porsi == "Holding" ? 'selected' : '' }}>Holding</option>
+                                <option value="Other" {{ $item->kategori_porsi == "Other" ? 'selected' : '' }}>Other</option>
+                            </select>
+                            
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                    <!--end::Input group-->
+    
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+        </div>
+    </form>
+</div>
+@endforeach
+<!--End:: Modal Porsi Saham Edit-->
+
+<!--Begin:: Modal Porsi Saham Delete-->
+@foreach ($customer->PorsiSaham as $item)
+<form action="/customer/porsi-saham/{{ $item->id }}/delete" method="post">
+    @method("delete")
+    @csrf
+    <div class="modal fade" id="kt_porsi_saham_delete_{{ $item->id }}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-800px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Hapus : {{ $item->nama }}
+                    </h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+                    Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                    <br>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-light btn-active-danger">Delete</button>
+                </div>
+                <!--end::Input group-->
+
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+    </div>
+
+</form>
+@endforeach
+<!--End:: Modal Porsi Saham Delete-->
+
+
+<!--Begin:: Modal Comapny Profile-->
+<div class="pop-up company-profile">
+    <form action="/customer/company-profile/save" method="POST" enctype="multipart/form-data">
+        @csrf
+        <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}">
+        <div class="modal fade" id="kt_modal_input_company_profile" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-500px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Add Company Profile</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6" style="overflow:hidden;">
+                        <!--Begin:Nama Proyek-->
+                        <div class="row">
+                            <div class="d-flex flex-column">
+                                <p>Upload File: </p>
+                                <input type="file" name="file-document" class="form-control form-control-sm form-control-solid">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-primary">Save</button>
+                        </div>
+                    <!--end::Input group-->
+    
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+        </div>
+    </form>
+</div>
+<!--End:: Modal Comapny Profile-->
+
+<!--Begin:: Modal Comapny Profile Edit-->
+@foreach ($customer->CompanyProfile as $item)
+<div class="pop-up company-profile-edit">
+    <form action="/customer/company-profile/edit" method="POST" enctype="multipart/form-data">
+        @csrf
+        <input type="hidden" name="id-company-profile" value="{{ $item->id }}">
+        <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}">
+        <div class="modal fade" id="kt_modal_edit_company_profile_{{ $item->id }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-500px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Edit Company Profile</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6" style="overflow:hidden;">
+                        <!--Begin:Nama Proyek-->
+                        <div class="row">
+                            <div class="d-flex flex-column">
+                                <p>Upload File:</p>
+                                <input type="file" name="file-document" class="form-control form-control-sm form-control-solid">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-primary">Save</button>
+                        </div>
+                    <!--end::Input group-->
+    
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+        </div>
+    </form>
+</div>
+@endforeach
+<!--End:: Modal Comapny Profile Edit-->
+
+<!--Begin:: Modal Comapny Profile Delete-->
+@foreach ($customer->CompanyProfile as $item)
+<form action="/customer/company-profile/{{ $item->id }}/delete" method="post">
+    @method("delete")
+    @csrf
+    <div class="modal fade" id="kt_company_profile_delete_{{ $item->id }}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-600px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Hapus : {{ $item->nama_file }}
+                    </h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+                    Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                    <br>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-light btn-active-danger">Delete</button>
+                </div>
+                <!--end::Input group-->
+
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+    </div>
+
+</form>
+@endforeach
+<!--End:: Modal Comapny Profile Delete-->
+
+
+<!--Begin:: Modal Laporan Keuangan-->
+<div class="pop-up laporan-keuangan">
+    <form action="/customer/laporan-keuangan/save" method="POST" enctype="multipart/form-data">
+        @csrf
+        <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}">
+        <div class="modal fade" id="kt_modal_input_laporan_keuangan" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-500px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Add Laporan Keuangan</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6" style="overflow:hidden;">
+                        <!--Begin:Nama Proyek-->
+                        <div class="row">
+                            <div class="d-flex flex-column">
+                                <p>Upload File: </p>
+                                <input type="file" name="file-document" class="form-control form-control-sm form-control-solid">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-primary">Save</button>
+                        </div>
+                    <!--end::Input group-->
+    
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+        </div>
+    </form>
+</div>
+<!--End:: Modal Laporan Keuangan-->
+
+<!--Begin:: Modal Laporan Keuangan Edit-->
+@foreach ($customer->LaporanKeuangan as $item)
+<div class="pop-up laporan-keuangan-edit">
+    <form action="/customer/laporan-keuangan/edit" method="POST" enctype="multipart/form-data">
+        @csrf
+        <input type="hidden" name="id-laporan-keuangan" value="{{ $item->id }}">
+        <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}">
+        <div class="modal fade" id="kt_modal_edit_laporan_keuangan_{{ $item->id }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-500px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Edit Laporan Keuangan</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6" style="overflow:hidden;">
+                        <!--Begin:Nama Proyek-->
+                        <div class="row">
+                            <div class="d-flex flex-column">
+                                <p>Upload File:</p>
+                                <input type="file" name="file-document" class="form-control form-control-sm form-control-solid">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-primary">Save</button>
+                        </div>
+                    <!--end::Input group-->
+    
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+        </div>
+    </form>
+</div>
+@endforeach
+<!--End:: Modal Laporan Keuangan Edit-->
+
+<!--Begin:: Modal Laporan Keuangan Delete-->
+@foreach ($customer->LaporanKeuangan as $item)
+<form action="/customer/laporan-keuangan/{{ $item->id }}/delete" method="post">
+    @method("delete")
+    @csrf
+    <div class="modal fade" id="kt_laporan_keuangan_delete_{{ $item->id }}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-600px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Hapus : {{ $item->nama_file }}
+                    </h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+                    Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                    <br>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-light btn-active-danger">Delete</button>
+                </div>
+                <!--end::Input group-->
+
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+    </div>
+
+</form>
+@endforeach
+<!--End:: Modal Laporan Keuangan Delete-->
 
 <!--Begin:: Modal AHU-->
 <div class="pop-up AHU">

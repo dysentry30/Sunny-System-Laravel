@@ -1959,6 +1959,16 @@
                                 @endforeach
                             </div>
                         @endif
+                        @if (!empty($proyek->proyekBerjalan->customer->AHU))
+                            <hr>
+                            <h5>File Preview AHU: </h5>
+                            <div class="text-center">
+                                @foreach ($proyek->proyekBerjalan->customer->AHU as $dokumen)
+                                <iframe src="{{ asset('customer-file' . '\\' . $dokumen->file_document) }}"
+                                    width="800px" height="600px"></iframe>
+                                @endforeach
+                            </div>
+                        @endif
                         @if (!empty($nota_rekomendasi->file_pengajuan))
                             <hr>
                             <h5>File Preview: </h5>
@@ -2288,6 +2298,16 @@
                             </div>
                             <hr>
                         @endif
+                        @if (!empty($proyek->proyekBerjalan->customer->AHU))
+                            <hr>
+                            <h5>File Preview AHU: </h5>
+                            <div class="text-center">
+                                @foreach ($proyek->proyekBerjalan->customer->AHU as $dokumen)
+                                <iframe src="{{ asset('customer-file' . '\\' . $dokumen->file_document) }}"
+                                    width="800px" height="600px"></iframe>
+                                @endforeach
+                            </div>
+                        @endif
                         @if (!empty($nota_rekomendasi->file_pengajuan))
                             <h5>Form Pengajuan Rekomendasi: </h5>
                             <div class="text-center">
@@ -2476,6 +2496,25 @@
                                     width="800px" height="600px"></iframe>
                             </div>
                             @endif
+                            @if (!empty($proyek->proyekBerjalan->customer->AHU))
+                                <hr>
+                                <h5>File Preview AHU: </h5>
+                                <div class="text-center">
+                                    @foreach ($proyek->proyekBerjalan->customer->AHU as $dokumen)
+                                    <iframe src="{{ asset('customer-file' . '\\' . $dokumen->file_document) }}"
+                                        width="800px" height="600px"></iframe>
+                                    @endforeach
+                                </div>
+                            @endif
+                            @if (!empty($nota_rekomendasi->file_penilaian_risiko))
+                                <hr>
+                                <h5>File Penilaian Risiko Pengguna Jasa: </h5>
+                                <div class="text-center">
+                                    <iframe src="{{ asset('file-profile-risiko' . '\\' . $nota_rekomendasi->file_penilaian_risiko) }}"
+                                        width="800px" height="600px"></iframe>
+                                </div>
+                            @endif
+                            
                             @if (!empty($nota_rekomendasi->file_rekomendasi))
                                 <hr>
                                 <h5>Hasil Assessment: </h5>

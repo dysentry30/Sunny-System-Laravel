@@ -1036,7 +1036,7 @@
                                                         data-bs-target="#kt_modal_create_aanwitjzing_{{ $dc->id }}"
                                                         {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                         class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                    <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', 'dokumen-aanwitjzing')">Delete</button>
+                                                    <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', 'dokumen-aanwitjzing', 'dokumen-aanwitjzing')">Delete</button>
                                                 </div>
                                             </td>
                                             <!--end::Action-->
@@ -1053,11 +1053,15 @@
 
                             </table>
                             @php
-                                $uploadFileAanwitjzing = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Aanwitjzing")->where('status', '=', 'Final')->first();
+                                // $uploadFileAanwitjzing = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Aanwitjzing")->where('status', '=', 'Final')->first();
+                                $uploadFileAanwitjzing = $contract->UploadFinal->where(function($query) use($contract){
+                                    $query->where('profit_center', "=", $contract->profit_center)
+                                    ->orWhere("id_contract", "=", $contract->id_contract);
+                                })->where('category', '=', "Aanwitjzing")->where('status', '=', 'Final')->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFileAanwitjzing))
-                            <a target="_blank" href="{{ asset('words/'.$uploadFileAanwitjzing->id_document) }}" class="text-hover-primary">
+                            <a target="_blank" href="{{ asset('contract-managements/dokumen-aanwitjzing/'.$uploadFileAanwitjzing->id_document) }}" class="text-hover-primary">
                             <small> <b>Download File :</b> {{ $uploadFileAanwitjzing->nama_document }}
                             </small></a>
                             @endif
@@ -1188,7 +1192,8 @@
                                 
                                 <!--begin::Table body-->
                                 @php
-                                    $dokumen_tinjauan_perolehan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Tinjauan Dokumen Kontrak - Perolehan")->where('status', '!=', 'Final');
+                                    // $dokumen_tinjauan_perolehan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Tinjauan Dokumen Kontrak - Perolehan")->where('status', '!=', 'Final');
+                                    $dokumen_tinjauan_perolehan = $contract->UploadFinal->where('category', '=', "Tinjauan Dokumen Kontrak - Perolehan")->where('status', '!=', 'Final');
                                 @endphp
                                 
                                 <tbody class="fw-bold text-gray-400">
@@ -1197,7 +1202,7 @@
                                             <tr>
                                                 <!--begin::Column-->
                                                 <td>
-                                                    <a target="_blank" href="{{ asset('words/'.$dc->id_document) }}" class="text-hover-primary">
+                                                    <a target="_blank" href="{{ asset('contract-managements/tinjauan-dokumen-kontrak/'.$dc->id_document) }}" class="text-hover-primary">
                                                         {{ $dc->nama_document }}
                                                     </a>
                                                 </td>
@@ -1214,7 +1219,7 @@
                                                             data-bs-target="#kt_modal_create_tinjauan_dokumen_perolehan_{{ $dc->id }}"
                                                             {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                             class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}')">Delete</button>
+                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', null, 'tinjauan-dokumen-kontrak')">Delete</button>
                                                     </div>
                                                 </td>
                                                 <!--end::Action-->
@@ -1239,11 +1244,15 @@
                             </table>
                             
                             @php
-                                $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Tinjauan Dokumen Kontrak - Perolehan")->where('status', '=', "Final")->first();
+                                // $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Tinjauan Dokumen Kontrak - Perolehan")->where('status', '=', "Final")->first();
+                                $uploadFilePerubahan = $contract->UploadFinal->where(function($query) use($contract){
+                                    $query->where('profit_center', "=", $contract->profit_center)
+                                    ->orWhere("id_contract", "=", $contract->id_contract);
+                                })->where('category', '=', "Tinjauan Dokumen Kontrak - Perolehan")->where('status', '=', "Final")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFilePerubahan))
-                                <a target="_blank" href="{{ asset('words/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
+                                <a target="_blank" href="{{ asset('contract-managements/tinjauan-dokumen-kontrak/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
                                 <small><b>Download File :</b> {{ $uploadFilePerubahan->nama_document }}</small>
                                 </a>
                             @endif
@@ -1394,14 +1403,15 @@
                             <!--begin::Table body-->
                             <tbody class="fw-bold text-gray-400">
                                 @php
-                                    $uploadResikoPerolehan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Resiko - Perolehan")->first();
+                                    // $uploadResikoPerolehan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Resiko - Perolehan")->first();
+                                    $uploadResikoPerolehan = $contract->UploadFinal->where('category', '=', "Dokumen Resiko - Perolehan")->first();
                                 @endphp
                                     @if (!empty($uploadResikoPerolehan))
                                         <tr>
                                             <!--begin::Column-->
                                             <td>
                                                 <!--End:Table: Review-->
-                                                <a target="_blank" href="{{ asset('words/'.$uploadResikoPerolehan->id_document) }}" class="text-hover-primary">
+                                                <a target="_blank" href="{{ asset('contract-managements/dokumen-resiko/'.$uploadResikoPerolehan->id_document) }}" class="text-hover-primary">
                                                 <p>{{ $uploadResikoPerolehan->nama_document }}</p>
                                                 </a>
                                             </td>
@@ -1498,7 +1508,8 @@
                                 </tbody> --}}
                                 <!--begin::Table body-->
                                 @php
-                                    $dokumen_usulan_perubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Usulan Perubahan Draft Kontrak")->where('status', '!=', 'Final');
+                                    // $dokumen_usulan_perubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Usulan Perubahan Draft Kontrak")->where('status', '!=', 'Final');
+                                    $dokumen_usulan_perubahan = $contract->UploadFinal->where('category', '=', "Usulan Perubahan Draft Kontrak")->where('status', '!=', 'Final');
                                 @endphp
                                 <tbody class="fw-bold text-gray-400">
                                     @if (!empty($dokumen_usulan_perubahan))
@@ -1506,7 +1517,7 @@
                                             <tr>
                                                 <!--begin::Column-->
                                                 <td>
-                                                    <a target="_blank" href="{{ asset('words/'.$dc->id_document) }}" class="text-hover-primary">
+                                                    <a target="_blank" href="{{ asset('contract-managements/usulan-perubahan-draft-kontrak/'.$dc->id_document) }}" class="text-hover-primary">
                                                         {{ $dc->nama_document }}
                                                     </a>
                                                 </td>
@@ -1523,7 +1534,7 @@
                                                             data-bs-target="#kt_modal_create_usulan_perubahan_draft_kontrak_{{ $dc->id }}"
                                                             {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                             class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}')">Delete</button>
+                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', null, 'usulan-perubahan-draft-kontrak')">Delete</button>
                                                     </div>
                                                 </td>
                                                 <!--end::Action-->
@@ -1549,11 +1560,15 @@
                             </table>
                             <!--End:Table: Review-->
                             @php
-                            $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Usulan Perubahan Draft Kontrak")->where('status', '=', "Final")->first();
+                            // $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Usulan Perubahan Draft Kontrak")->where('status', '=', "Final")->first();
+                            $uploadFilePerubahan = $contract->UploadFinal->where(function($query) use($contract){
+                                $query->where('profit_center', "=", $contract->profit_center)
+                                ->orWhere("id_contract", "=", $contract->id_contract);
+                            })->where('category', '=', "Usulan Perubahan Draft Kontrak")->where('status', '=', "Final")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFilePerubahan))
-                            <a target="_blank" href="{{ asset('words/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
+                            <a target="_blank" href="{{ asset('contract-managements/usulan-perubahan-draft-kontrak/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
                             <small><b>Download File :</b> {{ $uploadFilePerubahan->nama_document }}</small>
                             </a>
                             @endif
@@ -1634,7 +1649,7 @@
                                     @forelse ($contract->project?->DokumenNda as $nda)
                                         <tr>
                                             <td>
-                                                <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
+                                                <a target="_blank" href="{{asset("words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
                                             </td>
                                             <td>
                                                 {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
@@ -1654,11 +1669,15 @@
                             </table>
                             <!--End:Table: Review-->
                             @php
-                            $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen NDA")->first();
+                            // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen NDA")->first();
+                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
+                                $query->where('profit_center', "=", $contract->profit_center)
+                                ->orWhere("id_contract", "=", $contract->id_contract);
+                            })->where('category', '=', "Dokumen NDA")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFile))
-                            <a target="_blank" href="{{ asset('words/'.$uploadFile->id_document) }}" class="text-hover-primary">
+                            <a target="_blank" href="{{ asset('contract-managements/dokumen-nda/'.$uploadFile->id_document) }}" class="text-hover-primary">
                             <small><b>Download File :</b> {{ $uploadFile->nama_document }}</small>
                             </a>
                             @endif
@@ -1698,7 +1717,7 @@
                                     @forelse ($contract->project?->DokumenMou as $nda)
                                         <tr>
                                             <td>
-                                                <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
+                                                <a target="_blank" href="{{asset("words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
                                             </td>
                                             <td>
                                                 {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
@@ -1718,11 +1737,15 @@
                             </table>
                             <!--End:Table: Review-->
                             @php
-                            $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen MOU")->first();
+                            // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen MOU")->first();
+                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
+                                $query->where('profit_center', "=", $contract->profit_center)
+                                ->orWhere("id_contract", "=", $contract->id_contract);
+                            })->where('category', '=', "Dokumen MOU")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFile))
-                            <a target="_blank" href="{{ asset('words/'.$uploadFile->id_document) }}" class="text-hover-primary">
+                            <a target="_blank" href="{{ asset('contract-managements/dokumen-mou/'.$uploadFile->id_document) }}" class="text-hover-primary">
                             <small><b>Download File :</b> {{ $uploadFile->nama_document }}</small>
                             </a>
                             @endif
@@ -1782,11 +1805,15 @@
                             </table>
                             <!--End:Table: Review-->
                             @php
-                            $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen ECA")->first();
+                            // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen ECA")->first();
+                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
+                                $query->where('profit_center', "=", $contract->profit_center)
+                                ->orWhere("id_contract", "=", $contract->id_contract);
+                            })->where('category', '=', "Dokumen ECA")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFile))
-                            <a target="_blank" href="{{ asset('words/'.$uploadFile->id_document) }}" class="text-hover-primary">
+                            <a target="_blank" href="{{ asset('contract-managements/dokumen-eca/'.$uploadFile->id_document) }}" class="text-hover-primary">
                             <small><b>Download File :</b> {{ $uploadFile->nama_document }}</small>
                             </a>
                             @endif
@@ -1847,11 +1874,15 @@
                             </table>
                             <!--End:Table: Review-->
                             @php
-                            $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen ICA")->first();
+                            // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen ICA")->first();
+                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
+                                $query->where('profit_center', "=", $contract->profit_center)
+                                ->orWhere("id_contract", "=", $contract->id_contract);
+                            })->where('category', '=', "Dokumen ICA")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFile))
-                            <a target="_blank" href="{{ asset('words/'.$uploadFile->id_document) }}" class="text-hover-primary">
+                            <a target="_blank" href="{{ asset('contract-managements/dokumen-ica/'.$uploadFile->id_document) }}" class="text-hover-primary">
                             <small><b>Download File :</b> {{ $uploadFile->nama_document }}</small>
                             </a>
                             @endif
@@ -1910,11 +1941,15 @@
 
                             </table>
                             @php
-                            $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen ITB/TOR")->first();
+                            // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen ITB/TOR")->first();
+                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
+                                $query->where('profit_center', "=", $contract->profit_center)
+                                ->orWhere("id_contract", "=", $contract->id_contract);
+                            })->where('category', '=', "Dokumen ITB/TOR")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFile))
-                            <a target="_blank" href="{{ asset('words/'.$uploadFile->id_document) }}" class="text-hover-primary">
+                            <a target="_blank" href="{{ asset('contract-managements/dokumen-itb-tor/'.$uploadFile->id_document) }}" class="text-hover-primary">
                             <small><b>Download File :</b> {{ $uploadFile->nama_document }}</small>
                             </a>
                             @endif
@@ -1974,11 +2009,15 @@
 
                             </table>
                             @php
-                            $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen RKS / Project Spesification")->first();
+                            // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen RKS / Project Spesification")->first();
+                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
+                                $query->where('profit_center', "=", $contract->profit_center)
+                                ->orWhere("id_contract", "=", $contract->id_contract);
+                            })->where('category', '=', "Dokumen RKS / Project Spesification")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFile))
-                            <a target="_blank" href="{{ asset('words/'.$uploadFile->id_document) }}" class="text-hover-primary">
+                            <a target="_blank" href="{{ asset('contract-managements/dokumen-rks/'.$uploadFile->id_document) }}" class="text-hover-primary">
                             <small><b>Download File :</b> {{ $uploadFile->nama_document }}</small>
                             </a>
                             @endif
@@ -2037,11 +2076,15 @@
                             </table>
                             <!--End:Table: Review-->
                             @php
-                            $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Draft Kontrak")->first();
+                            // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Draft Kontrak")->first();
+                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
+                                $query->where('profit_center', "=", $contract->profit_center)
+                                ->orWhere("id_contract", "=", $contract->id_contract);
+                            })->where('category', '=', "Dokumen Draft Kontrak")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFile))
-                            <a target="_blank" href="{{ asset('words/'.$uploadFile->id_document) }}" class="text-hover-primary">
+                            <a target="_blank" href="{{ asset('contract-managements/dokumen-draft-kontrak/'.$uploadFile->id_document) }}" class="text-hover-primary">
                             <small><b>Download File :</b> {{ $uploadFile->nama_document }}</small>
                             </a>
                             @endif
@@ -2101,11 +2144,15 @@
                             </table>
                             <!--End:Table: Review-->
                             @php
-                            $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen LOI")->first();
+                            // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen LOI")->first();
+                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
+                                $query->where('profit_center', "=", $contract->profit_center)
+                                ->orWhere("id_contract", "=", $contract->id_contract);
+                            })->where('category', '=', "Dokumen LOI")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFile))
-                            <a target="_blank" href="{{ asset('words/'.$uploadFile->id_document) }}" class="text-hover-primary">
+                            <a target="_blank" href="{{ asset('contract-managements/dokumen-loi/'.$uploadFile->id_document) }}" class="text-hover-primary">
                             <small><b>Download File :</b> {{ $uploadFile->nama_document }}</small>
                             </a>
                             @endif
@@ -2234,11 +2281,15 @@
 
                             </table>
                             @php
-                            $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Perjanjian KSO")->first();
+                            // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Perjanjian KSO")->first();
+                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
+                                $query->where('profit_center', "=", $contract->profit_center)
+                                ->orWhere("id_contract", "=", $contract->id_contract);
+                            })->where('category', '=', "Dokumen Perjanjian KSO")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFile))
-                            <a target="_blank" href="{{ asset('words/'.$uploadFile->id_document) }}" class="text-hover-primary">
+                            <a target="_blank" href="{{ asset('contract-managements/dokumen-perjanjian-kso/'.$uploadFile->id_document) }}" class="text-hover-primary">
                             <small><b>Download File :</b> {{ $uploadFile->nama_document }}</small>
                             </a>
                             @endif
@@ -2645,7 +2696,8 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 @php
-                                    $dokumen_kontrak = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Kontrak");
+                                    // $dokumen_kontrak = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Kontrak");
+                                    $dokumen_kontrak = $contract->UploadFinal->where('category', '=', "Dokumen Kontrak");
                                 @endphp
                                 <tbody class="fw-bold text-gray-400">
                                     @if (!empty($dokumen_kontrak))
@@ -2653,7 +2705,7 @@
                                             <tr>
                                                 <!--begin::Column-->
                                                 <td>
-                                                    <a target="_blank" href="{{ asset('words/'.$dc->id_document) }}" class="text-hover-primary">
+                                                    <a target="_blank" href="{{ asset('contract-managements/dokumen-kontrak/'.$dc->id_document) }}" class="text-hover-primary">
                                                         {{ $dc->nama_document }}
                                                     </a>
                                                 </td>
@@ -2675,7 +2727,7 @@
                                                             data-bs-target="#kt_modal_upload_dokumen_kontrak_{{ $dc->id }}"
                                                             {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                             class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}')">Delete</button>
+                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', null, 'dokumen-kontrak')">Delete</button>
                                                     </div>
                                                 </td>
                                                 <!--end::Action-->
@@ -2726,7 +2778,8 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 @php
-                                    $dokumen_amandemen = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Amandemen");
+                                    // $dokumen_amandemen = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Amandemen");
+                                    $dokumen_amandemen = $contract->UploadFinal->where('category', '=', "Dokumen Amandemen");
                                 @endphp
                                 <tbody class="fw-bold text-gray-400">
                                     @if (!empty($dokumen_amandemen))
@@ -2734,7 +2787,7 @@
                                             <tr>
                                                 <!--begin::Column-->
                                                 <td>
-                                                    <a target="_blank" href="{{ asset('words/'.$dc->id_document) }}" class="text-hover-primary">
+                                                    <a target="_blank" href="{{ asset('contract-managements/dokumen-amandemen/'.$dc->id_document) }}" class="text-hover-primary">
                                                         {{ $dc->nama_document }}
                                                     </a>
                                                 </td>
@@ -2756,7 +2809,7 @@
                                                             data-bs-target="#kt_modal_upload_dokumen_amandemen_{{ $dc->id }}"
                                                             {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                             class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}')">Delete</button>
+                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', null, 'dokumen-amandemen')">Delete</button>
                                                     </div>
                                                 </td>
                                                 <!--end::Action-->
@@ -2805,7 +2858,8 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 @php
-                                    $dokumen = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Bill Of Quantity");
+                                    // $dokumen = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Bill Of Quantity");
+                                    $dokumen = $contract->UploadFinal->where('category', '=', "Dokumen Bill Of Quantity");
                                 @endphp
                                 <tbody class="fw-bold text-gray-400">
                                     @if (!empty($dokumen))
@@ -2813,7 +2867,7 @@
                                             <tr>
                                                 <!--begin::Column-->
                                                 <td>
-                                                    <a target="_blank" href="{{ asset('words/'.$dc->id_document) }}" class="text-hover-primary">
+                                                    <a target="_blank" href="{{ asset('contract-managements/dokumen-boq/'.$dc->id_document) }}" class="text-hover-primary">
                                                         {{ $dc->nama_document }}
                                                     </a>
                                                 </td>
@@ -2871,7 +2925,7 @@
                                 <div class="row">
                                     <div class="col-6 mr-3">
                                         <!--begin::Input-->
-                                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                        <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                         name="id-contract" form="form-1">
                                     <input type="hidden" class="modal-name" name="modal-name" form="form-1">
     
@@ -2911,7 +2965,7 @@
                                     </div>
                                     <div class="col-6">
                                         <!--begin::Input-->
-                                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                        <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                             name="id-contract" form="form-1">
                                         <input type="hidden" class="modal-name" name="modal-name" form="form-1">
         
@@ -3008,7 +3062,8 @@
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
                                     @php
-                                        $uploadResikoPelaksanaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Resiko - Pelaksanaan");
+                                        // $uploadResikoPelaksanaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Resiko - Pelaksanaan");
+                                        $uploadResikoPelaksanaan = $contract->UploadFinal->where('category', '=', "Dokumen Resiko - Pelaksanaan");
                                     @endphp
                                     @forelse ($uploadResikoPelaksanaan as $inputRisk)
                                         <tr>
@@ -3018,7 +3073,7 @@
                                             </td> --}}
                                             <td>
                                                 <!--End:Table: Review-->
-                                                <a target="_blank" href="{!! asset('words/'.$inputRisk->id_document) !!}" class="text-hover-primary">
+                                                <a target="_blank" href="{!! asset('contract-managements/dokumen-resiko/'.$inputRisk->id_document) !!}" class="text-hover-primary">
                                                 <p>{{ $inputRisk->nama_document }}</p>
                                                 </a>
                                             </td>
@@ -3035,11 +3090,15 @@
                             <!--End:Table: Review-->
                             
                             @php
-                            $uploadFileResiko = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Resiko - Pelaksanaan")->first();
+                            // $uploadFileResiko = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Resiko - Pelaksanaan")->first();
+                            $uploadFileResiko = $contract->UploadFinal->where(function($query) use($contract){
+                                $query->where('profit_center', "=", $contract->profit_center)
+                                ->orWhere("id_contract", "=", $contract->id_contract);
+                            })->where('category', '=', "Dokumen Resiko - Pelaksanaan")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFileResiko))
-                            <a target="_blank" href="{{ asset('words/'.$uploadFileResiko->id_document) }}" class="text-hover-primary">
+                            <a target="_blank" href="{{ asset('contract-managements/dokumen-resiko/'.$uploadFileResiko->id_document) }}" class="text-hover-primary">
                             <small><b>Download File :</b> {{ $uploadFileResiko->nama_document }}</small>
                             </a>
                             @endif
@@ -3068,7 +3127,8 @@
                                 </thead>
                                 <!--end::Table head-->
                                 @php
-                                    $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Rencana Kerja Manajemen Kontrak (BAB 12)");
+                                    // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Rencana Kerja Manajemen Kontrak (BAB 12)");
+                                    $uploadFile = $contract->UploadFinal->where('category', '=', "Dokumen Rencana Kerja Manajemen Kontrak (BAB 12)");
                                 @endphp
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
@@ -3077,7 +3137,7 @@
                                             <tr>
                                                 <!--begin::Column-->
                                                 <td>
-                                                    <a target="_blank" href="{{ asset('words/'.$rencana_kerja->id_document) }}" class="text-hover-primary">
+                                                    <a target="_blank" href="{{ asset('contract-managements/dokumen-rencana-kerja/'.$rencana_kerja->id_document) }}" class="text-hover-primary">
                                                         {{ $rencana_kerja->nama_document }}
                                                     </a>
                                                 </td>
@@ -3099,7 +3159,7 @@
                                                             data-bs-target="#kt_modal_input_rencana_kerja_kontrak_{{ $rencana_kerja->id }}"
                                                             {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                             class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $rencana_kerja->id }}')">Delete</button>
+                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $rencana_kerja->id }}', null, 'dokumen-rencana-kerja')">Delete</button>
                                                     </div>
                                                 </td>
                                                 <!--end::Action-->
@@ -3167,7 +3227,7 @@
                                             <tr>
                                                 <!--begin::Column-->
                                                 <td>
-                                                    <a target="_blank" href="{{ asset('words/'.$dc->id_document) }}" class="text-hover-primary">
+                                                    <a target="_blank" href="{{ asset('contract-managements/tinjauan-dokumen-kontrak/'.$dc->id_document) }}" class="text-hover-primary">
                                                         {{ $dc->nama_document }}
                                                     </a>
                                                 </td>
@@ -3184,7 +3244,7 @@
                                                             data-bs-target="#kt_modal_create_tinjauan_dokumen_pelaksanaan_{{ $dc->id }}"
                                                             {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                             class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}')">Delete</button>
+                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', null, 'tinjauan-dokumen-kontrak')">Delete</button>
                                                     </div>
                                                 </td>
                                                 <!--end::Action-->
@@ -3208,18 +3268,22 @@
 
                             </table>
                             @php
-                                $uploadFilePerubahanFinal = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Tinjauan Dokumen Kontrak - Pelaksanaan")->where('status', '=', "Final")->first();
+                                // $uploadFilePerubahanFinal = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Tinjauan Dokumen Kontrak - Pelaksanaan")->where('status', '=', "Final")->first();
+                                $uploadFilePerubahanFinal = $contract->UploadFinal->where(function($query) use($contract){
+                                    $query->where('profit_center', "=", $contract->profit_center)
+                                    ->orWhere("id_contract", "=", $contract->id_contract);
+                                })->where('category', '=', "Tinjauan Dokumen Kontrak - Pelaksanaan")->where('status', '=', "Final")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFilePerubahanFinal))
-                                <a target="_blank" href="{{ asset('words/'.$uploadFilePerubahanFinal->id_document) }}" class="text-hover-primary">
+                                <a target="_blank" href="{{ asset('contract-managements/tinjauan-dokumen-kontrak/'.$uploadFilePerubahanFinal->id_document) }}" class="text-hover-primary">
                                 <small><b>Download File :</b> {{ $uploadFilePerubahanFinal->nama_document }}</small>
                                 </a>
                             @endif
 
                             {{-- @dump($contract->reviewProjects->where("stage", "=", 1)->isNotEmpty()) --}}
 
-                            <br><br><br>
+                            <br>
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Identifikasi Pasal Kontraktual
                                 @if ($contract->PasalKontraktual->isNotEmpty())
@@ -3313,15 +3377,19 @@
                             </table>
                             <!--End:Table: Pasal Kontraktual-->
                             @php
-                            $uploadFilePasalKontraktual = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Pasal Kontraktual")->first();
+                            // $uploadFilePasalKontraktual = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Pasal Kontraktual")->first();
+                            $uploadFilePasalKontraktual = $contract->UploadFinal->where(function($query) use($contract){
+                                $query->where('profit_center', "=", $contract->profit_center)
+                                ->orWhere("id_contract", "=", $contract->id_contract);
+                            })->where('category', '=', "Pasal Kontraktual")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFilePasalKontraktual))
-                            <a target="_blank" href="{{ asset('words/'.$uploadFilePasalKontraktual->id_document) }}" class="text-hover-primary">
+                            <a target="_blank" href="{{ asset('contract-managements/pasal-kontraktual/'.$uploadFilePasalKontraktual->id_document) }}" class="text-hover-primary">
                             <small><b>Download File :</b> {{ $uploadFilePasalKontraktual->nama_document }}</small>
                             </a>
                             @endif
-                            <br><br><br>
+                            <br>
 
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Pending Issue - Pelaksanaan
@@ -3391,9 +3459,9 @@
                                                 </td>
                                                 
                                                 <td>
-                                                    @if (!empty($pending_issue->document))
-                                                        <a target="_blank" href="{{ asset('words/'.$pending_issue->id_document) }}">
-                                                            <p class="text-gray-600">{{ $pending_issue->document }}</p>
+                                                    @if (!empty($pending_issue->id_document))
+                                                        <a target="_blank" href="{{ asset('contract-managements/dokumen-pending-issue/'.$pending_issue->id_document) }}">
+                                                            <p class="text-gray-600">{{ $pending_issue->id_document }}</p>
                                                         </a>
                                                         @else
                                                         <p class="text-gray-600">No Data</p>
@@ -3419,45 +3487,20 @@
                                     @endif
                                 </tbody>
 
-                                {{-- <tbody class="fw-bold text-gray-400">
-                                    @php
-                                        $uploadIssuePemeliharaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "pending-issue-pelaksanaan")->first();
-                                    @endphp
-                                        @if (!empty($uploadIssuePemeliharaan))
-                                            <tr>
-                                                <!--begin::Column-->
-                                                <td>
-                                                    <!--End:Table: Review-->
-                                                    <a target="_blank" href="{{ asset('words/'.$uploadIssuePemeliharaan->id_document) }}" class="text-hover-primary">
-                                                    <p>{{ $uploadIssuePemeliharaan->nama_document }}</p>
-                                                    </a>
-                                                </td>
-                                                <!--end::Column-->
-                                                <!--begin::tanggal=-->
-                                                <td>
-                                                    <p class="text-gray-600 mb-1">{{ Carbon\Carbon::createFromTimeString($uploadResikoPerolehan->created_at)->translatedFormat("d F Y") }}</p>
-                                                </td>
-                                                <!--end::tanggal=-->
-                                            </tr>
-                                        @else
-                                            <tr>
-                                                <td colspan="5" class="text-center">
-                                                    <h6><b>There is no data</b></h6>
-                                                </td>
-                                            </tr>
-                                        @endif
-                                </tbody> --}}
-
 
                                 <!--end::Table body-->
     
                             </table>
                             @php
-                                $uploadFilePendingPelaksanaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Pending Issue - Pelaksanaan")->first();
+                                // $uploadFilePendingPelaksanaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Pending Issue - Pelaksanaan")->first();
+                                $uploadFilePendingPelaksanaan = $contract->UploadFinal->where(function($query) use($contract){
+                                    $query->where('profit_center', "=", $contract->profit_center)
+                                    ->orWhere("id_contract", "=", $contract->id_contract);
+                                })->where('category', '=', "Pending Issue - Pelaksanaan")->first();
                             @endphp
                                 <!--End:Table: Review-->
                             @if (!empty($uploadFilePendingPelaksanaan))
-                                <a target="_blank" href="{{ asset('words/'.$uploadFilePendingPelaksanaan->id_document) }}" class="text-hover-primary">
+                                <a target="_blank" href="{{ asset('contract-managements/pending-issue/'.$uploadFilePendingPelaksanaan->id_document) }}" class="text-hover-primary">
                                 <small><b>Download File :</b> {{ $uploadFilePendingPelaksanaan->nama_document }}</small>
                                 </a>
                             @endif
@@ -3611,15 +3654,6 @@
 
                             </table>
                             <!--End:Table: Perubahan Kontrak-->
-                            {{-- @php
-                                $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "perubahan-kontrak")->first();
-                            @endphp
-                            <!--End:Table: Review-->
-                            @if (!empty($uploadFilePerubahan))
-                                <a target="_blank" href="{{ asset('words/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
-                                <small><b>Download File :</b> {{ $uploadFilePerubahan->nama_document }}</small>
-                                </a>
-                            @endif --}}
 
                             <br>
                             <br>
@@ -3666,21 +3700,21 @@
                                         $interval = $currentDate->diff($jaminanExpired);
                                         if($interval->invert == 1){
                                             // $check = $interval->format('Expired %m bulan lagi');
-                                            $style_expired = "badge badge-light-danger";
+                                            $style_expired = "badge badge-light-danger m-0";
                                             $style_kategori = "text-gray-600";
                                             $is_expired = "Sudah Expired";
-                                        }else if($jaminan->is_expired == false && $interval->m == 1){
+                                        }else if($jaminan->is_expired == false && $interval->m == 1 && $interval->y == 0){
                                             $check = $interval->format('Expired %m bulan lagi');
-                                            $style_expired = "badge badge-light-danger";
+                                            $style_expired = "badge badge-light-danger m-0";
                                             $style_kategori = "text-gray-600";
                                             $is_expired = $check;
-                                        }elseif ($jaminan->is_expired == false && $interval->m == 0 || $interval->d == 0) {
+                                        }elseif ($jaminan->is_expired == false && $interval->m == 0 || $interval->d == 0 && $interval->y == 0) {
                                             $check = $interval->format('Expired %d hari lagi');
-                                            $style_expired = "badge badge-light-danger";
+                                            $style_expired = "badge badge-light-danger m-0";
                                             $style_kategori = "text-danger";
                                             $is_expired = $check;
                                         }else{
-                                            $style_expired = "badge badge-light-success";
+                                            $style_expired = "badge badge-light-success m-0";
                                             $style_kategori = "text-gray-600";
                                             $is_expired = "Valid";
                                         }
@@ -3798,12 +3832,12 @@
                                             $style_expired = "badge badge-light-danger";
                                             $style_kategori = "text-gray-600";
                                             $is_expired = "Sudah Expired";
-                                        }else if($asuransi->is_expired == false && $interval->m == 1){
+                                        }else if($asuransi->is_expired == false && $interval->m == 1 && $interval->y == 0){
                                             $check = $interval->format('Expired %m bulan lagi');
                                             $style_expired = "badge badge-light-danger";
                                             $style_kategori = "text-gray-600";
                                             $is_expired = $check;
-                                        }elseif ($asuransi->is_expired == false && $interval->m == 0) {
+                                        }elseif ($asuransi->is_expired == false && $interval->m == 0 && $interval->y == 0) {
                                             $check = $interval->format('Expired %d hari lagi');
                                             $style_expired = "badge badge-light-danger";
                                             $style_kategori = "text-danger";
@@ -3929,11 +3963,15 @@
                             </table>
                             <!--End:Table: Checklist Manajemen Kontrak-->
                             @php
-                                $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Checklist Manajemen Kontrak")->first();
+                                // $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Checklist Manajemen Kontrak")->first();
+                                $uploadFilePerubahan = $contract->UploadFinal->where(function($query) use($contract){
+                                    $query->where('profit_center', "=", $contract->profit_center)
+                                    ->orWhere("id_contract", "=", $contract->id_contract);
+                                })->where('category', '=', "Checklist Manajemen Kontrak")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFilePerubahan))
-                                <a target="_blank" href="{{ asset('words/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
+                                <a target="_blank" href="{{ asset('contract-managements/checklist-manajemen-kontrak/'.$uploadFilePerubahan->id_document) }}" class="text-hover-primary">
                                 <small><b>Download File :</b> {{ $uploadFilePerubahan->nama_document }}</small>
                                 </a>
                             @endif
@@ -4602,8 +4640,14 @@
                             </thead>
                             <!--end::Table head-->
                             <!--begin::Table body-->
+                            @php
+                                $documentBAST1 = App\Models\ContractBast::where(function($query) use($contract){
+                                    $query->where('id_contract', $contract->id_contract)
+                                            ->orWhere('profit_center', $contract->profit_center);
+                                })->get();
+                            @endphp
                             <tbody class="fw-bold text-gray-400">
-                                @foreach ($contract->ContractBast as $dokumen)
+                                @foreach ($documentBAST1 as $dokumen)
                                     @if ($dokumen->bast == 1)
                                     <tr>
                                         <!--begin::Nomor-->
@@ -4618,13 +4662,15 @@
                                         <!--end::Column-->
                                         <!--begin::Name-->
                                         <td>
-                                            @if (str_contains("$dokumen->nama_dokumen", '.pdf'))
+                                            <a href="{{ asset('contract-managements/dokumen-bast/' . $dokumen->id_document ) }}"
+                                                class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
+                                            {{-- @if (str_contains("$dokumen->nama_dokumen", '.pdf'))
                                                 <a href="{{ asset('words/' . $dokumen->id_document . '.pdf') }}"
                                                     class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
                                             @else
                                                 <a target="_blank" href="{{ asset('words/' . $dokumen->id_document . '.docx') }}"
                                                     class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
-                                            @endif
+                                            @endif --}}
                                         </td>
                                         <!--end::Name-->
                                         <td>
@@ -4647,7 +4693,7 @@
                                     </tr>
                                     @endif
                                 @endforeach
-                                @if ($contract->ContractBast->where("bast", "=", 1)->isEmpty())
+                                @if ($documentBAST1->where("bast", "=", 1)->isEmpty())
                                 <tr>
                                     <td colspan="4" class="text-center">
                                         <h6><b>There is no data</b></h6>
@@ -4684,19 +4730,15 @@
                             <!--begin::Table body-->
                             <tbody class="fw-bold text-gray-400">
                                 @php
-                                    $dokumen_mom = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Minutes of Meeting (MoM)");
+                                    // $dokumen_mom = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Minutes of Meeting (MoM)");
+                                    $dokumen_mom = $contract->UploadFinal->where('category', '=', "Dokumen Minutes of Meeting (MoM)");
                                 @endphp
                                 @forelse ($dokumen_mom as $dokumen)
                                     <tr>
                                         <!--begin::Name-->
                                         <td>
-                                            @if (str_contains("$dokumen->nama_document", '.pdf'))
-                                                <a href="{{ asset('words/' . $dokumen->id_document) }}"
-                                                    class="text-hover-primary">{{ $dokumen->nama_document }}</a>
-                                            @else
-                                                <a target="_blank" href="{{ asset('words/' . $dokumen->id_document . '.docx') }}"
-                                                    class="text-hover-primary">{{ $dokumen->nama_document }}</a>
-                                            @endif
+                                            <a target="_blank" href="{{ asset('contract-managements/dokumen-mom/' . $dokumen->id_document) }}"
+                                                class="text-hover-primary">{{ $dokumen->nama_document }}</a>
                                         </td>
                                         <!--end::Name-->
                                         <td>
@@ -4709,7 +4751,7 @@
                                                     data-bs-target="#kt_modal_upload_mom_{{ $dokumen->id }}"
                                                     {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                     class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dokumen->id }}')">Delete</button>
+                                                <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dokumen->id }}', null, 'dokumen-mom')">Delete</button>
                                             </div>
                                         </td>
                                         <!--end::Action-->
@@ -4752,19 +4794,15 @@
                             <!--begin::Table body-->
                             <tbody class="fw-bold text-gray-400">
                                 @php
-                                    $dokumen_kickoff = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Kick Off Meeting");
+                                    // $dokumen_kickoff = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Kick Off Meeting");
+                                    $dokumen_kickoff = $contract->UploadFinal->where('category', '=', "Dokumen Kick Off Meeting");
                                 @endphp
                                 @forelse ($dokumen_kickoff as $dokumen)
                                     <tr>
                                         <!--begin::Name-->
                                         <td>
-                                            @if (str_contains("$dokumen->nama_document", '.pdf'))
-                                                <a href="{{ asset('words/' . $dokumen->id_document) }}"
-                                                    class="text-hover-primary">{{ $dokumen->nama_document }}</a>
-                                            @else
-                                                <a target="_blank" href="{{ asset('words/' . $dokumen->id_document . '.docx') }}"
-                                                    class="text-hover-primary">{{ $dokumen->nama_document }}</a>
-                                            @endif
+                                            <a href="{{ asset('contract-managements/dokumen-kick-off-meeting/' . $dokumen->id_document) }}"
+                                                class="text-hover-primary">{{ $dokumen->nama_document }}</a>
                                         </td>
                                         <!--end::Name-->
                                         <td>
@@ -4777,7 +4815,7 @@
                                                     data-bs-target="#kt_modal_upload_kickoff_{{ $dokumen->id }}"
                                                     {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                     class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dokumen->id }}')">Delete</button>
+                                                <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dokumen->id }}', null, 'dokumen-kick-off-meeting')">Delete</button>
                                             </div>
                                         </td>
                                         <!--end::Action-->
@@ -4825,7 +4863,11 @@
                             <!--end::Table head-->
                             <!--begin::Table body-->
                             @php
-                            $dokumen_kontrak_pemeliharaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', 'Dokumen Kontrak');
+                            // $dokumen_kontrak_pemeliharaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', 'Dokumen Kontrak');
+                            $dokumen_kontrak_pemeliharaan = $contract->UploadFinal->where(function($query) use($contract){
+                                $query->where('profit_center', "=", $contract->profit_center)
+                                ->orWhere("id_contract", "=", $contract->id_contract);
+                            })->where('category', '=', 'Dokumen Kontrak');
                             @endphp
                             <tbody class="fw-bold text-gray-400">
                                 @if (!empty($dokumen_kontrak_pemeliharaan))
@@ -4833,7 +4875,7 @@
                                         <tr>
                                             <!--begin::Column-->
                                             <td>
-                                                <a target="_blank" href="{{ asset('words/' . $dc->id_document) }}"
+                                                <a target="_blank" href="{{ asset('contract-managements/dokumen-kontrak/' . $dc->id_document) }}"
                                                     class="text-hover-primary">
                                                     {{ $dc->nama_document }}
                                                 </a>
@@ -4858,7 +4900,7 @@
                                                         data-bs-target="#kt_modal_upload_dokumen_kontrak_{{ $dc->id }}"
                                                         {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                         class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                    <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}')">Delete</button>
+                                                    <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', null, 'dokumen-kontrak')">Delete</button>
                                                 </div>
                                             </td>
                                             <!--end::Action-->
@@ -4909,7 +4951,11 @@
                             <!--end::Table head-->
                             <!--begin::Table body-->
                             @php
-                                $dokumen_amandemen_pemeliharaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Amandemen");
+                                // $dokumen_amandemen_pemeliharaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Amandemen");
+                                $dokumen_amandemen_pemeliharaan = $contract->UploadFinal->where(function($query) use($contract){
+                                    $query->where('profit_center', "=", $contract->profit_center)
+                                    ->orWhere("id_contract", "=", $contract->id_contract);
+                                })->where('category', '=', "Dokumen Amandemen");
                             @endphp
                             <tbody class="fw-bold text-gray-400">
                                 @if (!empty($dokumen_amandemen_pemeliharaan))
@@ -4917,7 +4963,7 @@
                                         <tr>
                                             <!--begin::Column-->
                                             <td>
-                                                <a target="_blank" href="{{ asset('words/'.$dc->id_document) }}" class="text-hover-primary">
+                                                <a target="_blank" href="{{ asset('contract-managements/dokumen-amandemen/'.$dc->id_document) }}" class="text-hover-primary">
                                                     {{ $dc->nama_document }}
                                                 </a>
                                             </td>
@@ -4939,7 +4985,7 @@
                                                         data-bs-target="#kt_modal_upload_dokumen_amandemen_pemeliharaan_{{ $dc->id }}"
                                                         {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                         class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                    <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}')">Delete</button>
+                                                    <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', null, 'dokumen-amandemen')">Delete</button>
                                                 </div>
                                             </td>
                                             <!--end::Action-->
@@ -4964,11 +5010,15 @@
                         </table>
                         <!--End:Table: Review-->
                         @php
-                        $uploadFileAmandemen = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Amandemen - Pemeliharaan")->first();
+                        // $uploadFileAmandemen = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Amandemen - Pemeliharaan")->first();
+                        $uploadFileAmandemen = $contract->UploadFinal->where(function($query) use($contract){
+                            $query->where('profit_center', "=", $contract->profit_center)
+                            ->orWhere("id_contract", "=", $contract->id_contract);
+                        })->where('category', '=', "Dokumen Amandemen - Pemeliharaan")->first();
                         @endphp
                         <!--End:Table: Review-->
                         @if (!empty($uploadFileAmandemen))
-                        <a target="_blank" href="{{ asset('words/'.$uploadFileAmandemen->id_document) }}" class="text-hover-primary">
+                        <a target="_blank" href="{{ asset('contract-managements/dokumen-amandemen/'.$uploadFileAmandemen->id_document) }}" class="text-hover-primary">
                         <small><b>Download File :</b> {{ $uploadFileAmandemen->nama_document }}</small>
                         </a>
                         @endif
@@ -4998,7 +5048,11 @@
                             <!--end::Table head-->
                             <!--begin::Table body-->
                             @php
-                                $dokumen = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Bill Of Quantity");
+                                // $dokumen = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Bill Of Quantity");
+                                $dokumen = $contract->UploadFinal->where(function($query) use($contract){
+                                    $query->where('profit_center', "=", $contract->profit_center)
+                                    ->orWhere("id_contract", "=", $contract->id_contract);
+                                })->where('category', '=', "Dokumen Bill Of Quantity");
                             @endphp
                             <tbody class="fw-bold text-gray-400">
                                 @if (!empty($dokumen))
@@ -5006,7 +5060,7 @@
                                         <tr>
                                             <!--begin::Column-->
                                             <td>
-                                                <a target="_blank" href="{{ asset('words/'.$dc->id_document) }}" class="text-hover-primary">
+                                                <a target="_blank" href="{{ asset('contract-managements/dokumen-boq/'.$dc->id_document) }}" class="text-hover-primary">
                                                     {{ $dc->nama_document }}
                                                 </a>
                                             </td>
@@ -5037,11 +5091,15 @@
                         </table>
                         <!--End:Table: Review-->
                         @php
-                        $uploadFileBOQ = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Bill Of Quantity - Pemeliharaan")->first();
+                        // $uploadFileBOQ = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Bill Of Quantity - Pemeliharaan")->first();
+                        $uploadFileBOQ = $contract->UploadFinal->where(function($query) use($contract){
+                            $query->where('profit_center', "=", $contract->profit_center)
+                            ->orWhere("id_contract", "=", $contract->id_contract);
+                        })->where('category', '=', "Dokumen Bill Of Quantity - Pemeliharaan")->first();
                         @endphp
                         <!--End:Table: Review-->
                         @if (!empty($uploadFileBOQ))
-                        <a target="_blank" href="{{ asset('words/'.$uploadFileBOQ->id_document) }}" class="text-hover-primary">
+                        <a target="_blank" href="{{ asset('contract-managements/dokumen-boq/'.$uploadFileBOQ->id_document) }}" class="text-hover-primary">
                         <small><b>Download File :</b> {{ $uploadFileBOQ->nama_document }}</small>
                         </a>
                         @endif
@@ -5071,7 +5129,11 @@
                             <!--end::Table head-->
                             <!--begin::Table body-->
                             @php
-                                $dokumen = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Faktur Pajak Lunas");
+                                // $dokumen = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Faktur Pajak Lunas");
+                                $dokumen = $contract->UploadFinal->where(function($query) use($contract){
+                                    $query->where('profit_center', "=", $contract->profit_center)
+                                    ->orWhere("id_contract", "=", $contract->id_contract);
+                                })->where('category', '=', "Dokumen Faktur Pajak Lunas");
                             @endphp
                             <tbody class="fw-bold text-gray-400">
                                 @if (!empty($dokumen))
@@ -5079,7 +5141,7 @@
                                         <tr>
                                             <!--begin::Column-->
                                             <td>
-                                                <a target="_blank" href="{{ asset('words/'.$dc->id_document) }}" class="text-hover-primary">
+                                                <a target="_blank" href="{{ asset('contract-managements/dokumen-faktur-pajak-lunas/'.$dc->id_document) }}" class="text-hover-primary">
                                                     {{ $dc->nama_document }}
                                                 </a>
                                             </td>
@@ -5109,15 +5171,6 @@
 
                         </table>
                         <!--End:Table: Review-->
-                        {{-- @php
-                        $uploadFileBOQ = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Bill Of Quantity - Pemeliharaan")->first();
-                        @endphp
-                        <!--End:Table: Review-->
-                        @if (!empty($uploadFileBOQ))
-                        <a target="_blank" href="{{ asset('words/'.$uploadFileBOQ->id_document) }}" class="text-hover-primary">
-                        <small><b>Download File :</b> {{ $uploadFileBOQ->nama_document }}</small>
-                        </a>
-                        @endif --}}
                         <br>
 
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
@@ -5142,7 +5195,11 @@
                             <!--end::Table head-->
                             <!--begin::Table body-->
                             @php
-                                $dokumen = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Bukti Setor PPh Lunas");
+                                // $dokumen = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Bukti Setor PPh Lunas");
+                                $dokumen = $contract->UploadFinal->where(function($query) use($contract){
+                                    $query->where('profit_center', "=", $contract->profit_center)
+                                    ->orWhere("id_contract", "=", $contract->id_contract);
+                                })->where('category', '=', "Dokumen Bukti Setor PPh Lunas");
                             @endphp
                             <tbody class="fw-bold text-gray-400">
                                 @if (!empty($dokumen))
@@ -5150,7 +5207,7 @@
                                         <tr>
                                             <!--begin::Column-->
                                             <td>
-                                                <a target="_blank" href="{{ asset('words/'.$dc->id_document) }}" class="text-hover-primary">
+                                                <a target="_blank" href="{{ asset('contract-managements/dokumen-setor-pph/'.$dc->id_document) }}" class="text-hover-primary">
                                                     {{ $dc->nama_document }}
                                                 </a>
                                             </td>
@@ -5221,7 +5278,7 @@
                                                                 {{-- <a href="/document/view/{{ $contract->id_contract }}/{{ $ba_defect }}"
                                                                     class="text-gray-600 text-hover-primary">Dokumen BA Defect
                                                                     #{{ $key + 1 }}</a> --}}
-                                                                <a target="_blank" href="{{ asset('words/' . $ba_defect . '.pdf') }}" class="text-gray-400 text-hover-primary">Klik Dokumen BA Defect Disini</a>
+                                                                <a target="_blank" href="{{ asset('contract-managements/dokumen-ba-defect/' . $ba_defect . '.pdf') }}" class="text-gray-400 text-hover-primary">Klik Dokumen BA Defect Disini</a>
                                                             </td>
                                                             <!--end::Column-->
                                                         </tr>
@@ -5388,13 +5445,15 @@
                                                                 <!--end::Column-->
                                                                 <!--begin::Name-->
                                                                 <td>
-                                                                    @if (str_contains("$dokumen->nama_dokumen", '.pdf'))
-                                                                        <a href="{{ asset('words/' . $dokumen->id_document . '.pdf') }}"
+                                                                    <a href="{{ asset('contract-managements/dokumen-bast/' . $dokumen->id_document) }}"
+                                                                        class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
+                                                                    {{-- @if (str_contains("$dokumen->nama_dokumen", '.pdf'))
+                                                                        <a href="{{ asset('contract-managements/dokumen-bast/' . $dokumen->id_document . '.pdf') }}"
                                                                             class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
                                                                     @else
-                                                                        <a target="_blank" href="{{ asset('words/' . $dokumen->id_document . '.docx') }}"
+                                                                        <a target="_blank" href="{{ asset('contract-managements/dokumen-bast/' . $dokumen->id_document . '.docx') }}"
                                                                             class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
-                                                                    @endif
+                                                                    @endif --}}
                                                                 </td>
                                                                 <!--end::Name-->
                                                                 <td>
@@ -5464,19 +5523,22 @@
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
                                     @php
-                                        $dokumen_lesson_learned = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Lesson Learned");
+                                        // $dokumen_lesson_learned = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Lesson Learned");
+                                        $dokumen_lesson_learned = $contract->UploadFinal->where('category', '=', "Dokumen Lesson Learned");
                                     @endphp
                                     @forelse ($dokumen_lesson_learned as $dokumen)
                                         <tr>
                                             <!--begin::Name-->
                                             <td>
-                                                @if (str_contains("$dokumen->nama_document", '.pdf'))
+                                                <a href="{{ asset('contract-managements/dokumen-lesson-learned/' . $dokumen->id_document) }}"
+                                                    class="text-hover-primary">{{ $dokumen->nama_document }}</a>
+                                                {{-- @if (str_contains("$dokumen->nama_document", '.pdf'))
                                                     <a href="{{ asset('words/' . $dokumen->id_document) }}"
                                                         class="text-hover-primary">{{ $dokumen->nama_document }}</a>
                                                 @else
                                                     <a target="_blank" href="{{ asset('words/' . $dokumen->id_document . '.docx') }}"
                                                         class="text-hover-primary">{{ $dokumen->nama_document }}</a>
-                                                @endif
+                                                @endif --}}
                                             </td>
                                             <!--end::Name-->
                                             <td>
@@ -5489,7 +5551,7 @@
                                                         data-bs-target="#kt_modal_upload_lesson_learned_{{ $dokumen->id }}"
                                                         {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                         class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                    <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dokumen->id }}')">Delete</button>
+                                                    <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dokumen->id }}', null, 'dokumen-lesson-learned')">Delete</button>
                                                 </div>
                                             </td>
                                             <!--end::Action-->
@@ -5533,19 +5595,22 @@
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
                                     @php
-                                        $dokumen_monitoring_status = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Monitoring Status");
+                                        // $dokumen_monitoring_status = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Monitoring Status");
+                                        $dokumen_monitoring_status = $contract->UploadFinal->where('category', '=', "Dokumen Monitoring Status");
                                     @endphp
                                     @forelse ($dokumen_monitoring_status as $dokumen)
                                         <tr>
                                             <!--begin::Name-->
                                             <td>
-                                                @if (str_contains("$dokumen->nama_document", '.pdf'))
+                                                <a href="{{ asset('contract-managements/dokumen-monitoring-status/' . $dokumen->id_document) }}"
+                                                    class="text-hover-primary">{{ $dokumen->nama_document }}</a>
+                                                {{-- @if (str_contains("$dokumen->nama_document", '.pdf'))
                                                     <a href="{{ asset('words/' . $dokumen->id_document) }}"
                                                         class="text-hover-primary">{{ $dokumen->nama_document }}</a>
                                                 @else
                                                     <a target="_blank" href="{{ asset('words/' . $dokumen->id_document . '.docx') }}"
                                                         class="text-hover-primary">{{ $dokumen->nama_document }}</a>
-                                                @endif
+                                                @endif --}}
                                             </td>
                                             <!--end::Name-->
                                             <td>
@@ -5558,7 +5623,7 @@
                                                         data-bs-target="#kt_modal_upload_monitoring_status_{{ $dokumen->id }}"
                                                         {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                         class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                    <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dokumen->id }}')">Delete</button>
+                                                    <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dokumen->id }}', null, 'dokumen-monitoring-status')">Delete</button>
                                                 </div>
                                             </td>
                                             <!--end::Action-->
@@ -5745,7 +5810,11 @@
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-400">
                                             @php
-                                                $uploadResikoPemeliharaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Resiko - Pemeliharaan");
+                                                // $uploadResikoPemeliharaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Resiko - Pemeliharaan");
+                                                $uploadResikoPemeliharaan = $contract->UploadFinal->where(function($query) use($contract){
+                                                    $query->where('profit_center', "=", $contract->profit_center)
+                                                    ->orWhere("id_contract", "=", $contract->id_contract);
+                                                })->where('category', '=', "Dokumen Resiko - Pemeliharaan");
                                             @endphp
                                             @forelse ($uploadResikoPemeliharaan as $inputRisk)
                                                 <tr>
@@ -5755,7 +5824,7 @@
                                                     </td> --}}
                                                     <td>
                                                         <!--End:Table: Review-->
-                                                        <a target="_blank" href="{!! asset('words/'.$inputRisk->id_document) !!}" class="text-hover-primary">
+                                                        <a target="_blank" href="{!! asset('contract-managements/dokumen-resiko/'.$inputRisk->id_document) !!}" class="text-hover-primary">
                                                         <p>{{ $inputRisk->nama_document }}</p>
                                                         </a>
                                                     </td>
@@ -5869,50 +5938,30 @@
                                 @else
                                 @endif
                             </tbody>
-                            {{-- <tbody class="fw-bold text-gray-400">
-                                @php
-                                    $uploadIssuePemeliharaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "pending-issue-pemeliharaan")->first();
-                                @endphp
-                                    @if (!empty($uploadIssuePemeliharaan))
-                                        <tr>
-                                            <!--begin::Column-->
-                                            <td>
-                                                <!--End:Table: Review-->
-                                                <a target="_blank" href="{{ asset('words/'.$uploadIssuePemeliharaan->id_document) }}" class="text-hover-primary">
-                                                <p>{{ $uploadIssuePemeliharaan->nama_document }}</p>
-                                                </a>
-                                            </td>
-                                            <!--end::Column-->
-                                            <!--begin::tanggal=-->
-                                            <td>
-                                                <p class="text-gray-600 mb-1">{{ Carbon\Carbon::createFromTimeString($uploadResikoPerolehan->created_at)->translatedFormat("d F Y") }}</p>
-                                            </td>
-                                            <!--end::tanggal=-->
-                                        </tr>
-                                    @else
-                                        <tr>
-                                            <td colspan="5" class="text-center">
-                                                <h6><b>There is no data</b></h6>
-                                            </td>
-                                        </tr>
-                                    @endif
-                            </tbody> --}}
                             <!--end::Table body-->
 
                         </table>
                         @php
-                            $uploadFilePendingPemeliharaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Pending Issue - Pemeliharaan")->first();
-                            $uploadFilePendingPelaksanaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Pending Issue - Pelaksanaan")->first();
+                            // $uploadFilePendingPemeliharaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Pending Issue - Pemeliharaan")->first();
+                            $uploadFilePendingPemeliharaan = $contract->UploadFinal->where(function($query) use($contract){
+                                $query->where('profit_center', "=", $contract->profit_center)
+                                ->orWhere("id_contract", "=", $contract->id_contract);
+                            })->where('category', '=', "Pending Issue - Pemeliharaan")->first();
+                            // $uploadFilePendingPelaksanaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Pending Issue - Pelaksanaan")->first();
+                            $uploadFilePendingPelaksanaan = $contract->UploadFinal->where(function($query) use($contract){
+                                $query->where('profit_center', "=", $contract->profit_center)
+                                ->orWhere("id_contract", "=", $contract->id_contract);
+                            })->where('category', '=', "Pending Issue - Pelaksanaan")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFilePendingPelaksanaan))
-                                <a target="_blank" href="{{ asset('words/'.$uploadFilePendingPelaksanaan->id_document) }}" class="text-hover-primary">
+                                <a target="_blank" href="{{ asset('contract-managements/pending-issue/'.$uploadFilePendingPelaksanaan->id_document) }}" class="text-hover-primary">
                                 <small><b>File Pending Issue Pelaksanaan :</b> {{ $uploadFilePendingPelaksanaan->nama_document }}</small>
                                 </a>
                             @endif
                             <br>
                             @if (!empty($uploadFilePendingPemeliharaan))
-                                <a target="_blank" href="{{ asset('words/'.$uploadFilePendingPemeliharaan->id_document) }}" class="text-hover-primary">
+                                <a target="_blank" href="{{ asset('contract-managements/pending-issue/'.$uploadFilePendingPemeliharaan->id_document) }}" class="text-hover-primary">
                                 <small><b>Download File :</b> {{ $uploadFilePendingPemeliharaan->nama_document }}</small>
                                 </a>
                             @endif
@@ -6084,7 +6133,7 @@
                     </label>
                     <!--end::Label-->
                     <!--begin::Input-->
-                    <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                    <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                         name="id-contract">
                     <input type="hidden" class="modal-name" name="modal-name">
                     <input type="file" style="font-weight: normal" class="form-control form-control-solid"
@@ -6191,7 +6240,7 @@
                     </label>
                     <!--end::Label-->
                     <!--begin::Input-->
-                    <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                    <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                         name="id-contract">
                     <input type="hidden" class="modal-name" name="modal-name">
                     <input type="file" class="form-control form-control-solid" name="attach-file-draft"
@@ -6291,7 +6340,7 @@
                             <!--begin::Input-->
                             <input type="hidden" value="1" name="is-tender-menang">
                             <input type="hidden" class="modal-name" name="modal-name">
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="file" class="form-control form-control-solid"
                                 name="attach-file-draft-menang" id="attach-file-draft-menang"
@@ -6393,7 +6442,7 @@
                             <!--begin::Input-->
                             <input type="hidden" value="1" name="is-tender-menang">
                             <input type="hidden" class="modal-name" name="modal-name">
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="file" style="font-weight: normal"
                                 class="form-control form-control-solid" name="attach-file"
@@ -6491,7 +6540,7 @@
                             <!--begin::Input-->
                             <input type="hidden" value="1" name="is-tender-menang">
                             <input type="hidden" class="modal-name" name="modal-name">
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="file" style="font-weight: normal"
                                 class="form-control form-control-solid" name="attach-file"
@@ -6588,7 +6637,7 @@
                             <!--begin::Input-->
                             <input type="hidden" value="1" name="is-tender-menang">
                             <input type="hidden" class="modal-name" name="modal-name">
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="file" style="font-weight: normal"
                                 class="form-control form-control-solid" name="attach-file"
@@ -6673,7 +6722,7 @@
                             <!--begin::Input-->
                             <input type="hidden" value="1" name="is-tender-menang">
                             <input type="hidden" class="modal-name" name="modal-name">
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="file" style="font-weight: normal"
                                 class="form-control form-control-solid" name="attach-file"
@@ -6771,7 +6820,7 @@
                             <!--begin::Input-->
                             <input type="hidden" value="1" name="is-tender-menang">
                             <input type="hidden" class="modal-name" name="modal-name">
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="file" style="font-weight: normal"
                                 class="form-control form-control-solid" name="attach-file"
@@ -6868,7 +6917,7 @@
                             <!--begin::Input-->
                             <input type="hidden" value="1" name="is-tender-menang">
                             <input type="hidden" class="modal-name" name="modal-name">
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="file" style="font-weight: normal"
                                 class="form-control form-control-solid" name="attach-file"
@@ -6965,7 +7014,7 @@
                             <!--begin::Input-->
                             <input type="hidden" value="1" name="is-tender-menang">
                             <input type="hidden" class="modal-name" name="modal-name">
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="file" class="form-control form-control-solid" name="attach-file-issue"
                                 id="attach-file-issue-project-menang" style="font-weight: normal" value=""
@@ -7505,10 +7554,11 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="hidden" name="kategori" value="Dokumen Resiko - Perolehan">
+                                <input type="hidden" name="kategori-path" value="dokumen-resiko">
                                 <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".xlsx">
                                 <!--end::Input-->
                             </div>
-                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                     name="id-contract">
                                 <input type="hidden" class="modal-name" name="modal-name">
                             </div>
@@ -8161,10 +8211,12 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="hidden" name="kategori" value="Dokumen Resiko - Pelaksanaan">
+                                <input type="hidden" name="kategori-path" value="dokumen-resiko">
                                 <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".xlsx">
                                 <!--end::Input-->
                             </div>
-                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                {{-- <input type="hidden" value="{{ $contract->id_document ?? 0 }}" id="id-contract" --}}
+                                <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                     name="id-contract">
                                 <input type="hidden" class="modal-name" name="modal-name">
                             </div>
@@ -8215,7 +8267,9 @@
                         @csrf
                         <input type="hidden" class="modal-name" name="modal-name">
                         <input type="hidden" value="Dokumen Resiko - Pemeliharaan" name="kategori">
-                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" name="id-contract">
+                        <input type="hidden" value="dokumen-resiko" name="kategori-path">
+                        {{-- <input type="hidden" value="{{ $contract->id_document ?? 0 }}" name="id-contract"> --}}
+                        <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" name="id-contract">
                         <br>
                         <div class="row">
                             <div class="col">
@@ -8276,6 +8330,7 @@
                         @csrf
                         <input type="hidden" class="modal-name" name="modal-name">
                         <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}">
+                        <input type="hidden" name="profit-center" value="{{ $contract->profit_center }}">
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
                             <span style="font-weight: normal">Masukan file dibawah ini</span>
@@ -8332,6 +8387,7 @@
                         <input type="hidden" name="bast" value="1">
                         <input type="hidden" class="modal-name" name="modal-name">
                         <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}">
+                        <input type="hidden" name="profit-center" value="{{ $contract->profit_center }}">
 
                         <label class="fs-6 fw-bold form-label mt-3">
                             <span class="">Nomor</span>
@@ -8809,7 +8865,7 @@
                         enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" class="modal-name" name="modal-name">
-                        <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}">
+                        <input type="hidden" name="id-contract" value="{{ $contract->id_contract ?? $contract->profit_center }}">
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
                             <span style="font-weight: normal">Masukan file dibawah ini</span>
@@ -9513,7 +9569,7 @@
                             <!--begin::Input-->
                             <input type="hidden" value="1" name="is-tender-menang">
                             <input type="hidden" class="modal-name" name="modal-name">
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="file" class="form-control form-control-solid"
                                 name="attach-file-question" id="attach-file-question-menang" value=""
@@ -9617,8 +9673,10 @@
                                 class="form-control form-control-solid"></textarea> --}}
                                 <input type="hidden" name="modal-name" value="kt_modal_input_rencana_kerja_kontrak">
                                 <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
-                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract" name="id-contract">
+                                {{-- <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract" name="id-contract"> --}}
+                                <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract" name="id-contract">
                                 <input type="hidden" name="kategori" value="Dokumen Rencana Kerja Manajemen Kontrak (BAB 12)">
+                                <input type="hidden" name="kategori-path" value="dokumen-rencana-kerja">
 
                                 <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
                                     <span style="font-weight: normal">Status</span>
@@ -9732,8 +9790,9 @@
                                             {{ !empty($item->id_document) ? 'File sebelumnya: '.$item->nama_document : '' }}
                                         </small>
                                     </label>
-                                    <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract" name="id-contract">
+                                    <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract" name="id-contract">
                                     <input type="hidden" name="kategori" value="Dokumen Rencana Kerja Manajemen Kontrak (BAB 12)">
+                                    <input type="hidden" name="kategori-path" value="dokumen-rencana-kerja">
                                     <br>
                                     <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
                                         <span style="font-weight: normal">Status</span>
@@ -9830,7 +9889,7 @@
                         <form action="/dokumen-site-instruction/upload" method="POST" enctype="multipart/form-data">
                             @csrf
                             <!--begin::Input-->
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" value="{{ $contract->profit_center }}" id="profit-center"
                                 name="profit-center">
@@ -9920,7 +9979,7 @@
                         <form action="/dokumen-technical-form/upload" method="POST" enctype="multipart/form-data">
                             @csrf
                             <!--begin::Input-->
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" value="{{ $contract->profit_center }}" id="profit-center"
                                 name="profit-center">
@@ -10012,7 +10071,7 @@
                         <form action="/dokumen-technical-query/upload" method="POST" enctype="multipart/form-data">
                             @csrf
                             <!--begin::Input-->
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" value="{{ $contract->profit_center }}" id="profit-center"
                             name="profit-center">
@@ -10104,7 +10163,7 @@
                         <form action="/dokumen-field-design-change/upload" method="POST" enctype="multipart/form-data">
                             @csrf
                             <!--begin::Input-->
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" value="{{ $contract->profit_center }}" id="profit-center"
                             name="profit-center">
@@ -10194,7 +10253,7 @@
                         <form action="/dokumen-contract-change-notice/upload" method="POST" enctype="multipart/form-data">
                             @csrf
                             <!--begin::Input-->
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" value="{{ $contract->profit_center }}" id="profit-center"
                             name="profit-center">
@@ -10284,7 +10343,7 @@
                         <form action="/dokumen-contract-change-proposal/upload" method="POST" enctype="multipart/form-data">
                             @csrf
                             <!--begin::Input-->
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" value="{{ $contract->profit_center }}" id="profit-center"
                             name="profit-center">
@@ -10374,7 +10433,7 @@
                         <form action="/dokumen-contract-change-order/upload" method="POST" enctype="multipart/form-data">
                             @csrf
                             <!--begin::Input-->
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" value="{{ $contract->profit_center }}" id="profit-center"
                             name="profit-center">
@@ -10470,7 +10529,7 @@
                     <form action="/perubahan-kontrak/upload" method="POST"
                         enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                        <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                             name="id-contract">
                         <input type="hidden" class="modal-name" name="modal-name">
                         <br>
@@ -10593,7 +10652,7 @@
                         <form action="/jaminan-pelaksanaan/upload" method="POST" enctype="multipart/form-data">
                             @csrf
                             <!--begin::Input-->
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                             <input type="hidden" value="{{ $perubahan_kontrak->id_perubahan_kontrak ?? 0 }}" id="id-perubahan-kontrak" name="id-perubahan-kontrak">
@@ -10740,7 +10799,7 @@
                         <form action="/asuransi-pelaksanaan/upload" method="POST" enctype="multipart/form-data">
                             @csrf
                             <!--begin::Input-->
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                             <input type="hidden" value="{{ $perubahan_kontrak->id_perubahan_kontrak ?? 0 }}" id="id-perubahan-kontrak" name="id-perubahan-kontrak">
@@ -10981,7 +11040,7 @@
                         <form action="/jaminan-pelaksanaan/edit" method="POST" enctype="multipart/form-data">
                             @csrf
                             <!--begin::Input-->
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                             <input type="hidden" value="{{ $perubahan_kontrak->id_perubahan_kontrak ?? 0 }}" id="id-perubahan-kontrak" name="id-perubahan-kontrak">
@@ -11220,7 +11279,7 @@
                         <form action="/asuransi-pelaksanaan/edit" method="POST" enctype="multipart/form-data">
                             @csrf
                             <!--begin::Input-->
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                             <input type="hidden" value="{{ $perubahan_kontrak->id_perubahan_kontrak ?? 0 }}" id="id-perubahan-kontrak" name="id-perubahan-kontrak">
@@ -11366,7 +11425,7 @@
                     <form action="/pasal-kontraktual/upload" method="POST">
                         @csrf
                         <!--begin::Input-->
-                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                        <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                             name="id-contract">
                         <input type="hidden" class="modal-name" name="modal-name">
     
@@ -11490,7 +11549,7 @@
                         <form action="/checklist-manajemen-kontrak/upload" method="POST">
                             @csrf
                             <!--begin::Input-->
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                             
@@ -13694,7 +13753,7 @@
 
                         <br><br>
 
-                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                        <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                             name="id-contract">
                         <input type="hidden" class="modal-name" name="modal-name">
 
@@ -13813,7 +13872,7 @@
                     </label>
                     <!--end::Label-->
                     <!--begin::Input-->
-                    <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                    <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                         name="id-contract">
                     <input type="hidden" class="modal-name" name="modal-name">
                     <input type="file" class="form-control form-control-solid" name="attach-file-bulanan"
@@ -14311,6 +14370,7 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen Kontrak">
+                            <input type="hidden" name="kategori-path" value="dokumen-kontrak">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                             <br>
@@ -14332,7 +14392,8 @@
                             </select>
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            {{-- <input type="hidden" value="{{ $contract->id_document ?? 0 }}" id="id-contract" --}}
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -14391,7 +14452,9 @@
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="hidden" name="kategori" value="Dokumen Kontrak">
-                                    <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}">
+                                    <input type="hidden" name="kategori-path" value="dokumen-kontrak">
+                                    {{-- <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}"> --}}
+                                    <input type="hidden" name="id-contract" value="{{ $contract->profit_center }}">
                                     <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                                     <label for="dokumen-bast-1">
                                         <small class="fs-8 text-primary">
@@ -14418,8 +14481,6 @@
                                     </select>
                                     <!--end::Input-->
                                 </div>
-                                    <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                                        name="id-contract">
                                     <input type="hidden" class="modal-name" name="modal-name">
                                 </div>
                             </div>
@@ -14477,6 +14538,7 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen Kontrak - Pemeliharaan">
+                            <input type="hidden" name="kategori-path" value="dokumen-kontrak">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                             <br>
@@ -14498,7 +14560,7 @@
                             </select>
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -14557,7 +14619,9 @@
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="hidden" name="kategori" value="Dokumen Kontrak - Pemeliharaan">
-                                    <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}">
+                                    <input type="hidden" name="kategori-path" value="dokumen-kontrak">
+                                    {{-- <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}"> --}}
+                                    <input type="hidden" name="id-contract" value="{{ $contract->profit_center }}">
                                     <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                                     <label for="dokumen-bast-1">
                                         <small class="fs-8 text-primary">
@@ -14584,8 +14648,6 @@
                                     </select>
                                     <!--end::Input-->
                                 </div>
-                                    <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                                        name="id-contract">
                                     <input type="hidden" class="modal-name" name="modal-name">
                                 </div>
                             </div>
@@ -14643,6 +14705,7 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen Amandemen">
+                            <input type="hidden" name="kategori-path" value="dokumen-amandemen">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                             <br>
@@ -14664,7 +14727,7 @@
                             </select>
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -14723,7 +14786,9 @@
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="hidden" name="kategori" value="Dokumen Amandemen">
-                                    <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}">
+                                    <input type="hidden" name="kategori-path" value="dokumen-amandemen">
+                                    {{-- <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}"> --}}
+                                    <input type="hidden" name="id-contract" value="{{ $contract->profit_center }}">
                                     <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                                     <label for="dokumen-bast-1">
                                         <small class="fs-8 text-primary">
@@ -14750,8 +14815,6 @@
                                     </select>
                                     <!--end::Input-->
                                 </div>
-                                    <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                                        name="id-contract">
                                     <input type="hidden" class="modal-name" name="modal-name">
                                 </div>
                             </div>
@@ -14809,6 +14872,7 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen Amandemen - Pemeliharaan">
+                            <input type="hidden" name="kategori-path" value="dokumen-amandemen">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                             <br>
@@ -14830,7 +14894,7 @@
                             </select>
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -14888,8 +14952,10 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}">
+                                    {{-- <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}"> --}}
+                                    <input type="hidden" name="id-contract" value="{{ $contract->profit_center }}">
                                     <input type="hidden" name="kategori" value="Dokumen Amandemen - Pemeliharaan">
+                                    <input type="hidden" name="kategori-path" value="dokumen-amandemen">
                                     <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                                     <label for="dokumen-bast-1">
                                         <small class="fs-8 text-primary">
@@ -14916,8 +14982,6 @@
                                     </select>
                                     <!--end::Input-->
                                 </div>
-                                    <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                                        name="id-contract">
                                     <input type="hidden" class="modal-name" name="modal-name">
                                 </div>
                             </div>
@@ -14975,10 +15039,12 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen Minutes of Meeting (MoM)">
+                            <input type="hidden" name="kategori-path" value="dokumen-mom">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            {{-- <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract" --}}
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -15034,6 +15100,7 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="hidden" name="kategori" value="Dokumen Minutes of Meeting (MoM)">
+                                <input type="hidden" name="kategori-path" value="dokumen-mom">
                                 <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                                 <label for="dokumen-bast-1">
                                     <small class="fs-8 text-primary">
@@ -15042,7 +15109,9 @@
                                 </label>
                                 <!--end::Input-->
                             </div>
-                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                {{-- <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
+                                    name="id-contract"> --}}
+                                <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                     name="id-contract">
                                 <input type="hidden" class="modal-name" name="modal-name">
                             </div>
@@ -15100,10 +15169,12 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen Kick Off Meeting">
+                            <input type="hidden" name="kategori-path" value="dokumen-kick-off-meeting">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            {{-- <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract" --}}
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -15159,6 +15230,7 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="hidden" name="kategori" value="Dokumen Kick Off Meeting">
+                                <input type="hidden" name="kategori-path" value="dokumen-kick-off-meeting">
                                 <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                                 <label for="dokumen-bast-1">
                                     <small class="fs-8 text-primary">
@@ -15167,7 +15239,9 @@
                                 </label>
                                 <!--end::Input-->
                             </div>
-                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                {{-- <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
+                                    name="id-contract"> --}}
+                                <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                     name="id-contract">
                                 <input type="hidden" class="modal-name" name="modal-name">
                             </div>
@@ -15225,10 +15299,12 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen Lesson Learned">
+                            <input type="hidden" name="kategori-path" value="dokumen-lesson-learned">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            {{-- <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract" --}}
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -15284,6 +15360,7 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="hidden" name="kategori" value="Dokumen Lesson Learned">
+                                <input type="hidden" name="kategori-path" value="dokumen-lesson-learned">
                                 <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                                 <label for="dokumen-bast-1">
                                     <small class="fs-8 text-primary">
@@ -15292,7 +15369,9 @@
                                 </label>
                                 <!--end::Input-->
                             </div>
-                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                {{-- <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
+                                    name="id-contract"> --}}
+                                <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                     name="id-contract">
                                 <input type="hidden" class="modal-name" name="modal-name">
                             </div>
@@ -15350,10 +15429,12 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen Monitoring Status">
+                            <input type="hidden" name="kategori-path" value="dokumen-monitoring-status">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            {{-- <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract" --}}
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -15409,6 +15490,7 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="hidden" name="kategori" value="Dokumen Monitoring Status">
+                                <input type="hidden" name="kategori-path" value="dokumen-monitoring-status">
                                 <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                                 <label for="dokumen-bast-1">
                                     <small class="fs-8 text-primary">
@@ -15417,7 +15499,9 @@
                                 </label>
                                 <!--end::Input-->
                             </div>
-                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                {{-- <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
+                                    name="id-contract"> --}}
+                                <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                     name="id-contract">
                                 <input type="hidden" class="modal-name" name="modal-name">
                             </div>
@@ -15476,10 +15560,12 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen Bill Of Quantity">
+                            <input type="hidden" name="kategori-path" value="dokumen-boq">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            {{-- <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract" --}}
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -15536,10 +15622,12 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen Bill Of Quantity - Pemeliharaan">
+                            <input type="hidden" name="kategori-path" value="dokumen-boq">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            {{-- <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract" --}}
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -15596,10 +15684,12 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen Faktur Pajak Lunas">
+                            <input type="hidden" name="kategori-path" value="dokumen-faktur-pajak-lunas">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            {{-- <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract" --}}
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -15656,10 +15746,12 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen Bukti Setor PPh Lunas">
+                            <input type="hidden" name="kategori-path" value="dokumen-setor-pph">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            {{-- <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract" --}}
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -15710,7 +15802,7 @@
                                 <form action="/question/upload" enctype="multipart/form-data" method="POST">
                                     @csrf
                                     <!--begin::Input-->
-                                    <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                    <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                         name="id-contract">
                                     <input type="hidden" class="modal-name" name="modal-name">
 
@@ -15803,7 +15895,7 @@
                             <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->profit_center ?? 0 }}" id="profit-center" name="profit-center">
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="profit-center" name="profit-center">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
                     </div>
@@ -15867,7 +15959,7 @@
                                 </label>
                                 <!--end::Input-->
                             </div>
-                                <input type="hidden" value="{{ $contract->profit_center ?? 0 }}" id="profit-center"
+                                <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="profit-center"
                                     name="profit-center">
                                 <input type="hidden" class="modal-name" name="modal-name">
                             </div>
@@ -15928,7 +16020,7 @@
                             <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->profit_center ?? 0 }}" id="profit-center"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="profit-center"
                                 name="profit-center">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -15984,11 +16076,13 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Pasal Kontraktual">
+                            <input type="hidden" name="kategori-path" value="pasal-kontraktual">
                             <input type="hidden" name="status" value="Final">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            {{-- <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract" --}}
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -16045,11 +16139,12 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Tinjauan Dokumen Kontrak - Perolehan">
+                            <input type="hidden" name="kategori-path" value="tinjauan-dokumen-kontrak">
                             {{-- <input type="hidden" name="status" value="Final"> --}}
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -16107,6 +16202,7 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="hidden" name="kategori" value="Tinjauan Dokumen Kontrak - Perolehan">
+                                <input type="hidden" name="kategori-path" value="tinjauan-dokumen-kontrak">
                                 {{-- <input type="hidden" name="status" value="Final"> --}}
                                 <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                                 <label for="file-document">
@@ -16116,7 +16212,7 @@
                                 </label>
                                 <!--end::Input-->
                             </div>
-                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                     name="id-contract">
                                 <input type="hidden" class="modal-name" name="modal-name">
                             </div>
@@ -16176,11 +16272,12 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Tinjauan Dokumen Kontrak - Pelaksanaan">
+                            <input type="hidden" name="kategori-path" value="tinjauan-dokumen-kontrak">
                             {{-- <input type="hidden" name="status" value="Final"> --}}
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -16238,6 +16335,7 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="hidden" name="kategori" value="Tinjauan Dokumen Kontrak - Pelaksanaan">
+                                <input type="hidden" name="kategori-path" value="tinjauan-dokumen-kontrak">
                                 {{-- <input type="hidden" name="status" value="Final"> --}}
                                 <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                                 <label for="file-document">
@@ -16247,7 +16345,8 @@
                                 </label>
                                 <!--end::Input-->
                             </div>
-                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                {{-- <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract" --}}
+                                <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                     name="id-contract">
                                 <input type="hidden" class="modal-name" name="modal-name">
                             </div>
@@ -16307,11 +16406,12 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Usulan Perubahan Draft Kontrak">
+                            <input type="hidden" name="kategori-path" value="usulan-perubahan-draft-kontrak">
                             {{-- <input type="hidden" name="status" value="Final"> --}}
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -16369,6 +16469,7 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="hidden" name="kategori" value="Usulan Perubahan Draft Kontrak">
+                                <input type="hidden" name="kategori-path" value="usulan-perubahan-draft-kontrak">
                                 {{-- <input type="hidden" name="status" value="Final"> --}}
                                 <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                                 <label for="file-document">
@@ -16378,7 +16479,7 @@
                                 </label>
                                 <!--end::Input-->
                             </div>
-                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                     name="id-contract">
                                 <input type="hidden" class="modal-name" name="modal-name">
                             </div>
@@ -16439,11 +16540,12 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Tinjauan Dokumen Kontrak - Perolehan">
+                            <input type="hidden" name="kategori-path" value="tinjauan-dokumen-kontrak">
                             <input type="hidden" name="status" value="Final">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -16499,11 +16601,13 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Tinjauan Dokumen Kontrak - Pelaksanaan">
+                            <input type="hidden" name="kategori-path" value="tinjauan-dokumen-kontrak">
                             <input type="hidden" name="status" value="Final">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            {{-- <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract" --}}
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -16560,11 +16664,13 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Checklist Manajemen Kontrak">
+                            <input type="hidden" name="kategori-path" value="checklist-manajemen-kontrak">
                             <input type="hidden" name="status" value="Final">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            {{-- <input type="hidden" value="{{ $contract->id_document ?? 0 }}" id="id-contract" --}}
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -16634,7 +16740,7 @@
                             <form action="/ld/upload" enctype="multipart/form-data" method="POST">
                                 @csrf
                                 <!--begin::Input-->
-                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                     name="id-contract">
                                 <input type="hidden" class="modal-name" name="modal-name">
 
@@ -16704,7 +16810,7 @@
                             <form action="/law/upload" enctype="multipart/form-data" method="POST">
                                 @csrf
                                 <!--begin::Input-->
-                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                     name="id-contract">
                                 <input type="hidden" class="modal-name" name="modal-name">
 
@@ -16792,11 +16898,13 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Pending Issue - Pelaksanaan">
+                            <input type="hidden" name="kategori-path" value="pending-issue">
                             <input type="hidden" name="status" value="Final">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            {{-- <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract" --}}
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -16853,11 +16961,13 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Pending Issue - Pemeliharaan">
+                            <input type="hidden" name="kategori-path" value="pending-issue">
                             <input type="hidden" name="status" value="Final">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            {{-- <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract" --}}
+                            <input type="hidden" value="{{ $contract->profit_cneter ?? 0 }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -16914,11 +17024,12 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Usulan Perubahan Draft Kontrak">
+                            <input type="hidden" name="kategori-path" value="usulan-perubahan-draft-kontrak">
                             <input type="hidden" name="status" value="Final">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -16975,11 +17086,12 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen NDA">
+                            <input type="hidden" name="kategori-path" value="dokumen-nda">
                             <input type="hidden" name="status" value="Final">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -17036,11 +17148,12 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen MOU">
+                            <input type="hidden" name="kategori-path" value="dokumen-mou">
                             <input type="hidden" name="status" value="Final">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -17101,7 +17214,7 @@
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -17158,11 +17271,12 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen ICA">
+                            <input type="hidden" name="kategori-path" value="dokumen-ica">
                             <input type="hidden" name="status" value="Final">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -17219,11 +17333,12 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen ITB/TOR">
+                            <input type="hidden" name="kategori-path" value="dokumen-itb-tor">
                             <input type="hidden" name="status" value="Final">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -17280,11 +17395,12 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen RKS / Project Spesification">
+                            <input type="hidden" name="kategori-path" value="dokumen-rks">
                             <input type="hidden" name="status" value="Final">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -17341,11 +17457,12 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen Draft Kontrak">
+                            <input type="hidden" name="kategori-path" value="dokumen-draft-kontrak">
                             <input type="hidden" name="status" value="Final">
                             <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -17402,11 +17519,12 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen LOI">
+                            <input type="hidden" name="kategori-path" value="dokumen-loi">
                             <input type="hidden" name="status" value="Final">
                             <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -17463,11 +17581,12 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen Perjanjian KSO">
+                            <input type="hidden" name="kategori-path" value="dokumen-perjanjian-kso">
                             <input type="hidden" name="status" value="Final">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -17524,11 +17643,12 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Perubahan Kontrak">
+                            <input type="hidden" name="kategori-path" value="perubahan-kontrak">
                             <input type="hidden" name="status" value="Final">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -17631,10 +17751,12 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Input Resiko - Pelaksanaan">
+                            <input type="hidden" name="kategori-path" value="input-resiko">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
                         </div>
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            {{-- <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract" --}}
+                            <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
                                 name="id-contract">
                             <input type="hidden" class="modal-name" name="modal-name">
                         </div>
@@ -18073,7 +18195,7 @@ aria-hidden="true">
 </script>
 
 <script>
-    async function confirmDeleteFinalDokumen(id, kategori = null) {
+    async function confirmDeleteFinalDokumen(id, kategori = null, path = null) {
         Swal.fire({
             title: '',
             text: "Apakah anda yakin?",
@@ -18088,8 +18210,9 @@ aria-hidden="true">
                 const formData = new FormData();
                 formData.append("_token", "{{ csrf_token() }}");
                 formData.append("id", id);
+                formData.append("kategori-path", path);
                 // formData.append("id-contract", "{{ !empty($contract->id_contract) && $contract->id_contract != 0 ? $contract->id_contract : $contract->profit_center }}");
-                formData.append("id-contract", "{{ $contract->profit_center }}");
+                formData.append("id-contract", "{{ $contract->id_contract ?? $contract->profit_center }}");
                 let sendData;
                 if (kategori == null) {
                     sendData = await fetch(`{{ url('/contract-management/final-dokumen') }}/${id}/delete`, {

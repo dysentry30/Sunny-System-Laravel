@@ -115,7 +115,7 @@
                                             <td class="text-start">{{ $piutang->Customer->name ?? "-" }}</td>
                                             <td class="text-center">{{ $piutang->Proyek->kode_proyek ?? "-" }}</td>
                                             <td class="text-start">{{ $piutang->Proyek->nama_proyek ?? "-" }}</td>
-                                            <td class="text-center">{{ $piutang->kategori == 3 ? "Tidak Ada Piutang" : ($piutang->kategori == 2 ? "Piutang < 3 Bulan" : "Tidak ada Piutang") }}</td>
+                                            <td class="text-center">{{ $piutang->kategori == 3 ? "Piutang > 3 Bulan" : ($piutang->kategori == 2 ? "Piutang < 3 Bulan" : "Tidak ada Piutang") }}</td>
                                             <td class="text-center">{{ \Carbon\Carbon::create($piutang->created_at)->translatedFormat('d F Y') }}</td>
                                             <td class="text-center">{{ \Carbon\Carbon::create($piutang->updated_at)->translatedFormat('d F Y') }}</td>
                                             {{-- <td class="text-center">{{ $piutang->UserCreated->name }}</td>
