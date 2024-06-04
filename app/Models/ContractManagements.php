@@ -11,16 +11,16 @@ class ContractManagements extends Model
     use HasFactory;
 
     protected $primaryKey   = "id_contract";
-    public $timestamps      = false;
-    public $keyType = 'string';
+    public $timestamps      = true;
+    // public $keyType = 'string';
     public $incrementing = false;
-    protected $fillable     = ["*"];
-    protected $visible      = ["*"];
-    protected $casts        = [
-        "contract_in" => "datetime:Y-m-d",
-        "contract_out" => "datetime:Y-m-d",
-    ];
-    protected $dateFormat   = "Y-m-d";
+    // protected $fillable     = ["*"];
+    // protected $visible      = ["*"];
+    // protected $casts        = [
+    //     "contract_in" => "datetime:Y-m-d",
+    //     "contract_out" => "datetime:Y-m-d",
+    // ];
+    // protected $dateFormat   = "Y-m-d";
 
     public function draftContracts()
     {

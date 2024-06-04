@@ -62,6 +62,7 @@ use App\Http\Controllers\PiutangController;
 use App\Http\Controllers\CompetitorController;
 use App\Http\Controllers\KnowladgeBaseController;
 use App\Models\ChecklistCalonMitraKSO;
+use App\Models\ContractManagements;
 use App\Models\ContractChangeNotice;
 use App\Models\ContractChangeOrder;
 use App\Models\ContractChangeProposal;
@@ -131,6 +132,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use Termwind\Components\Dd;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Faker\Core\Uuid;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -6691,11 +6693,12 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     //Begin :: Integrasi Get Proyek PIS
     Route::get('/get-progress-pis/all', function () {
-        $login = Http::post('https://api.wika.co.id/services/services/auth', [
+        $login = Http::post('https://api.wika.co.id/services/auth', [
             "entitas" => "CRM",
-            "skey" => "OAZvRmB7HKDdDkKF29DXZwgSmlv9KqQWZNDWV51SAAAb3nOvuA1AvZf5FnIBrLxC"
+            // "skey" => "OAZvRmB7HKDdDkKF29DXZwgSmlv9KqQWZNDWV51SAAAb3nOvuA1AvZf5FnIBrLxC"
+            "skey" => "OAZvRmB7HKDdDkKF29DXZwgSmlv9KqQWZNDWV51SADAbhnOvuA1AvZf5FnIBrLxC"
         ]);
-        dd($login);
+        //dd($login);
         if ($login->successful()) {
             // $login_response = $login->header("w-key");
             // dd($login_response);
@@ -6706,9 +6709,148 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 ->get('https://api.wika.co.id/services/getproyek');
                 if ($response->successful()) {
                     $data = $response->collect($key = 'data');
+                    // dd($data->toJson());
                     if (!empty($data)) {
+                        DB::beginTransaction();
                         try {
-                            $data_mapping = $data->map(function ($proyek) {
+                            $collectDataPISNew = collect([]);
+                            $collectDataContractNew = collect([]);
+
+                            $data->each(function ($proyek) use ($collectDataPISNew, $collectDataContractNew) {
+                                $is_exist_proyek = ProyekPISNew::where(function ($query) use ($proyek) {
+                                    $query->where('profit_center', $proyek['profit_center'])
+                                        ->orWhere('crm_proyek_id', $proyek['crm_proyek_id']);
+                                })->first();
+
+                                $is_exist_contract = ContractManagements::where("profit_center", $proyek['profit_center'])->first();
+
+                                if (!empty($is_exist_proyek)) {
+                                    $is_exist_proyek->proyek_id = is_array($proyek["proyek_id"]) && empty($proyek["proyek_id"]) ? null : $proyek["proyek_id"];
+                                    $is_exist_proyek->proyek_name = is_array($proyek["proyek_name"]) && empty($proyek["proyek_name"]) ? null : $proyek["proyek_name"];
+                                    $is_exist_proyek->proyek_shortname = is_array($proyek["proyek_shortname"]) && empty($proyek["proyek_shortname"]) ? null : $proyek["proyek_shortname"];
+                                    $is_exist_proyek->contract_no = is_array($proyek["contract_no"]) && empty($proyek["contract_no"]) ? null : $proyek["contract_no"];
+                                    $is_exist_proyek->contract_date = is_array($proyek["contract_date"]) && empty($proyek["contract_date"]) ? null : $proyek["contract_date"];
+                                    $is_exist_proyek->type_code = is_array($proyek["type_code"]) && empty($proyek["type_code"]) ? null : $proyek["type_code"];
+                                    $is_exist_proyek->status_id = is_array($proyek["status_id"]) && empty($proyek["status_id"]) ? null : $proyek["status_id"];
+                                    $is_exist_proyek->spk_extern_no = is_array($proyek["spk_extern_no"]) && empty($proyek["spk_extern_no"]) ? null : $proyek["spk_extern_no"];
+                                    $is_exist_proyek->spk_extern_date = is_array($proyek["spk_extern_date"]) && empty($proyek["spk_extern_date"]) ? null : $proyek["spk_extern_date"];
+                                    $is_exist_proyek->spk_intern_no = is_array($proyek["spk_intern_no"]) && empty($proyek["spk_intern_no"]) ? null : $proyek["spk_intern_no"];
+                                    $is_exist_proyek->spk_intern_date = is_array($proyek["spk_intern_date"]) && empty($proyek["spk_intern_date"]) ? null : $proyek["spk_intern_date"];
+                                    $is_exist_proyek->sbu_id = is_array($proyek["sbu_id"]) && empty($proyek["sbu_id"]) ? null : $proyek["sbu_id"];
+                                    $is_exist_proyek->currency_code = is_array($proyek["currency_code"]) && empty($proyek["currency_code"]) ? null : $proyek["currency_code"];
+                                    $is_exist_proyek->currency_rate = is_array($proyek["currency_rate"]) && empty($proyek["currency_rate"]) ? null : $proyek["currency_rate"];
+                                    $is_exist_proyek->contract_value_idr = is_array($proyek["contract_value_idr"]) && empty($proyek["contract_value_idr"]) ? null : $proyek["contract_value_idr"];
+                                    $is_exist_proyek->contract_value_valas = is_array($proyek["contract_value_valas"]) && empty($proyek["contract_value_valas"]) ? null : $proyek["contract_value_valas"];
+                                    $is_exist_proyek->job_type = is_array($proyek["job_type"]) && empty($proyek["job_type"]) ? null : $proyek["job_type"];
+                                    $is_exist_proyek->address = is_array($proyek["address"]) && empty($proyek["address"]) ? null : $proyek["address"];
+                                    $is_exist_proyek->country_id = is_array($proyek["country_id"]) && empty($proyek["country_id"]) ? null : $proyek["country_id"];
+                                    $is_exist_proyek->province_id = is_array($proyek["province_id"]) && empty($proyek["province_id"]) ? null : $proyek["province_id"];
+                                    $is_exist_proyek->longitude = is_array($proyek["longitude"]) && empty($proyek["longitude"]) ? null : $proyek["longitude"];
+                                    $is_exist_proyek->latitude = is_array($proyek["latitude"]) && empty($proyek["latitude"]) ? null : $proyek["latitude"];
+                                    $is_exist_proyek->sumber_dana_id = is_array($proyek["sumber_dana_id"]) && empty($proyek["sumber_dana_id"]) ? null : $proyek["sumber_dana_id"];
+                                    $is_exist_proyek->created_by = is_array($proyek["created_by"]) && empty($proyek["created_by"]) ? null : $proyek["created_by"];
+                                    $is_exist_proyek->creation_time = is_array($proyek["creation_time"]) && empty($proyek["creation_time"]) ? null : $proyek["creation_time"];
+                                    $is_exist_proyek->last_updated_by = is_array($proyek["last_updated_by"]) && empty($proyek["last_updated_by"]) ? null : $proyek["last_updated_by"];
+                                    $is_exist_proyek->last_update_time = is_array($proyek["last_update_time"]) && empty($proyek["last_update_time"]) ? null : $proyek["last_update_time"];
+                                    $is_exist_proyek->mp_name = is_array($proyek["mp_name"]) && empty($proyek["mp_name"]) ? null : $proyek["mp_name"];
+                                    $is_exist_proyek->mp_nip = is_array($proyek["mp_nip"]) && empty($proyek["mp_nip"]) ? null : $proyek["mp_nip"];
+                                    $is_exist_proyek->mp_phone = is_array($proyek["mp_phone"]) && empty($proyek["mp_phone"]) ? null : $proyek["mp_phone"];
+                                    $is_exist_proyek->mp_email = is_array($proyek["mp_email"]) && empty($proyek["mp_email"]) ? null : $proyek["mp_email"];
+                                    $is_exist_proyek->pemberi_kerja_code = is_array($proyek["pemberi_kerja_code"]) && empty($proyek["pemberi_kerja_code"]) ? null : $proyek["pemberi_kerja_code"];
+                                    $is_exist_proyek->pemberi_kerja_name = is_array($proyek["pemberi_kerja_name"]) && empty($proyek["pemberi_kerja_name"]) ? null : $proyek["pemberi_kerja_name"];
+                                    $is_exist_proyek->pemberi_kerja_intern = is_array($proyek["pemberi_kerja_intern"]) && empty($proyek["pemberi_kerja_intern"]) ? null : $proyek['pemberi_kerja_intern'];
+                                    $is_exist_proyek->scorecard_type = is_array($proyek["scorecard_type"]) && empty($proyek["scorecard_type"]) ? null : $proyek["scorecard_type"];
+                                    $is_exist_proyek->entitas_proyek = is_array($proyek["entitas_proyek"]) && empty($proyek["entitas_proyek"]) ? null : $proyek["entitas_proyek"];
+                                    $is_exist_proyek->is_proyek_pelaporan = is_array($proyek["is_proyek_pelaporan"]) && empty($proyek["is_proyek_pelaporan"]) ? null : $proyek["is_proyek_pelaporan"];
+                                    $is_exist_proyek->use_pmcs = is_array($proyek["use_pmcs"]) && empty($proyek["use_pmcs"]) ? null : $proyek["use_pmcs"];
+                                    $is_exist_proyek->start_date = is_array($proyek["start_date"]) && empty($proyek["start_date"]) ? null : $proyek["start_date"];
+                                    $is_exist_proyek->finish_date = is_array($proyek["finish_date"]) && empty($proyek["finish_date"]) ? null : $proyek["finish_date"];
+                                    $is_exist_proyek->duration = is_array($proyek["duration"]) && empty($proyek["duration"]) ? null : $proyek["duration"];
+                                    $is_exist_proyek->extended_duration = is_array($proyek["extended_duration"]) && empty($proyek["extended_duration"]) ? null : $proyek["extended_duration"];
+                                    $is_exist_proyek->maintenance_duration = is_array($proyek["maintenance_duration"]) && empty($proyek["maintenance_duration"]) ? null : $proyek["maintenance_duration"];
+                                    $is_exist_proyek->bast1_date = is_array($proyek["bast1_date"]) && empty($proyek["bast1_date"]) ? null : $proyek["bast1_date"];
+                                    $is_exist_proyek->bast2_date = is_array($proyek["bast2_date"]) && empty($proyek["bast2_date"]) ? null : $proyek["bast2_date"];
+                                    $is_exist_proyek->bast_final_date = is_array($proyek["bast_final_date"]) && empty($proyek["bast_final_date"]) ? null : $proyek["bast_final_date"];
+                                    $is_exist_proyek->tot_pegawai_organik = is_array($proyek["tot_pegawai_organik"]) && empty($proyek["tot_pegawai_organik"]) ? null : $proyek["tot_pegawai_organik"];
+                                    $is_exist_proyek->tot_pegawai_terampil = is_array($proyek["tot_pegawai_terampil"]) && empty($proyek["tot_pegawai_terampil"]) ? null : $proyek["tot_pegawai_terampil"];
+                                    $is_exist_proyek->tot_pegawai_os_trainer = is_array($proyek["tot_pegawai_os_trainer"]) && empty($proyek["tot_pegawai_os_trainer"]) ? null : $proyek["tot_pegawai_os_trainer"];
+                                    $is_exist_proyek->tot_pegawai_kkwt = is_array($proyek["tot_pegawai_kkwt"]) && empty($proyek["tot_pegawai_kkwt"]) ? null : $proyek["tot_pegawai_kkwt"];
+                                    $is_exist_proyek->jo_type = is_array($proyek["jo_type"]) && empty($proyek["jo_type"]) ? null : $proyek["jo_type"];
+                                    $is_exist_proyek->jo_creation_no = is_array($proyek["jo_creation_no"]) && empty($proyek["jo_creation_no"]) ? null : $proyek["jo_creation_no"];
+                                    $is_exist_proyek->jo_creation_date = is_array($proyek["jo_creation_date"]) && empty($proyek["jo_creation_date"]) ? null : $proyek["jo_creation_date"];
+                                    $is_exist_proyek->jo_mou_no = is_array($proyek["jo_mou_no"]) && empty($proyek["jo_mou_no"]) ? null : $proyek["jo_mou_no"];
+                                    $is_exist_proyek->jo_mou_date = is_array($proyek["jo_mou_date"]) && empty($proyek["jo_mou_date"]) ? null : $proyek["jo_mou_date"];
+                                    $is_exist_proyek->jo_npwp = is_array($proyek["jo_npwp"]) && empty($proyek["jo_npwp"]) ? null : $proyek["jo_npwp"];
+                                    $is_exist_proyek->crm_proyek_id = is_array($proyek["crm_proyek_id"]) && empty($proyek["crm_proyek_id"]) ? null : $proyek["crm_proyek_id"];
+                                    $is_exist_proyek->kategori_proyek = is_array($proyek["kategori_proyek"]) && empty($proyek["kategori_proyek"]) ? null : $proyek["kategori_proyek"];
+                                    $is_exist_proyek->ra_progress = is_array($proyek["ra_progress"]) && empty($proyek["ra_progress"]) ? null : $proyek["ra_progress"];
+                                    $is_exist_proyek->progress_lock_status = is_array($proyek["progress_lock_status"]) && empty($proyek["progress_lock_status"]) ? null : $proyek["progress_lock_status"];
+                                    $is_exist_proyek->is_strategis_nas = is_array($proyek["is_strategis_nas"]) && empty($proyek["is_strategis_nas"]) ? null : $proyek["is_strategis_nas"];
+                                    $is_exist_proyek->is_strategis_wika = is_array($proyek["is_strategis_wika"]) && empty($proyek["is_strategis_wika"]) ? null : $proyek["is_strategis_wika"];
+                                    $is_exist_proyek->jenis_kontrak = is_array($proyek["jenis_kontrak"]) && empty($proyek["jenis_kontrak"]) ? null : $proyek["jenis_kontrak"];
+                                    $is_exist_proyek->is_new = is_array($proyek["is_new"]) && empty($proyek["is_new"]) ? null : $proyek["is_new"];
+                                    $is_exist_proyek->is_closed = is_array($proyek["is_closed"]) && empty($proyek["is_closed"]) ? null : $proyek["is_closed"];
+                                    $is_exist_proyek->kasie_name = is_array($proyek["kasie_name"]) && empty($proyek["kasie_name"]) ? null : $proyek["kasie_name"];
+                                    $is_exist_proyek->kasie_nip = is_array($proyek["kasie_nip"]) && empty($proyek["kasie_nip"]) ? null : $proyek["kasie_nip"];
+                                    $is_exist_proyek->kasie_phone = is_array($proyek["kasie_phone"]) && empty($proyek["kasie_phone"]) ? null : $proyek["kasie_phone"];
+                                    $is_exist_proyek->kasie_email = is_array($proyek["kasie_email"]) && empty($proyek["kasie_email"]) ? null : $proyek["kasie_email"];
+                                    $is_exist_proyek->tanggal_mulai = is_array($proyek["tanggal_mulai"]) && empty($proyek["tanggal_mulai"]) ? null : $proyek["tanggal_mulai"];
+                                    $is_exist_proyek->klasifikasi = is_array($proyek["klasifikasi"]) && empty($proyek["klasifikasi"]) ? null : $proyek["klasifikasi"];
+                                    $is_exist_proyek->pembayaran = is_array($proyek["pembayaran"]) && empty($proyek["pembayaran"]) ? null : $proyek["pembayaran"];
+                                    $is_exist_proyek->sbu_skd = is_array($proyek["sbu_skd"]) && empty($proyek["sbu_skd"]) ? null : $proyek["sbu_skd"];
+                                    $is_exist_proyek->keterangan_pembayaran = is_array($proyek["keterangan_pembayaran"]) && empty($proyek["keterangan_pembayaran"]) ? null : $proyek["keterangan_pembayaran"];
+                                    $is_exist_proyek->status_proyek_internal = is_array($proyek["status_proyek_internal"]) && empty($proyek["status_proyek_internal"]) ? null : $proyek["status_proyek_internal"];
+                                    $is_exist_proyek->profit_center = is_array($proyek["profit_center"]) && empty($proyek["profit_center"]) ? null : $proyek["profit_center"];
+                                    $is_exist_proyek->is_closed_risk = is_array($proyek["is_closed_risk"]) && empty($proyek["is_closed_risk"]) ? null : $proyek["is_closed_risk"];
+                                    $is_exist_proyek->status_contract = is_array($proyek["status_contract"]) && empty($proyek["status_contract"]) ? null : $proyek["status_contract"];
+                                    $is_exist_proyek->klasifikasi_sap = is_array($proyek["klasifikasi_sap"]) && empty($proyek["klasifikasi_sap"]) ? null : $proyek["klasifikasi_sap"];
+                                    $is_exist_proyek->start_year = is_array($proyek["start_year"]) && empty($proyek["start_year"]) ? null : $proyek["start_year"];
+                                    $is_exist_proyek->end_year = is_array($proyek["end_year"]) && empty($proyek["end_year"]) ? null : $proyek["end_year"];
+                                    $is_exist_proyek->bast1_year = is_array($proyek["bast1_year"]) && empty($proyek["bast1_year"]) ? null : $proyek["bast1_year"];
+                                    $is_exist_proyek->bast2_year = is_array($proyek["bast2_year"]) && empty($proyek["bast2_year"]) ? null : $proyek["bast2_year"];
+                                    $is_exist_proyek->jenis_proyek = is_array($proyek["jenis_proyek"]) && empty($proyek["jenis_proyek"]) ? null : $proyek["jenis_proyek"];
+                                    $is_exist_proyek->tipe_proyek = is_array($proyek["tipe_proyek"]) && empty($proyek["tipe_proyek"]) ? null : $proyek["tipe_proyek"];
+                                    $is_exist_proyek->status_proyek = is_array($proyek["status_proyek"]) && empty($proyek["status_proyek"]) ? null : $proyek["status_proyek"];
+                                    $is_exist_proyek->is_investasi = is_array($proyek["is_investasi"]) && empty($proyek["is_investasi"]) ? null : $proyek["is_investasi"];
+                                    $is_exist_proyek->kd_divisi = is_array($proyek["kd_divisi"]) && empty($proyek["kd_divisi"]) ? null : $proyek["kd_divisi"];
+                                    $is_exist_proyek->project_definition = is_array($proyek["project_definition"]) && empty($proyek["project_definition"]) ? null : $proyek["project_definition"];
+                                    $is_exist_proyek->kode_crm = is_array($proyek["kode_crm"]) && empty($proyek["kode_crm"]) ? null : $proyek["kode_crm"];
+                                    $is_exist_proyek->divisi = is_array($proyek["divisi"]) && empty($proyek["divisi"]) ? null : $proyek["divisi"];
+                                    $is_exist_proyek->tipe_kontrak = is_array($proyek["tipe_kontrak"]) && empty($proyek["tipe_kontrak"]) ? null : $proyek["tipe_kontrak"];
+                                    $is_exist_proyek->sumber_dana = is_array($proyek["sumber_dana"]) && empty($proyek["sumber_dana"]) ? null : $proyek["sumber_dana"];
+                                    $is_exist_proyek->pola_bayar = is_array($proyek["pola_bayar"]) && empty($proyek["pola_bayar"]) ? null : $proyek["pola_bayar"];
+                                    $is_exist_proyek->kdbp_sap = is_array($proyek["kdbp_sap"]) && empty($proyek["kdbp_sap"]) ? null : $proyek["kdbp_sap"];
+                                    $is_exist_proyek->requisition_id = is_array($proyek["requisition_id"]) && empty($proyek["requisition_id"]) ? null : $proyek["requisition_id"];
+                                    $is_exist_proyek->business_partner = is_array($proyek["business_partner"]) && empty($proyek["business_partner"]) ? null : $proyek["business_partner"];
+                                    $is_exist_proyek->bi_email = is_array($proyek["bi_email"]) && empty($proyek["bi_email"]) ? null : $proyek["bi_email"];
+                                    $is_exist_proyek->sbu_name = is_array($proyek["sbu_name"]) && empty($proyek["sbu_name"]) ? null : $proyek["sbu_name"];
+                                    $is_exist_proyek->is_sap = is_array($proyek["is_sap"]) && empty($proyek["is_sap"]) ? null : $proyek["is_sap"];
+                                    $is_exist_proyek->save();
+
+                                    if (!empty($is_exist_contract)) {
+                                        $is_exist_contract->id_contract = $is_exist_contract->id_contract ?? Str::uuid()->toString();
+                                        $is_exist_contract->contract_proceed = "Belum Selesai";
+                                        $is_exist_contract->stages = 2;
+                                        $is_exist_contract->contract_in = $is_exist_proyek->start_date;
+                                        $is_exist_contract->contract_out = $is_exist_proyek->finish_date;
+                                        $is_exist_contract->value = (int) $is_exist_proyek->contract_value_idr;
+                                        $is_exist_contract->no_contract = $is_exist_proyek->contract_no;
+                                        $is_exist_contract->profit_center = $is_exist_proyek->profit_center;
+                                        $is_exist_contract->save();
+                                    } else {
+                                        $contractModel = new ContractManagements();
+                                        $contractModel->id_contract = Str::uuid()->toString();
+                                        $contractModel->contract_proceed = "Belum Selesai";
+                                        $contractModel->stages = 2;
+                                        $contractModel->contract_in = $is_exist_proyek->start_date;
+                                        $contractModel->contract_out = $is_exist_proyek->finish_date;
+                                        $contractModel->value = (int) $is_exist_proyek->contract_value_idr;
+                                        $contractModel->no_contract = $is_exist_proyek->contract_no;
+                                        $contractModel->number_spk = $is_exist_proyek->spk_intern_no;
+                                        $contractModel->profit_center = $is_exist_proyek->profit_center;
+                                        $collectDataContractNew->push($contractModel);
+                                    }
+                                } else {
                                 $proyekModel = new ProyekPISNew();
                                 $proyekModel->proyek_id = is_array($proyek["proyek_id"]) && empty($proyek["proyek_id"]) ? null : $proyek["proyek_id"];
                                 $proyekModel->proyek_name = is_array($proyek["proyek_name"]) && empty($proyek["proyek_name"]) ? null : $proyek["proyek_name"];
@@ -6810,19 +6952,48 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                                 $proyekModel->bi_email = is_array($proyek["bi_email"]) && empty($proyek["bi_email"]) ? null : $proyek["bi_email"];
                                 $proyekModel->sbu_name = is_array($proyek["sbu_name"]) && empty($proyek["sbu_name"]) ? null : $proyek["sbu_name"];
                                 $proyekModel->is_sap = is_array($proyek["is_sap"]) && empty($proyek["is_sap"]) ? null : $proyek["is_sap"];
+                                    $collectDataPISNew->push($proyekModel);
 
-                                return $proyekModel;
+                                    $contractModel = new ContractManagements();
+                                    $contractModel->id_contract = Str::uuid()->toString();
+                                    $contractModel->contract_proceed = "Belum Selesai";
+                                    $contractModel->stages = 2;
+                                    $contractModel->contract_in = $proyekModel->start_date;
+                                    $contractModel->contract_out = $proyekModel->finish_date;
+                                    $contractModel->value = (int) $proyekModel->contract_value_idr;
+                                    $contractModel->no_contract = $proyekModel->contract_no;
+                                    $contractModel->number_spk = $is_exist_proyek->spk_intern_no;
+                                    $contractModel->profit_center = $proyekModel->profit_center;
+                                    $collectDataContractNew->push($contractModel);
+                                }
+
                             });
 
-                            ProyekPISNew::insert($data_mapping->toArray());
+                            // dd($collectDataPISNew, $collectDataContractNew);
+                            if ($collectDataPISNew->count() > 0) {
+                                ProyekPISNew::insert($collectDataPISNew->toArray());
+                            }
+
+                            if ($collectDataContractNew->count() > 0) {
+                                ContractManagements::insert($collectDataContractNew->toArray());
+                            }
+
+                            DB::commit();
+
                             $logging = [
                                 'success' => true,
                                 'createdAt' => Carbon::now(),
-                                'data' => $data_mapping->toArray()
+                                'data' => $collectDataPISNew->toArray(),
+                                'dataContract' => $collectDataContractNew->toArray()
                             ];
                             setLogging('Get_Progress_PIS_3', "[Get Data Proyek From PIS] => ", $logging);
+
+                            return response()->json([
+                                "Success", true
+                            ]);
                         } catch (\Throwable $th) {
-                            dd($th);
+                            DB::rollBack();
+                            throw $th;
                         }
                     }
                 }

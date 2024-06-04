@@ -373,6 +373,7 @@ class ProyekController extends Controller
                 // $contractManagements->value = preg_replace("/[^0-9]/i", "", $dataProyek["nilai-perolehan"]);
                 // $contractManagements->value_review = 0;
                 $contractManagements->contract_proceed = "Belum Selesai";
+                $contractManagements->profit_center = $newProyek->profit_center;
                 $contractManagements->stages = (int) 1;
                 $contractManagements->save();
             }   
@@ -1132,7 +1133,11 @@ class ProyekController extends Controller
         Alert::toast("Edit Berhasil", "success")->autoClose(3000);
 
         // if (isset($kode_proyek) && isset($dataProyek["nilai-perolehan"]) && isset($dataProyek["nospk-external"]) && isset($dataProyek["nomor-terkontrak"]) && isset($dataProyek["tanggal-mulai-kontrak"]) && isset($dataProyek["tanggal-akhir-kontrak"])) {
-        $contractManagements = ContractManagements::get()->where("project_id", "=", $kode_proyek)->first();
+        // $contractManagements = ContractManagements::get()->where("project_id", "=", $kode_proyek)->first();
+        $contractManagements = ContractManagements::get()->where(function ($query) use ($newProyek) {
+            $query->where("project_id", "=", $newProyek->kode_proyek)
+                ->orWhere("profit_center", "=", $newProyek->profit_center);
+        })->first();
         if (empty($contractManagements)) {
             $uuid = new Uuid();
             $contractManagements = new ContractManagements();
@@ -1144,6 +1149,7 @@ class ProyekController extends Controller
             $contractManagements->contract_out = $dataProyek["tanggal-akhir-kontrak"];
             $contractManagements->number_spk = $dataProyek["nospk-external"];
             $contractManagements->contract_proceed = "Belum Selesai";
+            $contractManagements->profit_center = $newProyek->profit_center;
             $contractManagements->value = preg_replace("/[^0-9]/i", "", $dataProyek["nilai-perolehan"]);
             if ($newProyek->stage == 8) {
                 $contractManagements->stages = (int) 2;
@@ -1160,6 +1166,7 @@ class ProyekController extends Controller
             $contractManagements->contract_out = $dataProyek["tanggal-akhir-kontrak"];
             $contractManagements->number_spk = $dataProyek["nospk-external"];
             $contractManagements->contract_proceed = "Belum Selesai";
+            $contractManagements->profit_center = $newProyek->profit_center;
             $contractManagements->value = preg_replace("/[^0-9]/i", "", $dataProyek["nilai-perolehan"]);
             if ($newProyek->stage == 8) {
                 $contractManagements->stages = (int) 2;
