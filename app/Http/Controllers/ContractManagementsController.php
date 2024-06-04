@@ -136,7 +136,7 @@ class ContractManagementsController extends Controller
             // $jenis_proyek_get = !empty($request->query("filter-jenis")) ? [$request->query("filter-jenis")] : $jenis_proyeks->toArray();
             // $unit_kerja_get = !empty($request->query("filter-unit")) ? [$request->query("filter-unit")] : $unitkerjas->toArray();
 
-            if(!empty($filterBulan) && $filterTahun == 2023){
+            if (!empty($filterBulan) && $filterTahun == date('Y')) {
                 $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
             }else{
                 if($filterTahun < 2023 && !empty($filterBulan)){
@@ -144,7 +144,7 @@ class ContractManagementsController extends Controller
                 }elseif($filterTahun < 2023 && empty($filterBulan)){
                     $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "<=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
                 }else{
-                    $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "<=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
+                    $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
                     // dd("test");
                 }
                 
@@ -292,7 +292,7 @@ class ContractManagementsController extends Controller
                 'start_year',
                 '<=',
                 $filterTahun
-            )->whereIn('proyek_pis_new.profit_center', $proyekSelected)->get();
+            )->whereIn('proyek_pis_new.spk_intern_no', $proyekSelected)->get();
         }
         $proyeks_perolehan = $proyeks_all->whereIn("stage", [2, 3, 4, 5, 6])->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
         // $proyeks_pelaksanaan = $proyeks_all->where("stage", ">=", 8)->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
@@ -627,6 +627,28 @@ class ContractManagementsController extends Controller
             $perubahan_kontrak = PerubahanKontrak::where("profit_center", "=", $profit_center)->get();
             $progress = $contract->ProyekPISNew?->ProyekProgress?->sortByDesc("created_at")->first();
         }
+
+        if (empty($contract->id_contract)) {
+            $tesss = ContractManagements::where('profit_center', $contract->profit_center)
+                ->update(['id_contract' => Str::uuid()->toString()]);
+        }
+
+        if (empty($contract->contract_proceed) && !empty($contract->profit_center)) {
+            $proyekPISNew = ProyekPISNew::where('profit_center', $contract->profit_center)->first();
+            $tes = ContractManagements::where(function ($query) use ($contract) {
+                $query->where('id_contract', "=", $contract->id_contract)
+                    ->orWhere('profit_center', '=', $contract->profit_center);
+            })
+                ->update([
+                    'contract_proceed' => "Belum Selesai",
+                    'contract_in' => $proyekPISNew->start_date,
+                    'contract_out' => $proyekPISNew->finish_date,
+                    'value' => (int)$proyekPISNew->contract_value_idr,
+                    'no_contract' => $proyekPISNew->contract_no,
+                    'number_spk' => $proyekPISNew->spk_intern_no,
+                ]);
+        }
+        
         $perubahan_group = $perubahan_kontrak->groupBy("jenis_perubahan")->toArray();
         $perubahan_vo = array_key_exists("VO", $perubahan_group);
         $perubahan_klaim = array_key_exists("Klaim", $perubahan_group);
@@ -2464,14 +2486,16 @@ class ContractManagementsController extends Controller
         // dd($data);
         $faker = new Uuid();
         $dokumen = new ContractBast();
-        $id_document = $faker->uuid3();
+        $id_document = $faker->uuid3() . "." . $data['dokumen-bast-1']->getClientOriginalExtension();
         $file_name = $data['dokumen-bast-1']->getClientOriginalName();
-        $nama_document = date("His_") . $file_name;
+        $nama_document = date("His_") . str_replace(" ", "", $file_name);
         // $nama_document = date("His_") . substr($uploadedFile->getClientOriginalName(), 0, strlen($uploadedFile->getClientOriginalName()) - 5);
-        moveFileTemp($data['dokumen-bast-1'], $id_document);
+        // moveFileTemp($data['dokumen-bast-1'], $id_document);
+        
         $dokumen->nomor_dokumen = $data["nomor-dokumen"];
         $dokumen->nama_dokumen = $nama_document;
-        $dokumen->id_contract =  $data["id-contract"];
+        $dokumen->id_contract =  $data["id-contract"] ?? "";
+        $dokumen->profit_center =  $data["profit-center"] ?? "";
         $dokumen->bast =  (int) $data["bast"];
         $dokumen->jenis_dokumen =  $data["jenis-bast"] ?? "";
         $dokumen->status_dokumen =  $data["status_dokumen"] ?? "";
@@ -2480,6 +2504,9 @@ class ContractManagementsController extends Controller
         // dd($dokumen);
 
         if($dokumen->save()){
+            if (isset($data['dokumen-bast-1'])) {
+                $data['dokumen-bast-1']->move(public_path('contract-managements/dokumen-bast'), $id_document);
+            }
             Alert::success("Success", "Dokumen Bast berhasil dibuat");
             return redirect()->back();
         };
@@ -2547,13 +2574,12 @@ class ContractManagementsController extends Controller
 
         if (!empty($data['dokumen-bast-1'])) {
             $old_file = $dokumen->id_document;
-            File::delete(public_path("words/$old_file"));
 
-            $id_document = $faker->uuid3();
+            $id_document = $faker->uuid3() . "." . $data['dokumen-bast-1']->getClientOriginalExtension();
             $file_name = $data['dokumen-bast-1']->getClientOriginalName();
             $nama_document = date("His_") . $file_name;
 
-            moveFileTemp($data['dokumen-bast-1'], $id_document);
+            // moveFileTemp($data['dokumen-bast-1'], $id_document);
             $dokumen->nomor_dokumen = $data["nomor-dokumen"];
             $dokumen->nama_dokumen = $nama_document;
             $dokumen->id_document = $id_document;
@@ -2568,6 +2594,10 @@ class ContractManagementsController extends Controller
         // dd($dokumen);
 
         if ($dokumen->save()) {
+            if (!empty($data['dokumen-bast-1'])) {
+                File::delete(public_path("contract-managements/dokumen-bast/$old_file"));
+                $data['dokumen-bast-1']->move(public_path("contract-managements/dokumen-bast"), $id_document);
+            }
             Alert::success("Success", "Dokumen Bast berhasil diubah");
             return redirect()->back();
         };
@@ -2577,11 +2607,12 @@ class ContractManagementsController extends Controller
     public function deleteBast($id_document){
         // dd($id_document);
         $documentBast = ContractBast::where('id_document', '=', $id_document)->first();
-        if (str_contains($documentBast->nama_dokumen, '.pdf')) {
-            File::delete(public_path("words/" . $id_document . '.pdf'));
-        } else {
-            File::delete(public_path("words/" . $id_document . '.docx'));
-        }
+        File::delete(public_path("contract-managements/dokumen-bast/" . $id_document));
+        // if (str_contains($documentBast->nama_dokumen, '.pdf')) {
+        //     File::delete(public_path("contract-managements/dokumen-bast/" . $id_document . '.pdf'));
+        // } else {
+        //     File::delete(public_path("contract-managements/dokumen-bast/" . $id_document . '.docx'));
+        // }
         if($documentBast->delete()){
             // Alert::success("Success", "Dokumen berhasil dihapus");
             // return redirect()->back();
@@ -2618,7 +2649,11 @@ class ContractManagementsController extends Controller
         }
         $validation->validate();
 
-        $contract = ContractManagements::find($data["id-contract"]);
+        // $contract = ContractManagements::find($data["id-contract"]);
+        $contract = ContractManagements::where(function ($query) use ($data) {
+            $query->where('profit_center', $data['id-contract'])
+            ->orWhere('id_contract', $data['id-contract']);
+        });
         if (empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
             return Redirect::back()->with("modal", $data["modal-name"]);
@@ -2629,14 +2664,17 @@ class ContractManagementsController extends Controller
         if (count($data["ba-defect"]) > 1) {
             $list_id_document_pendukung = [];
             foreach ($data["ba-defect"] as $dokumen_ba_defect) {
-                $id_document = $faker->uuid3();
+                $id_document = $faker->uuid3() . $dokumen_ba_defect->getClientOriginalExtension();
                 array_push($list_id_document_pendukung, $id_document);
-                moveFileTemp($dokumen_ba_defect, $id_document);
+                // moveFileTemp($dokumen_ba_defect, $id_document);
+                $dokumen_ba_defect->move(public_path("/contract-managements/dokumen-ba-defect"), $id_document);
             }
             $contract->list_dokumen_ba_defect = join(",", $list_id_document_pendukung);
         } else {
-            $id_document = $faker->uuid3();
-            moveFileTemp($data["ba-defect"][0], $id_document);
+            // $id_document = $faker->uuid3();
+            $id_document = $faker->uuid3() . $data["ba-defect"][0]->getClientOriginalExtension();
+            // moveFileTemp($data["ba-defect"][0], $id_document);
+            $data["ba-defect"][0]->move(public_path("/contract-managements/dokumen-ba-defect"), $id_document);
             $contract->list_dokumen_ba_defect = $id_document;
         }
 
@@ -2669,7 +2707,11 @@ class ContractManagementsController extends Controller
         }
         $validation->validate();
 
-        $contract = ContractManagements::find($data["id-contract"]);
+        // $contract = ContractManagements::find($data["id-contract"]);
+        $contract = ContractManagements::where(function ($query) use ($data) {
+            $query->where('profit_center', $data['id-contract'])
+            ->orWhere('id_contract', $data['id-contract']);
+        })->first();
         if (empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
             return Redirect::back()->with("modal", $data["modal-name"]);
@@ -2679,9 +2721,9 @@ class ContractManagementsController extends Controller
         if (!empty($contract->dokumen_kontrak_dan_addendum)) {
             $list_dokumen_kontrak_dan_addendum = collect(explode(", ", $contract->dokumen_pendukung));
             foreach ($list_dokumen_kontrak_dan_addendum as $dokumen) {
-                $get_dokumen = File::get(public_path("/words/$dokumen.docx"));
+                $get_dokumen = File::get(public_path("/contract-managements/dokumen-pendukung-contract/$dokumen"));
                 if (!empty($get_dokumen)) {
-                    File::delete(public_path("/words/$dokumen.docx"));
+                    File::delete(public_path("/contract-managements/dokumen-pendukung-contract/$dokumen"));
                 }
             }
         }
@@ -2690,14 +2732,16 @@ class ContractManagementsController extends Controller
         if (count($data["dokumen-pendukung"]) > 1) {
             $list_id_document_pendukung = [];
             foreach ($data["dokumen-pendukung"] as $dokumen_pendukung) {
-                $id_document = $faker->uuid3();
+                $id_document = $faker->uuid3() . '.' . $dokumen_pendukung->getClientOriginalExtension();
                 array_push($list_id_document_pendukung, $id_document);
-                moveFileTemp($dokumen_pendukung, $id_document);
+                // moveFileTemp($dokumen_pendukung, $id_document);
+                $dokumen_pendukung->move(public_path("/contract-managements/dokumen-pendukung-contract"), $id_document);
             }
             $contract->dokumen_pendukung = join(",", $list_id_document_pendukung);
         } else {
-            $id_document = $faker->uuid3();
-            moveFileTemp($data["dokumen-pendukung"][0], $id_document);
+            $id_document = $faker->uuid3() . '.' . $data["dokumen-pendukung"][0]->getClientOriginalExtension();
+            // moveFileTemp($data["dokumen-pendukung"][0], $id_document);
+            $data["dokumen-pendukung"][0]->move(public_path("/contract-managements/dokumen-pendukung-contract"), $id_document);
             $contract->dokumen_pendukung = $id_document;
         }
 
@@ -2733,7 +2777,7 @@ class ContractManagementsController extends Controller
 
         if (isset($data["file-document"])) {
             $rules["file-document"] = "required|file";
-            $id_document = date("His_") . $file->getClientOriginalName();
+            $id_document = date("His_") . str_replace(" ", "-", $file->getClientOriginalName());
             $nama_file = $file->getClientOriginalName();
         } else {
             $rules["pending-issue"] = "required";
@@ -2746,7 +2790,11 @@ class ContractManagementsController extends Controller
         }
         $validation->validate();
 
-        $contract = ContractManagements::find($data["id-contract"]);
+        // $contract = ContractManagements::find($data["id-contract"]);
+        $contract = ContractManagements::where(function ($query) use ($data) {
+            $query->where('profit_center', $data['id-contract'])
+            ->orWhere('id_contract', $data['id-contract']);
+        })->first();
         if (empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
             return Redirect::back()->with("modal", $data["modal-name"]);
@@ -2764,7 +2812,9 @@ class ContractManagementsController extends Controller
             $pendingIssue->id_document = $id_document;
 
             $uploadFinal->save();
-            if (!$uploadFinal->save() || !moveFileTemp($file, explode(".", $id_document)[0])) {
+            $data['file-document']->move(public_path('contract-managements/dokumen-pending-issue'), $id_document);
+            // if (!$uploadFinal->save() || !moveFileTemp($file, explode(".", $id_document)[0])) {
+            if (!$uploadFinal->save()) {
                 Alert::error("Erorr", "Dokumen gagal ditambahkan");
                 return Redirect::back()->with("modal", $data["modal-name"]);
             }
@@ -2775,7 +2825,8 @@ class ContractManagementsController extends Controller
         $pendingIssue->stage = $data["stage"];
         $pendingIssue->issue = $data["pending-issue"];
         $pendingIssue->status = true;
-        $pendingIssue->id_contract = $contract->id_contract;
+        $pendingIssue->id_contract = $contract->id_contract ?? "-";
+        $pendingIssue->profit_center = $contract->profit_center ?? "-";
         $pendingIssue->penyebab = $data["penyebab-issue"];
         $pendingIssue->biaya = str_replace(".", "", $data["resiko-biaya"]);
         $pendingIssue->waktu = $data["resiko-waktu"];
@@ -2825,7 +2876,10 @@ class ContractManagementsController extends Controller
         }
         $validation->validate();
 
-        $contract = ContractManagements::find($data["id-contract"]);
+        $contract = ContractManagements::where(function ($query) use ($data) {
+            $query->where('profit_center', $data['id-contract'])
+            ->orWhere('id_contract', $data['id-contract']);
+        });
         if (empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
             return Redirect::back()->with("modal", $data["modal-name"]);
@@ -2842,7 +2896,7 @@ class ContractManagementsController extends Controller
         $is_exist_pd->stage = $data["stage"];
         $is_exist_pd->issue = $data["pending-issue"];
         $is_exist_pd->status = (bool) $data["status"];
-        $is_exist_pd->id_contract = $contract->id_contract;
+        // $is_exist_pd->id_contract = $contract->id_contract;
         $is_exist_pd->penyebab = $data["penyebab-issue"];
         $is_exist_pd->biaya = str_replace(".", "", $data["resiko-biaya"]);
         $is_exist_pd->waktu = $data["resiko-waktu"];
@@ -2949,7 +3003,11 @@ class ContractManagementsController extends Controller
         }
         $validation->validate();
 
-        $contract = ContractManagements::find($data["id-contract"]);
+        // $contract = ContractManagements::find($data["id-contract"]);
+        $contract = ContractManagements::where(function ($query) use ($data) {
+            $query->where('profit_center', $data['id-contract'])
+            ->orWhere('id_contract', $data['id-contract']);
+        });
         if (empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
             return Redirect::back()->with("modal", $data["modal-name"]);
@@ -2958,7 +3016,8 @@ class ContractManagementsController extends Controller
         // $pasals = collect($data["pasals"]);
         // $pasals = $pasals->join("|");
 
-        $usulanPerubahanDraft->id_contract = $contract->id_contract;
+        $usulanPerubahanDraft->id_contract = $contract->id_contract ?? "-";
+        $usulanPerubahanDraft->profit_center = $contract->profit_center ?? "-";
         $usulanPerubahanDraft->deskripsi_klausul_awal = $data["deskripsi-klausul-awal"];
         $usulanPerubahanDraft->isu = $data["isu"];
         $usulanPerubahanDraft->usulan_perubahan_klausul = $data["usulan-perubahan-klausul"];
@@ -2996,14 +3055,19 @@ class ContractManagementsController extends Controller
         }
         $validation->validate();
 
-        $contract = ContractManagements::find($data["id-contract"]);
+        // $contract = ContractManagements::find($data["id-contract"]);
+        $contract = ContractManagements::where(function ($query) use ($data) {
+            $query->where('profit_center', $data['id-contract'])
+            ->orWhere('id_contract', $data['id-contract']);
+        });
         if (empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // return redirect()->back();
         }
 
-        $rencanKerjaManajemenKontrak->id_contract = $contract->id_contract;
+        $rencanKerjaManajemenKontrak->id_contract = $contract->id_contract ?? "-";
+        $rencanKerjaManajemenKontrak->profit_center = $contract->profit_center ?? "-";
         $rencanKerjaManajemenKontrak->id_document = $id_document;
         $rencanKerjaManajemenKontrak->nama_document = $nama_file;
 
@@ -3156,7 +3220,7 @@ class ContractManagementsController extends Controller
     public function uploadAsuransi(Request $request, ContractAsuransi $asuransi) {
         $data = $request->all();
         $file = $request->file("file-document");
-        $id_document = date("His_") . $file->getClientOriginalName();
+        $id_document = date("His_") . str_replace(" ", "-", $file->getClientOriginalName());
         $nama_file = $file->getClientOriginalName();
         $messages = [
             "required" => "Field di atas wajib diisi",
@@ -3179,7 +3243,11 @@ class ContractManagementsController extends Controller
         }
         $validation->validate();
 
-        $contract = ContractManagements::find($data["id-contract"]);
+        // $contract = ContractManagements::find($data["id-contract"]);
+        $contract = ContractManagements::where(function ($query) use ($data) {
+            $query->where('profit_center', $data["id-contract"])
+            ->orWhere('id_contract', $data["id-contract"]);
+        })->first();
         if (empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
             return Redirect::back()->with("modal", $data["modal-name"]);
@@ -3189,16 +3257,20 @@ class ContractManagementsController extends Controller
         if(isset($data['file-document'])){
             $uploadFinal = new ContractUploadFinal();
             $uploadFinal->id_contract = $contract->id_contract;
+            $uploadFinal->profit_center = $contract->profit_center;
             $uploadFinal->id_document = $id_document;
             $uploadFinal->nama_document = $nama_file;
             $uploadFinal->category = $data["kategori"];
             $asuransi->id_document = $id_document;
             $asuransi->nama_document = $nama_file;
             $uploadFinal->save();
-            if (!$uploadFinal->save() || !moveFileTemp($file, explode(".", $id_document)[0])) {
+
+            if (!$uploadFinal->save()) {
                 Alert::error("Erorr", "Dokumen gagal ditambahkan");
                 return Redirect::back()->with("modal", $data["modal-name"]);
             }
+
+            $file->move(public_path('contract-managements/dokumen-asuransi'), $id_document);
         }
 
         $asuransiExpired = new DateTime($data["tanggal-berakhir-asuransi"]);
@@ -3206,7 +3278,8 @@ class ContractManagementsController extends Controller
         $interval = $currentDate->diff($asuransiExpired);
         $is_expired = $interval->invert == 1 ? true : false;
 
-        $asuransi->id_contract = $data["id-contract"];
+        $asuransi->id_contract = $contract->id_contract;
+        $asuransi->profit_center = $contract->profit_center;
         $asuransi->kategori_asuransi = $data["kategori-asuransi"];
         $asuransi->nomor_polis = $data["nomor-polis-asuransi"];
         $asuransi->penerbit_polis = $data["penerbit-polis-asuransi"];
@@ -3226,7 +3299,7 @@ class ContractManagementsController extends Controller
     public function editAsuransi(Request $request, ContractAsuransi $asuransi) {
         $data = $request->all();
         $file = $request->file("file-document");
-        $id_document = date("His_") . $file->getClientOriginalName();
+        $id_document = date("His_") . str_replace(" ", "-", $file->getClientOriginalName());
         $nama_file = $file->getClientOriginalName();
         $messages = [
             "required" => "Field di atas wajib diisi",
@@ -3249,7 +3322,11 @@ class ContractManagementsController extends Controller
         }
         $validation->validate();
 
-        $contract = ContractManagements::find($data["id-contract"]);
+        // $contract = ContractManagements::find($data["id-contract"]);
+        $contract = ContractManagements::where(function ($query) use ($data) {
+            $query->where('profit_center', $data["id-contract"])
+            ->orWhere('id_contract', $data["id-contract"]);
+        })->first();
         if (empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
             return Redirect::back()->with("modal", $data["modal-name"]);
@@ -3265,13 +3342,14 @@ class ContractManagementsController extends Controller
                 $document = ContractUploadFinal::where('id_document', '=', $id_document_asuransi)->first();
                 // dd($document);
                 $old_file = $document->id_document;
-                File::delete(public_path("words/$old_file"));
+                File::delete(public_path("contract-managements/dokumen-asuransi/$old_file"));
                 $document->id_document = $id_document;
                 $document->nama_document = $nama_file;
                 $asuransi->id_document = $id_document;
                 $asuransi->nama_document = $nama_file;
                     if($document->save()){
-                        moveFileTemp($file, explode(".", $id_document)[0]);
+                    // moveFileTemp($file, explode(".", $id_document)[0]);
+                    $file->move(public_path('contract-managements/dokumen-asuransi'), $id_document);
                     }else{
                         Alert::error("Erorr", "Dokumen gagal ditambahkan");
                         return Redirect::back();
@@ -3280,6 +3358,7 @@ class ContractManagementsController extends Controller
             }else{
                 $uploadFinal = new ContractUploadFinal();
                 $uploadFinal->id_contract = $contract->id_contract;
+                $uploadFinal->profit_center = $contract->profit_center;
                 $uploadFinal->id_document = $id_document;
                 $uploadFinal->nama_document = $nama_file;
                 $uploadFinal->category = $data["kategori"];
@@ -3287,7 +3366,8 @@ class ContractManagementsController extends Controller
                 $asuransi->nama_document = $nama_file;
                 // dd($uploadFinal);
                 if($uploadFinal->save()){
-                    moveFileTemp($file, explode(".", $id_document)[0]);
+                    // moveFileTemp($file, explode(".", $id_document)[0]);
+                    $file->move(public_path('contract-managements/dokumen-asuransi'), $id_document);
                 }else{
                     Alert::error("Erorr", "Dokumen gagal ditambahkan");
                     return Redirect::back();
@@ -3302,10 +3382,11 @@ class ContractManagementsController extends Controller
         $currentDate = new DateTime();
         $interval = $currentDate->diff($asuransiExpired);
         $is_expired = $interval->invert == 1 ? true : false;
-        
+
         // $editAsuransi = ContractAsuransi::where("nomor_polis", "=", $data["nomor-polis-asuransi"])->first();
-        
-        $asuransi->id_contract = $data["id-contract"];
+
+        $asuransi->id_contract = $contract->id_contract;
+        $asuransi->profit_center = $contract->profit_center;
         $asuransi->kategori_asuransi = $data["kategori-asuransi"];
         $asuransi->nomor_polis = $data["nomor-polis-asuransi"];
         $asuransi->penerbit_polis = $data["penerbit-polis-asuransi"];
@@ -3327,7 +3408,7 @@ class ContractManagementsController extends Controller
     public function uploadJaminan(Request $request, ContractJaminan $jaminan) {
         $data = $request->all();
         $file = $request->file("file-document");
-        $id_document = date("His_") . $file->getClientOriginalName();
+        $id_document = date("His_") . str_replace(" ", "-", $file->getClientOriginalName());
         $nama_file = $file->getClientOriginalName();
         $messages = [
             "required" => "Field di atas wajib diisi",
@@ -3350,7 +3431,11 @@ class ContractManagementsController extends Controller
         }
         $validation->validate();
 
-        $contract = ContractManagements::find($data["id-contract"]);
+        // $contract = ContractManagements::find($data["id-contract"]);
+        $contract = ContractManagements::where(function ($query) use ($data) {
+            $query->where('profit_center', $data['id-contract'])
+            ->orWhere('id_contract', $data["id-contract"]);
+        })->first();
         if (empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
             return Redirect::back()->with("modal", $data["modal-name"]);
@@ -3360,16 +3445,18 @@ class ContractManagementsController extends Controller
         if(isset($data['file-document'])){
             $uploadFinal = new ContractUploadFinal();
             $uploadFinal->id_contract = $contract->id_contract;
+            $uploadFinal->profti_center = $contract->profti_center;
             $uploadFinal->id_document = $id_document;
             $uploadFinal->nama_document = $nama_file;
             $uploadFinal->category = $data["kategori"];
             $jaminan->id_document = $id_document;
             $jaminan->nama_document = $nama_file;
             $uploadFinal->save();
-            if (!$uploadFinal->save() || !moveFileTemp($file, explode(".", $id_document)[0])) {
+            if (!$uploadFinal->save()) {
                 Alert::error("Erorr", "Dokumen gagal ditambahkan");
                 return Redirect::back()->with("modal", $data["modal-name"]);
             }
+            $file->move(public_path("contract-managements/dokumen-jaminan"), $id_document);
         }
 
         $jaminanExpired = new DateTime($data["tanggal-berakhir-jaminan"]);
@@ -3377,7 +3464,8 @@ class ContractManagementsController extends Controller
         $interval = $currentDate->diff($jaminanExpired);
         $is_expired = $interval->invert == 1 ? true : false;
 
-        $jaminan->id_contract = $data["id-contract"];
+        $jaminan->id_contract = $contract->id_contract;
+        $jaminan->profit_center = $contract->profit_center;
         $jaminan->kategori_jaminan = $data["kategori-jaminan"];
         $jaminan->nomor_jaminan = $data["nomor-jaminan"];
         $jaminan->penerbit_jaminan = $data["penerbit-jaminan"];
@@ -3396,7 +3484,7 @@ class ContractManagementsController extends Controller
     public function editJaminan(Request $request, ContractJaminan $jaminan) {
         $data = $request->all();
         $file = $request->file("file-document");
-        $id_document = date("His_") . $file->getClientOriginalName();
+        $id_document = date("His_") . str_replace(" ", "-", $file->getClientOriginalName());
         $nama_file = $file->getClientOriginalName();
         $messages = [
             "required" => "Field di atas wajib diisi",
@@ -3419,7 +3507,11 @@ class ContractManagementsController extends Controller
         }
         $validation->validate();
 
-        $contract = ContractManagements::find($data["id-contract"]);
+        // $contract = ContractManagements::find($data["id-contract"]);
+        $contract = ContractManagements::where(function ($query) use ($data) {
+            $query->where('profit_center', $data["id-contract"])
+            ->orWhere("id_contract", $data["id-contract"]);
+        });
         if (empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
             return Redirect::back()->with("modal", $data["modal-name"]);
@@ -3436,13 +3528,15 @@ class ContractManagementsController extends Controller
                 $document = ContractUploadFinal::where('id_document', '=', $id_document_jaminan)->first();
                 // dd($document);
                 $old_file = $document->id_document;
-                File::delete(public_path("words/$old_file"));
+                // File::delete(public_path("words/$old_file"));
+                File::delete(public_path("contract-managements/dokumen-jaminan/$old_file"));
                 $document->id_document = $id_document;
                 $document->nama_document = $nama_file;
                 $jaminan->id_document = $id_document;
                 $jaminan->nama_document = $nama_file;
                     if($document->save()){
-                        moveFileTemp($file, explode(".", $id_document)[0]);
+                    // moveFileTemp($file, explode(".", $id_document)[0]);
+                    $file->move(public_path('contract-managements/dokumen-jaminan'), $id_document);
                     }else{
                         Alert::error("Erorr", "Dokumen gagal ditambahkan");
                         return Redirect::back();
@@ -3451,6 +3545,7 @@ class ContractManagementsController extends Controller
             }else{
                 $uploadFinal = new ContractUploadFinal();
                 $uploadFinal->id_contract = $contract->id_contract;
+                $uploadFinal->profit_center = $contract->profit_center;
                 $uploadFinal->id_document = $id_document;
                 $uploadFinal->nama_document = $nama_file;
                 $uploadFinal->category = $data["kategori"];
@@ -3458,7 +3553,8 @@ class ContractManagementsController extends Controller
                 $jaminan->nama_document = $nama_file;
                 // dd($uploadFinal);
                 if($uploadFinal->save()){
-                    moveFileTemp($file, explode(".", $id_document)[0]);
+                    // moveFileTemp($file, explode(".", $id_document)[0]);
+                    $file->move(public_path('contract-managements/dokumen-jaminan'), $id_document);
                 }else{
                     Alert::error("Erorr", "Dokumen gagal ditambahkan");
                     return Redirect::back();
@@ -3472,7 +3568,8 @@ class ContractManagementsController extends Controller
         $interval = $currentDate->diff($jaminanExpired);
         $is_expired = $interval->invert == 1 ? true : false;
 
-        $jaminan->id_contract = $data["id-contract"];
+        $jaminan->id_contract = $contract->id_contract;
+        $jaminan->profit_center = $contract->profit_center;
         $jaminan->kategori_jaminan = $data["kategori-jaminan"];
         $jaminan->nomor_jaminan = $data["nomor-jaminan"];
         $jaminan->penerbit_jaminan = $data["penerbit-jaminan"];
@@ -3497,13 +3594,13 @@ class ContractManagementsController extends Controller
             $collectFile = [];
             foreach ($file as $f) {
                 $collectNameFile = [];
-                $collectNameFile["id_document"] = date("His_") . str_replace(' ', '-', $f->getClientOriginalName());
+                $collectNameFile["id_document"] = date("dmYHis_") . str_replace(' ', '-', $f->getClientOriginalName());
                 $collectNameFile["nama_file"] = $f->getClientOriginalName();
                 array_push($collectFile, $collectNameFile);
             }
         } else {
             $nama_file = $file->getClientOriginalName();
-            $id_document = date("His_") . str_replace(' ', '-', $file->getClientOriginalName());
+            $id_document = date("dmYHis_") . str_replace(' ', '-', $file->getClientOriginalName());
         }
 
         $filterAddRecord = [
@@ -3538,6 +3635,7 @@ class ContractManagementsController extends Controller
         $rules = [
             "id-contract" => "required",
             "file-document" => "required",
+            "kategori-path" => "required"
         ];
         if (isset($data['status_dokumen'])) {
             $addRules = ['status_dokumen' => "required|string"];
@@ -3551,13 +3649,27 @@ class ContractManagementsController extends Controller
         }
         $validation->validate();
 
-        $contract = ContractManagements::find($data["id-contract"]);
+        // $contract = ContractManagements::find($data["id-contract"]);
+        $contract = ContractManagements::where(function ($query) use ($data) {
+            $query->where('id_contract', "=", $data['id-contract'])
+            ->orWhere('profit_center', '=', $data["id-contract"]);
+        })->first();
+
         if (empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // return redirect()->back();
         }
 
+
+        if (empty($contract->id_contract)) {
+            ContractManagements::where(function ($query) use ($data) {
+                $query->where('id_contract', "=", $data['id-contract'])
+                ->orWhere('profit_center', '=', $data["id-contract"]);
+            })->update(['id_contract' => Str::uuid()->toString()]);
+        }
+
+        // $kategori = ContractUploadFinal::where([['id_contract', '=', $data['id-contract']],['category', '=', $data['kategori']]])->first();
         $kategori = ContractUploadFinal::where([['id_contract', '=', $data['id-contract']],['category', '=', $data['kategori']]])->first();
         // dd($kategori);
 
@@ -3574,6 +3686,7 @@ class ContractManagementsController extends Controller
                     $uploadFinal->id_document = $collectFile[$i]["id_document"];
                     $uploadFinal->nama_document = $collectFile[$i]["nama_file"];
                     $uploadFinal->category = $data["kategori"];
+                    $uploadFinal->profit_center = $contract->profit_center;
                     if (isset($data['stage'])) {
                         $uploadFinal->stage = $data['stage'];
                     }
@@ -3589,8 +3702,9 @@ class ContractManagementsController extends Controller
                         Alert::error("Error", "Dokumen " . $collectFile[$i]["nama_file"] . " ditambahkan");
                         return redirect()->back();
                     }
-                    
-                    $f->move(public_path('words'), $collectFile[$i]["id_document"]);
+
+                    // $f->move(public_path('words'), $collectFile[$i]["id_document"]);
+                    $f->move(public_path('contract-managements/' . $data['kategori-path']), $collectFile[$i]["id_document"]);
                 }
                 Alert::success("Success", "Dokumen berhasil ditambahkan");
                 return redirect()->back();
@@ -3599,6 +3713,7 @@ class ContractManagementsController extends Controller
                 $uploadFinal->id_contract = $contract->id_contract;
                 $uploadFinal->id_document = $id_document;
                 $uploadFinal->nama_document = $nama_file;
+                $uploadFinal->profit_center = $contract->profit_center;
                 $uploadFinal->category = $data["kategori"];
                 if (isset($data['stage'])) {
                     $uploadFinal->stage = $data['stage'];
@@ -3611,7 +3726,8 @@ class ContractManagementsController extends Controller
                 }
                 if ($uploadFinal->save()) {
                     // moveFileTemp($file, explode(".", $id_document)[0]);
-                    $file->move(public_path('words'), $id_document);
+                    // $file->move(public_path('words'), $id_document);
+                    $file->move(public_path('contract-managements/' . $data['kategori-path']), $id_document);
                     Alert::success("Success", "Dokumen berhasil ditambahkan");
                     return redirect()->back();
                 }
@@ -3621,11 +3737,13 @@ class ContractManagementsController extends Controller
         }else if(!empty($kategori)){
             // dd("update not empty");
             $old_file = $kategori->id_document;
-            File::delete(public_path("words/$old_file"));
+            // File::delete(public_path("words/$old_file"));
+            File::delete(public_path("contract-managements/" . $data['kategori'] . "/$old_file"));
             $kategori->id_document = $id_document;
             $kategori->nama_document = $nama_file;
             $kategori->save();
-            moveFileTemp($file, explode(".", $id_document)[0]);
+            // moveFileTemp($file, explode(".", $id_document)[0]);
+            $file->move(public_path('contract-managements/' . $data['kategori-path']), $id_document[0]);
             Alert::success("Success", "Dokumen berhasil ditambahkan");
             return redirect()->back();
         } else{
@@ -3638,6 +3756,7 @@ class ContractManagementsController extends Controller
             $uploadFinal->id_contract = $contract->id_contract;
             $uploadFinal->id_document = $id_document;
             $uploadFinal->nama_document = $nama_file;
+            $uploadFinal->profit_center = $contract->profit_center;
             $uploadFinal->category = $data["kategori"];
             if (isset($data['stage'])) {
                 $uploadFinal->stage = $data['stage'];
@@ -3650,7 +3769,8 @@ class ContractManagementsController extends Controller
             }
  
             if ($uploadFinal->save()) {
-                moveFileTemp($file, explode(".", $id_document)[0]);
+                // moveFileTemp($file, explode(".", $id_document)[0]);
+                $file->move(public_path('contract-managements/' . $data['kategori-path']), $id_document);
                 Alert::success("Success", "Dokumen berhasil ditambahkan");
                 return redirect()->back();
             }
@@ -3691,6 +3811,12 @@ class ContractManagementsController extends Controller
             return Redirect::back()->with("modal", $data["modal-name"]);
             // return redirect()->back();
         }
+        if (empty($contract->id_contract)) {
+            ContractManagements::where(function ($query) use ($data) {
+                $query->where('id_contract', "=", $data['id-contract'])
+                ->orWhere('profit_center', '=', $data["id-contract"]);
+            })->update(['id_contract' => Str::uuid()->toString()]);
+        }
 
         $kategori = ContractUploadFinal::where([['id_contract', '=', $data['id-contract']], ['id', '=', $id]])->first();
         if (!empty($data["status_dokumen"])) {
@@ -3698,10 +3824,11 @@ class ContractManagementsController extends Controller
         }
         if (!empty($data["file-document"])) {
             $file = $request->file("file-document");
-            $id_document = date("His_") . str_replace(' ', '-', $file->getClientOriginalName());
+            $id_document = date("dmYHis_") . str_replace(' ', '-', $file->getClientOriginalName());
             $nama_file = $file->getClientOriginalName();
             $old_file = $kategori->id_document;
-            File::delete(public_path("words/$old_file"));
+            // File::delete(public_path("words/$old_file"));
+            File::delete(public_path("contract-managements/" . $data['kategori'] . "/$old_file"));
             $kategori->id_document = $id_document;
             $kategori->nama_document = $nama_file;
         }
@@ -3709,9 +3836,12 @@ class ContractManagementsController extends Controller
             $kategori->status = $data['status'];
         }
 
+        $kategori->profit_center = $contract->profit_center;
+
         if ($kategori->save()) {
             if (!empty($data["file-document"])) {
-                moveFileTemp($file, explode(".", $id_document)[0]);
+                // moveFileTemp($file, explode(".", $id_document)[0]);
+                $file->move(public_path('contract-managements/' . $data['kategori']), $id_document[0]);
             }
             Alert::success("Success", "Dokumen berhasil diubah");
             return redirect()->back();
@@ -3723,27 +3853,48 @@ class ContractManagementsController extends Controller
     public function deleteDokumenFinal(Request $request, $id)
     {
         $data = $request->all();
-        $kategori = ContractUploadFinal::where([['id_contract', '=', $data['id-contract']], ['id', '=', $id]])->first();
-        // dd($kategori);
+        $kategori = ContractUploadFinal::where('id', $id)->first();
         $old_file = $kategori->id_document;
-        File::delete(public_path("words/$old_file"));
+        $path = "contract-managements/" . $data['kategori-path'];
+        // File::delete(public_path("words/$old_file"));
+        File::delete(public_path($path . "/" . $old_file));
         if ($kategori->delete()) {
-            return (object)[
+            return response()->json([
                 'success' => true,
                 'message' => "Dokumen berhasil dihapus",
-            ];
-            return (object)[
-                'success' => false,
-                'message' => "Dokumen gagal dihapus",
-            ];
+            ]);
+            // return (object)[
+            //     'success' => true,
+            //     'message' => "Dokumen berhasil dihapus",
+            // ];
+            // return (object)[
+            //     'success' => false,
+            //     'message' => "Dokumen gagal dihapus",
+            // ];
         }
+        return response()->json([
+            'success' => false,
+            'message' => "Dokumen gagal dihapus",
+        ]);
     }
 
     public function uploadPasalKontraktual(Request $request) {
         $data = $request->all();
         // dd($data);
+
+        $contract = ContractManagements::where(function ($query) use ($data) {
+            $query->where('profit_center', $data['id-contract'])
+            ->orWhere('id_contract', $data['id-contract']);
+        })->first();
+
+        if (empty($contract)) {
+            Alert::error("Error", "Contract tidak ditemukan");
+            return redirect()->back();
+        }
+        
         $kontraktual = new PasalKontraktual();
-        $kontraktual->id_contract = $data["id-contract"];
+        $kontraktual->id_contract = $contract->id_contract;
+        $kontraktual->profit_center = $contract->profit_center;
         $kontraktual->item = $data["item"];
         $kontraktual->pasal = $data["pasal"];
         // $kontraktual->perpanjangan_waktu = $data["perpanjangan-waktu"];
@@ -4477,151 +4628,151 @@ class ContractManagementsController extends Controller
         ], 200);
     }
 
-    function getDataProgressPIS2($kode_proyek, $kode_spk, $period)
-    {
-        $login = Http::post('https://pis.wika.co.id/wpapi/auth/token', [
-            "grant_type" => "client_credentials",
-            "client_id" => "app-she",
-            "secret_key" => "y7sdyf7sdhfuerwe7ry383rwriwu3894u2"
-        ]);
+    // function getDataProgressPIS2($kode_proyek, $kode_spk, $period)
+    // {
+    //     $login = Http::post('https://pis.wika.co.id/wpapi/auth/token', [
+    //         "grant_type" => "client_credentials",
+    //         "client_id" => "app-she",
+    //         "secret_key" => "y7sdyf7sdhfuerwe7ry383rwriwu3894u2"
+    //     ]);
 
-        if ($login->successful()) {
-            $login_response = $login->object();
-            $token = $login_response->access_token ?? null;
+    //     if ($login->successful()) {
+    //         $login_response = $login->object();
+    //         $token = $login_response->access_token ?? null;
 
-            $is_exist_progress_period = ProyekPIS::where("kode_spk", "=", $kode_spk)->where("period", "=", $period)->first();
+    //         $is_exist_progress_period = ProyekPIS::where("kode_spk", "=", $kode_spk)->where("period", "=", $period)->first();
 
-            if (!empty($token)) {
-                $response = Http::withHeaders(["x-access-token" => $token])
-                ->post('https://pis.wika.co.id/wpapi/proyek/getProyekResume', [
-                    "no_spk" => $kode_spk,
-                    "period" => $period
-                ]);
+    //         if (!empty($token)) {
+    //             $response = Http::withHeaders(["x-access-token" => $token])
+    //             ->post('https://pis.wika.co.id/wpapi/proyek/getProyekResume', [
+    //                 "no_spk" => $kode_spk,
+    //                 "period" => $period
+    //             ]);
 
-                if ($response->successful()) {
-                    $dataResponse = $response->collect($key = "data");
-                    // dd($dataResponse);
-                    if ($is_exist_progress_period) {
-                        $data = $is_exist_progress_period;
-                        $data->kode_proyek = $kode_proyek;
-                        $data->kode_spk = $kode_spk;
-                        $data->spk_intern_no = $dataResponse['spk_intern_no'];
-                        $data->proyek_shortname = $dataResponse['proyek_shortname'];
-                        $data->proyek_name = $dataResponse['proyek_name'];
-                        $data->type_code = $dataResponse['type_code'];
-                        $data->period = $dataResponse['period'];
-                        $data->start_date = $dataResponse['start_date'];
-                        $data->finish_date = $dataResponse['finish_date'];
-                        $data->bast1_date = $dataResponse['bast1_date'];
-                        $data->bast2_date = $dataResponse['bast2_date'];
-                        $data->divisi_name = $dataResponse['divisi_name'];
-                        $data->departemen_name = $dataResponse['departemen_name'];
-                        $data->departemen_code = $dataResponse['departemen_code'];
-                        $data->direktorat_name = $dataResponse['direktorat_name'];
-                        $data->pemberi_kerja_code = $dataResponse['pemberi_kerja_code'];
-                        $data->pemberi_kerja_name = $dataResponse['pemberi_kerja_name'];
-                        $data->sumber_dana = $dataResponse['sumber_dana'];
-                        $data->sbu = $dataResponse['sbu'];
-                        $data->country = $dataResponse['country'];
-                        $data->province = $dataResponse['province'];
-                        $data->longitude = $dataResponse['longitude'];
-                        $data->latitude = $dataResponse['latitude'];
-                        $data->mp_nip = $dataResponse['mp_nip'];
-                        $data->mp_name = $dataResponse['mp_name'];
-                        $data->mp_phone = $dataResponse['mp_phone'];
-                        $data->mp_email = $dataResponse['mp_email'];
-                        $data->is_strategis_nas = $dataResponse['is_strategis_nas'];
-                        $data->is_strategis_wika = $dataResponse['is_strategis_wika'];
-                        $data->status_autorisasi = $dataResponse['status_autorisasi'];
-                        $data->is_req_unlock = $dataResponse['is_req_unlock'];
-                        $data->ok_awal = $dataResponse['ok_awal'];
-                        $data->ok_review = $dataResponse['ok_review'];
-                        $data->nilai_ok = $dataResponse['nilai_ok'];
-                        $data->ra_penjualan = $dataResponse['ra_penjualan'];
-                        $data->ri_penjualan = $dataResponse['ri_penjualan'];
-                        $data->ra_progress = $dataResponse['ra_progress'];
-                        $data->ri_progress = $dataResponse['ri_progress'];
-                        $data->ra_biaya_progress_diakui = $dataResponse['ra_biaya_progress_diakui'];
-                        $data->ri_biaya_progress_diakui = $dataResponse['ri_biaya_progress_diakui'];
-                        $data->ra_margin = $dataResponse['ra_margin'];
-                        $data->ri_margin = $dataResponse['ri_margin'];
-                        $data->pi_margin = $dataResponse['pi_margin'];
-                        $data->saldo_rkjo = $dataResponse['saldo_rkjo'];
-                        $data->piutang_retensi = $dataResponse['piutang_retensi'];
-                        $data->piutang_usaha = $dataResponse['piutang_usaha'];
-                        $data->tagihan_bruto = $dataResponse['tagihan_bruto'];
-                        $data->bad = $dataResponse['bad'];
-                        $data->pdpk = $dataResponse['pdpk'];
-                        $data->bdd = $dataResponse['bdd'];
-                        $data->persediaan = $dataResponse['persediaan'];
-                        $data->rk = $dataResponse['rk'];
-                    } else {
-                        $data = new ProyekPIS();
-                        $data->kode_proyek = $kode_proyek;
-                        $data->kode_spk = $kode_spk;
-                        $data->spk_intern_no = $dataResponse['spk_intern_no'];
-                        $data->proyek_shortname = $dataResponse['proyek_shortname'];
-                        $data->proyek_name = $dataResponse['proyek_name'];
-                        $data->type_code = $dataResponse['type_code'];
-                        $data->period = $dataResponse['period'];
-                        $data->start_date = $dataResponse['start_date'];
-                        $data->finish_date = $dataResponse['finish_date'];
-                        $data->bast1_date = $dataResponse['bast1_date'];
-                        $data->bast2_date = $dataResponse['bast2_date'];
-                        $data->divisi_name = $dataResponse['divisi_name'];
-                        $data->departemen_name = $dataResponse['departemen_name'];
-                        $data->departemen_code = $dataResponse['departemen_code'];
-                        $data->direktorat_name = $dataResponse['direktorat_name'];
-                        $data->pemberi_kerja_code = $dataResponse['pemberi_kerja_code'];
-                        $data->pemberi_kerja_name = $dataResponse['pemberi_kerja_name'];
-                        $data->sumber_dana = $dataResponse['sumber_dana'];
-                        $data->sbu = $dataResponse['sbu'];
-                        $data->country = $dataResponse['country'];
-                        $data->province = $dataResponse['province'];
-                        $data->longitude = $dataResponse['longitude'];
-                        $data->latitude = $dataResponse['latitude'];
-                        $data->mp_nip = $dataResponse['mp_nip'];
-                        $data->mp_name = $dataResponse['mp_name'];
-                        $data->mp_phone = $dataResponse['mp_phone'];
-                        $data->mp_email = $dataResponse['mp_email'];
-                        $data->is_strategis_nas = $dataResponse['is_strategis_nas'];
-                        $data->is_strategis_wika = $dataResponse['is_strategis_wika'];
-                        $data->status_autorisasi = $dataResponse['status_autorisasi'];
-                        $data->is_req_unlock = $dataResponse['is_req_unlock'];
-                        $data->ok_awal = $dataResponse['ok_awal'];
-                        $data->ok_review = $dataResponse['ok_review'];
-                        $data->nilai_ok = $dataResponse['nilai_ok'];
-                        $data->ra_penjualan = $dataResponse['ra_penjualan'];
-                        $data->ri_penjualan = $dataResponse['ri_penjualan'];
-                        $data->ra_progress = $dataResponse['ra_progress'];
-                        $data->ri_progress = $dataResponse['ri_progress'];
-                        $data->ra_biaya_progress_diakui = $dataResponse['ra_biaya_progress_diakui'];
-                        $data->ri_biaya_progress_diakui = $dataResponse['ri_biaya_progress_diakui'];
-                        $data->ra_margin = $dataResponse['ra_margin'];
-                        $data->ri_margin = $dataResponse['ri_margin'];
-                        $data->pi_margin = $dataResponse['pi_margin'];
-                        $data->saldo_rkjo = $dataResponse['saldo_rkjo'];
-                        $data->piutang_retensi = $dataResponse['piutang_retensi'];
-                        $data->piutang_usaha = $dataResponse['piutang_usaha'];
-                        $data->tagihan_bruto = $dataResponse['tagihan_bruto'];
-                        $data->bad = $dataResponse['bad'];
-                        $data->pdpk = $dataResponse['pdpk'];
-                        $data->bdd = $dataResponse['bdd'];
-                        $data->persediaan = $dataResponse['persediaan'];
-                        $data->rk = $dataResponse['rk'];
-                    }
-                    setLogging("Get_Progress_PIS_2", "[Proyek=>" . $kode_proyek . "]", $dataResponse->toArray());
-                    return $data->save();
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
+    //             if ($response->successful()) {
+    //                 $dataResponse = $response->collect($key = "data");
+    //                 // dd($dataResponse);
+    //                 if ($is_exist_progress_period) {
+    //                     $data = $is_exist_progress_period;
+    //                     $data->kode_proyek = $kode_proyek;
+    //                     $data->kode_spk = $kode_spk;
+    //                     $data->spk_intern_no = $dataResponse['spk_intern_no'];
+    //                     $data->proyek_shortname = $dataResponse['proyek_shortname'];
+    //                     $data->proyek_name = $dataResponse['proyek_name'];
+    //                     $data->type_code = $dataResponse['type_code'];
+    //                     $data->period = $dataResponse['period'];
+    //                     $data->start_date = $dataResponse['start_date'];
+    //                     $data->finish_date = $dataResponse['finish_date'];
+    //                     $data->bast1_date = $dataResponse['bast1_date'];
+    //                     $data->bast2_date = $dataResponse['bast2_date'];
+    //                     $data->divisi_name = $dataResponse['divisi_name'];
+    //                     $data->departemen_name = $dataResponse['departemen_name'];
+    //                     $data->departemen_code = $dataResponse['departemen_code'];
+    //                     $data->direktorat_name = $dataResponse['direktorat_name'];
+    //                     $data->pemberi_kerja_code = $dataResponse['pemberi_kerja_code'];
+    //                     $data->pemberi_kerja_name = $dataResponse['pemberi_kerja_name'];
+    //                     $data->sumber_dana = $dataResponse['sumber_dana'];
+    //                     $data->sbu = $dataResponse['sbu'];
+    //                     $data->country = $dataResponse['country'];
+    //                     $data->province = $dataResponse['province'];
+    //                     $data->longitude = $dataResponse['longitude'];
+    //                     $data->latitude = $dataResponse['latitude'];
+    //                     $data->mp_nip = $dataResponse['mp_nip'];
+    //                     $data->mp_name = $dataResponse['mp_name'];
+    //                     $data->mp_phone = $dataResponse['mp_phone'];
+    //                     $data->mp_email = $dataResponse['mp_email'];
+    //                     $data->is_strategis_nas = $dataResponse['is_strategis_nas'];
+    //                     $data->is_strategis_wika = $dataResponse['is_strategis_wika'];
+    //                     $data->status_autorisasi = $dataResponse['status_autorisasi'];
+    //                     $data->is_req_unlock = $dataResponse['is_req_unlock'];
+    //                     $data->ok_awal = $dataResponse['ok_awal'];
+    //                     $data->ok_review = $dataResponse['ok_review'];
+    //                     $data->nilai_ok = $dataResponse['nilai_ok'];
+    //                     $data->ra_penjualan = $dataResponse['ra_penjualan'];
+    //                     $data->ri_penjualan = $dataResponse['ri_penjualan'];
+    //                     $data->ra_progress = $dataResponse['ra_progress'];
+    //                     $data->ri_progress = $dataResponse['ri_progress'];
+    //                     $data->ra_biaya_progress_diakui = $dataResponse['ra_biaya_progress_diakui'];
+    //                     $data->ri_biaya_progress_diakui = $dataResponse['ri_biaya_progress_diakui'];
+    //                     $data->ra_margin = $dataResponse['ra_margin'];
+    //                     $data->ri_margin = $dataResponse['ri_margin'];
+    //                     $data->pi_margin = $dataResponse['pi_margin'];
+    //                     $data->saldo_rkjo = $dataResponse['saldo_rkjo'];
+    //                     $data->piutang_retensi = $dataResponse['piutang_retensi'];
+    //                     $data->piutang_usaha = $dataResponse['piutang_usaha'];
+    //                     $data->tagihan_bruto = $dataResponse['tagihan_bruto'];
+    //                     $data->bad = $dataResponse['bad'];
+    //                     $data->pdpk = $dataResponse['pdpk'];
+    //                     $data->bdd = $dataResponse['bdd'];
+    //                     $data->persediaan = $dataResponse['persediaan'];
+    //                     $data->rk = $dataResponse['rk'];
+    //                 } else {
+    //                     $data = new ProyekPIS();
+    //                     $data->kode_proyek = $kode_proyek;
+    //                     $data->kode_spk = $kode_spk;
+    //                     $data->spk_intern_no = $dataResponse['spk_intern_no'];
+    //                     $data->proyek_shortname = $dataResponse['proyek_shortname'];
+    //                     $data->proyek_name = $dataResponse['proyek_name'];
+    //                     $data->type_code = $dataResponse['type_code'];
+    //                     $data->period = $dataResponse['period'];
+    //                     $data->start_date = $dataResponse['start_date'];
+    //                     $data->finish_date = $dataResponse['finish_date'];
+    //                     $data->bast1_date = $dataResponse['bast1_date'];
+    //                     $data->bast2_date = $dataResponse['bast2_date'];
+    //                     $data->divisi_name = $dataResponse['divisi_name'];
+    //                     $data->departemen_name = $dataResponse['departemen_name'];
+    //                     $data->departemen_code = $dataResponse['departemen_code'];
+    //                     $data->direktorat_name = $dataResponse['direktorat_name'];
+    //                     $data->pemberi_kerja_code = $dataResponse['pemberi_kerja_code'];
+    //                     $data->pemberi_kerja_name = $dataResponse['pemberi_kerja_name'];
+    //                     $data->sumber_dana = $dataResponse['sumber_dana'];
+    //                     $data->sbu = $dataResponse['sbu'];
+    //                     $data->country = $dataResponse['country'];
+    //                     $data->province = $dataResponse['province'];
+    //                     $data->longitude = $dataResponse['longitude'];
+    //                     $data->latitude = $dataResponse['latitude'];
+    //                     $data->mp_nip = $dataResponse['mp_nip'];
+    //                     $data->mp_name = $dataResponse['mp_name'];
+    //                     $data->mp_phone = $dataResponse['mp_phone'];
+    //                     $data->mp_email = $dataResponse['mp_email'];
+    //                     $data->is_strategis_nas = $dataResponse['is_strategis_nas'];
+    //                     $data->is_strategis_wika = $dataResponse['is_strategis_wika'];
+    //                     $data->status_autorisasi = $dataResponse['status_autorisasi'];
+    //                     $data->is_req_unlock = $dataResponse['is_req_unlock'];
+    //                     $data->ok_awal = $dataResponse['ok_awal'];
+    //                     $data->ok_review = $dataResponse['ok_review'];
+    //                     $data->nilai_ok = $dataResponse['nilai_ok'];
+    //                     $data->ra_penjualan = $dataResponse['ra_penjualan'];
+    //                     $data->ri_penjualan = $dataResponse['ri_penjualan'];
+    //                     $data->ra_progress = $dataResponse['ra_progress'];
+    //                     $data->ri_progress = $dataResponse['ri_progress'];
+    //                     $data->ra_biaya_progress_diakui = $dataResponse['ra_biaya_progress_diakui'];
+    //                     $data->ri_biaya_progress_diakui = $dataResponse['ri_biaya_progress_diakui'];
+    //                     $data->ra_margin = $dataResponse['ra_margin'];
+    //                     $data->ri_margin = $dataResponse['ri_margin'];
+    //                     $data->pi_margin = $dataResponse['pi_margin'];
+    //                     $data->saldo_rkjo = $dataResponse['saldo_rkjo'];
+    //                     $data->piutang_retensi = $dataResponse['piutang_retensi'];
+    //                     $data->piutang_usaha = $dataResponse['piutang_usaha'];
+    //                     $data->tagihan_bruto = $dataResponse['tagihan_bruto'];
+    //                     $data->bad = $dataResponse['bad'];
+    //                     $data->pdpk = $dataResponse['pdpk'];
+    //                     $data->bdd = $dataResponse['bdd'];
+    //                     $data->persediaan = $dataResponse['persediaan'];
+    //                     $data->rk = $dataResponse['rk'];
+    //                 }
+    //                 setLogging("Get_Progress_PIS_2", "[Proyek=>" . $kode_proyek . "]", $dataResponse->toArray());
+    //                 return $data->save();
+    //             } else {
+    //                 return false;
+    //             }
+    //         } else {
+    //             return false;
+    //         }
+    //     } else {
+    //         return false;
+    //     }
+    // }
 
     public function getProgressFromTableProyekPISNew(Request $request)
     {
@@ -4783,7 +4934,10 @@ class ContractManagementsController extends Controller
                 return redirect()->back();
             }
 
-            $contract = ContractManagements::where('profit_center', $data['profit-center'])->first();
+            $contract = ContractManagements::where(function ($query) use ($data) {
+                $query->where('profit_center', $data['profit-center'])
+                ->orWhere('id_contract', $data['profit-center']);
+            })->first();
 
             if (empty($contract)) {
                 Alert::error('Error', 'Kontrak tidak ditemukan. Silahkan hubungi Admin!');
@@ -4845,7 +4999,10 @@ class ContractManagementsController extends Controller
 
             $file = $data['file-document'];
 
-            $contract = ContractManagements::where('profit_center', $data['profit-center'])->first();
+            $contract = ContractManagements::where(function ($query) use ($data) {
+                $query->where('profit_center', $data['profit-center'])
+                ->orWhere('id_contract', $data['profit-center']);
+            })->first();
 
             if (empty($contract)) {
                 Alert::error('Error', 'Kontrak tidak ditemukan. Silahkan hubungi Admin!');
@@ -4907,7 +5064,10 @@ class ContractManagementsController extends Controller
         $data = $request->all();
 
         try {
-            $contract = ContractManagements::where('profit_center', $data['id-contract'])->first();
+            $contract = ContractManagements::where(function ($query) use ($data) {
+                $query->where('profit_center', $data['id-contract'])
+                    ->orWhere('id_contract', $data['id-contract']);
+            })->first();
 
             if (empty($contract)) {
                 return response()->json([
@@ -4958,6 +5118,9 @@ class ContractManagementsController extends Controller
     {
         try {
             switch ($kategori_file) {
+                case "dokumen-aanwitjzing":
+                    $modelClass = new DokumenAanwitjzingContract();
+                    break;
                 case "dokumen-site-instruction":
                     $modelClass = new SiteInstruction();
                     break;

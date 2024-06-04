@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AHU;
 use App\Models\Cli;
+use App\Models\CompanyProfile;
 use App\Models\Csi;
 use Faker\Core\Uuid;
 use App\Models\Proyek;
@@ -22,8 +23,10 @@ use App\Models\IndustryOwner;
 use App\Models\IndustrySector;
 use App\Models\JenisPerusahaan;
 use App\Models\KaryaInovasi;
+use App\Models\LaporanKeuangan;
 use App\Models\MasalahHukum;
 use App\Models\Nps;
+use App\Models\PorsiSaham;
 use App\Models\Provinsi;
 use App\Models\StrukturAttachment;
 use App\Models\SyaratPembayaran;
@@ -1251,6 +1254,148 @@ class CustomerController extends Controller
         }
     }
 
+    public function savePorsiSaham(Request $request)
+    {
+        $data = $request->all();
+
+        if (isset($data["id-porsi"])) {
+            $id = $data["id-porsi"];
+            $porsiSaham = PorsiSaham::find($id);
+        } else {
+            $porsiSaham = null;
+        }
+
+        if (!empty($porsiSaham)) {
+            $porsiSaham->id_customer = $data["id-customer"];
+            $porsiSaham->nama = $data["name-porsi-saham"];
+            $porsiSaham->porsi_saham = $data["porsi"];
+            $porsiSaham->kategori_porsi = $data["kategori-porsi"];
+            Alert::success("Success", "Porsi Saham Berhasil Diperbarui");
+        } else {
+            $porsiSaham = new PorsiSaham();
+            $porsiSaham->id_customer = $data["id-customer"];
+            $porsiSaham->nama = $data["name-porsi-saham"];
+            $porsiSaham->porsi_saham = $data["porsi"];
+            $porsiSaham->kategori_porsi = $data["kategori-porsi"];
+            Alert::success("Success", "Porsi Saham Berhasil Dibuat");
+        }
+        if ($porsiSaham->save()) {
+            return redirect()->back();
+        }
+        Alert::error("Error", "Porsi Saham Gagal Diperbarui / Dibuat!");
+        return redirect()->back();
+    }
+
+    public function deletePorsiSaham(Request $request, PorsiSaham $porsi_saham)
+    {
+        if ($porsi_saham->delete()) {
+            Alert::success("Success", "Porsi Saham Berhasil dihapus");
+            return redirect()->back();
+        }
+        Alert::error("Error", "Porsi Saham Gagal dihapus!");
+        return redirect()->back();
+    }
+
+    public function saveCompanyProfile(Request $request)
+    {
+        $data = $request->all();
+
+        if (isset($data["id-company-profile"])) {
+            $id = $data["id-company-profile"];
+            $companyProfile = CompanyProfile::find($id);
+        } else {
+            $companyProfile = null;
+        }
+
+
+        if (isset($data["file-document"])) {
+            $file = $request->file("file-document");
+            $nama_file = $file->getClientOriginalName();
+            $id_document = date("His_") . $file->getClientOriginalName();
+
+            if (empty($companyProfile)) {
+                $companyProfile = new CompanyProfile();
+                $companyProfile->id_customer = $data["id-customer"];
+                $is_create = true;
+            }
+            $companyProfile->file_document = $id_document;
+            $companyProfile->nama_file = $nama_file;
+            $file->move(public_path('customer-file'), $id_document);
+
+            if ($companyProfile->save()) {
+                if (isset($is_create)) {
+                    Alert::success("Success", "Company Profile Berhasil Dibuat");
+                } else {
+                    Alert::success("Success", "Company Profile Berhasil Diperbaharui");
+                }
+                return redirect()->back();
+            }
+        }
+        Alert::error("Error", "Company Profile Gagal Diperbarui / Dibuat!");
+        return redirect()->back();
+    }
+
+    public function deleteCompanyProfile(Request $request, CompanyProfile $company_profile)
+    {
+        if ($company_profile->delete()) {
+            File::delete(public_path("customer-file/$company_profile->file_document"));
+            Alert::success("Success", "Company Profile Berhasil dihapus");
+            return redirect()->back();
+        }
+        Alert::error("Error", "Porsi Saham Gagal dihapus!");
+        return redirect()->back();
+    }
+
+    public function saveLaporanKeuangan(Request $request)
+    {
+        $data = $request->all();
+
+        if (isset($data["id-laporan-keuangan"])) {
+            $id = $data["id-laporan-keuangan"];
+            $laporanKeuangan = LaporanKeuangan::find($id);
+        } else {
+            $laporanKeuangan = null;
+        }
+
+
+        if (isset($data["file-document"])) {
+            $file = $request->file("file-document");
+            $nama_file = $file->getClientOriginalName();
+            $id_document = date("His_") . $file->getClientOriginalName();
+
+            if (empty($laporanKeuangan)) {
+                $laporanKeuangan = new LaporanKeuangan();
+                $laporanKeuangan->id_customer = $data["id-customer"];
+                $is_create = true;
+            }
+            $laporanKeuangan->file_document = $id_document;
+            $laporanKeuangan->nama_file = $nama_file;
+            $file->move(public_path('customer-file'), $id_document);
+
+            if ($laporanKeuangan->save()) {
+                if (isset($is_create)) {
+                    Alert::success("Success", "Laporan Keuangan Berhasil Dibuat");
+                } else {
+                    Alert::success("Success", "Laporan Keuangan Berhasil Diperbaharui");
+                }
+                return redirect()->back();
+            }
+        }
+        Alert::error("Error", "Laporan Keuangan Gagal Diperbarui / Dibuat!");
+        return redirect()->back();
+    }
+
+    public function deleteLaporanKeuangan(Request $request, LaporanKeuangan $laporan_keuangan)
+    {
+        if ($laporan_keuangan->delete()) {
+            File::delete(public_path("customer-file/$laporan_keuangan->file_document"));
+            Alert::success("Success", "Laporan Keuangan Berhasil dihapus");
+            return redirect()->back();
+        }
+        Alert::error("Error", "Laporan Keuangan Gagal dihapus!");
+        return redirect()->back();
+    }
+
     public function saveAHU(Request $request)
     {
         $data = $request->all();
@@ -1299,7 +1444,7 @@ class CustomerController extends Controller
         }
 
         if ($customerAHU->delete()) {
-            File::delete(public_path("customer/$customerAHU->file_document"));
+            File::delete(public_path("customer-file/$customerAHU->file_document"));
             Alert::success("Success", "AHU Berhasil dihapus");
             return redirect()->back();
         }

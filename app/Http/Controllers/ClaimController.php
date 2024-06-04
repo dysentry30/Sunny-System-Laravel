@@ -566,52 +566,7 @@ class ClaimController extends Controller
                 // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->whereIn("unit_kerja", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->get();
                 $proyeks_all = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->whereIn("kd_divisi", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->where('contract_managements.profit_center', '!=', null)->get();
 
-                $proyeks_all->each(function ($proyek) use (&$totalVOAll, &$totalClaimAll, &$totalAntiClaimAll, &$totalClaimAsuransiAll, &$totalVOAllApproved, &$totalClaimAllApproved, &$totalAntiClaimAllApproved, &$totalClaimAsuransiAllApproved) {
-                    if ($proyek->PerubahanKontrak->isNotEmpty()) {
-                        $claimsPerProyek = $proyek->PerubahanKontrak;
-
-                        // $countVO = $claimsPerProyek->where("jenis_perubahan", "=", "VO")->count();
-                        $countVO = $claimsPerProyek->where("jenis_perubahan", "=", "VO")->sum(function ($item) {
-                            return (int) $item->biaya_pengajuan;
-                        });
-                        $totalVOAll += $countVO;
-                        $countVOApproved = $claimsPerProyek->where("stage", 5)->where("jenis_perubahan", "=", "VO")->sum(function ($item) {
-                            return (int) $item->nilai_disetujui;
-                        });
-                        $totalVOAllApproved += $countVOApproved;
-
-                        // $countClaim = $claimsPerProyek->where("jenis_perubahan", "=", "Klaim")->count();
-                        $countClaim = $claimsPerProyek->where("jenis_perubahan", "=", "Klaim")->sum(function ($item) {
-                            return (int) $item->biaya_pengajuan;
-                        });
-                        $totalClaimAll += $countClaim;
-                        $countClaimApproved = $claimsPerProyek->where("stage", 5)->where("jenis_perubahan", "=", "Klaim")->sum(function ($item) {
-                            return (int) $item->nilai_disetujui;
-                        });
-                        $totalClaimAllApproved += $countClaimApproved;
-
-                        // $countAntiClaim = $claimsPerProyek->where("jenis_perubahan", "=", "Anti Klaim")->count();
-                        $countAntiClaim = $claimsPerProyek->where("jenis_perubahan", "=", "Anti Klaim")->sum(function ($item) {
-                            return (int) $item->biaya_pengajuan;
-                        });
-                        $totalAntiClaimAll += $countAntiClaim;
-                        $countAntiClaimApproved = $claimsPerProyek->where("stage", 5)->where("jenis_perubahan", "=", "Anti Klaim")->sum(function ($item) {
-                            return (int) $item->nilai_disetujui;
-                        });
-                        $totalAntiClaimAllApproved += $countAntiClaimApproved;
-
-                        $countClaimAsuransi = $claimsPerProyek->where("jenis_perubahan", "=", "Klaim Asuransi")->sum(function ($item) {
-                            return (int) $item->biaya_pengajuan;
-                        });
-                        $totalClaimAsuransiAll += $countClaimAsuransi;
-                        $countClaimAsuransiApproved = $claimsPerProyek->where("stage", 5)->where("jenis_perubahan", "=", "Klaim Asuransi")->sum(function ($item) {
-                            return (int) $item->nilai_disetujui;
-                        });
-                        $totalClaimAsuransiAllApproved += $countClaimAsuransiApproved;
-                    }
-                });
-                
-                $proyeks_all = $proyeks_all->map(function ($proyek) {
+                $proyeks_all = $proyeks_all->map(function ($proyek) use (&$totalVOAll, &$totalClaimAll, &$totalAntiClaimAll, &$totalClaimAsuransiAll, &$totalVOAllApproved, &$totalClaimAllApproved, &$totalAntiClaimAllApproved, &$totalClaimAsuransiAllApproved) {
                     $result = [];
                     // $result['kode_proyek'] = $proyek->kode_proyek;
                     $result['profit_center'] = $proyek->profit_center;
@@ -619,46 +574,131 @@ class ClaimController extends Controller
                     // $result['id_contract'] = $proyek->ContractManagements->id_contract;
                     $result['unit_kerja'] = $proyek->UnitKerja->unit_kerja;
 
-                    if (!empty($proyek->PerubahanKontrak)) {
+                    if ($proyek->PerubahanKontrak->isNotEmpty()) {
                         $claim = $proyek->PerubahanKontrak;
+                        $item_vo = 0;
+                        $item_vo_approved = 0;
                         $cat_vo = $claim->where("jenis_perubahan", "=", "VO");
                         // $item_vo = $cat_vo->count();
-                        $item_vo = $cat_vo->sum(function ($item) {
-                            return (int) $item->biaya_pengajuan;
-                        });
-                        $item_vo_approved = $cat_vo->where("stage", 5)->sum(function ($item) {
-                            return (int) $item->nilai_disetujui;
-                        });
+                        // $item_vo = $cat_vo->sum(function ($item) {
+                        //     return (int) $item->biaya_pengajuan;
+                        // });
+                        // $item_vo_approved = $cat_vo->where("stage", 5)->sum(function ($item) {
+                        //     return (int) $item->nilai_disetujui;
+                        // });
+                        foreach ($cat_vo as $item) {
+                            $item_vo += $item->biaya_pengajuan;
+                            if ($item->stage == 5) {
+                                $item_vo_approved += (int)$item->nilai_disetujui;
+                            }
+                            // if (!$item->nilai_negatif) {
+                            //     $item_vo += $item->biaya_pengajuan;
+                            //     if ($item->stage == 5) {
+                            //         $item_vo_approved += (int)$item->nilai_disetujui;
+                            //     }
+                            // } else {
+                            //     $item_vo -= $item->biaya_pengajuan;
+                            //     if ($item->stage == 5) {
+                            //         $item_vo_approved -= (int)$item->nilai_disetujui;
+                            //     }
+                            // }
+                        }
+
+                        $totalVOAll += $item_vo;
+                        $totalVOAllApproved += $item_vo_approved;
 
                         //Kategori Klaim
                         $cat_klaim = $claim->where("jenis_perubahan", "=", "Klaim");
                         // $item_klaim = $cat_klaim->count();
-                        $item_klaim = $cat_klaim->sum(function ($item) {
-                            return (int) $item->biaya_pengajuan;
-                        });
-                        $item_klaim_approved = $cat_klaim->where("stage", 5)->sum(function ($item) {
-                            return (int) $item->nilai_disetujui;
-                        });
+                        // $item_klaim = $cat_klaim->sum(function ($item) {
+                        //     return (int) $item->biaya_pengajuan;
+                        // });
+                        // $item_klaim_approved = $cat_klaim->where("stage", 5)->sum(function ($item) {
+                        //     return (int) $item->nilai_disetujui;
+                        // });
+                        $item_klaim = 0;
+                        $item_klaim_approved = 0;
+                        foreach ($cat_klaim as $item) {
+                            $item_klaim += $item->biaya_pengajuan;
+                            if ($item->stage == 5) {
+                                $item_klaim_approved += (int)$item->nilai_disetujui;
+                            }
+                            // if (!$item->nilai_negatif) {
+                            //     $item_klaim += $item->biaya_pengajuan;
+                            //     if ($item->stage == 5) {
+                            //         $item_klaim_approved += (int)$item->nilai_disetujui;
+                            //     }
+                            // } else {
+                            //     $item_klaim -= $item->biaya_pengajuan;
+                            //     if ($item->stage == 5) {
+                            //         $item_klaim_approved -= (int)$item->nilai_disetujui;
+                            //     }
+                            // }
+                        }
+                        $totalClaimAll += $item_klaim;
+                        $totalClaimAllApproved += $item_klaim_approved;
 
                         //Kategori ANti Klaim
                         $cat_anti_klaim = $claim->where("jenis_perubahan", "=", "Anti Klaim");
                         // $item_anti_klaim = $cat_anti_klaim->count();
-                        $item_anti_klaim = $cat_anti_klaim->sum(function ($item) {
-                            return (int) $item->biaya_pengajuan;
-                        });
-                        $item_anti_klaim_approved = $cat_anti_klaim->where("stage", 5)->sum(function ($item) {
-                            return (int) $item->nilai_disetujui;
-                        });
+                        // $item_anti_klaim = $cat_anti_klaim->sum(function ($item) {
+                        //     return (int) $item->biaya_pengajuan;
+                        // });
+                        // $item_anti_klaim_approved = $cat_anti_klaim->where("stage", 5)->sum(function ($item) {
+                        //     return (int) $item->nilai_disetujui;
+                        // });
+                        $item_anti_klaim = 0;
+                        $item_anti_klaim_approved = 0;
+                        foreach ($cat_anti_klaim as $item) {
+                            $item_anti_klaim -= $item->biaya_pengajuan;
+                            if ($item->stage == 5) {
+                                $item_anti_klaim_approved -= (int)$item->nilai_disetujui;
+                            }
+                            // if (!$item->nilai_negatif) {
+                            //     $item_anti_klaim += $item->biaya_pengajuan;
+                            //     if ($item->stage == 5) {
+                            //         $item_anti_klaim_approved += (int)$item->nilai_disetujui;
+                            //     }
+                            // } else {
+                            //     $item_anti_klaim -= $item->biaya_pengajuan;
+                            //     if ($item->stage == 5) {
+                            //         $item_anti_klaim_approved -= (int)$item->nilai_disetujui;
+                            //     }
+                            // }
+                        }
+                        $totalAntiClaimAll += $item_anti_klaim;
+                        $totalAntiClaimAllApproved += $item_anti_klaim_approved;
 
                         //Kategori Klaim Asuransi
                         $cat_klaim_asuransi = $claim->where("jenis_perubahan", "=", "Klaim Asuransi");
                         // $item_klaim_asuransi = $cat_klaim_asuransi->count();
-                        $item_klaim_asuransi = $cat_klaim_asuransi->sum(function ($item) {
-                            return (int) $item->biaya_pengajuan;
-                        });
-                        $item_klaim_asuransi_approved = $cat_klaim_asuransi->where("stage", 5)->sum(function ($item) {
-                            return (int) $item->nilai_disetujui;
-                        });
+                        // $item_klaim_asuransi = $cat_klaim_asuransi->sum(function ($item) {
+                        //     return (int) $item->biaya_pengajuan;
+                        // });
+                        // $item_klaim_asuransi_approved = $cat_klaim_asuransi->where("stage", 5)->sum(function ($item) {
+                        //     return (int) $item->nilai_disetujui;
+                        // });
+                        $item_klaim_asuransi = 0;
+                        $item_klaim_asuransi_approved = 0;
+                        foreach ($cat_klaim_asuransi as $item) {
+                            $item_klaim_asuransi += $item->biaya_pengajuan;
+                            if ($item->stage == 5) {
+                                $item_klaim_asuransi_approved += (int)$item->nilai_disetujui;
+                            }
+                            // if (!$item->nilai_negatif) {
+                            //     $item_klaim_asuransi -= $item->biaya_pengajuan;
+                            //     if ($item->stage == 5) {
+                            //         $item_klaim_asuransi_approved -= (int)$item->nilai_disetujui;
+                            //     }
+                            // } else {
+                            //     $item_klaim_asuransi -= $item->biaya_pengajuan;
+                            //     if ($item->stage == 5) {
+                            //         $item_klaim_asuransi_approved -= (int)$item->nilai_disetujui;
+                            //     }
+                            // }
+                        }
+                        $totalClaimAsuransiAll += $item_klaim_asuransi;
+                        $totalClaimAsuransiAllApproved += $item_klaim_asuransi_approved;
 
                         $result['total_vo'] = $item_vo;
                         $result['total_klaim'] = $item_klaim;
@@ -693,52 +733,6 @@ class ClaimController extends Controller
                     "=",
                     $filterTahun
                 )->get()->groupBy('kode_proyek');
-
-                $proyeks_all->each(function ($proyek) use (&$totalVOAll, &$totalClaimAll, &$totalAntiClaimAll, &$totalClaimAsuransiAll, &$totalVOAllApproved, &$totalClaimAllApproved, &$totalAntiClaimAllApproved, &$totalClaimAsuransiAllApproved) {
-                    if ($proyek->PerubahanKontrak->isNotEmpty()) {
-                        $claimsPerProyek = $proyek->PerubahanKontrak;
-
-                        // $countVO = $claimsPerProyek->where("jenis_perubahan", "=", "VO")->count();
-                        $countVO = $claimsPerProyek->where("jenis_perubahan", "=", "VO")->sum(function ($item) {
-                            return (int) $item->biaya_pengajuan;
-                        });
-                        $totalVOAll += $countVO;
-                        $countVOApproved = $claimsPerProyek->where("stage", 5)->where("jenis_perubahan", "=", "VO")->sum(function ($item) {
-                            return (int) $item->nilai_disetujui;
-                        });
-                        $totalVOAllApproved += $countVOApproved;
-
-                        // $countClaim = $claimsPerProyek->where("jenis_perubahan", "=", "Klaim")->count();
-                        $countClaim = $claimsPerProyek->where("jenis_perubahan", "=", "Klaim")->sum(function ($item) {
-                            return (int) $item->biaya_pengajuan;
-                        });
-                        $totalClaimAll += $countClaim;
-                        $countClaimApproved = $claimsPerProyek->where("stage", 5)->where("jenis_perubahan", "=", "Klaim")->sum(function ($item) {
-                            return (int) $item->nilai_disetujui;
-                        });
-                        $totalClaimAllApproved += $countClaimApproved;
-
-                        // $countAntiClaim = $claimsPerProyek->where("jenis_perubahan", "=", "Anti Klaim")->count();
-                        $countAntiClaim = $claimsPerProyek->where("jenis_perubahan", "=", "Anti Klaim")->sum(function ($item) {
-                            return (int) $item->biaya_pengajuan;
-                        });
-                        $totalAntiClaimAll += $countAntiClaim;
-                        $countAntiClaimApproved = $claimsPerProyek->where("stage", 5)->where("jenis_perubahan", "=", "Anti Klaim")->sum(function ($item) {
-                            return (int) $item->nilai_disetujui;
-                        });
-                        $totalAntiClaimAllApproved += $countAntiClaimApproved;
-
-                        // $countClaimAsuransi = $claimsPerProyek->where("jenis_perubahan", "=", "Klaim Asuransi")->count();
-                        $countClaimAsuransi = $claimsPerProyek->where("jenis_perubahan", "=", "Klaim Asuransi")->sum(function ($item) {
-                            return (int) $item->biaya_pengajuan;
-                        });
-                        $totalClaimAsuransiAll += $countClaimAsuransi;
-                        $countClaimAsuransiApproved = $claimsPerProyek->where("stage", 5)->where("jenis_perubahan", "=", "Klaim Asuransi")->sum(function ($item) {
-                            return (int) $item->nilai_disetujui;
-                        });
-                        $totalClaimAsuransiAllApproved += $countClaimAsuransiApproved;
-                    }
-                });
 
                 $proyeks_all = $proyeks_all->map(function ($claim) {
                     $cat_vo = $claim->where(
@@ -845,53 +839,7 @@ class ClaimController extends Controller
                 // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->whereIn("unit_kerja", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->get();
                 $proyeks_all = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->whereIn("kd_divisi", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->where('contract_managements.profit_center', '!=', null)->get();
 
-                $proyeks_all->each(function ($proyek) use (&$totalVOAll, &$totalClaimAll, &$totalAntiClaimAll, &$totalClaimAsuransiAll, &$totalVOAllApproved, &$totalClaimAllApproved, &$totalAntiClaimAllApproved, &$totalClaimAsuransiAllApproved) {
-                    if ($proyek->PerubahanKontrak->isNotEmpty()) {
-                        $claimsPerProyek = $proyek->PerubahanKontrak;
-
-                        // $countVO = $claimsPerProyek->where("jenis_perubahan", "=", "VO")->count();
-                        $countVO = $claimsPerProyek->where("jenis_perubahan", "=", "VO")->sum(function ($item) {
-                            return (int) $item->biaya_pengajuan;
-                        });
-                        $totalVOAll += $countVO;
-                        $countVOApproved = $claimsPerProyek->where("stage", 5)->where("jenis_perubahan", "=", "VO")->sum(function ($item) {
-                            return (int) $item->nilai_disetujui;
-                        });
-                        $totalVOAllApproved += $countVOApproved;
-
-                        // $countClaim = $claimsPerProyek->where("jenis_perubahan", "=", "Klaim")->count();
-                        $countClaim = $claimsPerProyek->where("jenis_perubahan", "=", "Klaim")->sum(function ($item) {
-                            return (int) $item->biaya_pengajuan;
-                        });
-                        $totalClaimAll += $countClaim;
-                        $countClaimApproved = $claimsPerProyek->where("stage", 5)->where("jenis_perubahan", "=", "Klaim")->sum(function ($item) {
-                            return (int) $item->nilai_disetujui;
-                        });
-                        $totalClaimAllApproved += $countClaimApproved;
-
-                        // $countAntiClaim = $claimsPerProyek->where("jenis_perubahan", "=", "Anti Klaim")->count();
-                        $countAntiClaim = $claimsPerProyek->where("jenis_perubahan", "=", "Anti Klaim")->sum(function ($item) {
-                            return (int) $item->biaya_pengajuan;
-                        });
-                        $totalAntiClaimAll += $countAntiClaim;
-                        $countAntiClaimApproved = $claimsPerProyek->where("stage", 5)->where("jenis_perubahan", "=", "Anti Klaim")->sum(function ($item) {
-                            return (int) $item->nilai_disetujui;
-                        });
-                        $totalAntiClaimAllApproved += $countAntiClaimApproved;
-
-                        // $countClaimAsuransi = $claimsPerProyek->where("jenis_perubahan", "=", "Klaim Asuransi")->count();
-                        $countClaimAsuransi = $claimsPerProyek->where("jenis_perubahan", "=", "Klaim Asuransi")->sum(function ($item) {
-                            return (int) $item->biaya_pengajuan;
-                        });
-                        $totalClaimAsuransiAll += $countClaimAsuransi;
-                        $countClaimAsuransiApproved = $claimsPerProyek->where("stage", 5)->where("jenis_perubahan", "=", "Klaim Asuransi")->sum(function ($item) {
-                            return (int) $item->nilai_disetujui;
-                        });
-                        $totalClaimAsuransiAllApproved += $countClaimAsuransiApproved;
-                    }
-                });
-
-                $proyeks_all = $proyeks_all->map(function ($proyek) {
+                $proyeks_all = $proyeks_all->map(function ($proyek) use (&$totalVOAll, &$totalClaimAll, &$totalAntiClaimAll, &$totalClaimAsuransiAll, &$totalVOAllApproved, &$totalClaimAllApproved, &$totalAntiClaimAllApproved, &$totalClaimAsuransiAllApproved) {
                     $result = [];
                     // $result['kode_proyek'] = $proyek->kode_proyek;
                     $result['profit_center'] = $proyek->profit_center;
@@ -899,46 +847,127 @@ class ClaimController extends Controller
                     // $result['id_contract'] = $proyek->ContractManagements->id_contract;
                     $result['unit_kerja'] = $proyek->UnitKerja->unit_kerja;
 
-                    if (!empty($proyek->PerubahanKontrak)) {
+                    if ($proyek->PerubahanKontrak->isNotEmpty()) {
                         $claim = $proyek->PerubahanKontrak;
+                        $item_vo = 0;
+                        $item_vo_approved = 0;
                         $cat_vo = $claim->where("jenis_perubahan", "=", "VO");
                         // $item_vo = $cat_vo->count();
-                        $item_vo = $cat_vo->sum(function ($item) {
-                            return (int) $item->biaya_pengajuan;
-                        });
-                        $item_vo_approved = $cat_vo->where("stage", 5)->sum(function ($item) {
-                            return (int) $item->nilai_disetujui;
-                        });
+                        // $item_vo = $cat_vo->sum(function ($item) {
+                        //     return (int) $item->biaya_pengajuan;
+                        // });
+                        // $item_vo_approved = $cat_vo->where("stage", 5)->sum(function ($item) {
+                        //     return (int) $item->nilai_disetujui;
+                        // });
+                        foreach ($cat_vo as $item) {
+                            if (!$item->nilai_negatif) {
+                                $item_vo += $item->biaya_pengajuan;
+                                if ($item->stage == 5) {
+                                    $item_vo_approved += (int)$item->nilai_disetujui;
+                                }
+                            } else {
+                                $item_vo -= $item->biaya_pengajuan;
+                                if ($item->stage == 5) {
+                                    $item_vo_approved -= (int)$item->nilai_disetujui;
+                                }
+                            }
+                        }
+
+                        $totalVOAll += $item_vo;
+                        $totalVOAllApproved += $item_vo_approved;
 
                         //Kategori Klaim
                         $cat_klaim = $claim->where("jenis_perubahan", "=", "Klaim");
                         // $item_klaim = $cat_klaim->count();
-                        $item_klaim = $cat_klaim->sum(function ($item) {
-                            return (int) $item->biaya_pengajuan;
-                        });
-                        $item_klaim_approved = $cat_klaim->where("stage", 5)->sum(function ($item) {
-                            return (int) $item->nilai_disetujui;
-                        });
+                        // $item_klaim = $cat_klaim->sum(function ($item) {
+                        //     return (int) $item->biaya_pengajuan;
+                        // });
+                        // $item_klaim_approved = $cat_klaim->where("stage", 5)->sum(function ($item) {
+                        //     return (int) $item->nilai_disetujui;
+                        // });
+                        $item_klaim = 0;
+                        $item_klaim_approved = 0;
+                        foreach ($cat_klaim as $item) {
+                            $item_klaim += $item->biaya_pengajuan;
+                            if ($item->stage == 5) {
+                                $item_klaim_approved += (int)$item->nilai_disetujui;
+                            }
+                            // if (!$item->nilai_negatif) {
+                            //     $item_klaim += $item->biaya_pengajuan;
+                            //     if ($item->stage == 5) {
+                            //         $item_klaim_approved += (int)$item->nilai_disetujui;
+                            //     }
+                            // } else {
+                            //     $item_klaim -= $item->biaya_pengajuan;
+                            //     if ($item->stage == 5) {
+                            //         $item_klaim_approved -= (int)$item->nilai_disetujui;
+                            //     }
+                            // }
+                        }
+                        $totalClaimAll += $item_klaim;
+                        $totalClaimAllApproved += $item_klaim_approved;
 
                         //Kategori ANti Klaim
                         $cat_anti_klaim = $claim->where("jenis_perubahan", "=", "Anti Klaim");
                         // $item_anti_klaim = $cat_anti_klaim->count();
-                        $item_anti_klaim = $cat_anti_klaim->sum(function ($item) {
-                            return (int) $item->biaya_pengajuan;
-                        });
-                        $item_anti_klaim_approved = $cat_anti_klaim->where("stage", 5)->sum(function ($item) {
-                            return (int) $item->nilai_disetujui;
-                        });
+                        // $item_anti_klaim = $cat_anti_klaim->sum(function ($item) {
+                        //     return (int) $item->biaya_pengajuan;
+                        // });
+                        // $item_anti_klaim_approved = $cat_anti_klaim->where("stage", 5)->sum(function ($item) {
+                        //     return (int) $item->nilai_disetujui;
+                        // });
+                        $item_anti_klaim = 0;
+                        $item_anti_klaim_approved = 0;
+                        foreach ($cat_anti_klaim as $item) {
+                            $item_anti_klaim += $item->biaya_pengajuan;
+                            if ($item->stage == 5) {
+                                $item_anti_klaim_approved += (int)$item->nilai_disetujui;
+                            }
+                            // if (!$item->nilai_negatif) {
+                            //     $item_anti_klaim += $item->biaya_pengajuan;
+                            //     if ($item->stage == 5) {
+                            //         $item_anti_klaim_approved += (int)$item->nilai_disetujui;
+                            //     }
+                            // } else {
+                            //     $item_anti_klaim -= $item->biaya_pengajuan;
+                            //     if ($item->stage == 5) {
+                            //         $item_anti_klaim_approved -= (int)$item->nilai_disetujui;
+                            //     }
+                            // }
+                        }
+                        $totalAntiClaimAll += $item_anti_klaim;
+                        $totalAntiClaimAllApproved += $item_anti_klaim_approved;
 
                         //Kategori Klaim Asuransi
                         $cat_klaim_asuransi = $claim->where("jenis_perubahan", "=", "Klaim Asuransi");
                         // $item_klaim_asuransi = $cat_klaim_asuransi->count();
-                        $item_klaim_asuransi = $cat_klaim_asuransi->sum(function ($item) {
-                            return (int) $item->biaya_pengajuan;
-                        });
-                        $item_klaim_asuransi_approved = $cat_klaim_asuransi->where("stage", 5)->sum(function ($item) {
-                            return (int) $item->nilai_disetujui;
-                        });
+                        // $item_klaim_asuransi = $cat_klaim_asuransi->sum(function ($item) {
+                        //     return (int) $item->biaya_pengajuan;
+                        // });
+                        // $item_klaim_asuransi_approved = $cat_klaim_asuransi->where("stage", 5)->sum(function ($item) {
+                        //     return (int) $item->nilai_disetujui;
+                        // });
+                        $item_klaim_asuransi = 0;
+                        $item_klaim_asuransi_approved = 0;
+                        foreach ($cat_klaim_asuransi as $item) {
+                            $item_klaim_asuransi -= $item->biaya_pengajuan;
+                            if ($item->stage == 5) {
+                                $item_klaim_asuransi_approved -= (int)$item->nilai_disetujui;
+                            }
+                            // if (!$item->nilai_negatif) {
+                            //     $item_klaim_asuransi -= $item->biaya_pengajuan;
+                            //     if ($item->stage == 5) {
+                            //         $item_klaim_asuransi_approved -= (int)$item->nilai_disetujui;
+                            //     }
+                            // } else {
+                            //     $item_klaim_asuransi -= $item->biaya_pengajuan;
+                            //     if ($item->stage == 5) {
+                            //         $item_klaim_asuransi_approved -= (int)$item->nilai_disetujui;
+                            //     }
+                            // }
+                        }
+                        $totalClaimAsuransiAll += $item_klaim_asuransi;
+                        $totalClaimAsuransiAllApproved += $item_klaim_asuransi_approved;
 
                         $result['total_vo'] = $item_vo;
                         $result['total_klaim'] = $item_klaim;
@@ -984,53 +1013,6 @@ class ClaimController extends Controller
                     "=",
                     $filterTahun
                 )->get()->groupBy('kode_proyek');
-
-
-                $proyeks_all->each(function ($proyek) use (&$totalVOAll, &$totalClaimAll, &$totalAntiClaimAll, &$totalClaimAsuransiAll, &$totalVOAllApproved, &$totalClaimAllApproved, &$totalAntiClaimAllApproved, &$totalClaimAsuransiAllApproved) {
-                    if ($proyek->PerubahanKontrak->isNotEmpty()) {
-                        $claimsPerProyek = $proyek->PerubahanKontrak;
-
-                        // $countVO = $claimsPerProyek->where("jenis_perubahan", "=", "VO")->count();
-                        $countVO = $claimsPerProyek->where("jenis_perubahan", "=", "VO")->sum(function ($item) {
-                            return (int) $item->biaya_pengajuan;
-                        });
-                        $totalVOAll += $countVO;
-                        $countVOApproved = $claimsPerProyek->where("stage", 5)->where("jenis_perubahan", "=", "VO")->sum(function ($item) {
-                            return (int) $item->nilai_disetujui;
-                        });
-                        $totalVOAllApproved += $countVOApproved;
-
-                        // $countClaim = $claimsPerProyek->where("jenis_perubahan", "=", "Klaim")->count();
-                        $countClaim = $claimsPerProyek->where("jenis_perubahan", "=", "Klaim")->sum(function ($item) {
-                            return (int) $item->biaya_pengajuan;
-                        });
-                        $totalClaimAll += $countClaim;
-                        $countClaimApproved = $claimsPerProyek->where("stage", 5)->where("jenis_perubahan", "=", "Klaim")->sum(function ($item) {
-                            return (int) $item->nilai_disetujui;
-                        });
-                        $totalClaimAllApproved += $countClaimApproved;
-
-                        // $countAntiClaim = $claimsPerProyek->where("jenis_perubahan", "=", "Anti Klaim")->count();
-                        $countAntiClaim = $claimsPerProyek->where("jenis_perubahan", "=", "Anti Klaim")->sum(function ($item) {
-                            return (int) $item->biaya_pengajuan;
-                        });
-                        $totalAntiClaimAll += $countAntiClaim;
-                        $countAntiClaimApproved = $claimsPerProyek->where("stage", 5)->where("jenis_perubahan", "=", "Anti Klaim")->sum(function ($item) {
-                            return (int) $item->nilai_disetujui;
-                        });
-                        $totalAntiClaimAllApproved += $countAntiClaimApproved;
-
-                        // $countClaimAsuransi = $claimsPerProyek->where("jenis_perubahan", "=", "Klaim Asuransi")->count();
-                        $countClaimAsuransi = $claimsPerProyek->where("jenis_perubahan", "=", "Klaim Asuransi")->sum(function ($item) {
-                            return (int) $item->biaya_pengajuan;
-                        });
-                        $totalClaimAsuransiAll += $countClaimAsuransi;
-                        $countClaimAsuransiApproved = $claimsPerProyek->where("stage", 5)->where("jenis_perubahan", "=", "Klaim Asuransi")->sum(function ($item) {
-                            return (int) $item->nilai_disetujui;
-                        });
-                        $totalClaimAsuransiAllApproved += $countClaimAsuransiApproved;
-                    }
-                });
 
 
                 $proyeks_all = $proyeks_all->map(function ($claim) {
