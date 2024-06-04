@@ -3700,21 +3700,21 @@
                                         $interval = $currentDate->diff($jaminanExpired);
                                         if($interval->invert == 1){
                                             // $check = $interval->format('Expired %m bulan lagi');
-                                            $style_expired = "badge badge-light-danger";
+                                            $style_expired = "badge badge-light-danger m-0";
                                             $style_kategori = "text-gray-600";
                                             $is_expired = "Sudah Expired";
-                                        }else if($jaminan->is_expired == false && $interval->m == 1){
+                                        }else if($jaminan->is_expired == false && $interval->m == 1 && $interval->y == 0){
                                             $check = $interval->format('Expired %m bulan lagi');
-                                            $style_expired = "badge badge-light-danger";
+                                            $style_expired = "badge badge-light-danger m-0";
                                             $style_kategori = "text-gray-600";
                                             $is_expired = $check;
-                                        }elseif ($jaminan->is_expired == false && $interval->m == 0 || $interval->d == 0) {
+                                        }elseif ($jaminan->is_expired == false && $interval->m == 0 || $interval->d == 0 && $interval->y == 0) {
                                             $check = $interval->format('Expired %d hari lagi');
-                                            $style_expired = "badge badge-light-danger";
+                                            $style_expired = "badge badge-light-danger m-0";
                                             $style_kategori = "text-danger";
                                             $is_expired = $check;
                                         }else{
-                                            $style_expired = "badge badge-light-success";
+                                            $style_expired = "badge badge-light-success m-0";
                                             $style_kategori = "text-gray-600";
                                             $is_expired = "Valid";
                                         }
@@ -3832,12 +3832,12 @@
                                             $style_expired = "badge badge-light-danger";
                                             $style_kategori = "text-gray-600";
                                             $is_expired = "Sudah Expired";
-                                        }else if($asuransi->is_expired == false && $interval->m == 1){
+                                        }else if($asuransi->is_expired == false && $interval->m == 1 && $interval->y == 0){
                                             $check = $interval->format('Expired %m bulan lagi');
                                             $style_expired = "badge badge-light-danger";
                                             $style_kategori = "text-gray-600";
                                             $is_expired = $check;
-                                        }elseif ($asuransi->is_expired == false && $interval->m == 0) {
+                                        }elseif ($asuransi->is_expired == false && $interval->m == 0 && $interval->y == 0) {
                                             $check = $interval->format('Expired %d hari lagi');
                                             $style_expired = "badge badge-light-danger";
                                             $style_kategori = "text-danger";

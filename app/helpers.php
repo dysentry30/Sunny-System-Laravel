@@ -240,8 +240,27 @@ function checkGreenLine($proyek) {
                         if (!empty($proyek->negara) && ($proyek->negara == 'ID' || $proyek->negara == 'Indonesia')) {
                             if ($proyek->sumber_dana == "APBD" || $proyek->sumber_dana == "BUMN") {
                                 $results->push(App\Models\KriteriaGreenLine::where("isi", "=", $proyek->sumber_dana)->where("item", "=", "Sumber Dana")->where(function ($query) use ($proyek, $customer) {
-                                    $query->where('sub_isi', '=', $proyek->provinsi)
-                                        ->orWhere('sub_isi', '=', $customer->group_tier);
+                                    if ($proyek->sumber_data == "APBD") {
+                                        $query->where('sub_isi', '=', $proyek->provinsi);
+                                    }else{
+                                        // if(!empty($customer->nama_holding)){
+                                        //     $holding = Customer::find($customer->nama_holding);
+                                        //     $query->where('sub_isi', '=', $holding->group_tier);
+                                        // }else{
+                                        //     $query->where('sub_isi', '=', $customer->group_tier);
+                                        // }
+                                        if(!empty($customer->nama_holding)){
+                                            $tier_bumn = App\Models\MasterGrupTierBUMN::where("id_pelanggan", $customer->nama_holding)->orderBy("updated_at")->first();
+                                            if (!empty($tier_bumn)) {
+                                                $query->where('sub_isi', '=', $proyek->provinsi)->orWhere('sub_isi', '=', $tier_bumn->kategori);
+                                            }
+                                        }else{
+                                            $tier_bumn = App\Models\MasterGrupTierBUMN::where("id_pelanggan", $customer->id_customer)->orderBy("updated_at")->first();
+                                            if (!empty($tier_bumn)) {
+                                                $query->where('sub_isi', '=', $proyek->provinsi)->orWhere('sub_isi', '=', $tier_bumn->kategori);
+                                            }
+                                        }
+                                    }
                                 })->count() > 0);
                             } else {
                                 $results->push(App\Models\KriteriaGreenLine::where("isi", "=", $proyek->sumber_dana)->where("item", "=", "Sumber Dana")->count() > 0);

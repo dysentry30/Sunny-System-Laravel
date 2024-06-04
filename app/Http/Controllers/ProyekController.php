@@ -3170,7 +3170,7 @@ class ProyekController extends Controller
 
                                         "SPART" => "",
 
-                                        "KDGRP" => $kdgrp,
+                                        "KDGRP" => "$kdgrp",
 
                                         "CUST_WAERS" => "IDR",
 
@@ -3246,6 +3246,7 @@ class ProyekController extends Controller
                         // setLogging();
                         if ($proyekStage->UnitKerja->dop != 'EA') {
                             $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm", $data_nasabah_online)->json();
+                            setLogging("Send_Nasabah_Online", "[Nasabah Online => $customer->name] => ", $data_nasabah_online->toArray());
                             // dd($nasabah_online_response);
                             if (!$nasabah_online_response["status"] && !str_contains($nasabah_online_response["msg"], "sudah ada dalam nasabah online")) {
                                 Alert::error("Error", $nasabah_online_response["msg"]);

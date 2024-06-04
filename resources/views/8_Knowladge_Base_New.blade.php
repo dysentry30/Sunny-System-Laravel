@@ -48,7 +48,7 @@
                                 <!--end::Title-->
                             </div>
                             <!--end::Page title-->
-                            @canany(['super-admin', 'risk-crm'])
+                            @canany(['super-admin', 'admin-crm'])
                                 <!--begin::Actions-->
                                 <div class="d-flex align-items-center py-1">
 

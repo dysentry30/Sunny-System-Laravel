@@ -117,11 +117,41 @@ class DashboardController extends Controller
                 // dd($nilaiHistoryForecast);
             }
             if (!empty($request->get("dop"))) {
-                $nilaiHistoryForecast = $nilaiHistoryForecast->where("dop", $request->get("dop"));
-                $claims = $claims->where("dop", $request->get("dop"));
-                $proyeks = $proyeks->where("dop", $request->get("dop"));
-                $contracts = $contracts->where("dop", $request->get("dop"));
-                $paretoProyeks = $paretoProyeks->where("dop", $request->get("dop"));
+                $nilaiHistoryForecast = $nilaiHistoryForecast->filter(function ($history) use ($request) {
+                    if ($request->get("dop") == "PUSAT") {
+                        return $history->dop != "EA";
+                    } else {
+                        return $history->dop == $request->get("dop");
+                    }
+                });
+                $claims = $claims->filter(function ($claim) use ($request) {
+                    if ($request->get("dop") == "PUSAT") {
+                        return $claim->dop != "EA";
+                    } else {
+                        return $claim->dop == $request->get("dop");
+                    }
+                });
+                $proyeks = $proyeks->filter(function ($proyek) use ($request) {
+                    if ($request->get("dop") == "PUSAT") {
+                        return $proyek->dop != "EA";
+                    } else {
+                        return $proyek->dop == $request->get("dop");
+                    }
+                });
+                $contracts = $contracts->filter(function ($contract) use ($request) {
+                    if ($request->get("dop") == "PUSAT") {
+                        return $contract->dop != "EA";
+                    } else {
+                        return $contract->dop == $request->get("dop");
+                    }
+                });
+                $paretoProyeks = $paretoProyeks->filter(function ($pareto) use ($request) {
+                    if ($request->get("dop") == "PUSAT") {
+                        return $pareto->dop != "EA";
+                    } else {
+                        return $pareto->dop == $request->get("dop");
+                    }
+                });
                 // dd($proyeks);
                 // dd($nilaiHistoryForecast, $claims, $proyeks, $contracts);
             }
@@ -168,11 +198,41 @@ class DashboardController extends Controller
                 $contracts = $contracts->where("unit_kerja", $request->get("unit-kerja"));
                 $paretoProyeks = $paretoProyeks->where("unit_kerja", $request->get("unit-kerja"));
             } else if (!empty($request->get("dop"))) {
-                $nilaiHistoryForecast = $nilaiHistoryForecast->where("dop", $request->get("dop"));
-                $claims = $claims->where("dop", $request->get("dop"));
-                $proyeks = $proyeks->where("dop", $request->get("dop"));
-                $contracts = $contracts->where("dop", $request->get("dop"));
-                $paretoProyeks = $paretoProyeks->where("dop", $request->get("dop"));
+                $nilaiHistoryForecast = $nilaiHistoryForecast->filter(function ($history) use ($request) {
+                    if ($request->get("dop") == "PUSAT") {
+                        return $history->dop != "EA";
+                    } else {
+                        return $history->dop == $request->get("dop");
+                    }
+                });
+                $claims = $claims->filter(function ($claim) use ($request) {
+                    if ($request->get("dop") == "PUSAT") {
+                        return $claim->dop != "EA";
+                    } else {
+                        return $claim->dop == $request->get("dop");
+                    }
+                });
+                $proyeks = $proyeks->filter(function ($proyek) use ($request) {
+                    if ($request->get("dop") == "PUSAT") {
+                        return $proyek->dop != "EA";
+                    } else {
+                        return $proyek->dop == $request->get("dop");
+                    }
+                });
+                $contracts = $contracts->filter(function ($contract) use ($request) {
+                    if ($request->get("dop") == "PUSAT") {
+                        return $contract->dop != "EA";
+                    } else {
+                        return $contract->dop == $request->get("dop");
+                    }
+                });
+                $paretoProyeks = $paretoProyeks->filter(function ($pareto) use ($request) {
+                    if ($request->get("dop") == "PUSAT") {
+                        return $pareto->dop != "EA";
+                    } else {
+                        return $pareto->dop == $request->get("dop");
+                    }
+                });
                 // dd($proyeks);
                 // dd($nilaiHistoryForecast, $claims, $proyeks, $contracts);
             } else {
@@ -3642,32 +3702,46 @@ class DashboardController extends Controller
         // dd($type, $prognosa, $month, $unit_`kerja);
         if ($type == "Forecast") {
             $month = array_search($month, $arrNamaBulan);
-            if (Auth::user()->check_administrator || str_contains(Auth::user()->name, "(PIC)")) {
-
+            if (Auth::user()->check_administrator || Gate::any(['admin-crm'])) {
+                $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
                 $history_forecasts = Proyek::with(["proyekBerjalan"])->select("proyeks.*", "history_forecast.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $year)->where("periode_prognosa", "=", $prognosa)->where("month_forecast", "!=", 0)->get()->where("is_cancel", "!=", true)->sortBy("month_forecast", SORT_NUMERIC);
+                
                 $countUnitKerjaFromHistory = $history_forecasts->groupBy('unit_kerja')->count();
                 if ($history_forecasts->count() < 1 || $countUnitKerjaFromHistory < 11) {
                     $history_forecasts = Proyek::with(["proyekBerjalan"])->select("proyeks.*", "forecasts.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("forecasts", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $year)->where("periode_prognosa", "=", $prognosa)->where("month_forecast", "!=", 0)->get()->where("is_cancel", "!=", true)->sortBy("month_forecast", SORT_NUMERIC);
                 }
                 if ($unit_kerja != "" && strlen($unit_kerja) == 1) {
                     $history_forecasts = $history_forecasts->where("divcode", $unit_kerja);
-                    if (empty($history_realisasi) || $history_realisasi->isEmpty()) {
+                    if (empty($history_forecasts) || $history_forecasts->isEmpty()) {
                         $history_forecasts = Proyek::with(["proyekBerjalan"])->select("proyeks.*", "forecasts.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("forecasts", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $year)->where("periode_prognosa", "=", $prognosa)->where("month_forecast", "!=", 0)->where("divcode", $unit_kerja)->get()->where("is_cancel", "!=", true)->sortBy("month_forecast", SORT_NUMERIC);
                     }
                     // dd($history_forecasts);
                 } elseif ($unit_kerja != "") {
                     $dop = str_replace("-", " ", $unit_kerja);
-                    $history_forecasts = $history_forecasts->where("dop", $dop);
+                    if (empty($history_forecasts) || $history_forecasts->isEmpty()) {
+                        $history_forecasts = Proyek::with(["proyekBerjalan"])->select("proyeks.*", "forecasts.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("forecasts", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $year)->where("periode_prognosa", "=", $prognosa)->where("month_forecast", "!=", 0)->where("divcode", $unit_kerja)->get()->where("is_cancel", "!=", true)->sortBy("month_forecast", SORT_NUMERIC);
+                    }
+                    if ($unit_kerja == "PUSAT") {
+                        $history_forecasts = $history_forecasts->whereIn("dop", ["DOP 1", "DOP 2", "DOP 3"]);
+                    } else {
+                        $history_forecasts = $history_forecasts->where("dop", $dop);
+                    }
                     // dd($dop, $history_forecasts);
                 }
+                if (Gate::any(["admin-crm"])) {
+                    $history_forecasts = $history_forecasts->whereIn('divcode', $unit_kerja_user);
+                }
                 $history_forecasts = $history_forecasts->where("nilai_forecast", "!=", "")->where("nilai_forecast", "!=", "0")->where("tahun_perolehan", "=", $year)->groupBy("kode_proyek");
+                // if (Gate::allows(['super-admin'])) {
+                //     dd($history_forecasts);
+                // }
             } else {
                 if (!empty($unit_kerja)) {
                     $history_forecasts = Proyek::with(["proyekBerjalan"])->select("proyeks.*", "history_forecast.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("proyeks.unit_kerja", "=", $unit_kerja)->where("tahun", "=", $year)->where("periode_prognosa", "=", $prognosa)->where("month_forecast", "!=", 0)->get()->where("is_cancel", "!=", true)->sortBy("month_forecast", SORT_NUMERIC);
                     if($history_forecasts->count() < 1) {
                         $history_forecasts = Proyek::with(["proyekBerjalan"])->select("proyeks.*", "forecasts.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("forecasts", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("proyeks.unit_kerja", "=", $unit_kerja)->where("tahun", "=", $year)->where("periode_prognosa", "=", $prognosa)->where("month_forecast", "!=", 0)->get()->where("is_cancel", "!=", true)->sortBy("month_forecast", SORT_NUMERIC);
                     }
-                    if (empty($history_realisasi) || $history_realisasi->isEmpty()) {
+                    if (empty($history_forecasts) || $history_forecasts->isEmpty()) {
                         $history_forecasts = Proyek::with(["proyekBerjalan"])->select("proyeks.*", "forecasts.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("forecasts", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("proyeks.unit_kerja", "=", $unit_kerja)->where("tahun", "=", $year)->where("periode_prognosa", "=", $prognosa)->where("month_forecast", "!=", 0)->get()->where("is_cancel", "!=", true)->sortBy("month_forecast", SORT_NUMERIC);
                     }
                 } else {
@@ -3677,7 +3751,7 @@ class DashboardController extends Controller
                     if($history_forecasts->count() < 1) {
                         $history_forecasts = Proyek::with(["proyekBerjalan"])->select("proyeks.*", "forecasts.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("forecasts", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $year)->where("periode_prognosa", "=", $prognosa)->where("month_forecast", "!=", 0)->get()->whereIn("divcode", $unit_kerja_user->toArray())->where("is_cancel", "!=", true)->sortBy("month_forecast", SORT_NUMERIC);
                     }
-                    if (empty($history_realisasi) || $history_realisasi->isEmpty()) {
+                    if (empty($history_forecasts) || $history_forecasts->isEmpty()) {
                         $history_forecasts = Proyek::with(["proyekBerjalan"])->select("proyeks.*", "forecasts.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("forecasts", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $year)->where("periode_prognosa", "=", $prognosa)->where("month_forecast", "!=", 0)->get()->whereIn("divcode", $unit_kerja_user->toArray())->where("is_cancel", "!=", true)->sortBy("month_forecast", SORT_NUMERIC);
                     }
                 }
@@ -3718,7 +3792,8 @@ class DashboardController extends Controller
             // dd($data);
         } elseif ($type == "NilaiOKRKAP") {
             $month = array_search($month, $arrNamaBulan);
-            if (Auth::user()->check_administrator || str_contains(Auth::user()->name, "(PIC)")) {
+            if (Auth::user()->check_administrator || Gate::any(['admin-crm'])) {
+                $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
                 $history_rkap = Proyek::with(["proyekBerjalan"])->select("proyeks.*", "history_forecast.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $year)->where("periode_prognosa", "=", $prognosa)->where("month_rkap", "!=", 0)->get()->sortBy("month_rkap", SORT_NUMERIC);
                 $countUnitKerjaFromHistory = $history_rkap->groupBy('unit_kerja')->count();
                 if ($history_rkap->count() < 1 || $countUnitKerjaFromHistory < 11) {
@@ -3726,14 +3801,24 @@ class DashboardController extends Controller
                 }
                 if ($unit_kerja != "" && strlen($unit_kerja) == 1) {
                     $history_rkap = $history_rkap->where("divcode", $unit_kerja);
-                    if (empty($history_realisasi) || $history_realisasi->isEmpty()) {
+                    if (empty($history_rkap) || $history_rkap->isEmpty()) {
                         $history_rkap = Proyek::with(["proyekBerjalan"])->select("proyeks.*", "forecasts.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("forecasts", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $year)->where("periode_prognosa", "=", $prognosa)->where("month_rkap", "!=", 0)->where("divcode", $unit_kerja)->get()->sortBy("month_rkap", SORT_NUMERIC);
                     }
                 } elseif ($unit_kerja != "") {
                     $dop = str_replace("-", " ", $unit_kerja);
-                    $history_rkap = $history_rkap->where("dop", $dop);
+                    if (empty($history_rkap) || $history_rkap->isEmpty()) {
+                        $history_rkap = Proyek::with(["proyekBerjalan"])->select("proyeks.*", "forecasts.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("forecasts", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $year)->where("periode_prognosa", "=", $prognosa)->where("month_rkap", "!=", 0)->where("divcode", $unit_kerja)->get()->where("is_cancel", "!=", true)->sortBy("month_rkap", SORT_NUMERIC);
+                    }
+                    if ($unit_kerja == "PUSAT") {
+                        $history_rkap = $history_rkap->whereIn("dop", ["DOP 1", "DOP 2", "DOP 3"]);
+                    } else {
+                        $history_rkap = $history_rkap->where("dop", $dop);
+                    }
                 }
                 // dd($year, $history_rkap->first());
+                if (Gate::any(["admin-crm"])) {
+                    $history_rkap = $history_rkap->whereIn('divcode', $unit_kerja_user);
+                }
                 if ($year == 2022) {
                     $history_rkap = $history_rkap->where("tahun_perolehan", "=", $year)->groupBy("kode_proyek");
                 } else {
@@ -3745,7 +3830,7 @@ class DashboardController extends Controller
                     if($history_rkap->count() < 1) {
                         $history_rkap = Proyek::with(["proyekBerjalan"])->select("proyeks.*", "forecasts.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("forecasts", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("proyeks.unit_kerja", "=", $unit_kerja)->where("tahun", "=", $year)->where("periode_prognosa", "=", $prognosa)->where("month_rkap", "!=", 0)->get()->whereNotIn("unit_kerja", ["B", "C", "D", "8"])->where("tahun", "=", $year)->sortBy("month_rkap", SORT_NUMERIC);
                     }
-                    if (empty($history_realisasi) || $history_realisasi->isEmpty()) {
+                    if (empty($history_rkap) || $history_rkap->isEmpty()) {
                         $history_rkap = Proyek::with(["proyekBerjalan"])->select("proyeks.*", "forecasts.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("forecasts", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("proyeks.unit_kerja", "=", $unit_kerja)->where("tahun", "=", $year)->where("periode_prognosa", "=", $prognosa)->where("month_rkap", "!=", 0)->get()->whereNotIn("unit_kerja", ["B", "C", "D", "8"])->where("tahun", "=", $year)->sortBy("month_rkap", SORT_NUMERIC);
                     }
                 } else {
@@ -3754,7 +3839,7 @@ class DashboardController extends Controller
                     if($history_rkap->count() < 1) {
                         $history_rkap = Proyek::with(["proyekBerjalan"])->select("proyeks.*", "forecasts.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("forecasts", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $year)->where("periode_prognosa", "=", $prognosa)->where("month_rkap", "!=", 0)->get()->whereNotIn("divcode", ["B", "C", "D", "8"])->where("tahun", "=", $year)->whereIn("divcode", $unit_kerja_user->toArray())->sortBy("month_rkap", SORT_NUMERIC);
                     }
-                    if (empty($history_realisasi) || $history_realisasi->isEmpty()) {
+                    if (empty($history_rkap) || $history_rkap->isEmpty()) {
                         $history_rkap = Proyek::with(["proyekBerjalan"])->select("proyeks.*", "forecasts.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("forecasts", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $year)->where("periode_prognosa", "=", $prognosa)->where("month_rkap", "!=", 0)->get()->whereNotIn("divcode", ["B", "C", "D", "8"])->where("tahun", "=", $year)->whereIn("divcode", $unit_kerja_user->toArray())->sortBy("month_rkap", SORT_NUMERIC);
                     }
                 }
@@ -3799,7 +3884,8 @@ class DashboardController extends Controller
         } else {
             $month = array_search($month, $arrNamaBulan);
 
-            if (Auth::user()->check_administrator || str_contains(Auth::user()->name, "(PIC)")) {
+            if (Auth::user()->check_administrator || Gate::allows(['admin-crm'])) {
+                $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
                 $history_realisasi = Proyek::with(["proyekBerjalan"])->select("proyeks.*", "history_forecast.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.stage", "=", 8)->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $year)->where("periode_prognosa", "=", $prognosa)->where("month_realisasi", "!=", 0)->get()->where("is_cancel", "!=", true)->sortBy("month_realisasi", SORT_NUMERIC);
                 $countUnitKerjaFromHistory = $history_realisasi->groupBy('unit_kerja')->count();
                 if ($history_realisasi->count() < 1 || $countUnitKerjaFromHistory < 11) {
@@ -3812,7 +3898,17 @@ class DashboardController extends Controller
                     }
                 } elseif ($unit_kerja != "") {
                     $dop = str_replace("-", " ", $unit_kerja);
-                    $history_realisasi = $history_realisasi->where("dop", $dop);
+                    if (empty($history_realisasi) || $history_realisasi->isEmpty()) {
+                        $history_realisasi = Proyek::with(["proyekBerjalan"])->select("proyeks.*", "forecasts.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("forecasts", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.stage", "=", 8)->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $year)->where("periode_prognosa", "=", $prognosa)->where("month_realisasi", "!=", 0)->where("divcode", $unit_kerja)->get()->where("is_cancel", "!=", true)->sortBy("month_realisasi", SORT_NUMERIC);
+                    }
+                    if ($unit_kerja == "PUSAT") {
+                        $history_realisasi = $history_realisasi->whereIn("dop", ["DOP 1", "DOP 2", "DOP 3"]);
+                    } else {
+                        $history_realisasi = $history_realisasi->where("dop", $dop);
+                    }
+                }
+                if (Gate::any(["admin-crm"])) {
+                    $history_realisasi = $history_realisasi->whereIn('divcode', $unit_kerja_user);
                 }
                 $history_realisasi = $history_realisasi->where("tahun_perolehan", "=", $year)->filter(function ($p) {
                     return $p->realisasi_forecast != 0;
