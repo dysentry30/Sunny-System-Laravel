@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\KriteriaPenggunaJasa;
 use App\Models\KriteriaPenggunaJasaDetail;
+use App\Models\Proyek;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\File;
@@ -138,6 +139,9 @@ class KriteriaPenggunaJasaController extends Controller
         $collectKriteriaDetail = [];
         // $files = collect($request->file("dokumen_penilaian"))->values();
         $index = collect($data["index"]);
+        $proyek = Proyek::find($data['kode_proyek']);
+        $hasil_assessment = collect(performAssessment($proyek->proyekBerjalan->Customer, $proyek));
+        createWordRekomendasi($proyek, $hasil_assessment, false);
 
         // if (empty($data["is_legalitas"]) || empty($data["is_kriteria_1"]) || empty($data["is_kriteria_2"]) || empty($data["is_kriteria_3"]) || empty($data["is_kriteria_4"]) || empty($data["is_kriteria_5"])) {
         //     Alert::error('Form Penilaian Pengguna Jasa Tidak lengkap', "Mohon periksa kembali");

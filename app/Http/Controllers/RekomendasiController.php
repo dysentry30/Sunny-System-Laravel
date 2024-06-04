@@ -228,8 +228,8 @@ class RekomendasiController extends Controller
             // $fileQrCode = generateQrCode($proyek->kode_proyek, Auth::user()->nip, $request->schemeAndHttpHost() . "?nip=" . Auth::user()->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyek->kode_proyek");
             // createWordPengajuan($proyek, $hasil_assessment, $is_proyek_mega, $url);
             // createWordPengajuan($proyek, $hasil_assessment, $is_proyek_mega, $request->schemaAndHttpHost());
-            createWordNotaRekomendasiPengajuan($notaRekomendasi, $request);
-            createWordRekomendasi($proyek, $hasil_assessment, $is_proyek_mega);
+            // createWordNotaRekomendasiPengajuan($notaRekomendasi, $request);
+            // createWordRekomendasi($proyek, $hasil_assessment, $is_proyek_mega);
             $notaRekomendasi->review_assessment = true;
             $notaRekomendasi->is_request_rekomendasi = false;
             $notaRekomendasi->hasil_assessment = $hasil_assessment;
@@ -1820,6 +1820,12 @@ class RekomendasiController extends Controller
                 if (!empty($proyek->DokumenPendukungPasarDini)) {
                     foreach ($proyek->DokumenPendukungPasarDini as $dokumen) {
                         $pdfMerger->add(public_path('dokumen-pendukung-pasdin' . '/' . $dokumen->id_document));
+                    }
+                }
+
+                if (!empty($proyek->proyekBerjalan->customer->AHU)) {
+                    foreach ($proyek->proyekBerjalan->customer->AHU as $dokumen) {
+                        $pdfMerger->add(public_path('customer-file' . '/' . $dokumen->file_document));
                     }
                 }
 

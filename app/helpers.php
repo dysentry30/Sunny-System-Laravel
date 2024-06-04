@@ -397,9 +397,9 @@ function createWordRekomendasi(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $footer = $section->addFooter();
     $footer->addText("*Dokumen ini dibuat oleh sistem CRM", ['size' => 10, 'bold' => true], ['align' => 'right']);
     $nama_proyek = str_replace("&", "dan", $proyek->nama_proyek);
-    
-    $section->addText("Hasil Assessment", ['size'=>12, "bold" => true], ['align' => "center"]);
-    $section->addText($nama_proyek, ['size' => 12, "bold" => true], ['align' => "center"]);
+
+    $section->addText("Tabel Kriteria Penilaian Pemberi Kerja", ['size' => 12, "bold" => true], ['align' => "center"]);
+    $section->addText($customer->name, ['size' => 12, "bold" => true], ['align' => "center"]);
 
     $section->addTextBreak(1);
     $table = $section->addTable('myOwnTableStyle',array('borderSize' => 1, 'borderColor' => '999999', 'afterSpacing' => 0, 'Spacing'=> 0, 'cellMargin'=>0  ));
@@ -3305,19 +3305,23 @@ function performAssessment(App\Models\Customer $customer, App\Models\Proyek $pro
                     $is_assessment_piutang_exist = $result_assessments->where("kriteria_penilaian", "=", $kriteria)->count() > 0;
                     // dump($is_assessment_piutang_exist);
                     if(!$is_assessment_piutang_exist) {
-                        if($customer->Piutang->count() > 0) {
-                            $is_piutang_91_day_exist = $customer->Piutang->where("day_91", ">", 0)->count() > 0;
+                        // if($customer->Piutang->count() > 0) {
+                        // $is_piutang_91_day_exist = $customer->Piutang->where("day_91", ">", 0)->count() > 0;
+                        $is_piutang_91_day_exist = $customer->Piutang->where("kategori", 3)->count() > 0;
                             if($is_piutang_91_day_exist) {
                                 $result = collect(["kategori" => "Internal", "kriteria_penilaian" => $kriteria, "score" => (float) 5]);
                                 $result_assessments->push($result);
-                            } else {
+                        } elseif ($customer->Piutang->where("kategori", 2)->count() > 0) {
                                 $result = collect(["kategori" => "Internal", "kriteria_penilaian" => $kriteria, "score" => (float) 7.5]);
-                                $result_assessments->push($result);
-                            }
+                            $result_assessments->push($result);
                         } else {
                             $result = collect(["kategori" => "Internal", "kriteria_penilaian" => $kriteria, "score" => (float) 10]);
                             $result_assessments->push($result);
                         }
+                        // } else {
+                            // $result = collect(["kategori" => "Internal", "kriteria_penilaian" => $kriteria, "score" => (float) 10]);
+                            // $result_assessments->push($result);
+                        // }
                     }
                 } else if($kriteria == "Bowheer Bermasalah") {
                     if($customer->MasalahHukum->isNotEmpty()) {
@@ -5231,7 +5235,7 @@ function createWordNotaRekomendasiPengajuan(\App\Models\NotaRekomendasi $proyekR
 
         if (!empty($proyek->DokumenPendukungPasarDini)) {
             foreach ($proyek->DokumenPendukungPasarDini as $dokumen) {
-                $pdfMerge->add(public_path('file-pendukung-pasdin/' . $dokumen->id_document));
+                $pdfMerge->add(public_path('dokumen-pendukung-pasdin/' . $dokumen->id_document));
             }
         }
 
