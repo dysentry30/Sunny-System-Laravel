@@ -1593,7 +1593,7 @@
                                 </a>
                             </div>
                         @endcanany --}}
-                        @canany(['super-admin', 'admin-crm', 'risk-crm'])
+                        @canany(['super-admin', 'admin-crm', 'risk-crm', 'user-crm'])
                             <!--Begin::Knowladge Base Expand-->
                             <div class="menu-item"
                                 style="{{ 
