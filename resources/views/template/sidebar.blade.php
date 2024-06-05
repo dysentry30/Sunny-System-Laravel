@@ -365,7 +365,7 @@
                             </div>
                         @endif --}}
 
-                        @canany(['super-admin', 'admin-crm', 'approver-crm', 'risk-crm'])
+                        @canany(['super-admin', 'admin-crm', 'approver-crm', 'risk-crm', 'user-crm'])
                             @if (str_contains(Request::url(), '/rekomendasi')||
                                 str_contains(Request::url(), '/green-lane') ||
                                 str_contains(Request::url(), '/non-green-lane')
@@ -1708,7 +1708,7 @@
                             </div>
                         @endif --}}
 
-                        @canany(['super-admin', 'admin-crm'])
+                        @canany(['super-admin', 'admin-crm', 'user-crm'])
                             <!--begin::Menu Colapse-->
                             <div class="menu-item">
                                 <a class="menu-link " href="/ska-skt" style="color:white; padding-left:20px; {{ Request::Path() == 'ska-skt' ? 'background-color:#008CB4' : '' }}">
