@@ -1829,6 +1829,18 @@ class RekomendasiController extends Controller
                     }
                 }
 
+                if (!empty($proyek->proyekBerjalan->customer->CompanyProfile)) {
+                    foreach ($proyek->proyekBerjalan->customer->CompanyProfile as $dokumen) {
+                        $pdfMerger->add(public_path('customer-file' . '/' . $dokumen->file_document));
+                    }
+                }
+
+                if (!empty($proyek->proyekBerjalan->customer->LaporanKeuangan)) {
+                    foreach ($proyek->proyekBerjalan->customer->LaporanKeuangan as $dokumen) {
+                        $pdfMerger->add(public_path('customer-file' . '/' . $dokumen->file_document));
+                    }
+                }
+
                 $now = \Carbon\Carbon::now();
                 $file_name = $now->format("dmYHis") . "_nota-persetujuan_" . $proyek->kode_proyek;
                 $pdfMerger->merge(public_path("file-persetujuan" . "/" . $file_name . ".pdf"));
@@ -1910,18 +1922,20 @@ class RekomendasiController extends Controller
 
             $kategori = $request->get("kategori");
 
+            $userSelected = User::where('nip', $nip)->first();
+
             switch ($kategori) {
                 case 'pengajuan':
-                    $collectPenandatangan = collect(json_decode($ProyekNotaQrSelected->approved_pengajuan));
+                    $collectPenandatangan = collect(json_decode($ProyekNotaQrSelected->approved_pengajuan))->where('user_id', $userSelected->id)->first();
                     break;
                 case 'penyusun':
-                    $collectPenandatangan = collect(json_decode($ProyekNotaQrSelected->approved_verifikasi));
+                    $collectPenandatangan = collect(json_decode($ProyekNotaQrSelected->approved_verifikasi))->where('user_id', $userSelected->id)->first();
                     break;
                 case 'rekomendasi':
-                    $collectPenandatangan = collect(json_decode($ProyekNotaQrSelected->approved_rekomendasi_final));
+                    $collectPenandatangan = collect(json_decode($ProyekNotaQrSelected->approved_rekomendasi_final))->where('user_id', $userSelected->id)->first();
                     break;
                 case 'persetujuan':
-                    $collectPenandatangan = collect(json_decode($ProyekNotaQrSelected->approved_persetujuan));
+                    $collectPenandatangan = collect(json_decode($ProyekNotaQrSelected->approved_persetujuan))->where('user_id', $userSelected->id)->first();
                     break;
 
                 default:
@@ -1943,17 +1957,16 @@ class RekomendasiController extends Controller
                 });
             }
 
-            $userSelected = User::where('nip', $nip)->first();
 
-            $penandatanganSelected = $collectPenandatangan->where('user_id', $userSelected->id)->first();
+            // $penandatanganSelected = $collectPenandatangan->where('user_id', $userSelected->id)->first();
 
-            $penandatanganSelected->user_id = $userSelected->name;
+            $collectPenandatangan->user_id = $userSelected->name;
 
-            $penandatanganSelected->jabatan = $userSelected->Pegawai?->Jabatan?->nama_jabatan ?? null;
+            $collectPenandatangan->jabatan = $userSelected->Pegawai?->Jabatan?->nama_jabatan ?? null;
 
-            $penandatanganSelected->tanggal = \Carbon\Carbon::parse(date('d M Y H:i:s', strtotime($penandatanganSelected->tanggal)))->translatedFormat('d F Y, H:i:s');
+            $collectPenandatangan->tanggal = \Carbon\Carbon::parse(date('d M Y H:i:s', strtotime($collectPenandatangan->tanggal)))->translatedFormat('d F Y, H:i:s');
 
-            return view('22_View_TTD_Barcode_Nota_1', ["penandatanganSelected" => $penandatanganSelected, "dataNotaRekomendasi" => $ProyekNotaQrSelected, "proyek" => $proyekSelected, "kategori" => $kategori, "assessmentInternal" => $assessmentInternal, "assessmentEksternal" => $assessmentEksternal]);
+            return view('22_View_TTD_Barcode_Nota_1', ["penandatanganSelected" => $collectPenandatangan, "dataNotaRekomendasi" => $ProyekNotaQrSelected, "proyek" => $proyekSelected, "kategori" => $kategori, "assessmentInternal" => $assessmentInternal, "assessmentEksternal" => $assessmentEksternal]);
         } catch (\Exception $e) {
             if ($e->getMessage() == 'Attempt to read property "id" on null') {
                 throw new \Exception('Pegawai tidak ditemukan. Mohon Hubungi Admin!', 0, $e);
