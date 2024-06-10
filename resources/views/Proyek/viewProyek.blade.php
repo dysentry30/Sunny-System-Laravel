@@ -1649,7 +1649,7 @@
                                                          <div class="fv-row mb-7">
                                                              <!--begin::Label-->
                                                              <label class="fs-6 fw-bold form-label mt-3">
-                                                                 <span>Sumber Dana</span>
+                                                                 <span class="required">Sumber Dana</span>
                                                              </label>
                                                              @php
                                                                  $sumberdanas = $sumberdanas->sortBy('created_at');
@@ -1864,7 +1864,7 @@
                                                      <div class="fv-row mb-7">
                                                          <!--Begin::Dokumen Nota Rekomendasi 1-->
                                                          <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                                             Dokumen Pendukung
+                                                             Dokumen Pendukung <small><i>(Mohon diperhatikan dokumen yang diupload tidak boleh terdapat permission. Total max size upload 20MB)</i></small>
                                                          </h3>
                                                          @canany(['super-admin', 'approver-crm', 'user-crm', 'admin-crm'])
                                                          {{-- @if (empty($proyek->DokumenPendukungPasarDini)) --}}
@@ -10780,6 +10780,28 @@
                     }
                 }
             })
+        }
+    </script>
+
+    <script>
+        function setRAKlasifikasi() {
+            const nilaiOK = document.querySelector('#nilai-rkap').value
+            const eltRAKlasifikasi = document.querySelector('#ra-klasifikasi-proyek');
+            const nilaiOKParse = parseInt(nilaiOK.replaceAll('.', ''))
+            let kategoriRAKlasifikasi;
+            if (nilaiOKParse > 500000000000 && nilaiOKParse <= 2000000000000) {
+                kategoriRAKlasifikasi = "Proyek Besar"
+            }else if(nilaiOKParse > 250000000000 && nilaiOKParse <= 500000000000) {
+                kategoriRAKlasifikasi = "Proyek Menengah"
+            }else if(nilaiOKParse > 0 && nilaiOKParse <= 250000000000) {
+                kategoriRAKlasifikasi = "Proyek Kecil"
+            }else if(nilaiOKParse > 2000000000000){
+                kategoriRAKlasifikasi = "Mega Proyek"
+            }else{
+                kategoriRAKlasifikasi = ""
+            }
+
+            eltRAKlasifikasi.value = kategoriRAKlasifikasi;
         }
     </script>
 

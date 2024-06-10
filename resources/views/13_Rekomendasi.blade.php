@@ -1946,7 +1946,7 @@
                             <hr>
                             <h5>File Preview: </h5>
                             <div class="text-center">
-                                <iframe src="{{asset("file-rekomendasi" . "\\" . $proyek->file_rekomendasi)}}" width="800px" height="600px" ></iframe>
+                                <iframe src="{{asset("file-rekomendasi" . "\\" . $proyek->file_rekomendasi)}}" width="auto" height="600px" ></iframe>
                             </div>
                         @endif --}}
                         @if (!empty($proyek->DokumenPendukungPasarDini))
@@ -1955,17 +1955,36 @@
                             <div class="text-center">
                                 @foreach ($proyek->DokumenPendukungPasarDini as $dokumen)
                                 <iframe src="{{ asset('dokumen-pendukung-pasdin' . '\\' . $dokumen->id_document) }}"
-                                    width="800px" height="600px"></iframe>
+                                    width="100%" height="600px"></iframe>
                                 @endforeach
                             </div>
                         @endif
                         @if (!empty($proyek->proyekBerjalan->customer->AHU))
-                            <hr>
                             <h5>File Preview AHU: </h5>
                             <div class="text-center">
                                 @foreach ($proyek->proyekBerjalan->customer->AHU as $dokumen)
                                 <iframe src="{{ asset('customer-file' . '\\' . $dokumen->file_document) }}"
-                                    width="800px" height="600px"></iframe>
+                                    width="100%" height="600px"></iframe>
+                                @endforeach
+                            </div>
+                        @endif
+                        @if (!empty($proyek->proyekBerjalan->customer->CompanyProfile))
+                            <hr>
+                            <h5>File Preview Company Profile: </h5>
+                            <div class="text-center">
+                                @foreach ($proyek->proyekBerjalan->customer->CompanyProfile as $dokumen)
+                                <iframe src="{{ asset('customer-file' . '\\' . $dokumen->file_document) }}"
+                                    width="100%" height="600px"></iframe>
+                                @endforeach
+                            </div>
+                        @endif
+                        @if (!empty($proyek->proyekBerjalan->customer->LaporanKeuangan))
+                            <hr>
+                            <h5>File Preview Laporan Keuangan: </h5>
+                            <div class="text-center">
+                                @foreach ($proyek->proyekBerjalan->customer->LaporanKeuangan as $dokumen)
+                                <iframe src="{{ asset('customer-file' . '\\' . $dokumen->file_document) }}"
+                                    width="100%" height="600px"></iframe>
                                 @endforeach
                             </div>
                         @endif
@@ -1974,7 +1993,7 @@
                             <h5>File Preview: </h5>
                             <div class="text-center">
                                 <iframe src="{{ asset('file-pengajuan' . '\\' . $nota_rekomendasi->file_pengajuan) }}"
-                                    width="800px" height="600px"></iframe>
+                                    width="100%" height="600px"></iframe>
                             </div>
                         @endif
                     </div>
@@ -2293,18 +2312,37 @@
                             <div class="text-center">
                                 @foreach ($proyek->DokumenPendukungPasarDini as $dokumen)
                                 <iframe src="{{ asset('dokumen-pendukung-pasdin' . '\\' . $dokumen->id_document) }}"
-                                    width="800px" height="600px"></iframe>
+                                    width="100%" height="600px"></iframe>
                                 @endforeach
                             </div>
                             <hr>
                         @endif
                         @if (!empty($proyek->proyekBerjalan->customer->AHU))
-                            <hr>
                             <h5>File Preview AHU: </h5>
                             <div class="text-center">
                                 @foreach ($proyek->proyekBerjalan->customer->AHU as $dokumen)
                                 <iframe src="{{ asset('customer-file' . '\\' . $dokumen->file_document) }}"
-                                    width="800px" height="600px"></iframe>
+                                    width="100%" height="600px"></iframe>
+                                @endforeach
+                            </div>
+                        @endif
+                        @if (!empty($proyek->proyekBerjalan->customer->CompanyProfile))
+                            <hr>
+                            <h5>File Preview Company Profile: </h5>
+                            <div class="text-center">
+                                @foreach ($proyek->proyekBerjalan->customer->CompanyProfile as $dokumen)
+                                <iframe src="{{ asset('customer-file' . '\\' . $dokumen->file_document) }}"
+                                    width="100%" height="600px"></iframe>
+                                @endforeach
+                            </div>
+                        @endif
+                        @if (!empty($proyek->proyekBerjalan->customer->LaporanKeuangan))
+                            <hr>
+                            <h5>File Preview Laporan Keuangan: </h5>
+                            <div class="text-center">
+                                @foreach ($proyek->proyekBerjalan->customer->LaporanKeuangan as $dokumen)
+                                <iframe src="{{ asset('customer-file' . '\\' . $dokumen->file_document) }}"
+                                    width="100%" height="600px"></iframe>
                                 @endforeach
                             </div>
                         @endif
@@ -2312,7 +2350,7 @@
                             <h5>Form Pengajuan Rekomendasi: </h5>
                             <div class="text-center">
                                 <iframe src="{{ asset('file-pengajuan' . '\\' . $nota_rekomendasi->file_pengajuan) }}"
-                                    width="800px" height="600px"></iframe>
+                                    width="100%" height="600px"></iframe>
                             </div>
                         @endif
                         @if (!empty($nota_rekomendasi->file_rekomendasi))
@@ -2320,7 +2358,7 @@
                             <h5>Hasil Assessment: </h5>
                             <div class="text-center">
                                 <iframe src="{{ asset('file-rekomendasi' . '\\' . $nota_rekomendasi->file_rekomendasi) }}"
-                                    width="800px" height="600px"></iframe>
+                                    width="100%" height="600px"></iframe>
                             </div>
                         @endif
                     </div>
@@ -2493,7 +2531,7 @@
                             <h5>Form Pengajuan Rekomendasi: </h5>
                             <div class="text-center">
                                 <iframe src="{{ asset('file-pengajuan' . '\\' . $nota_rekomendasi->file_pengajuan) }}"
-                                    width="800px" height="600px"></iframe>
+                                    width="100%" height="600px"></iframe>
                             </div>
                             @endif
                             @if (!empty($proyek->proyekBerjalan->customer->AHU))
@@ -2502,7 +2540,27 @@
                                 <div class="text-center">
                                     @foreach ($proyek->proyekBerjalan->customer->AHU as $dokumen)
                                     <iframe src="{{ asset('customer-file' . '\\' . $dokumen->file_document) }}"
-                                        width="800px" height="600px"></iframe>
+                                        width="100%" height="600px"></iframe>
+                                    @endforeach
+                                </div>
+                            @endif
+                            @if (!empty($proyek->proyekBerjalan->customer->CompanyProfile))
+                                <hr>
+                                <h5>File Preview Company Profile: </h5>
+                                <div class="text-center">
+                                    @foreach ($proyek->proyekBerjalan->customer->CompanyProfile as $dokumen)
+                                    <iframe src="{{ asset('customer-file' . '\\' . $dokumen->file_document) }}"
+                                        width="100%" height="600px"></iframe>
+                                    @endforeach
+                                </div>
+                            @endif
+                            @if (!empty($proyek->proyekBerjalan->customer->LaporanKeuangan))
+                                <hr>
+                                <h5>File Preview Laporan Keuangan: </h5>
+                                <div class="text-center">
+                                    @foreach ($proyek->proyekBerjalan->customer->LaporanKeuangan as $dokumen)
+                                    <iframe src="{{ asset('customer-file' . '\\' . $dokumen->file_document) }}"
+                                        width="100%" height="600px"></iframe>
                                     @endforeach
                                 </div>
                             @endif
@@ -2511,7 +2569,7 @@
                                 <h5>File Penilaian Risiko Pengguna Jasa: </h5>
                                 <div class="text-center">
                                     <iframe src="{{ asset('file-profile-risiko' . '\\' . $nota_rekomendasi->file_penilaian_risiko) }}"
-                                        width="800px" height="600px"></iframe>
+                                        width="100%" height="600px"></iframe>
                                 </div>
                             @endif
                             
@@ -2520,7 +2578,7 @@
                                 <h5>Hasil Assessment: </h5>
                                 <div class="text-center">
                                     <iframe src="{{ asset('file-rekomendasi' . '\\' . $nota_rekomendasi->file_rekomendasi) }}"
-                                        width="800px" height="600px"></iframe>
+                                        width="100%" height="600px"></iframe>
                                 </div>
                             @endif
 
@@ -2529,7 +2587,7 @@
                                 <h5>Hasil Rekomendasi: </h5>
                                 <div class="text-center">
                                     <iframe src="{{ asset('file-persetujuan' . '\\' . $nota_rekomendasi->file_persetujuan) }}"
-                                        width="800px" height="600px"></iframe>
+                                        width="100%" height="600px"></iframe>
                                 </div>
                             @endif
                         </div>
@@ -3068,7 +3126,7 @@
                                                             @if (!empty($data->tanggal))
                                                                 Tanggal:
                                                                 {{-- <b>{{ Carbon\Carbon::create($data->tanggal)->translatedFormat('d F Y H:i:s') }}</b><br> --}}
-                                                                <b>{{ Carbon\Carbon::parse(date('d M Y H:i:s', strtotime($d->tanggal)))->translatedFormat('d F Y H:i:s') }}</b>
+                                                                <b>{{ Carbon\Carbon::parse(date('d M Y H:i:s', strtotime($data->tanggal)))->translatedFormat('d F Y H:i:s') }}</b>
                                                             @endif
                                                             @if (!empty($data->catatan))
                                                                 Catatan:
@@ -3227,7 +3285,7 @@
                     {{-- <h5>Dokumen Persetujuan Nota Rekomendasi 1: </h5> --}}
                     <div class="text-center">
                         <iframe src="{{ asset('file-persetujuan/' . $proyek->file_persetujuan) }}"
-                            width="800px" height="600px"></iframe>
+                            width="100%" height="600px"></iframe>
                     </div>
                 @endif
             </div>
@@ -3328,7 +3386,7 @@
                             <hr>
                             <h5>File Preview: </h5>
                             <div class="text-center">
-                                <iframe src="{{asset("file-rekomendasi" . "\\" . $proyek_from_url->file_rekomendasi)}}" width="800px" height="600px" ></iframe>
+                                <iframe src="{{asset("file-rekomendasi" . "\\" . $proyek_from_url->file_rekomendasi)}}" width="auto" height="600px" ></iframe>
                             </div>
                         @endif --}}
                         @if (!empty($proyek_from_url->file_pengajuan))
@@ -3336,7 +3394,7 @@
                             <h5>File Preview: </h5>
                             <div class="text-center">
                                 <iframe src="{{ asset('file-pengajuan' . '\\' . $proyek_from_url->file_pengajuan) }}"
-                                    width="800px" height="600px"></iframe>
+                                    width="100%" height="600px"></iframe>
                             </div>
                         @endif
                     </div>

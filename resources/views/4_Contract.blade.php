@@ -263,16 +263,17 @@
                                         <tbody class="fw-bold text-gray-600 fs-6">
                                             @forelse ($proyeks_perolehan as $proyek)
                                                 @php
-                                                    $total_forecast = $proyek->Forecasts->filter(function($f) {
-                                                        $date = date_create($f->created_at);
-                                                        return $f->periode_prognosa == (int) date("m") && date_format($date, "Y") == date("Y");
+                                                    $total_forecast = $proyek->Forecasts->filter(function($f) use($filterBulan, $filterTahun) {
+                                                        // $date = date_create($f->created_at);
+                                                        // return $f->periode_prognosa == (int) date("m") && date_format($date, "Y") == date("Y");
+                                                        return $f->periode_prognosa == $filterBulan && $f->tahun == $filterTahun;
                                                     })->sum(function($f) {
-                                                        return (int) $f->nilai_forecast;
+                                                        return (int) $f->realisasi_forecast;
                                                     });
                                                     // @dump($total_forecast)
-                                                    if ($total_forecast == 0) {
-                                                        $total_forecast = $proyek->nilai_rkap;
-                                                    }
+                                                    // if ($total_forecast == 0) {
+                                                    //     $total_forecast = $proyek->nilai_rkap;
+                                                    // }
                                                 @endphp
                                                 <tr>
                                                     @if (!empty($proyek))

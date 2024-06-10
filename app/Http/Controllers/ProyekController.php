@@ -830,7 +830,7 @@ class ProyekController extends Controller
 
         // if (isset($kode_proyek) && isset($dataProyek["nilai-perolehan"]) && isset($dataProyek["nospk-external"]) && isset($dataProyek["nomor-terkontrak"]) && isset($dataProyek["tanggal-mulai-kontrak"]) && isset($dataProyek["tanggal-akhir-kontrak"])) {
         // $contractManagements = ContractManagements::get()->where("project_id", "=", $kode_proyek)->first();
-        $contractManagements = ContractManagements::get()->where(function ($query) use ($newProyek) {
+        $contractManagements = ContractManagements::where(function ($query) use ($newProyek) {
             $query->where("project_id", "=", $newProyek->kode_proyek)
                 ->orWhere("profit_center", "=", $newProyek->profit_center);
         })->first();

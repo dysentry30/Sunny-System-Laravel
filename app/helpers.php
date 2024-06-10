@@ -417,7 +417,8 @@ function createWordRekomendasi(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $piutang = $hasil_assessment->where("kriteria_penilaian", "=", "Piutang")->first();
 
     // dd($bowheer);
-    if ($customer->proyekBerjalans->where("stage", "=", 8)->count() > 0) {
+    // if ($customer->proyekBerjalans->where("stage", "=", 8)->count() > 0) {
+    if ($customer->Piutang->where('kategori', '!=', 1)->count() > 0 || $customer->MasalahHukum->count() > 0) {
         if (empty($key_client)) {
             $key_client = collect(["kategori" => "Internal", "kriteria_penilaian" => "Key Client", "score" => 0]);
             $hasil_assessment->push($key_client);
@@ -505,7 +506,8 @@ function createWordRekomendasi(App\Models\Proyek $proyek, \Illuminate\Support\Co
     // End :: Thead
 
     // Begin :: Body
-    if($customer->proyekBerjalans->where("stage", "=", 8)->count() > 0) {
+    // if($customer->proyekBerjalans->where("stage", "=", 8)->count() > 0) {
+    if ($customer->Piutang->where('kategori', '!=', 1)->count() > 0 || $customer->MasalahHukum->count() > 0) {
         $table->addRow(null, $cellCategoryStyle);
         $table->addCell(null, $cellCategoryStyle);
         $table->addCell(4000, $cellCategoryStyle)->addText("Internal", ["bold" => true]);
@@ -590,8 +592,9 @@ function createWordRekomendasi(App\Models\Proyek $proyek, \Illuminate\Support\Co
     $table->addCell(2000, $cellCategoryStyle)->addText($total_score, ["bold" => true]);
 
     $tier = "";
-    if($customer->proyekBerjalans->where("stage", "=", 8)->count() > 0) {
-        if($total_score > 45) {
+    // if($customer->proyekBerjalans->where("stage", "=", 8)->count() > 0) {
+    if ($customer->Piutang->where('kategori', '!=', 1)->count() > 0 || $customer->MasalahHukum->count() > 0) {
+        if ($total_score >= 45) {
             $tier = "A";
         } else if($total_score < 45 && $total_score >= 25) {
             $tier = "B";
@@ -599,7 +602,7 @@ function createWordRekomendasi(App\Models\Proyek $proyek, \Illuminate\Support\Co
             $tier = "C";
         }
     } else {
-        if($total_score > 22.5) {
+        if ($total_score >= 22.5) {
             $tier = "A";
         } else if($total_score < 22.5 && $total_score >= 15) {
             $tier = "B";
@@ -614,16 +617,17 @@ function createWordRekomendasi(App\Models\Proyek $proyek, \Illuminate\Support\Co
     // End :: Body
 
     // Begin :: Footer
-    if($customer->proyekBerjalans->where("stage", "=", 8)->count() > 0) {
+    // if($customer->proyekBerjalans->where("stage", "=", 8)->count() > 0) {
+    if ($customer->Piutang->where('kategori', '!=', 1)->count() > 0 || $customer->MasalahHukum->count() > 0) {
         $section->addText("Rumusan Tier dari Kolom Nilai dengan ketentuan:", ['size'=>10, "bold" => true], ['align' => "left"]);
-        $section->addText("A: X > 45", ['size'=>10, "bold" => true], ['align' => "left"]);
+        $section->addText("A: X >= 45", ['size' => 10, "bold" => true], ['align' => "left"]);
         $section->addText(htmlspecialchars("B: 25 =< X =< 45"), ['size'=>10, "bold" => true], ['align' => "left"]);
-        $section->addText(htmlspecialchars("C: 0 =< X =< 25"), ['size'=>10, "bold" => true], ['align' => "left"]);
+        $section->addText(htmlspecialchars("C: 0 =< X < 25"), ['size' => 10, "bold" => true], ['align' => "left"]);
     } else {
         $section->addText("Rumusan Tier dari Kolom Nilai dengan ketentuan:", ['size'=>10, "bold" => true], ['align' => "left"]);
-        $section->addText("A: X > 22.5", ['size'=>10, "bold" => true], ['align' => "left"]);
+        $section->addText("A: X >= 22.5", ['size' => 10, "bold" => true], ['align' => "left"]);
         $section->addText(htmlspecialchars("B: 15 =< X =< 22.5"), ['size'=>10, "bold" => true], ['align' => "left"]);
-        $section->addText(htmlspecialchars("C: 0 =< X =< 15"), ['size'=>10, "bold" => true], ['align' => "left"]);
+        $section->addText(htmlspecialchars("C: 0 =< X < 15"), ['size' => 10, "bold" => true], ['align' => "left"]);
     }
     
     // End :: Footer
@@ -3344,7 +3348,8 @@ function performAssessment(App\Models\Customer $customer, App\Models\Proyek $pro
     $result_assessments = collect();
     $bowheer = collect();
     $kriteria_assessments->groupBy("kriteria_penilaian")->each(function ($ka, $kriteria) use ($customer, $result_assessments, $bowheer, $kriteria_assessments) {
-        if($customer->proyekBerjalans->where("stage", "=", 8)->count() > 0) {
+        // if($customer->proyekBerjalans->where("stage", "=", 8)->count() > 0) {
+        if ($customer->Piutang->where('kategori', '!=', 1)->count() > 0 || $customer->MasalahHukum->count() > 0) {
             foreach($ka as $k) {
                 if($kriteria == "Piutang") {
                     // dd($customer->Piutang);
@@ -3413,23 +3418,37 @@ function performAssessment(App\Models\Customer $customer, App\Models\Proyek $pro
                         $result_assessments->push($result);
                     }
                 } else if($kriteria == "Top 100 Perusahan Besar di Indonesia") {
-                    $forbes_rank = preg_replace("/[^(0-9{2}|\-|0-9{2})]/i", "",  $customer->forbes_rank);
-                    if(str_contains($k->isi, $forbes_rank) && $customer->forbes_rank != "Diluar Top 100") {
-                        $result = collect(["kategori" => "Eksternal", "kriteria_penilaian" => $kriteria, "score" => (float) $k->nilai]);
-                        $result_assessments->push($result);
-                    } else if($customer->forbes_rank == "Diluar Top 100" && $k->isi == "Perusahaan tidak berada pada daftar Top Perusahaan") {
-                        $result = collect(["kategori" => "Eksternal", "kriteria_penilaian" => $kriteria, "score" => (float) $k->nilai]);
-                        $result_assessments->push($result);
+                    if (!empty($customer->forbes_rank)) {
+                        $forbes_rank = preg_replace("/[^(0-9{2}|\-|0-9{2})]/i", "",  $customer->forbes_rank);
+                        if (str_contains($k->isi, $forbes_rank) && $customer->forbes_rank != "Diluar Top 100") {
+                            $result = collect(["kategori" => "Eksternal", "kriteria_penilaian" => $kriteria, "score" => (float) $k->nilai]);
+                            $result_assessments->push($result);
+                        } else if ($customer->forbes_rank == "Diluar Top 100" && $k->isi == "Perusahaan tidak berada pada daftar Top Perusahaan") {
+                            $result = collect(["kategori" => "Eksternal", "kriteria_penilaian" => $kriteria, "score" => (float) $k->nilai]);
+                            $result_assessments->push($result);
+                        }
+                    } else {
+                        if ($result_assessments->where("kriteria_penilaian", "=", $kriteria)->count() < 1) {
+                            $result = collect(["kategori" => "Eksternal", "kriteria_penilaian" => $kriteria, "score" => (float) 5]);
+                            $result_assessments->push($result);
+                        }
                     }
                 } else if($kriteria == "Lembaga Lain yang mengeluarkan rating perusahaan di Indonesia") {
-                    $lq_rank = preg_replace("/[^(0-9{2}|\-|0-9{2})]/i", "", $customer->lq_rank);
-                    // dump($lq_rank, $k->isi);
-                    if(str_contains($k->isi, $lq_rank) && $customer->lq_rank != "Diluar Top 45") {
-                        $result = collect(["kategori" => "Eksternal", "kriteria_penilaian" => $kriteria, "score" => (float) $k->nilai]);
-                        $result_assessments->push($result);
-                    } else if($customer->lq_rank == "Diluar Top 45" && $k->isi == "Perusahaan tidak berada pada daftar Rating Perusahaan") {
-                        $result = collect(["kategori" => "Eksternal", "kriteria_penilaian" => $kriteria, "score" => (float) $k->nilai]);
-                        $result_assessments->push($result);
+                    if (!empty($customer->lq_rank)) {
+                        $lq_rank = preg_replace("/[^(0-9{2}|\-|0-9{2})]/i", "", $customer->lq_rank);
+                        // dump($lq_rank, $k->isi);
+                        if (str_contains($k->isi, $lq_rank) && $customer->lq_rank != "Diluar Top 45") {
+                            $result = collect(["kategori" => "Eksternal", "kriteria_penilaian" => $kriteria, "score" => (float) $k->nilai]);
+                            $result_assessments->push($result);
+                        } else if ($customer->lq_rank == "Diluar Top 45" && $k->isi == "Perusahaan tidak berada pada daftar Rating Perusahaan") {
+                            $result = collect(["kategori" => "Eksternal", "kriteria_penilaian" => $kriteria, "score" => (float) $k->nilai]);
+                            $result_assessments->push($result);
+                        }
+                    } else {
+                        if ($result_assessments->where("kriteria_penilaian", "=", $kriteria)->count() < 1) {
+                            $result = collect(["kategori" => "Eksternal", "kriteria_penilaian" => $kriteria, "score" => (float) 5]);
+                            $result_assessments->push($result);
+                        }
                     }
                 } else if($kriteria == "Industry Attractive") {
                     $industry_owner = IndustryOwner::find($customer->industry_sector);
@@ -3631,14 +3650,19 @@ function createWordNotaRekomendasiPengajuan(\App\Models\NotaRekomendasi $proyekR
         $templateProcessor->setValue('KategoriProyek', $proyek->klasifikasi_pasdin ?? "-");
 
         //Set Value Tanda Tangan
-        $qrNamePenyusun = date('dmYHis_') . "penyusun_" . Auth::user()->nip . "-" . $proyek->kode_proyek . ".png";
+        $collectPengajuan = collect(json_decode($proyekRekomendasi->approved_rekomendasi));
+        // $qrNamePenyusun = date('dmYHis_') . "penyusun_" . Auth::user()->nip . "-" . $proyek->kode_proyek . ".png";
+        $qrNamePenyusun = date('dmYHis_') . "penyusun_" . User::find($collectPengajuan->first()->user_id)->nip . "-" . $proyek->kode_proyek . ".png";
         $qrPath = storage_path("template/temp/" . $qrNamePenyusun);
-        $urlPenyusun = $request->schemeAndHttpHost() . "?nip=" . Auth::user()->nip . "&redirectTo=/rekomendasi/" . $proyek->kode_proyek . "/" . Auth::user()->nip . "/view-qr?kategori=pengajuan";
+        // $urlPenyusun = $request->schemeAndHttpHost() . "?nip=" . Auth::user()->nip . "&redirectTo=/rekomendasi/" . $proyek->kode_proyek . "/" . Auth::user()->nip . "/view-qr?kategori=pengajuan";
+        // $urlPenyusun = $request->schemeAndHttpHost() . "/rekomendasi/" . $proyek->kode_proyek . "/" . Auth::user()->nip . "/view-qr?kategori=pengajuan";
+        $urlPenyusun = $request->schemeAndHttpHost() . "/rekomendasi/" . $proyek->kode_proyek . "/" . User::find($collectPengajuan->first()->user_id)->nip . "/view-qr?kategori=pengajuan";
         $generateQRPenyusun = generateQrCode($qrNamePenyusun, $qrPath, $urlPenyusun);
 
         $templateProcessor->setImageValue("tandaTangan", ["path" => $qrPath, "height" => 90, "ratio" => false]);
-        $templateProcessor->setValue("namaTandaTangan", Auth::user()?->name ?? "-");
-        $templateProcessor->setValue("jabatanTandaTangan", Auth::user()->Pegawai->Jabatan?->nama_jabatan ?? "-");
+        // $templateProcessor->setValue("namaTandaTangan", Auth::user()?->name ?? "-");
+        $templateProcessor->setValue("namaTandaTangan", User::find($collectPengajuan->first()->user_id)->name ?? "-");
+        $templateProcessor->setValue("jabatanTandaTangan", User::find($collectPengajuan->first()->user_id)->Pegawai->Jabatan?->nama_jabatan ?? "-");
         $templateProcessor->setValue("tanggalTandaTangan", Carbon\Carbon::now()->translatedFormat("d F Y") ?? "-");
 
         File::delete($qrPath);
@@ -3658,15 +3682,16 @@ function createWordNotaRekomendasiPengajuan(\App\Models\NotaRekomendasi $proyekR
         $pdfMerge = new PdfMerge();
         $pdfMerge->add(public_path($target_path . "/" . $file_name . ".pdf"));
 
-        if (!empty($proyek->DokumenPendukungPasarDini)) {
-            foreach ($proyek->DokumenPendukungPasarDini as $dokumen) {
-                $pdfMerge->add(public_path('dokumen-pendukung-pasdin/' . $dokumen->id_document));
-            }
-        }
+        // if (!empty($proyek->DokumenPendukungPasarDini)) {
+        //     foreach ($proyek->DokumenPendukungPasarDini as $dokumen) {
+        //         $pdfMerge->add(public_path('dokumen-pendukung-pasdin/' . $dokumen->id_document));
+        //     }
+        // }
 
-        $pdfMerge->merge(public_path($target_path . "/" . $file_name . ".pdf"));
+        // $pdfMerge->merge(public_path($target_path . "/" . $file_name . ".pdf"));
 
         $proyekRekomendasi->file_pengajuan = $file_name . ".pdf";
+        $proyekRekomendasi->save();
     } catch (\Exception $e) {
         throw $e;
     }
