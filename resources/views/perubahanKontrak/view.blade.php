@@ -548,7 +548,7 @@
 
                                             @if ($perubahan_kontrak->stage == 4 || $perubahan_kontrak->stage == 5 || !$perubahan_kontrak->is_dispute)
                                                 
-                                                <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                <h3 class="fw-bolder m-0 required" id="HeadDetail" style="font-size:14px;">
                                                     Dokumen Pendukung Lain
                                                     <a href="#" Id="Plus" data-bs-toggle="modal"
                                                         data-bs-target="#kt_modal_input_dokumen_pendukung">+</a>

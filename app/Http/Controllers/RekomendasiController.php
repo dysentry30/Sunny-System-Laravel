@@ -228,7 +228,7 @@ class RekomendasiController extends Controller
             // $fileQrCode = generateQrCode($proyek->kode_proyek, Auth::user()->nip, $request->schemeAndHttpHost() . "?nip=" . Auth::user()->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyek->kode_proyek");
             // createWordPengajuan($proyek, $hasil_assessment, $is_proyek_mega, $url);
             // createWordPengajuan($proyek, $hasil_assessment, $is_proyek_mega, $request->schemaAndHttpHost());
-            // createWordNotaRekomendasiPengajuan($notaRekomendasi, $request);
+            createWordNotaRekomendasiPengajuan($notaRekomendasi, $request);
             // createWordRekomendasi($proyek, $hasil_assessment, $is_proyek_mega);
             $notaRekomendasi->review_assessment = true;
             $notaRekomendasi->is_request_rekomendasi = false;
@@ -1812,6 +1812,7 @@ class RekomendasiController extends Controller
                 // $file_persetujuan_old = $proyek->file_persetujuan;
                 // $file_persetujuan_old = $notaRekomendasi->file_persetujuan;
                 $pdfMerger = new PdfMerge();
+                $pdfMerger->add(public_path('file-pengajuan' . '/' . $notaRekomendasi->file_pengajuan));
                 $pdfMerger->add(public_path('file-persetujuan' . '/' . $notaRekomendasi->file_persetujuan));
                 $pdfMerger->add(public_path('file-rekomendasi' . '/' . $notaRekomendasi->file_rekomendasi));
                 // $pdfMerger->add(public_path('file-profile-risiko' . '/' . $proyek->file_penilaian_risiko));
@@ -1825,6 +1826,18 @@ class RekomendasiController extends Controller
 
                 if (!empty($proyek->proyekBerjalan->customer->AHU)) {
                     foreach ($proyek->proyekBerjalan->customer->AHU as $dokumen) {
+                        $pdfMerger->add(public_path('customer-file' . '/' . $dokumen->file_document));
+                    }
+                }
+
+                if (!empty($proyek->proyekBerjalan->customer->CompanyProfile)) {
+                    foreach ($proyek->proyekBerjalan->customer->CompanyProfile as $dokumen) {
+                        $pdfMerger->add(public_path('customer-file' . '/' . $dokumen->file_document));
+                    }
+                }
+
+                if (!empty($proyek->proyekBerjalan->customer->LaporanKeuangan)) {
+                    foreach ($proyek->proyekBerjalan->customer->LaporanKeuangan as $dokumen) {
                         $pdfMerger->add(public_path('customer-file' . '/' . $dokumen->file_document));
                     }
                 }
@@ -1914,7 +1927,7 @@ class RekomendasiController extends Controller
 
             switch ($kategori) {
                 case 'pengajuan':
-                    $collectPenandatangan = collect(json_decode($ProyekNotaQrSelected->approved_pengajuan))->where('user_id', $userSelected->id)->first();
+                    $collectPenandatangan = collect(json_decode($ProyekNotaQrSelected->approved_rekomendasi))->where('user_id', $userSelected->id)->first();
                     break;
                 case 'penyusun':
                     $collectPenandatangan = collect(json_decode($ProyekNotaQrSelected->approved_verifikasi))->where('user_id', $userSelected->id)->first();
@@ -1930,6 +1943,8 @@ class RekomendasiController extends Controller
                     $collectPenandatangan = null;
                     break;
             }
+
+
 
             if ($kategori != "pengajuan") {
                 $hasil_assessment = collect(json_decode($ProyekNotaQrSelected->hasil_assessment));
@@ -1949,11 +1964,12 @@ class RekomendasiController extends Controller
             // $penandatanganSelected = $collectPenandatangan->where('user_id', $userSelected->id)->first();
 
             $collectPenandatangan->user_id = $userSelected->name;
-
+            
             $collectPenandatangan->jabatan = $userSelected->Pegawai?->Jabatan?->nama_jabatan ?? null;
-
+            
             $collectPenandatangan->tanggal = \Carbon\Carbon::parse(date('d M Y H:i:s', strtotime($collectPenandatangan->tanggal)))->translatedFormat('d F Y, H:i:s');
-
+            
+            // $collectPenandatangan->catatan = $collectPenandatangan->catatan ?? null;
             return view('22_View_TTD_Barcode_Nota_1', ["penandatanganSelected" => $collectPenandatangan, "dataNotaRekomendasi" => $ProyekNotaQrSelected, "proyek" => $proyekSelected, "kategori" => $kategori, "assessmentInternal" => $assessmentInternal, "assessmentEksternal" => $assessmentEksternal]);
         } catch (\Exception $e) {
             if ($e->getMessage() == 'Attempt to read property "id" on null') {

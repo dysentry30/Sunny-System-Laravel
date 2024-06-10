@@ -139,11 +139,15 @@
                                 <td>Tanggal Approve</td>
                                 <td>{{ $penandatanganSelected->tanggal }}</td>
                             </tr>
+                            @if ($kategori != 'penyusun')
+                            @if ($kategori != 'pengajuan')
                             <tr>
-                                <td class="text-center">{{ $kategori != "pengajuan" ? "14" : "11" }}</td>
+                                <td class="text-center">14</td>
                                 <td>Catatan Approver</td>
-                                <td>{!! nl2br($penandatanganSelected->catatan) !!}</td>
-                            </tr>
+                                <td>{!! nl2br($penandatanganSelected?->catatan) !!}</td>
+                            </tr>                                
+                            @endif
+                            @endif
                         </tbody>
                     </table>
                 </div>

@@ -5628,8 +5628,9 @@ Route::get('/dashboard-tv/get-event-prakualifikasi/{kategori}', [DashboardTVCont
 Route::get('/dashboard-tv/get-event-tender/{kategori}', [DashboardTVController::class, 'getScheduleTender']);
 
 Route::group(['prefix' => 'v1'], function () {
-    // Route::get('/get-forecast', [MobileController::class, 'GetDataForecast']);
+    Route::get('/get-forecast', [MobileController::class, 'GetDataForecast']);
     Route::get('/get-unit-kerja/{departemen}', [MobileController::class, "getUnitKerja"]);
+    Route::post('/get-forecast-bulanan-all', [MobileController::class, 'GetDataForecastAll']);
     Route::get('/get-forecast-bulanan/{unitKerja}/{tahun}/{bulan}', [MobileController::class, 'GetDataForecastNew']);
     Route::get('/get-monitoring-proyek', [MobileController::class, 'GetMonitoringProyek']);
 });
@@ -5638,7 +5639,8 @@ Route::get('/tes-tv/{tes}', [DashboardTVController::class, 'getScheduleCampur'])
 Route::get('/rekomendasi/{kode_proyek}/{nip}/view-qr', [RekomendasiController::class, 'viewProyekQrCode']);
 
 Route::get('/testing-qr', function (Request $request) {
-    $notaRekomendasi = \App\Models\NotaRekomendasi::where('kode_proyek', "GNPD008")->first();
-    $hasil_assessment = collect(json_decode($notaRekomendasi->hasil_assessment));
-    return createWordNotaRekomendasiSetuju($notaRekomendasi, $hasil_assessment, $request);
+    $notaRekomendasi = \App\Models\NotaRekomendasi::where('kode_proyek', "PIPD001")->first();
+    // $hasil_assessment = collect(json_decode($notaRekomendasi->hasil_assessment));
+    // return createWordNotaRekomendasiSetuju($notaRekomendasi, $hasil_assessment, $request);
+    return createWordNotaRekomendasiPengajuan($notaRekomendasi, $request);
 });

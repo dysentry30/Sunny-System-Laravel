@@ -515,7 +515,7 @@ class ClaimController extends Controller
 
         // $unitkerjas = UnitKerja::get()->whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8"]);
         // dd($unitkerjas);
-        $tahun_proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->get()->groupBy("start_year")->keys();
+        $tahun_proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->get()->groupBy("start_year")->keys()->sortDesc();
         if (Auth::user()->check_administrator) {
 
             if ($filterTahun < 2023) {
@@ -919,9 +919,9 @@ class ClaimController extends Controller
                         $item_anti_klaim = 0;
                         $item_anti_klaim_approved = 0;
                         foreach ($cat_anti_klaim as $item) {
-                            $item_anti_klaim += $item->biaya_pengajuan;
+                            $item_anti_klaim -= $item->biaya_pengajuan;
                             if ($item->stage == 5) {
-                                $item_anti_klaim_approved += (int)$item->nilai_disetujui;
+                                $item_anti_klaim_approved -= (int)$item->nilai_disetujui;
                             }
                             // if (!$item->nilai_negatif) {
                             //     $item_anti_klaim += $item->biaya_pengajuan;
@@ -950,9 +950,9 @@ class ClaimController extends Controller
                         $item_klaim_asuransi = 0;
                         $item_klaim_asuransi_approved = 0;
                         foreach ($cat_klaim_asuransi as $item) {
-                            $item_klaim_asuransi -= $item->biaya_pengajuan;
+                            $item_klaim_asuransi += $item->biaya_pengajuan;
                             if ($item->stage == 5) {
-                                $item_klaim_asuransi_approved -= (int)$item->nilai_disetujui;
+                                $item_klaim_asuransi_approved += (int)$item->nilai_disetujui;
                             }
                             // if (!$item->nilai_negatif) {
                             //     $item_klaim_asuransi -= $item->biaya_pengajuan;
