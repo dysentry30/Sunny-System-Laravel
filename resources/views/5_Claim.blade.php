@@ -205,89 +205,113 @@
                                 <!--end::Card header-->
 
                                 <div class="card-body pt-5">
-                                    <table class="table align-middle table-row-dashed fs-6 gy-2" id="claim-management">
-                                        <thead>
-                                            <!--begin::Table row-->
-                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                {{-- <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th> --}}
-                                                <th colspan="3" class="min-w-auto"></th>
-                                                <th colspan="4" class="min-w-auto text-center">Nilai Submitted</th>
-                                                <th colspan="4" class="min-w-auto text-center">Nilai Approved</th>
-                                                {{-- <th class="min-w-auto">@sortablelink('id_contract','ID Contract')</th> --}}
-                                            </tr>
-                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                {{-- <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th> --}}
-                                                <th class="min-w-auto">Profit Center</th>
-                                                <th class="min-w-auto">Nama Proyek</th>
-                                                <th class="min-w-auto">Unit Kerja</th>
-                                                <th class="min-w-auto text-center">VO</th>
-                                                <th class="min-w-auto text-center">Klaim</th>
-                                                <th class="min-w-auto text-center">Anti Klaim</th>
-                                                <th class="min-w-auto text-center">Klaim Asuransi</th>
-                                                <th class="min-w-auto text-center">VO</th>
-                                                <th class="min-w-auto text-center">Klaim</th>
-                                                <th class="min-w-auto text-center">Anti Klaim</th>
-                                                <th class="min-w-auto text-center">Klaim Asuransi</th>
-                                                {{-- <th class="min-w-auto">@sortablelink('id_contract','ID Contract')</th> --}}
-                                            </tr>
-                                            <!--end::Table row-->
-                                        </thead>
-                                        <!--end::Table head-->
-                                        {{-- @php
-                                            $claim_get = $claim->map(function($p){
-                                                return $p->first();
-                                            })
-                                        @endphp --}}
-                                        <!--begin::Table body-->
-                                        {{-- @dd($filterBulan) --}}
-                                        <tbody class="fw-bold text-gray-600">
-                                            @forelse ($claims as $claim)
-                                                   
-                                            <tr>
-                                                <td>
-                                                    {{-- <a href="/claim-management/proyek/{{ $claim['kode_proyek'] }}/{{ $claim['id_contract'] }}?link=kt_user_view_claim_VO" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim['profit_center'] }}</a> --}}
-                                                    <a href="/claim-management/proyek/{{ ($claim['profit_center']) }}?link=kt_user_view_claim_VO" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim['profit_center'] }}</a>
-                                                </td>
-                                                <td>{{ $claim['nama_proyek'] }}</td>
-                                                <td>{{ $claim['unit_kerja'] }}</td>
-                                                {{-- <td class="text-center">{{ $claim['total_vo'] }}</td>
-                                                <td class="text-center">{{ $claim['total_klaim'] }}</td>
-                                                <td class="text-center">{{ $claim['total_anti_klaim'] }}</td>
-                                                <td class="text-center">{{ $claim['total_klaim_asuransi'] }}</td> --}}
-                                                <td class="text-center">{{ number_format($claim['total_vo'], 0, ".", ".") }}</td>
-                                                <td class="text-center">{{ number_format($claim['total_klaim'], 0, ".", ".") }}</td>
-                                                <td class="text-center">{{ number_format($claim['total_anti_klaim'], 0, ".", ".") }}</td>
-                                                <td class="text-center">{{ number_format($claim['total_klaim_asuransi'], 0, ".", ".") }}</td>
-                                                <td class="text-center">{{ number_format($claim['total_vo_approved'], 0, ".", ".") }}</td>
-                                                <td class="text-center">{{ number_format($claim['total_klaim_approved'], 0, ".", ".") }}</td>
-                                                <td class="text-center">{{ number_format($claim['total_anti_klaim_approved'], 0, ".", ".") }}</td>
-                                                <td class="text-center">{{ number_format($claim['total_klaim_asuransi_approved'], 0, ".", ".") }}</td>
-                                                {{-- <td>
-                                                    <a href="/contract-management/view/{{ $claim->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim->id_contract }}</a>
-                                                </td> --}}
-                                            </tr>
-                                            @empty
-                                                <tr class="bg-gray-100 text-center">
-                                                    <td colspan="7">
-                                                        <b>There is no data</b>
-                                                    </td>
+                                    <div class="overflow-scroll">
+                                        <table class="table align-middle table-row-dashed fs-6 gy-2" id="claim-management">
+                                            <thead>
+                                                <!--begin::Table row-->
+                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                    <th rowspan="3" class="min-w-auto">Profit Center</th>
+                                                    <th rowspan="3" class="min-w-auto">Nama Proyek</th>
+                                                    <th rowspan="3" class="min-w-auto">Unit Kerja</th>
+                                                    <th colspan="4" class="min-w-auto text-center">VO</th>
+                                                    <th colspan="4" class="min-w-auto text-center">Klaim</th>
+                                                    <th colspan="4" class="min-w-auto text-center">Anti Klaim</th>
+                                                    <th colspan="4" class="min-w-auto text-center">Klaim Asuransi</th>
                                                 </tr>
-                                            @endforelse
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="3" class="text-center text-white" style="background-color: #0DB0D9"><b>Total</b></td>
-                                                <td class="text-center">{{ number_format($totalVOAll, 0, ".", ".") }}</td>
-                                                <td class="text-center">{{ number_format($totalClaimAll, 0, ".", ".") }}</td>
-                                                <td class="text-center">{{ number_format($totalAntiClaimAll, 0, ".", ".") }}</td>
-                                                <td class="text-center">{{ number_format($totalClaimAsuransiAll, 0, ".", ".") }}</td>
-                                                <td class="text-center">{{ number_format($totalVOAllApproved, 0, ".", ".") }}</td>
-                                                <td class="text-center">{{ number_format($totalClaimAllApproved, 0, ".", ".") }}</td>
-                                                <td class="text-center">{{ number_format($totalAntiClaimAllApproved, 0, ".", ".") }}</td>
-                                                <td class="text-center">{{ number_format($totalClaimAsuransiAllApproved, 0, ".", ".") }}</td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
+                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                    <th colspan="2" class="min-w-auto text-center">Submitted</th>
+                                                    <th colspan="2" class="min-w-auto text-center">Approved</th>
+                                                    <th colspan="2" class="min-w-auto text-center">Submitted</th>
+                                                    <th colspan="2" class="min-w-auto text-center">Approved</th>
+                                                    <th colspan="2" class="min-w-auto text-center">Submitted</th>
+                                                    <th colspan="2" class="min-w-auto text-center">Approved</th>
+                                                    <th colspan="2" class="min-w-auto text-center">Submitted</th>
+                                                    <th colspan="2" class="min-w-auto text-center">Approved</th>
+                                                </tr>
+                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                    {{-- <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th> --}}
+                                                    <th colspan="1" class="min-w-auto text-center">Item</th>
+                                                    <th colspan="1" class="min-w-auto text-center">Nilai</th>
+                                                    <th colspan="1" class="min-w-auto text-center">Item</th>
+                                                    <th colspan="1" class="min-w-auto text-center">Nilai</th>
+                                                    <th colspan="1" class="min-w-auto text-center">Item</th>
+                                                    <th colspan="1" class="min-w-auto text-center">Nilai</th>
+                                                    <th colspan="1" class="min-w-auto text-center">Item</th>
+                                                    <th colspan="1" class="min-w-auto text-center">Nilai</th>
+                                                    <th colspan="1" class="min-w-auto text-center">Item</th>
+                                                    <th colspan="1" class="min-w-auto text-center">Nilai</th>
+                                                    <th colspan="1" class="min-w-auto text-center">Item</th>
+                                                    <th colspan="1" class="min-w-auto text-center">Nilai</th>
+                                                    <th colspan="1" class="min-w-auto text-center">Item</th>
+                                                    <th colspan="1" class="min-w-auto text-center">Nilai</th>
+                                                    <th colspan="1" class="min-w-auto text-center">Item</th>
+                                                    <th colspan="1" class="min-w-auto text-center">Nilai</th>
+                                                    {{-- <th class="min-w-auto">@sortablelink('id_contract','ID Contract')</th> --}}
+                                                </tr>
+                                                <!--end::Table row-->
+                                            </thead>
+                                            <!--end::Table head-->
+                                            {{-- @php
+                                                $claim_get = $claim->map(function($p){
+                                                    return $p->first();
+                                                })
+                                            @endphp --}}
+                                            <!--begin::Table body-->
+                                            {{-- @dd($filterBulan) --}}
+                                            <tbody class="fw-bold text-gray-600">
+                                                @foreach ($claims as $claim)
+                                                <tr>
+                                                    <td>
+                                                        {{-- <a href="/claim-management/proyek/{{ $claim['kode_proyek'] }}/{{ $claim['id_contract'] }}?link=kt_user_view_claim_VO" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim['profit_center'] }}</a> --}}
+                                                        <a href="/claim-management/proyek/{{ ($claim['profit_center']) }}?link=kt_user_view_claim_VO" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim['profit_center'] }}</a>
+                                                    </td>
+                                                    <td>{{ $claim['nama_proyek'] }}</td>
+                                                    <td>{{ $claim['unit_kerja'] }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($claim['jumlah_vo'], 0, ".", ".") }}</td>
+                                                    <td class="text-center">{{ number_format($claim['total_vo'], 0, ".", ".") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($claim['jumlah_vo_approved'], 0, ".", ".") }}</td>
+                                                    <td class="text-center">{{ number_format($claim['total_vo_approved'], 0, ".", ".") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($claim['jumlah_klaim'], 0, ".", ".") }}</td>
+                                                    <td class="text-center">{{ number_format($claim['total_klaim'], 0, ".", ".") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($claim['jumlah_klaim_approved'], 0, ".", ".") }}</td>
+                                                    <td class="text-center">{{ number_format($claim['total_klaim_approved'], 0, ".", ".") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($claim['jumlah_anti_klaim'], 0, ".", ".") }}</td>
+                                                    <td class="text-center">{{ number_format($claim['total_anti_klaim'], 0, ".", ".") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($claim['jumlah_anti_klaim_approved'], 0, ".", ".") }}</td>
+                                                    <td class="text-center">{{ number_format($claim['total_anti_klaim_approved'], 0, ".", ".") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($claim['jumlah_klaim_asuransi'], 0, ".", ".") }}</td>
+                                                    <td class="text-center">{{ number_format($claim['total_klaim_asuransi'], 0, ".", ".") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($claim['jumlah_klaim_asuransi_approved'], 0, ".", ".") }}</td>
+                                                    <td class="text-center">{{ number_format($claim['total_klaim_asuransi_approved'], 0, ".", ".") }}</td>
+                                                    {{-- <td>
+                                                        <a href="/contract-management/view/{{ $claim->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim->id_contract }}</a>
+                                                    </td> --}}
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="3" class="text-center text-white" style="background-color: #0DB0D9"><b>Total</b></td>
+                                                    <td class="text-center bg-secondary">{{ number_format($jumlahVOAll, 0, ".", ".") }}</td>
+                                                    <td class="text-center">{{ number_format($totalVOAll, 0, ".", ".") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($jumlahVOAllApproved, 0, ".", ".") }}</td>
+                                                    <td class="text-center">{{ number_format($totalVOAllApproved, 0, ".", ".") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($jumlahClaimAll, 0, ".", ".") }}</td>
+                                                    <td class="text-center">{{ number_format($totalClaimAll, 0, ".", ".") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($jumlahClaimAllApproved, 0, ".", ".") }}</td>
+                                                    <td class="text-center">{{ number_format($totalClaimAllApproved, 0, ".", ".") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($jumlahAntiClaimAll, 0, ".", ".") }}</td>
+                                                    <td class="text-center">{{ number_format($totalAntiClaimAll, 0, ".", ".") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($jumlahAntiClaimAllApproved, 0, ".", ".") }}</td>
+                                                    <td class="text-center">{{ number_format($totalAntiClaimAllApproved, 0, ".", ".") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($jumlahClaimAsuransiAll, 0, ".", ".") }}</td>
+                                                    <td class="text-center">{{ number_format($totalClaimAsuransiAll, 0, ".", ".") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($jumlahClaimAsuransiAllApproved, 0, ".", ".") }}</td>
+                                                    <td class="text-center">{{ number_format($totalClaimAsuransiAllApproved, 0, ".", ".") }}</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
                                     <!--end::Table -->
                                 </div>
 
