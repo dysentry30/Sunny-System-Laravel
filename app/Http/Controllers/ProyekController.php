@@ -208,7 +208,7 @@ class ProyekController extends Controller
             "nilai-rkap" => "required",
             // "sumber-dana" => "required",
             "tahun-perolehan" => "required",
-            "departemen-proyek" => "required",
+            // "departemen-proyek" => "required",
             // "bulan-pelaksanaan" => "required",
         ];
         $validation = Validator::make($dataProyek, $rules, $messages);
@@ -310,6 +310,9 @@ class ProyekController extends Controller
             $no_urut = 1;
         } else {
             $no_urut = (int) preg_replace("/[^0-9]/", "", $lastProyek->kode_proyek) + 1;
+            if (preg_match('~[0-9]+~', $dataProyek["unit-kerja"])) {
+                $no_urut = (int) (substr(preg_replace("/[^0-9]/", "", $lastProyek->kode_proyek) + 1, 1));
+            }
             $len = strlen($no_urut);
             // $no_urut = (int) trim($lastProyek->kode_proyek, $kode_proyek) + 1;
             // $no_urut = substr($no_urut, ($len-3), 3);
