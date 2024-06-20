@@ -892,10 +892,7 @@ class ClaimController extends Controller
                         $item_vo = 0;
                         $item_vo_approved = 0;
                         $cat_vo = $claim->where("jenis_perubahan", "=", "VO");
-                        $result["jumlah_vo"] = $cat_vo->count();
-                        $jumlahVOAll += $cat_vo->count();
-                        $result["jumlah_vo_approved"] = $cat_vo->where("stage", 5)->count();
-                        $jumlahVOAllApproved += $cat_vo->where("stage", 5)->count();
+                        // $item_vo = $cat_vo->count();
                         // $item_vo = $cat_vo->sum(function ($item) {
                         //     return (int) $item->biaya_pengajuan;
                         // });
@@ -903,21 +900,17 @@ class ClaimController extends Controller
                         //     return (int) $item->nilai_disetujui;
                         // });
                         foreach ($cat_vo as $item) {
-                            $item_vo += $item->biaya_pengajuan;
-                            if ($item->stage == 5) {
-                                $item_vo_approved += (int)$item->nilai_disetujui;
+                            if (!$item->nilai_negatif) {
+                                $item_vo += $item->biaya_pengajuan;
+                                if ($item->stage == 5) {
+                                    $item_vo_approved += (int)$item->nilai_disetujui;
+                                }
+                            } else {
+                                $item_vo -= $item->biaya_pengajuan;
+                                if ($item->stage == 5) {
+                                    $item_vo_approved -= (int)$item->nilai_disetujui;
+                                }
                             }
-                            // if (!$item->nilai_negatif) {
-                            //     $item_vo += $item->biaya_pengajuan;
-                            //     if ($item->stage == 5) {
-                            //         $item_vo_approved += (int)$item->nilai_disetujui;
-                            //     }
-                            // } else {
-                            //     $item_vo -= $item->biaya_pengajuan;
-                            //     if ($item->stage == 5) {
-                            //         $item_vo_approved -= (int)$item->nilai_disetujui;
-                            //     }
-                            // }
                         }
 
                         $totalVOAll += $item_vo;

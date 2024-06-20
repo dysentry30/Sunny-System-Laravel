@@ -106,7 +106,7 @@ class ContractManagementsController extends Controller
             // $proyeks_pelaksanaan_closing_proyek = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("c.stages", 5)->get()->map(function ($data) {
             //     return self::stdClassToModel($data, Proyek::class);
             // });
-            $tahun_proyeks = Proyek::get()->groupBy("tahun_perolehan")->keys();
+            $tahun_proyeks = Proyek::get()->groupBy("tahun_perolehan")->keys()->sortDesc();
             // $unit_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",",Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
             // $unitkerjas = UnitKerja::get()->whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8"]);
             // dd($unitkerjas);
@@ -241,7 +241,7 @@ class ContractManagementsController extends Controller
             // $proyeks_pelaksanaan = $proyeks_all->filter(function($p) {
             //     return !empty($p->ContractManagements) && $p->ContractManagements->where("stages", "=", )
             // });
-            $tahun_proyeks = Proyek::get()->groupBy("tahun_perolehan")->keys();
+            $tahun_proyeks = Proyek::get()->groupBy("tahun_perolehan")->keys()->sortDesc();
             $unit_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",",Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
             // $unitkerjas = UnitKerja::get()->whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8"]);
             // dd($unitkerjas);
@@ -270,29 +270,63 @@ class ContractManagementsController extends Controller
             // $unit_kerja_get = !empty($request->query("filter-unit")) ? [$request->query("filter-unit")] : $unitkerjas->toArray();
             $proyekSelected = !empty(Auth::user()->proyeks_selected) ? json_decode(Auth::user()->proyeks_selected) : [];
 
-            if(!empty($filterBulan) && $filterTahun == 2023){
-                $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->whereIn('contract_managements.profit_center', $proyekSelected)->get();
-            }else{
-                if($filterTahun < 2023 && !empty($filterBulan)){
-                    $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "<=", $filterTahun)->where("bulan_pelaksanaan", "<=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->whereIn('contract_managements.profit_center', $proyekSelected)->get();
-                }elseif($filterTahun < 2023 && empty($filterBulan)){
-                    $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "<=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->whereIn('contract_managements.profit_center', $proyekSelected)->get();
-                }else{
-                    $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "<=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->whereIn('contract_managements.profit_center', $proyekSelected)->get();
-                    // dd("test");
+            if (!empty($proyekSelected)) {
+                if (!empty($filterBulan) && $filterTahun == date('Y')) {
+                    $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where(
+                        "tahun_perolehan",
+                        "=",
+                        $filterTahun
+                    )->where("bulan_pelaksanaan", "<=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->whereIn('contract_managements.profit_center', $proyekSelected)->get();
+                } else {
+                    if ($filterTahun < 2023 && !empty($filterBulan)) {
+                        $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "<=", $filterTahun)->where("bulan_pelaksanaan", "<=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->whereIn('contract_managements.profit_center', $proyekSelected)->get();
+                    } elseif ($filterTahun < 2023 && empty($filterBulan)) {
+                        $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "<=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->whereIn('contract_managements.profit_center', $proyekSelected)->get();
+                    } else {
+                        $proyeks_all = Proyek::join(
+                            "contract_managements",
+                            "contract_managements.project_id",
+                            "=",
+                            "proyeks.kode_proyek"
+                        )->where("tahun_perolehan", "<=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->whereIn('contract_managements.profit_center', $proyekSelected)->get();
+                        // dd("test");
+                    }
                 }
-                
+                $proyekPISNew = ProyekPISNew::join(
+                    "contract_managements",
+                    "contract_managements.profit_center",
+                    "=",
+                    "proyek_pis_new.profit_center"
+                )->whereIn("kd_divisi", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->where('contract_managements.profit_center', '!=', null)->where(
+                    'start_year',
+                    '<=',
+                    $filterTahun
+                )->whereIn('proyek_pis_new.profit_center', $proyekSelected)->get();
+            } else {
+                if (!empty($filterBulan) && $filterTahun == 2023) {
+                    $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
+                } else {
+                    if ($filterTahun < date("Y") && !empty($filterBulan)) {
+                        $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "<=", $filterTahun)->where("bulan_pelaksanaan", "<=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
+                    } elseif ($filterTahun < date("Y") && empty($filterBulan)) {
+                        $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "<=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
+                    } else {
+                        $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->get();
+                        // dd("test");
+                    }
+                }
+                $proyekPISNew = ProyekPISNew::join(
+                    "contract_managements",
+                    "contract_managements.profit_center",
+                    "=",
+                    "proyek_pis_new.profit_center"
+                )->whereIn("kd_divisi", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->where('contract_managements.profit_center', '!=', null)->where(
+                    'start_year',
+                    '<=',
+                    $filterTahun
+                )->get();
             }
-            $proyekPISNew = ProyekPISNew::join(
-                "contract_managements",
-                "contract_managements.profit_center",
-                "=",
-                "proyek_pis_new.profit_center"
-            )->whereIn("kd_divisi", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->where('contract_managements.profit_center', '!=', null)->where(
-                'start_year',
-                '<=',
-                $filterTahun
-            )->whereIn('proyek_pis_new.spk_intern_no', $proyekSelected)->get();
+
         }
         $proyeks_perolehan = $proyeks_all->whereIn("stage", [2, 3, 4, 5, 6])->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
         // $proyeks_pelaksanaan = $proyeks_all->where("stage", ">=", 8)->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true);
