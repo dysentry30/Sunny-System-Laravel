@@ -106,6 +106,11 @@ class DashboardController extends Controller
             )->get();
             $contracts = ContractManagements::join("proyeks", "proyeks.kode_proyek", "=", "contract_managements.project_id")->get();
             $dops = Dop::orderBy('dop')->get()?->keyBy('dop')->keys()->sort();
+            if (date("Y") >= 2024) {
+                $dops = $dops->filter(function ($item) {
+                        return $item != "DOP 3";
+                    });
+            }
             // $dopJoin = Dop::join("proyeks", "dops.dop", "=", "proyeks.dop")->get();
             // dd($dops);
             if (!empty($request->get("unit-kerja"))) {
@@ -285,9 +290,14 @@ class DashboardController extends Controller
             $unit_kerjas = "";
             // $dops = Dop::orderBy('dop')->get();
             $dops = $unitKerja->groupBy('dop')->keys()->sort();
-            if ($dops->count() == 4
-            ) {
-                $dops = $dops->push("PUSAT");
+            if (date("Y") >= 2024) {
+                if ($dops->count() == 3) {
+                    $dops = $dops->push("PUSAT");
+                }
+            } else {
+                if ($dops->count() == 4) {
+                    $dops = $dops->push("PUSAT");
+                }
             }
             // dd($dops);
         }

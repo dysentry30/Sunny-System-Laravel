@@ -288,10 +288,13 @@ class ProyekController extends Controller
 
         $lastProyek = Proyek::select(["kode_proyek", "nama_proyek"])->where("kode_proyek", "like", "%" . $kode_proyek . "%")->get()->sortBy("kode_proyek")->last();
         // dd($no_urut);
-        if(empty($lastProyek)){
+        if (empty($lastProyek)) {
             $no_urut = 1;
-        }else{
+        } else {
             $no_urut = (int) preg_replace("/[^0-9]/", "", $lastProyek->kode_proyek) + 1;
+            if (preg_match('~[0-9]+~', $dataProyek["unit-kerja"])) {
+                $no_urut = (int) (substr(preg_replace("/[^0-9]/", "", $lastProyek->kode_proyek) + 1, 1));
+            }
             $len = strlen($no_urut);
             // $no_urut = (int) trim($lastProyek->kode_proyek, $kode_proyek) + 1;
             // $no_urut = substr($no_urut, ($len-3), 3);
