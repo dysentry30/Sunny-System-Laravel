@@ -63,7 +63,7 @@
                     <!--begin::Post-->
                     <!--begin::Container-->
                     <!--begin::Card "style edited"-->
-                    <div class="card card-flush container" id="kt_contacts_main" Id="List-vv">
+                    <div class="card card-flush" id="kt_contacts_main" Id="List-vv">
 
                         <!--begin::Card title-->
                         <div class="card-title">
@@ -177,49 +177,92 @@
                                                     <!--Begin::Total Claim Contract-->
                                                     <div class="row">
                                                         <div class="col-3">
-                                                            <p class="m-0">Total VO</p>
+                                                            <p class="m-0">Total VO Submitted</p>
                                                             <p><b>{{ $history['total_vo'] }}</b></p>
                                                         </div>
                                                         <div class="col-3">
-                                                            <p class="m-0">Total Klaim</p>
+                                                            <p class="m-0">Total Klaim Submitted</p>
                                                             <p><b>{{ $history['total_klaim'] }}</b></p>
                                                         </div>
                                                         <div class="col-3">
-                                                            <p class="m-0">Total Anti Klaim</p>
+                                                            <p class="m-0">Total Anti Klaim Submitted</p>
                                                             <p><b>{{ $history['total_anti_klaim'] }}</b></p>
                                                         </div>
                                                         <div class="col-3">
-                                                            <p class="m-0">Total Klaim Asuransi</p>
+                                                            <p class="m-0">Total Klaim Asuransi Submitted</p>
                                                             <p><b>{{ $history['total_klaim_asuransi'] }}</b></p>
                                                         </div>
                                                     </div>
-                                                    <hr class="m-0">
+                                                    {{-- <hr class="m-0"> --}}
                                                     <!--End::Total Claim Contract-->
                                                     <!--Begin::Jumlah Claim Contract-->
                                                     <div class="row">
                                                         <div class="col-3">
-                                                            <p class="m-0">Jumlah VO</p>
+                                                            <p class="m-0">Jumlah VO Submitted</p>
                                                             <p><b>Rp.{{ number_format($history['jumlah_vo'], 0, ",", "." ) }}</b></p>
                                                         </div>
                                                         <div class="col-3">
-                                                            <p class="m-0">Jumlah Klaim</p>
+                                                            <p class="m-0">Jumlah Klaim Submitted</p>
                                                             <p><b>Rp.{{ number_format($history['jumlah_klaim'], 0, ",", ".") }}</b></p>
                                                         </div>
                                                         <div class="col-3">
-                                                            <p class="m-0">Jumlah Anti Klaim</p>
+                                                            <p class="m-0">Jumlah Anti Klaim Submitted</p>
                                                             <p class="text-danger"><b>Rp.{{ number_format($history['jumlah_anti_klaim'], 0, ",", ".") }} ( - )</b></p>
                                                         </div>
                                                         <div class="col-3">
-                                                            <p class="m-0">Jumlah Klaim Asuransi</p>
+                                                            <p class="m-0">Jumlah Klaim Asuransi Submitted</p>
                                                             <p><b>Rp.{{ number_format($history['jumlah_klaim_asuransi'], 0, ",", ".") }}</b></p>
                                                         </div>
                                                     </div>
                                                     <!--End::Jumlah Claim Contract-->
+                                                    <hr class="m-0">
+                                                    <!--Begin::Total Claim Contract Approve-->
+                                                    <div class="row">
+                                                        <div class="col-3">
+                                                            <p class="m-0">Total VO Approved</p>
+                                                            <p><b>{{ $history['total_vo_approve'] }}</b></p>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <p class="m-0">Total Klaim Approved</p>
+                                                            <p><b>{{ $history['total_klaim_approve'] }}</b></p>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <p class="m-0">Total Anti Klaim Approved</p>
+                                                            <p><b>{{ $history['total_anti_klaim_approve'] }}</b></p>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <p class="m-0">Total Klaim Asuransi Approved</p>
+                                                            <p><b>{{ $history['total_klaim_asuransi_approve'] }}</b></p>
+                                                        </div>
+                                                    </div>
+                                                    {{-- <hr class="m-0"> --}}
+                                                    <!--End::Total Claim Contract Approve-->
+                                                    <!--Begin::Jumlah Claim Contract Approve-->
+                                                    <div class="row">
+                                                        <div class="col-3">
+                                                            <p class="m-0">Jumlah VO Approved</p>
+                                                            <p><b>Rp.{{ number_format($history['jumlah_vo_approve'], 0, ",", "." ) }}</b></p>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <p class="m-0">Jumlah Klaim Approved</p>
+                                                            <p><b>Rp.{{ number_format($history['jumlah_klaim_approve'], 0, ",", ".") }}</b></p>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <p class="m-0">Jumlah Anti Klaim Approved</p>
+                                                            <p class="text-danger"><b>Rp.{{ number_format($history['jumlah_anti_klaim_approve'], 0, ",", ".") }} ( - )</b></p>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <p class="m-0">Jumlah Klaim Asuransi Approved</p>
+                                                            <p><b>Rp.{{ number_format($history['jumlah_klaim_asuransi_approve'], 0, ",", ".") }}</b></p>
+                                                        </div>
+                                                    </div>
+                                                    <!--End::Jumlah Claim Contract Approve-->
                                                 </div>
 
 
                                                 <div class="col-3 ps-5">
-                                                    @if ($user->check_administrator || ($user->Pegawai->kode_jabatan == 410 && $user->Pegawai->kode_fungsi_bidang == 30100))
+                                                    {{-- @if ($user->check_administrator || ($user->Pegawai->kode_jabatan == 410 && $user->Pegawai->kode_fungsi_bidang == 30100)) --}}
+                                                    @if ($user->check_administrator || auth()->user()->can("admin-ccm"))
                                                         <div class="d-flex flex-column flex-md-row gap-4 justify-content-center">
                                                             @if ($history['is_approved'] == "t")
                                                                     <a class="btn btn-success btn-sm disabled d-flex align-items-center">Approved</a>
@@ -233,8 +276,8 @@
                                                             @elseif($history['is_approved'] == "f")
                                                                 <button class="btn btn-danger btn-sm disabled">Approval Ditolak</button>
                                                             @else
-                                                                <a class="btn btn-primary btn-sm d-flex align-items-center" onclick="confirmAction(this, '{{ $history['id_contract'] }}')">Approve</a>
-                                                                <a class="btn btn-secondary btn-sm d-flex align-items-center" onclick="confirmAction(this, '{{ $history['id_contract'] }}')">Cancel</a>
+                                                                <a class="btn btn-primary btn-sm d-flex align-items-center" onclick="confirmAction(this, '{{ $history['profit_center'] }}')">Approve</a>
+                                                                <a class="btn btn-secondary btn-sm d-flex align-items-center" onclick="confirmAction(this, '{{ $history['profit_center'] }}')">Cancel</a>
                                                             @endif
                                                         </div>
                                                     @else
@@ -291,6 +334,9 @@
 
 @section('js-script')
 <script>
+    const LOADING_BODY = new KTBlockUI(document.querySelector('#kt_body'), {
+        message: '<div class="blockui-message"><span class="spinner-border text-primary"></span> Loading...</div>',
+    })
     async function confirmAction(e, id_contract) {
         // console.log(e.innerHTML)
         Swal.fire({
@@ -302,6 +348,7 @@
             cancelButtonColor: '#BABABA',
             confirmButtonText: 'Ya'
         }).then(async(result)=>{
+            LOADING_BODY.block();
             if(result.isConfirmed){
                 if(e.innerHTML == "Approve"){
                     const formData = new FormData();

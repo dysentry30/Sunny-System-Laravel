@@ -92,13 +92,19 @@
                                 </div>
                                 @php
                                     $month = !empty($periode)? $periode : ((int) date('m') == 1 ? 12 : ((int)date('d') < 15 ? (int) date('m') : (int) date('m') - 1));
-                                    $is_approved = $contracts->ContractApproval?->where('periode', '=', $month)?->where('is_locked', '=', true);
+                                    // $is_approved = $contracts->ContractApproval?->where('periode', '=', $month)?->where('is_locked', '=', true);
+                                    $is_approved = \App\Models\ContractApproval::where(function($query) use($contracts){
+                                        $query->where('id_contract', $contracts->id_contract)
+                                        ->orWhere('profit_center', $contracts->profit_center);
+                                    })->where('is_locked', '=', true)->count() > 0;
                                 @endphp
                                 <!--Jika User adalah Manager & Contract Management-->
-                                @if (($user->Pegawai?->kode_jabatan == 410 && $user->Pegawai?->kode_fungsi_bidang == 30100) || auth()->user()->check_administrator)
+                                {{-- @if (($user->Pegawai?->kode_jabatan == 410 && $user->Pegawai?->kode_fungsi_bidang == 30100) || auth()->user()->check_administrator) --}}
+                                @if ((auth()->user()->can('ccm') && !empty(auth()->user()->proyek_selected)) || auth()->user()->check_administrator)
                                     <!--begin::Button-->
-                                    @if ($contracts->where('id_contract', '=', $contracts->id_contract)->where('stages', '!=', 1)->get()->isNotEmpty())
-                                        @if (empty($is_approved) || $is_approved->isEmpty())
+                                    @if ($contracts->where('stages', '!=', 1)->get()->isNotEmpty())
+                                        {{-- @if (empty($is_approved) || $is_approved->isEmpty()) --}}
+                                        @if (!$is_approved)
                                             <button type="button" class="btn btn-sm btn-primary" id="kt_toolbar_primary_button"
                                                 onclick="lockBulananContract()" style="background-color:#008CB4;">
                                                 <span>Lock</span>
@@ -125,11 +131,13 @@
                                                 cancelButtonColor: '#BABABA',
                                                 confirmButtonText: 'Ya'
                                             }).then(async (result) => {
+                                                LOADING_BODY.block();
                                                 if (result.isConfirmed) {
                                                     const formData = new FormData();
                                                     formData.append("_token", "{{ csrf_token() }}");
                                                     formData.append("id_contract", "{{ $contracts->id_contract }}")
                                                     formData.append("kode_proyek", "{{ $contracts->project_id }}")
+                                                    formData.append("profit_center", "{{ $profitCenter }}")
                                                     formData.append("periode", "{{ $periode }}")
                                                     formData.append("tahun", "{{ (int) date('Y') }}")
                                                     const sendData = await fetch("/contract-management/set-lock", {

@@ -515,7 +515,7 @@ class ClaimController extends Controller
 
         // $unitkerjas = UnitKerja::get()->whereNotIn("divcode", ["1", "2", "3", "4", "5", "6", "7", "8"]);
         // dd($unitkerjas);
-        $tahun_proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->get()->groupBy("start_year")->keys();
+        $tahun_proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->get()->groupBy("start_year")->keys()->sortDesc();
         if (Auth::user()->check_administrator) {
 
             if ($filterTahun < 2023) {
@@ -561,12 +561,20 @@ class ClaimController extends Controller
             $totalClaimAllApproved = 0;
             $totalAntiClaimAllApproved = 0;
             $totalClaimAsuransiAllApproved = 0;
+            $jumlahVOAll = 0;
+            $jumlahClaimAll = 0;
+            $jumlahAntiClaimAll = 0;
+            $jumlahClaimAsuransiAll = 0;
+            $jumlahVOAllApproved = 0;
+            $jumlahClaimAllApproved = 0;
+            $jumlahAntiClaimAllApproved = 0;
+            $jumlahClaimAsuransiAllApproved = 0;
 
             if ($filterBulan == (int) date("m") && $filterTahun == (int) date("Y")) {
                 // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->whereIn("unit_kerja", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->get();
                 $proyeks_all = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->whereIn("kd_divisi", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->where('contract_managements.profit_center', '!=', null)->get();
 
-                $proyeks_all = $proyeks_all->map(function ($proyek) use (&$totalVOAll, &$totalClaimAll, &$totalAntiClaimAll, &$totalClaimAsuransiAll, &$totalVOAllApproved, &$totalClaimAllApproved, &$totalAntiClaimAllApproved, &$totalClaimAsuransiAllApproved) {
+                $proyeks_all = $proyeks_all->map(function ($proyek) use (&$totalVOAll, &$totalClaimAll, &$totalAntiClaimAll, &$totalClaimAsuransiAll, &$totalVOAllApproved, &$totalClaimAllApproved, &$totalAntiClaimAllApproved, &$totalClaimAsuransiAllApproved, &$jumlahVOAll, &$jumlahClaimAll, &$jumlahAntiClaimAll, &$jumlahClaimAsuransiAll, &$jumlahVOAllApproved, &$jumlahClaimAllApproved, &$jumlahAntiClaimAllApproved, &$jumlahClaimAsuransiAllApproved) {
                     $result = [];
                     // $result['kode_proyek'] = $proyek->kode_proyek;
                     $result['profit_center'] = $proyek->profit_center;
@@ -579,7 +587,10 @@ class ClaimController extends Controller
                         $item_vo = 0;
                         $item_vo_approved = 0;
                         $cat_vo = $claim->where("jenis_perubahan", "=", "VO");
-                        // $item_vo = $cat_vo->count();
+                        $result["jumlah_vo"] = $cat_vo->count();
+                        $jumlahVOAll += $cat_vo->count();
+                        $result["jumlah_vo_approved"] = $cat_vo->where("stage", 5)->count();
+                        $jumlahVOAllApproved += $cat_vo->where("stage", 5)->count();
                         // $item_vo = $cat_vo->sum(function ($item) {
                         //     return (int) $item->biaya_pengajuan;
                         // });
@@ -609,7 +620,10 @@ class ClaimController extends Controller
 
                         //Kategori Klaim
                         $cat_klaim = $claim->where("jenis_perubahan", "=", "Klaim");
-                        // $item_klaim = $cat_klaim->count();
+                        $result["jumlah_klaim"] = $cat_klaim->count();
+                        $jumlahClaimAll += $cat_klaim->count();
+                        $result["jumlah_klaim_approved"] = $cat_klaim->where("stage", 5)->count();
+                        $jumlahClaimAllApproved += $cat_klaim->where("stage", 5)->count();
                         // $item_klaim = $cat_klaim->sum(function ($item) {
                         //     return (int) $item->biaya_pengajuan;
                         // });
@@ -640,7 +654,10 @@ class ClaimController extends Controller
 
                         //Kategori ANti Klaim
                         $cat_anti_klaim = $claim->where("jenis_perubahan", "=", "Anti Klaim");
-                        // $item_anti_klaim = $cat_anti_klaim->count();
+                        $result["jumlah_anti_klaim"] = $cat_anti_klaim->count();
+                        $jumlahAntiClaimAll += $cat_anti_klaim->count();
+                        $result["jumlah_anti_klaim_approved"] = $cat_anti_klaim->where("stage", 5)->count();
+                        $jumlahAntiClaimAllApproved += $cat_anti_klaim->where("stage", 5)->count();
                         // $item_anti_klaim = $cat_anti_klaim->sum(function ($item) {
                         //     return (int) $item->biaya_pengajuan;
                         // });
@@ -671,7 +688,10 @@ class ClaimController extends Controller
 
                         //Kategori Klaim Asuransi
                         $cat_klaim_asuransi = $claim->where("jenis_perubahan", "=", "Klaim Asuransi");
-                        // $item_klaim_asuransi = $cat_klaim_asuransi->count();
+                        $result["jumlah_klaim_asuransi"] = $cat_klaim_asuransi->count();
+                        $jumlahClaimAsuransiAll += $cat_klaim_asuransi->count();
+                        $result["jumlah_klaim_asuransi_approved"] = $cat_klaim_asuransi->where("stage", 5)->count();
+                        $jumlahClaimAsuransiAllApproved += $cat_klaim_asuransi->where("stage", 5)->count();
                         // $item_klaim_asuransi = $cat_klaim_asuransi->sum(function ($item) {
                         //     return (int) $item->biaya_pengajuan;
                         // });
@@ -717,6 +737,14 @@ class ClaimController extends Controller
                         $result['total_klaim_approved'] = 0;
                         $result['total_anti_klaim_approved'] = 0;
                         $result['total_klaim_asuransi_approved'] = 0;
+                        $result['jumlah_vo'] = 0;
+                        $result['jumlah_klaim'] = 0;
+                        $result['jumlah_anti_klaim'] = 0;
+                        $result['jumlah_klaim_asuransi'] = 0;
+                        $result['jumlah_vo_approved'] = 0;
+                        $result['jumlah_klaim_approved'] = 0;
+                        $result['jumlah_anti_klaim_approved'] = 0;
+                        $result['jumlah_klaim_asuransi_approved'] = 0;
                     }
 
                     return $result;
@@ -834,12 +862,24 @@ class ClaimController extends Controller
             $totalClaimAll = 0;
             $totalAntiClaimAll = 0;
             $totalClaimAsuransiAll = 0;
+            $totalVOAllApproved = 0;
+            $totalClaimAllApproved = 0;
+            $totalAntiClaimAllApproved = 0;
+            $totalClaimAsuransiAllApproved = 0;
+            $jumlahVOAll = 0;
+            $jumlahClaimAll = 0;
+            $jumlahAntiClaimAll = 0;
+            $jumlahClaimAsuransiAll = 0;
+            $jumlahVOAllApproved = 0;
+            $jumlahClaimAllApproved = 0;
+            $jumlahAntiClaimAllApproved = 0;
+            $jumlahClaimAsuransiAllApproved = 0;
 
             if ($filterBulan == (int) date("m") && $filterTahun == (int) date("Y")) {
                 // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->whereIn("unit_kerja", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->get();
                 $proyeks_all = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->whereIn("kd_divisi", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->where('contract_managements.profit_center', '!=', null)->get();
 
-                $proyeks_all = $proyeks_all->map(function ($proyek) use (&$totalVOAll, &$totalClaimAll, &$totalAntiClaimAll, &$totalClaimAsuransiAll, &$totalVOAllApproved, &$totalClaimAllApproved, &$totalAntiClaimAllApproved, &$totalClaimAsuransiAllApproved) {
+                $proyeks_all = $proyeks_all->map(function ($proyek) use (&$totalVOAll, &$totalClaimAll, &$totalAntiClaimAll, &$totalClaimAsuransiAll, &$totalVOAllApproved, &$totalClaimAllApproved, &$totalAntiClaimAllApproved, &$totalClaimAsuransiAllApproved, &$jumlahVOAll, &$jumlahClaimAll, &$jumlahAntiClaimAll, &$jumlahClaimAsuransiAll, &$jumlahVOAllApproved, &$jumlahClaimAllApproved, &$jumlahAntiClaimAllApproved, &$jumlahClaimAsuransiAllApproved) {
                     $result = [];
                     // $result['kode_proyek'] = $proyek->kode_proyek;
                     $result['profit_center'] = $proyek->profit_center;
@@ -852,7 +892,10 @@ class ClaimController extends Controller
                         $item_vo = 0;
                         $item_vo_approved = 0;
                         $cat_vo = $claim->where("jenis_perubahan", "=", "VO");
-                        // $item_vo = $cat_vo->count();
+                        $result["jumlah_vo"] = $cat_vo->count();
+                        $jumlahVOAll += $cat_vo->count();
+                        $result["jumlah_vo_approved"] = $cat_vo->where("stage", 5)->count();
+                        $jumlahVOAllApproved += $cat_vo->where("stage", 5)->count();
                         // $item_vo = $cat_vo->sum(function ($item) {
                         //     return (int) $item->biaya_pengajuan;
                         // });
@@ -860,17 +903,21 @@ class ClaimController extends Controller
                         //     return (int) $item->nilai_disetujui;
                         // });
                         foreach ($cat_vo as $item) {
-                            if (!$item->nilai_negatif) {
-                                $item_vo += $item->biaya_pengajuan;
-                                if ($item->stage == 5) {
-                                    $item_vo_approved += (int)$item->nilai_disetujui;
-                                }
-                            } else {
-                                $item_vo -= $item->biaya_pengajuan;
-                                if ($item->stage == 5) {
-                                    $item_vo_approved -= (int)$item->nilai_disetujui;
-                                }
+                            $item_vo += $item->biaya_pengajuan;
+                            if ($item->stage == 5) {
+                                $item_vo_approved += (int)$item->nilai_disetujui;
                             }
+                            // if (!$item->nilai_negatif) {
+                            //     $item_vo += $item->biaya_pengajuan;
+                            //     if ($item->stage == 5) {
+                            //         $item_vo_approved += (int)$item->nilai_disetujui;
+                            //     }
+                            // } else {
+                            //     $item_vo -= $item->biaya_pengajuan;
+                            //     if ($item->stage == 5) {
+                            //         $item_vo_approved -= (int)$item->nilai_disetujui;
+                            //     }
+                            // }
                         }
 
                         $totalVOAll += $item_vo;
@@ -878,7 +925,10 @@ class ClaimController extends Controller
 
                         //Kategori Klaim
                         $cat_klaim = $claim->where("jenis_perubahan", "=", "Klaim");
-                        // $item_klaim = $cat_klaim->count();
+                        $result["jumlah_klaim"] = $cat_klaim->count();
+                        $jumlahClaimAll += $cat_klaim->count();
+                        $result["jumlah_klaim_approved"] = $cat_klaim->where("stage", 5)->count();
+                        $jumlahClaimAllApproved += $cat_klaim->where("stage", 5)->count();
                         // $item_klaim = $cat_klaim->sum(function ($item) {
                         //     return (int) $item->biaya_pengajuan;
                         // });
@@ -909,7 +959,10 @@ class ClaimController extends Controller
 
                         //Kategori ANti Klaim
                         $cat_anti_klaim = $claim->where("jenis_perubahan", "=", "Anti Klaim");
-                        // $item_anti_klaim = $cat_anti_klaim->count();
+                        $result["jumlah_anti_klaim"] = $cat_anti_klaim->count();
+                        $jumlahAntiClaimAll += $cat_anti_klaim->count();
+                        $result["jumlah_anti_klaim_approved"] = $cat_anti_klaim->where("stage", 5)->count();
+                        $jumlahAntiClaimAllApproved += $cat_anti_klaim->where("stage", 5)->count();
                         // $item_anti_klaim = $cat_anti_klaim->sum(function ($item) {
                         //     return (int) $item->biaya_pengajuan;
                         // });
@@ -919,9 +972,9 @@ class ClaimController extends Controller
                         $item_anti_klaim = 0;
                         $item_anti_klaim_approved = 0;
                         foreach ($cat_anti_klaim as $item) {
-                            $item_anti_klaim += $item->biaya_pengajuan;
+                            $item_anti_klaim -= $item->biaya_pengajuan;
                             if ($item->stage == 5) {
-                                $item_anti_klaim_approved += (int)$item->nilai_disetujui;
+                                $item_anti_klaim_approved -= (int)$item->nilai_disetujui;
                             }
                             // if (!$item->nilai_negatif) {
                             //     $item_anti_klaim += $item->biaya_pengajuan;
@@ -940,7 +993,10 @@ class ClaimController extends Controller
 
                         //Kategori Klaim Asuransi
                         $cat_klaim_asuransi = $claim->where("jenis_perubahan", "=", "Klaim Asuransi");
-                        // $item_klaim_asuransi = $cat_klaim_asuransi->count();
+                        $result["jumlah_klaim_asuransi"] = $cat_klaim_asuransi->count();
+                        $jumlahClaimAsuransiAll += $cat_klaim_asuransi->count();
+                        $result["jumlah_klaim_asuransi_approved"] = $cat_klaim_asuransi->where("stage", 5)->count();
+                        $jumlahClaimAsuransiAllApproved += $cat_klaim_asuransi->where("stage", 5)->count();
                         // $item_klaim_asuransi = $cat_klaim_asuransi->sum(function ($item) {
                         //     return (int) $item->biaya_pengajuan;
                         // });
@@ -950,9 +1006,9 @@ class ClaimController extends Controller
                         $item_klaim_asuransi = 0;
                         $item_klaim_asuransi_approved = 0;
                         foreach ($cat_klaim_asuransi as $item) {
-                            $item_klaim_asuransi -= $item->biaya_pengajuan;
+                            $item_klaim_asuransi += $item->biaya_pengajuan;
                             if ($item->stage == 5) {
-                                $item_klaim_asuransi_approved -= (int)$item->nilai_disetujui;
+                                $item_klaim_asuransi_approved += (int)$item->nilai_disetujui;
                             }
                             // if (!$item->nilai_negatif) {
                             //     $item_klaim_asuransi -= $item->biaya_pengajuan;
@@ -986,6 +1042,14 @@ class ClaimController extends Controller
                         $result['total_klaim_approved'] = 0;
                         $result['total_anti_klaim_approved'] = 0;
                         $result['total_klaim_asuransi_approved'] = 0;
+                        $result['jumlah_vo'] = 0;
+                        $result['jumlah_klaim'] = 0;
+                        $result['jumlah_anti_klaim'] = 0;
+                        $result['jumlah_klaim_asuransi'] = 0;
+                        $result['jumlah_vo_approved'] = 0;
+                        $result['jumlah_klaim_approved'] = 0;
+                        $result['jumlah_anti_klaim_approved'] = 0;
+                        $result['jumlah_klaim_asuransi_approved'] = 0;
                     }
 
                     return $result;
@@ -1077,8 +1141,14 @@ class ClaimController extends Controller
 
         return view(
             "5_Claim",
-            compact([
-                "claims", "filterUnitKerja", "filterJenis", "unitkerjas", "tahun_proyeks", "filterTahun", "month", "filterBulan", "unit_kerjas_select", "totalVOAll", "totalClaimAll", "totalAntiClaimAll", "totalClaimAsuransiAll", "totalVOAllApproved", "totalClaimAllApproved", "totalAntiClaimAllApproved", "totalClaimAsuransiAllApproved"
+            compact(["claims", "filterUnitKerja", "filterJenis", "unitkerjas", "tahun_proyeks", "filterTahun", "month", "filterBulan", "unit_kerjas_select", "totalVOAll", "totalClaimAll", "totalAntiClaimAll", "totalClaimAsuransiAll", "totalVOAllApproved", "totalClaimAllApproved", "totalAntiClaimAllApproved", "totalClaimAsuransiAllApproved", "jumlahVOAll",
+                "jumlahClaimAll",
+                "jumlahAntiClaimAll",
+                "jumlahClaimAsuransiAll",
+                "jumlahVOAllApproved",
+                "jumlahClaimAllApproved",
+                "jumlahAntiClaimAllApproved",
+                "jumlahClaimAsuransiAllApproved"
             ])
         );
     }
@@ -1187,8 +1257,7 @@ class ClaimController extends Controller
         $claims_klaim_asuransi = $claims->where("jenis_perubahan", "=", "Klaim Asuransi");
         // dd($claims_vo);
 
-        return view("claimManagement/viewDetail", compact([
-            "contracts", "claims_vo", "claims_klaim", "claims_anti_klaim", "claims_klaim_asuransi", "proyek", "claim_all", "link", "periode", "user"
+        return view("claimManagement/viewDetail", compact(["contracts", "claims_vo", "claims_klaim", "claims_anti_klaim", "claims_klaim_asuransi", "proyek", "claim_all", "link", "periode", "user", "profitCenter"
         ]));
     }
 
