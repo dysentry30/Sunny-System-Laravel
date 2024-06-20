@@ -556,6 +556,7 @@ class RekomendasiController extends Controller
                 $notaRekomendasi->is_draft_recommend_note = false;
                 // createWordProfileRisiko($proyek->kode_proyek);
                 $mergeLampiran = mergeFileLampiranRisiko($proyek->kode_proyek);
+                sleep(5);
                 $profileResiko = createWordProfileRisikoNew($proyek->kode_proyek);
                 // dd($profileResiko);
                 if (!empty($profileResiko)) {

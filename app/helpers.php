@@ -222,7 +222,7 @@ function checkGreenLine($proyek) {
                         })->first();
                     }
 
-                    if (empty($greenlaneExcept) || !empty($greenlaneExcept->sub_item)) {
+                    if (empty($greenlaneExcept) || !empty($greenlaneExcept->sub_item) || ($greenlaneExcept->kategori == "Owner Selection" && $greenlaneExcept->sub_kategori == "Pemberi Kerja")) {
                         $results = collect();
 
                         if (!empty($proyek->sumber_dana)) {
@@ -237,8 +237,21 @@ function checkGreenLine($proyek) {
 
                                     //Jika tidak ada maka dicek di kriteria green lane dahulu untuk sumber dana dan anakannya
                                     $results->push(App\Models\KriteriaGreenLine::where("isi", "=", $proyek->sumber_dana)->where("item", "=", "Sumber Dana")->where(function ($query) use ($proyek, $customer) {
-                                        $query->where('sub_isi', '=', $proyek->provinsi)
-                                            ->orWhere('sub_isi', '=', $customer->group_tier);
+                                        if ($customer->jenis_instansi == "Anak dan Turunan BUMN") {
+                                            if (!empty($customer->nama_holding)) {
+                                                $holding = Customer::find($customer->nama_holding);
+                                                $query->where('sub_isi', '=', $proyek->provinsi)
+                                                    ->orWhere('sub_isi', '=', $holding->group_tier);
+                                            } else {
+                                                $query->where('sub_isi', '=', $proyek->provinsi)
+                                                    ->orWhere('sub_isi', '=', $customer->group_tier);
+                                            }
+                                        } else {
+                                            $query->where('sub_isi', '=', $proyek->provinsi)
+                                                ->orWhere('sub_isi', '=', $customer->group_tier);
+                                        }
+                                            // $query->where('sub_isi', '=', $proyek->provinsi)
+                                            //     ->orWhere('sub_isi', '=', $customer->group_tier);
                                     })->count() > 0);
                                 } else {
                                     //Jika diluar APBD dan BUMN

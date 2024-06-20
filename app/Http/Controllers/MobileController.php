@@ -239,8 +239,11 @@ class MobileController extends Controller
             if (str_contains($data["unit_kerja"], ',')) {
                 $arrUnitKerja = explode(',', $data["unit_kerja"]);
                 $nilaiHistoryForecast = $nilaiHistoryForecast->whereIn("unit_kerja", $arrUnitKerja);
+            } else if (empty($data["unit_kerja"])) {
+                $nilaiHistoryForecast = $nilaiHistoryForecast;
             } else {
                 $nilaiHistoryForecast = $nilaiHistoryForecast->where("unit_kerja", $data["unit_kerja"]);
+
             }
 
 

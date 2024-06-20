@@ -1218,7 +1218,7 @@
                                                          <div class="fv-row mb-7">
                                                              <!--begin::Label-->
                                                              <label class="fs-6 fw-bold form-label mt-3">
-                                                                 <span>Pelanggan</span>
+                                                                 <span>Pelanggan @if(!is_null($proyek->NotaRekomendasi?->is_request_rekomendasi))<i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Data ini tidak dapat diubah karena telah diajukan Nota Rekomendasi"></i>@endif</span>
                                                              </label>
                                                              <!--end::Label-->
                                                              <!--begin::Input-->
@@ -1226,7 +1226,7 @@
                                                              <select id="customer" name="customer"
                                                                  class="form-select form-select-solid"
                                                                  data-control="select2" data-hide-search="false"
-                                                                 data-placeholder="Pilih Customer">
+                                                                 data-placeholder="Pilih Customer" {{ !is_null($proyek->NotaRekomendasi?->is_request_rekomendasi) ? "readonly" : "" }}>
                                                                  <option></option>
                                                                  @if (isset($proyekberjalans))
                                                                      @foreach ($customers as $customer)
@@ -1649,7 +1649,7 @@
                                                          <div class="fv-row mb-7">
                                                              <!--begin::Label-->
                                                              <label class="fs-6 fw-bold form-label mt-3">
-                                                                 <span class="required">Sumber Dana</span>
+                                                                 <span class="required">Sumber Dana @if(!is_null($proyek->NotaRekomendasi?->is_request_rekomendasi))<i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Data ini tidak dapat diubah karena telah diajukan Nota Rekomendasi"></i>@endif</span>
                                                              </label>
                                                              @php
                                                                  $sumberdanas = $sumberdanas->sortBy('created_at');
@@ -1659,7 +1659,7 @@
                                                              <select id="sumber-dana" name="sumber-dana"
                                                                  class="form-select form-select-solid"
                                                                  data-control="select2" data-hide-search="false"
-                                                                 data-placeholder="Pilih Sumber Dana">
+                                                                 data-placeholder="Pilih Sumber Dana" {{ !is_null($proyek->NotaRekomendasi?->is_request_rekomendasi) ? "readonly" : "" }}>
                                                                  <option></option>
                                                                  @foreach ($sumberdanas as $sumberdana)
                                                                      @if ($sumberdana->kode_sumber == $proyek->sumber_dana)
@@ -1685,7 +1685,7 @@
                                                          <div class="fv-row mb-7">
                                                              <!--begin::Label-->
                                                              <label class="fs-6 fw-bold form-label mt-3">
-                                                                 <span>Nilai OK (Exclude Ppn) </span>
+                                                                 <span>Nilai OK (Exclude Ppn) @if(!is_null($proyek->NotaRekomendasi?->is_request_rekomendasi))<i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Data ini tidak dapat diubah karena telah diajukan Nota Rekomendasi"></i>@endif</span>
                                                              </label>
                                                              <!--end::Label-->
                                                              <!--begin::Input-->
@@ -1693,7 +1693,7 @@
                                                                  class="form-control reformat form-control-solid"
                                                                  id="nilai-rkap" name="nilai-rkap"
                                                                  value="{{ number_format((int) str_replace('.', '', $proyek->nilaiok_awal), 0, '.', '.') }}"
-                                                                 placeholder="Nilai OK (Excludde Ppn)" onfocusout="setRAKlasifikasi()" />
+                                                                 placeholder="Nilai OK (Excludde Ppn)" onfocusout="setRAKlasifikasi()" {{ !is_null($proyek->NotaRekomendasi?->is_request_rekomendasi) ? "readonly" : "" }}/>
                                                              <!--end::Input-->
                                                          </div>
                                                          <!--end::Input group-->
@@ -1704,7 +1704,7 @@
                                                          <div class="fv-row mb-7">
                                                              <!--begin::Label-->
                                                              <label class="fs-6 fw-bold form-label mt-3">
-                                                                 <span>Departemen </span>
+                                                                 <span>Departemen @if(!is_null($proyek->NotaRekomendasi?->is_request_rekomendasi))<i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Data ini tidak dapat diubah karena telah diajukan Nota Rekomendasi"></i>@endif</span>
                                                              </label>
                                                              <!--end::Label-->
                                                              <!--begin::Input-->
@@ -1712,7 +1712,7 @@
                                                              <select id="departemen-proyek" name="departemen-proyek"
                                                                  class="form-select form-select-solid"
                                                                  data-control="select2" data-hide-search="false"
-                                                                 data-placeholder="Pilih Departemen">
+                                                                 data-placeholder="Pilih Departemen" {{ !is_null($proyek->NotaRekomendasi?->is_request_rekomendasi) ? "readonly" : "" }}>
                                                                  <option value=""></option>
                                                                  @foreach ($departemen as $depart)
                                                                  <option value="{{ $depart->kode_departemen }}" {{ $depart->kode_departemen == $proyek->departemen_proyek ? "selected" : "" }}>{{ $depart->nama_departemen }}</option>
@@ -1798,13 +1798,13 @@
                                                          <div class="fv-row mb-7">
                                                              <!--begin::Label-->
                                                              <label class="fs-6 fw-bold form-label mt-3">
-                                                                 <span class="required">Negara</span>
+                                                                 <span class="required">Negara @if(!is_null($proyek->NotaRekomendasi?->is_request_rekomendasi))<i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Data ini tidak dapat diubah karena telah diajukan Nota Rekomendasi"></i>@endif</span>
                                                              </label>
                                                              <!--end::Label-->
                                                              <!--begin::Input-->
                                                              <select name="negara" id="negara" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
                                                                  {{-- onchange="selectNegara(this)" --}}
-                                                                 data-placeholder="Pilih Negara">
+                                                                 data-placeholder="Pilih Negara" {{ !is_null($proyek->NotaRekomendasi?->is_request_rekomendasi) ? "readonly" : "" }}>
                                                                  <option value=""></option>
                                                                  @foreach ($data_negara as $negara)
                                                                      @if ($negara->abbreviation == $proyek->negara || $negara->country == $proyek->negara)
@@ -1827,7 +1827,7 @@
                                                                  <div class="fv-row mb-7">
                                                                      <!--begin::Label-->
                                                                      <label class="fs-6 fw-bold form-label mt-3">
-                                                                         <span class="required">Provinsi</span>
+                                                                         <span class="required">Provinsi @if(!is_null($proyek->NotaRekomendasi?->is_request_rekomendasi))<i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Data ini tidak dapat diubah karena telah diajukan Nota Rekomendasi"></i>@endif</span>
                                                                      </label>
                                                                      <!--end::Label-->
                                                                      <!--begin::Input-->
@@ -1836,7 +1836,7 @@
                                                                      <div id="div-provinsi">
                                                                          <select name="provinsi" id="provinsi" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
                                                                              {{-- onchange="selectProvinsi(this)"  --}}
-                                                                             data-placeholder="Pilih Customer Provinsi">
+                                                                             data-placeholder="Pilih Customer Provinsi" {{ !is_null($proyek->NotaRekomendasi?->is_request_rekomendasi) ? "readonly" : "" }}>
                                                                              <option value=""></option>
                                                                              @foreach ($provinsi as $provinsi)
                                                                                  @if ($provinsi->province_id == $proyek->provinsi)
@@ -1864,7 +1864,7 @@
                                                      <div class="fv-row mb-7">
                                                          <!--Begin::Dokumen Nota Rekomendasi 1-->
                                                          <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                                             Dokumen Pendukung <small><i>(Mohon diperhatikan dokumen yang diupload tidak boleh terdapat permission. Total max size upload 20MB)</i></small>
+                                                             Dokumen Pendukung @if(!is_null($proyek->NotaRekomendasi?->is_request_rekomendasi))<i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Data ini tidak dapat diubah karena telah diajukan Nota Rekomendasi"></i>@endif <small><i>(Mohon diperhatikan dokumen yang diupload tidak boleh terdapat permission. Total max size upload 20MB)</i></small>
                                                          </h3>
                                                          @canany(['super-admin', 'approver-crm', 'user-crm', 'admin-crm'])
                                                          {{-- @if (empty($proyek->DokumenPendukungPasarDini)) --}}
@@ -1872,7 +1872,7 @@
                                                          <div class="w-50">
                                                              <input type="file"
                                                                  class="form-control form-control-sm form-input-solid"
-                                                                 name="dokumen-pendukung-pasar-dini" accept=".pdf">
+                                                                 name="dokumen-pendukung-pasar-dini" accept=".pdf" {{ !is_null($proyek->NotaRekomendasi?->is_request_rekomendasi) ? "disabled" : "" }}>
                                                          </div>
                                                          <h6 id="error-dokumen-pendukung-pasar-dini" class="text-danger fw-normal"
                                                              style="display: none">*File
@@ -1921,14 +1921,16 @@
                                                                         <!--begin::Action-->
                                                                         <td class="text-center align-middle">
                                                                             @canany(['super-admin', 'user-crm'])
-                                                                                <small>
-                                                                                    <p data-bs-toggle="modal"
-                                                                                        data-bs-target="#kt_dokumen_pendukung_pasdin_delete_{{ $dokumen->id }}"
-                                                                                        id="modal-delete"
-                                                                                        class="btn btn-sm btn-light btn-active-primary m-0">
-                                                                                        Delete
-                                                                                    </p>
-                                                                                </small>                                                                            
+                                                                            @if (is_null($proyek->NotaRekomendasi?->is_request_rekomendasi))
+                                                                            <small>
+                                                                                <p data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_dokumen_pendukung_pasdin_delete_{{ $dokumen->id }}"
+                                                                                    id="modal-delete"
+                                                                                    class="btn btn-sm btn-light btn-active-primary m-0">
+                                                                                    Delete
+                                                                                </p>
+                                                                            </small>                                                                                
+                                                                            @endif
                                                                             @endcanany
                                                                         </td>
                                                                         <!--end::Action-->
