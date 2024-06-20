@@ -272,7 +272,9 @@ class ContractManagementsController extends Controller
 
             if (!empty($proyekSelected)) {
                 if (!empty($filterBulan) && $filterTahun == date('Y')) {
-                    $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=",
+                    $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where(
+                        "tahun_perolehan",
+                        "=",
                         $filterTahun
                     )->where("bulan_pelaksanaan", "<=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->whereIn('contract_managements.profit_center', $proyekSelected)->get();
                 } else {
@@ -281,7 +283,8 @@ class ContractManagementsController extends Controller
                     } elseif ($filterTahun < 2023 && empty($filterBulan)) {
                         $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "<=", $filterTahun)->where("bulan_pelaksanaan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("jenis_proyek", $jenis_proyek_get)->whereIn('contract_managements.profit_center', $proyekSelected)->get();
                     } else {
-                        $proyeks_all = Proyek::join("contract_managements",
+                        $proyeks_all = Proyek::join(
+                            "contract_managements",
                             "contract_managements.project_id",
                             "=",
                             "proyeks.kode_proyek"
@@ -1512,15 +1515,20 @@ class ContractManagementsController extends Controller
     public function siteInstruction(Request $request, SiteInstruction $siteInstruction)
     {
         $data = $request->all();
+        $maxSize = env('MAX_FILE_SIZE');
 
         $messages = [
-            "required" => "Field di atas wajib diisi",
-            "numeric" => "Field di atas harus numeric",
-            "string" => "This field must be alphabet only",
-            "file" => "This field must be file only",
+            "required" => "Field :attribute wajib diisi",
+            "numeric" => "Field :attribute harus numeric",
+            "string" => "Field :attribute harus text",
+            "date" => "Field :attribute harus format tanggal",
+            "file-dokumen-instruction" => [
+                "max" => "Upload dokumen maksimal 70 MB",
+                "mimes" => "Upload dokumen dengan format PDF"
+            ],
         ];
         $rules = [
-            "file-dokumen-instruction" => "required|file",
+            "file-dokumen-instruction" => "required|file|mimes:pdf|max:$maxSize",
             "nomor-dokumen-instruction" => "required|string",
             "tanggal-dokumen-instruction" => "required|date",
             "uraian-dokumen-instruction" => "required|string",
@@ -1529,7 +1537,13 @@ class ContractManagementsController extends Controller
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
             $request->old("nomor-dokumen-instruction");
-            Alert::error('Error', "Dokumen Site Instruction gagal ditambahkan");
+            $errors = $validation->errors();
+            $collectMessage = "";
+            foreach ($errors->all() as $error) {
+                $collectMessage .= str_replace("-", " ", $error) . "<br>";
+            }
+
+            Alert::html("Error", $collectMessage, "error");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // return Redirect::back();
         }
@@ -1603,16 +1617,20 @@ class ContractManagementsController extends Controller
     public function technicalForm(Request $request, TechnicalForm $technicalForm)
     {
         $data = $request->all();
+        $maxSize = env('MAX_FILE_SIZE');
 
         $messages = [
-            "required" => "Field di atas wajib diisi",
-            "numeric" => "Field di atas harus numeric",
-            "date" => "Field di atas harus date",
-            "string" => "This field must be alphabet only",
-            "file" => "This field must be file only",
+            "required" => "Field :attribute wajib diisi",
+            "numeric" => "Field :attribute harus numeric",
+            "string" => "Field :attribute harus text",
+            "date" => "Field :attribute harus format tanggal",
+            "file-technical-form" => [
+                "max" => "Upload dokumen maksimal 70 MB",
+                "mimes" => "Upload dokumen dengan format PDF"
+            ],
         ];
         $rules = [
-            "file-technical-form" => "required|file",
+            "file-technical-form" => "required|file|mimes:pdf|max:$maxSize",
             "nomor-technical-form" => "required|string",
             "tanggal-technical-form" => "required|date",
             "uraian-technical-form" => "required|string",
@@ -1621,7 +1639,13 @@ class ContractManagementsController extends Controller
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
             $request->old("nomor-technical-form");
-            Alert::error('Error', "Dokumen Technical Form gagal ditambahkan");
+            $errors = $validation->errors();
+            $collectMessage = "";
+            foreach ($errors->all() as $error) {
+                $collectMessage .= str_replace("-", " ", $error) . "<br>";
+            }
+
+            Alert::html("Error", $collectMessage, "error");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // return Redirect::back();
         }
@@ -1694,17 +1718,20 @@ class ContractManagementsController extends Controller
     public function technicalQuery(Request $request, TechnicalQuery $technicalQuery)
     {
         $data = $request->all();
-        
+        $maxSize = env('MAX_FILE_SIZE');
 
         $messages = [
-            "required" => "Field di atas wajib diisi",
-            "numeric" => "Field di atas harus numeric",
-            "date" => "Field di atas harus date",
-            "string" => "This field must be alphabet only",
-            "file" => "This field must be file only",
+            "required" => "Field :attribute wajib diisi",
+            "numeric" => "Field :attribute harus numeric",
+            "string" => "Field :attribute harus text",
+            "date" => "Field :attribute harus format tanggal",
+            "file-technical-query" => [
+                "max" => "Upload dokumen maksimal 70 MB",
+                "mimes" => "Upload dokumen dengan format PDF"
+            ],
         ];
         $rules = [
-            "file-technical-query" => "required|file",
+            "file-technical-query" => "required|file|mimes:pdf|max:$maxSize",
             "nomor-technical-query" => "required|string",
             "tanggal-technical-query" => "required|date",
             "uraian-technical-query" => "required|string",
@@ -1713,7 +1740,13 @@ class ContractManagementsController extends Controller
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
             $request->old("nomor-technical-query");
-            Alert::error('Error', "Dokumen Technical Query gagal ditambahkan");
+            $errors = $validation->errors();
+            $collectMessage = "";
+            foreach ($errors->all() as $error) {
+                $collectMessage .= str_replace("-", " ", $error) . "<br>";
+            }
+
+            Alert::html("Error", $collectMessage, "error");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // return Redirect::back();
         }
@@ -1788,17 +1821,20 @@ class ContractManagementsController extends Controller
     public function fieldChange(Request $request, FieldChange $fieldChange)
     {
         $data = $request->all();
-        
+        $maxSize = env('MAX_FILE_SIZE');
 
         $messages = [
-            "required" => "Field di atas wajib diisi",
-            "numeric" => "Field di atas harus numeric",
-            "date" => "Field di atas harus date",
-            "string" => "This field must be alphabet only",
-            "file" => "This field must be file only",
+            "required" => "Field :attribute wajib diisi",
+            "numeric" => "Field :attribute harus numeric",
+            "string" => "Field :attribute harus text",
+            "date" => "Field :attribute harus format tanggal",
+            "file-field-design-change" => [
+                "max" => "Upload dokumen maksimal 70 MB",
+                "mimes" => "Upload dokumen dengan format PDF"
+            ],
         ];
         $rules = [
-            "file-field-design-change" => "required|file",
+            "file-field-design-change" => "required|file|mimes:pdf|max:$maxSize",
             "nomor-field-design-change" => "required|string",
             "tanggal-field-design-change" => "required|date",
             "uraian-field-design-change" => "required|string",
@@ -1807,7 +1843,13 @@ class ContractManagementsController extends Controller
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
             $request->old("nomor-field-design-change");
-            Alert::error('Error', "Dokumen Field Design Change gagal ditambahkan");
+            $errors = $validation->errors();
+            $collectMessage = "";
+            foreach ($errors->all() as $error) {
+                $collectMessage .= str_replace("-", " ", $error) . "<br>";
+            }
+
+            Alert::html("Error", $collectMessage, "error");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // return Redirect::back();
         }
@@ -1880,17 +1922,20 @@ class ContractManagementsController extends Controller
     public function changeNotice(Request $request, ContractChangeNotice $changeNotice)
     {
         $data = $request->all();
-        
+        $maxSize = env('MAX_FILE_SIZE');
 
         $messages = [
-            "required" => "Field di atas wajib diisi",
-            "numeric" => "Field di atas harus numeric",
-            "date" => "Field di atas harus date",
-            "string" => "This field must be alphabet only",
-            "file" => "This field must be file only",
+            "required" => "Field :attribute wajib diisi",
+            "numeric" => "Field :attribute harus numeric",
+            "string" => "Field :attribute harus text",
+            "date" => "Field :attribute harus format tanggal",
+            "file-contract-change-notice" => [
+                "max" => "Upload dokumen maksimal 70 MB",
+                "mimes" => "Upload dokumen dengan format PDF"
+            ],
         ];
         $rules = [
-            "file-contract-change-notice" => "required|file",
+            "file-contract-change-notice" => "required|file|mimes:pdf|max:$maxSize",
             "nomor-contract-change-notice" => "required|string",
             "tanggal-contract-change-notice" => "required|date",
             "uraian-contract-change-notice" => "required|string",
@@ -1898,7 +1943,13 @@ class ContractManagementsController extends Controller
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
-            Alert::error('Error', "Dokumen Contract Change Notice gagal ditambahkan");
+            $errors = $validation->errors();
+            $collectMessage = "";
+            foreach ($errors->all() as $error) {
+                $collectMessage .= str_replace("-", " ", $error) . "<br>";
+            }
+
+            Alert::html("Error", $collectMessage, "error");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // return Redirect::back();
         }
@@ -1972,17 +2023,20 @@ class ContractManagementsController extends Controller
     public function changeOrder(Request $request, ContractChangeOrder $changeOrder)
     {
         $data = $request->all();
-        
+        $maxSize = env('MAX_FILE_SIZE');
 
         $messages = [
-            "required" => "Field di atas wajib diisi",
-            "numeric" => "Field di atas harus numeric",
-            "date" => "Field di atas harus date",
-            "string" => "This field must be alphabet only",
-            "file" => "This field must be file only",
+            "required" => "Field :attribute wajib diisi",
+            "numeric" => "Field :attribute harus numeric",
+            "string" => "Field :attribute harus text",
+            "date" => "Field :attribute harus format tanggal",
+            "file-contract-change-order" => [
+                "max" => "Upload dokumen maksimal 70 MB",
+                "mimes" => "Upload dokumen dengan format PDF"
+            ],
         ];
         $rules = [
-            "file-contract-change-order" => "required|file",
+            "file-contract-change-order" => "required|file|mimes:pdf|max:$maxSize",
             "nomor-contract-change-order" => "required|string",
             "tanggal-contract-change-order" => "required|date",
             "uraian-contract-change-order" => "required|string",
@@ -1990,7 +2044,13 @@ class ContractManagementsController extends Controller
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
-            Alert::error('Error', "Dokumen Contract Change Order gagal ditambahkan");
+            $errors = $validation->errors();
+            $collectMessage = "";
+            foreach ($errors->all() as $error) {
+                $collectMessage .= str_replace("-", " ", $error) . "<br>";
+            }
+
+            Alert::html("Error", $collectMessage, "error");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // return Redirect::back();
         }
@@ -2063,17 +2123,20 @@ class ContractManagementsController extends Controller
     public function changeProposal(Request $request, ContractChangeProposal $changeProposal)
     {
         $data = $request->all();
-        
+        $maxSize = env('MAX_FILE_SIZE');
 
         $messages = [
-            "required" => "Field di atas wajib diisi",
-            "numeric" => "Field di atas harus numeric",
-            "date" => "Field di atas harus date",
-            "string" => "This field must be alphabet only",
-            "file" => "This field must be file only",
+            "required" => "Field :attribute wajib diisi",
+            "numeric" => "Field :attribute harus numeric",
+            "string" => "Field :attribute harus text",
+            "date" => "Field :attribute harus format tanggal",
+            "file-contract-change-proposal" => [
+                "max" => "Upload dokumen maksimal 70 MB",
+                "mimes" => "Upload dokumen dengan format PDF"
+            ],
         ];
         $rules = [
-            "file-contract-change-proposal" => "required|file",
+            "file-contract-change-proposal" => "required|file|mimes:pdf|max:$maxSize",
             "nomor-contract-change-proposal" => "required|string",
             "tanggal-contract-change-proposal" => "required|date",
             "uraian-contract-change-proposal" => "required|string",
@@ -2081,7 +2144,13 @@ class ContractManagementsController extends Controller
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
-            Alert::error('Error', "Dokumen Contract Change Proposal gagal ditambahkan");
+            $errors = $validation->errors();
+            $collectMessage = "";
+            foreach ($errors->all() as $error) {
+                $collectMessage .= str_replace("-", " ", $error) . "<br>";
+            }
+
+            Alert::html("Error", $collectMessage, "error");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // return Redirect::back();
         }
@@ -2347,12 +2416,17 @@ class ContractManagementsController extends Controller
     public function perjanjianKSO(Request $request)
     {
         $data = $request->all();
+        $maxSize = env('MAX_FILE_SIZE');
 
         $messages = [
-            "required" => "Field di atas wajib diisi",
-            "numeric" => "Field di atas harus numeric",
-            "string" => "This field must be alphabet only",
-            "file" => "This field must be file only",
+            "required" => "Field :attribute wajib diisi",
+            "numeric" => "Field :attribute harus numeric",
+            "string" => "Field :attribute harus text",
+            "date" => "Field :attribute harus format tanggal",
+            "attach-file" => [
+                "max" => "Upload dokumen maksimal 70 MB",
+                "mimes" => "Upload dokumen dengan format PDF"
+            ],
         ];
         $rules = [
             "attach-file" => "required|file",
@@ -2362,7 +2436,13 @@ class ContractManagementsController extends Controller
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
-            Alert::error('Error', "Perjanjian KSO gagal ditambahkan");
+            $errors = $validation->errors();
+            $collectMessage = "";
+            foreach ($errors->all() as $error) {
+                $collectMessage .= str_replace("-", " ", $error) . "<br>";
+            }
+
+            Alert::html("Error", $collectMessage, "error");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // dd($validation->errors());
         }
@@ -2394,23 +2474,33 @@ class ContractManagementsController extends Controller
     public function dokumenPendukungUpload(Request $request)
     {
         $data = $request->all();
+        $maxSize = env('MAX_FILE_SIZE');
         // dd($data);
 
         $messages = [
             "required" => "Field di atas wajib diisi",
             "numeric" => "Field di atas harus numeric",
             "string" => "This field must be alphabet only",
-            "file" => "This field must be file only",
+            "attach-file" => [
+                "max" => "Upload dokumen maksimal 70 MB",
+                "mimes" => "Upload dokumen dengan format PDF"
+            ],
         ];
         $rules = [
-            "attach-file" => "required|file",
+            "attach-file" => "required|file|mimes:pdf|max:$maxSize",
             // "document-name" => "required|string",
             "note" => "required|string",
             "id-perubahan-kontrak" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
-            Alert::error('Error', "Dokumen Pendukung gagal ditambahkan");
+            $errors = $validation->errors();
+            $collectMessage = "";
+            foreach ($errors->all() as $error) {
+                $collectMessage .= str_replace("-", " ", $error) . "<br>";
+            }
+
+            Alert::html("Error", $collectMessage, "error");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // dd($validation->errors());
         }
@@ -2467,22 +2557,33 @@ class ContractManagementsController extends Controller
     public function momMeeting(Request $request)
     {
         $data = $request->all();
+        $maxSize = env('MAX_FILE_SIZE');
 
         $messages = [
-            "required" => "Field di atas wajib diisi",
-            "numeric" => "Field di atas harus numeric",
-            "string" => "This field must be alphabet only",
-            "file" => "This field must be file only",
+            "required" => "Field :attribute wajib diisi",
+            "numeric" => "Field :attribute harus numeric",
+            "string" => "Field :attribute harus text",
+            "date" => "Field :attribute harus format tanggal",
+            "attach-file" => [
+                "max" => "Upload dokumen maksimal 70 MB",
+                "mimes" => "Upload dokumen dengan format PDF"
+            ],
         ];
         $rules = [
-            "attach-file" => "required|file",
+            "attach-file" => "required|file|mimes:pdf|max:$maxSize",
             "document-name" => "required|string",
             "note" => "required|string",
             "id-contract" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
-            Alert::error('Error', "MoM Kick Off Meeting gagal ditambahkan");
+            $errors = $validation->errors();
+            $collectMessage = "";
+            foreach ($errors->all() as $error) {
+                $collectMessage .= str_replace("-", " ", $error) . "<br>";
+            }
+
+            Alert::html("Error", $collectMessage, "error");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // dd($validation->errors());
         }
@@ -2514,17 +2615,51 @@ class ContractManagementsController extends Controller
     public function documentBastContractUpload(Request $request)
     {
         $data = $request->all();
+        $maxSize = env('MAX_FILE_SIZE');
+
+        $messages = [
+            "required" => "Field :attribute wajib diisi",
+            "numeric" => "Field :attribute harus numeric",
+            "string" => "Field :attribute harus text",
+            "date" => "Field :attribute harus format tanggal",
+            "dokumen-bast-1" => [
+                "max" => "Upload dokumen maksimal 70 MB",
+                "mimes" => "Upload dokumen dengan format PDF"
+            ],
+        ];
+        $rules = [
+            "dokumen-bast-1" => "required|file|mimes:pdf|max:$maxSize",
+            "nomor-dokumen" => "required|string",
+            "jenis-bast" => "required|string",
+            "status_dokumen" => "required|string",
+            "tanggal-dokumen" => "required|date",
+            // "id-contract" => "required|string",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            $errors = $validation->errors();
+            $collectMessage = "";
+            foreach ($errors->all() as $error) {
+                $collectMessage .= str_replace("-", " ", $error) . "<br>";
+            }
+
+            Alert::html("Error", $collectMessage, "error");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
+        }
+        $validation->validate();
+
         // dd($data);
-        $faker = new Uuid();
+        // $faker = new Uuid();
         $dokumen = new ContractBast();
-        $id_document = $faker->uuid3() . "." . $data['dokumen-bast-1']->getClientOriginalExtension();
+        // $id_document = $faker->uuid3() . "." . $data['dokumen-bast-1']->getClientOriginalExtension();
+        $id_document = date('Ymdhis_') . str_replace(' ', '', $data['dokumen-bast-1']->getClientOriginalExtension());
         $file_name = $data['dokumen-bast-1']->getClientOriginalName();
-        $nama_document = date("His_") . str_replace(" ", "", $file_name);
         // $nama_document = date("His_") . substr($uploadedFile->getClientOriginalName(), 0, strlen($uploadedFile->getClientOriginalName()) - 5);
         // moveFileTemp($data['dokumen-bast-1'], $id_document);
         
         $dokumen->nomor_dokumen = $data["nomor-dokumen"];
-        $dokumen->nama_dokumen = $nama_document;
+        $dokumen->nama_dokumen = $file_name;
         $dokumen->id_contract =  $data["id-contract"] ?? "";
         $dokumen->profit_center =  $data["profit-center"] ?? "";
         $dokumen->bast =  (int) $data["bast"];
@@ -2599,7 +2734,40 @@ class ContractManagementsController extends Controller
     public function documentBastContractEdit(Request $request, $id_bast) 
     {
         $data = $request->all();
-        // dd($data);
+        $maxSize = env('MAX_FILE_SIZE');
+
+        $messages = [
+            "required" => "Field :attribute wajib diisi",
+            "numeric" => "Field :attribute harus numeric",
+            "string" => "Field :attribute harus text",
+            "date" => "Field :attribute harus format tanggal",
+            "dokumen-bast-1" => [
+                "max" => "Upload dokumen maksimal 70 MB",
+                "mimes" => "Upload dokumen dengan format PDF"
+            ],
+        ];
+        $rules = [
+            "dokumen-bast-1" => "required|file|mimes:pdf|max:$maxSize",
+            "nomor-dokumen" => "required|string",
+            "jenis-bast" => "required|string",
+            "status_dokumen" => "required|string",
+            "tanggal-dokumen" => "required|date",
+            // "id-contract" => "required|string",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            $errors = $validation->errors();
+            $collectMessage = "";
+            foreach ($errors->all() as $error) {
+                $collectMessage .= str_replace("-", " ", $error) . "<br>";
+            }
+
+            Alert::html("Error", $collectMessage, "error");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
+        }
+        $validation->validate();
+
         $faker = new Uuid();
         $dokumen = ContractBast::find($id_bast);
 
@@ -2663,20 +2831,33 @@ class ContractManagementsController extends Controller
     public function baDefectContractUpload(Request $request)
     {
         $data = $request->all();
+        $maxSize = env('MAX_FILE_SIZE');
 
         $messages = [
-            "required" => "Field di atas wajib diisi",
-            "file" => "This field must be file only",
+            "required" => "Field :attribute wajib diisi",
+            "numeric" => "Field :attribute harus numeric",
+            "string" => "Field :attribute harus text",
+            "date" => "Field :attribute harus format tanggal",
+            "ba-defect" => [
+                "max" => "Upload dokumen maksimal 70 MB",
+                "mimes" => "Upload dokumen dengan format PDF"
+            ],
         ];
         $rules = [
-            "ba-defect" => "required",
+            "ba-defect" => "required|file|mimes:pdf|max:$maxSize",
             "id-contract" => "required",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
-            Alert::error('Error', "BA Defect gagal ditambahkan");
+            $errors = $validation->errors();
+            $collectMessage = "";
+            foreach ($errors->all() as $error) {
+                $collectMessage .= str_replace("-", " ", $error) . "<br>";
+            }
+
+            Alert::html("Error", $collectMessage, "error");
             return Redirect::back()->with("modal", $data["modal-name"]);
-            // dd($validation->errors());
+            // return Redirect::back();
         }
         $validation->validate();
 
@@ -2721,10 +2902,17 @@ class ContractManagementsController extends Controller
     public function dokumenPendukungContractUpload(Request $request)
     {
         $data = $request->all();
+        $maxSize = env('MAX_FILE_SIZE');
 
         $messages = [
-            "required" => "Field di atas wajib diisi",
-            "file" => "This field must be file only",
+            "required" => "Field :attribute wajib diisi",
+            "numeric" => "Field :attribute harus numeric",
+            "string" => "Field :attribute harus text",
+            "date" => "Field :attribute harus format tanggal",
+            "dokumen-pendukung" => [
+                "max" => "Upload dokumen maksimal 70 MB",
+                "mimes" => "Upload dokumen dengan format PDF"
+            ],
         ];
         $rules = [
             "dokumen-pendukung" => "required",
@@ -2732,7 +2920,13 @@ class ContractManagementsController extends Controller
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
-            Alert::error('Error', "BA Defect gagal ditambahkan");
+            $errors = $validation->errors();
+            $collectMessage = "";
+            foreach ($errors->all() as $error) {
+                $collectMessage .= str_replace("-", " ", $error) . "<br>";
+            }
+
+            Alert::html("Error", $collectMessage, "error");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // dd($validation->errors());
         }
@@ -2789,10 +2983,14 @@ class ContractManagementsController extends Controller
     {
         $data = $request->all();
         $file = $request->file("file-document");
+        $maxSize = env('MAX_FILE_SIZE');
 
         $messages = [
             "required" => "Field di atas wajib diisi",
-            "file" => "This field must be file only",
+            "file-document" => [
+                "max" => "Upload dokumen maksimal 70 MB",
+                "mimes" => "Upload dokumen dengan format PDF"
+            ],
         ];
         $rules = [
             "pending-issue" => "required",
@@ -2804,6 +3002,7 @@ class ContractManagementsController extends Controller
             // "ancaman" => "required",
             "id-contract" => "required",
             // "peluang" => "required",
+            "file-document" => "file|mimes:pdf|max:$maxSize",
         ];
 
         if (isset($data["file-document"])) {
@@ -2815,7 +3014,13 @@ class ContractManagementsController extends Controller
         }
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
-            Alert::error('Error', "Pending Issue gagal ditambahkan");
+            $errors = $validation->errors();
+            $collectMessage = "";
+            foreach ($errors->all() as $error) {
+                $collectMessage .= str_replace("-", " ", $error) . "<br>";
+            }
+
+            Alert::html("Error", $collectMessage, "error");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // dd($validation->errors());
         }
@@ -2879,9 +3084,13 @@ class ContractManagementsController extends Controller
     public function pendingIssueContractEdit(Request $request, PendingIssue $pendingIssue)
     {
         $data = $request->all();
+        $maxSize = env('MAX_FILE_SIZE');
         $messages = [
             "required" => "Field di atas wajib diisi",
-            "file" => "This field must be file only",
+            "pending-issue-file" => [
+                "max" => "Upload dokumen maksimal 70 MB",
+                "mimes" => "Upload dokumen dengan format PDF"
+            ],
         ];
         $rules = [
             "pending-issue" => "required",
@@ -2893,6 +3102,7 @@ class ContractManagementsController extends Controller
             // "ancaman" => "required",
             "id-contract" => "required",
             // "peluang" => "required",
+            "pending-issue-file" => "file|mimes:pdf|max:$maxSize",
         ];
         if (isset($data["pending-issue-file"])) {
             $rules["pending-issue-file"] = "required|file";
@@ -2901,7 +3111,13 @@ class ContractManagementsController extends Controller
         }
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
-            Alert::error('Error', "Pending Issue gagal ditambahkan");
+            $errors = $validation->errors();
+            $collectMessage = "";
+            foreach ($errors->all() as $error) {
+                $collectMessage .= str_replace("-", " ", $error) . "<br>";
+            }
+
+            Alert::html("Error", $collectMessage, "error");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // dd($validation->errors());
         }
@@ -3066,21 +3282,28 @@ class ContractManagementsController extends Controller
     public function rencanaKerjaManajemenContractUpload(Request $request, RencanKerjaManajemenKontrak $rencanKerjaManajemenKontrak)
     {
         $data = $request->all();
-        $file = $request->file("file-document");
-        $id_document = date("His_") . $file->getClientOriginalName();
-        $nama_file = $file->getClientOriginalName();
+        $maxSize = env('MAX_FILE_SIZE');
 
         $messages = [
             "required" => "Field di atas wajib diisi",
-            "file" => "This field must be file only",
+            "file-document" => [
+                "max" => "Upload dokumen maksimal 70 MB",
+                "mimes" => "Upload dokumen dengan format PDF"
+            ],
         ];
         $rules = [
             "id-contract" => "required",
-            "file-document" => "required|file",
+            "file-document" => "required|file|mimes:pdf|max:$maxSize",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
-            Alert::error('Error', "Rencana Kerja Manajemen Kontrak gagal ditambahkan");
+            $errors = $validation->errors();
+            $collectMessage = "";
+            foreach ($errors->all() as $error) {
+                $collectMessage .= str_replace("-", " ", $error) . "<br>";
+            }
+
+            Alert::html("Error", $collectMessage, "error");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // dd($validation->errors());
         }
@@ -3097,13 +3320,18 @@ class ContractManagementsController extends Controller
             // return redirect()->back();
         }
 
+        $file = $request->file("file-document");
+        $id_document = date("YmdHis_") . str_replace(' ', '', $file->getClientOriginalName());
+        $nama_file = $file->getClientOriginalName();
+
         $rencanKerjaManajemenKontrak->id_contract = $contract->id_contract ?? "-";
         $rencanKerjaManajemenKontrak->profit_center = $contract->profit_center ?? "-";
         $rencanKerjaManajemenKontrak->id_document = $id_document;
         $rencanKerjaManajemenKontrak->nama_document = $nama_file;
 
         if ($rencanKerjaManajemenKontrak->save()) {
-            moveFileTemp($file, explode(".", $id_document)[0]);
+            // moveFileTemp($file, explode(".", $id_document)[0]);
+            $file->move(public_path('contract-managements/rencana-kerja-manajemen-kontrak'), $id_document);
             Alert::success("Success", "Rencana Kerja Manajemen Kontrak berhasil ditambahkan");
             return redirect()->back();
         }
@@ -3250,12 +3478,17 @@ class ContractManagementsController extends Controller
 
     public function uploadAsuransi(Request $request, ContractAsuransi $asuransi) {
         $data = $request->all();
-        $file = $request->file("file-document");
-        $id_document = date("His_") . str_replace(" ", "-", $file->getClientOriginalName());
-        $nama_file = $file->getClientOriginalName();
+        $maxSize = env('MAX_FILE_SIZE');
+
         $messages = [
-            "required" => "Field di atas wajib diisi",
-            "string" => "This field must be string only",
+            "required" => "Field :attribute wajib diisi",
+            "numeric" => "Field :attribute harus numeric",
+            "string" => "Field :attribute harus text",
+            "date" => "Field :attribute harus format tanggal",
+            "file-document" => [
+                "max" => "Upload dokumen maksimal 70 MB",
+                "mimes" => "Upload dokumen dengan format PDF"
+            ],
         ];
         $rules = [
             "kategori-asuransi" => "required",
@@ -3264,11 +3497,18 @@ class ContractManagementsController extends Controller
             "penerbit-polis-asuransi" => "required",
             "tanggal-penerbitan-asuransi" => "required",
             "tanggal-berakhir-asuransi" => "required",
+            "file-dokumen-instruction" => "file|mimes:pdf|max:$maxSize",
             // "status-asuransi" => "required",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
-            Alert::error('Error', "Data Asuransi gagal ditambahkan");
+            $errors = $validation->errors();
+            $collectMessage = "";
+            foreach ($errors->all() as $error) {
+                $collectMessage .= str_replace("-", " ", $error) . "<br>";
+            }
+
+            Alert::html("Error", $collectMessage, "error");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // dd($validation->errors());
         }
@@ -3286,6 +3526,10 @@ class ContractManagementsController extends Controller
         }
 
         if(isset($data['file-document'])){
+            $file = $request->file("file-document");
+            $id_document = date("His_") . str_replace(" ", "-", $file->getClientOriginalName());
+            $nama_file = $file->getClientOriginalName();
+
             $uploadFinal = new ContractUploadFinal();
             $uploadFinal->id_contract = $contract->id_contract;
             $uploadFinal->profit_center = $contract->profit_center;
@@ -3329,12 +3573,17 @@ class ContractManagementsController extends Controller
     
     public function editAsuransi(Request $request, ContractAsuransi $asuransi) {
         $data = $request->all();
-        $file = $request->file("file-document");
-        $id_document = date("His_") . str_replace(" ", "-", $file->getClientOriginalName());
-        $nama_file = $file->getClientOriginalName();
+        $maxSize = env('MAX_FILE_SIZE');
+        
         $messages = [
-            "required" => "Field di atas wajib diisi",
-            "string" => "This field must be string only",
+            "required" => "Field :attribute wajib diisi",
+            "numeric" => "Field :attribute harus numeric",
+            "string" => "Field :attribute harus text",
+            "date" => "Field :attribute harus format tanggal",
+            "file-document" => [
+                "max" => "Upload dokumen maksimal 70 MB",
+                "mimes" => "Upload dokumen dengan format PDF"
+            ],
         ];
         $rules = [
             "kategori-asuransi" => "required",
@@ -3343,6 +3592,7 @@ class ContractManagementsController extends Controller
             "penerbit-polis-asuransi" => "required",
             "tanggal-penerbitan-asuransi" => "required",
             "tanggal-berakhir-asuransi" => "required",
+            "file-document" => "file|mimes:pdf|max:$maxSize",
             // "status-asuransi" => "required",
         ];
         $validation = Validator::make($data, $rules, $messages);
@@ -3365,6 +3615,10 @@ class ContractManagementsController extends Controller
         }
 
         if(isset($data['file-document'])){
+            $file = $request->file("file-document");
+            $id_document = date("His_") . str_replace(" ", "-", $file->getClientOriginalName());
+            $nama_file = $file->getClientOriginalName();
+
             $asuransi_get = $contract->Asuransi->where('kategori_asuransi', '=', $data["kategori-asuransi"])->sortByDesc('created_at')->first();
             $id_document_asuransi = $asuransi_get->id_document;
             // dd($id_document_asuransi);
@@ -3438,12 +3692,17 @@ class ContractManagementsController extends Controller
 
     public function uploadJaminan(Request $request, ContractJaminan $jaminan) {
         $data = $request->all();
-        $file = $request->file("file-document");
-        $id_document = date("His_") . str_replace(" ", "-", $file->getClientOriginalName());
-        $nama_file = $file->getClientOriginalName();
+        $maxSize = env('MAX_FILE_SIZE');
+        
         $messages = [
-            "required" => "Field di atas wajib diisi",
-            "string" => "This field must be string only",
+            "required" => "Field :attribute wajib diisi",
+            "numeric" => "Field :attribute harus numeric",
+            "string" => "Field :attribute harus text",
+            "date" => "Field :attribute harus format tanggal",
+            "file-document" => [
+                "max" => "Upload dokumen maksimal 70 MB",
+                "mimes" => "Upload dokumen dengan format PDF"
+            ],
         ];
         $rules = [
             "kategori-jaminan" => "required",
@@ -3452,11 +3711,18 @@ class ContractManagementsController extends Controller
             "penerbit-jaminan" => "required",
             "tanggal-penerbitan-jaminan" => "required",
             "tanggal-berakhir-jaminan" => "required",
+            "file-document" => "file|mimes:pdf|max:$maxSize",
             // "status-jaminan" => "required",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
-            Alert::error('Error', "Data Jaminan gagal ditambahkan");
+            $errors = $validation->errors();
+            $collectMessage = "";
+            foreach ($errors->all() as $error) {
+                $collectMessage .= str_replace("-", " ", $error) . "<br>";
+            }
+
+            Alert::html("Error", $collectMessage, "error");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // dd($validation->errors());
         }
@@ -3474,6 +3740,10 @@ class ContractManagementsController extends Controller
         }
 
         if(isset($data['file-document'])){
+            $file = $request->file("file-document");
+            $id_document = date("His_") . str_replace(" ", "-", $file->getClientOriginalName());
+            $nama_file = $file->getClientOriginalName();
+
             $uploadFinal = new ContractUploadFinal();
             $uploadFinal->id_contract = $contract->id_contract;
             $uploadFinal->profti_center = $contract->profti_center;
@@ -3514,12 +3784,17 @@ class ContractManagementsController extends Controller
 
     public function editJaminan(Request $request, ContractJaminan $jaminan) {
         $data = $request->all();
-        $file = $request->file("file-document");
-        $id_document = date("His_") . str_replace(" ", "-", $file->getClientOriginalName());
-        $nama_file = $file->getClientOriginalName();
+        $maxSize = env('MAX_FILE_SIZE');
+        
         $messages = [
-            "required" => "Field di atas wajib diisi",
-            "string" => "This field must be string only",
+            "required" => "Field :attribute wajib diisi",
+            "numeric" => "Field :attribute harus numeric",
+            "string" => "Field :attribute harus text",
+            "date" => "Field :attribute harus format tanggal",
+            "file-document" => [
+                "max" => "Upload dokumen maksimal 70 MB",
+                "mimes" => "Upload dokumen dengan format PDF"
+            ],
         ];
         $rules = [
             "kategori-jaminan" => "required",
@@ -3528,11 +3803,18 @@ class ContractManagementsController extends Controller
             "penerbit-jaminan" => "required",
             "tanggal-penerbitan-jaminan" => "required",
             "tanggal-berakhir-jaminan" => "required",
+            "file-document" => "file|mimes:pdf|max:$maxSize",
             // "status-jaminan" => "required",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
-            Alert::error('Error', "Data Jaminan gagal diedit");
+            $errors = $validation->errors();
+            $collectMessage = "";
+            foreach ($errors->all() as $error) {
+                $collectMessage .= str_replace("-", " ", $error) . "<br>";
+            }
+
+            Alert::html("Error", $collectMessage, "error");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // dd($validation->errors());
         }
@@ -3551,6 +3833,10 @@ class ContractManagementsController extends Controller
         // dd();
 
         if(isset($data['file-document'])){
+            $file = $request->file("file-document");
+            $id_document = date("His_") . str_replace(" ", "-", $file->getClientOriginalName());
+            $nama_file = $file->getClientOriginalName();
+            
             $jaminan_get = $contract->Jaminan->where('kategori_jaminan', '=', $data["kategori-jaminan"])->sortByDesc('created_at')->first();
             $id_document_jaminan = $jaminan_get->id_document;
             // dd($id_document_jaminan);
@@ -3619,6 +3905,8 @@ class ContractManagementsController extends Controller
     public function uploadDokumenFinal(Request $request)
     {
         $data = $request->all();
+        $maxSize = env('MAX_FILE_SIZE');
+
         $file = $request->file("file-document");
 
         if (is_array($file)) {
@@ -3660,12 +3948,15 @@ class ContractManagementsController extends Controller
         ];
 
         $messages = [
-            "required" => "Field di atas wajib diisi",
-            "file" => "This field must be file only",
+            "required" => "Field :attribute wajib diisi",
+            "file-document" => [
+                "max" => "Upload dokumen maksimal 70 MB",
+                "mimes" => "Upload dokumen dengan format PDF"
+            ],
         ];
         $rules = [
             "id-contract" => "required",
-            "file-document" => "required",
+            "file-document" => "required|file|mimes:pdf|max:$maxSize",
             "kategori-path" => "required"
         ];
         if (isset($data['status_dokumen'])) {
@@ -3674,7 +3965,13 @@ class ContractManagementsController extends Controller
         }
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
-            Alert::error('Error', "Dokumen gagal ditambahkan");
+            $errors = $validation->errors();
+            $collectMessage = "";
+            foreach ($errors->all() as $error) {
+                $collectMessage .= str_replace("-", " ", $error) . "<br>";
+            }
+
+            Alert::html("Error", $collectMessage, "error");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // dd($validation->errors());
         }
@@ -3815,14 +4112,18 @@ class ContractManagementsController extends Controller
     public function editDokumenFinal(Request $request, $id)
     {
         $data = $request->all();
+        $maxSize = env('MAX_FILE_SIZE');
 
         $messages = [
-            "required" => "Field di atas wajib diisi",
-            "file" => "This field must be file only",
+            "required" => "Field :attribute wajib diisi",
+            "file-document" => [
+                "max" => "Upload dokumen maksimal 70 MB",
+                "mimes" => "Upload dokumen dengan format PDF"
+            ],
         ];
         $rules = [
             "id-contract" => "required",
-            "file-document" => "file",
+            "file-document" => "required|file|mimes:pdf|max:$maxSize",
         ];
         if (isset($data['status_dokumen'])) {
             $addRules = ['status_dokumen' => "required|string"];
@@ -3830,7 +4131,13 @@ class ContractManagementsController extends Controller
         }
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
-            Alert::error('Error', "Dokumen gagal ditambahkan");
+            $errors = $validation->errors();
+            $collectMessage = "";
+            foreach ($errors->all() as $error) {
+                $collectMessage .= str_replace("-", " ", $error) . "<br>";
+            }
+
+            Alert::html("Error", $collectMessage, "error");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // dd($validation->errors());
         }
@@ -4959,16 +5266,38 @@ class ContractManagementsController extends Controller
     {
         try {
             $data = $request->all();
+            $maxSize = env('MAX_FILE_SIZE');
 
-            if (empty($data['file-document'])) {
-                Alert::error('Error', 'Input dokumen terlebih dahulu!');
-                return redirect()->back();
+            // if (empty($data['file-document'])) {
+            //     Alert::error('Error', 'Input dokumen terlebih dahulu!');
+            //     return redirect()->back();
+            // }
+            $messages = [
+                "required" => "Field :attribute wajib diisi",
+                "file-document" => [
+                    "max" => "Upload dokumen maksimal 70 MB",
+                    "mimes" => "Upload dokumen dengan format PDF"
+                ],
+            ];
+            $rules = [
+                "file-document" => "required|file|mimes:pdf|max:$maxSize",
+                // "id-contract" => "required|string",
+            ];
+            $validation = Validator::make($data, $rules, $messages);
+            if ($validation->fails()) {
+                $errors = $validation->errors();
+                $collectMessage = "";
+                foreach ($errors->all() as $error) {
+                    $collectMessage .= str_replace("-", " ", $error) . "<br>";
+                }
+
+                Alert::html("Error", $collectMessage, "error");
+                return Redirect::back()->with("modal", $data["modal-name"]);
+                // return Redirect::back();
             }
+            $validation->validate();
 
-            $contract = ContractManagements::where(function ($query) use ($data) {
-                $query->where('profit_center', $data['profit-center'])
-                ->orWhere('id_contract', $data['profit-center']);
-            })->first();
+            $contract = ContractManagements::where('profit_center', $data['profit-center'])->first();
 
             if (empty($contract)) {
                 Alert::error('Error', 'Kontrak tidak ditemukan. Silahkan hubungi Admin!');
@@ -5021,6 +5350,7 @@ class ContractManagementsController extends Controller
     {
         try {
             $data = $request->all();
+            $maxSize = env('MAX_FILE_SIZE');
 
 
             if (!isset($data['file-document']) && empty($data['file-document'])) {
@@ -5028,12 +5358,34 @@ class ContractManagementsController extends Controller
                 return redirect()->back();
             }
 
+            $messages = [
+                "required" => "Field :attribute wajib diisi",
+                "file-document" => [
+                    "max" => "Upload dokumen maksimal 70 MB",
+                    "mimes" => "Upload dokumen dengan format PDF"
+                ],
+            ];
+            $rules = [
+                "file-document" => "required|file|mimes:pdf|max:$maxSize",
+                // "id-contract" => "required|string",
+            ];
+            $validation = Validator::make($data, $rules, $messages);
+            if ($validation->fails()) {
+                $errors = $validation->errors();
+                $collectMessage = "";
+                foreach ($errors->all() as $error) {
+                    $collectMessage .= str_replace("-", " ", $error) . "<br>";
+                }
+
+                Alert::html("Error", $collectMessage, "error");
+                return Redirect::back()->with("modal", $data["modal-name"]);
+                // return Redirect::back();
+            }
+            $validation->validate();
+
             $file = $data['file-document'];
 
-            $contract = ContractManagements::where(function ($query) use ($data) {
-                $query->where('profit_center', $data['profit-center'])
-                ->orWhere('id_contract', $data['profit-center']);
-            })->first();
+            $contract = ContractManagements::where('profit_center', $data['profit-center'])->first();
 
             if (empty($contract)) {
                 Alert::error('Error', 'Kontrak tidak ditemukan. Silahkan hubungi Admin!');
@@ -5095,10 +5447,7 @@ class ContractManagementsController extends Controller
         $data = $request->all();
 
         try {
-            $contract = ContractManagements::where(function ($query) use ($data) {
-                $query->where('profit_center', $data['id-contract'])
-                    ->orWhere('id_contract', $data['id-contract']);
-            })->first();
+            $contract = ContractManagements::where('profit_center', $data['id-contract'])->first();
 
             if (empty($contract)) {
                 return response()->json([
@@ -5149,9 +5498,6 @@ class ContractManagementsController extends Controller
     {
         try {
             switch ($kategori_file) {
-                case "dokumen-aanwitjzing":
-                    $modelClass = new DokumenAanwitjzingContract();
-                    break;
                 case "dokumen-site-instruction":
                     $modelClass = new SiteInstruction();
                     break;
