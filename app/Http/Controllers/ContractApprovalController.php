@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ContractApproval;
 use App\Models\ContractManagements;
 use App\Models\PerubahanKontrak;
+use App\Models\ProyekPISNew;
 use App\Models\UnitKerja;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Http\Request;
@@ -955,5 +956,365 @@ class ContractApprovalController extends Controller
             'driver' => 'single',
             'path' => storage_path("logs/$file.log"),
         ])->info("$message", $data);
+    }
+
+
+
+
+
+
+
+    //Menu History Autorisasi
+    public function viewHistoryLaporan(Request $request)
+    {
+        $data = $request->all();
+
+        $periodeOtor = (int)date("m") == 1 ? 12 : (int)date("m") - 1;
+
+        $periodeOtor = isset($data["periode-prognosa"]) ? $data["periode-prognosa"] : $periodeOtor;
+
+        $historyClaims = ContractApproval::where("periode_laporan", $periodeOtor)->where("tahun", date("Y"))->get()->groupBy("unit_kerja");
+        // dd($historyClaims);
+
+        $totalItemVOAll = 0;
+        $totalItemKlaimAll = 0;
+        $totalItemAntiKlaimAll = 0;
+        $totalItemKlaimAsuransiAll = 0;
+
+        $totalItemVOAllApproved = 0;
+        $totalItemKlaimAllApproved = 0;
+        $totalItemAntiKlaimAllApproved = 0;
+        $totalItemKlaimAsuransiAllApproved = 0;
+
+        $jumlahVOAll = 0;
+        $jumlahKlaimAll = 0;
+        $jumlahAntiKlaimAll = 0;
+        $jumlahKlaimAsuransiAll = 0;
+
+        $jumlahVOAllApproved = 0;
+        $jumlahKlaimAllApproved = 0;
+        $jumlahAntiKlaimAllApproved = 0;
+        $jumlahKlaimAsuransiAllApproved = 0;
+
+
+        if (!empty($historyClaims)) {
+            $historyClaims = $historyClaims->mapWithKeys(function ($hc, $unitKerja) use (
+                &$totalItemVOAll,
+                &$totalItemKlaimAll,
+                &$totalItemAntiKlaimAll,
+                &$totalItemKlaimAsuransiAll,
+                &$totalItemVOAllApproved,
+                &$totalItemKlaimAllApproved,
+                &$totalItemAntiKlaimAllApproved,
+                &$totalItemKlaimAsuransiAllApproved,
+                &$jumlahVOAll,
+                &$jumlahKlaimAll,
+                &$jumlahAntiKlaimAll,
+                &$jumlahKlaimAsuransiAll,
+                &$jumlahVOAllApproved,
+                &$jumlahKlaimAllApproved,
+                &$jumlahAntiKlaimAllApproved,
+                &$jumlahKlaimAsuransiAllApproved,
+            ) {
+                $jumlahVOAllDivisi = 0;
+                $jumlahKlaimAllDivisi = 0;
+                $jumlahAntiKlaimAllDivisi = 0;
+                $jumlahKlaimAsuransiAllDivisi = 0;
+
+                $jumlahVOAllDivisiApproved = 0;
+                $jumlahKlaimAllDivisiApproved = 0;
+                $jumlahAntiKlaimAllDivisiApproved = 0;
+                $jumlahKlaimAsuransiAllDivisiApproved = 0;
+
+                $unitKerja = UnitKerja::where("divcode", $unitKerja)->first()->unit_kerja;
+
+                $newClass = new stdClass();
+                $newClass->unit_kerja = $hc->first()->unit_kerja;
+                $newClass->periode_laporan = get_bulan($hc->first()->periode_laporan);
+                $newClass->tahun = $hc->first()->tahun;
+                $newClass->is_request_unlock = $hc->first()->is_request_unlock;
+                $newClass->is_locked = $hc->first()->is_locked;
+                $newClass->is_approved = $hc->first()->is_approved;
+
+                $kategoriVO = $hc->where("jenis_perubahan", "VO");
+                $kategoriKlaim = $hc->where("jenis_perubahan", "Klaim");
+                $kategoriAntiKlaim = $hc->where("jenis_perubahan", "Anti Klaim");
+                $kategoriKlaimAsuransi = $hc->where("jenis_perubahan", "Klaim Asuransi");
+
+                foreach ($kategoriVO as $vo) {
+                    if (!$vo->nilai_negatif) {
+                        $jumlahVOAllDivisi += $vo->biaya_pengajuan;
+                        if ($vo->stage == 5) {
+                            $jumlahVOAllDivisiApproved += (int)$vo->nilai_disetujui;
+                        }
+                    } else {
+                        $jumlahVOAllDivisi -= $vo->biaya_pengajuan;
+                        if ($vo->stage == 5) {
+                            $jumlahVOAllDivisiApproved -= (int)$vo->nilai_disetujui;
+                        }
+                    }
+                }
+
+                foreach ($kategoriKlaim as $klaim) {
+                    $jumlahKlaimAllDivisi += $klaim->biaya_pengajuan;
+                    if ($klaim->stage == 5) {
+                        $jumlahKlaimAllDivisiApproved += (int)$klaim->nilai_disetujui;
+                    }
+                }
+
+                foreach ($kategoriAntiKlaim as $anti_klaim) {
+                    $jumlahAntiKlaimAllDivisi -= $anti_klaim->biaya_pengajuan;
+                    if ($anti_klaim->stage == 5) {
+                        $jumlahAntiKlaimAllDivisiApproved -= (int)$anti_klaim->nilai_disetujui;
+                    }
+                }
+
+                foreach ($kategoriKlaimAsuransi as $klaim_asuransi) {
+                    $jumlahKlaimAsuransiAllDivisi += $klaim_asuransi->biaya_pengajuan;
+                    if ($klaim_asuransi->stage == 5) {
+                        $jumlahKlaimAsuransiAllDivisiApproved += (int)$klaim_asuransi->nilai_disetujui;
+                    }
+                }
+
+
+                $newClass->total_vo_submitted = $kategoriVO->count();
+                $newClass->total_vo_approved = $kategoriVO->where("stage", 5)->count();
+                $totalItemVOAll += $newClass->total_vo_submitted;
+                $totalItemVOAllApproved += $newClass->total_vo_approved;
+
+                $newClass->jumlah_vo_submitted = $jumlahVOAllDivisi;
+                $newClass->jumlah_vo_approved = $jumlahVOAllDivisiApproved;
+                $jumlahVOAll += $newClass->jumlah_vo_submitted;
+                $jumlahVOAllApproved += $newClass->jumlah_vo_approved;
+
+                $newClass->total_klaim_submitted = $kategoriKlaim->count();
+                $newClass->total_klaim_approved = $kategoriKlaim->where("stage", 5)->count();
+                $totalItemKlaimAll += $newClass->total_klaim_submitted;
+                $totalItemKlaimAllApproved += $newClass->total_klaim_approved;
+
+                $newClass->jumlah_klaim_submitted = $jumlahKlaimAllDivisi;
+                $newClass->jumlah_klaim_approved = $jumlahKlaimAllDivisiApproved;
+                $jumlahKlaimAll += $newClass->jumlah_klaim_submitted;
+                $jumlahKlaimAllApproved += $newClass->jumlah_klaim_approved;
+
+                $newClass->total_anti_klaim_submitted = $kategoriAntiKlaim->count();
+                $newClass->total_anti_klaim_approved = $kategoriAntiKlaim->where("stage", 5)->count();
+                $totalItemAntiKlaimAll += $newClass->total_anti_klaim_submitted;
+                $totalItemAntiKlaimAllApproved += $newClass->total_anti_klaim_approved;
+
+                $newClass->jumlah_anti_klaim_submitted = $jumlahAntiKlaimAllDivisi;
+                $newClass->jumlah_anti_klaim_approved = $jumlahAntiKlaimAllDivisiApproved;
+                $jumlahAntiKlaimAll += $newClass->jumlah_anti_klaim_submitted;
+                $jumlahAntiKlaimAllApproved += $newClass->jumlah_anti_klaim_approved;
+
+                $newClass->total_klaim_asuransi_submitted = $kategoriKlaimAsuransi->count();
+                $newClass->total_klaim_asuransi_approved = $kategoriKlaimAsuransi->where("stage", 5)->count();
+                $totalItemKlaimAsuransiAll += $newClass->total_klaim_asuransi_submitted;
+                $totalItemKlaimAsuransiAllApproved += $newClass->total_klaim_asuransi_approved;
+
+                $newClass->jumlah_klaim_asuransi_submitted = $jumlahKlaimAsuransiAllDivisi;
+                $newClass->jumlah_klaim_asuransi_approved = $jumlahKlaimAsuransiAllDivisiApproved;
+                $jumlahKlaimAsuransiAll += $newClass->jumlah_klaim_asuransi_submitted;
+                $jumlahKlaimAsuransiAllApproved += $newClass->jumlah_klaim_asuransi_approved;
+
+                return [$unitKerja => $newClass];
+            });
+        }
+
+        return view("23_History_Laporan_Approval", compact(
+            "historyClaims",
+            "periodeOtor",
+            "totalItemVOAll",
+            "totalItemKlaimAll",
+            "totalItemAntiKlaimAll",
+            "totalItemKlaimAsuransiAll",
+            "totalItemVOAllApproved",
+            "totalItemKlaimAllApproved",
+            "totalItemAntiKlaimAllApproved",
+            "totalItemKlaimAsuransiAllApproved",
+            "jumlahVOAll",
+            "jumlahKlaimAll",
+            "jumlahAntiKlaimAll",
+            "jumlahKlaimAsuransiAll",
+            "jumlahVOAllApproved",
+            "jumlahKlaimAllApproved",
+            "jumlahAntiKlaimAllApproved",
+            "jumlahKlaimAsuransiAllApproved",
+        ));
+    }
+
+    public function viewDetailHistoryLaporan(Request $request, $unitKerja, $periodeOtor)
+    {
+        $data = $request->all();
+
+        $historyClaims = ContractApproval::where("periode_laporan", $periodeOtor)->where("unit_kerja", $unitKerja)->where("tahun", date("Y"))->get()->groupBy("profit_center");
+        // dd($historyClaims);
+
+        $totalItemVOAll = 0;
+        $totalItemKlaimAll = 0;
+        $totalItemAntiKlaimAll = 0;
+        $totalItemKlaimAsuransiAll = 0;
+
+        $totalItemVOAllApproved = 0;
+        $totalItemKlaimAllApproved = 0;
+        $totalItemAntiKlaimAllApproved = 0;
+        $totalItemKlaimAsuransiAllApproved = 0;
+
+        $jumlahVOAll = 0;
+        $jumlahKlaimAll = 0;
+        $jumlahAntiKlaimAll = 0;
+        $jumlahKlaimAsuransiAll = 0;
+
+        $jumlahVOAllApproved = 0;
+        $jumlahKlaimAllApproved = 0;
+        $jumlahAntiKlaimAllApproved = 0;
+        $jumlahKlaimAsuransiAllApproved = 0;
+
+
+        if (!empty($historyClaims)) {
+            $historyClaims = $historyClaims->mapWithKeys(function ($hc, $proyek) use (
+                &$totalItemVOAll,
+                &$totalItemKlaimAll,
+                &$totalItemAntiKlaimAll,
+                &$totalItemKlaimAsuransiAll,
+                &$totalItemVOAllApproved,
+                &$totalItemKlaimAllApproved,
+                &$totalItemAntiKlaimAllApproved,
+                &$totalItemKlaimAsuransiAllApproved,
+                &$jumlahVOAll,
+                &$jumlahKlaimAll,
+                &$jumlahAntiKlaimAll,
+                &$jumlahKlaimAsuransiAll,
+                &$jumlahVOAllApproved,
+                &$jumlahKlaimAllApproved,
+                &$jumlahAntiKlaimAllApproved,
+                &$jumlahKlaimAsuransiAllApproved,
+            ) {
+                $jumlahVOAllDivisi = 0;
+                $jumlahKlaimAllDivisi = 0;
+                $jumlahAntiKlaimAllDivisi = 0;
+                $jumlahKlaimAsuransiAllDivisi = 0;
+
+                $jumlahVOAllDivisiApproved = 0;
+                $jumlahKlaimAllDivisiApproved = 0;
+                $jumlahAntiKlaimAllDivisiApproved = 0;
+                $jumlahKlaimAsuransiAllDivisiApproved = 0;
+
+                $proyek = ProyekPISNew::where("profit_center", $proyek)->first()->proyek_name;
+
+                $newClass = new stdClass();
+                $newClass->profit_center = $hc->first()->profit_center;
+                $newClass->unit_kerja = UnitKerja::where("divcode", $hc->first()->unit_kerja)->first()->unit_kerja;
+                $newClass->periode_laporan = get_bulan($hc->first()->periode_laporan);
+                $newClass->tahun = $hc->first()->tahun;
+                $newClass->is_request_unlock = $hc->first()->is_request_unlock;
+                $newClass->is_locked = $hc->first()->is_locked;
+                $newClass->is_approved = $hc->first()->is_approved;
+
+                $kategoriVO = $hc->where("jenis_perubahan", "VO");
+                $kategoriKlaim = $hc->where("jenis_perubahan", "Klaim");
+                $kategoriAntiKlaim = $hc->where("jenis_perubahan", "Anti Klaim");
+                $kategoriKlaimAsuransi = $hc->where("jenis_perubahan", "Klaim Asuransi");
+
+                foreach ($kategoriVO as $vo) {
+                    if (!$vo->nilai_negatif) {
+                        $jumlahVOAllDivisi += $vo->biaya_pengajuan;
+                        if ($vo->stage == 5) {
+                            $jumlahVOAllDivisiApproved += (int)$vo->nilai_disetujui;
+                        }
+                    } else {
+                        $jumlahVOAllDivisi -= $vo->biaya_pengajuan;
+                        if ($vo->stage == 5) {
+                            $jumlahVOAllDivisiApproved -= (int)$vo->nilai_disetujui;
+                        }
+                    }
+                }
+
+                foreach ($kategoriKlaim as $klaim) {
+                    $jumlahKlaimAllDivisi += $klaim->biaya_pengajuan;
+                    if ($klaim->stage == 5) {
+                        $jumlahKlaimAllDivisiApproved += (int)$klaim->nilai_disetujui;
+                    }
+                }
+
+                foreach ($kategoriAntiKlaim as $anti_klaim) {
+                    $jumlahAntiKlaimAllDivisi -= $anti_klaim->biaya_pengajuan;
+                    if ($anti_klaim->stage == 5) {
+                        $jumlahAntiKlaimAllDivisiApproved -= (int)$anti_klaim->nilai_disetujui;
+                    }
+                }
+
+                foreach ($kategoriKlaimAsuransi as $klaim_asuransi) {
+                    $jumlahKlaimAsuransiAllDivisi += $klaim_asuransi->biaya_pengajuan;
+                    if ($klaim_asuransi->stage == 5) {
+                        $jumlahKlaimAsuransiAllDivisiApproved += (int)$klaim_asuransi->nilai_disetujui;
+                    }
+                }
+
+
+                $newClass->total_vo_submitted = $kategoriVO->count();
+                $newClass->total_vo_approved = $kategoriVO->where("stage", 5)->count();
+                $totalItemVOAll += $newClass->total_vo_submitted;
+                $totalItemVOAllApproved += $newClass->total_vo_approved;
+
+                $newClass->jumlah_vo_submitted = $jumlahVOAllDivisi;
+                $newClass->jumlah_vo_approved = $jumlahVOAllDivisiApproved;
+                $jumlahVOAll += $newClass->jumlah_vo_submitted;
+                $jumlahVOAllApproved += $newClass->jumlah_vo_approved;
+
+                $newClass->total_klaim_submitted = $kategoriKlaim->count();
+                $newClass->total_klaim_approved = $kategoriKlaim->where("stage", 5)->count();
+                $totalItemKlaimAll += $newClass->total_klaim_submitted;
+                $totalItemKlaimAllApproved += $newClass->total_klaim_approved;
+
+                $newClass->jumlah_klaim_submitted = $jumlahKlaimAllDivisi;
+                $newClass->jumlah_klaim_approved = $jumlahKlaimAllDivisiApproved;
+                $jumlahKlaimAll += $newClass->jumlah_klaim_submitted;
+                $jumlahKlaimAllApproved += $newClass->jumlah_klaim_approved;
+
+                $newClass->total_anti_klaim_submitted = $kategoriAntiKlaim->count();
+                $newClass->total_anti_klaim_approved = $kategoriAntiKlaim->where("stage", 5)->count();
+                $totalItemAntiKlaimAll += $newClass->total_anti_klaim_submitted;
+                $totalItemAntiKlaimAllApproved += $newClass->total_anti_klaim_approved;
+
+                $newClass->jumlah_anti_klaim_submitted = $jumlahAntiKlaimAllDivisi;
+                $newClass->jumlah_anti_klaim_approved = $jumlahAntiKlaimAllDivisiApproved;
+                $jumlahAntiKlaimAll += $newClass->jumlah_anti_klaim_submitted;
+                $jumlahAntiKlaimAllApproved += $newClass->jumlah_anti_klaim_approved;
+
+                $newClass->total_klaim_asuransi_submitted = $kategoriKlaimAsuransi->count();
+                $newClass->total_klaim_asuransi_approved = $kategoriKlaimAsuransi->where("stage", 5)->count();
+                $totalItemKlaimAsuransiAll += $newClass->total_klaim_asuransi_submitted;
+                $totalItemKlaimAsuransiAllApproved += $newClass->total_klaim_asuransi_approved;
+
+                $newClass->jumlah_klaim_asuransi_submitted = $jumlahKlaimAsuransiAllDivisi;
+                $newClass->jumlah_klaim_asuransi_approved = $jumlahKlaimAsuransiAllDivisiApproved;
+                $jumlahKlaimAsuransiAll += $newClass->jumlah_klaim_asuransi_submitted;
+                $jumlahKlaimAsuransiAllApproved += $newClass->jumlah_klaim_asuransi_approved;
+
+                return [$proyek => $newClass];
+            });
+        }
+
+        return view("23_History_Laporan_Approval", compact(
+            "historyClaims",
+            "periodeOtor",
+            "totalItemVOAll",
+            "totalItemKlaimAll",
+            "totalItemAntiKlaimAll",
+            "totalItemKlaimAsuransiAll",
+            "totalItemVOAllApproved",
+            "totalItemKlaimAllApproved",
+            "totalItemAntiKlaimAllApproved",
+            "totalItemKlaimAsuransiAllApproved",
+            "jumlahVOAll",
+            "jumlahKlaimAll",
+            "jumlahAntiKlaimAll",
+            "jumlahKlaimAsuransiAll",
+            "jumlahVOAllApproved",
+            "jumlahKlaimAllApproved",
+            "jumlahAntiKlaimAllApproved",
+            "jumlahKlaimAsuransiAllApproved",
+        ));
     }
 }

@@ -104,18 +104,18 @@ class UserController extends Controller
                 'email' => $request->UserName,
                 'password' => $request->UserPassword
             ];
-            if (Auth::attempt($data)) {
-                $user = auth()->user();
-                $token_user = $user->createToken($user->name)->plainTextToken;
-                // dd($token_user);
-                auth()->user()->forceFill([
-                    "remember_token" => $token_user,
-                ])->save();
-                return response()->json([
-                    "token" => $token_user,
-                    "user" => $user,
-                ])->cookie("BPMCSRF", $token, 60);
-            }
+            // if (Auth::attempt($data)) {
+            //     $user = auth()->user();
+            //     $token_user = $user->createToken($user->name)->plainTextToken;
+            //     // dd($token_user);
+            //     auth()->user()->forceFill([
+            //         "remember_token" => $token_user,
+            //     ])->save();
+            //     return response()->json([
+            //         "token" => $token_user,
+            //         "user" => $user,
+            //     ])->cookie("BPMCSRF", $token, 60);
+            // }
         } else if ((bool) $request->isMobile) {
             return self::loginForMobile($request);
         } else {
