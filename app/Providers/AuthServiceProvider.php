@@ -120,6 +120,12 @@ class AuthServiceProvider extends ServiceProvider
                 return  $user->check_user_csi == true && $user->role_user == true;
             }
         );
+
+        Gate::define('unlock-ccm',
+            function (User $user) {
+                return $user->role_admin && $user->is_unlock;
+            }
+        );
         //
     }
 }

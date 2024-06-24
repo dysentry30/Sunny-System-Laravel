@@ -429,6 +429,7 @@ class UserController extends Controller
         $role_user = $request->has("role_user") ?? false;
         $role_approver = $request->has("role_approver") ?? false;
         $role_risk = $request->has("role_risk") ?? false;
+        $role_unlock = $request->has("role_unlock") ?? false;
 
 
         // if ($validation->fails()) {
@@ -443,7 +444,7 @@ class UserController extends Controller
         //     // return redirect()->back();
         // }
 
-        if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_user_csi == false && $is_team_proyek == false && $role_admin == false && $role_user == false && $role_approver == false && $role_risk == false) {
+        if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_user_csi == false && $is_team_proyek == false && $role_admin == false && $role_user == false && $role_approver == false && $role_risk == false && $role_unlock == false) {
             $rules["administrator"] = "accepted";
             $rules["admin-kontrak"] = "accepted";
             $rules["user-sales"] = "accepted";
@@ -516,6 +517,7 @@ class UserController extends Controller
         $user->role_user = $role_user;
         $user->role_approver = $role_approver;
         $user->role_risk = $role_risk;
+        $user->is_unlock = $role_unlock;
 
         // if (isset($data['proyeks'])) {
         //     $proyekSelectedCollect = collect($data['proyeks']);

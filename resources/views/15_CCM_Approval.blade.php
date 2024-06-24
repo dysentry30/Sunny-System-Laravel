@@ -267,11 +267,13 @@
                                                             @if ($history['is_approved'] == "t")
                                                                     <a class="btn btn-success btn-sm disabled d-flex align-items-center">Approved</a>
                                                                     @if($history['is_request_unlock'] == "t")
+                                                                        @can('unlock-ccm')
                                                                         <form action="/history-approval/set-unlock" method="post">
                                                                             @csrf
                                                                             <input type="hidden" name="id_contract" value="{{ $history['id_contract'] }}">
                                                                             <button type="submit" class="btn btn-secondary btn-sm d-flex align-items-center">Unlock</button>
                                                                         </form>
+                                                                        @endcan
                                                                     @endif
                                                             @elseif($history['is_approved'] == "f")
                                                                 <button class="btn btn-danger btn-sm disabled">Approval Ditolak</button>
