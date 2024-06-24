@@ -175,8 +175,10 @@
                                             @if ($historyClaims->isNotEmpty() && strlen($historyClaims->first()->unit_kerja) != 1)
                                             <th rowspan="3" class="min-w-auto text-center align-middle">Profit Center</th>
                                             <th rowspan="3" class="min-w-auto text-center align-middle">Unit Kerja</th>
+                                            <th rowspan="3" class="min-w-auto text-center align-middle">Nama Proyek</th>
+                                            @else
+                                            <th rowspan="3" class="min-w-auto text-center align-middle">Unit Kerja</th>
                                             @endif
-                                            <th rowspan="3" class="min-w-auto text-center align-middle">{{ $historyClaims->isNotEmpty() && strlen($historyClaims->first()->unit_kerja) == 1 ? "Unit Kerja" : "Nama Proyek" }}</th>
                                             <th rowspan="3" class="min-w-auto text-center align-middle">Bulan Pelaporan</th>
                                             @if ($historyClaims->isNotEmpty() && strlen($historyClaims->first()->unit_kerja) == 1)
                                             <th rowspan="3" class="min-w-auto text-center align-middle">Status</th>
