@@ -281,6 +281,19 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">Request For Approval</span>
                                 </a>
                             </div>
+                            <div class="menu-item">
+                                <a class="menu-link " href="/history-laporan-approval"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'history-laporan-approval') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <i class="bi bi-calendar-date-fill text-white" style="font-size: 18px; margin-left:7px"></i>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">History Laporan Approval</span>
+                                </a>
+                            </div>
                         @endcanany
                         {{-- @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                             <div class="menu-item">
