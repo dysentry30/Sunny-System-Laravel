@@ -348,7 +348,7 @@
                                                                         <!-- begin:: Form Input User Sales -->
                                                                         <div class="form-check me-12">
                                                                             <input class="role form-check-input" type="checkbox"
-                                                                                value=""
+                                                                                value="user"
                                                                                 {{ $user->role_user == 1 ? 'checked' : '' }}
                                                                                 name="role_user" id="role_user" onchange="checkAplikasi(this)">
                                                                             <label class="form-check-label" for="role_user">
@@ -360,7 +360,7 @@
                                                                         <!-- begin:: Form Input Admin Kontrak -->
                                                                         <div class="form-check me-12">
                                                                             <input class="role form-check-input" type="checkbox"
-                                                                                value=""
+                                                                                value="approver"
                                                                                 {{ $user->role_approver == 1 ? 'checked' : '' }}
                                                                                 name="role_approver" id="role_approver" onchange="checkAplikasi(this)">
                                                                             <label class="form-check-label"
@@ -369,11 +369,26 @@
                                                                             </label>
                                                                         </div>
                                                                         <!-- end:: Form Input Admin Kontrak -->
-                                                                        @can('crm')
+                                                                        @can('super-admin')
+                                                                            <!-- begin:: Form Input Admin Kontrak -->
+                                                                            <div class="form-check me-12">
+                                                                                <input class="role form-check-input" type="checkbox"
+                                                                                    value="unlock"
+                                                                                    {{ $user->is_unlock == 1 ? 'checked' : '' }}
+                                                                                    name="role_unlock" id="role_unlock" onchange="checkAplikasi(this)">
+                                                                                <label class="form-check-label"
+                                                                                    for="role_unlock">
+                                                                                    Unlock
+                                                                                </label>
+                                                                            </div>
+                                                                            <!-- end:: Form Input Admin Kontrak -->
+                                                                        @endcan
+
+                                                                        @can('super-admin')
                                                                             <!-- begin:: Form Input Team Proyek -->
                                                                             <div class="form-check me-12">
                                                                                 <input class="role form-check-input" type="checkbox"
-                                                                                    value=""
+                                                                                    value="risk"
                                                                                     {{ $user->role_risk == 1 ? 'checked' : '' }}
                                                                                     name="role_risk" id="role_risk" onchange="checkAplikasi(this)">
                                                                                 <label class="form-check-label" for="role_risk">
@@ -803,7 +818,7 @@
             const eltRoleUser = document.querySelector('#role_user');
             const eltRoleAll = document.querySelectorAll("[class*='role']:checked");
 
-            if (eltRoleAll.length > 1) {
+            if ((eltRoleAll.length > 1 && eltRoleAll[0].value == "admin" && eltRoleAll[1].value != "unlock")) {
                 elt.checked = false;
                 return alert('error', "Role tidak dapat dipilih lebih dari 1");
             }
