@@ -435,6 +435,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     
         //end :: History Approval CCM
 
+    //begin :: Menu History Approval
+    Route::group(["prefix" => "/history-laporan-approval"], function () {
+        Route::get('/', [ContractApprovalController::class, "viewHistoryLaporan"]);
+        Route::get('/{unitKerja}/{periodeOtor}', [ContractApprovalController::class, "viewDetailHistoryLaporan"]);
+    });
+     //end :: Menu History Approval
+
 
 
     // begin :: Pasal
