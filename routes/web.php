@@ -432,8 +432,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post("/history-approval/set-unlock", [ContractApprovalController::class, "setUnlock"]);
 
     Route::post("/history-approval/request-unlock", [ContractApprovalController::class, "requestUnlock"]);
-    
-        //end :: History Approval CCM
+
+    //end :: History Approval CCM
 
     //begin :: Menu History Approval
     Route::group(["prefix" => "/history-laporan-approval"], function () {
@@ -813,7 +813,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $new_forecast = new Forecast();
             $new_forecast->kode_proyek = (string) $proyek->kode_proyek;
             $new_forecast->rkap_forecast = (string) $proyek->nilai_rkap;
-            $new_forecast->month_rkap = (int) $proyek->bulan_pelaksanaan;
+            // $new_forecast->month_rkap = (int) $proyek->bulan_pelaksanaan;
+            $new_forecast->month_rkap = (int) $proyek->bulan_rkap_review;
             $new_forecast->realisasi_forecast = (string) $proyek->nilai_perolehan ?? 0;
             $new_forecast->month_realisasi = (int) $proyek->bulan_ri_perolehan ?? null;
             $new_forecast->month_forecast = (int) $data["forecast_month"];
@@ -854,7 +855,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $forecast = new Forecast();
             $forecast->nilai_forecast = (string) $data["nilai_forecast"] * $per;
             $forecast->month_forecast = (int) $data["forecast_month"];
-            $forecast->month_rkap = (int) $proyek->bulan_pelaksanaan;
+            // $forecast->month_rkap = (int) $proyek->bulan_pelaksanaan;
+            $forecast->month_rkap = (int) $proyek->bulan_rkap_review;
             $forecast->month_realisasi = $proyek->bulan_ri_perolehan;
             $forecast->month_forecast = (int) $data["forecast_month"];
             $forecast->rkap_forecast = str_replace(".", "", (int) $proyek->nilai_rkap);
@@ -5650,4 +5652,16 @@ Route::get('/testing-qr', function (Request $request) {
     // $hasil_assessment = collect(json_decode($notaRekomendasi->hasil_assessment));
     // return createWordNotaRekomendasiSetuju($notaRekomendasi, $hasil_assessment, $request);
     return createWordNotaRekomendasiPengajuan($notaRekomendasi, $request);
+});
+
+Route::get('insert-bulan-rkap', function () {
+    $proyeks = Proyek::where("tahun_perolehan", 2024)->where("tipe_proyek", "P")->where("is_rkap", true)->whereNotNull("bulan_rkap")->get();
+
+    $proyeks->each(function ($proyek) {
+        $proyek->bulan_rkap_review = $proyek->bulan_rkap;
+        $proyek->nilai_rkap_review = $proyek->nilai_ok_rkap;
+        $proyek->save();
+    });
+
+    dd($proyeks->where("bulan_rkap_review", "!=", null));
 });

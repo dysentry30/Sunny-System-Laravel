@@ -2080,7 +2080,7 @@
                                                                      data-placeholder="Bulan Pelaksanaan" readonly>
                                                                      <option></option>
                                                                      <option selected>
-                                                                         @switch($proyek->bulan_pelaksanaan)
+                                                                         @switch($proyek->bulan_rkap)
                                                                              @case('1')
                                                                                  Januari
                                                                              @break
@@ -2221,8 +2221,8 @@
                                                                  <input type="text" onkeyup="hitungReview()"
                                                                      class="form-control form-control-solid reformat"
                                                                      id="nilai-valas-review" name="nilai-valas-review"
-                                                                     value="{{ number_format((int) str_replace('.', '', $proyek->nilai_valas_review), 0, '.', '.') }}"
-                                                                     placeholder="Nilai OK Review (Valas) (Exclude Tax)" />
+                                                                     value="{{ number_format((int) str_replace('.', '', $proyek->nilai_rkap_review), 0, '.', '.') }}"
+                                                                     placeholder="Nilai OK Review (Valas) (Exclude Tax)" {{ auth()->user()->check_administrator ? '' : 'readonly' }}/>
                                                                  <!--end::Input-->
                                                              </div>
                                                              <!--end::Input group-->
@@ -2304,40 +2304,40 @@
                                                                      {{ auth()->user()->check_administrator ? '' : 'readonly' }}>
                                                                      <option></option>
                                                                      <option value="1"
-                                                                         {{ $proyek->bulan_review == '1' ? 'selected' : '' }}>
+                                                                         {{ $proyek->bulan_rkap_review == '1' ? 'selected' : '' }}>
                                                                          Januari</option>
                                                                      <option value="2"
-                                                                         {{ $proyek->bulan_review == '2' ? 'selected' : '' }}>
+                                                                         {{ $proyek->bulan_rkap_review == '2' ? 'selected' : '' }}>
                                                                          Februari</option>
                                                                      <option value="3"
-                                                                         {{ $proyek->bulan_review == '3' ? 'selected' : '' }}>
+                                                                         {{ $proyek->bulan_rkap_review == '3' ? 'selected' : '' }}>
                                                                          Maret</option>
                                                                      <option value="4"
-                                                                         {{ $proyek->bulan_review == '4' ? 'selected' : '' }}>
+                                                                         {{ $proyek->bulan_rkap_review == '4' ? 'selected' : '' }}>
                                                                          April</option>
                                                                      <option value="5"
-                                                                         {{ $proyek->bulan_review == '5' ? 'selected' : '' }}>
+                                                                         {{ $proyek->bulan_rkap_review == '5' ? 'selected' : '' }}>
                                                                          Mei</option>
                                                                      <option value="6"
-                                                                         {{ $proyek->bulan_review == '6' ? 'selected' : '' }}>
+                                                                         {{ $proyek->bulan_rkap_review == '6' ? 'selected' : '' }}>
                                                                          Juni</option>
                                                                      <option value="7"
-                                                                         {{ $proyek->bulan_review == '7' ? 'selected' : '' }}>
+                                                                         {{ $proyek->bulan_rkap_review == '7' ? 'selected' : '' }}>
                                                                          Juli</option>
                                                                      <option value="8"
-                                                                         {{ $proyek->bulan_review == '8' ? 'selected' : '' }}>
+                                                                         {{ $proyek->bulan_rkap_review == '8' ? 'selected' : '' }}>
                                                                          Agustus</option>
                                                                      <option value="9"
-                                                                         {{ $proyek->bulan_review == '9' ? 'selected' : '' }}>
+                                                                         {{ $proyek->bulan_rkap_review == '9' ? 'selected' : '' }}>
                                                                          September</option>
                                                                      <option value="10"
-                                                                         {{ $proyek->bulan_review == '10' ? 'selected' : '' }}>
+                                                                         {{ $proyek->bulan_rkap_review == '10' ? 'selected' : '' }}>
                                                                          Oktober</option>
                                                                      <option value="11"
-                                                                         {{ $proyek->bulan_review == '11' ? 'selected' : '' }}>
+                                                                         {{ $proyek->bulan_rkap_review == '11' ? 'selected' : '' }}>
                                                                          November</option>
                                                                      <option value="12"
-                                                                         {{ $proyek->bulan_review == '12' ? 'selected' : '' }}>
+                                                                         {{ $proyek->bulan_rkap_review == '12' ? 'selected' : '' }}>
                                                                          Desember</option>
                                                                  </select>
                                                                  <!--end::Input-->
@@ -2364,7 +2364,7 @@
                                                                  <input type="text"
                                                                      class="form-control form-control-solid reformat"
                                                                      id="nilaiok-review" name="nilaiok-review"
-                                                                     value="{{ number_format((int) str_replace('.', '', $proyek->nilaiok_review), 0, '.', '.') }}"
+                                                                     value="{{ number_format((int) str_replace('.', '', $proyek->nilai_rkap_review), 0, '.', '.') }}"
                                                                      placeholder="Nilai OK (Exclude PPN)"
                                                                      {{ auth()->user()->check_administrator ? '' : 'readonly' }} />
                                                                  <!--end::Input-->

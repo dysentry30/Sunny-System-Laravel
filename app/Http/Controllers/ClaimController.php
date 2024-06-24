@@ -892,6 +892,10 @@ class ClaimController extends Controller
                         $item_vo = 0;
                         $item_vo_approved = 0;
                         $cat_vo = $claim->where("jenis_perubahan", "=", "VO");
+                        $result["jumlah_vo"] = $cat_vo->count();
+                        $jumlahVOAll += $cat_vo->count();
+                        $result["jumlah_vo_approved"] = $cat_vo->where("stage", 5)->count();
+                        $jumlahVOAllApproved += $cat_vo->where("stage", 5)->count();
                         // $item_vo = $cat_vo->count();
                         // $item_vo = $cat_vo->sum(function ($item) {
                         //     return (int) $item->biaya_pengajuan;
