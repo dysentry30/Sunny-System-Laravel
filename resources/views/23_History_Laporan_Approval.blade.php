@@ -167,18 +167,18 @@
                         <div class="card-body pt-0">
                             <div class="overflow-scroll">
                                 <!--begin::Table-->
-                                <table class="table align-middle table-row-dashed fs-6 gy-2" id="{{ strlen($historyClaims->first()->unit_kerja) != 1 ? "example" : "examples" }}">
+                                <table class="table align-middle table-row-dashed fs-6 gy-2" id="{{ $historyClaims->isNotEmpty() && strlen($historyClaims->first()->unit_kerja) != 1 ? "example" : "examples" }}">
                                     <!--begin::Table head-->
                                     <thead>
                                         <!--begin::Table row-->
                                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                            @if (strlen($historyClaims->first()->unit_kerja) != 1)
+                                            @if ($historyClaims->isNotEmpty() && strlen($historyClaims->first()->unit_kerja) != 1)
                                             <th rowspan="3" class="min-w-auto text-center align-middle">Profit Center</th>
                                             <th rowspan="3" class="min-w-auto text-center align-middle">Unit Kerja</th>
                                             @endif
-                                            <th rowspan="3" class="min-w-auto text-center align-middle">{{ strlen($historyClaims->first()->unit_kerja) == 1 ? "Unit Kerja" : "Nama Proyek" }}</th>
+                                            <th rowspan="3" class="min-w-auto text-center align-middle">{{ $historyClaims->isNotEmpty() && strlen($historyClaims->first()->unit_kerja) == 1 ? "Unit Kerja" : "Nama Proyek" }}</th>
                                             <th rowspan="3" class="min-w-auto text-center align-middle">Bulan Pelaporan</th>
-                                            @if (strlen($historyClaims->first()->unit_kerja) == 1)
+                                            @if ($historyClaims->isNotEmpty() && strlen($historyClaims->first()->unit_kerja) == 1)
                                             <th rowspan="3" class="min-w-auto text-center align-middle">Status</th>
                                             @endif
                                             <th colspan="4" class="min-w-auto text-center">VO</th>
@@ -273,7 +273,7 @@
                                     <!--begin::Table Footer-->
                                     <tfoot>
                                         <tr>
-                                            <td colspan="{{ strlen($historyClaims->first()->unit_kerja) == 1 ? "3" : "4" }}" class="text-center">TOTAL</td>
+                                            <td colspan="{{ $historyClaims->isNotEmpty() && strlen($historyClaims->first()->unit_kerja) == 1 ? "3" : "4" }}" class="text-center">TOTAL</td>
                                             <td class="text-center">{{ number_format($totalItemVOAll, 0, ".", ".") }}</td>
                                             <td class="text-center">{{ number_format($jumlahVOAll, 0, ".", ".") }}</td>
                                             <td class="text-center">{{ number_format($totalItemVOAllApproved, 0, ".", ".") }}</td>
