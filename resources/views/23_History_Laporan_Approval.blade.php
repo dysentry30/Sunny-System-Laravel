@@ -180,7 +180,7 @@
                                             <th rowspan="3" class="min-w-auto text-center align-middle">Unit Kerja</th>
                                             @endif
                                             <th rowspan="3" class="min-w-auto text-center align-middle">Bulan Pelaporan</th>
-                                            @if ($historyClaims->isNotEmpty() && strlen($historyClaims->first()->unit_kerja) == 1)
+                                            @if ($historyClaims->isNotEmpty() && strlen($historyClaims->first()->unit_kerja) != 1)
                                             <th rowspan="3" class="min-w-auto text-center align-middle">Status</th>
                                             @endif
                                             <th colspan="4" class="min-w-auto text-center">VO</th>
@@ -275,7 +275,7 @@
                                     <!--begin::Table Footer-->
                                     <tfoot>
                                         <tr>
-                                            <td colspan="{{ $historyClaims->isNotEmpty() && strlen($historyClaims->first()->unit_kerja) == 1 ? "3" : "4" }}" class="text-center">TOTAL</td>
+                                            <td colspan="{{ $historyClaims->isNotEmpty() && strlen($historyClaims->first()->unit_kerja) == 1 ? "5" : "2" }}" class="text-center">TOTAL</td>
                                             <td class="text-center">{{ number_format($totalItemVOAll, 0, ".", ".") }}</td>
                                             <td class="text-center">{{ number_format($jumlahVOAll, 0, ".", ".") }}</td>
                                             <td class="text-center">{{ number_format($totalItemVOAllApproved, 0, ".", ".") }}</td>
