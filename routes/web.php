@@ -4624,6 +4624,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $totalData = 0;
 
         $url = 'https://hcms.wika.co.id/apiwika/?method=get_sertifikat&client=crm&key=aksesaku&page=';
+        // $url = 'https://hcms-dev.wika.co.id/apiwika/?method=get_sertifikat&client=crm&key=aksesaku&page='; //DEV
+
 
 
         try {
@@ -4693,6 +4695,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                         $newSKASKT->emp_og_unit = $item['emp_og_unit'];
                         $newSKASKT->emp_og_unit_name = $item['emp_og_unit_name'];
                         $newSKASKT->file_sertifikat = $item['file_sertifikat'];
+                        $newSKASKT->status_kepegawaian = $item['status_kepegawaian'];
                         if ($newSKASKT->save()) {
                             $jumlahInsert++;
                         }
