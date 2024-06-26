@@ -95,11 +95,14 @@
                                         <th class="min-w-auto text-white">No.</th>
                                         <th class="min-w-auto text-white">NIP</th>
                                         <th class="min-w-auto text-white">Nama Pegawai</th>
-                                        <th class="min-w-auto text-white">Nama Fungsi Bidang</th>
-                                        <th class="min-w-auto text-white">No Sertifikat</th>
-                                        <th class="min-w-auto text-white">Tipe Sertifikat</th>
+                                        <th class="min-w-auto text-white">Bidang</th>
+                                        <th class="min-w-auto text-white">Lokasi Penempatan</th>
+                                        <th class="min-w-auto text-white">Nomor Registrasi</th>
+                                        <th class="min-w-auto text-white">Kualifikasi</th>
                                         <th class="min-w-auto text-white">Kategori Sertifikat</th>
                                         <th class="min-w-auto text-white">Penerbit Sertifikat</th>
+                                        <th class="min-w-auto text-white">Unduh Sertifikat</th>
+                                        <th class="min-w-auto text-white">Status Karyawan</th>
                                         <th class="min-w-auto text-white">Issued Date</th>
                                         <th class="min-w-auto text-white">Expired Date</th>
                                     </tr>
@@ -118,10 +121,19 @@
                                             <td class="align-middle">{{ $item->nip }}</td>
                                             <td class="align-middle">{{ $item->Pegawai?->nama_pegawai }}</td>
                                             <td class="align-middle">{{ $item->nm_fungsi_bidang }}</td>
+                                            <td class="align-middle">{{ $item->emp_position_name }}</td>
                                             <td class="text-center align-middle">{{ $item->no_sertifikat }}</td>
                                             <td class="text-center align-middle">{{ $item->type_sertifikat }}</td>
                                             <td class="text-center align-middle">{{ $item->category_sertifikat}}</td>
                                             <td class="text-center align-middle">{{ $item->institusi_penertbit_sertifikat }}</td>
+                                            <td class="text-center align-middle">
+                                                @if (!empty($item->file_sertifikat))
+                                                    <a href="{{ $item->file_sertifikat }}" class="btn btn-sm btn-primary">Download</a>
+                                                @else
+                                                    <p class="m-0">Belum ada sertifikat</p>
+                                                @endif
+                                            </td>
+                                            <td class="text-center align-middle"><p class="m-0 badge rounded-pill {{ $item->status_kepegawaian == "AKTIF" ? "bg-success" : "bg-danger" }}">{{ $item->status_kepegawaian }}</p></td>
                                             <td class="text-center align-middle">{{ \Carbon\Carbon::parse($item->issued_date)->translatedFormat('d F Y') }}</td>
                                             <td class="text-center align-middle">{{ \Carbon\Carbon::parse($item->expired_date)->translatedFormat('d F Y') }}</td>
                                         </tr>

@@ -7024,7 +7024,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $jumlahInsert = 0;
         $totalData = 0;
 
-        $url = 'https://hcms-dev.wika.co.id/apiwika/?method=get_sertifikat&client=crm&key=aksesaku&page=';
+        $url = 'https://hcms.wika.co.id/apiwika/?method=get_sertifikat&client=crm&key=aksesaku&page=';
+        // $url = 'https://hcms-dev.wika.co.id/apiwika/?method=get_sertifikat&client=crm&key=aksesaku&page='; //DEV
+
 
 
         try {
@@ -7052,30 +7054,51 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                     $data->each(function ($item) use (&$jumlahInsert) {
                         $isExistSKASKT = SKASKTProyek::where('nip', $item['nip'])?->where('no_sertifikat', $item['no_sertifikat'])->first();
 
-                        if (!empty($isExistSKASKT)) {
-                            $isExistSKASKT->emp_name = $item['emp_name'];
-                            $isExistSKASKT->nm_fungsi_bidang = $item['nm_fungsi_bidang'];
-                            $isExistSKASKT->no_sertifikat = $item['no_sertifikat'];
-                            $isExistSKASKT->type_sertifikat = $item['type_sertifikat'];
-                            $isExistSKASKT->institusi_penertbit_sertifikat = $item['institusi_penertbit_sertifikat'];
-                            $isExistSKASKT->category_sertifikat = $item['category_sertifikat'];
-                            $isExistSKASKT->issued_date = Carbon::create($item['issued_date']);
-                            $isExistSKASKT->expired_date = Carbon::create($item['expired_date']);
-                            $isExistSKASKT->save();
-                        } else {
-                            $newSKASKT = new SKASKTProyek();
-                            $newSKASKT->nip = $item['nip'];
-                            $newSKASKT->emp_name = $item['emp_name'];
-                            $newSKASKT->nm_fungsi_bidang = $item['nm_fungsi_bidang'];
-                            $newSKASKT->no_sertifikat = $item['no_sertifikat'];
-                            $newSKASKT->type_sertifikat = $item['type_sertifikat'];
-                            $newSKASKT->institusi_penertbit_sertifikat = $item['institusi_penertbit_sertifikat'];
-                            $newSKASKT->category_sertifikat = $item['category_sertifikat'];
-                            $newSKASKT->issued_date = Carbon::create($item['issued_date']);
-                            $newSKASKT->expired_date = Carbon::create($item['expired_date']);
-                            if ($newSKASKT->save()) {
-                                $jumlahInsert++;
-                            }
+                        // if (!empty($isExistSKASKT)) {
+                        //     $isExistSKASKT->emp_name = $item['emp_name'];
+                        //     $isExistSKASKT->nm_fungsi_bidang = $item['nm_fungsi_bidang'];
+                        //     $isExistSKASKT->no_sertifikat = $item['no_sertifikat'];
+                        //     $isExistSKASKT->type_sertifikat = $item['type_sertifikat'];
+                        //     $isExistSKASKT->institusi_penertbit_sertifikat = $item['institusi_penertbit_sertifikat'];
+                        //     $isExistSKASKT->category_sertifikat = $item['category_sertifikat'];
+                        //     $isExistSKASKT->issued_date = Carbon::create($item['issued_date']);
+                        //     $isExistSKASKT->expired_date = Carbon::create($item['expired_date']);
+                        //     $isExistSKASKT->save();
+                        // } else {
+                        //     $newSKASKT = new SKASKTProyek();
+                        //     $newSKASKT->nip = $item['nip'];
+                        //     $newSKASKT->emp_name = $item['emp_name'];
+                        //     $newSKASKT->nm_fungsi_bidang = $item['nm_fungsi_bidang'];
+                        //     $newSKASKT->no_sertifikat = $item['no_sertifikat'];
+                        //     $newSKASKT->type_sertifikat = $item['type_sertifikat'];
+                        //     $newSKASKT->institusi_penertbit_sertifikat = $item['institusi_penertbit_sertifikat'];
+                        //     $newSKASKT->category_sertifikat = $item['category_sertifikat'];
+                        //     $newSKASKT->issued_date = Carbon::create($item['issued_date']);
+                        //     $newSKASKT->expired_date = Carbon::create($item['expired_date']);
+                        //     if ($newSKASKT->save()) {
+                        //         $jumlahInsert++;
+                        //     }
+                        // }
+
+                        $newSKASKT = new SKASKTProyek();
+                        $newSKASKT->nip = $item['nip'];
+                        $newSKASKT->emp_name = $item['emp_name'];
+                        $newSKASKT->nm_fungsi_bidang = $item['nm_fungsi_bidang'];
+                        $newSKASKT->no_sertifikat = $item['no_sertifikat'];
+                        $newSKASKT->type_sertifikat = $item['type_sertifikat'];
+                        $newSKASKT->institusi_penertbit_sertifikat = $item['institusi_penertbit_sertifikat'];
+                        $newSKASKT->category_sertifikat = $item['category_sertifikat'];
+                        $newSKASKT->issued_date = Carbon::create($item['issued_date']);
+                        $newSKASKT->expired_date = Carbon::create($item['expired_date']);
+                        //Baru
+                        $newSKASKT->emp_position = $item['emp_position'];
+                        $newSKASKT->emp_position_name = $item['emp_position_name'];
+                        $newSKASKT->emp_og_unit = $item['emp_og_unit'];
+                        $newSKASKT->emp_og_unit_name = $item['emp_og_unit_name'];
+                        $newSKASKT->file_sertifikat = $item['file_sertifikat'];
+                        $newSKASKT->status_kepegawaian = $item['status_kepegawaian'];
+                        if ($newSKASKT->save()) {
+                            $jumlahInsert++;
                         }
                     });
 
