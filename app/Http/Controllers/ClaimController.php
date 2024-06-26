@@ -598,21 +598,21 @@ class ClaimController extends Controller
                         //     return (int) $item->nilai_disetujui;
                         // });
                         foreach ($cat_vo as $item) {
-                            $item_vo += $item->biaya_pengajuan;
-                            if ($item->stage == 5) {
-                                $item_vo_approved += (int)$item->nilai_disetujui;
-                            }
-                            // if (!$item->nilai_negatif) {
-                            //     $item_vo += $item->biaya_pengajuan;
-                            //     if ($item->stage == 5) {
-                            //         $item_vo_approved += (int)$item->nilai_disetujui;
-                            //     }
-                            // } else {
-                            //     $item_vo -= $item->biaya_pengajuan;
-                            //     if ($item->stage == 5) {
-                            //         $item_vo_approved -= (int)$item->nilai_disetujui;
-                            //     }
+                            // $item_vo += $item->biaya_pengajuan;
+                            // if ($item->stage == 5) {
+                            //     $item_vo_approved += (int)$item->nilai_disetujui;
                             // }
+                            if (!$item->nilai_negatif) {
+                                $item_vo += $item->biaya_pengajuan;
+                                if ($item->stage == 5) {
+                                    $item_vo_approved += (int)$item->nilai_disetujui;
+                                }
+                            } else {
+                                $item_vo -= $item->biaya_pengajuan;
+                                if ($item->stage == 5) {
+                                    $item_vo_approved -= (int)$item->nilai_disetujui;
+                                }
+                            }
                         }
 
                         $totalVOAll += $item_vo;

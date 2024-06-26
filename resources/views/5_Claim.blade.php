@@ -6,6 +6,24 @@
 @section('title', 'Change Managements')
 {{-- end:: title --}}
 
+<style>
+    .buttons-html5 {
+        border-radius: 5px !important;
+        border: none !important;
+        font-weight: normal !important;
+    }
+    .buttons-colvis {
+        border: none !important;
+        border-radius: 5px !important;
+    }
+    .dataTables_filter{
+        padding: 0 !important;
+        margin-left: 5px !important;
+        color: #B5B5C3;
+
+    }
+</style>
+
 {{-- begin:: content --}}
 @section('content')
     <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
@@ -373,9 +391,20 @@
         $(document).ready(function() {
             $('#claim-management').DataTable( {
                 // dom: 'Bfrtip',
-                dom: '<"float-start"f><"#example"t>rtip',
+                dom: '<"float-start"f><"#example"t>Brtip',
                 pageLength : 10,
-                ordering: false,
+                order: [[4, 'desc']],
+                language: {
+                    decimal: ',',
+                    thousands: '.'
+                },
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        title: 'Data Change Managements'
+                    },
+                        'pdf', 'print'
+                    ],
                 fixedHeader: {
                     footer: true
                 }

@@ -104,7 +104,7 @@
                                         <div class="form-group">
                                             <div id="stage-button" class="stage-list">
                                                     @if ($perubahan_kontrak->stage >= 1)
-                                                        <a href="#" role="link" class="stage-button clicked-stage color-is-default stage-is-done" style="outline: 0px; cursor: pointer;"
+                                                        <a href="#" role="link" class="stage-button clicked-stage color-is-default stage-is-done" style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator ? '' : 'pointer-events: none;' }}"
                                                             stage="1">
                                                             <div class="d-flex align-items-center text-white">Draft</div>
                                                         </a>
@@ -116,7 +116,7 @@
                                                     @endif
 
                                                     @if ($perubahan_kontrak->stage >= 2)
-                                                        <a href="#" role="link" class="stage-button clicked-stage color-is-default stage-is-done" style="outline: 0px; cursor: pointer;"
+                                                        <a href="#" role="link" class="stage-button clicked-stage color-is-default stage-is-done" style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator ? '' : 'pointer-events: none;' }}"
                                                             stage="2">
                                                             <div class="d-flex align-items-center text-white">Diajukan</div>
                                                         </a>
@@ -128,7 +128,7 @@
                                                     @endif
 
                                                     @if ($perubahan_kontrak->stage >= 3)
-                                                        <a href="#" role="link" class="stage-button clicked-stage color-is-default stage-is-done" style="outline: 0px; cursor: pointer;"
+                                                        <a href="#" role="link" class="stage-button clicked-stage color-is-default stage-is-done" style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator ? '' : 'pointer-events: none;' }}"
                                                             stage="3">
                                                             <div class="d-flex align-items-center text-white">Revisi</div>
                                                         </a>
@@ -147,7 +147,7 @@
                                                     @endif
 
                                                     @if ($perubahan_kontrak->stage >= 4)
-                                                        <a href="#" role="link" class="stage-button clicked-stage color-is-default stage-is-done" style="outline: 0px; cursor: pointer;"
+                                                        <a href="#" role="link" class="stage-button clicked-stage color-is-default stage-is-done" style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator ? '' : 'pointer-events: none;' }}"
                                                             stage="4">
                                                             <div class="d-flex align-items-center text-white">Negoisasi</div>
                                                         </a>
@@ -168,7 +168,7 @@
                                                     {{-- @dd($perubahan_kontrak->stage) --}}
                                                     @if ($perubahan_kontrak->stage > 4)
                                                         @if ($perubahan_kontrak->stage == 6 && !$perubahan_kontrak->is_dispute)
-                                                            <a href="#" role="link" class="stage-button stage-dropdown color-is-danger stage-is-done" style="outline: 0px; cursor: pointer;"
+                                                            <a href="#" role="link" class="stage-button stage-dropdown color-is-danger stage-is-done" style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator ? '' : 'pointer-events: none;' }}"
                                                                 data-bs-toggle="dropdown" aria-expanded="false">
                                                                 <div class="d-flex justify-content-between align-items-center">
                                                                     <span class="text-white me-3">Ditolak</span>
@@ -177,7 +177,7 @@
                                                             </a>
                                                         @else
                                                             @if ($perubahan_kontrak->is_dispute)
-                                                                <a href="#" role="link" class="stage-button stage-dropdown color-is-danger stage-is-done" style="outline: 0px; cursor: pointer;">
+                                                                <a href="#" role="link" class="stage-button stage-dropdown color-is-danger stage-is-done" style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator ? '' : 'pointer-events: none;' }}">
                                                                     <div class="d-flex justify-content-between align-items-center">
                                                                         <span class="text-white me-3">Ditolak</span>
                                                                         {{-- <i class="bi bi-caret-down-fill text-white"></i> --}}
