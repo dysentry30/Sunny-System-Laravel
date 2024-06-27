@@ -4684,7 +4684,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                         $newSKASKT->emp_name = $item['emp_name'];
                         $newSKASKT->nm_fungsi_bidang = $item['nm_fungsi_bidang'];
                         $newSKASKT->no_sertifikat = $item['no_sertifikat'];
-                        $newSKASKT->type_sertifikat = $item['type_sertifikat'];
+                        $newSKASKT->nama_sertifikat = $item['nama_sertifikat'];
                         $newSKASKT->institusi_penertbit_sertifikat = $item['institusi_penertbit_sertifikat'];
                         $newSKASKT->category_sertifikat = $item['category_sertifikat'];
                         $newSKASKT->issued_date = Carbon::create($item['issued_date']);
@@ -4694,6 +4694,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                         $newSKASKT->emp_position_name = $item['emp_position_name'];
                         $newSKASKT->emp_og_unit = $item['emp_og_unit'];
                         $newSKASKT->emp_og_unit_name = $item['emp_og_unit_name'];
+                        $newSKASKT->level_sertifikat = $item['level_sertifikat'];
                         $newSKASKT->file_sertifikat = $item['file_sertifikat'];
                         $newSKASKT->status_kepegawaian = $item['status_kepegawaian'];
                         if ($newSKASKT->save()) {
