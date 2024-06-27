@@ -125,7 +125,7 @@
                                             <td class="text-center align-middle">{{ $item->no_sertifikat }}</td>
                                             <td class="text-center align-middle">{{ $item->type_sertifikat }}</td>
                                             <td class="text-center align-middle">{{ $item->category_sertifikat}}</td>
-                                            <td class="text-center align-middle">{{ $item->institusi_penertbit_sertifikat }}</td>
+                                            <td class="text-center align-middle">{{ $item->institusi_penerbit_sertifikat }}</td>
                                             <td class="text-center align-middle">
                                                 @if (!empty($item->file_sertifikat))
                                                     <a href="{{ $item->file_sertifikat }}" class="btn btn-sm btn-primary">Download</a>
