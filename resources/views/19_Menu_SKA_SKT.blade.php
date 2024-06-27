@@ -98,7 +98,7 @@
                                         <th class="min-w-auto text-white">Bidang</th>
                                         <th class="min-w-auto text-white">Lokasi Penempatan</th>
                                         <th class="min-w-auto text-white">Nomor Registrasi</th>
-                                        <th class="min-w-auto text-white">Nama Sertifikat</th>
+                                        <th class="min-w-auto text-white">Kualifikasi</th>
                                         <th class="min-w-auto text-white">Kategori Sertifikat</th>
                                         <th class="min-w-auto text-white">Penerbit Sertifikat</th>
                                         <th class="min-w-auto text-white">Unduh Sertifikat</th>
@@ -120,10 +120,10 @@
                                             <td class="text-center align-middle">{{ $no++ }}</td>
                                             <td class="align-middle">{{ $item->nip }}</td>
                                             <td class="align-middle">{{ $item->Pegawai?->nama_pegawai }}</td>
-                                            <td class="align-middle">{{ $item->nm_fungsi_bidang }}</td>
+                                            <td class="align-middle">{{ $item->nama_sertifikat }}</td>
                                             <td class="align-middle">{{ $item->emp_position_name }}</td>
                                             <td class="text-center align-middle">{{ $item->no_sertifikat }}</td>
-                                            <td class="text-center align-middle">{{ $item->nama_sertifikat }}</td>
+                                            <td class="text-center align-middle">{{ $item->level_sertifikat }}</td>
                                             <td class="text-center align-middle">{{ $item->category_sertifikat}}</td>
                                             <td class="text-center align-middle">{{ $item->institusi_penerbit_sertifikat }}</td>
                                             <td class="text-center align-middle">
