@@ -98,7 +98,7 @@
                                         <th class="min-w-auto text-white">Bidang</th>
                                         <th class="min-w-auto text-white">Lokasi Penempatan</th>
                                         <th class="min-w-auto text-white">Nomor Registrasi</th>
-                                        <th class="min-w-auto text-white">Kualifikasi</th>
+                                        <th class="min-w-auto text-white">Nama Sertifikat</th>
                                         <th class="min-w-auto text-white">Kategori Sertifikat</th>
                                         <th class="min-w-auto text-white">Penerbit Sertifikat</th>
                                         <th class="min-w-auto text-white">Unduh Sertifikat</th>
@@ -123,12 +123,12 @@
                                             <td class="align-middle">{{ $item->nm_fungsi_bidang }}</td>
                                             <td class="align-middle">{{ $item->emp_position_name }}</td>
                                             <td class="text-center align-middle">{{ $item->no_sertifikat }}</td>
-                                            <td class="text-center align-middle">{{ $item->type_sertifikat }}</td>
+                                            <td class="text-center align-middle">{{ $item->nama_sertifikat }}</td>
                                             <td class="text-center align-middle">{{ $item->category_sertifikat}}</td>
                                             <td class="text-center align-middle">{{ $item->institusi_penerbit_sertifikat }}</td>
                                             <td class="text-center align-middle">
                                                 @if (!empty($item->file_sertifikat))
-                                                    <a href="{{ $item->file_sertifikat }}" class="btn btn-sm btn-primary">Download</a>
+                                                    <a href="{{ $item->file_sertifikat }}" class="btn btn-sm btn-primary text-white">Download</a>
                                                 @else
                                                     <p class="m-0">Belum ada sertifikat</p>
                                                 @endif
