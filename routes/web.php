@@ -4697,6 +4697,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                         $newSKASKT->level_sertifikat = $item['level_sertifikat'];
                         $newSKASKT->file_sertifikat = $item['file_sertifikat'];
                         $newSKASKT->status_kepegawaian = $item['status_kepegawaian'];
+                        $newSKASKT->emp_start_date = $item['emp_start_date'];
+                        $newSKASKT->emp_end_date = $item['emp_start_date'];
                         if ($newSKASKT->save()) {
                             $jumlahInsert++;
                         }
