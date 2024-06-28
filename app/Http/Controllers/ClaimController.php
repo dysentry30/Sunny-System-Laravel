@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\File;
+use stdClass;
 
 class ClaimController extends Controller
 {
@@ -1241,22 +1242,68 @@ class ClaimController extends Controller
 
         // dd(ContractApproval::where("id_contract", "=", $id_contract)->where("periode", "<=", $periode)->get());
 
+
+        // dd($contract);
+
+        $totalClaimVO = 0;
+        $totalClaimKlaim = 0;
+        $totalClaimAntiKlaim = 0;
+        $totalClaimKlaimAsuransi = 0;
+        $totalClaimAll = 0;
+
         $claim_all = PerubahanKontrak::where(
             "profit_center",
             "=",
             $profitCenter
-        )->get();
+        )->get()?->map(function ($item) use (&$totalClaimAll) {
+            if ($item->jenis_perubahan == "VO") {
+                if ($item->nilai_negatif) {
+                    $item->biaya_pengajuan = 0 - (int) $item->biaya_pengajuan;
+                }
+            } elseif ($item->jenis_perubahan == "Anti Klaim") {
+                $item->biaya_pengajuan = 0 - (int) $item->biaya_pengajuan;
+            }
 
-        // dd($contract);
+            $totalClaimAll += $item->biaya_pengajuan;
 
-        $claims_vo = $claims->where("jenis_perubahan", "=", "VO");
-        $claims_klaim = $claims->where("jenis_perubahan", "=", "Klaim");
-        $claims_anti_klaim = $claims->where("jenis_perubahan", "=", "Anti Klaim");
-        $claims_klaim_asuransi = $claims->where("jenis_perubahan", "=", "Klaim Asuransi");
+            return $item;
+        })->sortByDesc("biaya_pengajuan");
+
+        $claims_vo = $claims->where("jenis_perubahan", "=", "VO")?->map(function ($item) use (&$totalClaimVO) {
+            if ($item->nilai_negatif) {
+                $item->biaya_pengajuan = 0 - (int) $item->biaya_pengajuan;
+            }
+
+            $totalClaimVO += $item->biaya_pengajuan;
+
+            return $item;
+        });
+
+        $claims_klaim = $claims->where(
+            "jenis_perubahan",
+            "=",
+            "Klaim"
+        )?->each(function ($item) use (&$totalClaimKlaim) {
+            $totalClaimKlaim += $item->biaya_pengajuan;
+        });
+
+        $claims_anti_klaim = $claims->where("jenis_perubahan", "=", "Anti Klaim")?->map(function ($item) use (&$totalClaimAntiKlaim) {
+            $item->biaya_pengajuan = 0 - (int) $item->biaya_pengajuan;
+            $totalClaimAntiKlaim += $item->biaya_pengajuan;
+            return $item;
+        });
+
+        $claims_klaim_asuransi = $claims->where(
+                "jenis_perubahan",
+                "=",
+                "Klaim Asuransi"
+            )?->each(function ($item) use (&$totalClaimKlaimAsuransi) {
+                $totalClaimKlaimAsuransi += $item->biaya_pengajuan;
+            });
         // dd($claims_vo);
 
         return view("claimManagement/viewDetail", compact([
-            "contracts", "claims_vo", "claims_klaim", "claims_anti_klaim", "claims_klaim_asuransi", "proyek", "claim_all", "link", "periode", "user", "profitCenter"
+            "contracts", "claims_vo", "claims_klaim", "claims_anti_klaim", "claims_klaim_asuransi", "proyek", "claim_all", "link", "periode", "user", "profitCenter", "totalClaimVO", "totalClaimKlaim", "totalClaimAntiKlaim", "totalClaimKlaimAsuransi", "totalClaimAll"
         ]));
     }
 

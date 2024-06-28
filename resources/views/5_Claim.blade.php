@@ -284,22 +284,22 @@
                                                     </td>
                                                     <td>{{ $claim['nama_proyek'] }}</td>
                                                     <td>{{ $claim['unit_kerja'] }}</td>
-                                                    <td class="text-center bg-secondary">{{ number_format($claim['jumlah_vo'], 0, ".", ".") }}</td>
-                                                    <td class="text-center">{{ number_format($claim['total_vo'], 0, ".", ".") }}</td>
-                                                    <td class="text-center bg-secondary">{{ number_format($claim['jumlah_vo_approved'], 0, ".", ".") }}</td>
-                                                    <td class="text-center">{{ number_format($claim['total_vo_approved'], 0, ".", ".") }}</td>
-                                                    <td class="text-center bg-secondary">{{ number_format($claim['jumlah_klaim'], 0, ".", ".") }}</td>
-                                                    <td class="text-center">{{ number_format($claim['total_klaim'], 0, ".", ".") }}</td>
-                                                    <td class="text-center bg-secondary">{{ number_format($claim['jumlah_klaim_approved'], 0, ".", ".") }}</td>
-                                                    <td class="text-center">{{ number_format($claim['total_klaim_approved'], 0, ".", ".") }}</td>
-                                                    <td class="text-center bg-secondary">{{ number_format($claim['jumlah_anti_klaim'], 0, ".", ".") }}</td>
-                                                    <td class="text-center">{{ number_format($claim['total_anti_klaim'], 0, ".", ".") }}</td>
-                                                    <td class="text-center bg-secondary">{{ number_format($claim['jumlah_anti_klaim_approved'], 0, ".", ".") }}</td>
-                                                    <td class="text-center">{{ number_format($claim['total_anti_klaim_approved'], 0, ".", ".") }}</td>
-                                                    <td class="text-center bg-secondary">{{ number_format($claim['jumlah_klaim_asuransi'], 0, ".", ".") }}</td>
-                                                    <td class="text-center">{{ number_format($claim['total_klaim_asuransi'], 0, ".", ".") }}</td>
-                                                    <td class="text-center bg-secondary">{{ number_format($claim['jumlah_klaim_asuransi_approved'], 0, ".", ".") }}</td>
-                                                    <td class="text-center">{{ number_format($claim['total_klaim_asuransi_approved'], 0, ".", ".") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($claim['jumlah_vo'], 0, ".", ",") }}</td>
+                                                    <td class="text-center">{{ number_format($claim['total_vo'], 0, ".", ",") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($claim['jumlah_vo_approved'], 0, ".", ",") }}</td>
+                                                    <td class="text-center">{{ number_format($claim['total_vo_approved'], 0, ".", ",") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($claim['jumlah_klaim'], 0, ".", ",") }}</td>
+                                                    <td class="text-center">{{ number_format($claim['total_klaim'], 0, ".", ",") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($claim['jumlah_klaim_approved'], 0, ".", ",") }}</td>
+                                                    <td class="text-center">{{ number_format($claim['total_klaim_approved'], 0, ".", ",") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($claim['jumlah_anti_klaim'], 0, ".", ",") }}</td>
+                                                    <td class="text-center">{{ number_format($claim['total_anti_klaim'], 0, ".", ",") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($claim['jumlah_anti_klaim_approved'], 0, ".", ",") }}</td>
+                                                    <td class="text-center">{{ number_format($claim['total_anti_klaim_approved'], 0, ".", ",") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($claim['jumlah_klaim_asuransi'], 0, ".", ",") }}</td>
+                                                    <td class="text-center">{{ number_format($claim['total_klaim_asuransi'], 0, ".", ",") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($claim['jumlah_klaim_asuransi_approved'], 0, ".", ",") }}</td>
+                                                    <td class="text-center">{{ number_format($claim['total_klaim_asuransi_approved'], 0, ".", ",") }}</td>
                                                     {{-- <td>
                                                         <a href="/contract-management/view/{{ $claim->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim->id_contract }}</a>
                                                     </td> --}}
@@ -309,22 +309,22 @@
                                             <tfoot>
                                                 <tr>
                                                     <td colspan="3" class="text-center text-white" style="background-color: #0DB0D9"><b>Total</b></td>
-                                                    <td class="text-center bg-secondary">{{ number_format($jumlahVOAll, 0, ".", ".") }}</td>
-                                                    <td class="text-center">{{ number_format($totalVOAll, 0, ".", ".") }}</td>
-                                                    <td class="text-center bg-secondary">{{ number_format($jumlahVOAllApproved, 0, ".", ".") }}</td>
-                                                    <td class="text-center">{{ number_format($totalVOAllApproved, 0, ".", ".") }}</td>
-                                                    <td class="text-center bg-secondary">{{ number_format($jumlahClaimAll, 0, ".", ".") }}</td>
-                                                    <td class="text-center">{{ number_format($totalClaimAll, 0, ".", ".") }}</td>
-                                                    <td class="text-center bg-secondary">{{ number_format($jumlahClaimAllApproved, 0, ".", ".") }}</td>
-                                                    <td class="text-center">{{ number_format($totalClaimAllApproved, 0, ".", ".") }}</td>
-                                                    <td class="text-center bg-secondary">{{ number_format($jumlahAntiClaimAll, 0, ".", ".") }}</td>
-                                                    <td class="text-center">{{ number_format($totalAntiClaimAll, 0, ".", ".") }}</td>
-                                                    <td class="text-center bg-secondary">{{ number_format($jumlahAntiClaimAllApproved, 0, ".", ".") }}</td>
-                                                    <td class="text-center">{{ number_format($totalAntiClaimAllApproved, 0, ".", ".") }}</td>
-                                                    <td class="text-center bg-secondary">{{ number_format($jumlahClaimAsuransiAll, 0, ".", ".") }}</td>
-                                                    <td class="text-center">{{ number_format($totalClaimAsuransiAll, 0, ".", ".") }}</td>
-                                                    <td class="text-center bg-secondary">{{ number_format($jumlahClaimAsuransiAllApproved, 0, ".", ".") }}</td>
-                                                    <td class="text-center">{{ number_format($totalClaimAsuransiAllApproved, 0, ".", ".") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($jumlahVOAll, 0, ".", ",") }}</td>
+                                                    <td class="text-center">{{ number_format($totalVOAll, 0, ".", ",") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($jumlahVOAllApproved, 0, ".", ",") }}</td>
+                                                    <td class="text-center">{{ number_format($totalVOAllApproved, 0, ".", ",") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($jumlahClaimAll, 0, ".", ",") }}</td>
+                                                    <td class="text-center">{{ number_format($totalClaimAll, 0, ".", ",") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($jumlahClaimAllApproved, 0, ".", ",") }}</td>
+                                                    <td class="text-center">{{ number_format($totalClaimAllApproved, 0, ".", ",") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($jumlahAntiClaimAll, 0, ".", ",") }}</td>
+                                                    <td class="text-center">{{ number_format($totalAntiClaimAll, 0, ".", ",") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($jumlahAntiClaimAllApproved, 0, ".", ",") }}</td>
+                                                    <td class="text-center">{{ number_format($totalAntiClaimAllApproved, 0, ".", ",") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($jumlahClaimAsuransiAll, 0, ".", ",") }}</td>
+                                                    <td class="text-center">{{ number_format($totalClaimAsuransiAll, 0, ".", ",") }}</td>
+                                                    <td class="text-center bg-secondary">{{ number_format($jumlahClaimAsuransiAllApproved, 0, ".", ",") }}</td>
+                                                    <td class="text-center">{{ number_format($totalClaimAsuransiAllApproved, 0, ".", ",") }}</td>
                                                 </tr>
                                             </tfoot>
                                         </table>
@@ -400,7 +400,23 @@
                 buttons: [
                     {
                         extend: 'excelHtml5',
-                        title: 'Data Change Managements'
+                        title: 'Data Change Managements',
+                        footer: true,
+                        header: true,
+                        exportOptions: {
+                            format: {
+                                body: function(data, row, column, node) {
+                                    data = $('<p>' + data + '</p>').text();
+                                    // return $.isNumeric(data.replace('.', ',')) ? data.replace('.', ',') : data;
+                                    return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+                                },
+                                footer: function(data, row, column, node) {
+                                    data = $('<p>' + data + '</p>').text();
+                                    // return $.isNumeric(data.replace('.', ',')) ? data.replace('.', ',') : data;
+                                    return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+                                }
+                            }
+                        }
                     },
                         'pdf', 'print'
                     ],
