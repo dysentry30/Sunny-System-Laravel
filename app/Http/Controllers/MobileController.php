@@ -406,6 +406,119 @@ class MobileController extends Controller
         return response()->json($unit_kerjas->values());
     }
 
+    /**
+     * Get Data Detail Proyek Forecast
+     * 
+     * @return Illuminate\Http\Response JSON
+     */
+    public function getListProyek(Request $request, string $page)
+    {
+        try {
+            $category = $request->get("category");
+            $departemen = $request->get("departemen");
+            $unitKerja = $request->get("unitKerja");
+            $periodePrognosa = $request->get("periodePrognosa") ?? 3;
+            $tahun = $request->get("tahun") ?? date("Y");
+
+            if ($page == "list-proyek-forecast") {
+                $data = [];
+
+                $history_forecasts = Proyek::select("proyeks.nama_proyek", "proyeks.stage", "proyeks.status_pasdin", "proyeks.tipe_proyek", "proyeks.tahun_perolehan", "history_forecast.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $tahun)->where("periode_prognosa", "=", $periodePrognosa)->get()->where("is_cancel", "!=", true);
+                // dd($history_forecasts);
+                $countUnitKerjaFromHistory = $history_forecasts->groupBy('unit_kerja')->count();
+                if ($history_forecasts->count() < 1 || $countUnitKerjaFromHistory < 11) {
+                    $history_forecasts = Proyek::select("proyeks.nama_proyek", "proyeks.stage", "proyeks.status_pasdin", "proyeks.tipe_proyek", "proyeks.tahun_perolehan", "forecasts.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("forecasts", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $tahun)->where("periode_prognosa", "=", $periodePrognosa)->get()->where("is_cancel", "!=", true);
+                }
+                if ($unitKerja != "" && strlen($unitKerja) == 1) {
+                    $history_forecasts = $history_forecasts->where("divcode", $unitKerja);
+                    if (empty($history_forecasts) || $history_forecasts->isEmpty()) {
+                        $history_forecasts = Proyek::select("proyeks.nama_proyek", "proyeks.stage", "proyeks.status_pasdin", "proyeks.tipe_proyek", "proyeks.tahun_perolehan", "forecasts.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("forecasts", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $tahun)->where("periode_prognosa", "=", $periodePrognosa)->where("divcode", $unitKerja)->get()->where("is_cancel", "!=", true);
+                    }
+                    // dd($history_forecasts);
+                } elseif ($unitKerja != "") {
+                    $dop = str_replace("-", " ", $unitKerja);
+                    if (empty($history_forecasts) || $history_forecasts->isEmpty()) {
+                        $history_forecasts = Proyek::select("proyeks.nama_proyek", "proyeks.stage", "proyeks.status_pasdin", "proyeks.tipe_proyek", "proyeks.tahun_perolehan", "forecasts.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("forecasts", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $tahun)->where("periode_prognosa", "=", $periodePrognosa)->where("divcode", $unitKerja)->get()->where("is_cancel", "!=", true);
+                    }
+                    if ($unitKerja == "PUSAT") {
+                        $history_forecasts = $history_forecasts->whereIn("dop", ["DOP 1", "DOP 2", "DOP 3"]);
+                    } else {
+                        $history_forecasts = $history_forecasts->where("dop", $dop);
+                    }
+                    // dd($dop, $history_forecasts);
+                }
+
+                $history_forecasts = $history_forecasts
+                    ->when($category == "Forecast", function ($history) {
+                        $history->where("nilai_forecast", "!=", "")
+                        ->where("nilai_forecast", "!=", "0")
+                            ->where("month_forecast", "!=", 0)
+                            ->where("month_forecast", SORT_NUMERIC);
+                    })
+                    ->when($category == "RKAP", function ($history) {
+                        $history->where("is_rkap", "=", true)
+                            ->where("rkap_forecast", "!=", "")
+                            ->where("rkap_forecast", "!=", "0")
+                            ->where("month_rkap", "!=", 0)
+                            ->where("month_rkap", SORT_NUMERIC);
+                    })
+                    ->when($category == "Realisasi", function ($history) {
+                        $history->where("stage", 8)
+                        ->where("realisasi_forecast", "!=", "")
+                        ->where("realisasi_forecast", "!=", "0")
+                            ->where("month_realisasi", "!=", 0)
+                            ->where("month_realisasi", SORT_NUMERIC);
+                    })
+                    ->groupBy("kode_proyek");
+
+                foreach ($history_forecasts as $kode_proyek => $filter) {
+                    foreach ($filter as $f) {
+                        if ($f->month_rkap <= $periodePrognosa) {
+                            if (!array_key_exists($f->kode_proyek, $data)) {
+                                $data[$kode_proyek] = $f;
+                            } else {
+                                if ($category == "Forecast") {
+                                    $data[$kode_proyek]->nilai_forecast += $f->nilai_forecast;
+                                    $data[$kode_proyek]->month_forecast = $f->month_forecast;
+                                } elseif ($category == "RKAP") {
+                                    $data[$kode_proyek]->rkap_forecast += $f->rkap_forecast;
+                                    $data[$kode_proyek]->month_rkap = $f->month_rkap;
+                                } elseif ($category == "Realisasi") {
+                                    $data[$kode_proyek]->realisasi_forecast += $f->realisasi_forecast;
+                                    $data[$kode_proyek]->month_realisasi = $f->month_realisasi;
+                                }
+                            }
+                        }
+                    }
+                    if (isset($data[$kode_proyek])) {
+                        if ($data[$kode_proyek]->tipe_proyek == "R") {
+                            $tipe_proyek = "Retail";
+                        } else {
+                            $tipe_proyek = "Non-Retail";
+                        }
+                        $data[$kode_proyek]->nama_proyek;
+                        $data[$kode_proyek]->status_pasdin;
+                        $data[$kode_proyek]->stage = $this->getStage($data[$kode_proyek]->stage);
+                        $data[$kode_proyek]->tipe_proyek = $tipe_proyek;
+
+                        if ($category == "Forecast") {
+                            $data[$kode_proyek]->bulan = $this->getNamaBulan($data[$kode_proyek]->month_forecast);
+                        } elseif ($category == "RKAP") {
+                            $data[$kode_proyek]->bulan = $this->getNamaBulan($data[$kode_proyek]->month_rkap);
+                        } elseif ($category == "Realisasi") {
+                            $data[$kode_proyek]->bulan = $this->getNamaBulan($data[$kode_proyek]->month_realisasi);
+                        }
+                        // $data[$kode_proyek]->rkap_forecast;
+                    }
+                }
+                $data = collect($data)->values();
+                return response()->json($data);
+            }
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
 
 
 
@@ -446,51 +559,61 @@ class MobileController extends Controller
         return $stg;
     }
 
-    private function getNamaBulan(int $bulan)
+    private function getNamaBulan($bulan)
     {
-        switch ($bulan) {
-            case 1:
-                $namaBulan = "Januari";
-                break;
-            case 2:
-                $namaBulan = "Februari";
-                break;
-            case 3:
-                $namaBulan = "Maret";
-                break;
-            case 4:
-                $namaBulan = "April";
-                break;
-            case 5:
-                $namaBulan = "Mei";
-                break;
-            case 6:
-                $namaBulan = "Juni";
-                break;
-            case 7:
-                $namaBulan = "Juli";
-                break;
-            case 8:
-                $namaBulan = "Agustus";
-                break;
-            case 9:
-                $namaBulan = "September";
-                break;
-            case 10:
-                $namaBulan = "Oktober";
-                break;
-            case 11:
-                $namaBulan = "November";
-                break;
-            case 12:
-                $namaBulan = "Desember";
-                break;
+        if (!empty($bulan)) {
+            switch ($bulan) {
+                case 1:
+                    $namaBulan = "Januari";
+                    break;
+                case 2:
+                    $namaBulan = "Februari";
+                    break;
+                case 3:
+                    $namaBulan = "Maret";
+                    break;
+                case 4:
+                    $namaBulan = "April";
+                    break;
+                case 5:
+                    $namaBulan = "Mei";
+                    break;
+                case 6:
+                    $namaBulan = "Juni";
+                    break;
+                case 7:
+                    $namaBulan = "Juli";
+                    break;
+                case 8:
+                    $namaBulan = "Agustus";
+                    break;
+                case 9:
+                    $namaBulan = "September";
+                    break;
+                case 10:
+                    $namaBulan = "Oktober";
+                    break;
+                case 11:
+                    $namaBulan = "November";
+                    break;
+                case 12:
+                    $namaBulan = "Desember";
+                    break;
 
-            default:
-                $namaBulan = "";
-                break;
+                default:
+                    $namaBulan = "";
+                    break;
+            }
+        } else {
+            $namaBulan = "";
         }
 
         return $namaBulan;
+    }
+
+    private function getUnitKerjaProyek(string $unitKerja): string
+    {
+        $unitKerjaSelected = UnitKerja::where("divcode", $unitKerja)->first();
+        return $unitKerjaSelected->unit_kerja;
     }
 }

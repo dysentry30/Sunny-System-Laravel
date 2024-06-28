@@ -5646,6 +5646,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('/get-forecast-bulanan-all', [MobileController::class, 'GetDataForecastAll']);
     Route::get('/get-forecast-bulanan/{unitKerja}/{tahun}/{bulan}', [MobileController::class, 'GetDataForecastNew']);
     Route::get('/get-monitoring-proyek', [MobileController::class, 'GetMonitoringProyek']);
+    Route::get('/get-proyek/{page}', [MobileController::class, 'getListProyek']);
 });
 
 Route::get('/tes-tv/{tes}', [DashboardTVController::class, 'getScheduleCampur']);
