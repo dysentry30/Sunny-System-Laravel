@@ -102,9 +102,10 @@
                                         <th class="min-w-auto text-white">Kategori Sertifikat</th>
                                         <th class="min-w-auto text-white">Penerbit Sertifikat</th>
                                         <th class="min-w-auto text-white">Unduh Sertifikat</th>
-                                        <th class="min-w-auto text-white">Status Karyawan</th>
                                         <th class="min-w-auto text-white">Issued Date</th>
                                         <th class="min-w-auto text-white">Expired Date</th>
+                                        <th class="min-w-auto text-white">Tgl Mulai SK Penempatan</th>
+                                        <th class="min-w-auto text-white">Status Karyawan</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -133,9 +134,10 @@
                                                     <p class="m-0">Belum ada sertifikat</p>
                                                 @endif
                                             </td>
-                                            <td class="text-center align-middle"><p class="m-0 badge rounded-pill {{ $item->status_kepegawaian == "AKTIF" ? "bg-success" : "bg-danger" }}">{{ $item->status_kepegawaian }}</p></td>
                                             <td class="text-center align-middle">{{ \Carbon\Carbon::parse($item->issued_date)->translatedFormat('d F Y') }}</td>
                                             <td class="text-center align-middle">{{ \Carbon\Carbon::parse($item->expired_date)->translatedFormat('d F Y') }}</td>
+                                            <td class="text-center align-middle">{{ \Carbon\Carbon::parse($item->emp_start_date)->translatedFormat('d F Y') }}</td>
+                                            <td class="text-center align-middle"><p class="m-0 badge rounded-pill {{ $item->status_kepegawaian == "AKTIF" ? "bg-success" : "bg-danger" }}">{{ $item->status_kepegawaian }}</p></td>
                                         </tr>
                                     @endforeach
                                 </tbody>
