@@ -1781,7 +1781,7 @@ class DashboardController extends Controller
                     $result["potensial"] = $filterJenisPerubahan->count();
                     $result["potensial_value"] = $filterJenisPerubahan->sum(function ($item) use ($p) {
                         $nilai = 0;
-                        if ($p == "VO" && $item->is_negatif) {
+                        if ($p == "VO" && $item->nilai_negatif) {
                             $nilai -= (int)$item->biaya_pengajuan;
                         } else {
                             $nilai += (int)$item->biaya_pengajuan;
@@ -1797,7 +1797,7 @@ class DashboardController extends Controller
                     $result["subs"] = $filterSubs->count();
                     $result["subs_value"] = $filterSubs->sum(function ($item) use ($p) {
                         $nilai = 0;
-                        if ($p == "VO" && $item->is_negatif) {
+                        if ($p == "VO" && $item->nilai_negatif) {
                             $nilai -= (int)$item->biaya_pengajuan;
                         } else {
                             $nilai += (int)$item->biaya_pengajuan;
@@ -1813,7 +1813,7 @@ class DashboardController extends Controller
                     $result["revisi"] = $filterRevision->count();
                     $result["revisi_value"] = $filterRevision->sum(function ($item) use ($p) {
                         $nilai = 0;
-                        if ($p == "VO" && $item->is_negatif) {
+                        if ($p == "VO" && $item->nilai_negatif) {
                             $nilai -= (int)$item->biaya_pengajuan;
                         } else {
                             $nilai += (int)$item->biaya_pengajuan;
@@ -1829,7 +1829,7 @@ class DashboardController extends Controller
                     $result["nego"] = $filterNego->count();
                     $result["nego_value"] = $filterNego->sum(function ($item) use ($p) {
                         $nilai = 0;
-                        if ($p == "VO" && $item->is_negatif) {
+                        if ($p == "VO" && $item->nilai_negatif) {
                             $nilai -= (int)$item->biaya_pengajuan;
                         } else {
                             $nilai += (int)$item->biaya_pengajuan;
@@ -1854,7 +1854,7 @@ class DashboardController extends Controller
                     $result["tolak"] = $filterTolak->count();
                     $result["tolak_value"] = $filterTolak->sum(function ($item) use ($p) {
                         $nilai = 0;
-                        if ($p == "VO" && $item->is_negatif) {
+                        if ($p == "VO" && $item->nilai_negatif) {
                             $nilai -= (int)$item->biaya_pengajuan;
                         } else {
                             $nilai += (int)$item->biaya_pengajuan;
@@ -1870,7 +1870,7 @@ class DashboardController extends Controller
                     $result["dispute"] = $filterDispute->count();
                     $result["dispute_value"] = $filterDispute->sum(function ($item) use ($p) {
                         $nilai = 0;
-                        if ($p == "VO" && $item->is_negatif) {
+                        if ($p == "VO" && $item->nilai_negatif) {
                             $nilai -= (int)$item->biaya_pengajuan;
                         } else {
                             $nilai += (int)$item->biaya_pengajuan;
@@ -2732,7 +2732,7 @@ class DashboardController extends Controller
                                 // dump($data);
                                 $data["jenis_perubahan"] = $data["jenis_perubahan"];
                                 $data["total_item"] = $data["total_item"] + 1;
-                                if ($p == "VO" && $cp->is_negatif) {
+                                if ($p == "VO" && $cp->nilai_negatif) {
                                     $data["total_nilai"] = $data["total_nilai"] - (int)$cp->biaya_pengajuan;
                                 } else {
                                     $data["total_nilai"] = $data["total_nilai"] + (int)$cp->biaya_pengajuan;
@@ -2740,7 +2740,7 @@ class DashboardController extends Controller
 
                                 if ($cp->stage == 5) {
                                     $data["total_item_approved"] = $data["total_item_approved"] + 1;
-                                    if ($p == "VO" && $cp->is_negatif) {
+                                    if ($p == "VO" && $cp->nilai_negatif) {
                                         $data["total_nilai_approved"] = $data["total_nilai_approved"] - (int)$cp->nilai_disetujui;
                                     } else {
                                         $data["total_nilai_approved"] = $data["total_nilai_approved"] + (int)$cp->nilai_disetujui;
@@ -2753,9 +2753,9 @@ class DashboardController extends Controller
                                 $result[$p] = [
                                     "jenis_perubahan" => $p,
                                     "total_item" => ++$counter,
-                                    "total_nilai" => $p == "VO" && $cp->is_negatif ? $nilai -= (int)$cp->biaya_pengajuan : $nilai += (int)$cp->biaya_pengajuan,
+                                    "total_nilai" => $p == "VO" && $cp->nilai_negatif ? $nilai -= (int)$cp->biaya_pengajuan : $nilai += (int)$cp->biaya_pengajuan,
                                     "total_item_approved" => $cp->stage == 5 ? ++$counterApproved : 0,
-                                    "total_nilai_approved" => $cp->stage == 5 && $p == "VO" && $cp->is_negatif ? $nilaiApproved -= (int)$cp->nilai_disetujui : ($cp->stage == 5 ? $nilaiApproved += (int)$cp->nilai_disetujui : 0)
+                                    "total_nilai_approved" => $cp->stage == 5 && $p == "VO" && $cp->nilai_negatif ? $nilaiApproved -= (int)$cp->nilai_disetujui : ($cp->stage == 5 ? $nilaiApproved += (int)$cp->nilai_disetujui : 0)
                                 ];
                             }
                         } else {
@@ -2763,7 +2763,7 @@ class DashboardController extends Controller
                                 $data = $result[$p];
                                 $data["jenis_perubahan"] = $data["jenis_perubahan"];
                                 $data["total_item"] = $data["total_item"] + 1;
-                                if ($p == "VO" && $cp->is_negatif) {
+                                if ($p == "VO" && $cp->nilai_negatif) {
                                     $data["total_nilai"] = $data["total_nilai"] - (int)$cp->biaya_pengajuan;
                                 } else {
                                     $data["total_nilai"] = $data["total_nilai"] + (int)$cp->biaya_pengajuan;
@@ -2771,7 +2771,7 @@ class DashboardController extends Controller
 
                                 if ($cp->stage == 5) {
                                     $data["total_item_approved"] = $data["total_item_approved"] + 1;
-                                    if ($p == "VO" && $cp->is_negatif) {
+                                    if ($p == "VO" && $cp->nilai_negatif) {
                                         $data["total_nilai_approved"] = $data["total_nilai_approved"] - (int)$cp->nilai_disetujui;
                                     } else {
                                         $data["total_nilai_approved"] = $data["total_nilai_approved"] + (int)$cp->nilai_disetujui;
@@ -3150,7 +3150,7 @@ class DashboardController extends Controller
                     $result["potensial"] = $filterJenisPerubahan->count();
                     $result["potensial_value"] = $filterJenisPerubahan->sum(function ($item) use ($p) {
                         $nilai = 0;
-                        if ($p == "VO" && $item->is_negatif) {
+                        if ($p == "VO" && $item->nilai_negatif) {
                             $nilai -= (int)$item->biaya_pengajuan;
                         } else {
                             $nilai += (int)$item->biaya_pengajuan;
@@ -3166,7 +3166,7 @@ class DashboardController extends Controller
                     $result["subs"] = $filterSubs->count();
                     $result["subs_value"] = $filterSubs->sum(function ($item) use ($p) {
                         $nilai = 0;
-                        if ($p == "VO" && $item->is_negatif) {
+                        if ($p == "VO" && $item->nilai_negatif) {
                             $nilai -= (int)$item->biaya_pengajuan;
                         } else {
                             $nilai += (int)$item->biaya_pengajuan;
@@ -3182,7 +3182,7 @@ class DashboardController extends Controller
                     $result["revisi"] = $filterRevision->count();
                     $result["revisi_value"] = $filterRevision->sum(function ($item) use ($p) {
                         $nilai = 0;
-                        if ($p == "VO" && $item->is_negatif) {
+                        if ($p == "VO" && $item->nilai_negatif) {
                             $nilai -= (int)$item->biaya_pengajuan;
                         } else {
                             $nilai += (int)$item->biaya_pengajuan;
@@ -3198,7 +3198,7 @@ class DashboardController extends Controller
                     $result["nego"] = $filterNego->count();
                     $result["nego_value"] = $filterNego->sum(function ($item) use ($p) {
                         $nilai = 0;
-                        if ($p == "VO" && $item->is_negatif) {
+                        if ($p == "VO" && $item->nilai_negatif) {
                             $nilai -= (int)$item->biaya_pengajuan;
                         } else {
                             $nilai += (int)$item->biaya_pengajuan;
@@ -3223,7 +3223,7 @@ class DashboardController extends Controller
                     $result["tolak"] = $filterTolak->count();
                     $result["tolak_value"] = $filterTolak->sum(function ($item) use ($p) {
                         $nilai = 0;
-                        if ($p == "VO" && $item->is_negatif) {
+                        if ($p == "VO" && $item->nilai_negatif) {
                             $nilai -= (int)$item->biaya_pengajuan;
                         } else {
                             $nilai += (int)$item->biaya_pengajuan;
@@ -3239,7 +3239,7 @@ class DashboardController extends Controller
                     $result["dispute"] = $filterDispute->count();
                     $result["dispute_value"] = $filterDispute->sum(function ($item) use ($p) {
                         $nilai = 0;
-                        if ($p == "VO" && $item->is_negatif) {
+                        if ($p == "VO" && $item->nilai_negatif) {
                             $nilai -= (int)$item->biaya_pengajuan;
                         } else {
                             $nilai += (int)$item->biaya_pengajuan;
@@ -4108,7 +4108,7 @@ class DashboardController extends Controller
                                 // dump($data);
                                 $data["jenis_perubahan"] = $data["jenis_perubahan"];
                                 $data["total_item"] = $data["total_item"] + 1;
-                                if ($p == "VO" && $cp->is_negatif) {
+                                if ($p == "VO" && $cp->nilai_negatif) {
                                     $data["total_nilai"] = $data["total_nilai"] - (int)$cp->biaya_pengajuan;
                                 } else {
                                     $data["total_nilai"] = $data["total_nilai"] + (int)$cp->biaya_pengajuan;
@@ -4116,7 +4116,7 @@ class DashboardController extends Controller
 
                                 if ($cp->stage == 5) {
                                     $data["total_item_approved"] = $data["total_item_approved"] + 1;
-                                    if ($p == "VO" && $cp->is_negatif) {
+                                    if ($p == "VO" && $cp->nilai_negatif) {
                                         $data["total_nilai_approved"] = $data["total_nilai_approved"] - (int)$cp->nilai_disetujui;
                                     } else {
                                         $data["total_nilai_approved"] = $data["total_nilai_approved"] + (int)$cp->nilai_disetujui;
@@ -4129,9 +4129,9 @@ class DashboardController extends Controller
                                 $result[$p] = [
                                     "jenis_perubahan" => $p,
                                     "total_item" => ++$counter,
-                                    "total_nilai" => $p == "VO" && $cp->is_negatif ? $nilai -= (int)$cp->biaya_pengajuan : $nilai += (int)$cp->biaya_pengajuan,
+                                    "total_nilai" => $p == "VO" && $cp->nilai_negatif ? $nilai -= (int)$cp->biaya_pengajuan : $nilai += (int)$cp->biaya_pengajuan,
                                     "total_item_approved" => $cp->stage == 5 ? ++$counterApproved : 0,
-                                    "total_nilai_approved" => $cp->stage == 5 && $p == "VO" && $cp->is_negatif ? $nilaiApproved -= (int)$cp->nilai_disetujui : ($cp->stage == 5 ? $nilaiApproved += (int)$cp->nilai_disetujui : 0)
+                                    "total_nilai_approved" => $cp->stage == 5 && $p == "VO" && $cp->nilai_negatif ? $nilaiApproved -= (int)$cp->nilai_disetujui : ($cp->stage == 5 ? $nilaiApproved += (int)$cp->nilai_disetujui : 0)
                                 ];
                             }
                         } else {
@@ -4139,7 +4139,7 @@ class DashboardController extends Controller
                                 $data = $result[$p];
                                 $data["jenis_perubahan"] = $data["jenis_perubahan"];
                                 $data["total_item"] = $data["total_item"] + 1;
-                                if ($p == "VO" && $cp->is_negatif) {
+                                if ($p == "VO" && $cp->nilai_negatif) {
                                     $data["total_nilai"] = $data["total_nilai"] - (int)$cp->biaya_pengajuan;
                                 } else {
                                     $data["total_nilai"] = $data["total_nilai"] + (int)$cp->biaya_pengajuan;
@@ -4147,7 +4147,7 @@ class DashboardController extends Controller
 
                                 if ($cp->stage == 5) {
                                     $data["total_item_approved"] = $data["total_item_approved"] + 1;
-                                    if ($p == "VO" && $cp->is_negatif) {
+                                    if ($p == "VO" && $cp->nilai_negatif) {
                                         $data["total_nilai_approved"] = $data["total_nilai_approved"] - (int)$cp->nilai_disetujui;
                                     } else {
                                         $data["total_nilai_approved"] = $data["total_nilai_approved"] + (int)$cp->nilai_disetujui;
