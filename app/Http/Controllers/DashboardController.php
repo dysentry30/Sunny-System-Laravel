@@ -1843,8 +1843,15 @@ class DashboardController extends Controller
                     });
 
                     $result["setuju"] = $filterApprove->count();
-                    $result["setuju_value"] = $filterApprove->sum(function ($item) {
-                        return (int)$item->nilai_disetujui;
+                    $result["setuju_value"] = $filterApprove->sum(function ($item) use ($p) {
+                        $nilai = 0;
+                        if ($p == "VO" && $item->nilai_negatif) {
+                            $nilai -= (int)$item->nilai_disetujui;
+                        } else {
+                            $nilai += (int)$item->nilai_disetujui;
+                        }
+
+                        return $nilai;
                     });
 
                     $filterTolak = $filterJenisPerubahan->filter(function ($tolak) {
@@ -3212,8 +3219,15 @@ class DashboardController extends Controller
                     });
 
                     $result["setuju"] = $filterApprove->count();
-                    $result["setuju_value"] = $filterApprove->sum(function ($item) {
-                        return (int)$item->nilai_disetujui;
+                    $result["setuju_value"] = $filterApprove->sum(function ($item) use ($p) {
+                        $nilai = 0;
+                        if ($p == "VO" && $item->nilai_negatif) {
+                            $nilai -= (int)$item->nilai_disetujui;
+                        } else {
+                            $nilai += (int)$item->nilai_disetujui;
+                        }
+
+                        return $nilai;
                     });
 
                     $filterTolak = $filterJenisPerubahan->filter(function ($tolak) {
