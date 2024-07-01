@@ -2525,9 +2525,8 @@ class ContractManagementsController extends Controller
         // $model->document_name = $data["document-name"];
         $model->created_by = auth()->user()->id;
         $model->note = $data["note"];
-        if ($model->save()) {
+        if ($file->move(public_path('contract-managements/dokumen-pendukung-change'), $id_document) && $model->save()) {
             // moveFileTemp($file, explode(".", $id_document)[0]);
-            $file->move(public_path('contract-managements/dokumen-pendukung-change'), $id_document);
             Alert::success("Success", "Dokumen Pendukung berhasil dibuat");
             return redirect()->back();
         }
@@ -2546,7 +2545,7 @@ class ContractManagementsController extends Controller
 
         $nama_file = $file->id_document;
         if ($file->delete()) {
-            File::delete(public_path("dokumen-pendukung-change/$nama_file"));
+            File::delete(public_path("contract-managements/dokumen-pendukung-change/$nama_file"));
             return (object)[
                 'success' => true,
                 'message' => "Dokumen berhasil dihapus",

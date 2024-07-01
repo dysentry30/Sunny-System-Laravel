@@ -609,7 +609,7 @@
                                                                     <!--end::Unit-->
                                                                     <!--begin::Unit-->
                                                                     <td>
-                                                                        <a target="_blank" href="{{ asset("words/$dokumen_pendukung->id_document"); }}">{{$dokumen_pendukung->id_document}}</a>
+                                                                        <a target="_blank" href="{{ asset("contract-managements/dokumen-pendukung-change/$dokumen_pendukung->id_document"); }}">{{$dokumen_pendukung->id_document}}</a>
                                                                     </td>
                                                                     <!--end::Unit-->
                                                                     <!--begin::Unit-->
