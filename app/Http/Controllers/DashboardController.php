@@ -1779,28 +1779,64 @@ class DashboardController extends Controller
                     });
 
                     $result["potensial"] = $filterJenisPerubahan->count();
-                    $result["potensial_value"] = $filterJenisPerubahan->sum("biaya_pengajuan");
+                    $result["potensial_value"] = $filterJenisPerubahan->sum(function ($item) use ($p) {
+                        $nilai = 0;
+                        if ($p == "VO" && $item->is_negatif) {
+                            $nilai -= (int)$item->biaya_pengajuan;
+                        } else {
+                            $nilai += (int)$item->biaya_pengajuan;
+                        }
+
+                        return $nilai;
+                    });
 
                     $filterSubs = $filterJenisPerubahan->filter(function ($subs) {
                         return $subs->stage >= 2;
                     });
 
                     $result["subs"] = $filterSubs->count();
-                    $result["subs_value"] = $filterSubs->sum("biaya_pengajuan");
+                    $result["subs_value"] = $filterSubs->sum(function ($item) use ($p) {
+                        $nilai = 0;
+                        if ($p == "VO" && $item->is_negatif) {
+                            $nilai -= (int)$item->biaya_pengajuan;
+                        } else {
+                            $nilai += (int)$item->biaya_pengajuan;
+                        }
+
+                        return $nilai;
+                    });
 
                     $filterRevision = $filterJenisPerubahan->filter(function ($revisi) {
                         return $revisi->stage == 3;
                     });
 
                     $result["revisi"] = $filterRevision->count();
-                    $result["revisi_value"] = $filterRevision->sum("biaya_pengajuan");
+                    $result["revisi_value"] = $filterRevision->sum(function ($item) use ($p) {
+                        $nilai = 0;
+                        if ($p == "VO" && $item->is_negatif) {
+                            $nilai -= (int)$item->biaya_pengajuan;
+                        } else {
+                            $nilai += (int)$item->biaya_pengajuan;
+                        }
+
+                        return $nilai;
+                    });
 
                     $filterNego = $filterJenisPerubahan->filter(function ($nego) {
                         return $nego->stage == 4;
                     });
 
                     $result["nego"] = $filterNego->count();
-                    $result["nego_value"] = $filterNego->sum("biaya_pengajuan");
+                    $result["nego_value"] = $filterNego->sum(function ($item) use ($p) {
+                        $nilai = 0;
+                        if ($p == "VO" && $item->is_negatif) {
+                            $nilai -= (int)$item->biaya_pengajuan;
+                        } else {
+                            $nilai += (int)$item->biaya_pengajuan;
+                        }
+
+                        return $nilai;
+                    });
 
                     $filterApprove = $filterJenisPerubahan->filter(function ($setuju) {
                         return $setuju->stage == 5;
@@ -1816,14 +1852,32 @@ class DashboardController extends Controller
                     });
 
                     $result["tolak"] = $filterTolak->count();
-                    $result["tolak_value"] = $filterTolak->sum("biaya_pengajuan");
+                    $result["tolak_value"] = $filterTolak->sum(function ($item) use ($p) {
+                        $nilai = 0;
+                        if ($p == "VO" && $item->is_negatif) {
+                            $nilai -= (int)$item->biaya_pengajuan;
+                        } else {
+                            $nilai += (int)$item->biaya_pengajuan;
+                        }
+
+                        return $nilai;
+                    });
 
                     $filterDispute = $filterJenisPerubahan->filter(function ($dispute) {
                         return $dispute->stage == 6 && $dispute->is_dispute == true;
                     });
 
                     $result["dispute"] = $filterDispute->count();
-                    $result["dispute_value"] = $filterDispute->sum("biaya_pengajuan");
+                    $result["dispute_value"] = $filterDispute->sum(function ($item) use ($p) {
+                        $nilai = 0;
+                        if ($p == "VO" && $item->is_negatif) {
+                            $nilai -= (int)$item->biaya_pengajuan;
+                        } else {
+                            $nilai += (int)$item->biaya_pengajuan;
+                        }
+
+                        return $nilai;
+                    });
 
                     // return $data;
                     // foreach($contracts_perubahan as $cp) {
@@ -2665,6 +2719,8 @@ class DashboardController extends Controller
                 $result = collect();
                 $counter = 0;
                 $nilai = 0;
+                $nilaiApproved = 0;
+                $counterApproved = 0;
                 foreach ($contracts_perubahan as $cp) {
                     // dump($cp);
                     // $qualified_kontrak = collect();
@@ -2676,22 +2732,54 @@ class DashboardController extends Controller
                                 // dump($data);
                                 $data["jenis_perubahan"] = $data["jenis_perubahan"];
                                 $data["total_item"] = $data["total_item"] + 1;
-                                $data["total_nilai"] = $data["total_nilai"] + $cp->biaya_pengajuan;
+                                if ($p == "VO" && $cp->is_negatif) {
+                                    $data["total_nilai"] = $data["total_nilai"] - (int)$cp->biaya_pengajuan;
+                                } else {
+                                    $data["total_nilai"] = $data["total_nilai"] + (int)$cp->biaya_pengajuan;
+                                }
+
+                                if ($cp->stage == 5) {
+                                    $data["total_item_approved"] = $data["total_item_approved"] + 1;
+                                    if ($p == "VO" && $cp->is_negatif) {
+                                        $data["total_nilai_approved"] = $data["total_nilai_approved"] - (int)$cp->nilai_disetujui;
+                                    } else {
+                                        $data["total_nilai_approved"] = $data["total_nilai_approved"] + (int)$cp->nilai_disetujui;
+                                    }
+                                }
                                 // dump($data);
                                 $result[$p] = $data;
                                 // dump($result[$p]);
                             } else {
-                                $result[$p] = ["jenis_perubahan" => $p, "total_item" => ++$counter, "total_nilai" => $nilai += $cp->biaya_pengajuan];
+                                $result[$p] = [
+                                    "jenis_perubahan" => $p,
+                                    "total_item" => ++$counter,
+                                    "total_nilai" => $p == "VO" && $cp->is_negatif ? $nilai -= (int)$cp->biaya_pengajuan : $nilai += (int)$cp->biaya_pengajuan,
+                                    "total_item_approved" => $cp->stage == 5 ? ++$counterApproved : 0,
+                                    "total_nilai_approved" => $cp->stage == 5 && $p == "VO" && $cp->is_negatif ? $nilaiApproved -= (int)$cp->nilai_disetujui : ($cp->stage == 5 ? $nilaiApproved += (int)$cp->nilai_disetujui : 0)
+                                ];
                             }
                         } else {
                             if (!empty($result[$p])) {
                                 $data = $result[$p];
                                 $data["jenis_perubahan"] = $data["jenis_perubahan"];
                                 $data["total_item"] = $data["total_item"] + 1;
-                                $data["total_nilai"] = $data["total_nilai"];
+                                if ($p == "VO" && $cp->is_negatif) {
+                                    $data["total_nilai"] = $data["total_nilai"] - (int)$cp->biaya_pengajuan;
+                                } else {
+                                    $data["total_nilai"] = $data["total_nilai"] + (int)$cp->biaya_pengajuan;
+                                }
+
+                                if ($cp->stage == 5) {
+                                    $data["total_item_approved"] = $data["total_item_approved"] + 1;
+                                    if ($p == "VO" && $cp->is_negatif) {
+                                        $data["total_nilai_approved"] = $data["total_nilai_approved"] - (int)$cp->nilai_disetujui;
+                                    } else {
+                                        $data["total_nilai_approved"] = $data["total_nilai_approved"] + (int)$cp->nilai_disetujui;
+                                    }
+                                }
                                 // dump($data);
                             } else {
-                                $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0];
+                                $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0, "total_item_approved" => 0, "total_nilai_approved" => 0];
                             }
                         }
                         // foreach($cp->PerubahanKontrak as $pk) {
@@ -2711,7 +2799,7 @@ class DashboardController extends Controller
                         // }
                         // dump($result);
                     } else {
-                        $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0];
+                        $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0, "total_item_approved" => 0, "total_nilai_approved" => 0];
                     }
                 }
                 return $result;
@@ -2721,10 +2809,12 @@ class DashboardController extends Controller
                 $data = $perubahan[$key]->first();
                 // $data["persen"] = ($data["total_nilai"] / $totalKontrakFull) * 100;
                 $data["persen"] = $data["total_nilai"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai"], $totalKontrakFull)->asString() : "0%";
+                $data["persen_approved"] = $data["total_nilai_approved"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai_approved"], $totalKontrakFull)->asString() : "0%";
                 return $data;
             })->values();
             // dd($kategori_kontrak);
             $perubahan_total = $kategori_kontrak->sum('total_nilai');
+            $perubahan_total_approved = $kategori_kontrak->sum('total_nilai_approved');
             // $kategori_kontrak = $perubahan->groupBy("jenis_perubahan")->map(function($item, $key) use ($totalKontrakFull){
             //     $biaya_total = (int) $item->sum('biaya_pengajuan');
             //     $persentase_kategori = (float) $biaya_total * 100 / (float) $totalKontrakFull;
@@ -2733,13 +2823,14 @@ class DashboardController extends Controller
             // dd($kategori_kontrak);
         }else{
             $perubahan_total = 0;
+            $perubahan_total_approved = 0;
             $perubahan = $kategori->map(function ($item) use ($contract_pelaksanaan_new) {
                 $result = collect();
                 $counter = 0;
                 $nilai = 0;
                 // foreach($contracts_pelaksanaan as $cp) {
                 //     // $qualified_kontrak = collect();
-                    
+
                 //     foreach($cp->PerubahanKontrak as $pk) {
                 //         if($pk->jenis_perubahan == $item) {
                 //             $result[$item] = ["jenis_perubahan" => $item, "total_item" => ++$counter, "total_nilai" => $nilai += $pk->biaya_pengajuan];
@@ -2754,22 +2845,26 @@ class DashboardController extends Controller
                 //         }
                 //     }
                 // }
-                $result[$item] = ["jenis_perubahan" => $item, "total_item" => 0, "total_nilai" => 0];
+                $result[$item] = ["jenis_perubahan" => $item, "total_item" => 0, "total_nilai" => 0, "total_item_approved" => 0, "total_nilai_approved" => 0];
                 return $result;
             });
             $kategori_kontrak = $perubahan->map(function($p, $key) use($perubahan, $totalKontrakFull) {
                 $data = $perubahan[$key]->first();
                 // $data["persen"] = ($data["total_nilai"] / $totalKontrakFull) * 100;
                 $data["persen"] = $data["total_nilai"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai"], $totalKontrakFull)->asString() : "0%";
+                $data["persen_approved"] = $data["total_nilai_approved"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai_approved"], $totalKontrakFull)->asString() : "0%";
                 return $data;
             })->values();
             $perubahan_total = $kategori_kontrak->sum('total_nilai');
+            $perubahan_total_approved = $kategori_kontrak->sum('total_nilai_approved');
         }
         // dd($kategori_kontrak);
         if (!empty($totalKontrakFull)) {
             $persentasePerubahan = Percentage::fromFractionAndTotal($perubahan_total, $totalKontrakFull)->asString();
+            $persentasePerubahanApproved = Percentage::fromFractionAndTotal($perubahan_total_approved, $totalKontrakFull)->asString();
         } else {
             $persentasePerubahan = 0;
+            $persentasePerubahanApproved = 0;
         }
         
         // dd($kategori_kontrak);
@@ -2777,7 +2872,7 @@ class DashboardController extends Controller
         // dd($persentasePerubahan);
 
         return view("1_Dashboard_ccm_pelaksanaan_kontrak",
-            compact(["change_status_out", "menang_kontrak", "changes_overview", "bulan_get", "unit_kerjas_all", "tahun_get", "tahun", "jumlahKontrak", "totalKontrak", "totalKontrakFull", "totalPersen", "persentasePerubahan",  "jumlahKontrak", "dops", "unit_kerjas", "proyeks", "pemilik_pekerjaan", "jenis_proyek", "jenis_kontrak", "dop_get", "unit_kerja_get", "proyek_get", "nilai_tender_proyeks",   "perubahan_total", "kategori_kontrak", "month", "contract_pelaksanaan_new", "unit_kerja_select", "dop_select"])
+            compact(["change_status_out", "menang_kontrak", "changes_overview", "bulan_get", "unit_kerjas_all", "tahun_get", "tahun", "jumlahKontrak", "totalKontrak", "totalKontrakFull", "totalPersen", "persentasePerubahan", "persentasePerubahanApproved", "jumlahKontrak", "dops", "unit_kerjas", "proyeks", "pemilik_pekerjaan", "jenis_proyek", "jenis_kontrak", "dop_get", "unit_kerja_get", "proyek_get", "nilai_tender_proyeks",   "perubahan_total", "perubahan_total_approved", "kategori_kontrak", "month", "contract_pelaksanaan_new", "unit_kerja_select", "dop_select"])
         );
     }
 
@@ -3053,35 +3148,70 @@ class DashboardController extends Controller
                     });
 
                     $result["potensial"] = $filterJenisPerubahan->count();
-                    $result["potensial_value"] = $filterJenisPerubahan->sum("biaya_pengajuan");
+                    $result["potensial_value"] = $filterJenisPerubahan->sum(function ($item) use ($p) {
+                        $nilai = 0;
+                        if ($p == "VO" && $item->is_negatif) {
+                            $nilai -= (int)$item->biaya_pengajuan;
+                        } else {
+                            $nilai += (int)$item->biaya_pengajuan;
+                        }
+
+                        return $nilai;
+                    });
 
                     $filterSubs = $filterJenisPerubahan->filter(function ($subs) {
                         return $subs->stage >= 2;
                     });
 
                     $result["subs"] = $filterSubs->count();
-                    $result["subs_value"] = $filterSubs->sum("biaya_pengajuan");
+                    $result["subs_value"] = $filterSubs->sum(function ($item) use ($p) {
+                        $nilai = 0;
+                        if ($p == "VO" && $item->is_negatif) {
+                            $nilai -= (int)$item->biaya_pengajuan;
+                        } else {
+                            $nilai += (int)$item->biaya_pengajuan;
+                        }
+
+                        return $nilai;
+                    });
 
                     $filterRevision = $filterJenisPerubahan->filter(function ($revisi) {
                         return $revisi->stage == 3;
                     });
 
                     $result["revisi"] = $filterRevision->count();
-                    $result["revisi_value"] = $filterRevision->sum("biaya_pengajuan");
+                    $result["revisi_value"] = $filterRevision->sum(function ($item) use ($p) {
+                        $nilai = 0;
+                        if ($p == "VO" && $item->is_negatif) {
+                            $nilai -= (int)$item->biaya_pengajuan;
+                        } else {
+                            $nilai += (int)$item->biaya_pengajuan;
+                        }
+
+                        return $nilai;
+                    });
 
                     $filterNego = $filterJenisPerubahan->filter(function ($nego) {
                         return $nego->stage == 4;
                     });
 
                     $result["nego"] = $filterNego->count();
-                    $result["nego_value"] = $filterNego->sum("biaya_pengajuan");
+                    $result["nego_value"] = $filterNego->sum(function ($item) use ($p) {
+                        $nilai = 0;
+                        if ($p == "VO" && $item->is_negatif) {
+                            $nilai -= (int)$item->biaya_pengajuan;
+                        } else {
+                            $nilai += (int)$item->biaya_pengajuan;
+                        }
+
+                        return $nilai;
+                    });
 
                     $filterApprove = $filterJenisPerubahan->filter(function ($setuju) {
                         return $setuju->stage == 5;
                     });
 
                     $result["setuju"] = $filterApprove->count();
-                    // $result["setuju_value"] = $filterApprove->sum("biaya_pengajuan");
                     $result["setuju_value"] = $filterApprove->sum(function ($item) {
                         return (int)$item->nilai_disetujui;
                     });
@@ -3091,14 +3221,32 @@ class DashboardController extends Controller
                     });
 
                     $result["tolak"] = $filterTolak->count();
-                    $result["tolak_value"] = $filterTolak->sum("biaya_pengajuan");
+                    $result["tolak_value"] = $filterTolak->sum(function ($item) use ($p) {
+                        $nilai = 0;
+                        if ($p == "VO" && $item->is_negatif) {
+                            $nilai -= (int)$item->biaya_pengajuan;
+                        } else {
+                            $nilai += (int)$item->biaya_pengajuan;
+                        }
+
+                        return $nilai;
+                    });
 
                     $filterDispute = $filterJenisPerubahan->filter(function ($dispute) {
                         return $dispute->stage == 6 && $dispute->is_dispute == true;
                     });
 
                     $result["dispute"] = $filterDispute->count();
-                    $result["dispute_value"] = $filterDispute->sum("biaya_pengajuan");
+                    $result["dispute_value"] = $filterDispute->sum(function ($item) use ($p) {
+                        $nilai = 0;
+                        if ($p == "VO" && $item->is_negatif) {
+                            $nilai -= (int)$item->biaya_pengajuan;
+                        } else {
+                            $nilai += (int)$item->biaya_pengajuan;
+                        }
+
+                        return $nilai;
+                    });
 
                     // return $data;
                     // foreach($contracts_perubahan as $cp) {
@@ -3947,6 +4095,8 @@ class DashboardController extends Controller
                 $result = collect();
                 $counter = 0;
                 $nilai = 0;
+                $nilaiApproved = 0;
+                $counterApproved = 0;
                 foreach ($contracts_perubahan as $cp) {
                     // dump($cp);
                     // $qualified_kontrak = collect();
@@ -3958,22 +4108,54 @@ class DashboardController extends Controller
                                 // dump($data);
                                 $data["jenis_perubahan"] = $data["jenis_perubahan"];
                                 $data["total_item"] = $data["total_item"] + 1;
-                                $data["total_nilai"] = $data["total_nilai"] + $cp->biaya_pengajuan;
+                                if ($p == "VO" && $cp->is_negatif) {
+                                    $data["total_nilai"] = $data["total_nilai"] - (int)$cp->biaya_pengajuan;
+                                } else {
+                                    $data["total_nilai"] = $data["total_nilai"] + (int)$cp->biaya_pengajuan;
+                                }
+
+                                if ($cp->stage == 5) {
+                                    $data["total_item_approved"] = $data["total_item_approved"] + 1;
+                                    if ($p == "VO" && $cp->is_negatif) {
+                                        $data["total_nilai_approved"] = $data["total_nilai_approved"] - (int)$cp->nilai_disetujui;
+                                    } else {
+                                        $data["total_nilai_approved"] = $data["total_nilai_approved"] + (int)$cp->nilai_disetujui;
+                                    }
+                                }
                                 // dump($data);
                                 $result[$p] = $data;
                                 // dump($result[$p]);
                             } else {
-                                $result[$p] = ["jenis_perubahan" => $p, "total_item" => ++$counter, "total_nilai" => $nilai += $cp->biaya_pengajuan];
+                                $result[$p] = [
+                                    "jenis_perubahan" => $p,
+                                    "total_item" => ++$counter,
+                                    "total_nilai" => $p == "VO" && $cp->is_negatif ? $nilai -= (int)$cp->biaya_pengajuan : $nilai += (int)$cp->biaya_pengajuan,
+                                    "total_item_approved" => $cp->stage == 5 ? ++$counterApproved : 0,
+                                    "total_nilai_approved" => $cp->stage == 5 && $p == "VO" && $cp->is_negatif ? $nilaiApproved -= (int)$cp->nilai_disetujui : ($cp->stage == 5 ? $nilaiApproved += (int)$cp->nilai_disetujui : 0)
+                                ];
                             }
                         } else {
                             if (!empty($result[$p])) {
                                 $data = $result[$p];
                                 $data["jenis_perubahan"] = $data["jenis_perubahan"];
                                 $data["total_item"] = $data["total_item"] + 1;
-                                $data["total_nilai"] = $data["total_nilai"];
+                                if ($p == "VO" && $cp->is_negatif) {
+                                    $data["total_nilai"] = $data["total_nilai"] - (int)$cp->biaya_pengajuan;
+                                } else {
+                                    $data["total_nilai"] = $data["total_nilai"] + (int)$cp->biaya_pengajuan;
+                                }
+
+                                if ($cp->stage == 5) {
+                                    $data["total_item_approved"] = $data["total_item_approved"] + 1;
+                                    if ($p == "VO" && $cp->is_negatif) {
+                                        $data["total_nilai_approved"] = $data["total_nilai_approved"] - (int)$cp->nilai_disetujui;
+                                    } else {
+                                        $data["total_nilai_approved"] = $data["total_nilai_approved"] + (int)$cp->nilai_disetujui;
+                                    }
+                                }
                                 // dump($data);
                             } else {
-                                $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0];
+                                $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0, "total_item_approved" => 0, "total_nilai_approved" => 0];
                             }
                         }
                         // foreach($cp->PerubahanKontrak as $pk) {
@@ -3993,7 +4175,7 @@ class DashboardController extends Controller
                         // }
                         // dump($result);
                     } else {
-                        $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0];
+                        $result[$p] = ["jenis_perubahan" => $p, "total_item" => 0, "total_nilai" => 0, "total_item_approved" => 0, "total_nilai_approved" => 0];
                     }
                 }
                 return $result;
@@ -4003,10 +4185,12 @@ class DashboardController extends Controller
                 $data = $perubahan[$key]->first();
                 // $data["persen"] = ($data["total_nilai"] / $totalKontrakFull) * 100;
                 $data["persen"] = $data["total_nilai"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai"], $totalKontrakFull)->asString() : "0%";
+                $data["persen_approved"] = $data["total_nilai_approved"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai_approved"], $totalKontrakFull)->asString() : "0%";
                 return $data;
             })->values();
             // dd($kategori_kontrak);
             $perubahan_total = $kategori_kontrak->sum('total_nilai');
+            $perubahan_total_approved = $kategori_kontrak->sum('total_nilai_approved');
             // $kategori_kontrak = $perubahan->groupBy("jenis_perubahan")->map(function($item, $key) use ($totalKontrakFull){
             //     $biaya_total = (int) $item->sum('biaya_pengajuan');
             //     $persentase_kategori = (float) $biaya_total * 100 / (float) $totalKontrakFull;
@@ -4015,6 +4199,7 @@ class DashboardController extends Controller
             // dd($kategori_kontrak);
         }else{
             $perubahan_total = 0;
+            $perubahan_total_approved = 0;
             $perubahan = $kategori->map(function ($item) use ($contracts_pemeliharaan) {
                 $result = collect();
                 $counter = 0;
@@ -4036,22 +4221,26 @@ class DashboardController extends Controller
                 //         }
                 //     }
                 // }
-                $result[$item] = ["jenis_perubahan" => $item, "total_item" => 0, "total_nilai" => 0];
+                $result[$item] = ["jenis_perubahan" => $item, "total_item" => 0, "total_nilai" => 0, "total_item_approved" => 0, "total_nilai_approved" => 0];
                 return $result;
             });
             $kategori_kontrak = $perubahan->map(function ($p, $key) use ($perubahan, $totalKontrakFull) {
                 $data = $perubahan[$key]->first();
                 // $data["persen"] = ($data["total_nilai"] / $totalKontrakFull) * 100;
                 $data["persen"] = $data["total_nilai"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai"], $totalKontrakFull)->asString() : "0%";
+                $data["persen_approved"] = $data["total_nilai_approved"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai_approved"], $totalKontrakFull)->asString() : "0%";
                 return $data;
             })->values();
             $perubahan_total = $kategori_kontrak->sum('total_nilai');
+            $perubahan_total_approved = $kategori_kontrak->sum('total_nilai_approved');
         }
         // dd($kategori_kontrak, $totalKontrakFull);
         if (!empty($totalKontrakFull)) {
             $persentasePerubahan = Percentage::fromFractionAndTotal($perubahan_total, $totalKontrakFull)->asString();
+            $persentasePerubahanApproved = Percentage::fromFractionAndTotal($perubahan_total_approved, $totalKontrakFull)->asString();
         } else {
             $persentasePerubahan = 0;
+            $persentasePerubahanApproved = 0;
         }
 
         // dd($kategori_kontrak);
@@ -4060,7 +4249,7 @@ class DashboardController extends Controller
 
         return view(
             "1_Dashboard_ccm_pemeliharaan",
-            compact(["change_status_out", "menang_kontrak", "changes_overview", "bulan_get", "unit_kerjas_all", "tahun_get", "tahun", "jumlahKontrak", "totalKontrak", "totalKontrakFull", "totalPersen", "persentasePerubahan",  "jumlahKontrak", "dops", "unit_kerjas", "proyeks", "pemilik_pekerjaan", "jenis_proyek", "jenis_kontrak", "dop_get", "unit_kerja_get", "proyek_get", "nilai_tender_proyeks",   "perubahan_total", "kategori_kontrak", "month", "contracts_pemeliharaan", "unit_kerja_select", "dop_select"])
+            compact(["change_status_out", "menang_kontrak", "changes_overview", "bulan_get", "unit_kerjas_all", "tahun_get", "tahun", "jumlahKontrak", "totalKontrak", "totalKontrakFull", "totalPersen", "persentasePerubahan", "persentasePerubahanApproved", "jumlahKontrak", "dops", "unit_kerjas", "proyeks", "pemilik_pekerjaan", "jenis_proyek", "jenis_kontrak", "dop_get", "unit_kerja_get", "proyek_get", "nilai_tender_proyeks",   "perubahan_total", "perubahan_total_approved", "kategori_kontrak", "month", "contracts_pemeliharaan", "unit_kerja_select", "dop_select"])
         );
     }
 

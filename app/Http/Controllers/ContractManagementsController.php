@@ -2513,17 +2513,21 @@ class ContractManagementsController extends Controller
             // return redirect()->back();
         }
         $file = $request->file("attach-file");
+        $nama_file = $file->getClientOriginalName();
+        $id_document = date("dmYHis_") . str_replace(' ', '', $file->getClientOriginalName());
+
         $model = new DokumenPendukung();
         $model->id_perubahan_kontrak = $data["id-perubahan-kontrak"];
         $model->id_contract = $data["id_contract"];
         // $model->id_document = Str::uuid();
-        $id_document = date("His_") . str_replace(' ', '_', $file->getClientOriginalName());
+        // $id_document = date("His_") . str_replace(' ', '_', $file->getClientOriginalName());
         $model->id_document = $id_document;
         // $model->document_name = $data["document-name"];
         $model->created_by = auth()->user()->id;
         $model->note = $data["note"];
         if ($model->save()) {
-            moveFileTemp($file, explode(".", $id_document)[0]);
+            // moveFileTemp($file, explode(".", $id_document)[0]);
+            $file->move(public_path('contract-managements/dokumen-pendukung-change'), $id_document);
             Alert::success("Success", "Dokumen Pendukung berhasil dibuat");
             return redirect()->back();
         }
@@ -2542,7 +2546,7 @@ class ContractManagementsController extends Controller
 
         $nama_file = $file->id_document;
         if ($file->delete()) {
-            File::delete(public_path("words/$nama_file"));
+            File::delete(public_path("dokumen-pendukung-change/$nama_file"));
             return (object)[
                 'success' => true,
                 'message' => "Dokumen berhasil dihapus",
