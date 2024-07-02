@@ -3749,7 +3749,7 @@ class ContractManagementsController extends Controller
 
             $uploadFinal = new ContractUploadFinal();
             $uploadFinal->id_contract = $contract->id_contract;
-            $uploadFinal->profti_center = $contract->profti_center;
+            $uploadFinal->profit_center = $contract->profit_center;
             $uploadFinal->id_document = $id_document;
             $uploadFinal->nama_document = $nama_file;
             $uploadFinal->category = $data["kategori"];

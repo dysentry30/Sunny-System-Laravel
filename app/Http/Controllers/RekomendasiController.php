@@ -27,7 +27,7 @@ class RekomendasiController extends Controller
 
     public function __construct()
     {
-        $this->isnomorTargetActive = env('NR_ACTIVE');
+        $this->isnomorTargetActive = env('IS_SEND_EMAIL');
     }
 
     public function index(Request $request)
