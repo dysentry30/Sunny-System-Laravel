@@ -421,7 +421,7 @@ class MobileController extends Controller
             $filterUnitKerja = $request->get('unitKerja');
             $filterTahun = $request->get('tahun') ?? date("Y");
 
-            $proyeks =  Proyek::select(["nama_proyek", "kode_proyek", "bulan_awal", "bulan_ri_perolehan", "bulan_pelaksanaan", "nilai_kontrak_keseluruhan", "nilai_rkap", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tipe_proyek", "tahun_perolehan", "jenis_proyek", "is_cancel"])
+            $proyeks =  Proyek::select(["nama_proyek", "kode_proyek", "dop", "bulan_awal", "bulan_ri_perolehan", "bulan_pelaksanaan", "nilai_kontrak_keseluruhan", "nilai_rkap", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tipe_proyek", "tahun_perolehan", "jenis_proyek", "is_cancel"])
                 ->where('tahun_perolehan', $filterTahun)
                 ->where('jenis_proyek', '!=', 'I')
                 ->where('tipe_proyek', 'P')
@@ -492,11 +492,20 @@ class MobileController extends Controller
     {
         try {
             $tahunSelect = $request->get("tahun") ?? date("Y");
-            $proyeksSelected =  Proyek::select(["nama_proyek", "kode_proyek", "bulan_awal", "bulan_ri_perolehan", "bulan_pelaksanaan", "nilai_kontrak_keseluruhan", "nilai_rkap", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tipe_proyek", "tahun_perolehan", "jenis_proyek", "is_cancel"])
+            $departemenSelect = $request->get("departemen");
+            $unitKerjaSelect = $request->get("unitKerja");
+            $tahunSelect = $request->get("tahun") ?? date("Y");
+            $proyeksSelected =  Proyek::select(["nama_proyek", "kode_proyek", "dop", "bulan_awal", "bulan_ri_perolehan", "bulan_pelaksanaan", "nilai_kontrak_keseluruhan", "nilai_rkap", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tipe_proyek", "tahun_perolehan", "jenis_proyek", "is_cancel"])
             ->where('tahun_perolehan', $tahunSelect)
                 ->where('jenis_proyek', '!=', 'I')
                 ->whereIn('stage', [6, 7, 8])
                 ->where('tipe_proyek', 'P')
+            ->when(!empty($departemenSelect), function ($query) use ($departemenSelect) {
+                $query->where("dop", $departemenSelect);
+            })
+                ->when(!empty($unitKerjaSelect), function ($query) use ($unitKerjaSelect) {
+                    $query->where("unit_kerja", $unitKerjaSelect);
+                })
                 ->orderBy("stage")
                 ->get();
 
