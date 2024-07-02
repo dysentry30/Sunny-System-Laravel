@@ -243,7 +243,6 @@ class MobileController extends Controller
                 $nilaiHistoryForecast = $nilaiHistoryForecast;
             } else {
                 $nilaiHistoryForecast = $nilaiHistoryForecast->where("unit_kerja", $data["unit_kerja"]);
-
             }
 
 
@@ -327,6 +326,89 @@ class MobileController extends Controller
     }
 
     /**
+     * Get Data Total Monitoring Proyek
+     * 
+     * @return Illuminate\Http\Response JSON
+     */
+    public function GetTotalMonitoringProyek(Request $request)
+    {
+        try {
+            $tahunSelect = $request->get("tahun") ?? date("Y");
+            $proyeksSelected =  Proyek::select(["nama_proyek", "kode_proyek", "bulan_awal", "bulan_ri_perolehan", "bulan_pelaksanaan", "nilai_kontrak_keseluruhan", "nilai_rkap", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tipe_proyek", "tahun_perolehan", "jenis_proyek", "is_cancel"])
+            ->where('tahun_perolehan', $tahunSelect)
+                ->where('jenis_proyek', '!=', 'I')
+                ->whereNotIn('stage', [1, 2])
+                ->where('tipe_proyek', 'P')
+                ->get();
+
+            $proyeksGroup = $proyeksSelected?->groupBy("stage");
+
+            $proyeks = $proyeksGroup->map(function ($proyek, $key) {
+                $newClass = new stdClass();
+                $newClass->category = $this->getStage((int) $key);
+
+                switch ($newClass->category) {
+                    case 'Tender Diikuti':
+                        $jumlah = $proyek->where('is_cancel', false)->count();
+                        $total = $proyek->where('is_cancel', false)->sum('hps_pagu');
+                        break;
+                    case 'Prakualifikasi':
+                        $jumlah = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->count();
+                        $total = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->sum('hps_pagu');
+                        break;
+                    case 'Menang':
+                        $jumlah = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->count();
+                        $total = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->sum('nilai_perolehan');
+                        break;
+                    case 'Kalah':
+                        $jumlah = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->count();
+                        $total = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->sum('nilai_perolehan');
+                        break;
+                    case 'Perolehan':
+                        $jumlah = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->count();
+                        $total = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->sum('nilai_perolehan');
+                        break;
+                    case 'Terkontrak':
+                        $jumlah = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->count();
+                        $total = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->sum('nilai_perolehan');
+                        break;
+
+                    default:
+                        $jumlah = 0;
+                        $total = 0;
+                        break;
+                }
+
+                $newClass->jumlah = $jumlah;
+                $newClass->total_nilai = $total;
+                return $newClass;
+            })->values();
+
+            $totalProyekTidakLulusPQ = $proyeksSelected->where("stage", ">=", 3)->where("is_tidak_lulus_pq", true)->count();
+            $totalProyekCancel = $proyeksSelected->where("is_cancel", true)->count();
+
+            $proyekIsTidakLulusPQ = new stdClass();
+            $proyekIsTidakLulusPQ->category = "Tidak Lulus PQ";
+            $proyekIsTidakLulusPQ->jumlah = $totalProyekTidakLulusPQ;
+            $proyekIsTidakLulusPQ->total_nilai = $proyeksSelected->where("stage", ">=", 3)->where("is_tidak_lulus_pq", true)->sum("hps_pagu");
+
+            $proyekIsCancel = new stdClass();
+            $proyekIsCancel->category = "Cancel";
+            $proyekIsCancel->jumlah = $totalProyekCancel;
+            $proyekIsCancel->total_nilai = $proyeksSelected->where("is_cancel", true)->sum("hps_pagu");
+
+            $proyeks->push($proyekIsTidakLulusPQ);
+            $proyeks->push($proyekIsCancel);
+
+            $data = ['data' => $proyeks->toArray()];
+            return response()->json($data);
+        } catch (\Exception $e) {
+            $data = ["Status" => false, "Message" => $e->getMessage(), "data" => []];
+            return response()->json($data);
+        }
+    }
+
+    /**
      * Get Data Monitoring Proyek
      * 
      * @return Illuminate\Http\Response JSON
@@ -334,30 +416,44 @@ class MobileController extends Controller
     public function GetMonitoringProyek(Request $request)
     {
         try {
-            $filterKategori = $request->get('kategori');
+            $filterKategori = $request->get('category');
+            $filterDepartemen = $request->get('departemen');
+            $filterUnitKerja = $request->get('unitKerja');
+            $filterTahun = $request->get('tahun') ?? date("Y");
 
-            $proyeks =  Proyek::with(["UnitKerja", "Forecasts"])
-                ->select(["nama_proyek", "kode_proyek", "bulan_awal", "bulan_ri_perolehan", "bulan_pelaksanaan", "nilai_kontrak_keseluruhan", "nilai_rkap", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tipe_proyek", "tahun_perolehan", "jenis_proyek", "is_cancel"])
-                ->where('tahun_perolehan', date('Y'))
+            $proyeks =  Proyek::select(["nama_proyek", "kode_proyek", "bulan_awal", "bulan_ri_perolehan", "bulan_pelaksanaan", "nilai_kontrak_keseluruhan", "nilai_rkap", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tipe_proyek", "tahun_perolehan", "jenis_proyek", "is_cancel"])
+                ->where('tahun_perolehan', $filterTahun)
                 ->where('jenis_proyek', '!=', 'I')
                 ->where('tipe_proyek', 'P')
-                ->get();
+            ->whereNotIn('stage', [1, 2])
+                ->when(!empty($filterDepartemen), function ($query) use ($filterDepartemen) {
+                    $query->where('dop', $filterDepartemen);
+                })
+                ->when(!empty($filterUnitKerja), function ($query) use ($filterUnitKerja) {
+                    $query->where('unit_kerja', $filterUnitKerja);
+                })->get();
 
             switch ($filterKategori) {
                 case 'Tender Diikuti':
-                    $proyeks = $proyeks->whereIn('stage', [4, 5])->sortBy('bulan_pelaksanaan', SORT_NUMERIC)->values();
+                    $proyeks = $proyeks->whereIn('stage', [4, 5])->where('is_cancel', false)->sortBy('bulan_pelaksanaan', SORT_NUMERIC)->values();
                     break;
                 case 'Prakualifikasi':
-                    $proyeks = $proyeks->where('stage', 3)->where('is_tidak_lulus_pq', false)->sortBy('bulan_pelaksanaan', SORT_NUMERIC)->values();
+                    $proyeks = $proyeks->where('stage', 3)->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->sortBy('bulan_pelaksanaan', SORT_NUMERIC)->values();
                     break;
                 case 'Menang':
-                    $proyeks = $proyeks->where('stage', 6)->where('is_tidak_lulus_pq', false)->sortBy('bulan_perolehan', SORT_NUMERIC)->values();
+                    $proyeks = $proyeks->where('stage', 6)->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->sortBy('bulan_perolehan', SORT_NUMERIC)->values();
                     break;
                 case 'Kalah':
-                    $proyeks = $proyeks->where('stage', 7)->where('is_tidak_lulus_pq', false)->sortBy('bulan_pelaksanaan', SORT_NUMERIC)->values();
+                    $proyeks = $proyeks->where('stage', 7)->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->sortBy('bulan_pelaksanaan', SORT_NUMERIC)->values();
                     break;
                 case 'Cancel':
                     $proyeks = $proyeks->where('is_cancel', true)->sortBy('bulan_pelaksanaan', SORT_NUMERIC)->values();
+                    break;
+                case 'Perolehan':
+                    $proyeks = $proyeks->where('stage', 5)->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->sortBy('bulan_perolehan', SORT_NUMERIC)->values();
+                    break;
+                case 'Terkontrak':
+                    $proyeks = $proyeks->where('stage', 8)->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->sortBy('bulan_perolehan', SORT_NUMERIC)->values();
                     break;
 
                 default:
@@ -366,20 +462,88 @@ class MobileController extends Controller
             }
 
             $proyeks = $proyeks->map(function ($proyek) {
+                $proyek->hps_pagu = $proyek->hps_pagu ?: "0";
+                $proyek->nilai_perolehan = $proyek->nilai_perolehan ?: "0";
+
                 $newClass = new stdClass();
                 $newClass->nama_proyek = $proyek->nama_proyek;
                 $newClass->status_pasar = $proyek->status_pasdin;
                 $newClass->stage = self::getStage($proyek->stage);
                 $newClass->unit_kerja = $proyek->UnitKerja->unit_kerja;
                 $newClass->tipe_proyek = $proyek->tipe_proyek == "P" ? 'Non-Retail' : 'Retail';
-                $newClass->bulan_ra = $proyek->stage != 6 ? self::getNamaBulan((int)$proyek->bulan_pelaksanaan) : self::getNamaBulan((int)$proyek->bulan_perolehan);
-                $newClass->nilai_proyek = $proyek->stage != 6 ? $proyek->hps_pagu : $proyek->nilai_perolehan;
+                $newClass->bulan = $proyek->stage != 6 ? self::getNamaBulan((int)$proyek->bulan_pelaksanaan) : self::getNamaBulan((int)$proyek->bulan_perolehan);
+                $newClass->total_forecast = $proyek->stage != 6 ? $proyek->hps_pagu : $proyek->nilai_perolehan;
                 return $newClass;
             });
-            $data = ["Status" => true, "Message" => "Success", 'data' => $proyeks->toArray()];
+            $data = ['data' => $proyeks->toArray()];
             return response()->json($data);
         } catch (\Exception $e) {
-            $data = ["Status" => false, "Message" => $e->getMessage(), "data" => []];
+            $data = ["data" => []];
+            return response()->json($data);
+        }
+    }
+
+    /**
+     * Get Data Total Monitoring Proyek
+     * 
+     * @return Illuminate\Http\Response JSON
+     */
+    public function GetTotalCompetitiveIndex(Request $request)
+    {
+        try {
+            $tahunSelect = $request->get("tahun") ?? date("Y");
+            $proyeksSelected =  Proyek::select(["nama_proyek", "kode_proyek", "bulan_awal", "bulan_ri_perolehan", "bulan_pelaksanaan", "nilai_kontrak_keseluruhan", "nilai_rkap", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tipe_proyek", "tahun_perolehan", "jenis_proyek", "is_cancel"])
+            ->where('tahun_perolehan', $tahunSelect)
+                ->where('jenis_proyek', '!=', 'I')
+                ->whereIn('stage', [6, 7, 8])
+                ->where('tipe_proyek', 'P')
+                ->orderBy("stage")
+                ->get();
+
+            $proyeksGroup = $proyeksSelected?->groupBy("stage");
+
+            $proyekMenang = 0;
+            $proyekTerkontrak = 0;
+            $proyeks = $proyeksGroup->map(function ($proyek, $key) use (&$proyekMenang, &$proyekTerkontrak) {
+                $newClass = new stdClass();
+                $newClass->category = $this->getStage((int) $key);
+
+                switch ($newClass->category) {
+                    case 'Menang':
+                        $jumlah = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->count();
+                        $total = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->sum('nilai_perolehan');
+                        $proyekMenang++;
+                        break;
+                    case 'Kalah':
+                        $jumlah = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->count();
+                        $total = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->sum('nilai_perolehan');
+                        break;
+                    case 'Terkontrak':
+                        $jumlah = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->count();
+                        $total = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->sum('nilai_perolehan');
+                        $proyekTerkontrak++;
+                        break;
+
+                    default:
+                        $jumlah = 0;
+                        $total = 0;
+                        break;
+                }
+
+                $newClass->jumlah = $jumlah;
+                $newClass->total_nilai = $total;
+                return $newClass;
+            })->values();
+
+            $winRate = "0%";
+            if ($proyeksSelected->count() > 0) {
+                $winRate = round(($proyekMenang + $proyekTerkontrak) / $proyeksSelected->count(), 2) . "%";
+            }
+
+            $data = ['data' => $proyeks->toArray(), 'winRate' => $winRate];
+            return response()->json($data);
+        } catch (\Exception $e) {
+            $data = ["Status" => false, "Message" => $e->getMessage(), "data" => [], 'winRate' => $winRate];
             return response()->json($data);
         }
     }
@@ -420,7 +584,7 @@ class MobileController extends Controller
             $periodePrognosa = $request->get("periodePrognosa") ?? 3;
             $tahun = $request->get("tahun") ?? date("Y");
 
-            if ($page == "list-proyek-forecast") {
+            if ($page == "list-proyek-forecast" || $page == "realisasi-ok") {
                 $data = [];
 
                 $history_forecasts = Proyek::select("proyeks.nama_proyek", "proyeks.stage", "proyeks.status_pasdin", "proyeks.tipe_proyek", "proyeks.tahun_perolehan", "history_forecast.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $tahun)->where("periode_prognosa", "=", $periodePrognosa)->get()->where("is_cancel", "!=", true);
@@ -451,7 +615,7 @@ class MobileController extends Controller
                 $history_forecasts = $history_forecasts
                     ->when($category == "Forecast", function ($history) {
                         $history->where("nilai_forecast", "!=", "")
-                        ->where("nilai_forecast", "!=", "0")
+                    ->where("nilai_forecast", "!=", "0")
                             ->where("month_forecast", "!=", 0)
                             ->where("month_forecast", SORT_NUMERIC);
                     })
@@ -502,17 +666,25 @@ class MobileController extends Controller
                         $data[$kode_proyek]->tipe_proyek = $tipe_proyek;
 
                         if ($category == "Forecast") {
+                            $data[$kode_proyek]->total_forecast = $data[$kode_proyek]->nilai_forecast;
                             $data[$kode_proyek]->bulan = $this->getNamaBulan($data[$kode_proyek]->month_forecast);
                         } elseif ($category == "RKAP") {
+                            $data[$kode_proyek]->total_forecast = $data[$kode_proyek]->rkap_forecast;
                             $data[$kode_proyek]->bulan = $this->getNamaBulan($data[$kode_proyek]->month_rkap);
                         } elseif ($category == "Realisasi") {
+                            $data[$kode_proyek]->total_forecast = $data[$kode_proyek]->realisasi_forecast;
                             $data[$kode_proyek]->bulan = $this->getNamaBulan($data[$kode_proyek]->month_realisasi);
                         }
                         // $data[$kode_proyek]->rkap_forecast;
                     }
                 }
-                $data = collect($data)->values();
-                return response()->json($data);
+                $data = collect($data)?->map(function ($item) {
+                    $item->total_forecast = (string)$item->total_forecast;
+                    return $item;
+                })->filter(function ($item) {
+                    return $item->total_forecast != "0";
+                })->sortByDesc('total_forecast')->values();
+                return response()->json(["data" => $data]);
             }
         } catch (\Exception $e) {
             throw $e;

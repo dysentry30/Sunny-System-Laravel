@@ -5647,7 +5647,9 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('/get-unit-kerja/{departemen}', [MobileController::class, "getUnitKerja"]);
     Route::post('/get-forecast-bulanan-all', [MobileController::class, 'GetDataForecastAll']);
     Route::get('/get-forecast-bulanan/{unitKerja}/{tahun}/{bulan}', [MobileController::class, 'GetDataForecastNew']);
+    Route::get('/get-total-monitoring-proyek', [MobileController::class, 'GetTotalMonitoringProyek']);
     Route::get('/get-monitoring-proyek', [MobileController::class, 'GetMonitoringProyek']);
+    Route::get('/get-total-competitive-index', [MobileController::class, 'GetTotalCompetitiveIndex']);
     Route::get('/get-proyek/{page}', [MobileController::class, 'getListProyek']);
 });
 
