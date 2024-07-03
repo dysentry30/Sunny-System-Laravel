@@ -47,7 +47,7 @@ class GetDataPegawai implements ShouldQueue
                     $totalData += $data->json()["total_seluruh_data"];
                     $pegawaiData = collect($data->json()["data"]);
                     if (!empty($pegawaiData)) {
-                        $pegawaiData->where('active', '!=', "0")->each(function ($pegawai) use (&$totalDataUpdate, $totalDataCreate) {
+                        $pegawaiData->where('active', '!=', "0")->each(function ($pegawai) use (&$totalDataUpdate, &$totalDataCreate) {
                             $is_pegawai_exist = Pegawai::where('nip', $pegawai["nip"])->first();
                             // dd($is_pegawai_exist, $pegawai);
                             if (!empty($is_pegawai_exist)) {

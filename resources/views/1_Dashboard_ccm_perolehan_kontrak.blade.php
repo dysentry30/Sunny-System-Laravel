@@ -960,8 +960,8 @@
                     </div>
                     <!--end::Body Dashboard-->
 
-                    <div class="card mx-8 px-0">
-                    <!--begin::Card body-->
+                    {{-- <div class="card mx-8 px-0">
+                        <!--begin::Card body-->
                         <div class="card-body pt-0 px-2">
                             <!--begin::Table-->
                             <table class="table align-middle table-bordered fs-6 gy-2" style="max-width: 100%" id="example">
@@ -969,7 +969,6 @@
                                 <thead style="border: white 1px solid; background-color: #F7AD1A">
                                     <!--begin::Table row-->
                                     <tr class="text-start text-dark fw-bolder fs-7 text-uppercase gs-0">
-                                        {{-- <th rowspan="2" class="min-w-auto px-4 align-middle text-center">NO</th> --}}
                                         <th rowspan="2" class="min-w-auto align-middle text-center fs-8">PROJECT</th>
                                         <th rowspan="2" width="15%" class="align-middle text-center fs-8">OWNER</th>
                                         <th rowspan="2" class="min-w-auto align-middle text-center fs-8">TYPE</th>
@@ -1001,9 +1000,6 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-600 fs-8">
-                                    {{-- <tr>
-                                        <td colspan="19" class="ps-3" style="border: white 1px solid; background-color: #F7DFAE">Sasaran</td>
-                                    </tr> --}}
                                     @foreach ($contract_proyeks as $proyek)
                                     <tr>
                                             <!--begin::NIP-->
@@ -1067,13 +1063,11 @@
                                             
                                             <!--begin::NDA-->
                                             @php
-                                                // $dokumenCRM_NDA = $proyek->is_rfa_nda;
                                                 $dokumenNDA = $contract->UploadFinal->where('category', '=', 'Dokumen NDA')->first();
                                                 if(!empty($dokumenNDA) && $proyek->is_rfa_nda == true){
                                                     $statusWaktuUpload = new DateTime($dokumenNDA->created_at);
                                                     $currentDate = new DateTime($proyek->tgl_rfa_nda);
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
-                                                    // dump($limitWaktu);
                                                 }
                                             @endphp
                                             <td class="text-center">
@@ -1118,7 +1112,6 @@
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
                                                 }
                                             @endphp
-                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
                                                 <small class="{{ !empty($dokumenCRM_LOI) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
                                                     @if (!empty($dokumenCRM_LOI))
@@ -1153,7 +1146,6 @@
                                             <!--end::LOI-->
                                             <!--begin::MOU-->
                                             @php
-                                                // $dokumenCRM_MOU = $proyek->DokumenMou->first();
                                                 $dokumenMOU = $contract->UploadFinal->where('category', '=', 'Dokumen MOU')->first();
                                                 if(!empty($dokumenMOU) && $proyek->is_rfa_mou == true){
                                                     $statusWaktuUpload = new DateTime($dokumenMOU->created_at);
@@ -1161,7 +1153,6 @@
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
                                                 }
                                             @endphp
-                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
                                                 <small class="{{ $proyek->is_rfa_mou == true ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
                                                     @if ($proyek->is_rfa_mou == true)
@@ -1196,7 +1187,6 @@
                                             <!--end::MOU-->
                                             <!--begin::ECA-->
                                             @php
-                                                // $dokumenCRM_ECA = $proyek->DokumenEca->first();
                                                 $dokumenECA = $contract->UploadFinal->where('category', '=', 'Dokumen ECA')->first();
                                                 if(!empty($dokumenECA) && $proyek->is_rfa_eca == true){
                                                     $statusWaktuUpload = new DateTime($dokumenECA->created_at);
@@ -1204,7 +1194,6 @@
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
                                                 }
                                             @endphp
-                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
                                                 <small class="{{ $proyek->is_rfa_eca == true ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
                                                     @if ($proyek->is_rfa_eca == true)
@@ -1239,7 +1228,6 @@
                                             <!--end::ECA-->
                                             <!--begin::ICA-->
                                             @php
-                                                // $dokumenCRM_ICA = $proyek->DokumenIca->first();
                                                 $dokumenICA = $contract->UploadFinal->where('category', '=', 'Dokumen ICA')->first();
                                                 if(!empty($dokumenICA) && $proyek->is_rfa_ica == true){
                                                     $statusWaktuUpload = new DateTime($dokumenICA->created_at);
@@ -1247,7 +1235,6 @@
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
                                                 }
                                             @endphp
-                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
                                                 <small class="{{ $proyek->is_rfa_ica == true ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
                                                     @if ($proyek->is_rfa_ica == true)
@@ -1290,7 +1277,6 @@
                                                 $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
                                             }
                                             @endphp
-                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
                                                 <small class="{{ !empty($dokumenCRM_Draft) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
                                                     @if (!empty($dokumenCRM_Draft))
@@ -1325,7 +1311,6 @@
                                             <!--end::DRAFT-->
                                             <!--begin::RKS-->
                                             @php
-                                                // $dokumenCRM_RKS = $proyek->DokumenRks->first();
                                                 $dokumenRKS = $contract->UploadFinal->where('category', '=', 'Dokumen RKS / Project Spesification')->first();
                                                 if(!empty($dokumenRKS) && $proyek->is_rfa_rks == true){
                                                     $statusWaktuUpload = new DateTime($dokumenRKS->created_at);
@@ -1333,7 +1318,6 @@
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
                                                 }
                                             @endphp
-                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
                                                 <small class="{{ $proyek->is_rfa_rks == true ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
                                                     @if ($proyek->is_rfa_rks == true)
@@ -1368,7 +1352,6 @@
                                             <!--end::RKS-->
                                             <!--begin::ITB-->
                                             @php
-                                                // $dokumenCRM_ITB = $proyek->DokumenItbTor->first();
                                                 $dokumenITB = $contract->UploadFinal->where('category', '=', 'Dokumen ITB/TOR')->first();
                                                 if(!empty($dokumenITB) && $proyek->is_rfa_itb_tor == true){
                                                     $statusWaktuUpload = new DateTime($dokumenITB->created_at);
@@ -1376,7 +1359,6 @@
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
                                                 }
                                             @endphp
-                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
                                                 <small class="{{ $proyek->is_rfa_itb_tor == true ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
                                                     @if ($proyek->is_rfa_itb_tor == true)
@@ -1419,7 +1401,6 @@
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
                                                 }
                                             @endphp
-                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
                                                 <small class="{{ !empty($dokumenCRM_Tender) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
                                                     @if (!empty($dokumenCRM_Tender))
@@ -1454,7 +1435,6 @@
                                             <!--end::TENDER-->
                                             <!--begin::RISK-->
                                             @php
-                                                // $dokumenCRM_Risk = $proyek->RiskTenderProyek->first();
                                                 $dokumenRisk = $contract->UploadFinal->where('category', '=', 'Dokumen Resiko - Perolehan')->first();
                                                 if(!empty($dokumenRisk) && !empty($dokumenCRM_Risk)){
                                                     $statusWaktuUpload = new DateTime($dokumenRisk->created_at);
@@ -1462,7 +1442,6 @@
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
                                                 }
                                             @endphp
-                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
                                                 <small class="{{ $proyek->is_rfa_risk == true ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
                                                     @if ($proyek->is_rfa_risk == true)
@@ -1497,7 +1476,6 @@
                                             <!--end::RISK-->
                                             <!--begin::DAFTAR-->
                                             @php
-                                                // $dokumenCRM_Aanwitjzing = $proyek->AanwitjzingTenderProyek->first();
                                                 $dokumenAanwitjzing = $contract->UploadFinal->where('category', '=', 'Dokumen Aanwitjzing')->first();
                                                 if(!empty($dokumenAanwitjzing)){
                                                     $statusWaktuUpload = new DateTime($dokumenAanwitjzing->created_at);
@@ -1505,37 +1483,7 @@
                                                     $limitWaktu = $statusWaktuUpload->diff($currentDate)->d;
                                                 }
                                             @endphp
-                                            {{-- @dump($statusWaktuUpload) --}}
                                             <td class="text-center">
-                                                {{-- <small class="{{ !empty($dokumenCRM_Aanwitjzing) ? 'badge badge-light-success' : 'badge badge-light-danger' }}">
-                                                    @if (!empty($dokumenCRM_Aanwitjzing))
-                                                    RFA <br>
-                                                    {{ Carbon\Carbon::create($dokumenCRM_Aanwitjzing->created_at)->format('d/m/Y') }}
-                                                    @else
-                                                    Open
-                                                    @endif
-                                                </small>
-                                                <br>
-                                                <small class="{{ !empty($dokumenAanwitjzing) ? 'badge badge-light-warning' : 'badge badge-light-danger' }} my-1">
-                                                    @if (!empty($dokumenAanwitjzing))
-                                                    Approved <br>
-                                                    {{ Carbon\Carbon::create($dokumenAanwitjzing->created_at)->format('d/m/Y') }}
-                                                    @else
-                                                    Open
-                                                    @endif
-                                                </small>
-                                                <br>
-                                                <small class="{{ !empty($dokumenAanwitjzing) ? 'badge badge-light-primary' : 'badge badge-light-danger' }} my-1">
-                                                    @if (!empty($dokumenAanwitjzing) && $limitWaktu > 14)
-                                                        Late
-                                                    @elseif (!empty($dokumenAanwitjzing) && $limitWaktu <= 14)
-                                                        On Time
-                                                    @elseif (!empty($dokumenCRM_Aanwitjzing))
-                                                        On Going
-                                                    @else
-                                                        Open
-                                                    @endif
-                                                </small> --}}
                                                 <small class="badge {{!empty($dokumenAanwitjzing) ? "badge-light-success" : "badge-light-danger"}}">
                                                     @if (!empty($dokumenAanwitjzing))
                                                         Approved
@@ -1557,8 +1505,6 @@
                                                 @php
                                                 if (!empty($contract)) {
                                                     $status = !empty($dokumenNDA) && !empty($dokumenLOI) && !empty($dokumenMOU) && !empty($dokumenECA) && !empty($dokumenICA) && !empty($dokumenRKS) && !empty($dokumenITB) && !empty($dokumenTender) && !empty($dokumenRisk) && !empty($dokumenAanwitjzing);
-                                                    // $status = $proyek->ContractManagements->reviewProjects->isNotEmpty() && $proyek->ContractManagements->inputRisks->isNotEmpty() && $proyek->ContractManagements->questionsProjects->isNotEmpty();
-                                                    // $status = $proyek->DokumenNda->isNotEmpty() && $proyek->DokumenMou->isNotEmpty() && $proyek->AttachmentMenang->isNotEmpty() && $proyek->RiskTenderProyek->isNotEmpty() && $proyek->DokumenEca->isNotEmpty() && $proyek->DokumenIca->isNotEmpty();
                                                 } else {
                                                     $status = false;
                                                 }
@@ -1575,7 +1521,7 @@
 
                         </div>
                         <!--end::Card body-->
-                    </div>
+                    </div> --}}
 
                 </div>
                 <!--end::Content-->
