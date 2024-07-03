@@ -614,8 +614,8 @@
                                                 
                                                 <th class="text-center">IDR</th>
                                                 <th class="text-center">USD</th>
-                                                <th class="text-center">KURS KONTRAK</th>
-                                                <th class="text-center">NILAI (EKIVALEN)</th>    
+                                                {{-- <th class="text-center">KURS KONTRAK</th>
+                                                <th class="text-center">NILAI (EKIVALEN)</th>     --}}
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -624,8 +624,8 @@
                                                 <td>Original</td>
                                                 <td class="text-center">100.000.000.000</td>
                                                 <td class="text-center">100.000.000.000</td>
-                                                <td class="text-center">100.000.000.000</td>
-                                                <td class="text-center">100.000.000.000</td>
+                                                {{-- <td class="text-center">100.000.000.000</td>
+                                                <td class="text-center">100.000.000.000</td> --}}
                                             </tr>
                                             @foreach (range(1,4) as $item)
                                                 <tr>
@@ -633,8 +633,8 @@
                                                     <td>Amandemen - {{ $item }}</td>
                                                     <td class="text-center">100.000.000.000</td>
                                                     <td class="text-center">100.000.000.000</td>
-                                                    <td class="text-center">100.000.000.000</td>
-                                                    <td class="text-center">100.000.000.000</td>
+                                                    {{-- <td class="text-center">100.000.000.000</td>
+                                                    <td class="text-center">100.000.000.000</td> --}}
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -827,14 +827,15 @@
                                 </div>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col-4">
+                            {{-- <div class="col-4"> --}}
+                            <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="py-2 bg-success">
                                     <h4 class="m-0 text-center">SUBMISIONS STATUS</h4>
                                     <div class="row">
-                                        <div class="col">
+                                        {{-- <div class="col">
                                             <h6 class="m-0 text-center">REVISION</h6>
-                                        </div>
+                                        </div> --}}
                                         <div class="col">
                                             <h6 class="m-0 text-center">NEGOITATION</h6>
                                         </div>
@@ -891,7 +892,7 @@
                                 </a>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col-1">
+                            {{-- <div class="col-1">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
@@ -901,7 +902,7 @@
                                     <!--end::Title body-->
                                 </a>
                                 <!--end::Title body-->
-                            </div>
+                            </div> --}}
                             <div class="col-1">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
@@ -979,7 +980,7 @@
                                 </a>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col-1">
+                            {{-- <div class="col-1">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
@@ -989,7 +990,7 @@
                                     <!--end::Title body-->
                                 </a>
                                 <!--end::Title body-->
-                            </div>
+                            </div> --}}
                             <div class="col-1">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
@@ -1069,14 +1070,15 @@
                                 </div>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col-4">
+                            {{-- <div class="col-4"> --}}
+                            <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="py-2 bg-success">
                                     <h4 class="m-0 text-center">SUBMISIONS STATUS</h4>
                                     <div class="row">
-                                        <div class="col">
+                                        {{-- <div class="col">
                                             <h6 class="m-0 text-center">REVISION</h6>
-                                        </div>
+                                        </div> --}}
                                         <div class="col">
                                             <h6 class="m-0 text-center">NEGOITATION</h6>
                                         </div>
@@ -1133,7 +1135,7 @@
                                 </a>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col-1">
+                            {{-- <div class="col-1">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
@@ -1143,7 +1145,7 @@
                                     <!--end::Title body-->
                                 </a>
                                 <!--end::Title body-->
-                            </div>
+                            </div> --}}
                             <div class="col-1">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
@@ -1221,7 +1223,7 @@
                                 </a>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col-1">
+                            {{-- <div class="col-1">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
@@ -1231,7 +1233,7 @@
                                     <!--end::Title body-->
                                 </a>
                                 <!--end::Title body-->
-                            </div>
+                            </div> --}}
                             <div class="col-1">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
@@ -1317,7 +1319,7 @@
                                 </a>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col-1">
+                            {{-- <div class="col-1">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
@@ -1331,7 +1333,7 @@
                                     <!--end::Title body-->
                                 </a>
                                 <!--end::Title body-->
-                            </div>
+                            </div> --}}
                             <div class="col-1">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
@@ -1395,7 +1397,7 @@
                         </div>
                         <!--end::% Nilai Kontrak-->
                         
-                        <br>
+                        {{-- <br>
 
                         <!--begin::Title-->
                         <div class="mb-4">
@@ -1478,7 +1480,7 @@
                             </div>
                             <!--begin::Card-->
                         </div>
-                        <!--end::Row-->
+                        <!--end::Row--> --}}
 
                         <br>
 
