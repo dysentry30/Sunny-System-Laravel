@@ -430,7 +430,7 @@
                         </div>
                         <!--end::Card Diagram Column dan Donut-->
                         
-                        <!--begin::Tabel Header-->
+                        {{-- <!--begin::Tabel Header-->
                         <div class="row mb-4 mx-3">
                             <div class="col-9">
                                 <!--begin::Title body-->
@@ -450,14 +450,11 @@
                         <!--end::Tabel Header-->
 
                         <!--begin::Table Body-->
-                        {{-- @foreach ($nilai_perubahan_table as $table) --}}
                         @foreach ($kategori_kontrak as $table)
-                        {{-- @dump($table) --}}
                         <div class="row mb-4 mx-3">
                             <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
-                                    {{-- <h2 class="m-0 text-center">{{ $table->jenis_claim }}</h2> --}}
                                     <h2 class="m-0 text-center">{{ $table["jenis_perubahan"] }}</h2>
                                 </div>
                                 <!--end::Title body-->
@@ -465,7 +462,6 @@
                             <div class="col-1">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    {{-- <h2 class="m-0 text-center">{{ $table->total_proyek }}</h2> --}}
                                     <h2 class="m-0 text-center">{{ $table["total_item"] }}</h2>
                                 </div>
                                 <!--end::Title body-->
@@ -473,7 +469,6 @@
                             <div class="col-5">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    {{-- <h2 class="m-0 text-center">Rp {{ number_format($table->total_nilai, 0, ".", ".") }}</h2> --}}
                                     <h2 class="m-0 text-center">Rp {{ number_format($table["total_nilai"], 0, ".", ".") }}</h2>
                                 </div>
                                 <!--end::Title body-->
@@ -481,7 +476,6 @@
                             <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    {{-- <h2 class="m-0 text-center">{{ $table->total_persen }}</h2> --}}
                                     <h2 class="m-0 text-center">{{ $table["persen"] }} </h2>
                                 </div>
                                 <!--end::Title body-->
@@ -511,7 +505,7 @@
 
                         <br>
                         <br>
-                        <br>
+                        <br> --}}
 
                         <!--begin::Tabel Header-->
                         <div class="row mb-4 mx-3">

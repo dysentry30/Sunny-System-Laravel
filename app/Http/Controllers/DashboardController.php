@@ -1503,7 +1503,7 @@ class DashboardController extends Controller
         $tahun_get = $request->query("tahun") ?? (int) date("Y");
         $bulan_get = $request->query("bulan") ?? "";
         $proyek_get = $request->query("kode-proyek") ?? "";
-        $dops = Dop::whereNotIn("dop", ["EA", "PUSAT"])->get("dop");
+        $dops = Dop::whereNotIn("dop", ["EA", "PUSAT", "DOP 3"])->get("dop");
         $year = date("Y");
         $month = date("m");
 
@@ -2890,7 +2890,7 @@ class DashboardController extends Controller
         $tahun_get = $request->query("tahun") ?? (int) date("Y");
         $bulan_get = $request->query("bulan") ?? "";
         $proyek_get = $request->query("kode-proyek") ?? "";
-        $dops = Dop::whereNotIn("dop", ["EA", "PUSAT"])->get("dop");
+        $dops = Dop::whereNotIn("dop", ["EA", "PUSAT", "DOP 3"])->get("dop");
         $year = date("Y");
         $month = date("m");
 
