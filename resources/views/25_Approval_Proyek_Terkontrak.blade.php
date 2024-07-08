@@ -90,7 +90,7 @@
                                         <th class="min-w-auto text-white">Tanggal Disetujui</th>
                                         <th class="min-w-auto text-white">Status</th>
                                         <th class="min-w-auto text-white">Catatan Revisi</th>
-                                        @if ($isCanApprove || (is_null($proyekApproval->is_approved)))
+                                        @if ($isCanApprove)
                                             <th class="min-w-auto text-white">Action</th>
                                         @endif
                                     </tr>
@@ -135,17 +135,19 @@
                                                     Revisi</button>
                                                 @endif
                                             </td>
-                                            @if ($isCanApprove && (is_null($proyekApproval->is_approved)) && is_null($proyekApproval->is_revisi))
-                                                <td class="text-center">
-                                                    <div class="d-flex flex-row justify-content-center">
-                                                        <button type="button" class="btn btn-sm btn-primary"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#kt_modal_approved">Approve</button>
-                                                        <button type="button" class="btn btn-sm btn-danger"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#kt_modal_revisi">Revisi</button>
-                                                    </div>
-                                                </td>
+                                            @if ($isCanApprove)
+                                            <td class="text-center">
+                                            @if ((is_null($proyekApproval->is_approved)) && is_null($proyekApproval->is_revisi))
+                                                <div class="d-flex flex-row justify-content-center">
+                                                    <button type="button" class="btn btn-sm btn-primary"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#kt_modal_approved">Approve</button>
+                                                    <button type="button" class="btn btn-sm btn-danger"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#kt_modal_revisi">Revisi</button>
+                                                </div>
+                                            @endif
+                                            </td>                                                
                                             @endif
                                         </tr>
                                     @endforeach
