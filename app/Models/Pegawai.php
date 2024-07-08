@@ -28,7 +28,7 @@ class Pegawai extends Model
 
     public function MatriksTerkontrakProyek()
     {
-        return $this->belongsTo(MatriksApprovalTerkontrakProyek::class, "nip", "nip");
+        return $this->hasMany(MatriksApprovalTerkontrakProyek::class, "nip", "nip");
     }
 
 }
