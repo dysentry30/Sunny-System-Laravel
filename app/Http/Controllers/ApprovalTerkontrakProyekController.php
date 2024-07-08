@@ -431,16 +431,7 @@ class ApprovalTerkontrakProyekController extends Controller
             ]
         ]);
 
-        if ($proyek->UnitKerja->dop != 'EA') {
-            $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm", $data_nasabah_online)->json();
-            setLogging("Send_Nasabah_Online", "[Nasabah Online => $customer->name] => ", $data_nasabah_online->toArray());
-            // dd($nasabah_online_response);
-            if (!$nasabah_online_response["status"] && !str_contains($nasabah_online_response["msg"], "sudah ada dalam nasabah online")) {
-                Alert::error("Error", $nasabah_online_response["msg"]);
-                return redirect()->back();
-            }
-            // $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev", $data_nasabah_online)->json();
-        }
+        return $data_nasabah_online;
     }
 
     private function sendDataNasabahOnline($dataNasabah)
