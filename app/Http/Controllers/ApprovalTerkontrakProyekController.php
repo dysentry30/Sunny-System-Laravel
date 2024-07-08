@@ -136,9 +136,9 @@ class ApprovalTerkontrakProyekController extends Controller
 
             if ($actionSelected == "approved") {
                 $generateDataNasabahOnline = self::generateNasabahOnline($proyek);
-                if ($proyek->UnitKerja->dop != "EA") {
-                    self::sendDataNasabahOnline($generateDataNasabahOnline);
-                }
+                // if ($proyek->UnitKerja->dop != "EA") {
+                //     self::sendDataNasabahOnline($generateDataNasabahOnline);
+                // }
                 $proyekApprovalSelected->is_approved = true;
                 $proyekApprovalSelected->approved_by = Auth::user()->nip;
                 $proyekApprovalSelected->approved_on = Carbon::now();
@@ -431,16 +431,7 @@ class ApprovalTerkontrakProyekController extends Controller
             ]
         ]);
 
-        if ($proyek->UnitKerja->dop != 'EA') {
-            $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm", $data_nasabah_online)->json();
-            setLogging("Send_Nasabah_Online", "[Nasabah Online => $customer->name] => ", $data_nasabah_online->toArray());
-            // dd($nasabah_online_response);
-            if (!$nasabah_online_response["status"] && !str_contains($nasabah_online_response["msg"], "sudah ada dalam nasabah online")) {
-                Alert::error("Error", $nasabah_online_response["msg"]);
-                return redirect()->back();
-            }
-            // $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev", $data_nasabah_online)->json();
-        }
+        return $data_nasabah_online;
     }
 
     private function sendDataNasabahOnline($dataNasabah)
@@ -449,8 +440,20 @@ class ApprovalTerkontrakProyekController extends Controller
         $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm", $dataNasabah)->json();
         setLogging("Send_Nasabah_Online", "[Nasabah Online => $namaNasabah] => ", $dataNasabah->toArray());
         if (!$nasabah_online_response["status"] && !str_contains($nasabah_online_response["msg"], "sudah ada dalam nasabah online")) {
+            integrationLog("SEND NASABAH ONLINE", $dataNasabah->toJson(), null, "FAIL", $nasabah_online_response["status"], $nasabah_online_response, null, $nasabah_online_response["msg"]);
             Alert::error("Error", $nasabah_online_response["msg"]);
             return redirect()->back();
         }
+
+        integrationLog("SEND NASABAH ONLINE", $dataNasabah->toJson(), null, "SUCCESS", $nasabah_online_response["status"], $nasabah_online_response);
+    }
+
+    private static function GUID()
+    {
+        if (function_exists('com_create_guid') === true) {
+            return trim(com_create_guid(), '{}');
+        }
+
+        return sprintf('%04X%04X%04X%04X%04X%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
     }
 }
