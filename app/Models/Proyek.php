@@ -289,4 +289,9 @@ class Proyek extends Model
     {
         return $this->hasOne(DokumenPersetujuanKSO::class, 'kode_proyek', 'kode_proyek');
     }
+
+    public function ApprovalTerkontrakProyek()
+    {
+        return $this->belongsTo(ApprovalTerkontrakProyek::class, 'kode_proyek', 'kode_proyek');
+    }
 }

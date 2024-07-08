@@ -2852,6 +2852,13 @@ class ProyekController extends Controller
         $years = (int) date('Y');
         $forecasts = Forecast::where("kode_proyek", "=", $kodeProyek)->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years)->first();
         // $forecasts = $proyekStage->Forecasts->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years)->first();
+        if ($proyekStage->stage == 8 && $request->is_ajax) {
+            Alert::error("Error", "Proyek sudah tidak dapat dikembalikan. Hubungi admin!");
+            return response()->json([
+                "status" => "success",
+                "link" => true,
+            ]);
+        }
         if ($request->stage >= 2 && empty($proyekStage->departemen_proyek)) {
             // $request->stage = 1;
             Alert::error("Error", "Departemen Pada Pasar Dini Belum Diisi !");
@@ -2894,6 +2901,11 @@ class ProyekController extends Controller
 
         if (!$request->is_ajax) {
             $data = $request->all();
+
+            if ($proyekStage->stage == 8) {
+                Alert::error("Error", "Proyek sudah tidak dapat dikembalikan. Hubungi admin!");
+                return redirect()->back();
+            }
 
             // Check kalo variable di bawah ini ada
             if (!empty($data["stage-menang"]) && $data["stage-menang"] == "Menang") {
@@ -3245,30 +3257,30 @@ class ProyekController extends Controller
                     return redirect()->back();
                 } else {
                     $contractManagements = ContractManagements::get()->where("project_id", "=", $proyekStage->kode_proyek)->first();
-                    if (str_contains(URL::full() , 'crm.wika.co.id')) {
-                        // setLogging();
-                        if ($proyekStage->UnitKerja->dop != 'EA') {
-                            $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm", $data_nasabah_online)->json();
-                            setLogging("Send_Nasabah_Online", "[Nasabah Online => $customer->name] => ", $data_nasabah_online->toArray());
-                            // dd($nasabah_online_response);
-                            if (!$nasabah_online_response["status"] && !str_contains($nasabah_online_response["msg"], "sudah ada dalam nasabah online")) {
-                                Alert::error("Error", $nasabah_online_response["msg"]);
-                                return redirect()->back();
-                            }
-                            // $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev", $data_nasabah_online)->json();
-                        }
+                    // if (str_contains(URL::full() , 'crm.wika.co.id')) {
+                    //     // setLogging();
+                    //     if ($proyekStage->UnitKerja->dop != 'EA') {
+                    //         $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm", $data_nasabah_online)->json();
+                    //         setLogging("Send_Nasabah_Online", "[Nasabah Online => $customer->name] => ", $data_nasabah_online->toArray());
+                    //         // dd($nasabah_online_response);
+                    //         if (!$nasabah_online_response["status"] && !str_contains($nasabah_online_response["msg"], "sudah ada dalam nasabah online")) {
+                    //             Alert::error("Error", $nasabah_online_response["msg"]);
+                    //             return redirect()->back();
+                    //         }
+                    //         // $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev", $data_nasabah_online)->json();
+                    //     }
+                    //     $request->stage = 8;
+                    //     if (!empty($contractManagements)) {
+                    //             $contractManagements->stages = (int) 2;
+                    //         $contractManagements->save();
+                    //     }
+                    // } else {
                         $request->stage = 8;
                         if (!empty($contractManagements)) {
                                 $contractManagements->stages = (int) 2;
                             $contractManagements->save();
                         }
-                    } else {
-                        $request->stage = 8;
-                        if (!empty($contractManagements)) {
-                                $contractManagements->stages = (int) 2;
-                            $contractManagements->save();
-                        }
-                    }
+                    // }
                 }
             } elseif (!empty($data["stage-terendah"]) && $data["stage-terendah"] == "Terendah") {
                 if ($proyekAttach->count() == 0) {

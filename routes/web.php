@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\FaqsController;
 use App\Http\Controllers\UserController;
 use RealRashid\SweetAlert\Facades\Alert;
+use App\Http\Controllers\ApprovalTerkontrakProyekController;
 use App\Http\Controllers\ClaimController;
 use App\Http\Controllers\PasalController;
 use App\Http\Controllers\StageController;
@@ -93,6 +94,7 @@ use App\Models\MatriksApprovalPersetujuanPartner;
 use App\Models\MatriksApprovalVerifikasiPartner;
 use App\Models\MatriksApprovalVerifikasiProyekNota2;
 use App\Models\MatriksApprovalNotaRekomendasi2;
+use App\Models\MatriksApprovalTerkontrakProyek;
 use App\Models\MasterCatatanNotaRekomendasi2;
 use App\Models\MasterKlasifikasiProyek;
 use App\Models\MasterKlasifikasiOmsetProyek;
@@ -2790,6 +2792,127 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         return view("MasterData/KriteriaAssessment", compact(["kriteria_assessments"]));
     });
 
+    Route::group(['prefix' => 'matriks-approval-proyek-terkontrak'], function () {
+        Route::get(
+            '/',
+            function (Request $request) {
+                $unitKerjas = UnitKerja::select(["divcode", "unit_kerja"])->whereNotNull("id_profit_center")->where('divcode', "!=", "8")->orderBy("id_profit_center", "asc")->get();
+                $matriks_all = MatriksApprovalTerkontrakProyek::all();
+                return view("MasterData.MatriksApprovalTerkontrak", compact("unitKerjas", "matriks_all"));
+            }
+        );
+
+        Route::post('/save', function (Request $request) {
+            try {
+                $data = $request->all();
+
+                $rules = [
+                    "start_date" => "required|date",
+                    "nama_pegawai" => "required|string",
+                    "unit_kerja" => "required|string",
+                ];
+
+                $messages = [
+                    "required" => "Field :attribute wajib diisi",
+                    "date" => "Format tanggal :attribute tidak sesuai",
+                ];
+
+                $validation = Validator::make($data, $rules, $messages);
+                if ($validation->fails()) {
+                    $errors = $validation->errors();
+                    $collectMessage = "";
+                    foreach ($errors->all() as $error) {
+                        $collectMessage .= str_replace("-", " ", $error) . "<br>";
+                    }
+
+                    Alert::html("Error", $collectMessage, "error");
+                    return redirect()->back()->with("modal", $data["modal"]);
+                }
+
+                $newMatriks = new MatriksApprovalTerkontrakProyek();
+                $newMatriks->start_date = $data["start_date"];
+                $newMatriks->nip = $data["nama_pegawai"];
+                $newMatriks->nama_pegawai = Pegawai::where("nip", $data["nama_pegawai"])->first()?->nama_pegawai;
+                $newMatriks->unit_kerja = $data["unit_kerja"];
+                $newMatriks->finish_date = $request->has("isActive") ? $data["finish_date"] : null;
+                $newMatriks->is_active = $request->has("isActive");
+
+                $newMatriks->save();
+
+                Alert::success("Success", "Data Berhasil Ditambahkan");
+                return redirect()->back();
+            } catch (\Exception $e) {
+                Alert::error("Error", $e->getMessage());
+                return redirect()->back();
+            }
+        });
+
+        Route::post('/{matriksSelected}/update', function (Request $request, MatriksApprovalTerkontrakProyek $matriksSelected) {
+            try {
+                $data = $request->all();
+
+                $rules = [
+                    "start_date" => "required|date",
+                    "nama_pegawai" => "required|string",
+                    "unit_kerja" => "required|string",
+                ];
+
+                $messages = [
+                    "required" => "Field :attribute wajib diisi",
+                    "date" => "Format tanggal :attribute tidak sesuai",
+                ];
+
+                $validation = Validator::make($data, $rules, $messages);
+                if ($validation->fails()) {
+                    $errors = $validation->errors();
+                    $collectMessage = "";
+                    foreach ($errors->all() as $error) {
+                        $collectMessage .= str_replace("-", " ", $error) . "<br>";
+                    }
+
+                    Alert::html("Error", $collectMessage, "error");
+                    return redirect()->back()->with("modal", $data["modal"]);
+                }
+
+                $matriksSelected->start_date = $data["start_date"];
+                $matriksSelected->nip = $data["nama_pegawai"];
+                $matriksSelected->nama_pegawai = Pegawai::where("nip", $data["nama_pegawai"])->first()?->nama_pegawai;
+                $matriksSelected->unit_kerja = $data["unit_kerja"];
+                $matriksSelected->finish_date = $request->has("isActive") ? $data["finish_date"] : null;
+                $matriksSelected->is_active = $request->has("isActive");
+
+                $matriksSelected->save();
+
+                Alert::success("Success", "Data Berhasil Diubah");
+                return redirect()->back();
+            } catch (\Exception $e) {
+                Alert::error("Error", $e->getMessage());
+                return redirect()->back();
+            }
+        });
+
+        Route::post('/{matriksSelected}/delete', function (MatriksApprovalTerkontrakProyek $matriksSelected) {
+
+            try {
+                if (empty($matriksSelected)) {
+                    Alert::error(
+                        "Error",
+                        "Data tidak ditemukan"
+                    );
+                    return redirect()->back();
+                }
+
+                $matriksSelected->delete();
+
+                Alert::success("Success", "Data berhasil dihapus");
+                return redirect()->back();
+            } catch (\Exception $e) {
+                Alert::error("Error", $e->getMessage());
+                return redirect()->back();
+            }
+        });
+    });
+
     Route::get('/matriks-approval-rekomendasi', function () {
         $approval_rekomendasi = MatriksApprovalRekomendasi::with(["Pegawai", "Divisi"])->where("start_tahun", "=", (int) date("Y"))->orderBy('updated_at')->get();
         // $jabatans = Jabatan::where("tahun", "=", (int) date("Y"))->get();
@@ -3132,6 +3255,12 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/penilaian-pengguna-jasa/save', [PenilaianPenggunaJasaController::class, 'store']);
     Route::post('/penilaian-pengguna-jasa/update/{id}', [PenilaianPenggunaJasaController::class, 'update']);
     Route::post('/penilaian-pengguna-jasa/delete/{id}', [PenilaianPenggunaJasaController::class, 'destroy']);
+
+    //Begin :: Approval Proyek Terkontrak
+    Route::get('/approval-terkontrak-proyek', [ApprovalTerkontrakProyekController::class, 'index']);
+    Route::post('/approval-terkontrak-proyek/{proyek}/request-approval', [ApprovalTerkontrakProyekController::class, 'requestApproval']);
+    Route::post('/approval-terkontrak-proyek/{proyek}/set-approval', [ApprovalTerkontrakProyekController::class, 'setApproval']);
+    //End :: Approval Proyek Terkontrak
 
     Route::get('/kriteria-selection-non-greenlane', [KriteriaSelectionNonGreenlaneController::class, 'index']);
     Route::post('/kriteria-selection-non-greenlane/save', [KriteriaSelectionNonGreenlaneController::class, 'store']);
@@ -8128,3 +8257,50 @@ Route::get('/test-persetujuan-nota-2', function (Request $request) {
 });
 
 Route::get('/rekomendasi/{kode_proyek}/{nip}/view-qr', [RekomendasiController::class, 'viewProyekQrCode']);
+
+
+Route::post('copy-forecast', function (Request $request) {
+    $data = $request->all();
+
+    try {
+        DB::beginTransaction();
+
+        $historyForecast = HistoryForecast::where("periode_prognosa", $data["periode_prognosa"])->where("tahun", $data["tahun"])->get();
+
+        $totalData = 0;
+
+        $isExistForecastPeriode = Forecast::where("periode_prognosa", $data["periode_prognosa"])->where("tahun", $data["tahun"])->get();
+
+        if ($isExistForecastPeriode->isNotEmpty()) {
+            DB::table('forecasts')->where("periode_prognosa", $data["periode_prognosa"])->where("tahun", $data["tahun"])->delete();
+        }
+
+        $historyForecast->each(function ($h) use (&$totalData) {
+            $newForecast = new Forecast();
+            $newForecast->kode_proyek = $h->kode_proyek;
+            $newForecast->nilai_forecast = $h->nilai_forecast;
+            $newForecast->month_forecast = $h->month_forecast;
+            $newForecast->rkap_forecast = $h->rkap_forecast;
+            $newForecast->month_rkap = $h->month_rkap;
+            $newForecast->realisasi_forecast = $h->realisasi_forecast;
+            $newForecast->month_realisasi = $h->month_realisasi;
+            $newForecast->periode_prognosa = $h->periode_prognosa + 1;
+            $newForecast->tahun = $h->tahun;
+            $newForecast->save();
+            $totalData++;
+        });
+
+        DB::commit();
+        return response()->json([
+            "success" => true,
+            "totalData" => $totalData
+        ]);
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return response()->json([
+            "success" => false,
+            "totalData" => 0,
+            "message" => $e->getMessage()
+        ]);
+    }
+});
