@@ -231,6 +231,23 @@
                             </div>
                         @endcanany
                         {{-- @endif --}}
+                        @canany(['super-admin', 'approver-crm', 'user-crm', 'risk-crm'])
+                            <div class="menu-item">
+                                <a class="menu-link " href="/approval-terkontrak-proyek"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::url(), 'approval-terkontrak-proyek') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Approval Proyek Terkontrak
+                                        2</span>
+                                </a>
+                            </div>
+                        @endcanany
                         @canany(['super-admin', 'admin-crm', 'approver-crm', 'risk-crm'])
                             @if (str_contains(Request::url(), '/rekomendasi') ||
                                     str_contains(Request::url(), '/green-lane') ||
@@ -398,6 +415,7 @@
                                 str_contains(Request::Path(), 'provinsi') ||
                                 str_contains(Request::Path(), 'otomasi-approval') ||
                                 str_contains(Request::Path(), 'konsultan-perencana') ||
+                                str_contains(Request::Path(), 'matriks-approval-proyek-terkontrak') ||
                                 // str_contains(Request::Path(), 'instansi') ||
                                 str_contains(Request::Path(), 'team-proyek')
                                     ? 'background-color:#008CB4'
@@ -856,6 +874,23 @@
                                         </div>
                                         <!--end::Menu Colapse-->
                                     @endcanany
+
+                                    @can('super-admin')
+                                        <!--begin::Menu Colapse-->
+                                        <div id="#kt_aside_menu" data-kt-menu="true"
+                                            style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'matriks-approval-proyek-terkontrak' ? 'background-color:#008CB4' : '' }}">
+                                            <a class="menu-link " href="/matriks-approval-proyek-terkontrak"
+                                                style="color:white; padding-left:20px;">
+                                                <span class="menu-icon">
+                                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                    <i class="bi bi-fingerprint text-white" style="font-size: 20px"></i>
+                                                    <!--end::Svg Icon-->
+                                                </span>
+                                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Materiks Approval Proyek Terkontrak</span>
+                                            </a>
+                                        </div>
+                                        <!--end::Menu Colapse-->
+                                    @endcan
                                 </div>
                                 <!--end::Colapse-->
                                 <!--end::Svg Icon-->
