@@ -5412,6 +5412,21 @@ function createWordNotaRekomendasiSetuju(\App\Models\NotaRekomendasi $proyekReko
 //     return $imageName;
 // }
 
+function integrationLog($category, $requestBody, $requestHeader = null, $statusCode, $status, $responseBody, $responseHeader = null, $errorMessage = null)
+{
+    $newLog = new IntegrationLog();
+    $newLog->category = $category;
+    $newLog->request_body = $requestBody;
+    $newLog->request_header = $requestHeader;
+    $newLog->status_code = $statusCode;
+    $newLog->statsu = $status;
+    $newLog->response_body = $responseBody;
+    $newLog->response_header = $responseHeader;
+    $newLog->error_message = $errorMessage;
+
+    $newLog->save();
+}
+
 function generateQrCode(string $imageName, string $path, string $url)
 {
     try {
