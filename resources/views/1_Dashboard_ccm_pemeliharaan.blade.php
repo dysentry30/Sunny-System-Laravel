@@ -251,10 +251,10 @@
                                         </div>
     
                                         @php
-                                            $proyek_select = $proyeks->map(function($filter){
-                                                return $filter->ContractManagements;
-                                            });
-                                            $proyek_select_2 = $proyek_select->where("stages", "=", 3);
+                                            // $proyek_select = $proyeks->map(function($filter){
+                                            //     return $filter->ContractManagements;
+                                            // });
+                                            $proyek_select_2 = $proyeks->where("stages", "=", 3);
                                         @endphp
                                             {{-- @dump($proyek_select_2) --}}
                                         <div class="col-2">
@@ -265,8 +265,9 @@
                                                     aria-hidden="true">
                                                     <option value="" selected></option>
                                                     @foreach ($proyek_select_2 as $proyek)
-                                                        <option value="{{ $proyek->project_id }}" {{ $proyek_get == $proyek->project_id ? 'selected' : '' }} >{{ $proyek->project->nama_proyek }}</option>
+                                                        {{-- <option value="{{ $proyek->project_id }}" {{ $proyek_get == $proyek->project_id ? 'selected' : '' }} >{{ $proyek->project->nama_proyek }}</option> --}}
                                                         {{-- <option value="{{ $proyek->kode_proyek }}" >{{ $proyek->nama_proyek }} ({{$proyek->kode_proyek}})</option> --}}
+                                                        <option value="{{ $proyek->profit_center }}" {{ $proyek_get == $proyek->profit_center ? 'selected' : '' }} >{{ $proyek->proyek_name }}</option>
                                                     @endforeach
                                             </select>
                                         </div>
@@ -431,20 +432,20 @@
                         
                         <!--begin::Tabel Header-->
                         <div class="row mb-4 mx-3">
-                            <div class="col-9">
+                            <div class="col-12">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
                                     <h2 class="m-0 text-center">CCM STATUS</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col-3">
+                            {{-- <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
-                                    <h2 class="m-0 text-center"><i class="bi bi-percent text-dark fs-3"></i> PERUBAHAN VS KONTRAK</h2>
+                                    <h2 class="m-0 text-center">NILAI APPROVED / NILAI KONTRAK</h2>
                                 </div>
                                 <!--end::Title body-->
-                            </div>
+                            </div> --}}
                         </div>
                         <!--end::Tabel Header-->
 
@@ -469,7 +470,7 @@
                                 </div>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col-5">
+                            <div class="col-8">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
                                     {{-- <h2 class="m-0 text-center">Rp {{ number_format($table->total_nilai, 0, ".", ".") }}</h2> --}}
@@ -477,11 +478,94 @@
                                 </div>
                                 <!--end::Title body-->
                             </div>
+                            {{-- <div class="col-3">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    <h2 class="m-0 text-center">{{ $table["persen"] }} </h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div> --}}
+                        </div>
+                        @endforeach
+                        <!--end::Table Body-->
+                        
+                        <!--begin::Tabel Header-->
+                        <div class="row mb-4 mx-3">
+                            <div class="col-12">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-warning">
+                                    <h2 class="m-0 text-center">TOTAL NILAI PERUBAHAN : Rp {{ number_format($perubahan_total, 0, ".", ".") }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            {{-- <div class="col-3">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-warning">
+                                    <h2 class="m-0 text-center">{{ $persentasePerubahan }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div> --}}
+                        </div>
+                        <!--end::Tabel Header-->
+
+                        <br>
+                        <br>
+                        <br>
+
+                        <!--begin::Tabel Header-->
+                        <div class="row mb-4 mx-3">
+                            <div class="col-9">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-success">
+                                    <h2 class="m-0 text-center">CCM STATUS APPROVED</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-3">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-success">
+                                    {{-- <h2 class="m-0 text-center">NILAI APPROVED / NILAI KONTRAK</h2> --}}
+                                    <h2 class="m-0 text-center">NILAI APPROVED / NILAI SUBMITTED</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                        </div>
+                        <!--end::Tabel Header-->
+
+                        <!--begin::Table Body-->
+                        {{-- @foreach ($nilai_perubahan_table as $table) --}}
+                        @foreach ($kategori_kontrak as $table)
+                        {{-- @dump($table) --}}
+                        <div class="row mb-4 mx-3">
+                            <div class="col-3">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-success">
+                                    {{-- <h2 class="m-0 text-center">{{ $table->jenis_claim }}</h2> --}}
+                                    <h2 class="m-0 text-center">{{ $table["jenis_perubahan"] }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-1">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    {{-- <h2 class="m-0 text-center">{{ $table->total_proyek }}</h2> --}}
+                                    <h2 class="m-0 text-center">{{ $table["total_item_approved"] }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
+                            <div class="col-5">
+                                <!--begin::Title body-->
+                                <div style="border-radius: 0px" class="card-body bg-secondary">
+                                    {{-- <h2 class="m-0 text-center">Rp {{ number_format($table->total_nilai, 0, ".", ".") }}</h2> --}}
+                                    <h2 class="m-0 text-center">Rp {{ number_format($table["total_nilai_approved"], 0, ".", ".") }}</h2>
+                                </div>
+                                <!--end::Title body-->
+                            </div>
                             <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
                                     {{-- <h2 class="m-0 text-center">{{ $table->total_persen }}</h2> --}}
-                                    <h2 class="m-0 text-center">{{ $table["persen"] }} </h2>
+                                    <h2 class="m-0 text-center">{{ $table["persen_approved"] }} </h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -493,15 +577,15 @@
                         <div class="row mb-4 mx-3">
                             <div class="col-9">
                                 <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-warning">
-                                    <h2 class="m-0 text-center">TOTAL NILAI PERUBAHAN : Rp {{ number_format($perubahan_total, 0, ".", ".") }}</h2>
+                                <div style="border-radius: 0px" class="card-body bg-success">
+                                    <h2 class="m-0 text-center">TOTAL NILAI PERUBAHAN : Rp {{ number_format($perubahan_total_approved, 0, ".", ".") }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
                             <div class="col-3">
                                 <!--begin::Title body-->
-                                <div style="border-radius: 0px" class="card-body bg-warning">
-                                    <h2 class="m-0 text-center">{{ $persentasePerubahan }}</h2>
+                                <div style="border-radius: 0px" class="card-body bg-success">
+                                    <h2 class="m-0 text-center">{{ $persentasePerubahanApproved }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
