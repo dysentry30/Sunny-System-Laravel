@@ -1212,7 +1212,8 @@ class DashboardController extends Controller
         $tahun_get = $request->query("tahun") ?? (int) date("Y");
         $bulan_get = $request->query("bulan") ?? "";
         $proyek_get = $request->query("kode-proyek") ?? "";
-        $dops = Dop::whereNotIn("dop", ["EA", "PUSAT"
+        $dops = Dop::whereNotIn("dop", [
+            "EA", "PUSAT", "DOP 3"
         ])->get("dop");
         $year = date("Y");
         $month = date("m");
@@ -1682,7 +1683,8 @@ class DashboardController extends Controller
 
         // $proyekPISNew = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->whereIn("kd_divisi", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->where('contract_managements.profit_center', '!=', null)->where('start_year', '<=', $tahun_get)->get();
 
-        $contract_pelaksanaan_new = $proyeks->where('stages', '>', 1)->map(function ($item) {
+        // $contract_pelaksanaan_new = $proyeks->where('stages', '>', 1)->map(function ($item) {
+        $contract_pelaksanaan_new = $proyeks->where('stages', 2)->map(function ($item) {
             return $item->ContractManagements;
         });
 
@@ -2816,12 +2818,13 @@ class DashboardController extends Controller
                 $data = $perubahan[$key]->first();
                 // $data["persen"] = ($data["total_nilai"] / $totalKontrakFull) * 100;
                 $data["persen"] = $data["total_nilai"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai"], $totalKontrakFull)->asString() : "0%";
-                $data["persen_approved"] = $data["total_nilai_approved"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai_approved"], $totalKontrakFull)->asString() : "0%";
+                // $data["persen_approved"] = $data["total_nilai_approved"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai_approved"], $totalKontrakFull)->asString() : "0%";
+                $data["persen_approved"] = $data["total_nilai_approved"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai_approved"], $data["total_nilai"])->asString() : "0%";
                 return $data;
             })->values();
-            // dd($kategori_kontrak);
             $perubahan_total = $kategori_kontrak->sum('total_nilai');
             $perubahan_total_approved = $kategori_kontrak->sum('total_nilai_approved');
+            // dd($kategori_kontrak);
             // $kategori_kontrak = $perubahan->groupBy("jenis_perubahan")->map(function($item, $key) use ($totalKontrakFull){
             //     $biaya_total = (int) $item->sum('biaya_pengajuan');
             //     $persentase_kategori = (float) $biaya_total * 100 / (float) $totalKontrakFull;
@@ -2859,7 +2862,8 @@ class DashboardController extends Controller
                 $data = $perubahan[$key]->first();
                 // $data["persen"] = ($data["total_nilai"] / $totalKontrakFull) * 100;
                 $data["persen"] = $data["total_nilai"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai"], $totalKontrakFull)->asString() : "0%";
-                $data["persen_approved"] = $data["total_nilai_approved"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai_approved"], $totalKontrakFull)->asString() : "0%";
+                // $data["persen_approved"] = $data["total_nilai_approved"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai_approved"], $totalKontrakFull)->asString() : "0%";
+                $data["persen_approved"] = $data["total_nilai_approved"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai_approved"], $data["total_nilai"])->asString() : "0%";
                 return $data;
             })->values();
             $perubahan_total = $kategori_kontrak->sum('total_nilai');
@@ -2868,7 +2872,8 @@ class DashboardController extends Controller
         // dd($kategori_kontrak);
         if (!empty($totalKontrakFull)) {
             $persentasePerubahan = Percentage::fromFractionAndTotal($perubahan_total, $totalKontrakFull)->asString();
-            $persentasePerubahanApproved = Percentage::fromFractionAndTotal($perubahan_total_approved, $totalKontrakFull)->asString();
+            // $persentasePerubahanApproved = Percentage::fromFractionAndTotal($perubahan_total_approved, $totalKontrakFull)->asString();
+            $persentasePerubahanApproved = Percentage::fromFractionAndTotal($perubahan_total_approved, $perubahan_total)->asString();
         } else {
             $persentasePerubahan = 0;
             $persentasePerubahanApproved = 0;
@@ -4199,7 +4204,8 @@ class DashboardController extends Controller
                 $data = $perubahan[$key]->first();
                 // $data["persen"] = ($data["total_nilai"] / $totalKontrakFull) * 100;
                 $data["persen"] = $data["total_nilai"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai"], $totalKontrakFull)->asString() : "0%";
-                $data["persen_approved"] = $data["total_nilai_approved"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai_approved"], $totalKontrakFull)->asString() : "0%";
+                // $data["persen_approved"] = $data["total_nilai_approved"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai_approved"], $totalKontrakFull)->asString() : "0%";
+                $data["persen_approved"] = $data["total_nilai_approved"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai_approved"], $data["total_nilai"])->asString() : "0%";
                 return $data;
             })->values();
             // dd($kategori_kontrak);
@@ -4242,7 +4248,8 @@ class DashboardController extends Controller
                 $data = $perubahan[$key]->first();
                 // $data["persen"] = ($data["total_nilai"] / $totalKontrakFull) * 100;
                 $data["persen"] = $data["total_nilai"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai"], $totalKontrakFull)->asString() : "0%";
-                $data["persen_approved"] = $data["total_nilai_approved"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai_approved"], $totalKontrakFull)->asString() : "0%";
+                // $data["persen_approved"] = $data["total_nilai_approved"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai_approved"], $totalKontrakFull)->asString() : "0%";
+                $data["persen_approved"] = $data["total_nilai_approved"] != 0 ? Percentage::fromFractionAndTotal($data["total_nilai_approved"], $data["total_nilai"])->asString() : "0%";
                 return $data;
             })->values();
             $perubahan_total = $kategori_kontrak->sum('total_nilai');
@@ -4251,7 +4258,8 @@ class DashboardController extends Controller
         // dd($kategori_kontrak, $totalKontrakFull);
         if (!empty($totalKontrakFull)) {
             $persentasePerubahan = Percentage::fromFractionAndTotal($perubahan_total, $totalKontrakFull)->asString();
-            $persentasePerubahanApproved = Percentage::fromFractionAndTotal($perubahan_total_approved, $totalKontrakFull)->asString();
+            // $persentasePerubahanApproved = Percentage::fromFractionAndTotal($perubahan_total_approved, $totalKontrakFull)->asString();
+            $persentasePerubahanApproved = Percentage::fromFractionAndTotal($perubahan_total_approved, $perubahan_total)->asString();
         } else {
             $persentasePerubahan = 0;
             $persentasePerubahanApproved = 0;

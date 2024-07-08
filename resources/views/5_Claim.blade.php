@@ -520,8 +520,8 @@
                 pageLength : 10,
                 order: [[4, 'desc']],
                 language: {
-                    decimal: ',',
-                    thousands: '.'
+                    decimal: '.',
+                    thousands: ','
                 },
                 buttons: [
                     {
