@@ -4949,10 +4949,7 @@
                             <!--begin::Table body-->
                             @php
                                 // $dokumen_amandemen_pemeliharaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Amandemen");
-                                $dokumen_amandemen_pemeliharaan = $contract->UploadFinal->where(function($query) use($contract){
-                                    $query->where('profit_center', "=", $contract->profit_center)
-                                    ->orWhere("id_contract", "=", $contract->id_contract);
-                                })->where('category', '=', "Dokumen Amandemen");
+                                $dokumen_amandemen_pemeliharaan = $contract->UploadFinal->where('category', '=', "Dokumen Amandemen - Pemeliharaan");
                             @endphp
                             <tbody class="fw-bold text-gray-400">
                                 @if (!empty($dokumen_amandemen_pemeliharaan))

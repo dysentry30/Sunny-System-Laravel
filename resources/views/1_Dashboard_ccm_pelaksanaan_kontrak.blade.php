@@ -430,22 +430,22 @@
                         </div>
                         <!--end::Card Diagram Column dan Donut-->
                         
-                        {{-- <!--begin::Tabel Header-->
+                        <!--begin::Tabel Header-->
                         <div class="row mb-4 mx-3">
-                            <div class="col-9">
+                            <div class="col-12">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
                                     <h2 class="m-0 text-center">CCM STATUS SUBMITTED</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col-3">
+                            {{-- <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
                                     <h2 class="m-0 text-center">NILAI SUBMITTED / NILAI KONTRAK</h2>
                                 </div>
                                 <!--end::Title body-->
-                            </div>
+                            </div> --}}
                         </div>
                         <!--end::Tabel Header-->
 
@@ -466,46 +466,46 @@
                                 </div>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col-5">
+                            <div class="col-8">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
                                     <h2 class="m-0 text-center">Rp {{ number_format($table["total_nilai"], 0, ".", ".") }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col-3">
+                            {{-- <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
                                     <h2 class="m-0 text-center">{{ $table["persen"] }} </h2>
                                 </div>
                                 <!--end::Title body-->
-                            </div>
+                            </div> --}}
                         </div>
                         @endforeach
                         <!--end::Table Body-->
                         
                         <!--begin::Tabel Header-->
                         <div class="row mb-4 mx-3">
-                            <div class="col-9">
+                            <div class="col-12">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
                                     <h2 class="m-0 text-center">TOTAL NILAI PERUBAHAN : Rp {{ number_format($perubahan_total, 0, ".", ".") }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col-3">
+                            {{-- <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-warning">
                                     <h2 class="m-0 text-center">{{ $persentasePerubahan }}</h2>
                                 </div>
                                 <!--end::Title body-->
-                            </div>
+                            </div> --}}
                         </div>
                         <!--end::Tabel Header-->
 
                         <br>
                         <br>
-                        <br> --}}
+                        <br>
 
                         <!--begin::Tabel Header-->
                         <div class="row mb-4 mx-3">
@@ -519,7 +519,7 @@
                             <div class="col-3">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-success">
-                                    <h2 class="m-0 text-center">NILAI APPROVED / NILAI KONTRAK</h2>
+                                    <h2 class="m-0 text-center">NILAI APPROVED / NILAI SUBMITTED</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>

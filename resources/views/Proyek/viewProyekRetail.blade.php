@@ -1579,7 +1579,7 @@
                                                                                 style="font-size:14px;">{{ $now->translatedFormat('F Y') }}</a>
                                                                         </li>
                                                                     @else
-                                                                        @if ((int) $now->format('m') == $submonth && $tgl > 5)
+                                                                        @if ((int) $now->format('m') == $submonth && $tgl >= 5)
                                                                             <li class="nav-item">
                                                                                 <a class="nav-link text-active-primary {{ $item == $submonth ? 'active' : '' }}"
                                                                                     data-bs-toggle="tab"
@@ -1813,7 +1813,7 @@
                                                                     @endphp
                                                                 </div>
                                                                 <!--end:::Tab Pane Forecasts-->
-                                                            @elseif ((int) $now_pane->format('m') == $submonth && $tgl > 5)
+                                                            @elseif ((int) $now_pane->format('m') == $submonth && $tgl >= 5)
                                                                 <!--begin:::Tab Pane Forecasts-->
                                                                 <div class="tab-pane fade {{ $item == $submonth ? 'show active' : '' }}"
                                                                     id="kt_user_view_forecasts_{{ (int) $now_pane->format('m') }}_{{ $now_pane->format('Y') }}"
