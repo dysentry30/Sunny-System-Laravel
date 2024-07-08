@@ -26,4 +26,9 @@ class Pegawai extends Model
         return $this->hasMany(MatriksApprovalRekomendasi::class, "nama_pegawai", "nip");
     }
 
+    public function MatriksTerkontrakProyek()
+    {
+        return $this->belongsTo(MatriksApprovalTerkontrakProyek::class, "nip", "nip");
+    }
+
 }

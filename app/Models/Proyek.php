@@ -211,4 +211,9 @@ class Proyek extends Model
     {
         return $this->hasMany(DokumenNotaRekomendasi1::class, 'kode_proyek');
     }
+
+    public function ApprovalTerkontrakProyek()
+    {
+        return $this->belongsTo(ApprovalTerkontrakProyek::class, 'kode_proyek', 'kode_proyek');
+    }
 }
