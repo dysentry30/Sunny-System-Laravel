@@ -1818,6 +1818,7 @@ class ClaimController extends Controller
         $claims_vo = $claims->where("jenis_perubahan", "=", "VO")?->map(function ($item) use (&$totalClaimVO) {
             if ($item->nilai_negatif) {
                 $item->biaya_pengajuan = 0 - (int) $item->biaya_pengajuan;
+                $item->nilai_disetujui = 0 - (int) $item->nilai_disetujui;
             }
 
             $totalClaimVO += $item->biaya_pengajuan;
@@ -1835,6 +1836,7 @@ class ClaimController extends Controller
 
         $claims_anti_klaim = $claims->where("jenis_perubahan", "=", "Anti Klaim")?->map(function ($item) use (&$totalClaimAntiKlaim) {
             $item->biaya_pengajuan = 0 - (int) $item->biaya_pengajuan;
+            $item->nilai_disetujui = 0 - (int) $item->nilai_disetujui;
             $totalClaimAntiKlaim += $item->biaya_pengajuan;
             return $item;
         });

@@ -297,16 +297,18 @@
                                                                     <th rowspan="2" class="min-w-auto">Uraian Perubahan</th>
                                                                     <th rowspan="2" class="min-w-auto">No Proposal Klaim</th>
                                                                     <th rowspan="2" class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th colspan="2" class="min-w-125px">Dampak Biaya</th>
-                                                                    <th colspan="2" class="min-w-125px">Dampak Waktu</th>
+                                                                    <th colspan="3" class="min-w-125px">Dampak Biaya</th>
+                                                                    <th colspan="3" class="min-w-125px">Dampak Waktu</th>
                                                                     <th rowspan="2" class="min-w-auto">Status</th>
                                                                     <th rowspan="2" class="min-w-auto text-center">Action</th>
                                                                 </tr>
                                                                 <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th colspan="1" class="min-w-125px">Is True</th>
-                                                                    <th colspan="1" class="min-w-125px">Nominal</th>
-                                                                    <th colspan="1" class="min-w-125px">Is True</th>
-                                                                    <th colspan="1" class="min-w-125px">Tanggal</th>
+                                                                    <th colspan="1" class="min-w-50px">Is True</th>
+                                                                    <th colspan="1" class="min-w-125px">Nominal Submitted</th>
+                                                                    <th colspan="1" class="min-w-125px">Nominal Approved</th>
+                                                                    <th colspan="1" class="min-w-50px">Is True</th>
+                                                                    <th colspan="1" class="min-w-125px">Tanggal Submitted</th>
+                                                                    <th colspan="1" class="min-w-125px">Tanggal Approved</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody class="fw-bold text-gray-600">
@@ -335,6 +337,9 @@
                                                                     <td>
                                                                         <p class="m-0 {{ $vo->nilai_negatif ? 'text-danger' : '' }}">{{ number_format($vo->biaya_pengajuan, 0, ".", ".") }}</p>
                                                                     </td>
+                                                                    <td>
+                                                                        <p class="m-0 {{ $vo->nilai_negatif ? 'text-danger' : '' }}">{{ !empty($vo->nilai_disetujui) ? number_format($vo->nilai_disetujui, 0, ".", ".") : "-" }}</p>
+                                                                    </td>
                                                                     <!--end::Dampak Biaya-->
                                                                     <!--begin::Dampak Waktu-->
                                                                     <td class="fw-bolder text-center">
@@ -342,6 +347,9 @@
                                                                     </td>
                                                                     <td>
                                                                         {{ !empty($vo->waktu_pengajuan) ? Carbon\Carbon::parse($vo->waktu_pengajuan)->translatedFormat('d F Y') : '' }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ !empty($vo->waktu_disetujui) ? Carbon\Carbon::parse($vo->waktu_disetujui)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                     <!--end::Dampak Waktu-->
                                                                     @php
@@ -416,16 +424,18 @@
                                                                     <th rowspan="2" class="min-w-auto">Uraian Perubahan</th>
                                                                     <th rowspan="2" class="min-w-auto">No Proposal Klaim</th>
                                                                     <th rowspan="2" class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th colspan="2" class="min-w-125px">Dampak Biaya</th>
-                                                                    <th colspan="2" class="min-w-125px">Dampak Waktu</th>
+                                                                    <th colspan="3" class="min-w-125px">Dampak Biaya</th>
+                                                                    <th colspan="3" class="min-w-125px">Dampak Waktu</th>
                                                                     <th rowspan="2" class="min-w-auto">Status</th>
                                                                     <th rowspan="2" class="min-w-auto text-center">Action</th>
                                                                 </tr>
                                                                 <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th colspan="1" class="min-w-125px">Is True</th>
-                                                                    <th colspan="1" class="min-w-125px">Nominal</th>
-                                                                    <th colspan="1" class="min-w-125px">Is True</th>
-                                                                    <th colspan="1" class="min-w-125px">Tanggal</th>
+                                                                    <th colspan="1" class="min-w-50px">Is True</th>
+                                                                    <th colspan="1" class="min-w-125px">Nominal Submitted</th>
+                                                                    <th colspan="1" class="min-w-125px">Nominal Approved</th>
+                                                                    <th colspan="1" class="min-w-50px">Is True</th>
+                                                                    <th colspan="1" class="min-w-125px">Tanggal Submitted</th>
+                                                                    <th colspan="1" class="min-w-125px">Tanggal Approved</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody class="fw-bold text-gray-600">
@@ -454,6 +464,9 @@
                                                                     <td>
                                                                         {{ number_format($klaim->biaya_pengajuan, 0, ".", ".") }}
                                                                     </td>
+                                                                    <td>
+                                                                        {{ !empty($klaim->nilai_disetujui) ? number_format($klaim->nilai_disetujui, 0, ".", ".") : '-' }}
+                                                                    </td>
                                                                     <!--end::Dampak Biaya-->
                                                                     <!--begin::Dampak Waktu-->
                                                                     <td class="fw-bolder text-center">
@@ -461,6 +474,9 @@
                                                                     </td>
                                                                     <td>
                                                                         {{ !empty($klaim->waktu_pengajuan) ? Carbon\Carbon::parse($klaim->waktu_pengajuan)->translatedFormat('d F Y') : '' }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ !empty($klaim->waktu_disetujui) ? Carbon\Carbon::parse($klaim->waktu_disetujui)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                     <!--end::Dampak Waktu-->
                                                                     @php
@@ -535,16 +551,18 @@
                                                                     <th rowspan="2" class="min-w-auto">Uraian Perubahan</th>
                                                                     <th rowspan="2" class="min-w-auto">No Proposal Klaim</th>
                                                                     <th rowspan="2" class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th colspan="2" class="min-w-125px">Dampak Biaya</th>
-                                                                    <th colspan="2" class="min-w-125px">Dampak Waktu</th>
+                                                                    <th colspan="3" class="min-w-125px">Dampak Biaya</th>
+                                                                    <th colspan="3" class="min-w-125px">Dampak Waktu</th>
                                                                     <th rowspan="2" class="min-w-auto">Status</th>
                                                                     <th rowspan="2" class="min-w-auto text-center">Action</th>
                                                                 </tr>
                                                                 <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th colspan="1" class="min-w-125px">Is True</th>
-                                                                    <th colspan="1" class="min-w-125px">Nominal</th>
-                                                                    <th colspan="1" class="min-w-125px">Is True</th>
-                                                                    <th colspan="1" class="min-w-125px">Tanggal</th>
+                                                                    <th colspan="1" class="min-w-50px">Is True</th>
+                                                                    <th colspan="1" class="min-w-125px">Nominal Submitted</th>
+                                                                    <th colspan="1" class="min-w-125px">Nominal Approved</th>
+                                                                    <th colspan="1" class="min-w-50px">Is True</th>
+                                                                    <th colspan="1" class="min-w-125px">Tanggal Submitted</th>
+                                                                    <th colspan="1" class="min-w-125px">Tanggal Approved</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody class="fw-bold text-gray-600">
@@ -573,6 +591,9 @@
                                                                     <td class="text-danger">
                                                                         {{ number_format($anti_klaim->biaya_pengajuan, 0, ".", ".") }}
                                                                     </td>
+                                                                    <td class="text-danger">
+                                                                        {{ !empty($anti_klaim->nilai_disetujui) ? number_format($anti_klaim->nilai_disetujui, 0, ".", ".") : '-' }}
+                                                                    </td>
                                                                     <!--end::Dampak Biaya-->
                                                                     <!--begin::Dampak Waktu-->
                                                                     <td class="fw-bolder text-center">
@@ -580,6 +601,9 @@
                                                                     </td>
                                                                     <td>
                                                                         {{ !empty($anti_klaim->waktu_pengajuan) ? Carbon\Carbon::parse($anti_klaim->waktu_pengajuan)->translatedFormat('d F Y') : '' }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ !empty($anti_klaim->waktu_disetujui) ? Carbon\Carbon::parse($anti_klaim->waktu_disetujui)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                     <!--end::Dampak Waktu-->
                                                                     @php
@@ -654,16 +678,18 @@
                                                                     <th rowspan="2" class="min-w-auto">Uraian Perubahan</th>
                                                                     <th rowspan="2" class="min-w-auto">No Proposal Klaim</th>
                                                                     <th rowspan="2" class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th colspan="2" class="min-w-125px">Dampak Biaya</th>
-                                                                    <th colspan="2" class="min-w-125px">Dampak Waktu</th>
+                                                                    <th colspan="3" class="min-w-125px">Dampak Biaya</th>
+                                                                    <th colspan="3" class="min-w-125px">Dampak Waktu</th>
                                                                     <th rowspan="2" class="min-w-auto">Status</th>
                                                                     <th rowspan="2" class="min-w-auto text-center">Action</th>
                                                                 </tr>
                                                                 <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th colspan="1" class="min-w-125px">Is True</th>
-                                                                    <th colspan="1" class="min-w-125px">Nominal</th>
-                                                                    <th colspan="1" class="min-w-125px">Is True</th>
-                                                                    <th colspan="1" class="min-w-125px">Tanggal</th>
+                                                                    <th colspan="1" class="min-w-50px">Is True</th>
+                                                                    <th colspan="1" class="min-w-125px">Nominal Submitted</th>
+                                                                    <th colspan="1" class="min-w-125px">Nominal Approved</th>
+                                                                    <th colspan="1" class="min-w-50px">Is True</th>
+                                                                    <th colspan="1" class="min-w-125px">Tanggal Submitted</th>
+                                                                    <th colspan="1" class="min-w-125px">Tanggal Approved</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody class="fw-bold text-gray-600">
@@ -692,6 +718,9 @@
                                                                     <td class="text-end">
                                                                         {{ number_format($klaim_asuransi->biaya_pengajuan, 0, ".", ".") }}
                                                                     </td>
+                                                                    <td class="text-end">
+                                                                        {{ !empty($klaim_asuransi->nilai_disetujui) ? number_format($klaim_asuransi->nilai_disetujui, 0, ".", ".") : '-' }}
+                                                                    </td>
                                                                     <!--end::Dampak Biaya-->
                                                                     <!--begin::Dampak Waktu-->
                                                                     <td>
@@ -699,6 +728,9 @@
                                                                     </td>
                                                                     <td>
                                                                         {{ !empty($klaim_asuransi->waktu_pengajuan) ? Carbon\Carbon::parse($klaim_asuransi->waktu_pengajuan)->translatedFormat('d F Y') : '' }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ !empty($klaim_asuransi->waktu_disetujui) ? Carbon\Carbon::parse($klaim_asuransi->waktu_disetujui)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                     <!--end::Dampak Waktu-->
                                                                     @php
@@ -773,15 +805,17 @@
                                                                     <th rowspan="2" class="min-w-auto">Uraian Perubahan</th>
                                                                     <th rowspan="2" class="min-w-auto">No Proposal Klaim</th>
                                                                     <th rowspan="2" class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th colspan="2" class="min-w-125px">Dampak Biaya</th>
-                                                                    <th colspan="2" class="min-w-125px">Dampak Waktu</th>
+                                                                    <th colspan="3" class="min-w-125px">Dampak Biaya</th>
+                                                                    <th colspan="3" class="min-w-125px">Dampak Waktu</th>
                                                                     <th rowspan="2" class="min-w-auto">Status</th>
                                                                 </tr>
                                                                 <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                                                     <th class="min-w-125px">Is True</th>
-                                                                    <th class="min-w-125px">Nominal</th>
+                                                                    <th class="min-w-125px">Nominal Submitted</th>
+                                                                    <th class="min-w-125px">Nominal Approved</th>
                                                                     <th class="min-w-125px">Is True</th>
-                                                                    <th class="min-w-125px">Tanggal</th>
+                                                                    <th class="min-w-125px">Tanggal Submitted</th>
+                                                                    <th class="min-w-125px">Tanggal Approved</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody class="fw-bold text-gray-600">
@@ -842,10 +876,16 @@
                                                                         {{ number_format($claim->biaya_pengajuan, 0, ".", ",") }}
                                                                     </td>
                                                                     <td>
+                                                                        {{ !empty($claim->nilai_disetujui) ? number_format($claim->nilai_disetujui, 0, ".", ",") : '' }}
+                                                                    </td>
+                                                                    <td>
                                                                         {{ !empty($claim->waktu_pengajuan) ? 'Yes' : 'No' }}
                                                                     </td>
                                                                     <td>
                                                                         {{ !empty($claim->waktu_pengajuan) ? Carbon\Carbon::parse($claim->waktu_pengajuan)->translatedFormat('d F Y') : '-' }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ !empty($claim->waktu_disetujui) ? Carbon\Carbon::parse($claim->waktu_disetujui)->translatedFormat('d F Y') : '-' }}
                                                                     </td>
                                                                     <td>
                                                                         <p class="{{$class_name}}">{{ $stage }}</p>
