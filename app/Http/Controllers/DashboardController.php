@@ -1578,14 +1578,14 @@ class DashboardController extends Controller
         // }
 
         if (!empty($bulan_get) && $tahun_get >= 2023) {
-            $proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->where("start_year", "<=", $tahun_get)->whereIn("kd_divisi", $unit_kerja_get)->get();
+            $proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->where("start_year", "<=", $tahun_get)->where("stages", 2)->whereIn("kd_divisi", $unit_kerja_get)->get();
         } else {
             if ($tahun_get < 2023 && $bulan_get) {
-                $proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->where("start_year", "<=", $tahun_get)->whereIn("kd_divisi", $unit_kerja_get)->get();
+                $proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->where("start_year", "<=", $tahun_get)->where("stages", 2)->whereIn("kd_divisi", $unit_kerja_get)->get();
             } elseif ($tahun_get < 2023 && empty($bulan_get)) {
-                $proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->where("start_year", "<=", $tahun_get)->whereIn("kd_divisi", $unit_kerja_get)->get();
+                $proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->where("start_year", "<=", $tahun_get)->where("stages", 2)->whereIn("kd_divisi", $unit_kerja_get)->get();
             } else {
-                $proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->where("start_year", "<=", $tahun_get)->whereIn("kd_divisi", $unit_kerja_get)->get();
+                $proyeks = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->where("start_year", "<=", $tahun_get)->where("stages", 2)->whereIn("kd_divisi", $unit_kerja_get)->get();
             }
         }
         
@@ -1675,7 +1675,8 @@ class DashboardController extends Controller
         
         // dd($proyeks);
         $proyek_get = $request->query("kode-proyek") ?? "";
-        $contracts_all = ContractManagements::all();
+        // $contracts_all = ContractManagements::all();
+        $contracts_all = ContractManagements::where("stages", 2)->get();
 
         // $contracts_pelaksanaan = $proyeks->map(function($item){
         //     return $item->ContractManagements;
