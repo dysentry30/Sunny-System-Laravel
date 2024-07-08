@@ -101,7 +101,7 @@
                             <!--end::Page title-->
                             <!--begin::Actions-->
                             <div class="d-flex align-items-center py-1">
-
+                                @if ($proyek->stage != 8 || empty($proyek->ApprovalTerkontrakProyek) || (!is_null($proyek->ApprovalTerkontrakProyek->is_revisi) && $proyek->ApprovalTerkontrakProyek->is_revisi))
                                  <!--begin::Button-->
                                 @canany(['super-admin', 'admin-crm', 'user-crm'])
                                     <button onclick="document.location.reload()" type="reset" class="btn btn-sm btn-light btn-active-danger pe-3 mx-2" id="cancel-button">
@@ -118,9 +118,17 @@
                                     @endif                                
                                 @endcanany
                                 <!--end::Button-->
+                                @endif
 
                                 <!--begin::Button-->
                                 @if ($proyek->UnitKerja?->dop != "EA")
+                                    @if (($proyek->stage == 8 && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek->is_revisi))
+                                        <button type="button" class="btn btn-sm btn-success ms-2" onclick="requestApprovalTerkontrak('{{ $proyek->kode_proyek }}')">Ajukan Approval</button>
+                                    @endif
+                                    @if (App\Models\MatriksApprovalTerkontrakProyek::where('nip', Auth::user()->nip)->where('unit_kerja', $proyek->unit_kerja)->where("is_active", true)->first() && $proyek->ApprovalTerkontrakProyek && is_null($proyek->ApprovalTerkontrakProyek->is_revisi) && is_null($proyek->ApprovalTerkontrakProyek->is_approved))
+                                        <button type="button" class="btn btn-sm btn-success ms-2" data-bs-toggle="modal" data-bs-target="#kt_modal_approval_terkontrak">Setujui Approval</button>
+                                        <button type="button" class="btn btn-sm btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#kt_modal_approval_terkontrak_revisi">Revisi Approval</button>
+                                    @endif
                                     @if (is_null($proyek->NotaRekomendasi?->is_request_rekomendasi) && !$check_green_line && $proyek->stage == 1 && is_null($proyek->NotaRekomendasi?->is_disetujui))
                                         <input type="button" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan"
                                             style="background-color:#00b48d">
@@ -12983,6 +12991,80 @@
     <!--end::Modal dialog-->
 </div> --}}
     <!--end:: Feedback Modals-->
+    
+    <!--Begin::Modal Approval Terkontrak Setuju-->
+    <form action="/approval-terkontrak-proyek/{{ $proyek->kode_proyek }}/set-approval" method="post" onsubmit="addLoading(this)">
+        @csrf
+            <div class="modal fade" id="kt_modal_approval_terkontrak" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="kt_modal_approvedLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="kt_modal_approvedLabel">Approved Proyek</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="m-0">Nama Proyek : <span><b>{{ $proyek->nama_proyek }}</b></span></p>
+                            <br>
+                            <p class="m-0">Apakah anda yakin proyek tersebut disetujui?</p>
+                            <small>(Pastikan data input proyek tersebut sudah sesuai)</small>
+                            <input type="hidden" name="button-selected" value="approved">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>  
+        <!--End::Modal Approval Terkontrak Setuju-->
+    
+        <!--Begin::Modal Approval Terkontrak Revisi-->
+        <form action="/approval-terkontrak-proyek/{{ $proyek->kode_proyek }}/set-approval" method="post" onsubmit="addLoading(this)">
+        @csrf
+            <div class="modal fade" id="kt_modal_approval_terkontrak_revisi" aria-hidden="true" aria-labelledby="kt_modal_revisiLabel" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="kt_modal_revisiLabel">Permohonan Revisi Approval</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="m-0">Nama Proyek : <span><b>{{ $proyek->nama_proyek }}</b></span></p>
+                        <br>
+                        <p class="m-0">Apakah anda yakin proyek tersebut direvisi?</p>
+                        <small>(Pastikan data input proyek tersebut sudah sesuai)</small>
+                        <input type="hidden" name="button-selected" value="revisi">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="next" data-bs-target="#kt_modal_revisi2" data-bs-toggle="modal">Next</button>
+                    </div>
+                    </div>
+                </div>
+                </div>
+                <div class="modal fade" id="kt_modal_revisi2" aria-hidden="true" aria-labelledby="kt_modal_revisiLabel2" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="kt_modal_revisiLabel2">Permohonan Revisi Approval</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <textarea name="revisi-note" id="revisi-note" rows="10" class="form-control form-control-solid"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" id="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!--End::Modal Approval Terkontrak Revisi-->
+    
 
 @endsection
 
@@ -13680,5 +13762,51 @@
             });
         }
     </script>
+
+<script>
+    function requestApprovalTerkontrak(kode_proyek) {
+        Swal.fire({
+            title: 'Apakah anda yakin mengajukan proyek ini?',
+            text: 'Pastikan data sudah benar!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#008CB4',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                LOADING_BODY.block();
+                try {
+                    const formData = new FormData();
+                    formData.append("_token", "{{ csrf_token() }}");
+                    const req = await fetch(`/approval-terkontrak-proyek/${kode_proyek}/request-approval`, {
+                        method: 'POST',
+                        header: {
+                            "content-type": "application/json",
+                        },
+                        body: formData
+                    }).then(res => res.json());
+                    LOADING_BODY.release();
+                    if (req.Success != true) {
+                        return Swal.fire({
+                            icon: 'error',
+                            title: req.Message
+                        }).then(res => window.location.reload())
+                    }
+                    Swal.fire({
+                        icon: 'success',
+                        title: req.Message
+                    }).then(res => window.location.reload())
+                } catch (error) {
+                    LOADING_BODY.release();
+                    Swal.fire({
+                        icon: 'error',
+                        title: error
+                    }).then(res => window.location.reload())
+                }
+            }
+        })
+    }
+</script>
 
 @endsection
