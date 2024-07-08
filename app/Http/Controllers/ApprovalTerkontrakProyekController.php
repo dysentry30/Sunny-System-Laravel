@@ -136,9 +136,9 @@ class ApprovalTerkontrakProyekController extends Controller
 
             if ($actionSelected == "approved") {
                 $generateDataNasabahOnline = self::generateNasabahOnline($proyek);
-                // if ($proyek->UnitKerja->dop != "EA") {
-                //     self::sendDataNasabahOnline($generateDataNasabahOnline);
-                // }
+                if ($proyek->UnitKerja->dop != "EA") {
+                    self::sendDataNasabahOnline($generateDataNasabahOnline);
+                }
                 $proyekApprovalSelected->is_approved = true;
                 $proyekApprovalSelected->approved_by = Auth::user()->nip;
                 $proyekApprovalSelected->approved_on = Carbon::now();
