@@ -514,15 +514,23 @@
                                             Serah Terima Pekerjaan
                                         </a> --}}
                                         @if (empty($is_approved) || $is_approved->isEmpty())
-                                        <a href="#" role="link" class="stage-button color-is-default"
-                                            style="outline: 0px;">
-                                            Pemeliharaan
-                                        </a>
+                                            @if ($contract->ContractBast->where("bast", 1)->count() < 1)
+                                                <a href="#" role="link" class="stage-button color-is-default not-click"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Mohon upload <b>Dokumen BAST 1</b> terlebih dahulu."
+                                                    style="outline: 0px; cursor: not-allowed;">
+                                                    Pemeliharaan
+                                                </a>
+                                            @else
+                                                <a href="#" role="link" class="stage-button color-is-default"
+                                                    style="outline: 0px;">
+                                                    Pemeliharaan
+                                                </a>
+                                            @endif
                                         @else
-                                        <a href="#" role="link" class="stage-button color-is-default" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Tidak dapat pindah stage <b>Pemeliharaan</b> saat ini karena kontrak sedang di <b>Lock</b>"
-                                            style="outline: 0px; cursor: not-allowed;">
-                                            Pemeliharaan
-                                        </a>
+                                            <a href="#" role="link" class="stage-button color-is-default" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Tidak dapat pindah stage <b>Pemeliharaan</b> saat ini karena kontrak sedang di <b>Lock</b>"
+                                                style="outline: 0px; cursor: not-allowed;">
+                                                Pemeliharaan
+                                            </a>                                            
                                         @endif
 
                                     </div>
@@ -549,8 +557,7 @@
                                 }
 
                             }
-                            if (stage.innerText == "Pemeliharaan") {
-
+                            if (stage.innerText == "Pemeliharaan" && stage.classList.length < 4) {
                                 stage.addEventListener("click", async e => {
                                     e.stopPropagation();
                                     Swal.fire({
@@ -4695,7 +4702,7 @@
                                 @endforeach
                                 @if ($documentBAST1->where("bast", "=", 1)->isEmpty())
                                 <tr>
-                                    <td colspan="4" class="text-center">
+                                    <td colspan="6" class="text-center">
                                         <h6><b>There is no data</b></h6>
                                     </td>
                                 </tr>
@@ -5475,7 +5482,7 @@
                                                         @endforeach
                                                         @if ($contract->ContractBast->isEmpty())
                                                         <tr>
-                                                            <td colspan="4" class="text-center">
+                                                            <td colspan="6" class="text-center">
                                                                 <h6><b>There is no data</b></h6>
                                                             </td>
                                                         </tr>
