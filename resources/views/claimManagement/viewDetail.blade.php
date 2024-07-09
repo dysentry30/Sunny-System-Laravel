@@ -6,6 +6,9 @@
 @section('title', 'Detail Claim Management')
 {{-- End::Title --}}
 
+<link rel="stylesheet" href="{{ asset('datatables/jquery.dataTables.min.css') }}" />
+<link rel="stylesheet" href="{{ asset('datatables/buttons.dataTables.min.css') }}" />
+
 <style>
     .buttons-html5 {
         border-radius: 5px !important;
@@ -136,8 +139,8 @@
                                                     const formData = new FormData();
                                                     formData.append("_token", "{{ csrf_token() }}");
                                                     formData.append("id_contract", "{{ $contracts->id_contract }}")
+                                                    formData.append("profit_center", "{{ $contracts->profit_center }}")
                                                     formData.append("kode_proyek", "{{ $contracts->project_id }}")
-                                                    formData.append("profit_center", "{{ $profitCenter }}")
                                                     formData.append("periode", "{{ $periode }}")
                                                     formData.append("tahun", "{{ (int) date('Y') }}")
                                                     const sendData = await fetch("/contract-management/set-lock", {
@@ -290,13 +293,22 @@
                                                         <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="view_VO">
                                                             <thead>
                                                                 <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="min-w-125px">Tanggal Kejadian Perubahan</th>
-                                                                    <th class="min-w-auto">Uraian Perubahan</th>
-                                                                    <th class="min-w-auto">No Proposal Klaim</th>
-                                                                    <th class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th class="min-w-125px" colspan="2">Dampak Biaya</th>
-                                                                    <th class="min-w-125px" colspan="2">Dampak Waktu</th>
-                                                                    <th class="min-w-auto">Status</th>
+                                                                    <th rowspan="2" class="min-w-125px">Tanggal Kejadian Perubahan</th>
+                                                                    <th rowspan="2" class="min-w-auto">Uraian Perubahan</th>
+                                                                    <th rowspan="2" class="min-w-auto">No Proposal Klaim</th>
+                                                                    <th rowspan="2" class="min-w-auto">Tanggal Pengajuan</th>
+                                                                    <th colspan="3" class="min-w-125px">Dampak Biaya</th>
+                                                                    <th colspan="3" class="min-w-125px">Dampak Waktu</th>
+                                                                    <th rowspan="2" class="min-w-auto">Status</th>
+                                                                    <th rowspan="2" class="min-w-auto text-center">Action</th>
+                                                                </tr>
+                                                                <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th colspan="1" class="min-w-50px">Is True</th>
+                                                                    <th colspan="1" class="min-w-125px">Nominal Submitted</th>
+                                                                    <th colspan="1" class="min-w-125px">Nominal Approved</th>
+                                                                    <th colspan="1" class="min-w-50px">Is True</th>
+                                                                    <th colspan="1" class="min-w-125px">Tanggal Submitted</th>
+                                                                    <th colspan="1" class="min-w-125px">Tanggal Approved</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody class="fw-bold text-gray-600">
@@ -319,11 +331,14 @@
                                                                         {{ !empty($vo->tanggal_pengajuan) ? Carbon\Carbon::parse($vo->tanggal_pengajuan)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                      <!--Begin::Dampak Biaya-->
-                                                                     <td class="fw-bolder text-center">
+                                                                    <td class="fw-bolder text-center">
                                                                         {{ (int) $vo->biaya_pengajuan != 0 ? 'Yes' : 'No' }}
                                                                     </td>
                                                                     <td>
-                                                                        <p class="m-0 {{ $vo->nilai_negatif ? 'text-danger' : '' }}">{{ $vo->nilai_negatif ? '(-)' : '' }} {{ number_format($vo->biaya_pengajuan, 0, ".", ".") }}</p>
+                                                                        <p class="m-0 {{ $vo->nilai_negatif ? 'text-danger' : '' }}">{{ number_format($vo->biaya_pengajuan, 0, ".", ".") }}</p>
+                                                                    </td>
+                                                                    <td>
+                                                                        <p class="m-0 {{ $vo->nilai_negatif ? 'text-danger' : '' }}">{{ !empty($vo->nilai_disetujui) ? number_format($vo->nilai_disetujui, 0, ".", ".") : "-" }}</p>
                                                                     </td>
                                                                     <!--end::Dampak Biaya-->
                                                                     <!--begin::Dampak Waktu-->
@@ -332,6 +347,9 @@
                                                                     </td>
                                                                     <td>
                                                                         {{ !empty($vo->waktu_pengajuan) ? Carbon\Carbon::parse($vo->waktu_pengajuan)->translatedFormat('d F Y') : '' }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ !empty($vo->waktu_disetujui) ? Carbon\Carbon::parse($vo->waktu_disetujui)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                     <!--end::Dampak Waktu-->
                                                                     @php
@@ -374,17 +392,20 @@
                                                                             {{ $stage }}
                                                                         </small>
                                                                     </td>
+                                                                    <td class="text-center">
+                                                                        <button class="btn btn-sm btn-danger" onclick="deleteAction('perubahan-kontrak/{{ $vo->id_perubahan_kontrak }}/delete')">Delete</button>
+                                                                    </td>
                                                                 </tr>
                                                                 @empty
                                                                 <tr>
-                                                                    <td colspan="7" class="text-center"">
+                                                                    <td colspan="10" class="text-center"">
                                                                         <h6><b>There is no data</b></h6>
                                                                     </td>
                                                                 </tr>
                                                                 @endforelse
                                                                 @else
                                                                 <tr>
-                                                                    <td colspan="7" class="text-center"">
+                                                                    <td colspan="10" class="text-center"">
                                                                         <h6><b>There is no data</b></h6>
                                                                     </td>
                                                                 </tr>
@@ -399,13 +420,22 @@
                                                         <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="view_Klaim">
                                                             <thead>
                                                                 <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="min-w-auto">Tanggal Kejadian Perubahan</th>
-                                                                    <th class="min-w-auto">Uraian Perubahan</th>
-                                                                    <th class="min-w-auto">No Proposal Klaim</th>
-                                                                    <th class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th class="min-w-125px" colspan="2">Dampak Biaya</th>
-                                                                    <th class="min-w-125px" colspan="2">Dampak Waktu</th>
-                                                                    <th class="min-w-auto">Status</th>
+                                                                    <th rowspan="2" class="min-w-125px">Tanggal Kejadian Perubahan</th>
+                                                                    <th rowspan="2" class="min-w-auto">Uraian Perubahan</th>
+                                                                    <th rowspan="2" class="min-w-auto">No Proposal Klaim</th>
+                                                                    <th rowspan="2" class="min-w-auto">Tanggal Pengajuan</th>
+                                                                    <th colspan="3" class="min-w-125px">Dampak Biaya</th>
+                                                                    <th colspan="3" class="min-w-125px">Dampak Waktu</th>
+                                                                    <th rowspan="2" class="min-w-auto">Status</th>
+                                                                    <th rowspan="2" class="min-w-auto text-center">Action</th>
+                                                                </tr>
+                                                                <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th colspan="1" class="min-w-50px">Is True</th>
+                                                                    <th colspan="1" class="min-w-125px">Nominal Submitted</th>
+                                                                    <th colspan="1" class="min-w-125px">Nominal Approved</th>
+                                                                    <th colspan="1" class="min-w-50px">Is True</th>
+                                                                    <th colspan="1" class="min-w-125px">Tanggal Submitted</th>
+                                                                    <th colspan="1" class="min-w-125px">Tanggal Approved</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody class="fw-bold text-gray-600">
@@ -434,6 +464,9 @@
                                                                     <td>
                                                                         {{ number_format($klaim->biaya_pengajuan, 0, ".", ".") }}
                                                                     </td>
+                                                                    <td>
+                                                                        {{ !empty($klaim->nilai_disetujui) ? number_format($klaim->nilai_disetujui, 0, ".", ".") : '-' }}
+                                                                    </td>
                                                                     <!--end::Dampak Biaya-->
                                                                     <!--begin::Dampak Waktu-->
                                                                     <td class="fw-bolder text-center">
@@ -441,6 +474,9 @@
                                                                     </td>
                                                                     <td>
                                                                         {{ !empty($klaim->waktu_pengajuan) ? Carbon\Carbon::parse($klaim->waktu_pengajuan)->translatedFormat('d F Y') : '' }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ !empty($klaim->waktu_disetujui) ? Carbon\Carbon::parse($klaim->waktu_disetujui)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                     <!--end::Dampak Waktu-->
                                                                     @php
@@ -483,17 +519,20 @@
                                                                             {{ $stage }}
                                                                         </small>
                                                                     </td>
+                                                                    <td class="text-center">
+                                                                        <button class="btn btn-sm btn-danger" onclick="deleteAction('perubahan-kontrak/{{ $klaim->id_perubahan_kontrak }}/delete')">Delete</button>
+                                                                    </td>
                                                                 </tr>
                                                                 @empty
                                                                 <tr>
-                                                                    <td colspan="7" class="text-center"">
+                                                                    <td colspan="10" class="text-center"">
                                                                         <h6><b>There is no data</b></h6>
                                                                     </td>
                                                                 </tr>
                                                                 @endforelse
                                                                 @else
                                                                 <tr>
-                                                                    <td colspan="7" class="text-center"">
+                                                                    <td colspan="10" class="text-center"">
                                                                         <h6><b>There is no data</b></h6>
                                                                     </td>
                                                                 </tr>
@@ -508,13 +547,22 @@
                                                         <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="view_AntiKlaim">
                                                             <thead>
                                                                 <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="min-w-125px">Tanggal Kejadian Perubahan</th>
-                                                                    <th class="min-w-auto">Uraian Perubahan</th>
-                                                                    <th class="min-w-auto">No Proposal Klaim</th>
-                                                                    <th class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th class="min-w-125px" colspan="2">Dampak Biaya</th>
-                                                                    <th class="min-w-125px" colspan="2">Dampak Waktu</th>
-                                                                    <th class="min-w-auto">Status</th>
+                                                                    <th rowspan="2" class="min-w-125px">Tanggal Kejadian Perubahan</th>
+                                                                    <th rowspan="2" class="min-w-auto">Uraian Perubahan</th>
+                                                                    <th rowspan="2" class="min-w-auto">No Proposal Klaim</th>
+                                                                    <th rowspan="2" class="min-w-auto">Tanggal Pengajuan</th>
+                                                                    <th colspan="3" class="min-w-125px">Dampak Biaya</th>
+                                                                    <th colspan="3" class="min-w-125px">Dampak Waktu</th>
+                                                                    <th rowspan="2" class="min-w-auto">Status</th>
+                                                                    <th rowspan="2" class="min-w-auto text-center">Action</th>
+                                                                </tr>
+                                                                <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th colspan="1" class="min-w-50px">Is True</th>
+                                                                    <th colspan="1" class="min-w-125px">Nominal Submitted</th>
+                                                                    <th colspan="1" class="min-w-125px">Nominal Approved</th>
+                                                                    <th colspan="1" class="min-w-50px">Is True</th>
+                                                                    <th colspan="1" class="min-w-125px">Tanggal Submitted</th>
+                                                                    <th colspan="1" class="min-w-125px">Tanggal Approved</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody class="fw-bold text-gray-600">
@@ -541,7 +589,10 @@
                                                                         {{ (int) $anti_klaim->biaya_pengajuan != 0 ? 'Yes' : 'No' }}
                                                                     </td>
                                                                     <td class="text-danger">
-                                                                        (-) {{ number_format($anti_klaim->biaya_pengajuan, 0, ".", ".") }}
+                                                                        {{ number_format($anti_klaim->biaya_pengajuan, 0, ".", ".") }}
+                                                                    </td>
+                                                                    <td class="text-danger">
+                                                                        {{ !empty($anti_klaim->nilai_disetujui) ? number_format($anti_klaim->nilai_disetujui, 0, ".", ".") : '-' }}
                                                                     </td>
                                                                     <!--end::Dampak Biaya-->
                                                                     <!--begin::Dampak Waktu-->
@@ -550,6 +601,9 @@
                                                                     </td>
                                                                     <td>
                                                                         {{ !empty($anti_klaim->waktu_pengajuan) ? Carbon\Carbon::parse($anti_klaim->waktu_pengajuan)->translatedFormat('d F Y') : '' }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ !empty($anti_klaim->waktu_disetujui) ? Carbon\Carbon::parse($anti_klaim->waktu_disetujui)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                     <!--end::Dampak Waktu-->
                                                                     @php
@@ -592,17 +646,20 @@
                                                                             {{ $stage }}
                                                                         </small>
                                                                     </td>
+                                                                    <td class="text-center">
+                                                                        <button class="btn btn-sm btn-danger" onclick="deleteAction('perubahan-kontrak/{{ $anti_klaim->id_perubahan_kontrak }}/delete')">Delete</button>
+                                                                    </td>
                                                                 </tr>
                                                                 @empty
                                                                 <tr>
-                                                                    <td colspan="7" class="text-center"">
+                                                                    <td colspan="10" class="text-center"">
                                                                         <h6><b>There is no data</b></h6>
                                                                     </td>
                                                                 </tr>
                                                                 @endforelse
                                                                 @else
                                                                 <tr>
-                                                                    <td colspan="7" class="text-center"">
+                                                                    <td colspan="10" class="text-center"">
                                                                         <h6><b>There is no data</b></h6>
                                                                     </td>
                                                                 </tr>
@@ -617,13 +674,22 @@
                                                         <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="view_KlaimAsuransi">
                                                             <thead>
                                                                 <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="min-w-125px">Tanggal Kejadian Perubahan</th>
-                                                                    <th class="min-w-auto">Uraian Perubahan</th>
-                                                                    <th class="min-w-auto">No Proposal Klaim</th>
-                                                                    <th class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th class="min-w-125px" colspan="2">Dampak Biaya</th>
-                                                                    <th class="min-w-125px" colspan="2">Dampak Waktu</th>
-                                                                    <th class="min-w-auto">Status</th>
+                                                                    <th rowspan="2" class="min-w-125px">Tanggal Kejadian Perubahan</th>
+                                                                    <th rowspan="2" class="min-w-auto">Uraian Perubahan</th>
+                                                                    <th rowspan="2" class="min-w-auto">No Proposal Klaim</th>
+                                                                    <th rowspan="2" class="min-w-auto">Tanggal Pengajuan</th>
+                                                                    <th colspan="3" class="min-w-125px">Dampak Biaya</th>
+                                                                    <th colspan="3" class="min-w-125px">Dampak Waktu</th>
+                                                                    <th rowspan="2" class="min-w-auto">Status</th>
+                                                                    <th rowspan="2" class="min-w-auto text-center">Action</th>
+                                                                </tr>
+                                                                <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th colspan="1" class="min-w-50px">Is True</th>
+                                                                    <th colspan="1" class="min-w-125px">Nominal Submitted</th>
+                                                                    <th colspan="1" class="min-w-125px">Nominal Approved</th>
+                                                                    <th colspan="1" class="min-w-50px">Is True</th>
+                                                                    <th colspan="1" class="min-w-125px">Tanggal Submitted</th>
+                                                                    <th colspan="1" class="min-w-125px">Tanggal Approved</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody class="fw-bold text-gray-600">
@@ -652,6 +718,9 @@
                                                                     <td class="text-end">
                                                                         {{ number_format($klaim_asuransi->biaya_pengajuan, 0, ".", ".") }}
                                                                     </td>
+                                                                    <td class="text-end">
+                                                                        {{ !empty($klaim_asuransi->nilai_disetujui) ? number_format($klaim_asuransi->nilai_disetujui, 0, ".", ".") : '-' }}
+                                                                    </td>
                                                                     <!--end::Dampak Biaya-->
                                                                     <!--begin::Dampak Waktu-->
                                                                     <td>
@@ -659,6 +728,9 @@
                                                                     </td>
                                                                     <td>
                                                                         {{ !empty($klaim_asuransi->waktu_pengajuan) ? Carbon\Carbon::parse($klaim_asuransi->waktu_pengajuan)->translatedFormat('d F Y') : '' }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ !empty($klaim_asuransi->waktu_disetujui) ? Carbon\Carbon::parse($klaim_asuransi->waktu_disetujui)->translatedFormat('d F Y') : '' }}
                                                                     </td>
                                                                     <!--end::Dampak Waktu-->
                                                                     @php
@@ -701,17 +773,20 @@
                                                                             {{ $stage }}
                                                                         </small>
                                                                     </td>
+                                                                    <td class="text-center">
+                                                                        <button class="btn btn-sm btn-danger" onclick="deleteAction('perubahan-kontrak/{{ $klaim_asuransi->id_perubahan_kontrak }}/delete')">Delete</button>
+                                                                    </td>
                                                                 </tr>
                                                                 @empty
                                                                     <tr>
-                                                                        <td colspan="7" class="text-center"">
+                                                                        <td colspan="10" class="text-center"">
                                                                             <h6><b>There is no data</b></h6>
                                                                         </td>
                                                                     </tr>
                                                                 @endforelse
                                                                 @else
                                                                 <tr>
-                                                                    <td colspan="7" class="text-center"">
+                                                                    <td colspan="10" class="text-center"">
                                                                         <h6><b>There is no data</b></h6>
                                                                     </td>
                                                                 </tr>
@@ -725,49 +800,28 @@
                                                     <div class="tab-pane fade" id="kt_user_view_overview_all" role="tabpanel">
                                                         <table class="table align-middle table-row-dashed fs-6 gy-2 card-body" id="view_KlaimAll">
                                                             <thead>
-                                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="min-w-125px">Jenis Perubahan</th>
-                                                                    <th class="min-w-auto">Uraian Perubahan</th>
-                                                                    <th class="min-w-auto">No Proposal Klaim</th>
-                                                                    <th class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th class="min-w-auto"></th>
-                                                                    <th class="min-w-125px">Dampak Biaya</th>
-                                                                    <th class="min-w-auto"></th>
-                                                                    <th class="min-w-125px">Dampak Waktu</th>
-                                                                    <th class="min-w-auto">Status</th>
+                                                                <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th rowspan="2" class="min-w-125px">Jenis Perubahan</th>
+                                                                    <th rowspan="2" class="min-w-auto">Uraian Perubahan</th>
+                                                                    <th rowspan="2" class="min-w-auto">No Proposal Klaim</th>
+                                                                    <th rowspan="2" class="min-w-auto">Tanggal Pengajuan</th>
+                                                                    <th colspan="3" class="min-w-125px">Dampak Biaya</th>
+                                                                    <th colspan="3" class="min-w-125px">Dampak Waktu</th>
+                                                                    <th rowspan="2" class="min-w-auto">Status</th>
+                                                                </tr>
+                                                                <tr class="text-center text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th class="min-w-125px">Is True</th>
+                                                                    <th class="min-w-125px">Nominal Submitted</th>
+                                                                    <th class="min-w-125px">Nominal Approved</th>
+                                                                    <th class="min-w-125px">Is True</th>
+                                                                    <th class="min-w-125px">Tanggal Submitted</th>
+                                                                    <th class="min-w-125px">Tanggal Approved</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody class="fw-bold text-gray-600">
                                                                 @if ($claim_all->isNotEmpty())
                                                                 @forelse ($claim_all as $claim)
-                                                                <tr>
-                                                                    <td>
-                                                                        {{ $claim->jenis_perubahan }}
-                                                                    </td>
-                                                                    <td>
-                                                                        <a href="/contract-management/view/{{$claim->id_contract}}/perubahan-kontrak/{{$claim->id_perubahan_kontrak}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
-                                                                        {{ $claim->uraian_perubahan }}
-                                                                        </a>
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ $claim->proposal_klaim }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ !empty($claim->tanggal_pengajuan) ? Carbon\Carbon::parse($claim->tanggal_pengajuan)->translatedFormat('d F Y') : '' }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ (int) $claim->biaya_pengajuan != 0 ? 'Yes' : 'No' }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ number_format($claim->biaya_pengajuan, 0, ".", ".") }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ !empty($claim->waktu_pengajuan) ? 'Yes' : 'No' }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ !empty($claim->waktu_pengajuan) ? Carbon\Carbon::parse($claim->waktu_pengajuan)->translatedFormat('d F Y') : '' }}
-                                                                    </td>
-                                                                    @php
+                                                                @php
                                                                     $stage = "";
                                                                     $class_name = "";
                                                                     if ($claim->is_dispute) {
@@ -800,29 +854,65 @@
                                                                                 $class_name = "badge fs-8 badge-light-danger";
                                                                                 break;
                                                                         }
-                                                                        }
-                                                                    @endphp
+                                                                    }
+                                                                @endphp
+                                                                <tr>
                                                                     <td>
-                                                                        <small class="{{$class_name}}">
-                                                                            {{ $stage }}
-                                                                        </small>
+                                                                        {{ $claim->jenis_perubahan }}
+                                                                    </td>
+                                                                    <td>
+                                                                        <p class="m-0">{{ $claim->uraian_perubahan }}</p>
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ $claim->proposal_klaim }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ !empty($claim->tanggal_pengajuan) ? Carbon\Carbon::parse($claim->tanggal_pengajuan)->translatedFormat('d F Y') : '' }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ (int) $claim->biaya_pengajuan != 0 ? 'Yes' : 'No' }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ number_format($claim->biaya_pengajuan, 0, ".", ",") }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ !empty($claim->nilai_disetujui) ? number_format($claim->nilai_disetujui, 0, ".", ",") : '' }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ !empty($claim->waktu_pengajuan) ? 'Yes' : 'No' }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ !empty($claim->waktu_pengajuan) ? Carbon\Carbon::parse($claim->waktu_pengajuan)->translatedFormat('d F Y') : '-' }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ !empty($claim->waktu_disetujui) ? Carbon\Carbon::parse($claim->waktu_disetujui)->translatedFormat('d F Y') : '-' }}
+                                                                    </td>
+                                                                    <td>
+                                                                        <p class="{{$class_name}}">{{ $stage }}</p>
                                                                     </td>
                                                                 </tr>
                                                                 @empty
                                                                     <tr>
-                                                                        <td colspan="7" class="text-center"">
+                                                                        <td colspan="9" class="text-center"">
                                                                             <h6><b>There is no data</b></h6>
                                                                         </td>
                                                                     </tr>
                                                                 @endforelse
                                                                 @else
                                                                 <tr>
-                                                                    <td colspan="7" class="text-center"">
+                                                                    <td colspan="9" class="text-center"">
                                                                         <h6><b>There is no data</b></h6>
                                                                     </td>
                                                                 </tr>
                                                                 @endif
                                                             </tbody>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <td colspan="5">TOTAL</td>
+                                                                    <td>{{ number_format($totalClaimAll, 0, ',', '.') }}</td>
+                                                                    <td colspan="3">{{ "" }}</td>
+                                                                </tr>
+                                                            </tfoot>
                                                         </table>
                                                     </div>
                                                 <!--End::Tab Pan Klaim Asuransi-->
@@ -1034,6 +1124,44 @@
 
 @section('js-script')
 <!--begin::Data Tables-->
+<script>
+    const LOADING_BODY = new KTBlockUI(document.querySelector('#kt_body'), {
+        message: '<div class="blockui-message"><span class="spinner-border text-primary"></span> Loading...</div>',
+    })
+    async function deleteAction(url) {
+        Swal.fire({
+            title: '',
+            text: "Apakah anda yakin?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#008CB4',
+            cancelButtonColor: '#BABABA',
+            confirmButtonText: 'Ya'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                LOADING_BODY.block();
+                const formData = new FormData();
+                formData.append("_token", "{{ csrf_token() }}");
+                const sendData = await fetch(`{{ url('${url}') }}`, {
+                    method: "POST",
+                    body: formData
+                }).then(res => res.json());
+                if (sendData.success) {
+                    LOADING_BODY.release();
+                    Swal.fire({title: sendData.message, icon: 'success'}).then(()=>{
+                        location.reload();
+                    })
+                } else{
+                    LOADING_BODY.release();
+                    Swal.fire({title: sendData.message, icon: 'error'}).then(()=>{
+                        location.reload();
+                    })
+                }
+            }
+
+        })
+    }
+</script>
 
 {{-- Begin :: Export To Excel Data --}}
 <script>
@@ -1058,22 +1186,26 @@
 </script>
 {{-- End :: Hide All Excel Btn --}}
 
-<script src="{{ asset('/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset("/datatables/dataTables.buttons.min.js") }}"></script>
-<script src="{{ asset("/datatables/buttons.html5.min.js") }}"></script>
-<script src="{{ asset("/datatables/buttons.colVis.min.js") }}"></script>
-<script src="{{ asset("/datatables/jszip.min.js") }}"></script>
-<script src="{{ asset("/datatables/pdfmake.min.js") }}"></script>
-<script src="{{ asset("/datatables/vfs_fonts.js") }}"></script>
+<script src="{{ asset('./datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset("./datatables/dataTables.buttons.min.js") }}"></script>
+<script src="{{ asset("./datatables/buttons.html5.min.js") }}"></script>
+<script src="{{ asset("./datatables/buttons.colVis.min.js") }}"></script>
+<script src="{{ asset("./datatables/jszip.min.js") }}"></script>
+<script src="{{ asset("./datatables/pdfmake.min.js") }}"></script>
+<script src="{{ asset("./datatables/vfs_fonts.js") }}"></script>
 <!--end::Data Tables-->
     <!--begin:: Dokumen File Upload Max Size-->
     <script>
         $(document).ready(function() {
             $('#view_VO').DataTable( {
                 // dom: 'Bfrtip',
-                dom: '<"float-start"f><"#example"t>Brti',
+                dom: '<"float-start"f><"#example"t>Brtip',
                 pageLength : 45,
-                ordering: false,
+                ordering: [[5, 'desc']],
+                language: {
+                    decimal: ',',
+                    thousands: '.'
+                },
                 buttons: [
                     {
                         extend: 'excelHtml5',
@@ -1089,7 +1221,11 @@
                 // dom: 'Bfrtip',
                 dom: '<"float-start"f><"#example"t>Brti',
                 pageLength : 45,
-                ordering: false,
+                ordering: [[5, 'desc']],
+                language: {
+                    decimal: ',',
+                    thousands: '.'
+                },
                 buttons: [
                     {
                         extend: 'excelHtml5',
@@ -1105,7 +1241,11 @@
                 // dom: 'Bfrtip',
                 dom: '<"float-start"f><"#example"t>Brti',
                 pageLength : 45,
-                ordering: false,
+                ordering: [[5, 'desc']],
+                language: {
+                    decimal: ',',
+                    thousands: '.'
+                },
                 buttons: [
                     {
                         extend: 'excelHtml5',
@@ -1121,7 +1261,11 @@
                 // dom: 'Bfrtip',
                 dom: '<"float-start"f><"#example"t>Brti',
                 pageLength : 45,
-                ordering: false,
+                ordering: [[5, 'desc']],
+                language: {
+                    decimal: ',',
+                    thousands: '.'
+                },
                 buttons: [
                     {
                         extend: 'excelHtml5',
@@ -1138,20 +1282,35 @@
                 dom: '<"float-start"f><"#example"t>Brti',
                 pageLength : 45,
                 ordering: false,
+                language: {
+                    decimal: ',',
+                    thousands: '.'
+                },
                 buttons: [
                     {
                         extend: 'excelHtml5',
-                        title: 'Change Description'
+                        title: 'Change Description',
+                        footer: true,
+                        exportOptions: {
+                            format: {
+                                body: function(data, row, column, node) {
+                                    data = $('<p>' + data + '</p>').text();
+                                    // return $.isNumeric(data.replace('.', ',')) ? data.replace('.', ',') : data;
+                                    return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+                                },
+                                footer: function(data, row, column, node) {
+                                    data = $('<p>' + data + '</p>').text();
+                                    // return $.isNumeric(data.replace('.', ',')) ? data.replace('.', ',') : data;
+                                    return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+                                },
+                            }
+                        }
                     }
-                    ]
+                ]
             } );
         });
     </script>
     <script>
-        const LOADING_BODY = new KTBlockUI(document.querySelector('#kt_body'), {
-            message: '<div class="blockui-message"><span class="spinner-border text-primary"></span> Loading...</div>',
-        })
-
         function checkJenisPerubahan(elt) {
             const jenisPerubahanSelected = elt.value;
             const eltDivNilaiNegatif = document.querySelector('#div-nilai-negatif');
@@ -1161,20 +1320,5 @@
                 eltDivNilaiNegatif.classList.add('d-none');
             }            
         }
-
-        // function nilaiMinusChecked() {
-        //     LOADING_BODY.block();
-
-        //     const checkedElt = document.querySelector('#nilai-minus');
-        //     const nilaiDampakBiaya = document.querySelector('#biaya-pengajuan');
-
-        //     if (checkedElt.checked) {
-        //         nilaiDampakBiaya.value = '-' + nilaiDampakBiaya.value;
-        //     }
-
-        //     LOADING_BODY.release();
-
-        //     return true;
-        // }
     </script>
 @endsection

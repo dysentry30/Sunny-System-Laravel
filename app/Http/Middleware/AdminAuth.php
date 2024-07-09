@@ -88,6 +88,7 @@ class AdminAuth
             "asuransi-pelaksanaan",
             "jaminan-pelaksanaan",
             "get-progress",
+            "approval-terkontrak-proyek",
         ]);
         $allowed_url_user_sales = join(" ", [
             "rekomendasi",
@@ -127,7 +128,8 @@ class AdminAuth
             "green-lane",
             "non-green-lane",
             "AHU",
-            "nota-rekomendasi-2"
+            "nota-rekomendasi-2",
+            "approval-terkontrak-proyek",
         ]);
         $allowed_url_team_proyek = join(" ", ["dashboard", "proyek", "contract-management", "review-contract", "draft-contract", "issue-project", "question", "input-risk", "laporan-bulanan", "serah-terima", "claim-management", "approval-claim", "detail-claim", "claim", "document", "user"]);
         $concat_allowed_url = "";

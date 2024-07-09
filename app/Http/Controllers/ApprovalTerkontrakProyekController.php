@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ApprovalTerkontrakProyek;
+use App\Models\Forecast;
 use App\Models\MatriksApprovalTerkontrakProyek;
 use App\Models\Pegawai;
 use App\Models\Provinsi;
@@ -11,6 +12,7 @@ use App\Models\UnitKerja;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Http;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -28,7 +30,8 @@ class ApprovalTerkontrakProyekController extends Controller
     public function index()
     {
         $this->matriks_user = !Auth::user()->check_administrator ? Auth::user()->Pegawai->MatriksTerkontrakProyek->where("is_active", true) : MatriksApprovalTerkontrakProyek::where("is_active", true)->get();
-        if ($this->matriks_user->isNotEmpty()) {
+
+        if (!empty($this->matriks_user)) {
             $isCanApprove = !empty(Auth::user()->Pegawai?->MatriksTerkontrakProyek?->where("is_active", true));
             $unitKerja = $this->matriks_user->map(function ($item) {
                 return $item->unit_kerja;
@@ -118,6 +121,7 @@ class ApprovalTerkontrakProyekController extends Controller
     public function setApproval(Request $request, Proyek $proyek)
     {
         try {
+            DB::beginTransaction();
             $this->matriks_user = !Auth::user()->check_administrator ? Auth::user()->Pegawai->MatriksTerkontrakProyek->where("is_active", true) : MatriksApprovalTerkontrakProyek::where("is_active", true)->get();
 
             if ($this->matriks_user->isEmpty()) {
@@ -135,10 +139,6 @@ class ApprovalTerkontrakProyekController extends Controller
             $selectPicCrm = Pegawai::where("nip", $proyekApprovalSelected->request_by)->first();
 
             if ($actionSelected == "approved") {
-                $generateDataNasabahOnline = self::generateNasabahOnline($proyek);
-                // if ($proyek->UnitKerja->dop != "EA") {
-                //     self::sendDataNasabahOnline($generateDataNasabahOnline);
-                // }
                 $proyekApprovalSelected->is_approved = true;
                 $proyekApprovalSelected->approved_by = Auth::user()->nip;
                 $proyekApprovalSelected->approved_on = Carbon::now();
@@ -151,8 +151,47 @@ class ApprovalTerkontrakProyekController extends Controller
                     if (!$sendEmailUser) {
                         return redirect()->back();
                     }
-                }
 
+                    $getTanggalRequest = Carbon::create($proyekApprovalSelected->request_on);
+                    $bulans = $getTanggalRequest->month;
+                    $years = $getTanggalRequest->year;
+
+                    if (!empty($proyek->bulan_ri_perolehan) && !empty($proyek->nilai_perolehan) && $proyek->stage == 8 && $proyek->tahun_perolehan == $years) {
+                        $editForecast = Forecast::where("kode_proyek", "=", $proyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->where("tahun", "=", $years)->first();
+                        if (!empty($editForecast)) {
+                            $oldestForecast = Forecast::where("kode_proyek", "=", $proyek->kode_proyek)->where("periode_prognosa", "=", ($bulans - 1))->where("tahun", "=", $years)->first();
+                            if (!empty($oldestForecast) && (int) date("d") <= 15) {
+                                // $oldestForecast = new Forecast();
+                                $oldestForecast->kode_proyek = $proyek->kode_proyek;
+                                $oldestForecast->periode_prognosa = $bulans - 1;
+                                $oldestForecast->tahun = $years;
+                                $oldestForecast->nilai_forecast = (int) str_replace('.', '', $proyek->nilai_perolehan);
+                                $oldestForecast->realisasi_forecast = (int) str_replace('.', '', $proyek->nilai_perolehan);
+                                $oldestForecast->month_realisasi = (int) $proyek->bulan_ri_perolehan;
+                                $oldestForecast->save();
+                            }
+                            $editForecast->nilai_forecast = (int) str_replace('.', '', $proyek->nilai_perolehan);
+                            $editForecast->realisasi_forecast = (int) str_replace('.', '', $proyek->nilai_perolehan);
+                            $editForecast->month_realisasi = (int) $proyek->bulan_ri_perolehan;
+                            $editForecast->save();
+                        } else {
+                            $newForecast = new Forecast();
+                            $newForecast->kode_proyek = $proyek->kode_proyek;
+                            $newForecast->month_forecast = $proyek->bulan_ri_perolehan;
+                            $newForecast->nilai_forecast = (int) str_replace('.', '', $proyek->nilai_perolehan);
+                            $newForecast->month_realisasi = $proyek->bulan_ri_perolehan;
+                            $newForecast->realisasi_forecast = (int) str_replace('.', '', $proyek->nilai_perolehan);
+                            $newForecast->periode_prognosa = $bulans;
+                            $newForecast->tahun = (int) date("Y");
+                            $newForecast->save();
+                        }
+                    }
+                    $generateDataNasabahOnline = self::generateNasabahOnline($proyek);
+                    if ($proyek->UnitKerja->dop != "EA") {
+                        self::sendDataNasabahOnline($generateDataNasabahOnline);
+                    }
+                }
+                DB::commit();
                 Alert::success("Success", "Proyek berhasil disetujui");
                 return redirect()->back();
             } else {
@@ -175,10 +214,12 @@ class ApprovalTerkontrakProyekController extends Controller
                         return redirect()->back();
                     }
                 }
+                DB::commit();
                 Alert::success("Success", "Proyek berhasil diajukan revisi");
                 return redirect()->back();
             }
         } catch (\Exception $e) {
+            DB::rollBack();
             Alert::error("Error", $e->getMessage());
             return redirect()->back();
         }

@@ -123,10 +123,10 @@
                                             <td class="text-center">
                                                 @if ($proyekApproval->is_revisi)
                                                     <p class="m-0 badge bg-danger">Revisi</p>
-                                                @elseif (is_null($proyekApproval->is_disetujui))
-                                                    <p class="m-0 badge bg-primary">Proses Persetujuan</p>
-                                                @elseif ($proyekApproval->is_disetujui)
+                                                @elseif ($proyekApproval->is_approved)
                                                     <p class="m-0 badge bg-success">Disetujui</p>
+                                                @elseif (is_null($proyekApproval->is_approved))
+                                                    <p class="m-0 badge bg-primary">Proses Persetujuan</p>
                                                 @endif
                                             </td>
                                             <td class="text-center">

@@ -101,7 +101,7 @@
                             <!--end::Page title-->
                             <!--begin::Actions-->
                             <div class="d-flex align-items-center py-1">
-                                @if ($proyek->stage != 8 || empty($proyek->ApprovalTerkontrakProyek) || (!is_null($proyek->ApprovalTerkontrakProyek->is_revisi) && $proyek->ApprovalTerkontrakProyek->is_revisi))
+                                @if ($proyek->stage != 8 || empty($proyek->ApprovalTerkontrakProyek) || (!is_null($proyek->ApprovalTerkontrakProyek?->is_revisi) && $proyek->ApprovalTerkontrakProyek?->is_revisi))
                                  <!--begin::Button-->
                                 @canany(['super-admin', 'admin-crm', 'user-crm'])
                                     <button onclick="document.location.reload()" type="reset" class="btn btn-sm btn-light btn-active-danger pe-3 mx-2" id="cancel-button">
@@ -122,10 +122,10 @@
 
                                 <!--begin::Button-->
                                 @if ($proyek->UnitKerja?->dop != "EA")
-                                    @if (($proyek->stage == 8 && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek->is_revisi))
+                                    @if (($proyek->stage == 8 && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek?->is_revisi))
                                         <button type="button" class="btn btn-sm btn-success ms-2" onclick="requestApprovalTerkontrak('{{ $proyek->kode_proyek }}')">Ajukan Approval</button>
                                     @endif
-                                    @if (App\Models\MatriksApprovalTerkontrakProyek::where('nip', Auth::user()->nip)->where('unit_kerja', $proyek->unit_kerja)->where("is_active", true)->first() && $proyek->ApprovalTerkontrakProyek && is_null($proyek->ApprovalTerkontrakProyek->is_revisi) && is_null($proyek->ApprovalTerkontrakProyek->is_approved))
+                                    @if (App\Models\MatriksApprovalTerkontrakProyek::where('nip', Auth::user()->nip)->where('unit_kerja', $proyek->unit_kerja)->where("is_active", true)->first() && $proyek->ApprovalTerkontrakProyek && is_null($proyek->ApprovalTerkontrakProyek?->is_revisi) && is_null($proyek->ApprovalTerkontrakProyek?->is_approved))
                                         <button type="button" class="btn btn-sm btn-success ms-2" data-bs-toggle="modal" data-bs-target="#kt_modal_approval_terkontrak">Setujui Approval</button>
                                         <button type="button" class="btn btn-sm btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#kt_modal_approval_terkontrak_revisi">Revisi Approval</button>
                                     @endif

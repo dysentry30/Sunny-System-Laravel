@@ -95,7 +95,7 @@
 
 
                         {{-- @if (auth()->user()->check_administrator || auth()->user()->check_user_sales || auth()->user()->check_team_proyek) --}}
-                        @canany(['super-admin', 'crm', 'admin-csi'])
+                        @canany(['super-admin', 'crm', 'admin-csi', 'approver-ccm'])
                             <div class="menu-item">
                                 <a class="menu-link " href="/proyek"
                                     style="color:white; padding-left:20px; {{ Request::Segment(1) == 'proyek' ? 'background-color:#008CB4' : '' }}">
@@ -231,7 +231,7 @@
                             </div>
                         @endcanany
                         {{-- @endif --}}
-                        @canany(['super-admin', 'approver-crm', 'user-crm', 'risk-crm'])
+                        @canany(['super-admin', 'approver-ccm', 'user-crm', 'admin-crm'])
                             <div class="menu-item">
                                 <a class="menu-link " href="/approval-terkontrak-proyek"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::url(), 'approval-terkontrak-proyek') ? 'background-color:#008CB4' : '' }}">
