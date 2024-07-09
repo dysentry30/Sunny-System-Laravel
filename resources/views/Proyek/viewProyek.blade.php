@@ -6001,15 +6001,15 @@
                                                     <br>
 
                                                     <!--begin::Data Performance-->
-                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                    {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                         Proyek Performance
                                                         <i onclick="hideperformance()" id="hide-performance"
                                                             class="bi bi-arrows-collapse"></i>
                                                         <i onclick="showperformance()" id="show-performance"
                                                             style="display: none" class="bi bi-arrows-expand"></i>
-                                                    </h3>
+                                                    </h3> --}}
 
-                                                    <script>
+                                                    {{-- <script>
                                                         function hideperformance() {
                                                             document.getElementById("divProyekPerformance").style.display = "none";
                                                             document.getElementById("hide-performance").style.display = "none";
@@ -6021,9 +6021,9 @@
                                                             document.getElementById("hide-performance").style.display = "";
                                                             document.getElementById("show-performance").style.display = "none";
                                                         }
-                                                    </script>
-                                                    <br>
-                                                    <div id="divProyekPerformance">
+                                                    </script> --}}
+                                                    {{-- <br> --}}
+                                                    {{-- <div id="divProyekPerformance">
                                                         <!--end::Data Performance-->
                                                         <!--begin::Row-->
                                                         <div class="row fv-row">
@@ -6111,7 +6111,7 @@
                                                             <!--End begin::Col-->
                                                         </div>
                                                         <!--End begin::Row-->
-                                                    </div>
+                                                    </div> --}}
 
                                                     <!--Begin::Title Biru Form: Laporan Kualitatif-->
                                                     <br>
