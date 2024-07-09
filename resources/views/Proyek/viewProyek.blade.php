@@ -7680,7 +7680,7 @@
                                                     <br>
 
                                                     <!--begin::Data Performance-->
-                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                    {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                         Proyek Performance
                                                         <i onclick="hideperformance()" id="hide-performance"
                                                             class="bi bi-arrows-collapse"></i>
@@ -7701,8 +7701,8 @@
                                                             document.getElementById("show-performance").style.display = "none";
                                                         }
                                                     </script>
-                                                    <br>
-                                                    <div id="divProyekPerformance">
+                                                    <br> --}}
+                                                    <div id="divProyekPerformance" style="display: none">
                                                         <!--end::Data Performance-->
                                                         <!--begin::Row-->
                                                         <div class="row fv-row">
