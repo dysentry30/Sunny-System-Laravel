@@ -343,7 +343,7 @@
                                     </div>
                                     <!--end::Header-->
                                     <div class="card-body py-7">
-                                        <span class="text-white pt-1 fs-2">{{ Carbon\Carbon::create($proyek->tanggal_akhir_terkontrak)->translatedFormat("d F Y") ?? "-" }}</span>
+                                        <span class="text-white pt-1 fs-2">{{ Carbon\Carbon::create($proyek->finish_date)->translatedFormat("d F Y") ?? "-" }}</span>
                                     </div>
                                 </div>
                                 <!--end::Card widget 20-->
@@ -367,7 +367,7 @@
                                     </div>
                                     <!--end::Header-->
                                     <div class="card-body py-7">
-                                        <span class="text-white pt-1 fs-2">{{ Carbon\Carbon::create($proyek->tanggal_akhir_terkontrak)->translatedFormat("d F Y") ?? "-" }}</span>
+                                        <span class="text-white pt-1 fs-2">{{ Carbon\Carbon::create($proyek->finish_date)->translatedFormat("d F Y") ?? "-" }}</span>
                                     </div>
                                 </div>
                                 <!--end::Card widget 20-->
@@ -385,7 +385,7 @@
                                             <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RA BAST 1</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white pt-1 fs-3">{{ Carbon\Carbon::create($proyek->tanggal_selesai_fho)->translatedFormat("d M Y") ?? "-" }}</span>
+                                            <span class="text-white pt-1 fs-3">{{ Carbon\Carbon::create($proyek->bast1_date)->translatedFormat("d M Y") ?? "-" }}</span>
                                             <!--end::Subtitle-->
                                         </div>  
                                         <!--end::Title-->
@@ -425,7 +425,7 @@
                                             <span class="fs-2 opacity-75 fw-bold text-white me-2 lh-1 ls-n2" id="data-items">RA BAST 2</span>
                                             <!--end::Amount-->
                                             <!--begin::Subtitle-->
-                                            <span class="text-white pt-1 fs-3">{{ Carbon\Carbon::create($proyek->tanggal_selesai_fho)->translatedFormat("d M Y") ?? "-" }}</span>
+                                            <span class="text-white pt-1 fs-3">{{ Carbon\Carbon::create($proyek->bast2_date)->translatedFormat("d M Y") ?? "-" }}</span>
                                             <!--end::Subtitle-->
                                         </div>  
                                         <!--end::Title-->
@@ -471,9 +471,9 @@
                                     <!--begin::Header-->
                                     <div class="card-body py-7">
                                         <!--begin::Subtitle-->
-                                        @if (empty($proyek->tanggal_mulai_terkontrak))
+                                        @if (empty($proyek->start_date))
                                         <span class="text-white fs-1">Persiapan</span>
-                                        @elseif ($proyek->tanggal_mulai_terkontrak < now()->translatedFormat("Y-m-d") && $proyek->tanggal_akhir_terkontrak > now()->translatedFormat("Y-m-d") )
+                                        @elseif ($proyek->start_date < now()->translatedFormat("Y-m-d") && $proyek->finish_date > now()->translatedFormat("Y-m-d") )
                                         <span class="text-white fs-1">Pelaksanaan</span>
                                         @elseif ($proyek->tanggal_selesai_pho )
                                         <span class="text-white fs-1">Pemeliharaan</span>
@@ -622,8 +622,8 @@
                                             <tr>
                                                 <td class="text-center">1</td>
                                                 <td>Original</td>
-                                                <td class="text-center">100.000.000.000</td>
-                                                <td class="text-center">100.000.000.000</td>
+                                                <td class="text-center">{{ number_format((int)$proyek->contract_value_idr, 0, '.', '.') }}</td>
+                                                <td class="text-center">{{ number_format((int)$proyek->contract_value_idr / 16276, 0, '.', '.') }}</td>
                                                 {{-- <td class="text-center">100.000.000.000</td>
                                                 <td class="text-center">100.000.000.000</td> --}}
                                             </tr>
@@ -631,8 +631,8 @@
                                                 <tr>
                                                     <td class="text-center">{{$item + 1}}</td>
                                                     <td>Amandemen - {{ $item }}</td>
-                                                    <td class="text-center">100.000.000.000</td>
-                                                    <td class="text-center">100.000.000.000</td>
+                                                    <td class="text-center">{{ number_format((int)$proyek->contract_value_idr, 0, '.', '.') }}</td>
+                                                    <td class="text-center">{{ number_format((int)$proyek->contract_value_idr / 16276, 0, '.', '.') }}</td>
                                                     {{-- <td class="text-center">100.000.000.000</td>
                                                     <td class="text-center">100.000.000.000</td> --}}
                                                 </tr>
@@ -659,42 +659,42 @@
                                             <tr>
                                                 <td class="text-center">1</td>
                                                 <td>Tanggal Efektif</td>
-                                                <td class="text-center">{{ Carbon\Carbon::now()->translatedFormat("d-M-Y")}}</td>
-                                                <td class="text-center">{{ Carbon\Carbon::now()->translatedFormat("d-M-Y")}}</td>
-                                                <td class="text-center">{{ Carbon\Carbon::now()->translatedFormat("d-M-Y")}}</td>
-                                                <td class="text-center">{{ Carbon\Carbon::now()->translatedFormat("d-M-Y")}}</td>
+                                                <td class="text-center">{{ !empty($proyek->finish_date) ? Carbon\Carbon::create($proyek->finish_date)->translatedFormat("d F Y") : "-" }}</td>
+                                                <td class="text-center">{{ !empty($proyek->finish_date) ? Carbon\Carbon::create($proyek->finish_date)->translatedFormat("d F Y") : "-" }}</td>
+                                                <td class="text-center">{{ !empty($proyek->finish_date) ? Carbon\Carbon::create($proyek->finish_date)->translatedFormat("d F Y") : "-" }}</td>
+                                                <td class="text-center">{{ !empty($proyek->finish_date) ? Carbon\Carbon::create($proyek->finish_date)->translatedFormat("d F Y") : "-" }}</td>
                                             </tr>
                                             <tr>
                                                 <td class="text-center">2</td>
                                                 <td>BAST-1 (PHO)</td>
-                                                <td class="text-center">{{ Carbon\Carbon::now()->translatedFormat("d-M-Y")}}</td>
-                                                <td class="text-center">{{ Carbon\Carbon::now()->translatedFormat("d-M-Y")}}</td>
-                                                <td class="text-center">{{ Carbon\Carbon::now()->translatedFormat("d-M-Y")}}</td>
-                                                <td class="text-center">{{ Carbon\Carbon::now()->translatedFormat("d-M-Y")}}</td>
+                                                <td class="text-center">{{ !empty($proyek->bast1_date) ? Carbon\Carbon::create($proyek->bast1_date)->translatedFormat("d F Y") : "-" }}</td>
+                                                <td class="text-center">{{ !empty($bast_1) ? Carbon\Carbon::create($bast_1->tanggal_dokumen)->translatedFormat("d F Y") : "-"  }}</td>
+                                                <td class="text-center">{{ !empty($bast_1) ? Carbon\Carbon::create($bast_1->tanggal_dokumen)->translatedFormat("d F Y") : "-"  }}</td>
+                                                <td class="text-center">{{ !empty($bast_1) ? Carbon\Carbon::create($bast_1->tanggal_dokumen)->translatedFormat("d F Y") : "-"  }}</td>
                                             </tr>
                                             <tr>
                                                 <td class="text-center">3</td>
                                                 <td>Durasi Pelaksanaan</td>
-                                                <td class="text-center">9000</td>
-                                                <td class="text-center">9000</td>
-                                                <td class="text-center">9000</td>
-                                                <td class="text-center">9000</td>
+                                                <td class="text-center">{{ $proyek->duration }}</td>
+                                                <td class="text-center">{{ $proyek->duration }}</td>
+                                                <td class="text-center">{{ $proyek->duration }}</td>
+                                                <td class="text-center">{{ $proyek->duration }}</td>
                                             </tr>
                                             <tr>
                                                 <td class="text-center">4</td>
                                                 <td>BAST-2 (FHO)</td>
-                                                <td class="text-center">{{ Carbon\Carbon::now()->translatedFormat("d-M-Y")}}</td>
-                                                <td class="text-center">{{ Carbon\Carbon::now()->translatedFormat("d-M-Y")}}</td>
-                                                <td class="text-center">{{ Carbon\Carbon::now()->translatedFormat("d-M-Y")}}</td>
-                                                <td class="text-center">{{ Carbon\Carbon::now()->translatedFormat("d-M-Y")}}</td>
+                                                <td class="text-center">{{ !empty($proyek->bast2_date) ? Carbon\Carbon::create($proyek->bast2_date)->translatedFormat("d F Y") : "-" }}</td>
+                                                <td class="text-center">{{ !empty($bast_2) ? Carbon\Carbon::create($bast_2->tanggal_dokumen)->translatedFormat("d F Y") : "-"  }}</td>
+                                                <td class="text-center">{{ !empty($bast_2) ? Carbon\Carbon::create($bast_2->tanggal_dokumen)->translatedFormat("d F Y") : "-"  }}</td>
+                                                <td class="text-center">{{ !empty($bast_2) ? Carbon\Carbon::create($bast_2->tanggal_dokumen)->translatedFormat("d F Y") : "-"  }}</td>
                                             </tr>
                                             <tr>
                                                 <td class="text-center">5</td>
                                                 <td>Durasi Pemeliharaan</td>
-                                                <td class="text-center">9000</td>
-                                                <td class="text-center">9000</td>
-                                                <td class="text-center">9000</td>
-                                                <td class="text-center">9000</td>
+                                                <td class="text-center">{{ $proyek->maintenance_duration }}</td>
+                                                <td class="text-center">{{ $proyek->maintenance_duration }}</td>
+                                                <td class="text-center">{{ $proyek->maintenance_duration }}</td>
+                                                <td class="text-center">{{ $proyek->maintenance_duration }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -1489,14 +1489,14 @@
                             <div class="col-6">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">INSURANCE STATUS</h2>
+                                    <h2 class="m-0 text-center">STATUS ASURANSI</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
                             <div class="col-6">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
-                                    <h2 class="m-0 text-center">BOND STATUS</h2>
+                                    <h2 class="m-0 text-center">STATUS JAMINAN</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>

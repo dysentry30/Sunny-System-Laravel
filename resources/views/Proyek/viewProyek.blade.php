@@ -6023,7 +6023,7 @@
                                                         }
                                                     </script> --}}
                                                     {{-- <br> --}}
-                                                    {{-- <div id="divProyekPerformance">
+                                                    <div id="divProyekPerformance" style="display: none">
                                                         <!--end::Data Performance-->
                                                         <!--begin::Row-->
                                                         <div class="row fv-row">
@@ -6111,7 +6111,7 @@
                                                             <!--End begin::Col-->
                                                         </div>
                                                         <!--End begin::Row-->
-                                                    </div> --}}
+                                                    </div>
 
                                                     <!--Begin::Title Biru Form: Laporan Kualitatif-->
                                                     <br>
