@@ -105,9 +105,25 @@ class ContractApprovalController extends Controller
             $newClass->CLAIM_VAL = $claim_val;
 
             if ($item->stage == 5) {
-                $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
+                if ($item->jenis_perubahan == "VO") {
+                    if ($item->nilai_negatif) {
+                        $newClass->CLAIM_AMOUNT = 0 - (int)$item->nilai_disetujui;
+                    } else {
+                        $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
+                    }
+                } else {
+                    $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
+                }
             } else {
-                $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
+                if ($item->jenis_perubahan == "VO") {
+                    if ($item->nilai_negatif) {
+                        $newClass->CLAIM_AMOUNT = 0 - (int)$item->biaya_pengajuan;
+                    } else {
+                        $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
+                    }
+                } else {
+                    $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
+                }
             }
 
             // $newClass->CLAIM_AMOUNT = (int)$item_claim->sum("biaya_pengajuan");
@@ -180,9 +196,25 @@ class ContractApprovalController extends Controller
             $newClass->CLAIM_VAL = $claim_val;
 
             if ($item->stage == 5) {
-                $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
+                if ($item->jenis_perubahan == "VO") {
+                    if ($item->nilai_negatif) {
+                        $newClass->CLAIM_AMOUNT = 0 - (int)$item->nilai_disetujui;
+                    } else {
+                        $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
+                    }
+                } else {
+                    $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
+                }
             } else {
-                $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
+                if ($item->jenis_perubahan == "VO") {
+                    if ($item->nilai_negatif) {
+                        $newClass->CLAIM_AMOUNT = 0 - (int)$item->biaya_pengajuan;
+                    } else {
+                        $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
+                    }
+                } else {
+                    $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
+                }
             }
 
             // $newClass->CLAIM_AMOUNT = (int)$item_claim->sum("biaya_pengajuan");
@@ -258,10 +290,26 @@ class ContractApprovalController extends Controller
 
             $newClass->CLAIM_VAL = $claim_val;
 
-            if($item->stage == 5){
-                $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
-            }else{
-                $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
+            if ($item->stage == 5) {
+                if ($item->jenis_perubahan == "VO") {
+                    if ($item->nilai_negatif) {
+                        $newClass->CLAIM_AMOUNT = 0 - (int)$item->nilai_disetujui;
+                    } else {
+                        $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
+                    }
+                } else {
+                    $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
+                }
+            } else {
+                if ($item->jenis_perubahan == "VO") {
+                    if ($item->nilai_negatif) {
+                        $newClass->CLAIM_AMOUNT = 0 - (int)$item->biaya_pengajuan;
+                    } else {
+                        $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
+                    }
+                } else {
+                    $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
+                }
             }
             
             // $newClass->CLAIM_AMOUNT = (int)$item_claim->sum("biaya_pengajuan");
@@ -282,7 +330,7 @@ class ContractApprovalController extends Controller
         $data_claims = $data_claims_potential->merge($data_claims_submission)->merge($data_claims_filter);
 
         // return response()->json($data_claims, 200);
-        // dd(
+        // dump(
         //     $data_claims->toArray()
         // );
 
@@ -345,8 +393,8 @@ class ContractApprovalController extends Controller
         if ($fill_data->successful() && $closed_request->successful()) {
 
             $this->setLogging('ccm_approval', "APPROVAL CCM => ", [
-                "KODE_PROYEK" => $claims_all->first()->kode_proyek,
-                "DATA" => $data_claims->toArray(),
+                "KODE_PROYEK" => $claims_all->first()?->profit_center,
+                "DATA" => $data_claims->toArray() ?? [],
                 "STATUS" => "SUCCESS"
             ]);
 
@@ -358,8 +406,8 @@ class ContractApprovalController extends Controller
             return response()->json($response_success);
         } else {
             $this->setLogging('ccm_approval', "APPROVAL CCM => ", [
-                "KODE_PROYEK" => $claims_all->first()->kode_proyek,
-                "DATA" => $data_claims->toArray(),
+                "KODE_PROYEK" => $claims_all->first()?->profit_center,
+                "DATA" => $data_claims->toArray() ?? [],
                 "STATUS" => "FAILED"
             ]);
 
@@ -1316,5 +1364,88 @@ class ContractApprovalController extends Controller
             "jumlahAntiKlaimAllApproved",
             "jumlahKlaimAsuransiAllApproved",
         ));
+    }
+
+    public function lockChangeFromBackdoor(Request $request)
+    {
+        $data = $request->all();
+
+        $claims = PerubahanKontrak::select([
+            'id_perubahan_kontrak',
+            'kode_proyek',
+            'id_contract',
+            'jenis_perubahan',
+            'tanggal_perubahan',
+            'uraian_perubahan',
+            'proposal_klaim',
+            'tanggal_pengajuan',
+            'biaya_pengajuan',
+            'nilai_disetujui',
+            'waktu_pengajuan',
+            'waktu_disetujui',
+            'stage',
+            'perubahan_kontrak.profit_center',
+            'nilai_negatif',
+            'kd_divisi'
+        ])->join('proyek_pis_new', 'perubahan_kontrak.profit_center', '=', 'proyek_pis_new.profit_center')->get()->groupBy('kd_divisi');
+
+        $claimsFilter = $claims->filter(function ($item, $key) use ($data) {
+            return $key == $data["unitKerja"];
+        })->first();
+
+        if (!empty($claimsFilter)) {
+            $approval = new ContractApproval();
+            $data_approval = $claimsFilter->map(function ($claim) use ($data) {
+                // $claim['periode'] = $periode;
+                $claim['id'] = Str::uuid()->toString();
+                $claim['periode_laporan'] = $data["periode"];
+                $claim['tahun'] = date('Y');
+                $claim['unit_kerja'] = $claim->kd_divisi;
+                $claim['is_locked'] = true;
+                $claim->nilai_negatif = $claim->nilai_negatif ?: false;
+                // $claim['perubahan_id'] = $claim->id;
+                // $claim->makeHidden(['Proyek', 'id']); //Untuk menghilangkan relasi agar tidak masuk ke array
+                $claim->makeHidden(['id_perubahan_kontrak', 'kd_divisi']); //Untuk menghilangkan relasi agar tidak masuk ke array
+                return $claim;
+            });
+            // dd($data_approval);
+            $is_success = $approval->insert($data_approval->toArray());
+            if ($is_success) {
+                // Alert::success("Success", "Contract berhasil dilock");
+                // toast("Contract berhasil dilock", "success")->autoClose(3000);
+                return response()->json([
+                    "status" => "success",
+                    "link" => true,
+                ]);
+            } else {
+                // Alert::error("Error", "Contract gagal dilock");
+                // toast("Contract gagal dilock", "error")->autoClose(3000);
+                return response()->json([
+                    "status" => "error",
+                    "link" => false,
+                ]);
+            }
+        }
+    }
+
+    public function setApproveFromBackdoor(Request $request)
+    {
+        $data = $request->all();
+        $approval = ContractApproval::select([
+            "contract_approval_new.*",
+            "proyek_pis_new.kd_divisi",
+        ])->join("proyek_pis_new", "contract_approval_new.profit_center", "=", "proyek_pis_new.profit_center")->where("periode_laporan", $data["periode"])->where("tahun", date("Y"))->where("kd_divisi", $data["unitKerja"])->get()->groupBy("profit_center");
+
+        foreach ($approval as $profit_center => $approve) {
+            // $update = $approve->update(['is_approved' => "t"]);
+            $get_response = $this->sendDataSAP($profit_center, $data["periode"]);
+            if ($get_response->original["statusCode"] == 200) {
+                dump("success");
+            } else {
+                dump("fail");
+            }
+        }
+
+        dd("FINISH");
     }
 }
