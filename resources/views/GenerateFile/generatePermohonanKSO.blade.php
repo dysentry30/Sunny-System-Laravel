@@ -500,17 +500,17 @@
         <table style="width: 80%">
             <tr>
                 <td style="width:2%"><p style="margin: 0; padding:0; font-size:0.5rem">1.</p></td>
-                <td style="width:5%"><input type="checkbox" id="opsi-loan-1" {{ !empty($proyek->fasilitas_ncl) && str_contains($proyek->fasilitas_ncl, 'Diajukan untuk porsi masing-masing ke Pengguna Jasa') ? 'checked' : '' }}></td>
+                <td style="width:5%;"><input style="font-size:0.5rem" type="checkbox" id="opsi-loan-1" {{ !empty($proyek->fasilitas_ncl) && str_contains($proyek->fasilitas_ncl, 'Diajukan untuk porsi masing-masing ke Pengguna Jasa') ? 'checked' : '' }}></td>
                 <td style="width:90%"><p style="margin: 0; padding:0; font-size:0.5rem">Diajukan untuk porsi masing-masing ke Pengguna Jasa</p></td>
             </tr>
             <tr>
                 <td style="width:2%"><p style="margin: 0; padding:0; font-size:0.5rem">2.</p></td>
-                <td style="width:5%"><input type="checkbox" id="opsi-loan-2" {{ !empty($proyek->fasilitas_ncl) && str_contains($proyek->fasilitas_ncl, 'Diajukan untuk porsi masing-masing sesuai porsi ke Pengguna Jasa') ? 'checked' : '' }}></td>
+                <td style="width:5%;"><input style="font-size:0.5rem" type="checkbox" id="opsi-loan-2" {{ !empty($proyek->fasilitas_ncl) && str_contains($proyek->fasilitas_ncl, 'Diajukan untuk porsi masing-masing sesuai porsi ke Pengguna Jasa') ? 'checked' : '' }}></td>
                 <td style="width:90%"><p style="margin: 0; padding:0; font-size:0.5rem">Diajukan untuk terbit masing-masing sesuai porsi ke Pengguna Jasa</p></td>
             </tr>
             <tr>
                 <td style="width:2%"><p style="margin: 0; padding:0; font-size:0.5rem">3.</p></td>
-                <td style="width:5%"><input type="checkbox" id="opsi-loan-3" {{ !empty($proyek->fasilitas_ncl) && str_contains($proyek->fasilitas_ncl, 'Diajukan untuk counter sesuai porsi ke salah satu member KSO (khusus NCL yang diterbitkan oleh Bank)') ? 'checked' : '' }}></td>
+                <td style="width:5%;"><input style="font-size:0.5rem" type="checkbox" id="opsi-loan-3" {{ !empty($proyek->fasilitas_ncl) && str_contains($proyek->fasilitas_ncl, 'Diajukan untuk counter sesuai porsi ke salah satu member KSO (khusus NCL yang diterbitkan oleh Bank)') ? 'checked' : '' }}></td>
                 <td style="width:90%"><p style="margin: 0; padding:0; font-size:0.5rem">Diajukan untuk counter sesuai porsi ke salah satu member KSO (khusus NCL yang diterbitkan oleh Bank)</p></td>
             </tr>
         </table>
@@ -526,13 +526,21 @@
                         <br><br>
                         <table style="width:100%">
                             <tr>
-                                <td style="width:100%; text-align:center">
-                                    <p style="font-size:0.5rem; margin:0px; padding-top:0px;">PJFK Corporate Marketing</p>
-                                </td>
-                                <td style="width:100%; text-align:center">
-                                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">
+                                @if (isset($pathQRPengajuan))
+                                    @foreach ($pathQRPengajuan as $ttdPengajuan)
+                                        <td style="width: 100%; text-align:center">
+                                            <img src="{{ asset('template-ttd\\verif-internal-persetujuan-partner\\') . $ttdPengajuan["fileName"] }}" width="50">
+                                            <p style="font-size:0.8rem; margin:0px; padding-top:0px;">{{ $ttdPengajuan["user"] }}</p>
+                                        </td>
+                                    @endforeach
+                                @else
+                                    <td style="width:100%; text-align:center">
+                                        <p style="font-size:0.5rem; margin:0px; padding-top:0px;">PJFK Corporate Marketing</p>
+                                    </td>
+                                    <td style="width:100%; text-align:center">
                                         <p style="font-size:0.5rem; margin:0px; padding-top:0px;">PJPU Operasi</p>
-                                </td>
+                                    </td>                                    
+                                @endif
                             </tr>
                         </table>
                     </div>
@@ -543,12 +551,21 @@
                         <br><br>
                         <table style="width:100%">
                             <tr>
-                                <td style="width:100%; text-align:center">
-                                    <p style="font-size:0.5rem; margin:0px; padding-top:0px;">PJFK Risk Management</p>
-                                </td>
-                                <td style="width:100%; text-align:center">
-                                    <p style="font-size:0.5rem; margin:0px; padding-top:0px;">PJFK Finance</p>
-                                </td>
+                                @if (isset($pathQRRekomendasi))
+                                    @foreach ($pathQRRekomendasi as $ttdRekomendasi)
+                                        <td style="width:100%; text-align:center">
+                                            <img src="{{ asset('template-ttd\\verif-internal-persetujuan-partner\\') . $ttdRekomendasi["fileName"] }}" width="50">
+                                            <p style="font-size:0.8rem; margin:0px; padding-top:0px;">{{ $ttdRekomendasi["user"] }}</p>
+                                        </td>   
+                                    @endforeach
+                                @else
+                                    <td style="width:100%; text-align:center">
+                                        <p style="font-size:0.5rem; margin:0px; padding-top:0px;">PJFK Risk Management</p>
+                                    </td>
+                                    <td style="width:100%; text-align:center">
+                                        <p style="font-size:0.5rem; margin:0px; padding-top:0px;">PJFK Finance</p>
+                                    </td>                            
+                                @endif
                             </tr>
                         </table>
                     </div>
@@ -559,9 +576,18 @@
                         <br><br>
                         <table style="width:100%">
                             <tr>
-                                <td style="width:100%; text-align:center">
-                                    <p style="font-size:0.5rem; margin:0px; padding-top:0px;">Direktur Operasi Pembina</p>
-                                </td>
+                                @if (isset($pathQRPersetujuan))
+                                    @foreach ($pathQRPersetujuan as $ttdPersetujuan)
+                                        <td style="width:100%; text-align:center">
+                                            <img src="{{ asset('template-ttd\\verif-internal-persetujuan-partner\\') . $ttdPersetujuan["fileName"] }}" width="50">
+                                            <p style="font-size:0.8rem; margin:0px; padding-top:0px;">{{ $ttdPersetujuan["user"] }}</p>
+                                        </td>
+                                    @endforeach
+                                @else
+                                    <td style="width:100%; text-align:center">
+                                        <p style="font-size:0.5rem; margin:0px; padding-top:0px;">Direktur Operasi Pembina</p>
+                                    </td>                              
+                                @endif
                             </tr>
                         </table>
                     </div>

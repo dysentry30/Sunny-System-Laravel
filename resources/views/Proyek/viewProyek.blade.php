@@ -38,6 +38,16 @@
         background: rgb(185, 185, 185);
         border-radius: 10px;
     }
+
+    .blockui-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5); /* Transparansi latar belakang */
+        z-index: 9999; /* Z-index tinggi untuk menutup semua elemen lainnya */
+    }
 </style>
 
 <!--begin::Main-->
@@ -3462,10 +3472,27 @@
                                                                     <div class="d-flex flex-row align-items-center gap-2">
                                                                         <!--begin::Label-->
                                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                            style="font-size:14px;">Generate Form Penentuan KSO
+                                                                            style="font-size:14px;">Request Verifikasi Internal Penentuan KSO
                                                                             &nbsp;
                                                                             @if (!empty($proyek->alasan_kso) && $proyek->alasan_kso != "[]")
-                                                                                <a href="/proyek/{{ $proyek->kode_proyek }}/kso/generate" class="btn btn-sm btn-primary"><b>Generate</b></a>
+                                                                            <span>
+                                                                                @if (empty($proyek->VerifikasiInternalPartner) || (collect(json_decode($proyek->VerifikasiInternalPartner->revisi_note))->isNotEmpty()) && collect(json_decode($proyek->VerifikasiInternalPartner->revisi_note))->where("stage", "Request Pengajuan")->count() > 0)
+                                                                                    <button type="button" class="btn btn-sm btn-primary" data-title="penentuan-kso" onclick="showModalRequest(this, '{{ $proyek->kode_proyek }}')">Ajukan</button>
+                                                                                @endif
+                                                                            </span>
+                                                                            @endif
+                                                                            @if (!empty($proyek->VerifikasiInternalPartner) && is_null($proyek->VerifikasiInternalPartner->is_persetujuan_approved))
+                                                                                <span>
+                                                                                    <p class="m-0 badge rounded-pill badge-sm text-warning">Proses Verifikasi</p>
+                                                                                </span>
+                                                                            @elseif($proyek->VerifikasiInternalPartner->is_persetujuan_approved)
+                                                                                <span>
+                                                                                    <p class="m-0 badge rounded-pill badge-sm text-success">Verifikasi Disetujui</p>
+                                                                                </span>
+                                                                            @elseif(!$proyek->VerifikasiInternalPartner->is_persetujuan_approved)
+                                                                                <span>
+                                                                                    <p class="m-0 badge rounded-pill badge-sm text-success">Verifikasi Ditolak</p>
+                                                                                </span>
                                                                             @endif
                                                                         </h3>
                                                                         <!--end::Label-->
@@ -3473,7 +3500,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <br>
+                                                        {{-- <br>
                                                         <!--Begin::Dokumen Penentuan KSO-->
                                                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                             Dokumen Form Penentuan KSO
@@ -3509,7 +3536,7 @@
                                                                 @endif
                                                             </tbody>
                                                         </table>
-                                                        <hr>
+                                                        <hr> --}}
                                                         <br>
                                                         <!--End::Dokumen Penentuan KSO-->
                                                         @canany(['super-admin', 'admin-crm', 'user-crm', 'approver-crm', 'risk-crm'])
@@ -3973,8 +4000,16 @@
                                                                 <div class="d-flex flex-row align-items-center gap-2">
                                                                     <!--begin::Label-->
                                                                     <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                        style="font-size:14px;">Generate Form Persetujuan KSO
-                                                                        &nbsp;<a href="/proyek/{{ $proyek->kode_proyek }}/kso/setuju/generate" class="btn btn-sm btn-primary"><b>Generate</b></a>
+                                                                        style="font-size:14px;">Verifikasi Internal Persetujuan Partner
+                                                                        @if (($porsiJO->isNotEmpty() && $porsiJO->whereNotNull('is_hasil_assessment')->count() > 0))
+                                                                            @if ($isDokumenFinish)
+                                                                            <span>
+                                                                                @if (empty($proyek->VerifikasiInternalPersetujuanPartner) || (collect(json_decode($proyek->VerifikasiInternalPersetujuanPartner->revisi_note))->isNotEmpty()) && collect(json_decode($proyek->VerifikasiInternalPersetujuanPartner?->revisi_note))?->where("stage", "Request Pengajuan")->count() > 0)
+                                                                                    <button type="button" class="btn btn-sm btn-primary" data-title="persetujuan-kso" onclick="showModalRequest(this, '{{ $proyek->kode_proyek }}')">Ajukan</button>
+                                                                                @endif
+                                                                            </span>
+                                                                            @endif
+                                                                        @endif
                                                                     </h3>
                                                                     <!--end::Label-->
                                                                 </div>
@@ -3983,7 +4018,7 @@
                                                     </div>
                                                     <br>
 
-                                                    <!--Begin::Title Biru Form: Document Persetujuan KSO-->
+                                                    {{-- <!--Begin::Title Biru Form: Document Persetujuan KSO-->
                                                     <h3 class="fw-bolder m-0 required" id="HeadDetail" style="font-size:14px;">
                                                         Document Form Persetujuan KSO
                                                     </h3>
@@ -4019,7 +4054,7 @@
                                                     </table>
                                                     <!--End::Table-->
                                                     <!--End::Title Biru Form: Document Persetujuan KSO-->
-                                                    <br>
+                                                    <br> --}}
 
                                                     <!--Begin::Title Biru Form: Document Prakualifikasi-->
                                                     <h3 class="fw-bolder m-0 required" id="HeadDetail" style="font-size:14px;">
@@ -5237,8 +5272,14 @@
                                                                 <div class="d-flex flex-row align-items-center gap-2">
                                                                     <!--begin::Label-->
                                                                     <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                        style="font-size:14px;">Generate Verifikasi Internal Penentuan Proyek Green Lane / Non Green lane
-                                                                        &nbsp;@if (!empty($proyek->jenis_terkontrak) && !empty($proyek->sistem_bayar))<a href="/proyek/{{ $proyek->kode_proyek }}/project-greenlane/generate" class="btn btn-sm btn-primary"><b>Generate</b></a>@endif
+                                                                        style="font-size:14px;">Verifikasi Penentuan Proyek Green Lane / Non Green lane
+                                                                        @if (!empty($proyek->jenis_terkontrak) && !empty($proyek->sistem_bayar))
+                                                                            <span>
+                                                                                @if (empty($proyek->VerifikasiProyekNota2) || (collect(json_decode($proyek->VerifikasiProyekNota2->revisi_note))->isNotEmpty()) && collect(json_decode($proyek->VerifikasiProyekNota2?->revisi_note))?->where("stage", "Request Pengajuan")->count() > 0)
+                                                                                    <button type="button" class="btn btn-sm btn-primary" data-title="verifikasi-proyek-nr-2" onclick="showModalRequest(this, '{{ $proyek->kode_proyek }}')">Ajukan</button>
+                                                                                @endif
+                                                                            </span>
+                                                                        @endif
                                                                     </h3>
                                                                     <!--end::Label-->
                                                                 </div>
@@ -13245,6 +13286,8 @@
     <script>
         const LOADING_BODY = new KTBlockUI(document.querySelector('#kt_body'), {
             message: '<div class="blockui-message"><span class="spinner-border text-primary"></span> Loading...</div>',
+            overlayClass: 'blockui-overlay',
+            opacity: 0.5
         })
         function addLoading(params) {
             LOADING_BODY.block();
@@ -13807,6 +13850,70 @@
             }
         })
     }
+</script>
+
+<script>
+    function showModalRequest(elt, kode_proyek) {
+        let urlTarget;
+        const kategori = elt.getAttribute("data-title");
+
+        Swal.fire({
+            title: 'Apakah anda yakin mengajukan proyek ini?',
+            text: 'Pastikan data sudah benar!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#008CB4',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                LOADING_BODY.block();
+                try {
+                    const formData = new FormData();
+                    formData.append("_token", "{{ csrf_token() }}");
+                    switch (kategori) {
+                        case "penentuan-kso":
+                            urlTarget = `/verifikasi-internal-partner/request-pengajuan/${kode_proyek}`;
+                            break;
+                        case "persetujuan-kso":
+                            urlTarget = `/verifikasi-internal-persetujuan-partner/request-pengajuan/${kode_proyek}`;
+                            break;                    
+                        case "verifikasi-proyek-nr-2":
+                            urlTarget = `/verifikasi-proyek-nota-2/request-pengajuan/${kode_proyek}`;
+                            break;                    
+                        default:
+                            urlTarget = null;
+                            break;
+                    }
+                    const req = await fetch(urlTarget, {
+                        method: 'POST',
+                        header: {
+                            "content-type": "application/json",
+                        },
+                        body: formData
+                    }).then(res => res.json());
+                    LOADING_BODY.release();
+                    if (req.Success != true) {
+                        return Swal.fire({
+                            icon: 'error',
+                            title: req.Message
+                        }).then(res => window.location.reload())
+                    }
+                    Swal.fire({
+                        icon: 'success',
+                        title: req.Message
+                    }).then(res => window.location.reload())
+                } catch (error) {
+                    LOADING_BODY.release();
+                    Swal.fire({
+                        icon: 'error',
+                        title: error
+                    }).then(res => window.location.reload())
+                }
+            }
+        })
+    }
+    
 </script>
 
 @endsection

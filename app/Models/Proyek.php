@@ -17,6 +17,7 @@ class Proyek extends Model
     protected $casts = [
         "kode_proyek" => "string"
     ];
+    // protected $hidden = ['alasan_kso', 'tujuan_kso'];
 
     public $sortable = [
         'nama_proyek', 'kode_proyek', 'jenis_proyek', 'tipe_proyek', 'unit_kerja', 'tahun_perolehan', 'stage', 'bulan_pelaksanaan', 'nilai_rkap', 'nilai_kontrak_keseluruhan', 'forecast'
@@ -290,8 +291,23 @@ class Proyek extends Model
         return $this->hasOne(DokumenPersetujuanKSO::class, 'kode_proyek', 'kode_proyek');
     }
 
+    public function VerifikasiInternalPartner()
+    {
+        return $this->belongsTo(VerifikasiInternalPartner::class, 'kode_proyek', 'kode_proyek');
+    }
+    
     public function ApprovalTerkontrakProyek()
     {
         return $this->belongsTo(ApprovalTerkontrakProyek::class, 'kode_proyek', 'kode_proyek');
+    }
+
+    public function VerifikasiInternalPersetujuanPartner()
+    {
+        return $this->belongsTo(VerifikasiInternalPersetujuanPartner::class, 'kode_proyek', 'kode_proyek');
+    }
+
+    public function VerifikasiProyekNota2()
+    {
+        return $this->belongsTo(VerifikasiProyekNota2::class, 'kode_proyek', 'kode_proyek');
     }
 }

@@ -449,6 +449,7 @@
                                             data-control="select2" data-hide-search="false" data-placeholder="Pilih Kategori..."
                                             data-select2-id="select2-kategori" tabindex="-1" aria-hidden="true">
                                             <option value="" selected></option>
+                                            <option value="Request Pengajuan">Request Pengajuan</option>
                                             <option value="Pengajuan">Pengajuan</option>
                                             <option value="Rekomendasi">Rekomendasi</option>
                                             <option value="Persetujuan">Persetujuan</option>
@@ -767,6 +768,7 @@
                                                 data-control="select2" data-hide-search="false" data-placeholder="Pilih Kategori..."
                                                 data-select2-id="select2-kategori-{{ $approval->id }}" tabindex="-1" aria-hidden="true">
                                                 <option value="" selected></option>
+                                                <option value="Request Pengajuan" {{ $approval->kategori == "Request Pengajuan" ? 'selected' : '' }}>Request Pengajuan</option>
                                                 <option value="Pengajuan" {{ $approval->kategori == "Pengajuan" ? 'selected' : '' }}>Pengajuan</option>
                                                 <option value="Rekomendasi" {{ $approval->kategori == "Rekomendasi" ? 'selected' : '' }}>Rekomendasi</option>
                                                 <option value="Persetujuan" {{ $approval->kategori == "Persetujuan" ? 'selected' : '' }}>Persetujuan</option>

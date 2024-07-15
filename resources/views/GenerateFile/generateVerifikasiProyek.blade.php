@@ -164,7 +164,7 @@
     <br>
     <br>
     <br>
-    <p style="font-size: 0.8rem; margin-top: 0px;; margin:0px; padding:0px;">Tanggal, ...........................</p>
+    <p style="font-size: 0.8rem; margin-top: 0px;; margin:0px; padding:0px;">Tanggal, {{ \Carbon\Carbon::now()->translatedFormat("d F Y") }}</p>
     <table style="width:100%; margin:0px; padding-top:0px;">
         <tr>
             <td style="text-align:center">
@@ -172,9 +172,24 @@
                     <b>
                         <h5 style="margin:0px; padding-top:0px;">Dibuat Oleh,</h5>
                     </b>
-                    <br><br><br>
-                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">(....................................)</p>
-                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">SubPJFs Key Account</p>
+                    <table style="width: 100%">
+                        <tr>
+                            @if (isset($pathQRPengajuan))
+                                @foreach ($pathQRPengajuan as $ttdPengajuan)
+                                    <td style="width: 100%; text-align:center">
+                                        <img src="{{ asset('template-ttd\\verif-proyek-nota-2\\') . $ttdPengajuan["fileName"] }}" width="50">
+                                        <p style="font-size:0.8rem; margin:0px; padding-top:0px;">{{ $ttdPengajuan["user"] }}</p>
+                                    </td>
+                                @endforeach
+                            @else
+                                <td style="width: 100%; text-align:center">
+                                    <br><br><br>
+                                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">(....................................)</p>
+                                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">SubPJFs Key Account</p>
+                                </td>
+                            @endif
+                        </tr>
+                    </table>
                 </div>
             </td>
             <td style="text-align:center">
@@ -185,16 +200,25 @@
                     <br><br><br>
                     <table style="width:100%">
                         <tr>
-                            <td style="width:100%; text-align:center">
-                                <p style="font-size:0.8rem; margin:0px; padding-top:0px;">
-                                    (....................................)</p>
-                                <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PJFs Marketing</p>
-                            </td>
-                            <td style="width:100%; text-align:center">
-                                <p style="font-size:0.8rem; margin:0px; padding-top:0px;">
-                                    (....................................)</p>
-                                <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PJFs Operasi</p>
-                            </td>
+                            @if (isset($pathQRRekomendasi))
+                                @foreach ($pathQRRekomendasi as $ttdRekomendasi)
+                                    <td style="width:100%; text-align:center">
+                                        <img src="{{ asset('template-ttd\\verif-proyek-nota-2\\') . $ttdRekomendasi["fileName"] }}" width="50">
+                                        <p style="font-size:0.8rem; margin:0px; padding-top:0px;">{{ $ttdRekomendasi["user"] }}</p>
+                                    </td>   
+                                @endforeach
+                            @else
+                                <td style="width:100%; text-align:center">
+                                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">
+                                        (....................................)</p>
+                                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PJFs Marketing</p>
+                                </td>
+                                <td style="width:100%; text-align:center">
+                                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">
+                                        (....................................)</p>
+                                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PJFs Operasi</p>
+                                </td>
+                            @endif
                         </tr>
                     </table>
                 </div>
@@ -207,16 +231,25 @@
                     <br><br><br>
                     <table style="width:100%">
                         <tr>
-                            <td style="width:100%; text-align:center">
-                                <p style="font-size:0.8rem; margin:0px; padding-top:0px;">
-                                    (....................................)</p>
-                                <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PJFK Corporate Marketing</p>
-                            </td>
-                            <td style="width:100%; text-align:center">
-                                <p style="font-size:0.8rem; margin:0px; padding-top:0px;">
-                                    (....................................)</p>
-                                <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PJPU Operasi</p>
-                            </td>
+                            @if (isset($pathQRPersetujuan))
+                                @foreach ($pathQRPersetujuan as $ttdPersetujuan)
+                                    <td style="width:100%; text-align:center">
+                                        <img src="{{ asset('template-ttd\\verif-proyek-nota-2\\') . $ttdPersetujuan["fileName"] }}" width="50">
+                                        <p style="font-size:0.8rem; margin:0px; padding-top:0px;">{{ $ttdPersetujuan["user"] }}</p>
+                                    </td>
+                                @endforeach
+                            @else
+                                <td style="width:100%; text-align:center">
+                                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">
+                                        (....................................)</p>
+                                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PJFK Corporate Marketing</p>
+                                </td>
+                                <td style="width:100%; text-align:center">
+                                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">
+                                        (....................................)</p>
+                                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PJPU Operasi</p>
+                                </td>                           
+                            @endif
                         </tr>
                     </table>
                 </div>

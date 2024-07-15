@@ -62,6 +62,9 @@ use App\Http\Controllers\MasalahHukumController;
 use App\Http\Controllers\PiutangController;
 use App\Http\Controllers\CompetitorController;
 use App\Http\Controllers\KnowladgeBaseController;
+use App\Http\Controllers\VerifikasiInternalPartnerController;
+use App\Http\Controllers\VerifikasiInternalPersetujuanPartnerController;
+use App\Http\Controllers\VerifikasiProyekNota2Controller;
 use App\Models\ChecklistCalonMitraKSO;
 use App\Models\ContractManagements;
 use App\Models\ContractChangeNotice;
@@ -620,6 +623,36 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/assessment-partner-selection/pengajuan-revisi/approval', [AssessmentPartnerSelectionController::class, 'setApprovalRevisi']);
     Route::get('/assessment-partner-selection/{partner}/generate-final', [AssessmentPartnerSelectionController::class, 'generateMergeAssessment']);
     //End::Assessment Partner Selection
+
+    //Begin::Verifikasi Internal Partner Selection
+    Route::group(['prefix' => 'verifikasi-internal-partner'], function () {
+        Route::get('/', [VerifikasiInternalPartnerController::class, "index"]);
+        Route::post('/request-pengajuan/{proyek}', [VerifikasiInternalPartnerController::class, "ProsesRequestApproval"]);
+        Route::post('/pengajuan/{proyek}', [VerifikasiInternalPartnerController::class, "ProsesPengajuanApproval"]);
+        Route::post('/rekomendasi/{proyek}', [VerifikasiInternalPartnerController::class, "ProsesRekomendasiApproval"]);
+        Route::post('/persetujuan/{proyek}', [VerifikasiInternalPartnerController::class, "ProsesPersetujuanApproval"]);
+    });
+    //End::Verifikasi Internal Partner Selection
+
+    //Begin::Verifikasi Internal Persetujuan Partner Selection
+    Route::group(['prefix' => 'verifikasi-internal-persetujuan-partner'], function () {
+        Route::get('/', [VerifikasiInternalPersetujuanPartnerController::class, "index"]);
+        Route::post('/request-pengajuan/{proyek}', [VerifikasiInternalPersetujuanPartnerController::class, "ProsesRequestApproval"]);
+        Route::post('/pengajuan/{proyek}', [VerifikasiInternalPersetujuanPartnerController::class, "ProsesPengajuanApproval"]);
+        Route::post('/rekomendasi/{proyek}', [VerifikasiInternalPersetujuanPartnerController::class, "ProsesRekomendasiApproval"]);
+        Route::post('/persetujuan/{proyek}', [VerifikasiInternalPersetujuanPartnerController::class, "ProsesPersetujuanApproval"]);
+    });
+    //End::Verifikasi Internal Persetujuan Partner Selection
+
+    //Begin::Verifikasi Internal Project Selection
+    Route::group(['prefix' => 'verifikasi-proyek-nota-2'], function () {
+        Route::get('/', [VerifikasiProyekNota2Controller::class, "index"]);
+        Route::post('/request-pengajuan/{proyek}', [VerifikasiProyekNota2Controller::class, "ProsesRequestApproval"]);
+        Route::post('/pengajuan/{proyek}', [VerifikasiProyekNota2Controller::class, "ProsesPengajuanApproval"]);
+        Route::post('/rekomendasi/{proyek}', [VerifikasiProyekNota2Controller::class, "ProsesRekomendasiApproval"]);
+        Route::post('/persetujuan/{proyek}', [VerifikasiProyekNota2Controller::class, "ProsesPersetujuanApproval"]);
+    });
+    //End::Verifikasi Internal Project Selection
 
     //Begin::Nota Rekomendasi 2
     Route::get('/nota-rekomendasi-2', [Rekomendasi2Controller::class, 'index']);
@@ -3970,7 +4003,42 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $data = $dataSubKlasifikasiSBU->paginate($perPage, ['*'], 'page', $page);
         return response()->json($data);
     });
-    //End::Get Master Klasifikasi KBLI SBU
+    // End::Get Master Klasifikasi KBLI SBU
+
+    //Begin::Get Data Proyek
+    Route::get('/proyek/get-data-proyek/{kode_proyek}', function (Request $request, $kode_proyek) {
+        try {
+            $proyek = Proyek::with([
+                'proyekBerjalan.customer', 'VerifikasiInternalPartner', 'Provinsi'
+            ])->where('kode_proyek', $kode_proyek)->first();
+            if (!empty($proyek)) {
+
+                $src = $request->schemeAndHttpHost() . '/file-persetujuan/14022024223803_nota-persetujuan_HNPD001.pdf';
+                // $src = null;
+
+                $proyek->dokumen_verifikasi_path = $src;
+                return response()->json([
+                    'success' => true,
+                    'data' => $proyek->toArray(),
+                    'message' => 'Success'
+
+                ]);
+            }
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => 'Proyek Tidak Ditemukan'
+
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'data' => [],
+                'message' => $e->getMessage()
+            ]);
+        }
+    });
+    //End::Get Data Proyek
 
     //Begin::Master Matriks Approval Verifikasi Partner
     Route::get('/matriks-approval-varifikasi-partner', function () {
