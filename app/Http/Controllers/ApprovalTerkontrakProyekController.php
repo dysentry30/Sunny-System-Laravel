@@ -187,9 +187,9 @@ class ApprovalTerkontrakProyekController extends Controller
                         }
                     }
                     $generateDataNasabahOnline = self::generateNasabahOnline($proyek);
-                    if ($proyek->UnitKerja->dop != "EA") {
-                        self::sendDataNasabahOnline($generateDataNasabahOnline);
-                    }
+                    // if ($proyek->UnitKerja->dop != "EA") {
+                    //     self::sendDataNasabahOnline($generateDataNasabahOnline);
+                    // }
                 }
                 DB::commit();
                 Alert::success("Success", "Proyek berhasil disetujui");
