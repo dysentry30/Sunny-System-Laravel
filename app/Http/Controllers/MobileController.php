@@ -7,6 +7,7 @@ use App\Models\HistoryForecast;
 use App\Models\Proyek;
 use App\Models\UnitKerja;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use stdClass;
 
 class MobileController extends Controller
@@ -750,6 +751,72 @@ class MobileController extends Controller
             }
         } catch (\Exception $e) {
             throw $e;
+        }
+    }
+
+    /**
+     * Get Schedule Proyek
+     * 
+     * @return Illuminate\Http\Response JSON
+     */
+    public function getSchedule(Request $request)
+    {
+        $bulan = $request->get("bulan") ?? date("m");
+        $tahun = $request->get("tahun") ?? date("Y");
+        $unitKerja = $request->get("unitKerja");
+
+        try {
+            $proyeks = Proyek::select('kode_proyek', 'nama_proyek', 'stage', 'jadwal_pq', 'jadwal_tender')->where('tipe_proyek', 'P')->where('is_cancel', false)->where('tahun_perolehan', $tahun)->where('is_tidak_lulus_pq', false)->whereIn('stage', [1, 2, 3, 4, 5, 6, 8])->get();
+
+            if (str_contains($unitKerja, ',')) {
+                $arrUnitKerja = explode(',', $unitKerja);
+                $proyeks = $proyeks->whereIn("unit_kerja", $arrUnitKerja);
+            } else if (empty($unitKerja)) {
+                $proyeks = $proyeks;
+            } else {
+                $proyeks = $proyeks->where("unit_kerja", $unitKerja);
+            }
+
+            if (!empty($proyeks)) {
+                $proyekPrakualifikasi = $proyeks->where("jadwal_pq", "!=", null);
+                $proyekTender = $proyeks->where("jadwal_tender", "!=", null);
+
+                if (!empty($proyekPrakualifikasi)) {
+                    $proyekPrakualifikasi = $proyekPrakualifikasi->map(function ($proyek) {
+                        $proyek->tgl_event = $proyek->jadwal_pq;
+                        $proyek->event = "Pemasukan Prakualifikasi";
+                        return $proyek;
+                    });
+                }
+
+                if (!empty($proyekTender)) {
+                    $proyekTender = $proyekTender->map(function ($proyek) {
+                        $proyek->tgl_event = $proyek->jadwal_tender;
+                        $proyek->event = "Pemasukan Tender";
+                        return $proyek;
+                    });
+                }
+
+                $proyeks = $proyekPrakualifikasi->merge($proyekTender)->groupBy("tgl_event");
+
+                $proyeks = $proyeks->mapWithKeys(function ($proyek, $key) {
+                    return [Carbon::create($key)->format('Y-m-d H:i:s') . ".000Z" => $proyek];
+                });
+            }
+
+            return response()->json([
+                'success' => true,
+                'status' => 'success',
+                'message' => null,
+                'data' => $proyeks->toArray()
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'status' => 'fail',
+                'message' => $e->getMessage(),
+                'data' => []
+            ]);
         }
     }
 
