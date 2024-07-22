@@ -877,41 +877,42 @@ class ProyekController extends Controller
         // }
 
         // dd($dataProyek);
-        // if ($dataProyek["nilai-perolehan"] != null && $newProyek->stage == 8 && $dataProyek["bulan-ri-perolehan"] != null){
-        // if (!empty($newProyek->bulan_ri_perolehan) && !empty($newProyek->nilai_perolehan) && $newProyek->stage == 8 && $newProyek->tahun_perolehan == $years) {
-        //     $editForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->where("tahun", "=", $years)->first();
-        //     if (!empty($editForecast)) {
-        //         $oldestForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", ($bulans - 1))->where("tahun", "=", $years)->first();
-        //         if (!empty($oldestForecast) && (int) date("d") <= 15) {
-        //             // $oldestForecast = new Forecast();
-        //             $oldestForecast->kode_proyek = $newProyek->kode_proyek;
-        //             $oldestForecast->periode_prognosa = $bulans - 1;
-        //             $oldestForecast->tahun = $years;
-        //             $oldestForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
-        //             $oldestForecast->realisasi_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
-        //             $oldestForecast->month_realisasi = (int) $newProyek->bulan_ri_perolehan;
-        //             $oldestForecast->save();
-        //         }
-        //         // $editForecast->month_forecast = $dataProyek["month-forecast"];
-        //         $editForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
-        //         $editForecast->realisasi_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
-        //         $editForecast->month_realisasi = (int) $newProyek->bulan_ri_perolehan;
-        //         // $editForecast->tahun = $years;
-        //         $editForecast->save();
-        //     } else {
-        //         $newForecast = new Forecast();
-        //         $newForecast->kode_proyek = $newProyek->kode_proyek;
-        //         // $newForecast->month_forecast = $dataProyek["month-forecast"];
-        //         // $newForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-forecast"]);
-        //         $newForecast->month_forecast = $dataProyek["bulan-ri-perolehan"];
-        //         $newForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
-        //         $newForecast->month_realisasi = $dataProyek["bulan-ri-perolehan"];
-        //         $newForecast->realisasi_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
-        //         $newForecast->periode_prognosa = $bulans;
-        //         $newForecast->tahun = (int) date("Y");
-        //         $newForecast->save();
-        //     }
-        // }
+        if ($dataProyek["nilai-perolehan"] != null && $newProyek->stage == 8 && $dataProyek["bulan-ri-perolehan"] != null) {
+            if (!empty($newProyek->bulan_ri_perolehan) && !empty($newProyek->nilai_perolehan) && $newProyek->stage == 8 && $newProyek->dop == "EA" && $newProyek->tahun_perolehan == $years) {
+                $editForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->where("tahun", "=", $years)->first();
+                if (!empty($editForecast)) {
+                    $oldestForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", ($bulans - 1))->where("tahun", "=", $years)->first();
+                    if (!empty($oldestForecast) && (int) date("d") <= 15) {
+                        // $oldestForecast = new Forecast();
+                        $oldestForecast->kode_proyek = $newProyek->kode_proyek;
+                        $oldestForecast->periode_prognosa = $bulans - 1;
+                        $oldestForecast->tahun = $years;
+                        $oldestForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
+                        $oldestForecast->realisasi_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
+                        $oldestForecast->month_realisasi = (int) $newProyek->bulan_ri_perolehan;
+                        $oldestForecast->save();
+                    }
+                    // $editForecast->month_forecast = $dataProyek["month-forecast"];
+                    $editForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
+                    $editForecast->realisasi_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
+                    $editForecast->month_realisasi = (int) $newProyek->bulan_ri_perolehan;
+                    // $editForecast->tahun = $years;
+                    $editForecast->save();
+                } else {
+                    $newForecast = new Forecast();
+                    $newForecast->kode_proyek = $newProyek->kode_proyek;
+                    // $newForecast->month_forecast = $dataProyek["month-forecast"];
+                    // $newForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-forecast"]);
+                    $newForecast->month_forecast = $dataProyek["bulan-ri-perolehan"];
+                    $newForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
+                    $newForecast->month_realisasi = $dataProyek["bulan-ri-perolehan"];
+                    $newForecast->realisasi_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
+                    $newForecast->periode_prognosa = $bulans;
+                    $newForecast->tahun = (int) date("Y");
+                    $newForecast->save();
+                }
+            }
+        }
 
         if ($idCustomer != null) {
             // $customer = Customer::where('name', "=", $dataProyek["customer"])->get()->first();
@@ -2124,6 +2125,8 @@ class ProyekController extends Controller
                             ]
                         ]
                     ]);
+
+                    $proyekStage->is_need_approval_terkontrak = true;
                 }
                 // dd($data_nasabah_online);
                 // End :: Ngirim data ke nasabah online WIKA

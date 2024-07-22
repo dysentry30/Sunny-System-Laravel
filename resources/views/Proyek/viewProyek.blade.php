@@ -123,7 +123,7 @@
 
                                 <!--begin::Button-->    
                                 @if ($proyek->UnitKerja?->dop != "EA")
-                                    @if (($proyek->stage == 8 && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek?->is_revisi))
+                                    @if (($proyek->stage == 8 && $proyek->is_need_approval_terkontrak && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek?->is_revisi))
                                         <button type="button" class="btn btn-sm btn-success ms-2" onclick="requestApprovalTerkontrak('{{ $proyek->kode_proyek }}')">Ajukan Approval</button>
                                     @endif
                                     @if (App\Models\MatriksApprovalTerkontrakProyek::where('nip', Auth::user()->nip)->where('unit_kerja', $proyek->unit_kerja)->where("is_active", true)->first() && $proyek->ApprovalTerkontrakProyek && is_null($proyek->ApprovalTerkontrakProyek?->is_revisi) && is_null($proyek->ApprovalTerkontrakProyek->is_approved))
@@ -6007,9 +6007,9 @@
                                                             class="bi bi-arrows-collapse"></i>
                                                         <i onclick="showperformance()" id="show-performance"
                                                             style="display: none" class="bi bi-arrows-expand"></i>
-                                                    </h3> --}}
+                                                    </h3>
 
-                                                    {{-- <script>
+                                                    <script>
                                                         function hideperformance() {
                                                             document.getElementById("divProyekPerformance").style.display = "none";
                                                             document.getElementById("hide-performance").style.display = "none";

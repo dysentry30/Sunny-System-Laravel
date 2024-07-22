@@ -95,10 +95,12 @@ class MobileController extends Controller
      * 
      * @return Illuminate\Http\Response JSON
      */
-    public function GetDataForecastNew(Request $request, $unitKerja = null, $yearFilter, $monthFilter)
+    public function GetDataForecastNew(Request $request, $yearFilter, $monthFilter)
     {
         $per = 1_000_000; //Dibagi Dalam Jutaan
         // $per = 1_000_000_000; //Dibagi Dalam Jutaan
+        $unitKerja = $request->get("unit_kerja");
+        $departemen = $request->get("direktorat");
 
         $year = (int)date("m") == 1 && (int)date("d") < 5 ? (int) date("Y") : (int) date("Y") - 1;
 
@@ -117,15 +119,23 @@ class MobileController extends Controller
         }
 
         try {
-            $nilaiHistoryForecast = HistoryForecast::select('proyeks.kode_proyek', 'proyeks.is_rkap', 'proyeks.is_cancel', 'proyeks.unit_kerja', 'proyeks.stage', 'rkap_forecast', 'nilai_forecast', 'realisasi_forecast', 'month_rkap', 'month_forecast', 'month_realisasi')->join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year)->where("history_forecast.periode_prognosa", "=", $month != "" ? (string) $month : (int) date("m"))->where("history_forecast.tahun", "=", $year)->get();
+            $nilaiHistoryForecast = HistoryForecast::select('proyeks.kode_proyek', 'proyeks.is_rkap', 'proyeks.dop', 'proyeks.is_cancel', 'proyeks.unit_kerja', 'proyeks.stage', 'rkap_forecast', 'nilai_forecast', 'realisasi_forecast', 'month_rkap', 'month_forecast', 'month_realisasi')->join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year)->where("history_forecast.periode_prognosa", "=", $month != "" ? (string) $month : (int) date("m"))->where("history_forecast.tahun", "=", $year)->get();
             $countUnitKerjaFromHistory = $nilaiHistoryForecast->groupBy('unit_kerja')->count();
 
             if ($nilaiHistoryForecast->count() < 1 || $countUnitKerjaFromHistory < 11) {
-                $nilaiHistoryForecast = Forecast::select('proyeks.kode_proyek', 'proyeks.is_rkap', 'proyeks.is_cancel', 'proyeks.unit_kerja', 'proyeks.stage', 'rkap_forecast', 'nilai_forecast', 'realisasi_forecast', 'month_rkap', 'month_forecast', 'month_realisasi')->join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year)->where("forecasts.periode_prognosa", "=", $month != "" ? (string) $month : (int) date("m"))->where("forecasts.tahun", "=", $year)->get();
+                $nilaiHistoryForecast = Forecast::select('proyeks.kode_proyek', 'proyeks.is_rkap', 'proyeks.dop', 'proyeks.is_cancel', 'proyeks.unit_kerja', 'proyeks.stage', 'rkap_forecast', 'nilai_forecast', 'realisasi_forecast', 'month_rkap', 'month_forecast', 'month_realisasi')->join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year)->where("forecasts.periode_prognosa", "=", $month != "" ? (string) $month : (int) date("m"))->where("forecasts.tahun", "=", $year)->get();
             }
 
             if (!empty($unitKerja)) {
                 $nilaiHistoryForecast = $nilaiHistoryForecast->where("unit_kerja", $unitKerja);
+            }
+
+            if (!empty($departemen)) {
+                if ($departemen == "PUSAT") {
+                    $nilaiHistoryForecast = $nilaiHistoryForecast->where("dop", "!=", "EA");
+                } else {
+                    $nilaiHistoryForecast = $nilaiHistoryForecast->where("dop", $departemen);
+                }
             }
 
 
@@ -333,13 +343,26 @@ class MobileController extends Controller
     public function GetTotalMonitoringProyek(Request $request)
     {
         try {
+            $filterDepartemen = $request->get("departemen");
+            $filterUnitKerja = $request->get("unitKerja");
             $tahunSelect = $request->get("tahun") ?? date("Y");
-            $proyeksSelected =  Proyek::select(["nama_proyek", "kode_proyek", "bulan_awal", "bulan_ri_perolehan", "bulan_pelaksanaan", "nilai_kontrak_keseluruhan", "nilai_rkap", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tipe_proyek", "tahun_perolehan", "jenis_proyek", "is_cancel"])
+            $proyeksSelected =  Proyek::select(["nama_proyek", "kode_proyek", "dop", "unit_kerja", "bulan_awal", "bulan_ri_perolehan", "bulan_pelaksanaan", "nilai_kontrak_keseluruhan", "nilai_rkap", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tipe_proyek", "tahun_perolehan", "jenis_proyek", "is_cancel"])
             ->where('tahun_perolehan', $tahunSelect)
                 ->where('jenis_proyek', '!=', 'I')
                 ->whereNotIn('stage', [1, 2])
                 ->where('tipe_proyek', 'P')
                 ->get();
+
+            $proyeksSelected = $proyeksSelected->when(!empty($filterDepartemen), function ($query) use ($filterDepartemen) {
+                if ($filterDepartemen == "PUSAT") {
+                    return $query->where('dop', "!=", "EA");
+                } else {
+                    return $query->where('dop', $filterDepartemen);
+                }
+            })
+            ->when(!empty($filterUnitKerja), function ($query) use ($filterUnitKerja) {
+                return $query->where('unit_kerja', $filterUnitKerja);
+            });
 
             $proyeksGroup = $proyeksSelected?->groupBy("stage");
 
@@ -421,13 +444,18 @@ class MobileController extends Controller
             $filterUnitKerja = $request->get('unitKerja');
             $filterTahun = $request->get('tahun') ?? date("Y");
 
-            $proyeks =  Proyek::select(["nama_proyek", "kode_proyek", "dop", "bulan_awal", "bulan_ri_perolehan", "bulan_pelaksanaan", "nilai_kontrak_keseluruhan", "nilai_rkap", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tipe_proyek", "tahun_perolehan", "jenis_proyek", "is_cancel"])
+            $proyeks =  Proyek::select(["nama_proyek", "kode_proyek", "dop", "unit_kerja", "bulan_awal", "bulan_ri_perolehan", "bulan_pelaksanaan", "nilai_kontrak_keseluruhan", "nilai_rkap", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tipe_proyek", "tahun_perolehan", "jenis_proyek", "is_cancel"])
                 ->where('tahun_perolehan', $filterTahun)
                 ->where('jenis_proyek', '!=', 'I')
                 ->where('tipe_proyek', 'P')
             ->whereNotIn('stage', [1, 2])
                 ->when(!empty($filterDepartemen), function ($query) use ($filterDepartemen) {
+                if ($filterDepartemen == "PUSAT") {
+                    $query->where('dop', "!=", "EA");
+                } else {
                     $query->where('dop', $filterDepartemen);
+                }
+                    
                 })
                 ->when(!empty($filterUnitKerja), function ($query) use ($filterUnitKerja) {
                     $query->where('unit_kerja', $filterUnitKerja);
@@ -492,19 +520,23 @@ class MobileController extends Controller
     {
         try {
             $tahunSelect = $request->get("tahun") ?? date("Y");
-            $departemenSelect = $request->get("departemen");
-            $unitKerjaSelect = $request->get("unitKerja");
+            $filterDepartemen = $request->get("departemen");
+            $filterUnitKerja = $request->get("unitKerja");
             $tahunSelect = $request->get("tahun") ?? date("Y");
-            $proyeksSelected =  Proyek::select(["nama_proyek", "kode_proyek", "dop", "bulan_awal", "bulan_ri_perolehan", "bulan_pelaksanaan", "nilai_kontrak_keseluruhan", "nilai_rkap", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tipe_proyek", "tahun_perolehan", "jenis_proyek", "is_cancel"])
+            $proyeksSelected =  Proyek::select(["nama_proyek", "kode_proyek", "dop", "unit_kerja", "bulan_awal", "bulan_ri_perolehan", "bulan_pelaksanaan", "nilai_kontrak_keseluruhan", "nilai_rkap", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tipe_proyek", "tahun_perolehan", "jenis_proyek", "is_cancel"])
             ->where('tahun_perolehan', $tahunSelect)
                 ->where('jenis_proyek', '!=', 'I')
                 ->whereIn('stage', [6, 7, 8])
                 ->where('tipe_proyek', 'P')
-            ->when(!empty($departemenSelect), function ($query) use ($departemenSelect) {
-                $query->where("dop", $departemenSelect);
+            ->when(!empty($filterDepartemen), function ($query) use ($filterDepartemen) {
+                if ($filterDepartemen == "PUSAT") {
+                    $query->where('dop', "!=", "EA");
+                } else {
+                    $query->where('dop', $filterDepartemen);
+                }
             })
-                ->when(!empty($unitKerjaSelect), function ($query) use ($unitKerjaSelect) {
-                    $query->where("unit_kerja", $unitKerjaSelect);
+                ->when(!empty($filterUnitKerja), function ($query) use ($filterUnitKerja) {
+                    $query->where('unit_kerja', $filterUnitKerja);
                 })
                 ->orderBy("stage")
                 ->get();
@@ -520,16 +552,34 @@ class MobileController extends Controller
                 switch ($newClass->category) {
                     case 'Menang':
                         $jumlah = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->count();
-                        $total = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->sum('nilai_perolehan');
+                        $total = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->sum(function ($proyek) {
+                            if ($proyek->nilai_perolehan != 0) {
+                                return (int)$proyek->nilai_perolehan * ($proyek->porsi_jo / 100);
+                            } else {
+                                return 0;
+                            }
+                        });
                         $proyekMenang++;
                         break;
                     case 'Kalah':
                         $jumlah = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->count();
-                        $total = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->sum('nilai_perolehan');
+                        $total = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->sum(function ($proyek) {
+                            if ($proyek->nilai_perolehan != 0) {
+                                return (int)$proyek->nilai_perolehan * ($proyek->porsi_jo / 100);
+                            } else {
+                                return 0;
+                            }
+                        });
                         break;
                     case 'Terkontrak':
                         $jumlah = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->count();
-                        $total = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->sum('nilai_perolehan');
+                        $total = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->sum(function ($proyek) {
+                            if ($proyek->nilai_perolehan != 0) {
+                                return (int)$proyek->nilai_perolehan * ($proyek->porsi_jo / 100);
+                            } else {
+                                return 0;
+                            }
+                        });
                         $proyekTerkontrak++;
                         break;
 
@@ -565,7 +615,7 @@ class MobileController extends Controller
     public function GetUnitKerja(string $departemen)
     {
         $curYear = 2022;
-        $unit_kerjas = UnitKerja::with(["proyeks"])->get()->map(function ($unit_kerja) {
+        $unit_kerjas = UnitKerja::with(["proyeks"])->where('id_profit_center', '!=', null)->orderBy("id_profit_center")->get()->map(function ($unit_kerja) {
             $new_class = new stdClass();
             $new_class->divcode = $unit_kerja->divcode;
             $new_class->unit_kerja = $unit_kerja->unit_kerja;
@@ -573,7 +623,9 @@ class MobileController extends Controller
             $new_class->tahun = $unit_kerja->proyeks->isNotEmpty() ? $unit_kerja->proyeks->groupBy("tahun_perolehan")->keys()->max() : 0;
             return $new_class;
         })->whereNotIn("divcode", ["C", "B", "D", "8"]);
-        if ($departemen != "All Direktorat") {
+        if ($departemen == "PUSAT") {
+            $unit_kerjas = $unit_kerjas->where("direktorat", "!=", "EA");
+        } else {
             $unit_kerjas = $unit_kerjas->where("direktorat", "=", $departemen);
         }
         return response()->json($unit_kerjas->values());
@@ -596,51 +648,51 @@ class MobileController extends Controller
             if ($page == "list-proyek-forecast" || $page == "realisasi-ok") {
                 $data = [];
 
-                $history_forecasts = Proyek::select("proyeks.nama_proyek", "proyeks.stage", "proyeks.status_pasdin", "proyeks.tipe_proyek", "proyeks.tahun_perolehan", "history_forecast.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $tahun)->where("periode_prognosa", "=", $periodePrognosa)->get()->where("is_cancel", "!=", true);
+                $history_forecasts = Proyek::select("proyeks.nama_proyek", "proyeks.stage", "proyeks.status_pasdin", "proyeks.is_rkap", "proyeks.dop", "proyeks.tipe_proyek", "proyeks.tahun_perolehan", "history_forecast.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $tahun)->where("periode_prognosa", "=", $periodePrognosa)->get()->where("is_cancel", "!=", true);
                 // dd($history_forecasts);
                 $countUnitKerjaFromHistory = $history_forecasts->groupBy('unit_kerja')->count();
                 if ($history_forecasts->count() < 1 || $countUnitKerjaFromHistory < 11) {
-                    $history_forecasts = Proyek::select("proyeks.nama_proyek", "proyeks.stage", "proyeks.status_pasdin", "proyeks.tipe_proyek", "proyeks.tahun_perolehan", "forecasts.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("forecasts", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $tahun)->where("periode_prognosa", "=", $periodePrognosa)->get()->where("is_cancel", "!=", true);
+                    $history_forecasts = Proyek::select("proyeks.nama_proyek", "proyeks.stage", "proyeks.status_pasdin", "proyeks.is_rkap", "proyeks.dop", "proyeks.tipe_proyek", "proyeks.tahun_perolehan", "forecasts.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("forecasts", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $tahun)->where("periode_prognosa", "=", $periodePrognosa)->get()->where("is_cancel", "!=", true);
                 }
                 if ($unitKerja != "" && strlen($unitKerja) == 1) {
                     $history_forecasts = $history_forecasts->where("divcode", $unitKerja);
                     if (empty($history_forecasts) || $history_forecasts->isEmpty()) {
-                        $history_forecasts = Proyek::select("proyeks.nama_proyek", "proyeks.stage", "proyeks.status_pasdin", "proyeks.tipe_proyek", "proyeks.tahun_perolehan", "forecasts.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("forecasts", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $tahun)->where("periode_prognosa", "=", $periodePrognosa)->where("divcode", $unitKerja)->get()->where("is_cancel", "!=", true);
+                        $history_forecasts = Proyek::select("proyeks.nama_proyek", "proyeks.stage", "proyeks.status_pasdin", "proyeks.is_rkap", "proyeks.dop", "proyeks.tipe_proyek", "proyeks.tahun_perolehan", "forecasts.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("forecasts", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $tahun)->where("periode_prognosa", "=", $periodePrognosa)->where("divcode", $unitKerja)->get()->where("is_cancel", "!=", true);
                     }
                     // dd($history_forecasts);
-                } elseif ($unitKerja != "") {
-                    $dop = str_replace("-", " ", $unitKerja);
+                } elseif (empty($unitKerja) && !empty($departemen)) {
+                    // $dop = str_replace("-", " ", $unitKerja);
                     if (empty($history_forecasts) || $history_forecasts->isEmpty()) {
-                        $history_forecasts = Proyek::select("proyeks.nama_proyek", "proyeks.stage", "proyeks.status_pasdin", "proyeks.tipe_proyek", "proyeks.tahun_perolehan", "forecasts.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("forecasts", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $tahun)->where("periode_prognosa", "=", $periodePrognosa)->where("divcode", $unitKerja)->get()->where("is_cancel", "!=", true);
+                        $history_forecasts = Proyek::select("proyeks.nama_proyek", "proyeks.stage", "proyeks.status_pasdin", "proyeks.is_rkap", "proyeks.dop", "proyeks.tipe_proyek", "proyeks.tahun_perolehan", "forecasts.*", "unit_kerjas.unit_kerja as unit_kerja", "unit_kerjas.divcode as divcode")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("forecasts", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("tahun", "=", $tahun)->where("periode_prognosa", "=", $periodePrognosa)->get()->where("is_cancel", "!=", true);
                     }
-                    if ($unitKerja == "PUSAT") {
-                        $history_forecasts = $history_forecasts->whereIn("dop", ["DOP 1", "DOP 2", "DOP 3"]);
+                    if ($departemen == "PUSAT") {
+                        $history_forecasts = $history_forecasts->where("dop", "!=", "EA");
                     } else {
-                        $history_forecasts = $history_forecasts->where("dop", $dop);
+                        $history_forecasts = $history_forecasts->where("dop", $departemen);
                     }
-                    // dd($dop, $history_forecasts);
+                    // dd($departemen, $history_forecasts);
                 }
 
                 $history_forecasts = $history_forecasts
                     ->when($category == "Forecast", function ($history) {
-                        $history->where("nilai_forecast", "!=", "")
-                    ->where("nilai_forecast", "!=", "0")
+                    return $history->where("nilai_forecast", "!=", "")
+                        ->where("nilai_forecast", "!=", "0")
                             ->where("month_forecast", "!=", 0)
-                            ->where("month_forecast", SORT_NUMERIC);
+                        ->sortBy("month_forecast", SORT_NUMERIC);
                     })
                     ->when($category == "RKAP", function ($history) {
-                        $history->where("is_rkap", "=", true)
+                    return $history->where("is_rkap", true)
                             ->where("rkap_forecast", "!=", "")
                             ->where("rkap_forecast", "!=", "0")
                             ->where("month_rkap", "!=", 0)
-                            ->where("month_rkap", SORT_NUMERIC);
+                        ->sortBy("month_rkap", SORT_NUMERIC);
                     })
                     ->when($category == "Realisasi", function ($history) {
-                        $history->where("stage", 8)
+                    return $history->where("stage", 8)
                         ->where("realisasi_forecast", "!=", "")
                         ->where("realisasi_forecast", "!=", "0")
                             ->where("month_realisasi", "!=", 0)
-                            ->where("month_realisasi", SORT_NUMERIC);
+                    ->sortBy("month_realisasi", SORT_NUMERIC);
                     })
                     ->groupBy("kode_proyek");
 
@@ -663,6 +715,7 @@ class MobileController extends Controller
                             }
                         }
                     }
+                    
                     if (isset($data[$kode_proyek])) {
                         if ($data[$kode_proyek]->tipe_proyek == "R") {
                             $tipe_proyek = "Retail";

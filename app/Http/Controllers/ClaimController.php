@@ -1167,7 +1167,7 @@ class ClaimController extends Controller
 
             if ($filterBulan == (int) date("m") && $filterTahun == (int) date("Y")) {
                 // $proyeks_all = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->whereIn("unit_kerja", $unit_kerja_get)->where('contract_managements.stages', '>', 1)->get();
-                $proyeks_all = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->whereIn("kd_divisi", $unit_kerja_get)->where('contract_managements.stages', 1)->where('contract_managements.profit_center', '!=', null)->get();
+                $proyeks_all = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->whereIn("kd_divisi", $unit_kerja_get)->where('contract_managements.stages', 2)->where('contract_managements.profit_center', '!=', null)->get();
                 $proyeks_all_pemeliharaan = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->whereIn("kd_divisi", $unit_kerja_get)->where('contract_managements.stages', 3)->where('contract_managements.profit_center', '!=', null)->get();
 
                 $proyeks_all = $proyeks_all->map(function ($proyek) use (&$totalVOAll, &$totalClaimAll, &$totalAntiClaimAll, &$totalClaimAsuransiAll, &$totalVOAllApproved, &$totalClaimAllApproved, &$totalAntiClaimAllApproved, &$totalClaimAsuransiAllApproved, &$jumlahVOAll, &$jumlahClaimAll, &$jumlahAntiClaimAll, &$jumlahClaimAsuransiAll, &$jumlahVOAllApproved, &$jumlahClaimAllApproved, &$jumlahAntiClaimAllApproved, &$jumlahClaimAsuransiAllApproved) {
@@ -1534,7 +1534,9 @@ class ClaimController extends Controller
                 });
             } else {
 
-                $proyeks_all = ContractApproval::join("proyeks", "proyeks.kode_proyek", "=", "contract_approval.kode_proyek")->where("periode", '=', $filterBulan)->where("tahun", "=", $filterTahun)->get()->groupBy('kode_proyek');
+                $proyeks_all = ContractApproval::join("proyeks", "proyeks.kode_proyek", "=", "contract_approval.kode_proyek")->where("periode", '=', $filterBulan)->where("tahun", "=", $filterTahun)->get()->filter(function ($item) {
+                    return $item->ContractManagements->stages == 2;
+                })->groupBy('kode_proyek');
 
                 $proyeks_all_pemeliharaan = ContractApproval::join("proyek_pis_new", "proyek_pis_new.profit_center", "=", "contract_approval.profit_center")->where("periode", '=', $filterBulan)->where("tahun", "=", $filterTahun)->get()->filter(function ($item) {
                     return $item->ContractManagements->stages == 3;

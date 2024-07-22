@@ -480,7 +480,7 @@ class CustomerController extends Controller
         ];
         $rules = [
             "name-customer" => "required",
-            "npwp-company" => "required|numeric"
+            // "npwp-company" => "required|numeric"
             // "email" => "required",
             // "phone-number" => "required",
         ];

@@ -630,7 +630,7 @@
                                                         if($selected_year < (int) date("Y")) {
                                                             $month = 12;
                                                         } else {
-                                                            $month = (int) date("m");
+                                                            $month = (int) date("m") - 1;
                                                         }
                                                         return $f->periode_prognosa == $month && $f->tahun == (int) $selected_year ;
                                                     })->sum(function($f) {

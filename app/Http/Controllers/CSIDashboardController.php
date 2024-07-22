@@ -77,7 +77,7 @@ class CSIDashboardController extends Controller
 
         $CSIGroupByUnitKerja = $CSIMapWithDivisi->groupBy('unit_kerja');
 
-        $groupUnitKerja = collect(['Divisi Infrastruktur 1', 'Divisi Infrastruktur 2', 'Divisi EPCC', 'Divisi BGLN']);
+        $groupUnitKerja = collect(['Divisi Infrastruktur 1', 'Divisi Infrastruktur 2', 'Divisi EPCC', 'Divisi Gedung']);
 
         $dataAveragePerDivisiCsi = $groupUnitKerja->map(function ($value) use ($CSIGroupByUnitKerja, $masterTingkatKepuasan) {
             $sumPerDivisi = 0;

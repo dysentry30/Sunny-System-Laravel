@@ -2671,18 +2671,18 @@
 
     <!--begin::TERENDAH vs TERKONTRAK-->
     @php
-        $nilaiAll = $nilaiTerendah + $nilaiTerkontrak;
+        $nilaiAll = ((int) $nilaiMenang / 1000000) + $nilaiTerkontrak;
     if ($nilaiAll != 0) {
-        $presentaseTerendah = round($nilaiTerendah / $nilaiAll * 100, 2);
+        $presentaseMenang = round(((int) $nilaiMenang / 1000000) / $nilaiAll * 100, 2);
         $presentaseTerkontrak = round($nilaiTerkontrak / $nilaiAll * 100, 2);
     } else {
-        $presentaseTerendah = 0;
+        $presentaseMenang = 0;
         $presentaseTerkontrak = 0;
     }
     @endphp
     <script>
         let presentaseTerkontrak = {{ $presentaseTerkontrak }};
-        let presentaseTerendah = {{ $presentaseTerendah }};
+        let presentaseMenang = {{ $presentaseMenang }};
         Highcharts.chart('terendah-terkontrak', {
             chart: {
                 type: 'pie',
@@ -2693,7 +2693,7 @@
             },
             title: {
                 align: 'center',
-                text: '<b class="h1">Terendah - Terkontrak</b>'
+                text: '<b class="h1">Menang - Terkontrak</b>'
             },
             subtitle: {
                 align: 'center',
@@ -2743,9 +2743,9 @@
                 name: "",
                 colorByPoint: true,
                 data: [{
-                        name: "Terendah : " + "{{ number_format($nilaiTerendah, 0, '.' , '.' ) }}",
-                        y: {{ $nilaiTerendah }},
-                        x: "Terendah : " + presentaseTerendah + "%",
+                        name: "Menang : " + "{{ number_format((int) $nilaiMenang / 1000000, 0, '.' , '.' ) }}",
+                        y: {{ (int) $nilaiMenang / 1000000 }},
+                        x: "Menang : " + presentaseMenang + "%",
                     },
                     {
                         name: "Terkontrak : " + "{{ number_format($nilaiTerkontrak, 0, '.' , '.' ) }}",
@@ -2837,17 +2837,17 @@
                 name: "",
                 colorByPoint: true,
                 data: [{
-                        name: "Menang Tender : " + {{ $jumlahMenang }},
+                        name: "Menang Non Retail : " + {{ $jumlahMenang }},
                         y: {{ $jumlahMenang }},
                         x: "Menang : " + {{ $presentaseMenang }},
                     },
                     {
-                        name: "Terkontrak Tender : " + {{ $jumlahTerkontrakCompetitive }},
+                        name: "Terkontrak Non Retail : " + {{ $jumlahTerkontrakCompetitive }},
                         y: {{ $jumlahTerkontrakCompetitive }},
                         x: "Terkontrak : " + {{ $presentaseTerkontrak }},
                     },
                     {
-                        name: "Kalah Tender : " + {{ $jumlahKalah }},
+                        name: "Kalah Non Retail : " + {{ $jumlahKalah }},
                         y: {{ $jumlahKalah }},
                         x: "Kalah : " + {{ $presentaseKalah }},
                     },
@@ -2938,17 +2938,17 @@
                 name: "",
                 colorByPoint: true,
                 data: [{
-                        name: "Menang Tender : " + "{{ number_format( ((int) $nilaiMenang / 1000000 ), 0, '.' , '.' ) }}",
+                        name: "Menang Non Retail : " + "{{ number_format( ((int) $nilaiMenang / 1000000 ), 0, '.' , '.' ) }}",
                         y: {{ $nilaiMenang }},
                         x: "Menang : " + {{ $presentaseNilaiMenang }},
                     },
                     {
-                        name: "Terkontrak Tender : " + "{{ number_format( ((int) $nilaiTerkontrakCompetitive / 1000000 ), 0, '.' , '.' ) }}",
+                        name: "Terkontrak Non Retail : " + "{{ number_format( ((int) $nilaiTerkontrakCompetitive / 1000000 ), 0, '.' , '.' ) }}",
                         y: {{ $nilaiTerkontrakCompetitive }},
                         x: "Terkontrak : " + {{ $presentaseNilaiTerkontrak }},
                     },
                     {
-                        name: "Kalah Tender : " + "{{ number_format( ((int) $nilaiKalah / 1000000 ), 0, '.' , '.' ) }}",
+                        name: "Kalah Non Retail : " + "{{ number_format( ((int) $nilaiKalah / 1000000 ), 0, '.' , '.' ) }}",
                         y: {{ $nilaiKalah }},
                         x: "Kalah : " + {{ $presentaseNilaiKalah }},
                     },
@@ -4176,9 +4176,26 @@
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
-            } else if(type == "Menang Tender" || type == "Terkontrak Tender" || type == "Kalah Tender" || type == "Tidak Lolos PQ Tender" ) {
+            } else if(type == "Menang Non Retail" || type == "Terkontrak Non Retail" || type == "Kalah Non Retail" || type == "Tidak Lolos PQ Non Retail" ) {
                 let tbodyHTML = ``;
                 let totalNilaiLainnya = 0;
+                let namaColumn;
+
+                switch (type) {
+                    case "Menang Non Retail":
+                        namaColumn = "Nilai Porsi WIKA";
+                        break;
+                    case "Kalah Non Retail":
+                        namaColumn = "Nilai Porsi WIKA";
+                        break;
+                    case "Terkontrak Non Retail":
+                        namaColumn = "Nilai Porsi WIKA";
+                        break;
+                
+                    default:
+                        namaColumn = "Nilai HPS / Pagu";
+                        break;
+                }
 
                 let theadHTML =
                 '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
@@ -4187,19 +4204,18 @@
                     '<th style="width:150px">Stage</th>' +
                     '<th>Unit Kerja</th>' +
                     '<th>Bulan</th>' +
-                    `<th class="text-end">Nilai ${type}</th>`
+                    `<th class="text-end">Nilai ${namaColumn}</th>`
                 '</tr>';
                 // console.log(filterRes);
                 [filterRes].forEach(filtering => {
                     for(let filter in filtering) {
                     filter = filtering[filter];
                     let stage = "";
-                    if(type == "Nilai Menang Tender") {
-                        totalNilaiLainnya += Number(filter.penawaran_tender);
-                    }else if(type == "Nilai Terkontrak Tender") {
-                        totalNilaiLainnya += Number(filter.penawaran_tender);
+                    if(type == "Terkontrak Non Retail") {
+                        totalNilaiLainnya += Number(filter.nilai_perolehan);
                     } else {
-                        totalNilaiLainnya += Number(filter.penawaran_tender);
+                        // totalNilaiLainnya += Number(filter.nilai_perolehan);
+                        totalNilaiLainnya += filter.nilai_perolehan != 0 ? Number(filter.nilai_perolehan * (filter.porsi_jo / 100)) : 0;
                     }
                     // if(filter.tipe == "Proyek Menang") {
                     // } else {
@@ -4248,9 +4264,9 @@
                     }
                     let getMonth = filter.bulan_pelaksanaan;
                     let bulan = "";
-                    if(type == "Nilai Menang Tender") {
+                    if(type == "Nilai Menang Non Retail") {
                         getMonth = filter.bulan_ri_perolehan;
-                    }else if(type == "Nilai Terkontrak Tender"){
+                    }else if(type == "Nilai Terkontrak Non Retail"){
                         getMonth = filter.bulan_ri_perolehan;
                     } else {
                         getMonth = filter.bulan_pelaksanaan;
@@ -4298,12 +4314,12 @@
                             break;
                     }
                     let nilai = 0;
-                    if(type == "Nilai Menang Tender") {
-                        nilai = filter.penawaran_tender;
-                    } if(type == "Nilai Terkontrak Tender") {
-                        nilai = filter.penawaran_tender;
+                    if(type == "Menang Non Retail") {
+                        nilai = filter.nilai_perolehan != 0 ? filter.nilai_perolehan * (filter.porsi_jo / 100) : 0;
+                    } if(type == "Terkontrak Non Retail") {
+                        nilai = filter.nilai_perolehan;
                     } else {
-                        nilai = filter.penawaran_tender;
+                        nilai = filter.nilai_perolehan != 0 ? filter.nilai_perolehan * (filter.porsi_jo / 100) : 0;
                     }
                     const unitKerja = typeof filter.unit_kerja == "object" ? filter.unit_kerja.unit_kerja : filter.unit_kerja 
                     tbodyHTML += `<tr>
@@ -4542,7 +4558,32 @@
                 let tbodyHTML = ``;
                 let totalNilaiLainnya = 0;
                 let textBulan = "Bulan RA";
+                let namaColumn;
                 if(type.trim() == "Menang") textBulan = "Bulan RI";
+                switch (type.trim()) {
+                    case "Prakualifikasi":
+                        namaColumn = "Nilai HPS / Pagu";
+                        break;
+                    case "Tender Diikuti":
+                        namaColumn = "Nilai HPS / Pagu";
+                        break;
+                    case "Tidak Lolos PQ":
+                        namaColumn = "Nilai HPS / Pagu";
+                        break;
+                    case "Perolehan":
+                        namaColumn = "Nilai Porsi WIKA";
+                        break;
+                    case "Menang":
+                        namaColumn = "Nilai Porsi WIKA";
+                        break;
+                    case "Kalah":
+                        namaColumn = "Nilai Porsi WIKA";
+                        break;
+                
+                    default:
+                        namaColumn = "Nilai HPS / Pagu";
+                        break;
+                }
                 let theadHTML =
                 '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
                     '<th>Nama Proyek</th>' +
@@ -4551,17 +4592,17 @@
                     '<th>Unit Kerja</th>' +
                     '<th>Tipe Proyek</th>' +
                     '<th>'+ textBulan +'</th>' +
-                    `<th class="text-end">Nilai ${type}</th>`
+                    `<th class="text-end">${namaColumn}</th>`
                 '</tr>';
-                console.log(filterRes);
                 [filterRes].forEach(filtering => {
                     for(let filter in filtering) {
                     filter = filtering[filter];
                     let stage = "";
+                    // if (type.trim() == "Prakualifikasi" || type.trim() == "Tender Diikuti" || type.trim() == "Kalah" || type.trim() == "Cancel" || type == "Tidak Lolos PQ") {
                     if (type.trim() == "Prakualifikasi" || type.trim() == "Tender Diikuti" || type.trim() == "Kalah" || type.trim() == "Cancel" || type == "Tidak Lolos PQ") {
                         totalNilaiLainnya += Number(filter.hps_pagu);
                     } else {
-                        totalNilaiLainnya += Number(filter.nilai_perolehan);
+                        totalNilaiLainnya += filter.nilai_perolehan != 0 ? Number(filter.nilai_perolehan * (filter.porsi_jo / 100)) : 0;
                         // console.log(totalNilaiLainnya, filter, "oke");
                     }
                     switch (Number(filter.stage)) {
@@ -4617,9 +4658,6 @@
                             if(filter.tipe_proyek == "R") continue;
                             nilai = filter.hps_pagu ?? 0;
                             break;
-                        case "Kalah":
-                            nilai = filter.hps_pagu ?? 0;
-                            break;
                         case "Cancel":
                             nilai = filter.hps_pagu ?? 0;
                             break;
@@ -4649,10 +4687,13 @@
                         //     }
                         //     break;
                         case "Perolehan" :
-                            nilai = filter.nilai_perolehan;
+                            nilai = filter.nilai_perolehan != 0 ? filter.nilai_perolehan * (filter.porsi_jo / 100) : 0;
                             break;
                         case "Menang" :
-                            nilai = filter.nilai_perolehan;
+                            nilai = filter.nilai_perolehan != 0 ? filter.nilai_perolehan * (filter.porsi_jo / 100) : 0;
+                            break;
+                        case "Kalah":
+                            nilai = filter.nilai_perolehan != 0 ? filter.nilai_perolehan * (filter.porsi_jo / 100) : 0;
                             break;
                         default:
                             nilai = 0;
