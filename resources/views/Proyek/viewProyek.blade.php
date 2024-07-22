@@ -112,18 +112,28 @@
 
                                 <!--begin::Button-->
                                 @canany(['super-admin', 'admin-crm', 'user-crm', 'approver-crm'])
-                                    @if ($proyek->is_cancel == false)
-                                        <button type="submit" name="proyek-save" class="btn btn-sm btn-primary ms-2" id="proyek-save"
-                                            style="background-color:#008CB4">
-                                            Save</button>
-                                    @endif                                
+                                    @if ($proyek->dop != "EA")
+                                        @if ($proyek->stage < 8)
+                                            @if ($proyek->is_cancel == false)
+                                                <button type="submit" name="proyek-save" class="btn btn-sm btn-primary ms-2" id="proyek-save"
+                                                    style="background-color:#008CB4">
+                                                    Save</button>
+                                            @endif
+                                        @endif
+                                    @else
+                                        @if ($proyek->is_cancel == false)
+                                            <button type="submit" name="proyek-save" class="btn btn-sm btn-primary ms-2" id="proyek-save"
+                                                style="background-color:#008CB4">
+                                                Save</button>
+                                        @endif                                
+                                    @endif                             
                                 @endcanany                                    
                                 @endif
                                 <!--end::Button-->
 
                                 <!--begin::Button-->    
                                 @if ($proyek->UnitKerja?->dop != "EA")
-                                    @if (($proyek->stage == 8 && $proyek->is_need_approval_terkontrak && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek?->is_revisi))
+                                    @if (($proyek->stage == 6 && $proyek->is_need_approval_terkontrak && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek?->is_revisi))
                                         <button type="button" class="btn btn-sm btn-success ms-2" onclick="requestApprovalTerkontrak('{{ $proyek->kode_proyek }}')">Ajukan Approval</button>
                                     @endif
                                     @if (App\Models\MatriksApprovalTerkontrakProyek::where('nip', Auth::user()->nip)->where('unit_kerja', $proyek->unit_kerja)->where("is_active", true)->first() && $proyek->ApprovalTerkontrakProyek && is_null($proyek->ApprovalTerkontrakProyek?->is_revisi) && is_null($proyek->ApprovalTerkontrakProyek->is_approved))
@@ -652,101 +662,138 @@
                                                         @endif
                                                     @endif
 
-                                                    @if ($proyek->stage > 7)
-                                                        @if ($proyek->stage == 8 || $proyek->stage > 9)
-                                                            <a href="#" data-bs-toggle="dropdown" role="button"
-                                                                id="terkontrak" aria-expanded="false"
-                                                                aria-controls="#terkontrak"
-                                                                class="stage-button stage-is-done color-is-default"
-                                                                style="outline: 0px; cursor: pointer;" stage="8">
-                                                                Terkontrak
-                                                                &nbsp;&nbsp;
-                                                                <span class="" style="position: relative;top: 15%;"
-                                                                    stage="8"><i
-                                                                        class="bi bi-caret-down-fill text-white"></i></span>
-                                                            </a>
-                                                        @elseif($proyek->stage == 9)
-                                                            <a href="#" data-bs-toggle="dropdown" role="button"
-                                                                id="terkontrak" aria-expanded="false"
-                                                                aria-controls="#terkontrak"
-                                                                class="stage-button stage-is-done color-is-danger"
-                                                                style="outline: 0px; cursor: pointer;" stage="8">
-                                                                Terendah
-                                                                &nbsp;&nbsp;
-                                                                <span class="" style="position: relative;top: 15%;"
-                                                                    stage="8"><i
-                                                                        class="bi bi-caret-down-fill text-white"></i></span>
-                                                            </a>
-                                                        @endif
-                                                        @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
-                                                            <ul class="dropdown-menu" id="terkontrak"
-                                                                aria-labelledby="terkontrak">
-                                                                <form action="/proyek/stage-save" method="POST">
-                                                                </form>
-                                                                <form action="/proyek/stage-save" method="POST"
-                                                                    onsubmit="confirmAction(this); return false;"
-                                                                    stage="1">
-                                                                    @csrf
-                                                                    <input type="hidden" name="kode_proyek"
-                                                                        value="{{ $proyek->kode_proyek }}">
-                                                                    <li><input type="submit"
-                                                                            onclick="this.form.submitted=this.value"
-                                                                            class="dropdown-item" name="stage-terkontrak"
-                                                                            value="Terkontrak" /></li>
-                                                                    <li><input type="submit"
-                                                                            onclick="this.form.submitted=this.value"
-                                                                            class="dropdown-item" name="stage-terendah"
-                                                                            value="Terendah" /></li>
-                                                                </form>
-                                                            </ul>
-                                                        @endif
-                                                    @else
-                                                        @php
-                                                            $selisih = abs($proyek->stage - 8);
-                                                        @endphp
-                                                        @if ($selisih == 2)
-                                                            <a href="#" data-bs-toggle="dropdown" role="button"
-                                                                id="terkontrak" aria-expanded="false"
-                                                                aria-controls="#terkontrak"
-                                                                class="stage-button stage-is-not-active color-is-default"
-                                                                style="outline: 0px; cursor: pointer;" stage="8">
-                                                                Terkontrak
-                                                                &nbsp;&nbsp;
-                                                                <span class="" style="position: relative;top: 15%;"
-                                                                    stage="8"><i
-                                                                        class="bi bi-caret-down-fill text-white"></i></span>
-                                                            </a>
-                                                        @else
+                                                    @if ($proyek->dop != "EA")
+                                                        @if ($proyek->stage == 8)
                                                             <a href="#"
-                                                                class="stage-button stage-is-not-active color-is-default"
-                                                                style="outline: 0px; cursor: pointer;pointer-events: none;"
+                                                                class="stage-button stage-action stage-is-done color-is-default"
+                                                                style="outline: 0px; cursor: pointer; pointer-events: none;"
                                                                 stage="8">
                                                                 Terkontrak
                                                             </a>
+                                                        @else
+                                                            @if ((abs($proyek->stage - 6) != 1 || abs($proyek->stage - 7) != 2) && $proyek->is_need_approval_terkontrak)
+                                                                @if (!empty($proyek->ApprovalTerkontrakProyek))
+                                                                    <a href="#"
+                                                                        class="stage-button stage-action stage-is-not-active color-is-default"
+                                                                        style="outline: 0px; cursor: pointer; pointer-events: none; background-color:rgb(12, 187, 50)"
+                                                                        stage="8">
+                                                                        Waiting for Approval
+                                                                    </a>                                                                    
+                                                                @else
+                                                                    <a href="#"
+                                                                        class="stage-button stage-action stage-is-not-active color-is-default"
+                                                                        style="outline: 0px; cursor: pointer; pointer-events: none; background-color:rgb(255, 156, 51)"
+                                                                        stage="8">
+                                                                        Request Approval
+                                                                    </a>                                                                    
+                                                                @endif
+                                                            @elseif(is_null($proyek->is_need_approval_terkontrak))
+                                                                <a href="#"
+                                                                    class="stage-button stage-action stage-is-not-active color-is-default"
+                                                                    style="outline: 0px; cursor: pointer;"
+                                                                    stage="8">
+                                                                    Approval Terkontrak
+                                                                </a>
+                                                            @endif
                                                         @endif
-                                                        @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
-                                                            <ul class="dropdown-menu" id="terkontrak"
-                                                                aria-labelledby="terkontrak">
-                                                                <form action="/proyek/stage-save" method="POST">
-                                                                </form>
-                                                                <form action="/proyek/stage-save" method="POST"
-                                                                    onsubmit="confirmAction(this); return false;"
-                                                                    stage="1">
-                                                                    @csrf
-                                                                    <input type="hidden" name="kode_proyek"
-                                                                        value="{{ $proyek->kode_proyek }}">
-                                                                    <li><input type="submit"
-                                                                            onclick="this.form.submitted=this.value"
-                                                                            class="dropdown-item" name="stage-terkontrak"
-                                                                            value="Terkontrak" /></li>
-                                                                    <li><input type="submit"
-                                                                            onclick="this.form.submitted=this.value"
-                                                                            class="dropdown-item" name="stage-terendah"
-                                                                            value="Terendah" /></li>
-                                                                </form>
-                                                            </ul>
+                                                    @else
+                                                        @if ($proyek->stage > 7)
+                                                            @if ($proyek->stage == 8 || $proyek->stage > 9)
+                                                                <a href="#" data-bs-toggle="dropdown" role="button"
+                                                                    id="terkontrak" aria-expanded="false"
+                                                                    aria-controls="#terkontrak"
+                                                                    class="stage-button stage-is-done color-is-default"
+                                                                    style="outline: 0px; cursor: pointer;" stage="8">
+                                                                    Terkontrak
+                                                                    &nbsp;&nbsp;
+                                                                    <span class="" style="position: relative;top: 15%;"
+                                                                        stage="8"><i
+                                                                            class="bi bi-caret-down-fill text-white"></i></span>
+                                                                </a>
+                                                            @elseif($proyek->stage == 9)
+                                                                <a href="#" data-bs-toggle="dropdown" role="button"
+                                                                    id="terkontrak" aria-expanded="false"
+                                                                    aria-controls="#terkontrak"
+                                                                    class="stage-button stage-is-done color-is-danger"
+                                                                    style="outline: 0px; cursor: pointer;" stage="8">
+                                                                    Terendah
+                                                                    &nbsp;&nbsp;
+                                                                    <span class="" style="position: relative;top: 15%;"
+                                                                        stage="8"><i
+                                                                            class="bi bi-caret-down-fill text-white"></i></span>
+                                                                </a>
+                                                            @endif
+                                                            @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
+                                                                <ul class="dropdown-menu" id="terkontrak"
+                                                                    aria-labelledby="terkontrak">
+                                                                    <form action="/proyek/stage-save" method="POST">
+                                                                    </form>
+                                                                    <form action="/proyek/stage-save" method="POST"
+                                                                        onsubmit="confirmAction(this); return false;"
+                                                                        stage="1">
+                                                                        @csrf
+                                                                        <input type="hidden" name="kode_proyek"
+                                                                            value="{{ $proyek->kode_proyek }}">
+                                                                        <li><input type="submit"
+                                                                                onclick="this.form.submitted=this.value"
+                                                                                class="dropdown-item" name="stage-terkontrak"
+                                                                                value="Terkontrak" /></li>
+                                                                        <li><input type="submit"
+                                                                                onclick="this.form.submitted=this.value"
+                                                                                class="dropdown-item" name="stage-terendah"
+                                                                                value="Terendah" /></li>
+                                                                    </form>
+                                                                </ul>
+                                                            @endif
+                                                        @else
+                                                            @php
+                                                                $selisih = abs($proyek->stage - 8);
+                                                            @endphp
+                                                            @if ($selisih == 2)
+                                                                <a href="#" data-bs-toggle="dropdown" role="button"
+                                                                    id="terkontrak" aria-expanded="false"
+                                                                    aria-controls="#terkontrak"
+                                                                    class="stage-button stage-is-not-active color-is-default"
+                                                                    style="outline: 0px; cursor: pointer;" stage="8">
+                                                                    Terkontrak
+                                                                    &nbsp;&nbsp;
+                                                                    <span class="" style="position: relative;top: 15%;"
+                                                                        stage="8"><i
+                                                                            class="bi bi-caret-down-fill text-white"></i></span>
+                                                                </a>
+                                                            @else
+                                                                <a href="#"
+                                                                    class="stage-button stage-is-not-active color-is-default"
+                                                                    style="outline: 0px; cursor: pointer;pointer-events: none;"
+                                                                    stage="8">
+                                                                    Terkontrak
+                                                                </a>
+                                                            @endif
+                                                            @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
+                                                                <ul class="dropdown-menu" id="terkontrak"
+                                                                    aria-labelledby="terkontrak">
+                                                                    <form action="/proyek/stage-save" method="POST">
+                                                                    </form>
+                                                                    <form action="/proyek/stage-save" method="POST"
+                                                                        onsubmit="confirmAction(this); return false;"
+                                                                        stage="1">
+                                                                        @csrf
+                                                                        <input type="hidden" name="kode_proyek"
+                                                                            value="{{ $proyek->kode_proyek }}">
+                                                                        <li><input type="submit"
+                                                                                onclick="this.form.submitted=this.value"
+                                                                                class="dropdown-item" name="stage-terkontrak"
+                                                                                value="Terkontrak" /></li>
+                                                                        <li><input type="submit"
+                                                                                onclick="this.form.submitted=this.value"
+                                                                                class="dropdown-item" name="stage-terendah"
+                                                                                value="Terendah" /></li>
+                                                                    </form>
+                                                                </ul>
+                                                            @endif
                                                         @endif
                                                     @endif
+
 
 
                                                     {{-- @if ($proyek->stage > 9)
@@ -993,16 +1040,40 @@
                                                     <!--end:::Tab item Perolehan-->
                                                 @endif
 
-                                                @if ($proyek->stage > 5)
-                                                    <!--begin:::Tab item Menang-->
-                                                    <li class="nav-item">
-                                                        <a class="nav-link text-active-primary pb-4"
-                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                            href="#kt_user_view_overview_menang"
-                                                            style="font-size:14px;">{{ $proyek->stage == 7 ? 'Kalah' : 'Menang' }}</a>
-                                                    </li>
-                                                    <!--end:::Tab item Menang-->
+                                                @if ($proyek->dop != "EA")
+                                                    @if ($proyek->stage > 5 && is_null($proyek->is_need_approval_terkontrak))
+                                                        <!--begin:::Tab item Menang-->
+                                                        <li class="nav-item">
+                                                            <a class="nav-link text-active-primary pb-4"
+                                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                                href="#kt_user_view_overview_menang"
+                                                                style="font-size:14px;">{{ $proyek->stage == 7 ? 'Kalah' : 'Menang' }}</a>
+                                                        </li>
+                                                        <!--end:::Tab item Menang-->
+                                                    @endif
+                                                    @if ($proyek->stage > 5 && $proyek->is_need_approval_terkontrak)
+                                                        <!--begin:::Tab item Terkontrak-->
+                                                        <li class="nav-item">
+                                                            <a class="nav-link text-active-primary pb-4"
+                                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                                href="#kt_user_view_overview_terkontrak"
+                                                                style="font-size:14px;">{{ $proyek->stage == 9 ? 'Terendah' : 'Terkontrak' }}</a>
+                                                        </li>
+                                                        <!--end:::Tab item Terkontrak-->
+                                                    @endif                                                    
+                                                @else
+                                                    @if ($proyek->stage > 5)
+                                                        <!--begin:::Tab item Menang-->
+                                                        <li class="nav-item">
+                                                            <a class="nav-link text-active-primary pb-4"
+                                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                                href="#kt_user_view_overview_menang"
+                                                                style="font-size:14px;">{{ $proyek->stage == 7 ? 'Kalah' : 'Menang' }}</a>
+                                                        </li>
+                                                        <!--end:::Tab item Menang-->
+                                                    @endif                                                    
                                                 @endif
+
                                                 @if ($proyek->stage > 7)
                                                     <!--begin:::Tab item Terkontrak-->
                                                     <li class="nav-item">
@@ -10334,6 +10405,13 @@
 @endsection
 
 @section('js-script')
+    <script>
+        $(document).on("keydown", ":input:not(textarea)", function(event) {
+            if (event.key == "Enter") {
+                event.preventDefault();
+            }
+        });
+    </script>
     <!--begin:: Dokumen File Upload Max Size-->
     <script>
         var inputs = document.getElementsByTagName('input');

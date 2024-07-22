@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ApprovalTerkontrakProyek;
 use App\Models\Forecast;
 use App\Models\MatriksApprovalTerkontrakProyek;
+use App\Models\ProyekBerjalans;
 use App\Models\Pegawai;
 use App\Models\Provinsi;
 use App\Models\Proyek;
@@ -138,6 +139,11 @@ class ApprovalTerkontrakProyekController extends Controller
             }
             $selectPicCrm = Pegawai::where("nip", $proyekApprovalSelected->request_by)->first();
 
+            if (empty($proyek->nilai_perolehan)) {
+                Alert::error("Error", "Nilai Perolehan belum diisi. Periksa Kembali");
+                return redirect()->back();
+            }
+
             if ($actionSelected == "approved") {
                 $proyekApprovalSelected->is_approved = true;
                 $proyekApprovalSelected->approved_by = Auth::user()->nip;
@@ -151,12 +157,12 @@ class ApprovalTerkontrakProyekController extends Controller
                     if (!$sendEmailUser) {
                         return redirect()->back();
                     }
-
+                    
                     $getTanggalRequest = Carbon::create($proyekApprovalSelected->request_on);
                     $bulans = $getTanggalRequest->month;
                     $years = $getTanggalRequest->year;
 
-                    if (!empty($proyek->bulan_ri_perolehan) && !empty($proyek->nilai_perolehan) && $proyek->stage == 8 && $proyek->tahun_perolehan == $years) {
+                    if (!empty($proyek->bulan_ri_perolehan) && !empty($proyek->nilai_perolehan) && $proyek->stage == 6 && $proyek->is_need_approval_terkontrak && $proyek->tahun_perolehan == $years) {
                         $editForecast = Forecast::where("kode_proyek", "=", $proyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->where("tahun", "=", $years)->first();
                         if (!empty($editForecast)) {
                             $oldestForecast = Forecast::where("kode_proyek", "=", $proyek->kode_proyek)->where("periode_prognosa", "=", ($bulans - 1))->where("tahun", "=", $years)->first();
@@ -187,9 +193,15 @@ class ApprovalTerkontrakProyekController extends Controller
                         }
                     }
                     $generateDataNasabahOnline = self::generateNasabahOnline($proyek);
-                    if ($proyek->UnitKerja->dop != "EA") {
-                        self::sendDataNasabahOnline($generateDataNasabahOnline);
-                    }
+                    // if ($proyek->UnitKerja->dop != "EA") {
+                    //     self::sendDataNasabahOnline($generateDataNasabahOnline);
+                    // }
+                    $proyek->stage = 8;
+                    $proyekBerjalan = ProyekBerjalans::where('kode_proyek', $proyek->kode_proyek)->first();
+                    $proyekBerjalan->stage = 8;
+                    $proyek->is_need_approval_terkontrak = false;
+                    $proyek->save();
+                    $proyekBerjalan->save();
                 }
                 DB::commit();
                 Alert::success("Success", "Proyek berhasil disetujui");
