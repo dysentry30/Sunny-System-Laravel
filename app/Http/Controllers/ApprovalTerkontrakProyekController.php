@@ -193,9 +193,9 @@ class ApprovalTerkontrakProyekController extends Controller
                         }
                     }
                     $generateDataNasabahOnline = self::generateNasabahOnline($proyek);
-                    // if ($proyek->UnitKerja->dop != "EA") {
-                    //     self::sendDataNasabahOnline($generateDataNasabahOnline);
-                    // }
+                    if ($proyek->UnitKerja->dop != "EA") {
+                        self::sendDataNasabahOnline($generateDataNasabahOnline);
+                    }
                     $proyek->stage = 8;
                     $proyekBerjalan = ProyekBerjalans::where('kode_proyek', $proyek->kode_proyek)->first();
                     $proyekBerjalan->stage = 8;
