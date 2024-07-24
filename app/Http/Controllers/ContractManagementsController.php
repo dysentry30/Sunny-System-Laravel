@@ -2455,14 +2455,19 @@ class ContractManagementsController extends Controller
             // return redirect()->back();
         }
         $file = $request->file("attach-file");
+        $nama_file = $file->getClientOriginalName();
+        $id_document = date("dmYHis_") . str_replace(' ', '', $file->getClientOriginalName());
+
         $model = new PerjanjianKso();
         $model->id_contract = $data["id-contract"];
-        $model->id_document = Str::uuid();
-        $model->document_name = $data["document-name"];
+        $model->profit_center = $contract->profit_center;
+        $model->id_document = $id_document;
+        $model->document_name = $nama_file;
         $model->created_by = auth()->user()->id;
         $model->note = $data["note"];
         if ($model->save()) {
-            moveFileTemp($file, $model->id_document);
+            // moveFileTemp($file, $model->id_document);
+            $file->move(public_path('contract-managements/dokumen-perjanjian-kso'), $id_document);
             Alert::success("Success", "Perjanjian KSO berhasil dibuat");
             return redirect()->back();
         }
@@ -2513,17 +2518,20 @@ class ContractManagementsController extends Controller
             // return redirect()->back();
         }
         $file = $request->file("attach-file");
+        $nama_file = $file->getClientOriginalName();
+        $id_document = date("dmYHis_") . str_replace(' ', '', $file->getClientOriginalName());
+
         $model = new DokumenPendukung();
         $model->id_perubahan_kontrak = $data["id-perubahan-kontrak"];
         $model->id_contract = $data["id_contract"];
         // $model->id_document = Str::uuid();
-        $id_document = date("His_") . str_replace(' ', '_', $file->getClientOriginalName());
+        // $id_document = date("His_") . str_replace(' ', '_', $file->getClientOriginalName());
         $model->id_document = $id_document;
         // $model->document_name = $data["document-name"];
         $model->created_by = auth()->user()->id;
         $model->note = $data["note"];
-        if ($model->save()) {
-            moveFileTemp($file, explode(".", $id_document)[0]);
+        if ($file->move(public_path('contract-managements/dokumen-pendukung-change'), $id_document) && $model->save()) {
+            // moveFileTemp($file, explode(".", $id_document)[0]);
             Alert::success("Success", "Dokumen Pendukung berhasil dibuat");
             return redirect()->back();
         }
@@ -2542,7 +2550,7 @@ class ContractManagementsController extends Controller
 
         $nama_file = $file->id_document;
         if ($file->delete()) {
-            File::delete(public_path("words/$nama_file"));
+            File::delete(public_path("contract-managements/dokumen-pendukung-change/$nama_file"));
             return (object)[
                 'success' => true,
                 'message' => "Dokumen berhasil dihapus",
@@ -3746,7 +3754,7 @@ class ContractManagementsController extends Controller
 
             $uploadFinal = new ContractUploadFinal();
             $uploadFinal->id_contract = $contract->id_contract;
-            $uploadFinal->profti_center = $contract->profti_center;
+            $uploadFinal->profit_center = $contract->profit_center;
             $uploadFinal->id_document = $id_document;
             $uploadFinal->nama_document = $nama_file;
             $uploadFinal->category = $data["kategori"];
@@ -4966,151 +4974,151 @@ class ContractManagementsController extends Controller
         ], 200);
     }
 
-    function getDataProgressPIS2($kode_proyek, $kode_spk, $period)
-    {
-        $login = Http::post('https://pis.wika.co.id/wpapi/auth/token', [
-            "grant_type" => "client_credentials",
-            "client_id" => "app-she",
-            "secret_key" => "y7sdyf7sdhfuerwe7ry383rwriwu3894u2"
-        ]);
+    // function getDataProgressPIS2($kode_proyek, $kode_spk, $period)
+    // {
+    //     $login = Http::post('https://pis.wika.co.id/wpapi/auth/token', [
+    //         "grant_type" => "client_credentials",
+    //         "client_id" => "app-she",
+    //         "secret_key" => "y7sdyf7sdhfuerwe7ry383rwriwu3894u2"
+    //     ]);
 
-        if ($login->successful()) {
-            $login_response = $login->object();
-            $token = $login_response->access_token ?? null;
+    //     if ($login->successful()) {
+    //         $login_response = $login->object();
+    //         $token = $login_response->access_token ?? null;
 
-            $is_exist_progress_period = ProyekPIS::where("kode_spk", "=", $kode_spk)->where("period", "=", $period)->first();
+    //         $is_exist_progress_period = ProyekPIS::where("kode_spk", "=", $kode_spk)->where("period", "=", $period)->first();
 
-            if (!empty($token)) {
-                $response = Http::withHeaders(["x-access-token" => $token])
-                ->post('https://pis.wika.co.id/wpapi/proyek/getProyekResume', [
-                    "no_spk" => $kode_spk,
-                    "period" => $period
-                ]);
+    //         if (!empty($token)) {
+    //             $response = Http::withHeaders(["x-access-token" => $token])
+    //             ->post('https://pis.wika.co.id/wpapi/proyek/getProyekResume', [
+    //                 "no_spk" => $kode_spk,
+    //                 "period" => $period
+    //             ]);
 
-                if ($response->successful()) {
-                    $dataResponse = $response->collect($key = "data");
-                    // dd($dataResponse);
-                    if ($is_exist_progress_period) {
-                        $data = $is_exist_progress_period;
-                        $data->kode_proyek = $kode_proyek;
-                        $data->kode_spk = $kode_spk;
-                        $data->spk_intern_no = $dataResponse['spk_intern_no'];
-                        $data->proyek_shortname = $dataResponse['proyek_shortname'];
-                        $data->proyek_name = $dataResponse['proyek_name'];
-                        $data->type_code = $dataResponse['type_code'];
-                        $data->period = $dataResponse['period'];
-                        $data->start_date = $dataResponse['start_date'];
-                        $data->finish_date = $dataResponse['finish_date'];
-                        $data->bast1_date = $dataResponse['bast1_date'];
-                        $data->bast2_date = $dataResponse['bast2_date'];
-                        $data->divisi_name = $dataResponse['divisi_name'];
-                        $data->departemen_name = $dataResponse['departemen_name'];
-                        $data->departemen_code = $dataResponse['departemen_code'];
-                        $data->direktorat_name = $dataResponse['direktorat_name'];
-                        $data->pemberi_kerja_code = $dataResponse['pemberi_kerja_code'];
-                        $data->pemberi_kerja_name = $dataResponse['pemberi_kerja_name'];
-                        $data->sumber_dana = $dataResponse['sumber_dana'];
-                        $data->sbu = $dataResponse['sbu'];
-                        $data->country = $dataResponse['country'];
-                        $data->province = $dataResponse['province'];
-                        $data->longitude = $dataResponse['longitude'];
-                        $data->latitude = $dataResponse['latitude'];
-                        $data->mp_nip = $dataResponse['mp_nip'];
-                        $data->mp_name = $dataResponse['mp_name'];
-                        $data->mp_phone = $dataResponse['mp_phone'];
-                        $data->mp_email = $dataResponse['mp_email'];
-                        $data->is_strategis_nas = $dataResponse['is_strategis_nas'];
-                        $data->is_strategis_wika = $dataResponse['is_strategis_wika'];
-                        $data->status_autorisasi = $dataResponse['status_autorisasi'];
-                        $data->is_req_unlock = $dataResponse['is_req_unlock'];
-                        $data->ok_awal = $dataResponse['ok_awal'];
-                        $data->ok_review = $dataResponse['ok_review'];
-                        $data->nilai_ok = $dataResponse['nilai_ok'];
-                        $data->ra_penjualan = $dataResponse['ra_penjualan'];
-                        $data->ri_penjualan = $dataResponse['ri_penjualan'];
-                        $data->ra_progress = $dataResponse['ra_progress'];
-                        $data->ri_progress = $dataResponse['ri_progress'];
-                        $data->ra_biaya_progress_diakui = $dataResponse['ra_biaya_progress_diakui'];
-                        $data->ri_biaya_progress_diakui = $dataResponse['ri_biaya_progress_diakui'];
-                        $data->ra_margin = $dataResponse['ra_margin'];
-                        $data->ri_margin = $dataResponse['ri_margin'];
-                        $data->pi_margin = $dataResponse['pi_margin'];
-                        $data->saldo_rkjo = $dataResponse['saldo_rkjo'];
-                        $data->piutang_retensi = $dataResponse['piutang_retensi'];
-                        $data->piutang_usaha = $dataResponse['piutang_usaha'];
-                        $data->tagihan_bruto = $dataResponse['tagihan_bruto'];
-                        $data->bad = $dataResponse['bad'];
-                        $data->pdpk = $dataResponse['pdpk'];
-                        $data->bdd = $dataResponse['bdd'];
-                        $data->persediaan = $dataResponse['persediaan'];
-                        $data->rk = $dataResponse['rk'];
-                    } else {
-                        $data = new ProyekPIS();
-                        $data->kode_proyek = $kode_proyek;
-                        $data->kode_spk = $kode_spk;
-                        $data->spk_intern_no = $dataResponse['spk_intern_no'];
-                        $data->proyek_shortname = $dataResponse['proyek_shortname'];
-                        $data->proyek_name = $dataResponse['proyek_name'];
-                        $data->type_code = $dataResponse['type_code'];
-                        $data->period = $dataResponse['period'];
-                        $data->start_date = $dataResponse['start_date'];
-                        $data->finish_date = $dataResponse['finish_date'];
-                        $data->bast1_date = $dataResponse['bast1_date'];
-                        $data->bast2_date = $dataResponse['bast2_date'];
-                        $data->divisi_name = $dataResponse['divisi_name'];
-                        $data->departemen_name = $dataResponse['departemen_name'];
-                        $data->departemen_code = $dataResponse['departemen_code'];
-                        $data->direktorat_name = $dataResponse['direktorat_name'];
-                        $data->pemberi_kerja_code = $dataResponse['pemberi_kerja_code'];
-                        $data->pemberi_kerja_name = $dataResponse['pemberi_kerja_name'];
-                        $data->sumber_dana = $dataResponse['sumber_dana'];
-                        $data->sbu = $dataResponse['sbu'];
-                        $data->country = $dataResponse['country'];
-                        $data->province = $dataResponse['province'];
-                        $data->longitude = $dataResponse['longitude'];
-                        $data->latitude = $dataResponse['latitude'];
-                        $data->mp_nip = $dataResponse['mp_nip'];
-                        $data->mp_name = $dataResponse['mp_name'];
-                        $data->mp_phone = $dataResponse['mp_phone'];
-                        $data->mp_email = $dataResponse['mp_email'];
-                        $data->is_strategis_nas = $dataResponse['is_strategis_nas'];
-                        $data->is_strategis_wika = $dataResponse['is_strategis_wika'];
-                        $data->status_autorisasi = $dataResponse['status_autorisasi'];
-                        $data->is_req_unlock = $dataResponse['is_req_unlock'];
-                        $data->ok_awal = $dataResponse['ok_awal'];
-                        $data->ok_review = $dataResponse['ok_review'];
-                        $data->nilai_ok = $dataResponse['nilai_ok'];
-                        $data->ra_penjualan = $dataResponse['ra_penjualan'];
-                        $data->ri_penjualan = $dataResponse['ri_penjualan'];
-                        $data->ra_progress = $dataResponse['ra_progress'];
-                        $data->ri_progress = $dataResponse['ri_progress'];
-                        $data->ra_biaya_progress_diakui = $dataResponse['ra_biaya_progress_diakui'];
-                        $data->ri_biaya_progress_diakui = $dataResponse['ri_biaya_progress_diakui'];
-                        $data->ra_margin = $dataResponse['ra_margin'];
-                        $data->ri_margin = $dataResponse['ri_margin'];
-                        $data->pi_margin = $dataResponse['pi_margin'];
-                        $data->saldo_rkjo = $dataResponse['saldo_rkjo'];
-                        $data->piutang_retensi = $dataResponse['piutang_retensi'];
-                        $data->piutang_usaha = $dataResponse['piutang_usaha'];
-                        $data->tagihan_bruto = $dataResponse['tagihan_bruto'];
-                        $data->bad = $dataResponse['bad'];
-                        $data->pdpk = $dataResponse['pdpk'];
-                        $data->bdd = $dataResponse['bdd'];
-                        $data->persediaan = $dataResponse['persediaan'];
-                        $data->rk = $dataResponse['rk'];
-                    }
-                    setLogging("Get_Progress_PIS_2", "[Proyek=>" . $kode_proyek . "]", $dataResponse->toArray());
-                    return $data->save();
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
+    //             if ($response->successful()) {
+    //                 $dataResponse = $response->collect($key = "data");
+    //                 // dd($dataResponse);
+    //                 if ($is_exist_progress_period) {
+    //                     $data = $is_exist_progress_period;
+    //                     $data->kode_proyek = $kode_proyek;
+    //                     $data->kode_spk = $kode_spk;
+    //                     $data->spk_intern_no = $dataResponse['spk_intern_no'];
+    //                     $data->proyek_shortname = $dataResponse['proyek_shortname'];
+    //                     $data->proyek_name = $dataResponse['proyek_name'];
+    //                     $data->type_code = $dataResponse['type_code'];
+    //                     $data->period = $dataResponse['period'];
+    //                     $data->start_date = $dataResponse['start_date'];
+    //                     $data->finish_date = $dataResponse['finish_date'];
+    //                     $data->bast1_date = $dataResponse['bast1_date'];
+    //                     $data->bast2_date = $dataResponse['bast2_date'];
+    //                     $data->divisi_name = $dataResponse['divisi_name'];
+    //                     $data->departemen_name = $dataResponse['departemen_name'];
+    //                     $data->departemen_code = $dataResponse['departemen_code'];
+    //                     $data->direktorat_name = $dataResponse['direktorat_name'];
+    //                     $data->pemberi_kerja_code = $dataResponse['pemberi_kerja_code'];
+    //                     $data->pemberi_kerja_name = $dataResponse['pemberi_kerja_name'];
+    //                     $data->sumber_dana = $dataResponse['sumber_dana'];
+    //                     $data->sbu = $dataResponse['sbu'];
+    //                     $data->country = $dataResponse['country'];
+    //                     $data->province = $dataResponse['province'];
+    //                     $data->longitude = $dataResponse['longitude'];
+    //                     $data->latitude = $dataResponse['latitude'];
+    //                     $data->mp_nip = $dataResponse['mp_nip'];
+    //                     $data->mp_name = $dataResponse['mp_name'];
+    //                     $data->mp_phone = $dataResponse['mp_phone'];
+    //                     $data->mp_email = $dataResponse['mp_email'];
+    //                     $data->is_strategis_nas = $dataResponse['is_strategis_nas'];
+    //                     $data->is_strategis_wika = $dataResponse['is_strategis_wika'];
+    //                     $data->status_autorisasi = $dataResponse['status_autorisasi'];
+    //                     $data->is_req_unlock = $dataResponse['is_req_unlock'];
+    //                     $data->ok_awal = $dataResponse['ok_awal'];
+    //                     $data->ok_review = $dataResponse['ok_review'];
+    //                     $data->nilai_ok = $dataResponse['nilai_ok'];
+    //                     $data->ra_penjualan = $dataResponse['ra_penjualan'];
+    //                     $data->ri_penjualan = $dataResponse['ri_penjualan'];
+    //                     $data->ra_progress = $dataResponse['ra_progress'];
+    //                     $data->ri_progress = $dataResponse['ri_progress'];
+    //                     $data->ra_biaya_progress_diakui = $dataResponse['ra_biaya_progress_diakui'];
+    //                     $data->ri_biaya_progress_diakui = $dataResponse['ri_biaya_progress_diakui'];
+    //                     $data->ra_margin = $dataResponse['ra_margin'];
+    //                     $data->ri_margin = $dataResponse['ri_margin'];
+    //                     $data->pi_margin = $dataResponse['pi_margin'];
+    //                     $data->saldo_rkjo = $dataResponse['saldo_rkjo'];
+    //                     $data->piutang_retensi = $dataResponse['piutang_retensi'];
+    //                     $data->piutang_usaha = $dataResponse['piutang_usaha'];
+    //                     $data->tagihan_bruto = $dataResponse['tagihan_bruto'];
+    //                     $data->bad = $dataResponse['bad'];
+    //                     $data->pdpk = $dataResponse['pdpk'];
+    //                     $data->bdd = $dataResponse['bdd'];
+    //                     $data->persediaan = $dataResponse['persediaan'];
+    //                     $data->rk = $dataResponse['rk'];
+    //                 } else {
+    //                     $data = new ProyekPIS();
+    //                     $data->kode_proyek = $kode_proyek;
+    //                     $data->kode_spk = $kode_spk;
+    //                     $data->spk_intern_no = $dataResponse['spk_intern_no'];
+    //                     $data->proyek_shortname = $dataResponse['proyek_shortname'];
+    //                     $data->proyek_name = $dataResponse['proyek_name'];
+    //                     $data->type_code = $dataResponse['type_code'];
+    //                     $data->period = $dataResponse['period'];
+    //                     $data->start_date = $dataResponse['start_date'];
+    //                     $data->finish_date = $dataResponse['finish_date'];
+    //                     $data->bast1_date = $dataResponse['bast1_date'];
+    //                     $data->bast2_date = $dataResponse['bast2_date'];
+    //                     $data->divisi_name = $dataResponse['divisi_name'];
+    //                     $data->departemen_name = $dataResponse['departemen_name'];
+    //                     $data->departemen_code = $dataResponse['departemen_code'];
+    //                     $data->direktorat_name = $dataResponse['direktorat_name'];
+    //                     $data->pemberi_kerja_code = $dataResponse['pemberi_kerja_code'];
+    //                     $data->pemberi_kerja_name = $dataResponse['pemberi_kerja_name'];
+    //                     $data->sumber_dana = $dataResponse['sumber_dana'];
+    //                     $data->sbu = $dataResponse['sbu'];
+    //                     $data->country = $dataResponse['country'];
+    //                     $data->province = $dataResponse['province'];
+    //                     $data->longitude = $dataResponse['longitude'];
+    //                     $data->latitude = $dataResponse['latitude'];
+    //                     $data->mp_nip = $dataResponse['mp_nip'];
+    //                     $data->mp_name = $dataResponse['mp_name'];
+    //                     $data->mp_phone = $dataResponse['mp_phone'];
+    //                     $data->mp_email = $dataResponse['mp_email'];
+    //                     $data->is_strategis_nas = $dataResponse['is_strategis_nas'];
+    //                     $data->is_strategis_wika = $dataResponse['is_strategis_wika'];
+    //                     $data->status_autorisasi = $dataResponse['status_autorisasi'];
+    //                     $data->is_req_unlock = $dataResponse['is_req_unlock'];
+    //                     $data->ok_awal = $dataResponse['ok_awal'];
+    //                     $data->ok_review = $dataResponse['ok_review'];
+    //                     $data->nilai_ok = $dataResponse['nilai_ok'];
+    //                     $data->ra_penjualan = $dataResponse['ra_penjualan'];
+    //                     $data->ri_penjualan = $dataResponse['ri_penjualan'];
+    //                     $data->ra_progress = $dataResponse['ra_progress'];
+    //                     $data->ri_progress = $dataResponse['ri_progress'];
+    //                     $data->ra_biaya_progress_diakui = $dataResponse['ra_biaya_progress_diakui'];
+    //                     $data->ri_biaya_progress_diakui = $dataResponse['ri_biaya_progress_diakui'];
+    //                     $data->ra_margin = $dataResponse['ra_margin'];
+    //                     $data->ri_margin = $dataResponse['ri_margin'];
+    //                     $data->pi_margin = $dataResponse['pi_margin'];
+    //                     $data->saldo_rkjo = $dataResponse['saldo_rkjo'];
+    //                     $data->piutang_retensi = $dataResponse['piutang_retensi'];
+    //                     $data->piutang_usaha = $dataResponse['piutang_usaha'];
+    //                     $data->tagihan_bruto = $dataResponse['tagihan_bruto'];
+    //                     $data->bad = $dataResponse['bad'];
+    //                     $data->pdpk = $dataResponse['pdpk'];
+    //                     $data->bdd = $dataResponse['bdd'];
+    //                     $data->persediaan = $dataResponse['persediaan'];
+    //                     $data->rk = $dataResponse['rk'];
+    //                 }
+    //                 setLogging("Get_Progress_PIS_2", "[Proyek=>" . $kode_proyek . "]", $dataResponse->toArray());
+    //                 return $data->save();
+    //             } else {
+    //                 return false;
+    //             }
+    //         } else {
+    //             return false;
+    //         }
+    //     } else {
+    //         return false;
+    //     }
+    // }
 
     public function getProgressFromTableProyekPISNew(Request $request)
     {

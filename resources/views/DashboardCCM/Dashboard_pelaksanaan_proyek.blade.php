@@ -214,7 +214,6 @@
                                                         @endforeach
                                                 </select>
                                             </div>
-
                                             <div class="col-2">
                                                 <select onchange="selectFilter(this)" id="kode-proyek" name="proyek"
                                                         class="form-select form-select-solid w-auto"
@@ -222,7 +221,7 @@
                                                         data-placeholder="Proyek" data-select2-id="select2-data-proyek" tabindex="-1"
                                                         aria-hidden="true">
                                                         <option value="" selected></option>
-                                                        @foreach ($contract_pelaksanaan_new as $kontrak)
+                                                        @foreach ($contract_pelaksanaan_new->flatten() as $kontrak)
                                                         {{-- <option value="{{ $kontrak->project_id }}" {{ $proyek_get == $kontrak->project_id ? 'selected' : '' }} >{{ $kontrak->project->nama_proyek }} ({{ $kontrak->project_id }})</option> --}}
                                                         {{-- <option value="{{ $proyek->kode_proyek }}" >{{ $proyek->nama_proyek }} ({{$proyek->kode_proyek}})</option> --}}
                                                         <option value="{{ $kontrak->profit_center }}" {{ $proyek_get == $kontrak->profit_center ? 'selected' : '' }} >{{ $kontrak->ProyekPISNew->proyek_name }} ({{ $kontrak->profit_center }})</option>
@@ -318,8 +317,8 @@
                                 return $item->bast == 2;
                             })->first();
                         }else {
-                            $bast_1 = "-";
-                            $bast_2 = "-";
+                            $bast_1 = null;
+                            $bast_2 = null;
                         };
                         @endphp
 

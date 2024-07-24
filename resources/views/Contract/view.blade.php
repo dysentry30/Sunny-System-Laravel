@@ -514,23 +514,15 @@
                                             Serah Terima Pekerjaan
                                         </a> --}}
                                         @if (empty($is_approved) || $is_approved->isEmpty())
-                                            @if ($contract->ContractBast->where("bast", 1)->count() < 1)
-                                                <a href="#" role="link" class="stage-button color-is-default not-click"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Mohon upload <b>Dokumen BAST 1</b> terlebih dahulu."
-                                                    style="outline: 0px; cursor: not-allowed;">
-                                                    Pemeliharaan
-                                                </a>
-                                            @else
-                                                <a href="#" role="link" class="stage-button color-is-default"
-                                                    style="outline: 0px;">
-                                                    Pemeliharaan
-                                                </a>
-                                            @endif
+                                        <a href="#" role="link" class="stage-button color-is-default"
+                                            style="outline: 0px;">
+                                            Pemeliharaan
+                                        </a>
                                         @else
-                                            <a href="#" role="link" class="stage-button color-is-default" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Tidak dapat pindah stage <b>Pemeliharaan</b> saat ini karena kontrak sedang di <b>Lock</b>"
-                                                style="outline: 0px; cursor: not-allowed;">
-                                                Pemeliharaan
-                                            </a>                                            
+                                        <a href="#" role="link" class="stage-button color-is-default" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Tidak dapat pindah stage <b>Pemeliharaan</b> saat ini karena kontrak sedang di <b>Lock</b>"
+                                            style="outline: 0px; cursor: not-allowed;">
+                                            Pemeliharaan
+                                        </a>
                                         @endif
 
                                     </div>
@@ -557,7 +549,8 @@
                                 }
 
                             }
-                            if (stage.innerText == "Pemeliharaan" && stage.classList.length < 4) {
+                            if (stage.innerText == "Pemeliharaan") {
+
                                 stage.addEventListener("click", async e => {
                                     e.stopPropagation();
                                     Swal.fire({
@@ -1026,7 +1019,10 @@
                                         <tr>
                                             <!--begin::Column-->
                                             <td>
-                                                <a href="/contract-management/dokumen-aanwitjzing/{{ $dc->id_document }}/download" class="text-hover-primary">
+                                                {{-- <a href="/contract-management/dokumen-aanwitjzing/{{ $dc->id_document }}/download" class="text-hover-primary">
+                                                    {{ $dc->nama_document }}
+                                                </a> --}}
+                                                <a href="{{ asset('contract-managements/dokumen-aanwitjzing/'). '/' . $dc->id_document }}" target="_blank" class="text-hover-primary">
                                                     {{ $dc->nama_document }}
                                                 </a>
                                             </td>
@@ -1050,7 +1046,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="text-center">
+                                            <td colspan="3" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -1568,10 +1564,7 @@
                             <!--End:Table: Review-->
                             @php
                             // $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Usulan Perubahan Draft Kontrak")->where('status', '=', "Final")->first();
-                            $uploadFilePerubahan = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Usulan Perubahan Draft Kontrak")->where('status', '=', "Final")->first();
+                            $uploadFilePerubahan = $contract->UploadFinal->where('category', '=', "Usulan Perubahan Draft Kontrak")->where('status', '=', "Final")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFilePerubahan))
@@ -1677,10 +1670,7 @@
                             <!--End:Table: Review-->
                             @php
                             // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen NDA")->first();
-                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Dokumen NDA")->first();
+                            $uploadFile = $contract->UploadFinal->where('category', '=', "Dokumen NDA")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFile))
@@ -1745,10 +1735,7 @@
                             <!--End:Table: Review-->
                             @php
                             // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen MOU")->first();
-                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Dokumen MOU")->first();
+                            $uploadFile = $contract->UploadFinal->where('category', '=', "Dokumen MOU")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFile))
@@ -1813,10 +1800,7 @@
                             <!--End:Table: Review-->
                             @php
                             // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen ECA")->first();
-                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Dokumen ECA")->first();
+                            $uploadFile = $contract->UploadFinal->where('category', '=', "Dokumen ECA")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFile))
@@ -1882,10 +1866,7 @@
                             <!--End:Table: Review-->
                             @php
                             // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen ICA")->first();
-                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Dokumen ICA")->first();
+                            $uploadFile = $contract->UploadFinal->where('category', '=', "Dokumen ICA")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFile))
@@ -1949,10 +1930,7 @@
                             </table>
                             @php
                             // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen ITB/TOR")->first();
-                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Dokumen ITB/TOR")->first();
+                            $uploadFile = $contract->UploadFinal->where('category', '=', "Dokumen ITB/TOR")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFile))
@@ -2017,10 +1995,7 @@
                             </table>
                             @php
                             // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen RKS / Project Spesification")->first();
-                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Dokumen RKS / Project Spesification")->first();
+                            $uploadFile = $contract->UploadFinal->where('category', '=', "Dokumen RKS / Project Spesification")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFile))
@@ -2084,10 +2059,7 @@
                             <!--End:Table: Review-->
                             @php
                             // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Draft Kontrak")->first();
-                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Dokumen Draft Kontrak")->first();
+                            $uploadFile = $contract->UploadFinal->where('category', '=', "Dokumen Draft Kontrak")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFile))
@@ -2152,10 +2124,7 @@
                             <!--End:Table: Review-->
                             @php
                             // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen LOI")->first();
-                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Dokumen LOI")->first();
+                            $uploadFile = $contract->UploadFinal->where('category', '=', "Dokumen LOI")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFile))
@@ -2244,8 +2213,13 @@
                                             <tr>
                                                 <!--begin::Column-->
                                                 <td>
-                                                    <a target="_blank"
+                                                    {{-- <a target="_blank"
                                                     href="/contract-management/download/kso/{{ $perjanjian_kso->id_document }}"
+                                                        class="text-gray-600 text-hover-primary mb-1">
+                                                        {{ $perjanjian_kso->document_name }}
+                                                    </a> --}}
+                                                    <a target="_blank"
+                                                    href="{{ asset("contract-managements/dokumen-perjanjian-kso/") . '/' . $perjanjian_kso->id_document }}"
                                                         class="text-gray-600 text-hover-primary mb-1">
                                                         {{ $perjanjian_kso->document_name }}
                                                     </a>
@@ -2289,10 +2263,7 @@
                             </table>
                             @php
                             // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Perjanjian KSO")->first();
-                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Dokumen Perjanjian KSO")->first();
+                            $uploadFile = $contract->UploadFinal->where('category', '=', "Dokumen Perjanjian KSO")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFile))
@@ -3098,10 +3069,7 @@
                             
                             @php
                             // $uploadFileResiko = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Resiko - Pelaksanaan")->first();
-                            $uploadFileResiko = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Dokumen Resiko - Pelaksanaan")->first();
+                            $uploadFileResiko = $contract->UploadFinal->where('category', '=', "Dokumen Resiko - Pelaksanaan")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFileResiko))
@@ -3385,10 +3353,7 @@
                             <!--End:Table: Pasal Kontraktual-->
                             @php
                             // $uploadFilePasalKontraktual = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Pasal Kontraktual")->first();
-                            $uploadFilePasalKontraktual = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Pasal Kontraktual")->first();
+                            $uploadFilePasalKontraktual = $contract->UploadFinal->where('category', '=', "Pasal Kontraktual")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFilePasalKontraktual))
@@ -4702,7 +4667,7 @@
                                 @endforeach
                                 @if ($documentBAST1->where("bast", "=", 1)->isEmpty())
                                 <tr>
-                                    <td colspan="6" class="text-center">
+                                    <td colspan="4" class="text-center">
                                         <h6><b>There is no data</b></h6>
                                     </td>
                                 </tr>
@@ -5482,7 +5447,7 @@
                                                         @endforeach
                                                         @if ($contract->ContractBast->isEmpty())
                                                         <tr>
-                                                            <td colspan="6" class="text-center">
+                                                            <td colspan="4" class="text-center">
                                                                 <h6><b>There is no data</b></h6>
                                                             </td>
                                                         </tr>
@@ -5944,15 +5909,9 @@
                         </table>
                         @php
                             // $uploadFilePendingPemeliharaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Pending Issue - Pemeliharaan")->first();
-                            $uploadFilePendingPemeliharaan = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Pending Issue - Pemeliharaan")->first();
+                            $uploadFilePendingPemeliharaan = $contract->UploadFinal->where('category', '=', "Pending Issue - Pemeliharaan")->first();
                             // $uploadFilePendingPelaksanaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Pending Issue - Pelaksanaan")->first();
-                            $uploadFilePendingPelaksanaan = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Pending Issue - Pelaksanaan")->first();
+                            $uploadFilePendingPelaksanaan = $contract->UploadFinal->where('category', '=', "Pending Issue - Pelaksanaan")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFilePendingPelaksanaan))
@@ -6642,7 +6601,7 @@
                                 name="id-contract">
                             <input type="file" style="font-weight: normal"
                                 class="form-control form-control-solid" name="attach-file"
-                                id="attach-file-perjanjian-kso" value="" accept=".docx" placeholder="" />
+                                id="attach-file-perjanjian-kso" value="" accept=".pdf" placeholder="" />
                             <!--end::Input-->
 
                             <!--begin::Label-->

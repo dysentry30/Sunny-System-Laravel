@@ -121,7 +121,7 @@
                                 <!--begin::Button-->
                                 @canany(['super-admin', 'admin-crm', 'approver-crm', 'user-crm'])
                                 @if ($proyek->dop != "EA")
-                                    @if ($proyek->stage == 8 && empty($proyek->ApprovalTerkontrakProyek))
+                                    @if (($proyek->stage == 8 && empty($proyek->ApprovalTerkontrakProyek)) || $proyek->stage < 8)
                                         @if ($proyek->is_cancel == false)
                                             <button type="submit" name="proyek-save" class="btn btn-sm btn-primary ms-2" id="proyek-save"
                                                 style="background-color:#008CB4">

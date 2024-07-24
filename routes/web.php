@@ -422,12 +422,12 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post("/contract-management/set-lock", [ContractApprovalController::class, "lockApprovalRev"]);
 
-    Route::get("/contract-management/download/kso/{id_document}", function (string $id) {
-        $document_kso = PerjanjianKso::select(['id_document', 'document_name'])->where('id_document', '=', $id)->first();
-        $path = public_path('words\\' . $document_kso->id_document . '.docx');
-        // dd($path);
-        return response()->download($path, $document_kso->document_name . '.docx');
-    });
+    // Route::get("/contract-management/download/kso/{id_document}", function (string $id) {
+    //     $document_kso = PerjanjianKso::select(['id_document', 'document_name'])->where('id_document', '=', $id)->first();
+    //     $path = public_path('words\\' . $document_kso->id_document . '.docx');
+    //     // dd($path);
+    //     return response()->download($path, $document_kso->document_name . '.docx');
+    // });
 
 
 
