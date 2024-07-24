@@ -136,6 +136,12 @@ class AdminAuth
             "assessment-partner-selection",
         ]);
         $allowed_url_team_proyek = join(" ", ["dashboard", "proyek", "contract-management", "review-contract", "draft-contract", "issue-project", "question", "input-risk", "laporan-bulanan", "serah-terima", "claim-management", "approval-claim", "detail-claim", "claim", "document", "user"]);
+
+        $allowed_url_user_ska_skt = join(" ", [
+            "proyeks",
+            "ska-skt"
+        ]);
+
         $concat_allowed_url = "";
         if (Gate::any(['super-admin', 'admin-ccm', 'admin-crm', 'approver-crm', 'admin-csi', 'risk-crm'])) {
             return $next($request);
@@ -145,6 +151,9 @@ class AdminAuth
         }
         if (Gate::allows('crm')) {
             $concat_allowed_url .= $allowed_url_user_sales;
+        }
+        if (Gate::allows("ska-skt")) {
+            $concat_allowed_url .= $allowed_url_user_ska_skt;
         }
         if (Gate::allows('user-csi')) {
             $concat_allowed_url .= join(" ", ["csi"]);
@@ -172,11 +181,22 @@ class AdminAuth
                 return $next($request);
             } else {
                 Alert::error('Error', 'Tidak bisa mengakses halaman ' . $path);
-
-                return redirect("/proyek");
+                if (Gate::allows('crm')) {
+                    return redirect("/dashboard");
+                } elseif (Gate::allows('ccm')) {
+                    return redirect("/dashboard-ccm/perolehan-kontrak");
+                }
             }
         } else {
             if (str_contains($concat_allowed_url, $request->segment(1))) {
+                if (Gate::allows('ska-skt') && $request->segment(2) == "stage-save") {
+                    Alert::error("Akses Ditolak", "Anda tidak dapat melakukan aksi");
+                    return response()->json([
+                        "status" => "success",
+                        "link" => true,
+                    ]);
+                }
+                
                 return $next($request);
             }
         }
@@ -184,7 +204,13 @@ class AdminAuth
 
         Alert::error('Error', 'Tidak bisa mengakses halaman ' . $path);
 
-        return redirect("/proyek");
+        if (Gate::allows('crm')) {
+            return redirect("/dashboard");
+        } elseif (Gate::allows('ccm')) {
+            return redirect("/dashboard-ccm/perolehan-kontrak");
+        } elseif (Gate::allows("ska-skt")) {
+            return redirect("/ska-skt");
+        }
         // return app(AdminKontrakAuth::class)->handle($request, $next);
 
     }

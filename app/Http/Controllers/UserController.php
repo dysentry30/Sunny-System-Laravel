@@ -104,18 +104,20 @@ class UserController extends Controller
                 'email' => $request->UserName,
                 'password' => $request->UserPassword
             ];
-            // if (Auth::attempt($data)) {
-            //     $user = auth()->user();
-            //     $token_user = $user->createToken($user->name)->plainTextToken;
-            //     // dd($token_user);
-            //     auth()->user()->forceFill([
-            //         "remember_token" => $token_user,
-            //     ])->save();
-            //     return response()->json([
-            //         "token" => $token_user,
-            //         "user" => $user,
-            //     ])->cookie("BPMCSRF", $token, 60);
-            // }
+            if (Auth::attempt($data)) {
+                $user = auth()->user();
+                $token_user = $user->createToken($user->name)->plainTextToken;
+                // dd($token_user);
+                auth()->user()->forceFill([
+                    "remember_token" => $token_user,
+                ])->save();
+                return response()->json([
+                    "token" => $token_user,
+                    "user" => $user,
+                ])->cookie("BPMCSRF", $token,
+                    60
+                );
+            }
         } else if ((bool) $request->isMobile) {
             return self::loginForMobile($request);
         } else {
@@ -349,13 +351,17 @@ class UserController extends Controller
         $is_user_sales = $request->has("user-sales") ?? false;
         $is_user_csi = $request->has("user-csi") ?? false;
         $is_team_proyek = $request->has("team-proyek") ?? false;
+        $is_user_mobile = $request->has("mobile") ?? false;
+        $is_user_ska_skt = $request->has("ska-skt") ?? false;
 
-        if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_user_csi == false && $is_team_proyek == false) {
+        if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_user_csi == false && $is_team_proyek == false && $is_user_mobile == false && $is_user_ska_skt == false) {
             $rules["administrator"] = "accepted";
             $rules["admin-kontrak"] = "accepted";
             $rules["user-sales"] = "accepted";
             $rules["user-csi"] = "accepted";
             $rules["team-proyek"] = "accepted";
+            $rules["mobile"] = "accepted";
+            $rules["ska-skt"] = "accepted";
 
             $validation = Validator::make($data, $rules, $messages);
             if ($validation->fails()) {
@@ -377,6 +383,8 @@ class UserController extends Controller
         $user->check_user_sales = $is_user_sales;
         $user->check_user_csi = $is_user_csi;
         $user->check_team_proyek = $is_team_proyek;
+        $user->check_user_mobile = $is_user_mobile;
+        $user->check_user_ska_skt = $is_user_ska_skt;
         $user->password = Hash::make("password");
 
         if ($user->save()) {
@@ -425,6 +433,8 @@ class UserController extends Controller
         $is_user_sales = $request->has("user-sales") ?? false;
         $is_user_csi = $request->has("user-csi") ?? false;
         $is_team_proyek = $request->has("team-proyek") ?? false;
+        $is_user_mobile = $request->has("mobile") ?? false;
+        $is_user_ska_skt = $request->has("ska-skt") ?? false;
         $role_admin = $request->has("role_admin") ?? false;
         $role_user = $request->has("role_user") ?? false;
         $role_approver = $request->has("role_approver") ?? false;
@@ -444,17 +454,20 @@ class UserController extends Controller
         //     // return redirect()->back();
         // }
 
-        if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_user_csi == false && $is_team_proyek == false && $role_admin == false && $role_user == false && $role_approver == false && $role_risk == false && $role_unlock == false) {
+        if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_user_csi == false && $is_team_proyek == false && $role_admin == false && $role_user == false && $role_approver == false && $role_risk == false && $role_unlock == false && $is_user_mobile == false && $is_user_ska_skt == false) {
             $rules["administrator"] = "accepted";
             $rules["admin-kontrak"] = "accepted";
             $rules["user-sales"] = "accepted";
             $rules["user-csi"] = "accepted";
             $rules["team-proyek"] = "accepted";
+            $rules["mobile"] = "accepted";
+            $rules["ska-skt"] = "accepted";
 
             $rules["role_admin"] = "accepted";
             $rules["role_user"] = "accepted";
             $rules["role_approver"] = "accepted";
             $rules["role_risk"] = "accepted";
+            $rules["role_unlock"] = "accepted";
 
             Alert::error("Error", "Pilih Hak Akses Terlebih Dahulu");
             $request->old("nip");
@@ -512,6 +525,8 @@ class UserController extends Controller
         $user->check_user_sales = $is_user_sales;
         $user->check_user_csi = $is_user_csi;
         $user->check_team_proyek = $is_team_proyek;
+        $user->check_user_mobile = $is_user_mobile;
+        $user->check_user_ska_skt = $is_user_ska_skt;
 
         $user->role_admin = $role_admin;
         $user->role_user = $role_user;
@@ -799,9 +814,10 @@ class UserController extends Controller
 
                 if ($response["responseStatus"] != 0) {
                     // dd($response["responseData"]);
+                    setLogging("login", "User Login WZONE => ",  $response["responseData"]);
                     $nip = $response["responseData"]["nip"];
                 } else {
-                    return redirect()->back();
+                    dd($response);
                 }
                 // $nip = $user['NIP'];
             } else {
@@ -814,22 +830,25 @@ class UserController extends Controller
                 // dd($checkUserInCRM);
 
                 if (!empty($checkUserInCRM) && $checkUserInCRM->is_active) {
-                    // $dataPegawai = Pegawai::where('nip', $nip)->first();
-                    // $dataPegawai->nama_pegawai = $response["responseData"]["full_name"];
-                    // $dataPegawai->email = $response["responseData"]["email"];
-                    // $dataPegawai->handphone = $response["responseData"]["handphone"];
-                    // $dataPegawai->kode_jabatan = $response["responseData"]["kd_jabatan"];
-                    // $dataPegawai->nama_fungsi_bidang = $response["responseData"]["nm_fungsi_bidang"];
-                    // $dataPegawai->kode_kantor_sap = $response["responseData"]["cmp_id"];
-                    // $dataPegawai->nama_kantor = $response["responseData"]["nm_kantor"];
+                    $dataPegawai = Pegawai::where('nip', $nip)->first();
+                    // if (!empty($dataPegawai)) {
+                    //     $dataPegawai->nama_pegawai = $response["responseData"]["full_name"];
+                    //     $dataPegawai->email = $response["responseData"]["email"];
+                    //     $dataPegawai->handphone = $response["responseData"]["handphone"] ?? 0;
+                    //     // $dataPegawai->kode_jabatan = $response["responseData"]["kd_jabatan"];
+                    //     $dataPegawai->kode_fungsi_bidang_sap = $response["responseData"]["kd_fungsi_bidang"];
+                    //     $dataPegawai->nama_fungsi_bidang = $response["responseData"]["nm_fungsi_bidang"];
+                    //     $dataPegawai->kode_jabatan_sap = $response["responseData"]["kd_jabatan"];
+                    //     // $dataPegawai->kode_kantor_sap = $response["responseData"]["kd_kantor"];
+                    //     $dataPegawai->nama_kantor = $response["responseData"]["nm_kantor"];
+                    // }
 
                     $checkUserInCRM->name = $response["responseData"]["full_name"];
                     $checkUserInCRM->email = $response["responseData"]["email"];
                     $checkUserInCRM->no_hp = $response["responseData"]["handphone"];
 
                     // dd($dataPegawai);
-                    // if ($dataPegawai->save() && $checkUserInCRM->save()
-                    if ($checkUserInCRM->save()) {
+                    if ($dataPegawai->save() && $checkUserInCRM->save()) {
                         // Auth::login(['nip' => $nip]);
                         Auth::login($checkUserInCRM);
                         if (Auth::check()) {
@@ -865,9 +884,7 @@ class UserController extends Controller
                 // return redirect(env('WZONE_URL')); 
             }
         } catch (\Exception $e) {
-            dd($e->getMessage());
-            Alert::error('Error', $e->getMessage());
-            return redirect()->back();
+            dd($e);
         }
     }
 

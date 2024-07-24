@@ -2880,10 +2880,6 @@ class ProyekController extends Controller
             } else {
                 $request->stage = 4;
             }
-            // if ($proyekStage->DokumenPrakualifikasi->isEmpty()) {
-            //     Alert::error("Error", "Dokumen Prakualifikasi wajib diisi !");
-            //     $request->stage = 3;
-            // }
         } else if ($request->stage == 5) {
             // if ($dokumenTender->count() == 0) {
             //     // dd($dokumenTender);
@@ -3002,14 +2998,13 @@ class ProyekController extends Controller
                 return redirect()->back();
             } else {
                 $contractManagements = ContractManagements::get()->where("project_id", "=", $proyekStage->kode_proyek)->first();
-                $request->stage = 6;
+                // $request->stage = 6;
                 if (!empty($contractManagements)) {
                     $contractManagements->stages = (int) 2;
                     $contractManagements->save();
                 }
             }
         };
-
 
         if (!$request->is_ajax) {
             $data = $request->all();
@@ -3352,6 +3347,7 @@ class ProyekController extends Controller
                             ]
                         ]
                     ]);
+
                     $proyekStage->is_need_approval_terkontrak = true;
                 }
                 // dd($data_nasabah_online);
@@ -3403,23 +3399,11 @@ class ProyekController extends Controller
                     $request->stage = 9;
                 }
             } else if (isset($data["stage-tidak-lulus-pq"])) {
-                if (empty($proyekStage->klasifikasi_sbu_kbli) || empty($proyekStage->kode_kbli_2020)) {
-                    Alert::error("Error", "Klasifikasi SBU KBLI dan Sub Klasifikasi SBU KBLI wajib diisi!");
-                    // $request->stage = 2;
-                    return redirect()->back();
-                } else {
-                    $proyekStage->is_tidak_lulus_pq = true;
-                    $request->stage = 3;
-                }
+                $proyekStage->is_tidak_lulus_pq = true;
+                $request->stage = 3;
             } else if (isset($data["stage-prakualifikasi"])) {
-                if (empty($proyekStage->klasifikasi_sbu_kbli) || empty($proyekStage->kode_kbli_2020)) {
-                    Alert::error("Error", "Klasifikasi SBU KBLI dan Sub Klasifikasi SBU KBLI wajib diisi!");
-                    // $request->stage = 2;
-                    return redirect()->back();
-                } else {
-                    $proyekStage->is_tidak_lulus_pq = false;
-                    $request->stage = 3;
-                }
+                $proyekStage->is_tidak_lulus_pq = false;
+                $request->stage = 3;
             }
         }
         $proyekStage->stage = $request->stage;

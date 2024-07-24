@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class UserNotAuthenticatedMiddleware
 {
@@ -29,6 +30,14 @@ class UserNotAuthenticatedMiddleware
             return $next($request);
         }
 
-        return redirect("/dashboard");
+        if (Gate::allows("crm")) {
+            return redirect("/dashboard");
+        } elseif (Gate::allows("ccm")) {
+            return redirect("/dashboard-ccm/perolehan-kontrak");
+        } elseif (Gate::allows("csi")) {
+            return redirect("/csi");
+        } elseif (Gate::allows("ska-skt")) {
+            return redirect("/ska-skt");
+        }
     }
 }

@@ -111,7 +111,6 @@
                             <!--end::Page title-->
                             <!--begin::Actions-->
                             <div class="d-flex align-items-center py-1">
-                                @if ($proyek->stage != 8 || empty($proyek->ApprovalTerkontrakProyek) || (!is_null($proyek->ApprovalTerkontrakProyek?->is_revisi) && $proyek->ApprovalTerkontrakProyek?->is_revisi))
                                  <!--begin::Button-->
                                 @canany(['super-admin', 'admin-crm', 'user-crm'])
                                     <button onclick="document.location.reload()" type="reset" class="btn btn-sm btn-light btn-active-danger pe-3 mx-2" id="cancel-button">
@@ -122,7 +121,7 @@
                                 <!--begin::Button-->
                                 @canany(['super-admin', 'admin-crm', 'approver-crm', 'user-crm'])
                                 @if ($proyek->dop != "EA")
-                                    @if ($proyek->stage < 8)
+                                    @if ($proyek->stage == 8 && empty($proyek->ApprovalTerkontrakProyek))
                                         @if ($proyek->is_cancel == false)
                                             <button type="submit" name="proyek-save" class="btn btn-sm btn-primary ms-2" id="proyek-save"
                                                 style="background-color:#008CB4">
@@ -138,17 +137,19 @@
                                 @endif
                                 @endcanany
                                 <!--end::Button-->
-                                @endif
 
                                 <!--begin::Button-->
                                 @if ($proyek->UnitKerja?->dop != "EA")
-                                    @if (($proyek->stage == 6 && $proyek->is_need_approval_terkontrak && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek?->is_revisi))
+                                    @if (($proyek->stage == 8 && $proyek->is_need_approval_terkontrak && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek?->is_revisi))
                                         <button type="button" class="btn btn-sm btn-success ms-2" onclick="requestApprovalTerkontrak('{{ $proyek->kode_proyek }}')">Ajukan Approval</button>
                                     @endif
-                                    @if (App\Models\MatriksApprovalTerkontrakProyek::where('nip', Auth::user()->nip)->where('unit_kerja', $proyek->unit_kerja)->where("is_active", true)->first() && $proyek->ApprovalTerkontrakProyek && is_null($proyek->ApprovalTerkontrakProyek?->is_revisi) && is_null($proyek->ApprovalTerkontrakProyek?->is_approved))
-                                        <button type="button" class="btn btn-sm btn-success ms-2" data-bs-toggle="modal" data-bs-target="#kt_modal_approval_terkontrak">Setujui Approval</button>
-                                        <button type="button" class="btn btn-sm btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#kt_modal_approval_terkontrak_revisi">Revisi Approval</button>
-                                    @endif
+                                    @canany(['admin-ccm'])
+                                        @if (App\Models\MatriksApprovalTerkontrakProyek::where('nip', Auth::user()->nip)->where('unit_kerja', $proyek->unit_kerja)->where("is_active", true)->first() && $proyek->ApprovalTerkontrakProyek && is_null($proyek->ApprovalTerkontrakProyek?->is_revisi) && is_null($proyek->ApprovalTerkontrakProyek?->is_approved))
+                                            <button type="button" class="btn btn-sm btn-success ms-2" data-bs-toggle="modal" data-bs-target="#kt_modal_approval_terkontrak">Setujui Approval</button>
+                                            <button type="button" class="btn btn-sm btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#kt_modal_approval_terkontrak_revisi">Revisi Approval</button>
+                                        @endif                                        
+                                    @endcanany
+                                    @canany(['super-admin', 'approver-crm', 'user-crm'])
                                     @if (is_null($proyek->NotaRekomendasi?->is_request_rekomendasi) && !$check_green_line && $proyek->stage == 1 && is_null($proyek->NotaRekomendasi?->is_disetujui))
                                         <input type="button" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan"
                                             style="background-color:#00b48d">
@@ -159,54 +160,27 @@
                                             <input type="button" name="proyek-rekomendasi-2" data-bs-toggle="modal"  value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi-2" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan-nota-2"
                                                     style="background-color:#00b48d">
                                         @endif    
-                                    {{-- @elseif($proyek->stage > 1 && $proyek->is_disetujui == true &&  $proyek->is_recommended_with_note)
-                                        <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="<b>Rekomendasi Aproved</b><br>Silahkan Lanjut Stage Selanjutnya">
-                                            <p class="mt-4 btn btn-sm btn-success ms-2">
-                                                Direkomendasikan dengan catatan
-                                            </p>
-                                        </div>
-                                    @elseif($proyek->stage > 1 && $proyek->is_disetujui == true )
-                                        <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="<b>Rekomendasi Aproved</b><br>Silahkan Lanjut Stage Selanjutnya">
-                                            <p class="mt-4 btn btn-sm btn-success ms-2">
-                                                Direkomendasikan
-                                            </p>
-                                        </div>
-                                    @elseif($proyek->stage > 1 && $check_green_line )
-                                        <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="Proyek ini termasuk ke dalam kategori<br><b>Green Lane</b>">
-                                            <p class="mt-4 btn btn-sm btn-success ms-2">
-                                                Direkomendasikan
-                                            </p>
-                                        </div>
-                                    @elseif($proyek->stage > 1 && $proyek->is_disetujui == false )
-                                        <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="<b>Rekomendasi Rejected</b><br>Silahkan Lanjut Stage Selanjutnya">
-                                            <p class="mt-4 btn btn-sm btn-danger ms-2">
-                                                Tidak Direkomendasikan
-                                            </p>
-                                        </div>
-                                    @elseif($proyek->stage > 1 && !$check_green_line)
-                                        <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="<b>Rekomendasi Aproved</b><br>Silahkan Lanjut Stage Selanjutnya">
-                                            <p class="mt-4 btn btn-sm btn-success ms-2">
-                                                Direkomendasikan
-                                            </p>
-                                        </div>
-                                    @elseif($proyek->stage == 1 && $check_green_line && is_null($proyek->is_disetujui))
-                                        <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="Proyek ini termasuk ke dalam kategori<br><b>Green Lane</b>">
-                                            <input type="submit" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-secondary ms-2" id="proyek-rekomendasi" disabled >
-                                        </div>
-                                    @else 
-                                        <div class="" data-bs-toggle="tooltip" data-bs-title="Sedang Dalam Proses Pengajuan Rekomendasi">
-                                            <input type="submit" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-secondary ms-2" id="proyek-rekomendasi" disabled >
-                                        </div> --}}
                                     @endif
+                                    @endcanany
                                 @endif
                                 <!--end::Button-->
 
                                 <!--begin::Button-->
-                                @canany(['super-admin', 'admin-crm', 'user-crm'])
-                                    <a class="btn btn-sm btn-light btn-active-danger ms-2" data-bs-toggle="modal"
-                                        data-bs-target="#kt_modal_cancel_proyek" id="kt_toolbar_export">Cancel Proyek
-                                    </a>                                    
-                                @endcanany
+                                @if ($proyek->dop != "EA")
+                                    @if ($proyek->stage == 8 && empty($proyek->ApprovalTerkontrakProyek))
+                                        @canany(['super-admin', 'admin-crm', 'user-crm'])
+                                            <a class="btn btn-sm btn-light btn-active-danger ms-2" data-bs-toggle="modal"
+                                                data-bs-target="#kt_modal_cancel_proyek" id="kt_toolbar_export">Cancel Proyek
+                                            </a>
+                                        @endcanany                                        
+                                    @endif
+                                @else
+                                    @canany(['super-admin', 'admin-crm', 'user-crm'])
+                                        <a class="btn btn-sm btn-light btn-active-danger ms-2" data-bs-toggle="modal"
+                                            data-bs-target="#kt_modal_cancel_proyek" id="kt_toolbar_export">Cancel Proyek
+                                        </a>
+                                    @endcanany
+                                @endif
                                 <!--end::Button-->
 
                                 <!--begin::Action-->
@@ -763,7 +737,7 @@
                                                     @endif
 
                                                     @if ($proyek->dop != "EA")
-                                                        @if ($proyek->stage == 8)
+                                                        @if ($proyek->stage == 8 && !empty($proyek->ApprovalTerkontrakProyek) && $proyek->ApprovalTerkontrakProyek->is_approved)
                                                             <a href="#"
                                                                 class="stage-button stage-action stage-is-done color-is-default"
                                                                 style="outline: 0px; cursor: pointer; pointer-events: none;"
@@ -771,7 +745,7 @@
                                                                 Terkontrak
                                                             </a>
                                                         @else
-                                                            @if ((abs($proyek->stage - 6) != 1 || abs($proyek->stage - 7) != 2) && $proyek->is_need_approval_terkontrak)
+                                                            @if (abs($proyek->stage - 8) != 1 && $proyek->is_need_approval_terkontrak)
                                                                 @if (!empty($proyek->ApprovalTerkontrakProyek))
                                                                     <a href="#"
                                                                         class="stage-button stage-action stage-is-not-active color-is-default"
@@ -787,7 +761,7 @@
                                                                         Request Approval
                                                                     </a>                                                                    
                                                                 @endif
-                                                            @elseif((abs($proyek->stage - 6) != 1 || abs($proyek->stage - 7) != 2) && is_null($proyek->is_need_approval_terkontrak))
+                                                            @elseif(is_null($proyek->is_need_approval_terkontrak))
                                                                 <a href="#"
                                                                     class="stage-button stage-action stage-is-not-active color-is-default"
                                                                     style="outline: 0px; cursor: pointer;"
@@ -891,7 +865,7 @@
                                                                     </form>
                                                                 </ul>
                                                             @endif
-                                                        @endif                                                        
+                                                        @endif
                                                     @endif
 
 
