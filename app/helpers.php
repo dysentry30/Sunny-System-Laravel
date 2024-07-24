@@ -3661,6 +3661,7 @@ function createWordPengajuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekomen
 function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekomendasi, string $hostName)
 {
     $phpWord = new \PhpOffice\PhpWord\PhpWord();
+    $phpWord->setDefaultFontName('DejaVu Sans');
     $proyek = $proyekNotaRekomendasi->Proyek;
     $customer = $proyek->proyekBerjalan->Customer;
     $target_path = "file-nota-rekomendasi-2/file-persetujuan";
@@ -3676,19 +3677,19 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
     try {
         $section = $phpWord->addSection();
 
-        $section->addText("NOTA REKOMENDASI TAHAP II", ['size' => 12, "bold" => true], ['align' => "center"]);
-        $section->addText("Seleksi Proyek Non Green Lane", ['size' => 12, "bold" => true], ['align' => "center"]);
+        $section->addText("NOTA REKOMENDASI TAHAP II", ['size' => 12, "bold" => true, 'name' => 'Times New Roman'], ['align' => "center", "spaceBefore" => 0, 'spaceAfter' => 0]);
+        $section->addText("Seleksi Proyek Non Green Lane", ['size' => 12, "bold" => true, 'name' => 'Times New Roman'], ['align' => "center", "spaceBefore" => 0, 'spaceAfter' => 0]);
 
         if (str_contains($proyek->klasifikasi_pasdin, "Mega")) {
-            $section->addText("Proyek Mega", ['size' => 12, "bold" => true], ['align' => "center"]);
+            $section->addText("Proyek Mega", ['size' => 12, "bold" => true, 'name' => 'Times New Roman'], ['align' => "center", "spaceBefore" => 0, 'spaceAfter' => 0]);
         } elseif (str_contains($proyek->klasifikasi_pasdin, "Besar")) {
-            $section->addText("Proyek Besar", ['size' => 12, "bold" => true], ['align' => "center"]);
+            $section->addText("Proyek Besar", ['size' => 12, "bold" => true, 'name' => 'Times New Roman'], ['align' => "center", "spaceBefore" => 0, 'spaceAfter' => 0]);
         } else {
-            $section->addText("Proyek Kecil / Proyek Menengah", ['size' => 12, "bold" => true], ['align' => "center"]);
+            $section->addText("Proyek Kecil / Proyek Menengah", ['size' => 12, "bold" => true, 'name' => 'Times New Roman'], ['align' => "center", "spaceBefore" => 0, 'spaceAfter' => 0]);
         }
 
         $section->addTextBreak(1);
-        $section->addText("A. INFORMASI PROYEK", ['size' => 12, "bold" => true], ['align' => "center"]);
+        $section->addText("A. INFORMASI PROYEK", ['size' => 12, "bold" => true, 'name' => 'Times New Roman'], ['align' => "left", "spaceBefore" => 0]);
         // $section->addTextBreak(1);
 
         $table = $section->addTable('myOwnTableStyle', array('borderSize' => 1, 'borderColor' => '999999', 'spaceAfter' => 0, 'cellMargin' => 0));
@@ -3696,9 +3697,9 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
 
         $styleCell = array('borderTopSize' => 1, 'borderTopColor' => 'black', 'borderLeftSize' => 1, 'borderLeftColor' => 'black', 'borderRightSize' => 1, 'borderRightColor' => 'black', 'borderBottomSize' => 1, 'borderBottomColor' => 'black', 'textAlignment' => \PhpOffice\PhpWord\SimpleType\TextAlignment::CENTER);
         $TstyleCell = array("bgColor" => "F4B083", 'borderTopSize' => 1, 'borderTopColor' => 'black', 'borderLeftSize' => 1, 'borderLeftColor' => 'black', 'borderRightSize' => 1, 'borderRightColor' => 'black', 'borderBottomSize' => 1, 'borderBottomColor' => 'black');
-        $TfontStyle = array('bold' => true, 'italic' => false, 'size' => 10, 'name' => 'Times New Roman', 'spaceAfter' => 0, 'cellMargin' => 0, 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::BOTH);
-        $fontStyle = array('bold' => false, 'italic' => false, 'size' => 10, 'name' => 'Times New Roman', 'spaceAfter' => 0, 'spaceBefore' => 0, 'cellMargin' => 0, 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::BOTH);
-        $fontStyleTTD = array('bold' => true, 'italic' => false, 'size' => 8, 'name' => 'Times New Roman', 'spaceAfter' => 0, 'cellMargin' => 0, 'alignment' => 'center');
+        $TfontStyle = array('bold' => true, 'italic' => false, 'size' => 10, 'name' => 'Times New Roman', 'cellMargin' => 0, 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::BOTH);
+        $fontStyle = array('bold' => false, 'italic' => false, 'size' => 10, 'name' => 'Times New Roman', 'spaceBefore' => 0, 'cellMargin' => 0, 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::BOTH);
+        $fontStyleTTD = array('bold' => true, 'italic' => false, 'size' => 8, 'name' => 'Times New Roman', 'cellMargin' => 0, 'alignment' => 'center');
 
         $table->addCell(500, $TstyleCell)->addText('No', $TfontStyle);
         $table->addCell(2500, $TstyleCell)->addText("Item", $TfontStyle);
@@ -3759,48 +3760,47 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
         $table->addCell(2500, $styleCell)->addText("Kategori Proyek", $fontStyle);
         $table->addCell(6000, $styleCell)->addText($proyek->klasifikasi_pasdin, $fontStyle);
 
-        $section->addText("Berdasarkan informasi di atas, mengajukan untuk mengikuti aktifitas Perolehan Kontrak (tender) tersebut di atas.");
+        $section->addText("Berdasarkan informasi di atas, mengajukan untuk mengikuti aktifitas Perolehan Kontrak (tender) tersebut di atas.", ["size" => 12, "name" => "Times New Roman"]);
 
         // $section->addTextBreak(1);
 
         $section_2 = $phpWord->addSection();
-        $section_2->addText("B. SELF ASSESSMENT", ['size' => 12, "bold" => true], ['align' => "center"]);
         $section_2->addTextBreak(1);
-        $assessment = $section_2->addTable('assessment_self', array('borderSize' => 1, 'borderColor' => '999999', 'afterSpacing' => 0, 'Spacing' => 0, 'cellMargin' => 0));
+        $section_2->addText("B. SELF ASSESSMENT", ['size' => 12, "bold" => true, 'name' => 'Times New Roman'], ['align' => "left", "spaceBefore" => 0, 'spaceAfter' => 0]);
+        $assessment = $section_2->addTable('assessment_self', array('borderSize' => 1, 'borderColor' => '999999', "spaceBefore" => 0, 'spaceAfter' => 0, 'cellMargin' => 0));
 
         $assessment->addRow();
-        $assessment->addCell(3000, ["vMerge" => "restart", "gridSpan" => 3, "bgColor" => "F4B083"])->addText("Self Assessment,", ["bold" => true], ["align" => "center"]);
+        $assessment->addCell(3000, ["vMerge" => "restart", "gridSpan" => 3, "bgColor" => "F4B083"])->addText("Self Assessment,", ["bold" => true, 'name' => 'Times New Roman'], ["align" => "center", "spaceBefore" => 0, 'spaceAfter' => 0]);
 
         $assessment->addRow();
-        $assessment->addCell(500, $TstyleCell)->addText("No.", $TfontStyle);
-        $assessment->addCell(2500, $TstyleCell)->addText("Item", $TfontStyle);
-        $assessment->addCell(6000, $TstyleCell)->addText("Uraian", $TfontStyle);
+        $assessment->addCell(500, $TstyleCell)->addText("No.", $TfontStyle, ["spaceBefore" => 0, "spaceAfter" => 0]);
+        $assessment->addCell(2500, $TstyleCell)->addText("Item", $TfontStyle, ["spaceBefore" => 0, "spaceAfter" => 0]);
+        $assessment->addCell(6000, $TstyleCell)->addText("Uraian", $TfontStyle, ["spaceBefore" => 0, "spaceAfter" => 0]);
 
         $assessment->addRow();
-        $assessment->addCell(500, $styleCell)->addText('1', $fontStyle);
+        $assessment->addCell(500, $styleCell)->addText('1', $fontStyle, ['align' => 'center']);
         $assessment->addCell(2500, $styleCell)->addText("Assessment Internal", $fontStyle);
         // $assessment->addCell(6000, $styleCell)->addText($proyekNotaRekomendasi->catatan_nota_rekomendasi, $fontStyle);
-        $assessment->addCell(6000, $styleCell)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($proyekNotaRekomendasi->catatan_nota_rekomendasi, ENT_QUOTES)), null, ["align" => "left", "spaceBefore" => 1, "spaceAfter" => 1, "spacing" => 0]);
+        $assessment->addCell(6000, $styleCell)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($proyekNotaRekomendasi->catatan_nota_rekomendasi, ENT_QUOTES)), $fontStyle, ["align" => "left", "spaceBefore" => 1, "spaceAfter" => 1, "spacing" => 0]);
         $assessment->addRow();
-        $assessment->addCell(500, $styleCell)->addText('2', $fontStyle);
+        $assessment->addCell(500, $styleCell)->addText('2', $fontStyle, ['align' => 'center']);
         $assessment->addCell(2500, $styleCell)->addText("Profil Risiko", $fontStyle);
         $assessment->addCell(6000, $styleCell)->addText("Risiko Tinggi", $fontStyle);
         // $footer = $section->addFooter();
         // $footer->addText('Testing', $fontStyle);
 
-        $section_2->addTextBreak(1);
 
         // $section_3 = $phpWord->addSection();
-        $section_2->addText("C. CATATAN", ['size' => 12, "bold" => true], ['align' => "center", "spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0]);
         $section_2->addTextBreak(1);
+        $section_2->addText("C. CATATAN", ['size' => 12, "bold" => true, 'name' => 'Times New Roman'], ['align' => "left", "spaceBefore" => 0, "spaceAfter" => 0]);
         $catatan_table = $section_2->addTable('catatan_table', array('borderSize' => 1, 'borderColor' => '999999', 'afterSpacing' => 0, 'Spacing' => 0, 'cellMargin' => 0));
 
         $catatan_table->addRow();
-        $catatan_table->addCell(3000, ["vMerge" => "restart", "gridSpan" => 2, "bgColor" => "F4B083"])->addText("Catatan,", ["bold" => true], ["align" => "center"]);
+        $catatan_table->addCell(3000, ["vMerge" => "restart", "gridSpan" => 2, "bgColor" => "F4B083"])->addText("Catatan,", ["bold" => true, 'name' => 'Times New Roman'], ["align" => "center", "spaceBefore" => 0, "spaceAfter" => 0]);
 
         $catatan_table->addRow();
-        $catatan_table->addCell(3000, $TstyleCell)->addText("Item", $TfontStyle);
-        $catatan_table->addCell(6000, $TstyleCell)->addText("Uraian", $TfontStyle);
+        $catatan_table->addCell(3000, $TstyleCell)->addText("Item", $TfontStyle, ["spaceBefore" => 0, "spaceAfter" => 0]);
+        $catatan_table->addCell(6000, $TstyleCell)->addText("Uraian", $TfontStyle, ["spaceBefore" => 0, "spaceAfter" => 0]);
 
         if (!empty($catatanAssessment)) {
             foreach ($catatanAssessment as $key => $p) {
@@ -3808,21 +3808,21 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
 
                 $cell_1_note = $catatan_table->addCell(3000);
                 $cell_2_note = $catatan_table->addCell(6000);
-                $cell_1_note->addText(htmlspecialchars($urutanCatatan[$key - 1]['kategori'], ENT_QUOTES), ["bold" => true], ["align" => "center", "spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0]);
-                $cell_2_note->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($p->uraian, ENT_QUOTES)), ["bold" => false], ["align" => "left", "spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0]);
+                $cell_1_note->addText(htmlspecialchars($urutanCatatan[$key - 1]['kategori'], ENT_QUOTES), ["bold" => true, 'name' => 'Times New Roman'], ["align" => "center", "spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0]);
+                $cell_2_note->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($p->uraian, ENT_QUOTES)), ["bold" => false, "spaceBefore" => 0, "spaceAfter" => 0], ["align" => "left", "spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0]);
             }
         }
 
         $section_2->addPageBreak();
 
         $section_3 = $phpWord->addSection();
-        $section_3->addText("CATATAN REKOMENDASI DAN PERSETUJUAN", ['size' => 12, "bold" => true], ['align' => "center"]);
         $section_3->addTextBreak(1);
+        $section_3->addText("CATATAN REKOMENDASI DAN PERSETUJUAN", ['size' => 12, "bold" => true, 'name' => 'Times New Roman'], ['align' => "center", "spaceBefore" => 0, "spaceAfter" => 0]);
 
         $table_comment_rekomendasi = $section_3->addTable('comment_table', array('borderSize' => 1, 'borderColor' => '999999', 'afterSpacing' => 0, 'Spacing' => 0, 'cellMargin' => 0));
         $table_comment_rekomendasi->addRow();
         $header_cell = $table_comment_rekomendasi->addCell(500, ["vMerge" => "restart", "gridSpan" => 2, "bgColor" => "F4B083"]);
-        $header_cell->addText("Catatan dari Rekomendasi", ["bold" => true], ["align" => "center"]);
+        $header_cell->addText("Catatan dari Rekomendasi", ["bold" => true, 'name' => 'Times New Roman'], ["align" => "center", "spaceBefore" => 0, "spaceAfter" => 0]);
 
         if (!empty($rekomendator)) {
             foreach ($rekomendator as $key => $p) {
@@ -3830,14 +3830,14 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
 
                 $cell_1_note = $table_comment_rekomendasi->addCell(200);
                 $cell_2_note = $table_comment_rekomendasi->addCell(200);
-                $cell_1_note->addText(User::find($p->user_id)?->name, ["bold" => true], ["align" => "center", "spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0]);
+                $cell_1_note->addText(User::find($p->user_id)?->name, ["bold" => true, 'name' => 'Times New Roman'], ["align" => "center", "spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0]);
                 $cell_2_note->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($p->catatan, ENT_QUOTES)), ["bold" => false], ["align" => "left", "spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0]);
             }
         }
 
         $table_comment_rekomendasi->addRow();
         $header_cell_2 = $table_comment_rekomendasi->addCell(500, ["vMerge" => "restart", "gridSpan" => 2, "bgColor" => "F4B083"]);
-        $header_cell_2->addText("Catatan dari Persetujuan", ["bold" => true], ["align" => "center"]);
+        $header_cell_2->addText("Catatan dari Persetujuan", ["bold" => true, 'name' => 'Times New Roman'], ["align" => "center", "spaceBefore" => 0, "spaceAfter" => 0]);
 
         if (!empty($penyetuju)) {
             foreach ($penyetuju as $key => $p) {
@@ -3845,7 +3845,7 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
 
                 $cell_1_note = $table_comment_rekomendasi->addCell(200);
                 $cell_2_note = $table_comment_rekomendasi->addCell(200);
-                $cell_1_note->addText(User::find($p->user_id)?->name, ["bold" => true], ["align" => "center", "spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0]);
+                $cell_1_note->addText(User::find($p->user_id)?->name, ["bold" => true, 'name' => 'Times New Roman'], ["align" => "center", "spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0]);
                 $cell_2_note->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($p->catatan, ENT_QUOTES)), ["bold" => false], ["align" => "left", "spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0]);
             }
         }
@@ -3853,8 +3853,7 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
 
 
         $section_4 = $phpWord->addSection();
-        $section_4->addText("D. APPROVAL", ['size' => 12, "bold" => true], ['align' => "center"]);
-        $section_4->addTextBreak(1);
+        $section_4->addText("D. APPROVAL", ['size' => 12, "bold" => true, 'name' => 'Times New Roman'], ['align' => "left", "spaceAfter" => 0, "spaceBefore" => 0]);
 
 
 
@@ -3865,7 +3864,7 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
         $table_ttd_penyusun = $section_4->addTable('table_ttd_penyusun', array('borderSize' => 1, 'borderColor' => '999999', 'spaceAfter' => 0, 'spacing' => 0, 'cellMargin' => 0));
         $table_ttd_penyusun->addRow();
         $header_cell_1 = $table_ttd_penyusun->addCell(6000, ["vMerge" => "restart", "gridSpan" => 2, "bgColor" => "F4B083"]);
-        $header_cell_1->addText("Disusun oleh,", ["bold" => true], ["align" => "center", "spaceBefore" => 0, "spaceAfter" => 0]);
+        $header_cell_1->addText("Disusun oleh,", ["bold" => true, 'name' => 'Times New Roman'], ["align" => "center", "spaceBefore" => 0, "spaceAfter" => 0]);
 
         $table_ttd_penyusun2 = $section_4->addTable('table_ttd_penyusun2', array('borderSize' => 1, 'borderColor' => '999999', 'spaceAfter' => 0, 'spacing' => 0, 'cellMargin' => 0));
         $table_ttd_penyusun2->addRow();
@@ -3892,7 +3891,8 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
             $cell_ttd_penyusun_1->addText("$" . "{tandaTanganPenyusun0}", ["bold" => false], ["align" => "center"]);
             $cell_ttd_penyusun_1->addText($nama_ttd_penyusun_1, $fontStyleTTD, ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
             $cell_ttd_penyusun_1->addText($jabatan_ttd_penyusun_1, $fontStyleTTD, ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
-            $cell_ttd_penyusun_1->addText($tanggal_ttd_penyusun_1, ["bold" => true, "size" => 7], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
+            $cell_ttd_penyusun_1->addText($tanggal_ttd_penyusun_1, ["bold" => true, "size" => 7, 'name' => 'Times New Roman'], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
+            $cell_ttd_penyusun_1->addText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", ["bold" => false, "size" => 5, 'name' => 'Times New Roman', 'color' => "FFFFFF"], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
             //-------------------------------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -3903,7 +3903,8 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
             $cell_ttd_penyusun_2->addText("$" . "{tandaTanganPenyusun1}", ["bold" => false], ["align" => "center"]);
             $cell_ttd_penyusun_2->addText($nama_ttd_penyusun_2, $fontStyleTTD, ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
             $cell_ttd_penyusun_2->addText($jabatan_ttd_penyusun_2, $fontStyleTTD, ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
-            $cell_ttd_penyusun_2->addText($tanggal_ttd_penyusun_2, ["bold" => true, "size" => 7], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
+            $cell_ttd_penyusun_2->addText($tanggal_ttd_penyusun_2, ["bold" => true, "size" => 7, 'name' => 'Times New Roman'], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
+            $cell_ttd_penyusun_2->addText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", ["bold" => false, "size" => 5, 'name' => 'Times New Roman', 'color' => "FFFFFF"], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
         }
 
@@ -3958,7 +3959,7 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
         $table_ttd_rekomendasi = $section_4->addTable('table_ttd_rekomendasi', array('borderSize' => 1, 'borderColor' => '999999', 'spaceAfter' => 0, 'spacing' => 0, 'cellMargin' => 0));
         $table_ttd_rekomendasi->addRow();
         $header_cell_2 = $table_ttd_rekomendasi->addCell(9000, ["vMerge" => "restart", "gridSpan" => 2, "bgColor" => "F4B083"]);
-        $header_cell_2->addText("Direkomendasi oleh,", ["bold" => true], ["align" => "center", "spaceBefore" => 0, "spaceAfter" => 0]);
+        $header_cell_2->addText("Direkomendasi oleh,", ["bold" => true, 'name' => 'Times New Roman'], ["align" => "center", "spaceBefore" => 0, "spaceAfter" => 0]);
 
         $table_ttd_rekomendasi2 = $section_4->addTable('table_ttd_rekomendasi2', array('borderSize' => 1, 'borderColor' => '999999', 'spaceAfter' => 0, 'spacing' => 0, 'cellMargin' => 0));
         $table_ttd_rekomendasi2->addRow();
@@ -3988,15 +3989,23 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
                 $cell_ttd_rekomendasi_1->addText("$" . "{tandaTanganRekomendasi0}", ["bold" => false], ["align" => "center"]);
                 $cell_ttd_rekomendasi_1->addText($nama_ttd_rekomendasi_1, $fontStyleTTD, ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 $cell_ttd_rekomendasi_1->addText($jabatan_ttd_rekomendasi_1, $fontStyleTTD, ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
-                $cell_ttd_rekomendasi_1->addText($tanggal_ttd_rekomendasi_1, ["bold" => true, "size" => 7], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                $cell_ttd_rekomendasi_1->addText($tanggal_ttd_rekomendasi_1, ["bold" => true, "size" => 7, 'name' => 'Times New Roman'
+                ], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 if ($rekomendator[0]->status == "approved" && empty($rekomendator[0]->catatan)) {
-                    $cell_ttd_rekomendasi_1->addText("Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_1->addText("☑ Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_1->addText("□ Direkomendasikan Dengan Catatan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_1->addText("□ Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 } elseif ($rekomendator[0]->status == "approved" && !empty($rekomendator[0]->catatan)) {
-                    $cell_ttd_rekomendasi_1->addText("Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_1->addText("□ Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_1->addText("☑ Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_1->addText("□ Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 } else {
-                    $cell_ttd_rekomendasi_1->addText("Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_1->addText("□ Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_1->addText("□ Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_1->addText("☑ Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 }
+                $cell_ttd_rekomendasi_1->addText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", ["bold" => false, "size" => 5, 'name' => 'Times New Roman', 'color' => "FFFFFF"], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 //-------------------------------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -4004,7 +4013,7 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
 
                 // * TTD Kedua
 
-                $cell_ttd_rekomendasi_2->addText("$" . "{tandaTanganRekomendasi1}", ["bold" => false], ["align" => "center"]);
+                $cell_ttd_rekomendasi_2->addText("$" . "{tandaTanganRekomendasi1}", ["bold" => false, 'name' => 'Times New Roman'], ["align" => "center"]);
                 $cell_ttd_rekomendasi_2->addText($nama_ttd_rekomendasi_2, $fontStyleTTD, ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 $cell_ttd_rekomendasi_2->addText($jabatan_ttd_rekomendasi_2, $fontStyleTTD, ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 $cell_ttd_rekomendasi_2->addText($tanggal_ttd_rekomendasi_2, [
@@ -4014,12 +4023,19 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
                 ]);
 
                 if ($rekomendator[1]->status == "approved" && empty($rekomendator[1]->catatan)) {
-                    $cell_ttd_rekomendasi_2->addText("Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_2->addText("☑ Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_2->addText("□ Direkomendasikan Dengan Catatan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_2->addText("□ Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 } elseif ($rekomendator[1]->status == "approved" && !empty($rekomendator[1]->catatan)) {
-                    $cell_ttd_rekomendasi_2->addText("Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_2->addText("□ Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_2->addText("☑ Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_2->addText("□ Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 } else {
-                    $cell_ttd_rekomendasi_2->addText("Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_2->addText("□ Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_2->addText("□ Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_2->addText("☑ Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 }
+                $cell_ttd_rekomendasi_2->addText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", ["bold" => false, "size" => 5, 'name' => 'Times New Roman', 'color' => "FFFFFF"], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 //-------------------------------------------------------------------------------------------------------------------------------------------------------------//
             } elseif (str_contains($proyekNotaRekomendasi->klasifikasi_proyek, "Besar") || str_contains($proyekNotaRekomendasi->klasifikasi_proyek, "Mega")) {
@@ -4047,12 +4063,19 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
                 $cell_ttd_rekomendasi_1->addText($tanggal_ttd_rekomendasi_1, ["bold" => true, "size" => 7], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 if ($rekomendator[0]->status == "approved" && empty($rekomendator[0]->catatan)) {
-                    $cell_ttd_rekomendasi_1->addText("Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_1->addText("☑ Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_1->addText("□ Direkomendasikan Dengan Catatan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_1->addText("□ Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 } elseif ($rekomendator[0]->status == "approved" && !empty($rekomendator[0]->catatan)) {
-                    $cell_ttd_rekomendasi_1->addText("Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_1->addText("□ Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_1->addText("☑ Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_1->addText("□ Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 } else {
-                    $cell_ttd_rekomendasi_1->addText("Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_1->addText("□ Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_1->addText("□ Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_1->addText("☑ Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 }
+                $cell_ttd_rekomendasi_1->addText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", ["bold" => false, "size" => 5, 'name' => 'Times New Roman', 'color' => "FFFFFF"], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 //-------------------------------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -4074,14 +4097,19 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
                 $cell_ttd_rekomendasi_2->addText($tanggal_ttd_rekomendasi_2, ["bold" => true, "size" => 7], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 if ($rekomendator[1]->status == "approved" && empty($rekomendator[1]->catatan)) {
-                    $cell_ttd_rekomendasi_2->addText("Direkomendasikan", [
-                        "bold" => true, "size" => 7
-                    ], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_2->addText("☑ Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_2->addText("□ Direkomendasikan Dengan Catatan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_2->addText("□ Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 } elseif ($rekomendator[1]->status == "approved" && !empty($rekomendator[1]->catatan)) {
-                    $cell_ttd_rekomendasi_2->addText("Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_2->addText("□ Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_2->addText("☑ Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_2->addText("□ Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 } else {
-                    $cell_ttd_rekomendasi_2->addText("Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_2->addText("□ Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_2->addText("□ Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_2->addText("☑ Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 }
+                $cell_ttd_rekomendasi_2->addText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", ["bold" => false, "size" => 5, 'name' => 'Times New Roman', 'color' => "FFFFFF"], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 //-------------------------------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -4118,14 +4146,19 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
                 $cell_ttd_rekomendasi_3->addText($tanggal_ttd_rekomendasi_3, ["bold" => true, "size" => 7], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 if ($rekomendator[2]->status == "approved" && empty($rekomendator[2]->catatan)) {
-                    $cell_ttd_rekomendasi_3->addText("Direkomendasikan", [
-                        "bold" => true, "size" => 7
-                    ], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
-                } elseif ($rekomendator[2]->status == "approved" && !empty($rekomendator[2]->catatan)) {
-                    $cell_ttd_rekomendasi_3->addText("Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_3->addText("☑ Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_3->addText("□ Direkomendasikan Dengan Catatan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_3->addText("□ Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                } elseif ($rekomendator[2]->status == "approved" && !empty($rekomendator[1]->catatan)) {
+                    $cell_ttd_rekomendasi_3->addText("□ Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_3->addText("☑ Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_3->addText("□ Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 } else {
-                    $cell_ttd_rekomendasi_3->addText("Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_3->addText("□ Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_3->addText("□ Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_3->addText("☑ Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 }
+                $cell_ttd_rekomendasi_3->addText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", ["bold" => false, "size" => 5, 'name' => 'Times New Roman', 'color' => "FFFFFF"], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 //-------------------------------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -4147,14 +4180,19 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
                 $cell_ttd_rekomendasi_4->addText($tanggal_ttd_rekomendasi_4, ["bold" => true, "size" => 7], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 if ($rekomendator[3]->status == "approved" && empty($rekomendator[3]->catatan)) {
-                    $cell_ttd_rekomendasi_4->addText("Direkomendasikan", [
-                        "bold" => true, "size" => 7
-                    ], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_4->addText("☑ Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_4->addText("□ Direkomendasikan Dengan Catatan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_4->addText("□ Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 } elseif ($rekomendator[3]->status == "approved" && !empty($rekomendator[3]->catatan)) {
-                    $cell_ttd_rekomendasi_4->addText("Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_4->addText("□ Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_4->addText("☑ Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_4->addText("□ Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 } else {
-                    $cell_ttd_rekomendasi_4->addText("Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_4->addText("□ Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_4->addText("□ Direkomendasikan dengan catatan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_rekomendasi_4->addText("☑ Tidak Direkomendasikan", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 }
+                $cell_ttd_rekomendasi_4->addText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", ["bold" => false, "size" => 5, 'name' => 'Times New Roman', 'color' => "FFFFFF"], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
             }            
         }
 
@@ -4213,7 +4251,7 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
         }
 
         $header_cell_3 = $table_ttd_persetujuan->addCell(9000, ["vMerge" => "restart", "gridSpan" => $gridSpan, "bgColor" => "F4B083"]);
-        $header_cell_3->addText("Persetujuan,", ["bold" => true], ["align" => "center", "spaceBefore" => 0, "spaceAfter" => 0]);
+        $header_cell_3->addText("Persetujuan,", ["bold" => true, "name" => "Times New Roman"], ["align" => "center", "spaceBefore" => 0, "spaceAfter" => 0]);
 
         $table_ttd_persetujuan2 = $section_4->addTable('table_ttd_persetujuan2', array('borderSize' => 1, 'borderColor' => '999999', 'spaceAfter' => 0, 'spacing' => 0, 'cellMargin' => 0));
         $table_ttd_persetujuan2->addRow();
@@ -4250,10 +4288,13 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
                 $cell_ttd_penyetuju_1->addText($tanggal_ttd_penyetuju_1, ["bold" => true, "size" => 7], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 if ($penyetuju[0]->status == "approved") {
-                    $cell_ttd_penyetuju_1->addText("Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_1->addText("☑ Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_1->addText("□ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 } else {
-                    $cell_ttd_penyetuju_1->addText("Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_1->addText("□ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_1->addText("☑ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 }
+                $cell_ttd_penyetuju_1->addText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", ["bold" => false, "size" => 5, 'name' => 'Times New Roman', 'color' => "FFFFFF"], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 //-------------------------------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -4267,10 +4308,13 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
                 $cell_ttd_penyetuju_2->addText($tanggal_ttd_penyetuju_2, ["bold" => true, "size" => 7], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 if ($penyetuju[1]->status == "approved") {
-                    $cell_ttd_penyetuju_2->addText("Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_2->addText("☑ Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_2->addText("□ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 } else {
-                    $cell_ttd_penyetuju_2->addText("Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_2->addText("□ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_2->addText("☑ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 }
+                $cell_ttd_penyetuju_2->addText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", ["bold" => false, "size" => 5, 'name' => 'Times New Roman', 'color' => "FFFFFF"], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 //-------------------------------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -4283,11 +4327,14 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
                 $cell_ttd_penyetuju_3->addText($jabatan_ttd_penyetuju_3, $fontStyleTTD, ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 $cell_ttd_penyetuju_3->addText($tanggal_ttd_penyetuju_3, ["bold" => true, "size" => 7], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
-                if ($penyetuju[1]->status == "approved") {
-                    $cell_ttd_penyetuju_3->addText("Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                if ($penyetuju[2]->status == "approved") {
+                    $cell_ttd_penyetuju_3->addText("☑ Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_3->addText("□ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 } else {
-                    $cell_ttd_penyetuju_3->addText("Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_3->addText("□ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_3->addText("☑ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 }
+                $cell_ttd_penyetuju_3->addText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", ["bold" => false, "size" => 5, 'name' => 'Times New Roman', 'color' => "FFFFFF"], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 //-------------------------------------------------------------------------------------------------------------------------------------------------------------//
             } elseif (str_contains($proyekNotaRekomendasi->klasifikasi_proyek, "Besar")) {
@@ -4315,10 +4362,13 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
                 $cell_ttd_penyetuju_1->addText($tanggal_ttd_penyetuju_1, ["bold" => true, "size" => 7], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 if ($penyetuju[0]->status == "approved") {
-                    $cell_ttd_penyetuju_1->addText("Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_1->addText("☑ Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_1->addText("□ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 } else {
-                    $cell_ttd_penyetuju_1->addText("Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_1->addText("□ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_1->addText("☑ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 }
+                $cell_ttd_penyetuju_1->addText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", ["bold" => false, "size" => 5, 'name' => 'Times New Roman', 'color' => "FFFFFF"], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 //-------------------------------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -4332,10 +4382,13 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
                 $cell_ttd_penyetuju_2->addText($tanggal_ttd_penyetuju_2, ["bold" => true, "size" => 7], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 if ($penyetuju[1]->status == "approved") {
-                    $cell_ttd_penyetuju_2->addText("Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_2->addText("☑ Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_2->addText("□ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 } else {
-                    $cell_ttd_penyetuju_2->addText("Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_2->addText("□ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_2->addText("☑ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 }
+                $cell_ttd_penyetuju_2->addText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", ["bold" => false, "size" => 5, 'name' => 'Times New Roman', 'color' => "FFFFFF"], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 //-------------------------------------------------------------------------------------------------------------------------------------------------------------//
             } elseif (str_contains($proyekNotaRekomendasi->klasifikasi_proyek, "Mega")) {
@@ -4363,10 +4416,13 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
                 $cell_ttd_penyetuju_1->addText($tanggal_ttd_penyetuju_1, ["bold" => true, "size" => 7], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 if ($penyetuju[0]->status == "approved") {
-                    $cell_ttd_penyetuju_1->addText("Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_1->addText("☑ Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_1->addText("□ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 } else {
-                    $cell_ttd_penyetuju_1->addText("Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_1->addText("□ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_1->addText("☑ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 }
+                $cell_ttd_penyetuju_1->addText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", ["bold" => false, "size" => 5, 'name' => 'Times New Roman', 'color' => "FFFFFF"], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 //-------------------------------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -4380,10 +4436,13 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
                 $cell_ttd_penyetuju_2->addText($tanggal_ttd_penyetuju_2, ["bold" => true, "size" => 7], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 if ($penyetuju[1]->status == "approved") {
-                    $cell_ttd_penyetuju_2->addText("Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_2->addText("☑ Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_2->addText("□ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 } else {
-                    $cell_ttd_penyetuju_2->addText("Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_2->addText("□ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_2->addText("☑ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 }
+                $cell_ttd_penyetuju_2->addText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", ["bold" => false, "size" => 5, 'name' => 'Times New Roman', 'color' => "FFFFFF"], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 //-------------------------------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -4412,10 +4471,13 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
                 $cell_ttd_penyetuju_3->addText($tanggal_ttd_penyetuju_3, ["bold" => true, "size" => 7], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 if ($penyetuju[2]->status == "approved") {
-                    $cell_ttd_penyetuju_3->addText("Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_3->addText("☑ Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_3->addText("□ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 } else {
-                    $cell_ttd_penyetuju_3->addText("Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_3->addText("□ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_3->addText("☑ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 }
+                $cell_ttd_penyetuju_3->addText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", ["bold" => false, "size" => 5, 'name' => 'Times New Roman', 'color' => "FFFFFF"], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 //-------------------------------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -4429,10 +4491,13 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
                 $cell_ttd_penyetuju_4->addText($tanggal_ttd_penyetuju_4, ["bold" => true, "size" => 7], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
 
                 if ($penyetuju[3]->status == "approved") {
-                    $cell_ttd_penyetuju_4->addText("Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_4->addText("☑ Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_4->addText("□ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 } else {
-                    $cell_ttd_penyetuju_4->addText("Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
-                }    
+                    $cell_ttd_penyetuju_4->addText("□ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                    $cell_ttd_penyetuju_4->addText("☑ Tidak Menyetujui", ["bold" => true, "size" => 7], ["align" => "center", 'spaceAfter' => 0, 'spaceBefore' => 0]);
+                }
+                $cell_ttd_penyetuju_4->addText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", ["bold" => false, "size" => 5, 'name' => 'Times New Roman', 'color' => "FFFFFF"], ['alignment' => 'center', 'spaceAfter' => 0, 'spaceBefore' => 0]);
                 //-------------------------------------------------------------------------------------------------------------------------------------------------------------//
             }
         }
@@ -4555,6 +4620,7 @@ function createWordPersetujuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekom
 
         // File::delete(public_path($target_path . "/" . $file_name . ".docx"));
         // File::delete(public_path($target_path . "/" . $ttdFileName . ".docx"));
+        return response()->download(public_path($target_path . "/" . $file_name . ".pdf"));
 
         $proyekNotaRekomendasi->file_persetujuan = $file_name . ".pdf";
         // dd("saved", $proyekNotaRekomendasi->file_persetujuan);    
@@ -4914,7 +4980,7 @@ function mergeDokumenKelengkapanPartnerKSO(App\Models\PorsiJO $partner)
         $dokumenLapKeu = $partner->DokumenKelengkapanPartnerKSO?->where('kategori', 'Dokumen Laporan Keuangan')->first();
         $dokumenSPT = $partner->DokumenKelengkapanPartnerKSO?->where('kategori', 'Dokumen Laporan SPT')->first();
         $dokumenPengalaman = $partner->DokumenKelengkapanPartnerKSO?->where('kategori', 'Dokumen Pengalaman')->first();
-        $dokumenPenentuanKSO = $partner->Proyek?->DokumenPenentuanKSO;
+        $dokumenPenentuanKSO = $partner->Proyek?->VerifikasiInternalPartner;
 
         foreach ($consentTemp as $file) {
             $pdfMerge->add(public_path('consent-npwp/' . $file));
@@ -4941,7 +5007,7 @@ function mergeDokumenKelengkapanPartnerKSO(App\Models\PorsiJO $partner)
         }
 
         if (!empty($dokumenPenentuanKSO)) {
-            $pdfMerge->add(public_path('dokumen-penentuan-kso/' . $dokumenPenentuanKSO->id_document));
+            $pdfMerge->add(public_path('file-nota-rekomendasi-2/file-verifikasi-internal-partner/' . $dokumenPenentuanKSO->nama_dokumen));
         }
 
         $pdfMerge->merge(public_path("file-kelengkapan-partner" . "/" . $file_name . ".pdf"));
@@ -5006,7 +5072,8 @@ function mergeFileDokumenAssessmentPartnerKSO(App\Models\PorsiJO $partner)
         $partner->file_assessment_merge = $file_name . '.pdf';
         return $partner->save();
     } catch (\Exception $e) {
-        dd($e);
+        // dd($e);
+        throw $e;
     }
     // } else {
     //     return null;
@@ -5034,31 +5101,41 @@ function mergeDokumenKelengkapanProject(App\Models\NotaRekomendasi2 $rekomendasi
         $dokumenOtherProyek = $proyek->DokumenOtherProyek;
         $dokumenPPTPaparan = collect(json_decode($rekomendasi->file_pemaparan));
 
-        foreach ($dokumenCashFlow as $file) {
-            dd($file);
-            $pdfMerge->add(public_path('words/' . $file->id_document));
+        if ($dokumenCashFlow->isNotEmpty()) {
+            foreach ($dokumenCashFlow as $file) {
+                $pdfMerge->add(public_path('dokumen-cashflow/' . $file->id_document));
+            }
         }
 
-        foreach ($dokumenRiskTender as $file) {
-            $pdfMerge->add(public_path('words/' . $file->id_document));
+        if ($dokumenRiskTender->isNotEmpty()) {
+            foreach ($dokumenRiskTender as $file) {
+                $pdfMerge->add(public_path('words/' . $file->id_document . ".pdf"));
+            }
         }
 
-        foreach ($dokumenDraftKontrak as $file) {
-            $pdfMerge->add(public_path('words/' . $file->id_document));
+        if ($dokumenDraftKontrak->isNotEmpty()) {
+            foreach ($dokumenDraftKontrak as $file) {
+                $pdfMerge->add(public_path('words/' . $file->id_document . ".pdf"));
+            }
         }
 
-        foreach ($dokumenPPTPaparan as $file) {
-            $pdfMerge->add(public_path('file-nota-rekomendasi-2/file-notulen-paparan/' . $file->id_document));
+        if (!empty($dokumenPPTPaparan)) {
+            foreach ($dokumenPPTPaparan as $file) {
+                $pdfMerge->add(public_path('file-nota-rekomendasi-2/file-notulen-paparan/' . $file));
+            }
         }
 
-        foreach ($dokumenSCurves as $file) {
-            $pdfMerge->add(public_path('dokumen-s-curves/' . $file));
+        if ($dokumenSCurves->isNotEmpty()) {
+            foreach ($dokumenSCurves as $file) {
+                $pdfMerge->add(public_path('dokumen-s-curves/' . $file->id_document));
+            }
         }
 
-        foreach ($dokumenOtherProyek as $file) {
-            $pdfMerge->add(public_path('dokumen-other-proyek/' . $file));
+        if ($dokumenOtherProyek->isNotEmpty()) {
+            foreach ($dokumenOtherProyek as $file) {
+                $pdfMerge->add(public_path('dokumen-other-proyek/' . $file->id_document));
+            }
         }
-
         $pdfMerge->merge(public_path("file-nota-rekomendasi-2/file-kelengkapan-project" . "/" . $file_name . ".pdf"));
 
         $rekomendasi->file_kelengkapan_merge = $file_name . '.pdf';
@@ -5066,10 +5143,13 @@ function mergeDokumenKelengkapanProject(App\Models\NotaRekomendasi2 $rekomendasi
             return true;
         }
     } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => $e->getMessage()
-        ]);
+        dd($e->getMessage());
+        Alert::error("Error", $e->getMessage());
+        return redirect()->back();
+        // return response()->json([
+        //     'success' => false,
+        //     'message' => $e->getMessage()
+        // ]);
     }
 }
 
@@ -5430,7 +5510,7 @@ function integrationLog($category, $requestBody, $requestHeader = null, $statusC
 function generateQrCode(string $imageName, string $path, string $url)
 {
     try {
-        $qrcode = QrCode::format('png')->size(100)->merge('/public/media/logos/logo-wika.png')->errorCorrection('M')->generate($url, $path);
+        $qrcode = QrCode::format('png')->size(80)->merge('/public/media/logos/logo-wika.png')->errorCorrection('M')->generate($url, $path);
         return true;
     } catch (\Exception $e) {
         // throw new Exception("Error :" . $e->getMessage() ', Hubungi Admin!', 1, $e);

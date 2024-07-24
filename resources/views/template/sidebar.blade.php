@@ -340,6 +340,57 @@
                                 </a>
                             </div>
                         @endcanany
+                        
+                        @canany(['super-admin', 'approver-crm', 'user-crm', 'risk-crm'])
+                            <div class="menu-item">
+                                <a class="menu-link " href="/verifikasi-internal-partner"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::url(), 'verifikasi-internal-partner') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Verifikasi Internal Penentuan Proyek KSO / Non KSO</span>
+                                </a>
+                            </div>
+                        @endcanany
+
+                        @canany(['super-admin', 'approver-crm', 'user-crm', 'risk-crm'])
+                            <div class="menu-item">
+                                <a class="menu-link " href="/verifikasi-internal-persetujuan-partner"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::url(), 'verifikasi-internal-persetujuan-partner') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Permohonan Persetujuan Pembentukan Kerjasama Operasi (KSO)</span>
+                                </a>
+                            </div>
+                        @endcanany
+
+                        @canany(['super-admin', 'approver-crm', 'user-crm', 'risk-crm'])
+                            <div class="menu-item">
+                                <a class="menu-link " href="/verifikasi-proyek-nota-2"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::url(), 'verifikasi-proyek-nota-2') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Verifikasi Internal Proyek Greenlane/Non Greenlane</span>
+                                </a>
+                            </div>
+                        @endcanany
 
                         @canany(['super-admin', 'admin-crm', 'user-crm', 'approver-crm'])
                             <div class="menu-item">
@@ -1230,6 +1281,9 @@
                                 Request::Path() == 'matriks-approval-verifikasi-partner' ||
                                 Request::Path() == 'matriks-approval-persetujuan-partner' ||
                                 Request::Path() == 'matriks-approval-paparan' ||
+                                Request::Path() == 'matriks-approval-varifikasi-internal-partner' ||
+                                Request::Path() == 'matriks-approval-varifikasi-internal-persetujuan-partner' ||
+                                Request::Path() == 'matriks-approval-varifikasi-proyek' ||
                                 Request::Path() == 'except-greenlane' ||
                                 Request::Path() == 'piutang' ||
                                 Request::Path() == 'kriteria-green-line' ||
@@ -1251,7 +1305,10 @@
                                 Request::Path() == 'master-lq-rank' ||
                                 Request::Path() == 'master-masalah-hukum' ||
                                 Request::Path() == 'master-pefindo' ||
-                                Request::Path() == 'master-group-tier'
+                                Request::Path() == 'master-group-tier' ||
+                                Request::Path() == 'matriks-approval-varifikasi-partner' ||
+                                Request::Path() == 'matriks-approval-persetujuan-partner' ||
+                                Request::Path() == 'matriks-approval-varifikasi-proyek'
                                     ? 'background-color:#008CB4'
                                     : '' }}">
                                 <a class="menu-link" id="collapse-button" style="color:white; padding-left:20px;"
@@ -1347,9 +1404,27 @@
                                 @can('super-admin')
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
-                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'matriks-approval-verifikasi-partner' ? 'background-color:#008CB4' : '' }}">
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'matriks-approval-paparan' ? 'background-color:#008CB4' : '' }}">
                                         <a class="menu-link d-flex flex-row align-items-center"
-                                            href="/matriks-approval-verifikasi-partner"
+                                            href="/matriks-approval-paparan" style="color:white; padding-left:10px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                <i class="bi bi-person-fill-lock text-white"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Matriks
+                                                Approval Paparan</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                @endcan
+
+                                @can('super-admin')
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'matriks-approval-varifikasi-partner' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link d-flex flex-row align-items-center"
+                                            href="/matriks-approval-varifikasi-partner"
                                             style="color:white; padding-left:10px;">
                                             <span class="menu-icon">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
@@ -1357,7 +1432,7 @@
                                                 <!--end::Svg Icon-->
                                             </span>
                                             <span class="menu-title" style="font-size: 16px; padding-left: 10px">Matriks
-                                                Approval Verifikasi Partner</span>
+                                                Approval Verifikasi Internal Partner</span>
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
@@ -1376,25 +1451,26 @@
                                                 <!--end::Svg Icon-->
                                             </span>
                                             <span class="menu-title" style="font-size: 16px; padding-left: 10px">Matriks
-                                                Approval Persetujuan Partner</span>
+                                                Approval Verifikasi Persetujuan Partner</span>
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
                                 @endcan
-
+                               
                                 @can('super-admin')
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
-                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'matriks-approval-paparan' ? 'background-color:#008CB4' : '' }}">
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'matriks-approval-varifikasi-proyek' ? 'background-color:#008CB4' : '' }}">
                                         <a class="menu-link d-flex flex-row align-items-center"
-                                            href="/matriks-approval-paparan" style="color:white; padding-left:10px;">
+                                            href="/matriks-approval-varifikasi-proyek"
+                                            style="color:white; padding-left:10px;">
                                             <span class="menu-icon">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                                 <i class="bi bi-person-fill-lock text-white"></i>
                                                 <!--end::Svg Icon-->
                                             </span>
                                             <span class="menu-title" style="font-size: 16px; padding-left: 10px">Matriks
-                                                Approval Paparan</span>
+                                                Approval Verifikasi Persetujuan Project Greenlane / Non Greenlane</span>
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->

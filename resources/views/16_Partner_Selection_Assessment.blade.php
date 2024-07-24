@@ -1988,6 +1988,13 @@
                                             @endif
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td>8.</td>
+                                        <td>Hasil Assessment Internal</td>
+                                        <td>
+                                            {{ $partner->PartnerSelection?->where('kode_proyek', $partner->kode_proyek)->sum('nilai') ?: "Belum Ditentukan" }}
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                             <br>
@@ -2133,6 +2140,13 @@
                                         </tr>
                                         <tr>
                                             <td>8.</td>
+                                            <td>Hasil Assessment Internal</td>
+                                            <td>
+                                                {{ $partner->PartnerSelection?->where('kode_proyek', $partner->kode_proyek)->sum('nilai') ?: "Belum Ditentukan" }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>9.</td>
                                             <td>Catatan Assessment</td>
                                             <td>
                                                 <p class="m-0">{!! $assessment->catatan_assessment !!}</p>
@@ -2162,10 +2176,9 @@
                             @if (is_null($assessment->is_rekomendasi_approved) &&$matriks_user->contains('kategori', 'Rekomendasi') &&
                             $matriks_user->where('kategori', 'Rekomendasi')?->where('departemen_code', $partner->Proyek->departemen_proyek)?->where('divisi_id', $partner->Proyek->UnitKerja->Divisi->id_divisi)?->first())
                             <label for="kategori-rekomendasi" class="text-start"><span class="required">Kategori Rekomendasi: </span></label>
-                            <select id="kategori-rekomendasi" name="kategori-rekomendasi"
-                                class="form-select form-select-solid w-auto" style="margin-right: 2rem;"
+                            <select id="kategori-rekomendasi" name="kategori-rekomendasi" class="form-select form-select-solid" style="margin-right: 2rem;"
                                 data-control="select2" data-hide-search="true" data-placeholder="Pilih Kategori"
-                                data-select2-id="select2-data-kategori-rekomendasi" tabindex="-1"
+                                data-select2-id="select2-data-kategori-rekomendasi-{{ $assessment->id }}" tabindex="-1"
                                 aria-hidden="true">
                                 <option value=""></option>
                                 <option value="Disetujui">Disetujui</option>

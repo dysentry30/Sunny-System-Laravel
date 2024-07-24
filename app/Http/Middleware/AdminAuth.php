@@ -130,6 +130,10 @@ class AdminAuth
             "AHU",
             "nota-rekomendasi-2",
             "approval-terkontrak-proyek",
+            "verifikasi-internal-partner",
+            "verifikasi-internal-persetujuan-partner",
+            "verifikasi-proyek-nota-2",
+            "assessment-partner-selection",
         ]);
         $allowed_url_team_proyek = join(" ", ["dashboard", "proyek", "contract-management", "review-contract", "draft-contract", "issue-project", "question", "input-risk", "laporan-bulanan", "serah-terima", "claim-management", "approval-claim", "detail-claim", "claim", "document", "user"]);
         $concat_allowed_url = "";

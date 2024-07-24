@@ -32,6 +32,7 @@ return new class extends Migration
                 $table->text('persetujuan_approved')->nullable();
                 $table->boolean('is_revisi')->nullable();
                 $table->text('revisi_note')->nullable();
+                $table->string('nama_dokumen')->nullable();
                 $table->timestamps();
             });
         }

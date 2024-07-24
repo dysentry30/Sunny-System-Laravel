@@ -51,14 +51,14 @@ class Rekomendasi2Controller extends Controller
             if ($user->is_ktt) {
                 return TimTender::where('nip_pegawai', Auth::user()->nip)->where('posisi', 'Ketua')->first();
             } else {
-                return $user->Pegawai->nama_pegawai == Auth::user()->name;
+                return $user->Pegawai->nip == Auth::user()->nip;
             }
         });
         $is_user_exist_in_matriks_approval = $all_super_user_counter->contains(function ($user) {
             if ($user->is_ktt) {
                 return TimTender::where('nip_pegawai', Auth::user()->nip)->where('posisi', 'Ketua')->first();
             } else {
-                return $user->Pegawai->nama_pegawai == Auth::user()->name;
+                return $user->Pegawai->nip == Auth::user()->nip;
             }
         });
         $matriks_category = [];
@@ -221,25 +221,24 @@ class Rekomendasi2Controller extends Controller
                     foreach ($matriks_paparan as $user) {
                         $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_req_paparan_$proyekSelected->kode_proyek";
                         $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan pengajuan tanggal paparan untuk Nota Rekomendasi II, " . $proyekSelected->ProyekBerjalan->name_customer . " untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                        // $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Pengajuan Waktu Paparan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
-                        // if (!$sendEmailUser) {
-                        //     return redirect()->back();
-                        // }
+                        $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Pengajuan Waktu Paparan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                        if (!$sendEmailUser) {
+                            return redirect()->back();
+                        }
                     }
                 } else {
                     $nomorTarget = self::getNomorMatriksApproval($proyekSelected->UnitKerja->Divisi->id_divisi, $proyekSelected->klasifikasi_pasdin, $proyekSelected->departemen_proyek, "Penyusun")->where('urutan', '=', 1);
                     foreach ($nomorTarget as $target) {
                         $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_proyek_rekomendasi_" . $proyekPengajuan->kode_proyek;
                         $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan hasil revisi untuk proyek " . $proyekSelected->nama_proyek . " untuk permohonan pengajuan rekomendasi tahap II.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                        // $sendEmailUser = sendNotifEmail($target->Pegawai, "Pemberitahuan Hasil Revisi Pengajuan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
-                        // if (!$sendEmailUser) {
-                        //     return redirect()->back();
-                        // }
+                        $sendEmailUser = sendNotifEmail($target->Pegawai, "Pemberitahuan Hasil Revisi Pengajuan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
+                        if (!$sendEmailUser) {
+                            return redirect()->back();
+                        }
                     }
                 }
 
                 createWordPengajuanNota2($proyekPengajuan);
-                mergeDokumenKelengkapanProject($proyekPengajuan);
                 $proyekPengajuan->is_pengajuan_approved = true;
                 $proyekPengajuan->is_request_rekomendasi = false;
                 $proyekPengajuan->is_request_paparan = true;
@@ -915,7 +914,7 @@ class Rekomendasi2Controller extends Controller
             if ($is_checked) {
                 $proyekPersetujuan->is_disetujui = true;
                 $proyekPersetujuan->persetujuan_note = $request["catatan-persetujuan"];
-                createWordPersetujuanNota2($proyekPersetujuan, $request->schemeAndHttpHost());
+                // createWordPersetujuanNota2($proyekPersetujuan, $request->schemeAndHttpHost());
             }
             if ($proyekPersetujuan->save()) {
                 Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyekPersetujuan->nama_proyek</b> telah disetujui oleh tim Persetujuan melalui <b>Tahap Nota Rekomendasi 2</b>", "success");
@@ -938,7 +937,7 @@ class Rekomendasi2Controller extends Controller
             $proyekPersetujuan->is_disetujui = false;
 
             if ($proyekPersetujuan->save()) {
-                createWordPersetujuanNota2($proyekPersetujuan, $request->schemeAndHttpHost());
+                // createWordPersetujuanNota2($proyekPersetujuan, $request->schemeAndHttpHost());
                 Alert::html("Success", "Rekomendasi dengan nama proyek <b>$proyekSelected->nama_proyek</b> telah ditolak oleh tim Persetujuan melalui <b>Tahap Nota Rekomendasi 1</b>", "success");
                 return redirect()->back();
             }
@@ -1099,11 +1098,14 @@ class Rekomendasi2Controller extends Controller
 
             $penandatanganSelected = $collectPenandatangan->where('user_id', $userSelected->id)->first();
 
-            $penandatanganSelected["user_id"] = $userSelected->name;
+            if (!empty($penandatanganSelected)) {
+                $penandatanganSelected->user_id = $userSelected->name;
 
-            $penandatanganSelected["jabatan"] = $userSelected->Pegawai?->Jabatan?->nama_jabatan ?? null;
+                $penandatanganSelected->jabatan = $userSelected->Pegawai?->Jabatan?->nama_jabatan ?? null;
 
-            $penandatanganSelected["tanggal"] = Carbon::parse($penandatanganSelected["tanggal"])->translatedFormat('d F Y, H:i:s');
+                $penandatanganSelected->tanggal = Carbon::parse($penandatanganSelected->tanggal)->translatedFormat('d F Y, H:i:s');
+            }
+
 
             return view('22_View_TTD_Barcode_Nota_2', ["penandatanganSelected" => $penandatanganSelected, "dataNotaRekomendasi" => $ProyekNotaQrSelected, "proyek" => $proyekSelected]);
         } catch (\Exception $e) {
@@ -1112,6 +1114,46 @@ class Rekomendasi2Controller extends Controller
             } else {
                 throw $e;
             }
+        }
+    }
+
+    public function mergeFinalFile(Request $request, $kode_proyek)
+    {
+        try {
+            $proyekPersetujuan = NotaRekomendasi2::where('kode_proyek', $kode_proyek)->first();
+            createWordPersetujuanNota2($proyekPersetujuan, $request->schemeAndHttpHost());
+
+            $pdfMerge = new pdfMerge();
+            $file_name = date("dmYHis_") . "Dokumen_Nota_Rekomendasi_" . $proyekPersetujuan->Proyek->nama_proyek . "_Final.pdf";
+
+            sleep(5);
+
+            if (!empty($proyekPersetujuan->file_persetujuan)) {
+                $pdfMerge->add(public_path('file-nota-rekomendasi-2/file-persetujuan/' . $proyekPersetujuan->file_persetujuan));
+            }
+
+            if (!empty($proyekPersetujuan->file_assessment_merge)) {
+                $pdfMerge->add(public_path('file-nota-rekomendasi-2/file-kriteria-project-selection/' . $proyekPersetujuan->file_assessment_merge));
+            }
+
+            if (!empty($proyekPersetujuan->file_kelengkapan_merge)) {
+                $pdfMerge->add(public_path('file-nota-rekomendasi-2/file-kelengkapan-project/' . $proyekPersetujuan->file_kelengkapan_merge));
+            }
+
+            $pdfMerge->merge(public_path("file-nota-rekomendasi-2/file-persetujuan" . "/" . $file_name));
+
+            $proyekPersetujuan->file_persetujuan = $file_name;
+            $proyekPersetujuan->save();
+
+            return response()->json([
+                "success" => true,
+                "message" => "Dokumen berhasil di generate"
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "success" => false,
+                "message" => "Dokumen gagal di generate"
+            ]);
         }
     }
 

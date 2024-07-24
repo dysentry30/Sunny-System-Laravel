@@ -631,6 +631,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         Route::post('/pengajuan/{proyek}', [VerifikasiInternalPartnerController::class, "ProsesPengajuanApproval"]);
         Route::post('/rekomendasi/{proyek}', [VerifikasiInternalPartnerController::class, "ProsesRekomendasiApproval"]);
         Route::post('/persetujuan/{proyek}', [VerifikasiInternalPartnerController::class, "ProsesPersetujuanApproval"]);
+        Route::get('/{kode_proyek}/{nip}/view-qr', [VerifikasiInternalPartnerController::class, "viewProyekQRSelected"]);
     });
     //End::Verifikasi Internal Partner Selection
 
@@ -639,8 +640,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         Route::get('/', [VerifikasiInternalPersetujuanPartnerController::class, "index"]);
         Route::post('/request-pengajuan/{proyek}', [VerifikasiInternalPersetujuanPartnerController::class, "ProsesRequestApproval"]);
         Route::post('/pengajuan/{proyek}', [VerifikasiInternalPersetujuanPartnerController::class, "ProsesPengajuanApproval"]);
+        Route::post('/pengusul/{proyek}', [VerifikasiInternalPersetujuanPartnerController::class, "ProsesPengusulApproval"]);
         Route::post('/rekomendasi/{proyek}', [VerifikasiInternalPersetujuanPartnerController::class, "ProsesRekomendasiApproval"]);
         Route::post('/persetujuan/{proyek}', [VerifikasiInternalPersetujuanPartnerController::class, "ProsesPersetujuanApproval"]);
+        Route::get('/{kode_proyek}/{nip}/view-qr', [VerifikasiInternalPersetujuanPartnerController::class, "viewProyekQRSelected"]);
     });
     //End::Verifikasi Internal Persetujuan Partner Selection
 
@@ -651,6 +654,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         Route::post('/pengajuan/{proyek}', [VerifikasiProyekNota2Controller::class, "ProsesPengajuanApproval"]);
         Route::post('/rekomendasi/{proyek}', [VerifikasiProyekNota2Controller::class, "ProsesRekomendasiApproval"]);
         Route::post('/persetujuan/{proyek}', [VerifikasiProyekNota2Controller::class, "ProsesPersetujuanApproval"]);
+        Route::get('/{kode_proyek}/{nip}/view-qr', [VerifikasiProyekNota2Controller::class, "viewProyekQRSelected"]);
     });
     //End::Verifikasi Internal Project Selection
 
@@ -677,7 +681,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post('/nota-rekomendasi-2/{kode_proyek}/upload-final', [Rekomendasi2Controller::class, 'UploadDokumenFinal']);
 
-    Route::get('/nota-rekomendasi-2/{kode_proyek}/view-qr', [Rekomendasi2Controller::class, 'viewProyekQrCode']);
+    Route::post('/nota-rekomendasi-2/{kode_proyek}/generate-final', [Rekomendasi2Controller::class, 'mergeFinalFile']);
+
+    Route::get('/nota-rekomendasi-2/{kode_proyek}/{nip}/view-qr', [Rekomendasi2Controller::class, 'viewProyekQrCode']);
 
     Route::get('/proyek/{proyek}/kso/generate', function (Proyek $proyek) {
         if (empty($proyek)) {
@@ -5763,7 +5769,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $listMasterPefindo = MasterPefindo::all();
         $updateMasterPefindo = $listMasterPefindo
             ->filter(function ($item) {
-                return ($item->bulan_start - date('m') < 6) && $item->tahun_start == date('Y');
+            return ($item->bulan_start + 5 < date("m")) && $item->tahun_start == date('Y');
             })->map(function ($item) {
                 $collectItem = [];
                 $collectItem["id"] = $item->id;
@@ -5826,6 +5832,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         }
 
         $validation->validate();
+
+        $is_exist_pefindo = MasterPefindo::where("id_pelanggan", $data['nama_pelanggan'])->where("is_active", true)->first();
+        if (!empty($is_exist_pefindo)) {
+            Alert::error("Pefindo gagal ditambahkan. Data masih tersedia");
+            return redirect()->back();
+        }
+        
         $file = $request->file("file");
         $id_document = date("His_") . str_replace(' ', '_', $file->getClientOriginalName());
         $pelanggan = Customer::find($data['nama_pelanggan']);
@@ -5833,7 +5846,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $pefindo->id_pelanggan = $pelanggan->id_customer;
         $pefindo->bulan_start = $data['bulan'];
         $pefindo->tahun_start = $data['tahun'];
-        $pefindo->is_active = isset($data['isActive']) && ((int)$data['bulan'] - date('m') < 6) ? false : true;
+        $pefindo->is_active = isset($data['isActive']) && ((int)$data['bulan'] + 5 < date("m")) ? false : true;
         $pefindo->nama_pelanggan = $pelanggan->name;
         $pefindo->score = (int)$data["score"];
         $pefindo->id_document = $id_document;
@@ -5842,8 +5855,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         ->filter(function ($item) use ($data) {
             return $item->dari_nilai <= (int)$data["score"] && $item->sampai_nilai >= (int)$data["score"];
         })
-        ->first();
-
+            ->first();
         $pefindo->grade = $kriteria_penilaian->grade;
         $pefindo->keterangan = $kriteria_penilaian->nama;
 
@@ -8318,10 +8330,10 @@ Route::get('/tes-email', function () {
 });
 
 Route::get('/test-persetujuan-nota-2', function (Request $request) {
-    $notaRekomendasi = \App\Models\NotaRekomendasi::where('kode_proyek', 'PJPD012')->first();
-    $hasil_assessment = collect(json_decode($notaRekomendasi->hasil_assessment));
-    // return createWordPersetujuanNota2($notaRekomendasi, $request->schemeAndHttpHost());
-    return createWordNotaRekomendasiSetuju($notaRekomendasi, $hasil_assessment, $request);
+    $notaRekomendasi = \App\Models\NotaRekomendasi2::where('kode_proyek', 'PJPD020')->first();
+    // $hasil_assessment = collect(json_decode($notaRekomendasi->hasil_assessment));
+    return createWordPersetujuanNota2($notaRekomendasi, $request->schemeAndHttpHost());
+    // return createWordNotaRekomendasiSetuju($notaRekomendasi, $hasil_assessment, $request);
 });
 
 Route::get('/rekomendasi/{kode_proyek}/{nip}/view-qr', [RekomendasiController::class, 'viewProyekQrCode']);
@@ -8371,4 +8383,42 @@ Route::post('copy-forecast', function (Request $request) {
             "message" => $e->getMessage()
         ]);
     }
+});
+
+Route::post('get-matriks-verifikasi/{kategori}', function (Request $request, $kategori) {
+    $data = $request->all();
+
+    switch ($kategori) {
+        case 'penentuan-kso':
+            $verifikasi = MatriksApprovalVerifikasiPartner::where("is_active", true)->where("kategori", "Pengajuan")->get();
+            break;
+        case 'persetujuan-kso':
+            $verifikasi = MatriksApprovalPersetujuanPartner::where("is_active", true)->where("kategori", "Pengajuan")->get();
+            break;
+        case 'verifikasi-proyek-nr-2':
+            $verifikasi = MatriksApprovalVerifikasiProyekNota2::where("is_active", true)->where("kategori", "Pengajuan")->get();
+            break;
+
+        default:
+            $verifikasi = null;
+            break;
+    }
+
+    $collectVerifikasi = [];
+
+    if (!empty($verifikasi)) {
+        $verifikasi = $verifikasi?->where("divisi_id", $data["divisi_id"])->where("departemen_code", $data["departemen_code"])?->map(function ($item) {
+            return [$item->nama_pegawai => $item->kode_unit_kerja . " - " . $item->title];
+        });
+
+
+        foreach ($verifikasi->toArray() as $item) {
+            foreach ($item as $key => $value) {
+                $collectVerifikasi[$key] = $value;
+            }
+        }
+    }
+
+
+    return response()->json($collectVerifikasi);
 });

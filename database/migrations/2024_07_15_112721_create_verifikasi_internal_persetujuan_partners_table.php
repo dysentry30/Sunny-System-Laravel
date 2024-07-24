@@ -26,6 +26,8 @@ return new class extends Migration
                 $table->text('request_pengajuan')->nullable();
                 $table->boolean('is_pengajuan_approved')->nullable();
                 $table->text('pengajuan_approved')->nullable();
+                $table->boolean('is_pengusul_approved')->nullable();
+                $table->text('pengusul_approved')->nullable();
                 $table->boolean('is_rekomendasi_approved')->nullable();
                 $table->text('rekomendasi_approved')->nullable();
                 $table->boolean('is_persetujuan_approved')->nullable();

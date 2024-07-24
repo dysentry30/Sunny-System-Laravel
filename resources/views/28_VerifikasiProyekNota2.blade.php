@@ -465,7 +465,7 @@
 
                                                                 @else
                                                                     @if ($item->is_persetujuan_approved || (collect(json_decode($item->persetujuan_approved))->contains('user_id', auth()->user()->nip) && collect(json_decode($item->persetujuan_approved))?->first()?->status == 'approved'))
-                                                                        <button class="btn btn-sm btn-primary" onclick="showModalAction('kt_modal_final', '{{ $item->kode_proyek }}')">Lihat</button>
+                                                                        <button class="btn btn-sm btn-primary" bs-toggle="modal" data-bs-target="#kt_modal_persetujuan_verifikasi_{{ $item->kode_proyek }}">Lihat</button>
                                                                     @else
                                                                         <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_persetujuan_verifikasi_{{ $item->kode_proyek }}">Approve</button>
                                                                     @endif
@@ -479,7 +479,7 @@
                                                                 })->count() > 0 && (collect(json_decode($item->rekomendasi_approved))->isEmpty()))))
                                                                 @else
                                                                     @if ($item->is_rekomendasi_approved || (collect(json_decode($item->rekomendasi_approved))->contains('user_id', auth()->user()->nip) && collect(json_decode($item->rekomendasi_approved))?->first()?->status == 'approved'))
-                                                                        <button class="btn btn-sm btn-primary" onclick="showModalAction('kt_modal_final', '{{ $item->kode_proyek }}')">Lihat</button>
+                                                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_rekomendasi_verifikasi_{{ $item->kode_proyek }}">Lihat</button>
                                                                     @else
                                                                         <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_rekomendasi_verifikasi_{{ $item->kode_proyek }}">Approve</button>
                                                                     @endif
@@ -494,7 +494,7 @@
                                                                 
                                                                 @else
                                                                     @if ($item->is_pengajuan_approved || (collect(json_decode($item->pengajuan_approved))->contains('user_id', auth()->user()->nip) && collect(json_decode($item->pengajuan_approved))?->first()?->status == 'approved'))
-                                                                    <button class="btn btn-sm btn-primary" onclick="showModalAction('kt_modal_final', '{{ $item->kode_proyek }}')">Lihat</button>
+                                                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_pengajuan_verifikasi_{{ $item->kode_proyek }}">Lihat</button>
                                                                     @else
                                                                         <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_pengajuan_verifikasi_{{ $item->kode_proyek }}">Approve</button>
                                                                     @endif
@@ -557,7 +557,7 @@
                                                     <td class="text-center">
                                                         @canany(['super-admin', 'approver-crm', 'risk-crm'])
                                                             @if (!is_null($item->is_persetujuan_approved) && $item->is_persetujuan_approved)
-                                                                <button class="btn btn-sm btn-primary" onclick="generateFileFinal('{{ $item->kode_proyek }}')">Generate</button>
+                                                            <a href="{{ asset('file-nota-rekomendasi-2\\file-verifikasi-proyek-nota-2\\') . $item->nama_dokumen }}" class="btn btn-sm btn-primary text-white" target="_blank">Download</a>
                                                             @endif
                                                         @endcanany
                                                     </td>
@@ -634,13 +634,17 @@
                             <hr>
                             <h2>Form Verifikasi Persetujuan KSO</h2>
                             <div class="text-center">
-                                <iframe src="{{ asset("file-nota-rekomendasi-2\\file-verifikasi-proyek-nota-2\\") . $proyek->nama_dokumen }}" width="800px" height="100%"></iframe>
+                                <iframe src="{{ asset("file-nota-rekomendasi-2\\file-verifikasi-proyek-nota-2\\") . $proyek->nama_dokumen }}" width="100%" height="600px"></iframe>
                             </div>
                         </div>
+                        @if ($proyek->is_pengajuan_approved || (collect(json_decode($proyek->pengajuan_approved))->contains('user_id', auth()->user()->nip) && collect(json_decode($proyek->pengajuan_approved))?->first()?->status == 'approved'))
+                            
+                        @else
                         <div class="modal-footer">
                             <button class="btn btn-sm btn-danger" onclick="showModalRevisi()">Ajukan Revisi</button>
                             <input type="submit" name="is_approved" value="Setujui" class="btn btn-sm btn-success">
-                        </div>
+                        </div>                            
+                        @endif
                     </div>
                 </div>
             </div> 
@@ -693,13 +697,17 @@
                             <hr>
                             <h2>Form Verifikasi Persetujuan KSO</h2>
                             <div class="text-center">
-                                <iframe src="{{ asset("file-nota-rekomendasi-2\\file-verifikasi-proyek-nota-2\\") . $proyek->nama_dokumen }}" width="800px" height="100%"></iframe>
+                                <iframe src="{{ asset("file-nota-rekomendasi-2\\file-verifikasi-proyek-nota-2\\") . $proyek->nama_dokumen }}" width="100%" height="600px"></iframe>
                             </div>
                         </div>
+                        @if ($proyek->is_rekomendasi_approved || (collect(json_decode($proyek->rekomendasi_approved))->contains('user_id', auth()->user()->nip) && collect(json_decode($proyek->rekomendasi_approved))?->first()?->status == 'approved'))
+                            
+                        @else
                         <div class="modal-footer">
                             <button class="btn btn-sm btn-danger" onclick="showModalRevisi()">Ajukan Revisi</button>
                             <input type="submit" name="is_approved" value="Rekomendasikan" class="btn btn-sm btn-success">
-                        </div>
+                        </div>                            
+                        @endif
                     </div>
                 </div>
             </div> 
@@ -752,12 +760,39 @@
                             <hr>
                             <h2>Form Verifikasi Persetujuan KSO</h2>
                             <div class="text-center">
-                                <iframe src="{{ asset("file-nota-rekomendasi-2\\file-verifikasi-proyek-nota-2\\") . $proyek->nama_dokumen }}" width="800px" height="100%"></iframe>
+                                <iframe src="{{ asset("file-nota-rekomendasi-2\\file-verifikasi-proyek-nota-2\\") . $proyek->nama_dokumen }}" width="100%" height="600px"></iframe>
                             </div>
                         </div>
+                        @if ($proyek->is_persetujuan_approved || (collect(json_decode($proyek->persetujuan_approved))->contains('user_id', auth()->user()->nip) && collect(json_decode($proyek->persetujuan_approved))?->first()?->status == 'approved'))
+                            
+                        @else
                         <div class="modal-footer">
                             <button class="btn btn-sm btn-danger" onclick="showModalRevisi()">Ajukan Revisi</button>
                             <input type="submit" name="is_approved" value="Setujui" class="btn btn-sm btn-success">
+                        </div>                            
+                        @endif
+                    </div>
+                </div>
+            </div> 
+        </form>
+
+        <form action="" method="post" onsubmit="addLoading(this)">
+            @csrf
+            <div class="modal fade" id="kt_modal_revisi_verifikasi_{{ $proyek->kode_proyek }}" tabindex="-1"
+                aria-labelledby="kt_modal_revisi_verifikasi_{{ $proyek->kode_proyek }}" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Revisi Verifikasi Internal</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <textarea name="catatan-revisi" id="catatan-revisi" cols="30" rows="15" class="form-control form-control-solid"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                            <input type="submit" name="revisi" value="Revisi" class="btn btn-sm btn-success">
                         </div>
                     </div>
                 </div>
@@ -924,6 +959,15 @@
 
             modalSelected.show();
             
+        }
+
+        function showModalRevisi(kode_proyek, kategori, id) {
+            const modalId = document.getElementById(`kt_modal_revisi_verifikasi_${kode_proyek}`)
+            const modalSelected = new bootstrap.Modal(modalId);
+
+            const form = modalId.parentElement.setAttribute('action', `/verifikasi-proyek-nota-2/${kategori}/${id}`)
+
+            modalSelected.show();
         }
     </script>
 @endsection

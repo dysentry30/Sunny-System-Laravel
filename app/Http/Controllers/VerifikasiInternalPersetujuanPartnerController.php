@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use RealRashid\SweetAlert\Facades\Alert;
+use Karriere\PdfMerge\PdfMerge;
 
 class VerifikasiInternalPersetujuanPartnerController extends Controller
 {
@@ -33,7 +34,7 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
      */
     public function index()
     {
-        $this->matriks_user = !Auth::user()->check_administrator ? Auth::user()->Pegawai->MatriksVerifikasiPartner->where('is_active', true) : MatriksApprovalPersetujuanPartner::all()->where('is_active', true);
+        $this->matriks_user = !Auth::user()->check_administrator ? Auth::user()->Pegawai->MatriksApprovalPersetujuanPartner->where('is_active', true) : MatriksApprovalPersetujuanPartner::all()->where('is_active', true);
 
         $is_super_user = Gate::allows("super-admin");
         $unit_kerjas = $is_super_user && str_contains(Auth::user()->name, "Admin") || str_contains(Auth::user()->name, "ANDIAS") ?
@@ -142,10 +143,11 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
                 $nomorTarget = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->departemen_proyek, "Pengajuan");
 
                 if ($newApproval->save()) {
+                    self::mergeFileFinalDokumen($namaFile, $newApproval);
                     foreach ($nomorTarget as $target) {
                         $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/verifikasi-internal-persetujuan-partner?open=kt_modal_view_proyek_rekomendasi_" . $proyek->kode_proyek;
                         $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini mengajukan varifikasi internal persetujuan partner untuk proyek " . $proyek->nama_proyek . " untuk permohonan pengajuan assessment partner.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                        $sendEmailUser = sendNotifEmail($target->Pegawai, "Permohonan Pengajuan Verifikasi Internal Persetujuan Partner", nl2br($message), $this->isnomorTargetActive);
+                        $sendEmailUser = sendNotifEmail($target->Pegawai, "Permohonan Pengajuan Permohonan Persetujuan Pembentukan Kerjasama Operasi (KSO)", nl2br($message), $this->isnomorTargetActive);
                         if (!$sendEmailUser) {
                             return redirect()->back();
                         }
@@ -164,18 +166,18 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
                     foreach ($nomorTarget as $target) {
                         $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/verifikasi-internal-persetujuan-partner?open=kt_modal_view_proyek_rekomendasi_" . $proyek->kode_proyek;
                         $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini mengajukan varifikasi internal persetujuan partner untuk proyek " . $proyek->Proyek->nama_proyek . " untuk permohonan pengajuan assessment partner.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                        $sendEmailUser = sendNotifEmail($target->Pegawai, "Permohonan Pengajuan Verifikasi Internal Persetujuan Partner", nl2br($message), $this->isnomorTargetActive);
+                        $sendEmailUser = sendNotifEmail($target->Pegawai, "Permohonan Pengajuan Permohonan Persetujuan Pembentukan Kerjasama Operasi (KSO)", nl2br($message), $this->isnomorTargetActive);
                         if (!$sendEmailUser) {
                             return redirect()->back();
                         }
                     }
                 }
             }
-            // Alert::success("Pengajuan Berhasil", "Proses Pengajuan Verifikasi Internal Persetujuan Partner Berhasil Diajukan");
+            // Alert::success("Pengajuan Berhasil", "Proses Pengajuan Permohonan Persetujuan Pembentukan Kerjasama Operasi (KSO) Berhasil Diajukan");
             // return redirect()->back();
             return response()->json([
                 'Success' => true,
-                'Message' => "Proses Pengajuan Verifikasi Internal Persetujuan Partner Berhasil Diajukan"
+                'Message' => "Proses Pengajuan Permohonan Persetujuan Pembentukan Kerjasama Operasi (KSO) Berhasil Diajukan"
             ]);
         } catch (\Throwable $th) {
             // return response()->json([
@@ -207,7 +209,7 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
                 return redirect()->back()->with(["modal" => $data["modal-name"]]);
             }
 
-            if ($data["is_approved"]) {
+            if (isset($data["is_approved"])) {
                 $approvedPengajuan = collect(json_decode($proyek->pengajuan_approved));
                 $approvedPengajuan = $approvedPengajuan->push([
                     "nip" => auth()->user()->nip,
@@ -220,15 +222,15 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
                 $is_done = $this->checkMatriksApproval($proyek->divisi_id, $proyek->departemen_id, $approvedPengajuan, "Pengajuan");
                 if ($is_done) {
 
-                    $proyek->stage = "Rekomendasi";
+                    $proyek->stage = "Pengusul";
                     $proyek->is_pengajuan_approved = true;
 
-                    $getNomorMatriks = $this->getNomorMatriksApproval($proyek->divisi_id, $proyek->departemen_id, "Rekomendasi");
+                    $getNomorMatriks = $this->getNomorMatriksApproval($proyek->divisi_id, $proyek->departemen_id, "Pengusul");
 
                     foreach ($getNomorMatriks as $target) {
                         $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/verifikasi-internal-persetujuan-partner?open=kt_modal_pengajuan_verifikasi_" . $proyek->kode_proyek;
-                        $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan pemberian rekomendasi verifikasi internal partner untuk proyek " . $proyek->Proyek->nama_proyek . " untuk permohonan pengajuan assessment partner.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                        $sendEmailUser = sendNotifEmail($target->Pegawai, "Permohonan Pemberian Rekomendasi Verifikasi Internal Persetujuan Partner", nl2br($message), $this->isnomorTargetActive);
+                        $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan pemberitahuan verifikasi internal partner untuk proyek " . $proyek->Proyek->nama_proyek . " untuk permohonan persetujuan assessment partner.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                        $sendEmailUser = sendNotifEmail($target->Pegawai, "Pemberitahuan Permohonan Persetujuan Pembentukan Kerjasama Operasi (KSO)", nl2br($message), $this->isnomorTargetActive);
                         if (!$sendEmailUser) {
                             return redirect()->back();
                         }
@@ -257,7 +259,91 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
                 foreach ($getNomorMatriks as $target) {
                     $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/verifikasi-internal-persetujuan-partner?open=kt_modal_pengajuan_verifikasi_" . $proyek->kode_proyek;
                     $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan revisi verifikasi internal partner untuk proyek " . $proyek->Proyek->nama_proyek . " untuk permohonan pengajuan assessment partner.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                    $sendEmailUser = sendNotifEmail($target->Pegawai, "Pemberitahuan Revisi Pengajuan Verifikasi Internal Persetujuan Partner", nl2br($message), $this->isnomorTargetActive);
+                    $sendEmailUser = sendNotifEmail($target->Pegawai, "Pemberitahuan Revisi Pengajuan Permohonan Persetujuan Pembentukan Kerjasama Operasi (KSO)", nl2br($message), $this->isnomorTargetActive);
+                    if (!$sendEmailUser) {
+                        return redirect()->back();
+                    }
+                }
+
+                $proyek->save();
+            }
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    /**
+     * ? Proses Approval Pengusul Verifikasi Partner
+     */
+    public function ProsesPengusulApproval(Request $request, VerifikasiInternalPersetujuanPartner $proyek)
+    {
+        $data = $request->all();
+
+        try {
+
+            if (empty($proyek)) {
+                Alert::error("Error", "Proyek Tidak Ditemukan. Hubungi Admin!");
+                return redirect()->back()->with(["modal" => $data["modal-name"]]);
+            }
+
+            $checkValidateUser = $this->checkValidateUserMatriks(auth()->user(), $proyek->Proyek, "Pengusul");
+
+            if (!$checkValidateUser) {
+                Alert::error("Error", "Anda tidak dapat melakukan approval. Hubungi Admin!");
+                return redirect()->back()->with(["modal" => $data["modal-name"]]);
+            }
+
+            if (isset($data["is_approved"])) {
+                $approvedPengusul = collect(json_decode($proyek->pengusul_approved));
+                $approvedPengusul = $approvedPengusul->push([
+                    "nip" => auth()->user()->nip,
+                    "status" => "approved",
+                    "tanggal" => Carbon::now()->translatedFormat("d F Y")
+                ]);
+
+                $proyek->pengusul_approved = $approvedPengusul->toJson();
+
+                $is_done = $this->checkMatriksApproval($proyek->divisi_id, $proyek->departemen_id, $approvedPengusul, "Pengusul");
+                if ($is_done) {
+
+                    $proyek->stage = "Rekomendasi";
+                    $proyek->is_pengusul_approved = true;
+
+                    $getNomorMatriks = $this->getNomorMatriksApproval($proyek->divisi_id, $proyek->departemen_id, "Rekomendasi");
+
+                    foreach ($getNomorMatriks as $target) {
+                        $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/verifikasi-internal-persetujuan-partner?open=kt_modal_pengajuan_verifikasi_" . $proyek->kode_proyek;
+                        $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan pemberian rekomendasi verifikasi internal partner untuk proyek " . $proyek->Proyek->nama_proyek . " untuk permohonan persetujuan assessment partner.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                        $sendEmailUser = sendNotifEmail($target->Pegawai, "Pemberitahuan Permohonan Pemberian Rekomendasi Persetujuan Pembentukan Kerjasama Operasi (KSO)", nl2br($message), $this->isnomorTargetActive);
+                        if (!$sendEmailUser) {
+                            return redirect()->back();
+                        }
+                    }
+                }
+
+                $proyek->save();
+                Alert::success("Success", "Proyek Berhasil Disetujui");
+                return redirect()->back();
+            } else {
+                $revisiNote = collect(json_decode($proyek->revisi_note));
+                $revisiNote = $revisiNote->push([
+                    "nip" => auth()->user()->nip,
+                    "status" => "Revisi",
+                    "stage" => "Pengusul",
+                    "tanggal" => Carbon::now()->translatedFormat("d F Y"),
+                    "catatan" => $data["catatan-revisi"]
+                ]);
+
+                $proyek->is_revisi = true;
+                $proyek->revisi_note = $revisiNote->toJson();
+                $proyek->is_request_pengajuan = null;
+                $proyek->request_pengajuan = null;
+
+                $getNomorMatriks = $this->getNomorMatriksApproval($proyek->divisi_id, $proyek->departemen_id, "Pengajuan");
+                foreach ($getNomorMatriks as $target) {
+                    $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/verifikasi-internal-persetujuan-partner?open=kt_modal_pengajuan_verifikasi_" . $proyek->kode_proyek;
+                    $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan revisi verifikasi internal partner untuk proyek " . $proyek->Proyek->nama_proyek . " untuk permohonan pengajuan assessment partner.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                    $sendEmailUser = sendNotifEmail($target->Pegawai, "Pemberitahuan Revisi Pengajuan Permohonan Persetujuan Pembentukan Kerjasama Operasi (KSO)", nl2br($message), $this->isnomorTargetActive);
                     if (!$sendEmailUser) {
                         return redirect()->back();
                     }
@@ -291,7 +377,7 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
                 return redirect()->back()->with(["modal" => $data["modal-name"]]);
             }
 
-            if ($data["is_approved"]) {
+            if (isset($data["is_approved"])) {
                 $approvedRekomendasi = collect(json_decode($proyek->rekomendasi_approved));
                 $approvedRekomendasi = $approvedRekomendasi->push([
                     "nip" => auth()->user()->nip,
@@ -313,7 +399,7 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
                     foreach ($getNomorMatriks as $target) {
                         $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/verifikasi-internal-persetujuan-partner?open=kt_modal_persetujuan_verifikasi_" . $proyek->kode_proyek;
                         $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan persetujuan verifikasi internal partner untuk proyek " . $proyek->Proyek->nama_proyek . " untuk permohonan pengajuan assessment partner.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                        $sendEmailUser = sendNotifEmail($target->Pegawai, "Permohonan Persetujuan Verifikasi Internal Persetujuan Partner", nl2br($message), $this->isnomorTargetActive);
+                        $sendEmailUser = sendNotifEmail($target->Pegawai, "Permohonan Persetujuan Permohonan Persetujuan Pembentukan Kerjasama Operasi (KSO)", nl2br($message), $this->isnomorTargetActive);
                         if (!$sendEmailUser) {
                             return redirect()->back();
                         }
@@ -342,7 +428,7 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
                 foreach ($getNomorMatriks as $target) {
                     $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/verifikasi-internal-persetujuan-partner?open=kt_modal_persetujuan_verifikasi_" . $proyek->kode_proyek;
                     $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan revisi verifikasi internal partner untuk proyek " . $proyek->Proyek->nama_proyek . " untuk permohonan pengajuan assessment partner.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                    $sendEmailUser = sendNotifEmail($target->Pegawai, "Pemberitahuan Revisi Persetujuan Verifikasi Internal Persetujuan Partner", nl2br($message), $this->isnomorTargetActive);
+                    $sendEmailUser = sendNotifEmail($target->Pegawai, "Pemberitahuan Revisi Persetujuan Permohonan Persetujuan Pembentukan Kerjasama Operasi (KSO)", nl2br($message), $this->isnomorTargetActive);
                     if (!$sendEmailUser) {
                         return redirect()->back();
                     }
@@ -376,7 +462,7 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
                 return redirect()->back()->with(["modal" => $data["modal-name"]]);
             }
 
-            if ($data["is_approved"]) {
+            if (isset($data["is_approved"])) {
                 $approvedPersetujuan = collect(json_decode($proyek->persetujuan_approved));
                 $approvedPersetujuan = $approvedPersetujuan->push([
                     "nip" => auth()->user()->nip,
@@ -399,16 +485,17 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
                     $user = Pegawai::where("nip", $getNomorMatriks["nip"])->first();
                     $url = $request->schemeAndHttpHost() . "?nip=" . $user->nip . "&redirectTo=/verifikasi-internal-persetujuan-partner?open=kt_modal_persetujuan_verifikasi_" . $proyek->kode_proyek;
                     $message = "Yth Bapak/Ibu " . $user->nama_pegawai . "\nDengan ini menyampaikan permohonan pemberian rekomendasi verifikasi internal partner untuk proyek " . $proyek->Proyek->nama_proyek . " untuk permohonan pengajuan assessment partner.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                    $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Pemberian Rekomendasi Verifikasi Internal Persetujuan Partner", nl2br($message), $this->isnomorTargetActive);
+                    $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Pemberian Rekomendasi Permohonan Persetujuan Pembentukan Kerjasama Operasi (KSO)", nl2br($message), $this->isnomorTargetActive);
                     if (!$sendEmailUser) {
                         return redirect()->back();
                     }
-
+                    $proyek->save();
                     $namaFile = self::generateFinalDokumen($request, $proyek->Proyek);
-                    // $proyek->nama_dokumen = $namaFile;
+                    self::mergeFileFinalDokumen($namaFile, $proyek);
                 }
 
                 $proyek->save();
+                
                 Alert::success("Success", "Proyek Berhasil Disetujui");
                 return redirect()->back();
             } else {
@@ -430,7 +517,7 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
                 foreach ($getNomorMatriks as $target) {
                     $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/verifikasi-internal-persetujuan-partner?open=kt_modal_persetujuan_verifikasi_" . $proyek->kode_proyek;
                     $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan revisi verifikasi internal partner untuk proyek " . $proyek->Proyek->nama_proyek . " untuk permohonan pengajuan assessment partner.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                    $sendEmailUser = sendNotifEmail($target->Pegawai, "Pemberitahuan Revisi Persetujuan Verifikasi Internal Persetujuan Partner", nl2br($message), $this->isnomorTargetActive);
+                    $sendEmailUser = sendNotifEmail($target->Pegawai, "Pemberitahuan Revisi Persetujuan Permohonan Persetujuan Pembentukan Kerjasama Operasi (KSO)", nl2br($message), $this->isnomorTargetActive);
                     if (!$sendEmailUser) {
                         return redirect()->back();
                     }
@@ -438,6 +525,51 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
 
                 $proyek->save();
             }
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    /**
+     * ? Tampilan QR Code
+     */
+    public function viewProyekQRSelected(Request $request, $kode_proyek, $nip)
+    {
+        try {
+            $ProyekNotaQrSelected = VerifikasiInternalPersetujuanPartner::where('kode_proyek', $kode_proyek)->first();
+            $proyekSelected = $ProyekNotaQrSelected->Proyek;
+
+            $kategori = $request->get("kategori");
+
+            switch ($kategori) {
+                case 'pengajuan':
+                    $collectPenandatangan = collect(json_decode($ProyekNotaQrSelected->pengusul_approved));
+                    break;
+                case 'rekomendasi':
+                    $collectPenandatangan = collect(json_decode($ProyekNotaQrSelected->rekomendasi_approved));
+                    break;
+                case 'persetujuan':
+                    $collectPenandatangan = collect(json_decode($ProyekNotaQrSelected->persetujuan_approved));
+                    break;
+
+                default:
+                    $collectPenandatangan = null;
+                    break;
+            }
+
+
+            $userSelected = User::where('nip', $nip)->first();
+
+            $penandatanganSelected = $collectPenandatangan->where('nip', $userSelected->nip)->first();
+            if (!empty($penandatanganSelected)) {
+                $penandatanganSelected->nip = $userSelected->name ?? null;
+
+                $penandatanganSelected->jabatan = $userSelected->Pegawai?->Jabatan?->nama_jabatan ?? null;
+
+                $penandatanganSelected->tanggal = Carbon::create($penandatanganSelected->tanggal)->translatedFormat('d F Y, H:i:s');
+            }
+
+            return view('29_View_TTD_Verifikasi', ["penandatanganSelected" => $penandatanganSelected, "dataNotaRekomendasi" => $ProyekNotaQrSelected, "proyek" => $proyekSelected]);
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -547,39 +679,42 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
             $pathQRRekomendasi = collect([]);
             $pathQRPersetujuan = collect([]);
 
-            $approvedPengajuan = collect(json_decode($verifikasiPartner->pengajuan_approved));
+            $approvedPengajuan = collect(json_decode($verifikasiPartner->pengusul_approved));
             $approvedRekomendasi = collect(json_decode($verifikasiPartner->rekomendasi_approved));
             $approvedPersetujuan = collect(json_decode($verifikasiPartner->persetujuan_approved));
             $approvedPengajuan->each(function ($item) use ($request, $proyek, $pathQRPengajuan) {
                 $qrNamePengajuan = date('dmYHis_') . $item->nip . '_signed_Pengajuan-Verif-Internal_Partner.png';
-                $qrPathPengajuan = public_path("template-ttd\\verif-internal-persetujuan-partner\\" . $qrNamePengajuan);
-                $urlPengajuan = $request->schemeAndHttpHost() . "?nip=" . $item->nip . "&redirectTo=/verifikasi-internal-persetujuan-partner/" . $proyek->kode_proyek . "/" . $item->nip . "/view-qr?kategori=Pengajuan";
+                $qrPathPengajuan = public_path("template-ttd/verif-internal-persetujuan-partner/" . $qrNamePengajuan);
+                $urlPengajuan = $request->schemeAndHttpHost() . "?nip=" . $item->nip . "&redirectTo=/verifikasi-internal-persetujuan-partner/" . $proyek->kode_proyek . "/" . $item->nip . "/view-qr?kategori=pengajuan";
                 generateQrCode($qrNamePengajuan, $qrPathPengajuan, $urlPengajuan);
                 $pathQRPengajuan->push(collect([
                     "user" => Pegawai::where("nip", $item->nip)->first()->nama_pegawai ?? "NN",
                     "fileName" => $qrNamePengajuan,
+                    "jabatan" => Pegawai::where("nip", $item->nip)->first()?->Jabatan->nama_jabatan ?? "NN",
                 ]));
             });
 
             $approvedRekomendasi->each(function ($item) use ($request, $proyek, $pathQRRekomendasi) {
                 $qrNameRekomendasi = date('dmYHis_') . $item->nip . '_signed_Rekomendasi-verif-internal_Partner.png';
-                $qrPathRekomendasi = public_path("template-ttd\\verif-internal-persetujuan-partner\\" . $qrNameRekomendasi);
-                $urlRekomendasi = $request->schemeAndHttpHost() . "?nip=" . $item->nip . "&redirectTo=/verifikasi-internal-persetujuan-partner/" . $proyek->kode_proyek . "/" . $item->nip . "/view-qr?kategori=Rekomendasi";
+                $qrPathRekomendasi = public_path("template-ttd/verif-internal-persetujuan-partner/" . $qrNameRekomendasi);
+                $urlRekomendasi = $request->schemeAndHttpHost() . "?nip=" . $item->nip . "&redirectTo=/verifikasi-internal-persetujuan-partner/" . $proyek->kode_proyek . "/" . $item->nip . "/view-qr?kategori=rekomendasi";
                 generateQrCode($qrNameRekomendasi, $qrPathRekomendasi, $urlRekomendasi);
                 $pathQRRekomendasi->push(collect([
                     "user" => Pegawai::where("nip", $item->nip)->first()->nama_pegawai ?? "NN",
                     "fileName" => $qrNameRekomendasi,
+                    "jabatan" => Pegawai::where("nip", $item->nip)->first()?->Jabatan->nama_jabatan ?? "NN",
                 ]));
             });
 
             $approvedPersetujuan->each(function ($item) use ($request, $proyek, $pathQRPersetujuan) {
                 $qrNamePersetujuan = date('dmYHis_') . $item->nip . '_signed_Persetujuan-verif-internal_Partner.png';
-                $qrPathPersetujuan = public_path("template-ttd\\verif-internal-persetujuan-partner\\" . $qrNamePersetujuan);
-                $urlPersetujuan = $request->schemeAndHttpHost() . "?nip=" . $item->nip . "&redirectTo=/verifikasi-internal-persetujuan-partner/" . $proyek->kode_proyek . "/" . $item->nip . "/view-qr?kategori=Persetujuan";
+                $qrPathPersetujuan = public_path("template-ttd/verif-internal-persetujuan-partner/" . $qrNamePersetujuan);
+                $urlPersetujuan = $request->schemeAndHttpHost() . "?nip=" . $item->nip . "&redirectTo=/verifikasi-internal-persetujuan-partner/" . $proyek->kode_proyek . "/" . $item->nip . "/view-qr?kategori=persetujuan";
                 generateQrCode($qrNamePersetujuan, $qrPathPersetujuan, $urlPersetujuan);
                 $pathQRPersetujuan->push(collect([
                     "user" => Pegawai::where("nip", $item->nip)->first()->nama_pegawai ?? "NN",
                     "fileName" => $qrNamePersetujuan,
+                    "jabatan" => Pegawai::where("nip", $item->nip)->first()?->Jabatan->nama_jabatan ?? "NN",
                 ]));
             });
 
@@ -592,10 +727,41 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
             $namaFile = date("dmYHis_") . $proyek->kode_proyek . "_Dokumen_Verifikasi_Internal_Penentuan_KSO_Final.pdf";
             $pdf->save(public_path('file-nota-rekomendasi-2/file-verifikasi-internal-persetujuan-partner/' . $namaFile));
 
+            $verifikasiPartner->nama_dokumen = $namaFile;
+            $verifikasiPartner->save();
             return $namaFile;
         } catch (\Throwable $th) {
             Alert::error("Error", $th->getMessage());
             return redirect()->back();
         }
+    }
+
+    private function mergeFileFinalDokumen($namaFile, $proyekVerifikasi)
+    {
+        $proyek = $proyekVerifikasi->Proyek;
+
+        $newName = date('dMYHis_') . "Dokumen_Persetujuan_Partner_KSO_" . $proyek->nama_proyek . ".pdf";
+        $pdfMerge = new PdfMerge();
+
+        $pdfMerge->add(public_path('file-nota-rekomendasi-2/file-verifikasi-internal-persetujuan-partner/' . $namaFile));
+
+        $proyekAssessment = $proyek->PorsiJO->where("is_greenlane", false);
+
+        if (!empty($proyekAssessment)) {
+            foreach ($proyekAssessment as $partner) {
+                if (!empty($partner->file_assessment_merge)) {
+                    $pdfMerge->add(public_path('file-nota-rekomendasi-2/file-kriteria-partner/' . $partner->file_assessment_merge));
+                }
+
+                if (!empty($partner->file_kelengkapan_merge)) {
+                    $pdfMerge->add(public_path('file-kelengkapan-partner/' . $partner->file_kelengkapan_merge));
+                }
+            }
+        }
+
+        $pdfMerge->merge(public_path('file-nota-rekomendasi-2/file-verifikasi-internal-persetujuan-partner/' . $newName));
+
+        $proyekVerifikasi->nama_dokumen = $newName;
+        $proyekVerifikasi->save();
     }
 }

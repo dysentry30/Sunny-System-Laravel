@@ -523,21 +523,24 @@
                 <td style="text-align:center">
                     <div class="" style="margin:0px; padding-top:5px;">
                         <p style="margin: 0; padding:0; font-size:0.5rem">Diusulkan Oleh,</p>
-                        <br><br>
                         <table style="width:100%">
                             <tr>
                                 @if (isset($pathQRPengajuan))
                                     @foreach ($pathQRPengajuan as $ttdPengajuan)
                                         <td style="width: 100%; text-align:center">
-                                            <img src="{{ asset('template-ttd\\verif-internal-persetujuan-partner\\') . $ttdPengajuan["fileName"] }}" width="50">
-                                            <p style="font-size:0.8rem; margin:0px; padding-top:0px;">{{ $ttdPengajuan["user"] }}</p>
+                                            <img src="{{ public_path('template-ttd/verif-internal-persetujuan-partner/') . $ttdPengajuan["fileName"] }}" width="35%">
+                                            <br>
+                                            <b><p style="font-size:0.5rem; margin:0px; padding-top:10px">{{ $ttdPengajuan["user"] }}</p></b>
+                                            <b><p style="font-size:0.4rem; margin:0px; padding-top:0px">({{ $ttdPengajuan["jabatan"] }})</p></b>
                                         </td>
                                     @endforeach
                                 @else
                                     <td style="width:100%; text-align:center">
+                                        <br><br>
                                         <p style="font-size:0.5rem; margin:0px; padding-top:0px;">PJFK Corporate Marketing</p>
                                     </td>
                                     <td style="width:100%; text-align:center">
+                                        <br><br>
                                         <p style="font-size:0.5rem; margin:0px; padding-top:0px;">PJPU Operasi</p>
                                     </td>                                    
                                 @endif
@@ -548,21 +551,24 @@
                 <td style="text-align:center">
                     <div class="" style="margin:0px; padding-top:5px;">
                         <p style="margin: 0; padding:0; font-size:0.5rem">Direkomendasikan Oleh,</p>
-                        <br><br>
                         <table style="width:100%">
                             <tr>
                                 @if (isset($pathQRRekomendasi))
                                     @foreach ($pathQRRekomendasi as $ttdRekomendasi)
                                         <td style="width:100%; text-align:center">
-                                            <img src="{{ asset('template-ttd\\verif-internal-persetujuan-partner\\') . $ttdRekomendasi["fileName"] }}" width="50">
-                                            <p style="font-size:0.8rem; margin:0px; padding-top:0px;">{{ $ttdRekomendasi["user"] }}</p>
+                                            <img src="{{ public_path('template-ttd/verif-internal-persetujuan-partner/') . $ttdRekomendasi["fileName"] }}" width="35%">
+                                            <br>
+                                            <b><p style="font-size:0.5rem; margin:0px; padding-top:10px">{{ $ttdRekomendasi["user"] }}</p></b>
+                                            <b><p style="font-size:0.4rem; margin:0px; padding-top:0px">({{ $ttdRekomendasi["jabatan"] }})</p></b>
                                         </td>   
                                     @endforeach
                                 @else
                                     <td style="width:100%; text-align:center">
+                                        <br><br>
                                         <p style="font-size:0.5rem; margin:0px; padding-top:0px;">PJFK Risk Management</p>
                                     </td>
                                     <td style="width:100%; text-align:center">
+                                        <br><br>
                                         <p style="font-size:0.5rem; margin:0px; padding-top:0px;">PJFK Finance</p>
                                     </td>                            
                                 @endif
@@ -573,18 +579,20 @@
                 <td style="text-align:center">
                     <div class="" style="margin:0px; padding-top:5px;">
                         <p style="margin: 0; padding:0; font-size:0.5rem">Disetujui Oleh,</p>
-                        <br><br>
                         <table style="width:100%">
                             <tr>
                                 @if (isset($pathQRPersetujuan))
                                     @foreach ($pathQRPersetujuan as $ttdPersetujuan)
                                         <td style="width:100%; text-align:center">
-                                            <img src="{{ asset('template-ttd\\verif-internal-persetujuan-partner\\') . $ttdPersetujuan["fileName"] }}" width="50">
-                                            <p style="font-size:0.8rem; margin:0px; padding-top:0px;">{{ $ttdPersetujuan["user"] }}</p>
+                                            <img src="{{ public_path('template-ttd/verif-internal-persetujuan-partner/') . $ttdPersetujuan["fileName"] }}" width="35%">
+                                            <br>
+                                            <b><p style="font-size:0.5rem; margin:0px; padding-top:10px">{{ $ttdPersetujuan["user"] }}</p></b>
+                                            <b><p style="font-size:0.4rem; margin:0px; padding-top:0px">({{ $ttdPersetujuan["jabatan"] }})</p></b>
                                         </td>
                                     @endforeach
                                 @else
                                     <td style="width:100%; text-align:center">
+                                        <br><br>
                                         <p style="font-size:0.5rem; margin:0px; padding-top:0px;">Direktur Operasi Pembina</p>
                                     </td>                              
                                 @endif

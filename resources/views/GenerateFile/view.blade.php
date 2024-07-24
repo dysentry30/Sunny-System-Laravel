@@ -141,17 +141,20 @@
             <td style="text-align:center">
                 <div class="" style="margin:0px; padding-top:5px;">
                     <b><h5 style="margin:0px; padding-top:0px;">Dibuat Oleh,</h5></b>
-                    <br><br><br><br>
                     <table style="width: 100%">
                         <tr>
                             @if (isset($pathQRPengajuan))
                                 @foreach ($pathQRPengajuan as $ttdPengajuan)
-                                    <td style="width: 100%; text-align:center">
-                                        <img src="{{ asset('template-ttd\\verif-internal-partner\\') . $ttdPengajuan["fileName"] }}" width="50">
-                                        <p style="font-size:0.8rem; margin:0px; padding-top:0px;">{{ $ttdPengajuan["user"] }}</p>
-                                    </td>                                    
+                                <td style="width: 100%; text-align:center">
+                                    <br><br>
+                                    <img src="{{ public_path('template-ttd/verif-internal-partner/') . $ttdPengajuan["fileName"] }}">
+                                    <br>
+                                    <b><h5 style="font-size:0.8rem; margin:0px; padding-top:10px">{{ $ttdPengajuan["user"] }}</h5></b>
+                                    <b><h5 style="font-size:0.6rem; margin:0px; padding-top:0px">({{ $ttdPengajuan["jabatan"] }})</h5></b>
+                                </td>                                    
                                 @endforeach
                             @else
+                                <br><br><br><br>
                                 <td style="width: 100%; text-align:center">
                                     <p style="font-size:0.8rem; margin:0px; padding-top:0px;">SubPJFs Key Account</p>
                                 </td>                                
@@ -164,17 +167,20 @@
             <td style="text-align:center">
                 <div class="" style="margin:0px; padding-top:5px;">
                     <b><h5 style="margin:0px; padding-top:0px;">Direkomendasikan Oleh,</h5></b>
-                    <br><br><br><br>
                     <table style="width:100%">
                         <tr>
                             @if (isset($pathQRRekomendasi))
                                 @foreach ($pathQRRekomendasi as $ttdRekomendasi)
                                     <td style="width:100%; text-align:center">
-                                        <img src="{{ asset('template-ttd\\verif-internal-partner\\') . $ttdRekomendasi["fileName"] }}" width="50">
-                                        <p style="font-size:0.8rem; margin:0px; padding-top:0px;">{{ $ttdRekomendasi["user"] }}</p>
+                                        <br><br>
+                                        <img src="{{ public_path('template-ttd/verif-internal-partner/') . $ttdRekomendasi["fileName"] }}">
+                                        <br>
+                                        <b><h5 style="font-size:0.8rem; margin:0px; padding-top:10px">{{ $ttdRekomendasi["user"] }}</h5></b>
+                                        <b><h5 style="font-size:0.6rem; margin:0px; padding-top:0px">({{ $ttdRekomendasi["jabatan"] }})</h5></b>
                                     </td>   
                                 @endforeach
                             @else
+                                <br><br><br><br>
                                 <td style="width:100%; text-align:center">
                                     <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PjFs Marketing</p>
                                 </td>
@@ -189,17 +195,20 @@
             <td style="text-align:center">
                 <div class="" style="margin:0px; padding-top:5px;">
                     <b><h5 style="margin:0px; padding-top:0px;">Disetujui Oleh,</h5></b>
-                    <br><br><br><br>
                     <table style="width:100%">
                         <tr>
                             @if (isset($pathQRPersetujuan))
                                 @foreach ($pathQRPersetujuan as $ttdPersetujuan)
                                     <td style="width:100%; text-align:center">
-                                        <img src="{{ asset('template-ttd\\verif-internal-partner\\') . $ttdPersetujuan["fileName"] }}" width="50">
-                                        <p style="font-size:0.8rem; margin:0px; padding-top:0px;">{{ $ttdPersetujuan["user"] }}</p>
+                                        <br><br>
+                                        <img src="{{ public_path('template-ttd/verif-internal-partner/') . $ttdPersetujuan["fileName"] }}">
+                                        <br>
+                                        <b><h5 style="font-size:0.8rem; margin:0px; padding-top:10px">{{ $ttdPersetujuan["user"] }}</h5></b>
+                                        <b><h5 style="font-size:0.6rem; margin:0px; padding-top:0px">({{ $ttdPersetujuan["jabatan"] }})</h5></b>
                                     </td>
                                 @endforeach
                             @else
+                                <br><br><br><br>
                                 <td style="width:100%; text-align:center">
                                     <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PjFK Corporate Marketing</p>
                                 </td>

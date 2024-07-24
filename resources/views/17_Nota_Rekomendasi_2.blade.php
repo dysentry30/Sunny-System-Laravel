@@ -3169,20 +3169,6 @@
                             width="800px" height="600px"></iframe>
                     </div>
                 @endif
-                @if (!empty($proyek->file_kelengkapan_merge))
-                    {{-- <h5>Dokumen Persetujuan Nota Rekomendasi 1: </h5> --}}
-                    <div class="text-center">
-                        <iframe src="{{ asset('file-nota-rekomendasi-2\\file-kelengkapan-project' . '\\' . $proyek->file_kelengkapan_merge) }}"
-                            width="800px" height="600px"></iframe>
-                    </div>
-                @endif
-                @if (!empty($proyek->file_assessment_merge))
-                    {{-- <h5>Dokumen Persetujuan Nota Rekomendasi 1: </h5> --}}
-                    <div class="text-center">
-                        <iframe src="{{ asset('file-nota-rekomendasi-2\\file-kriteria-project-selection' . '\\' . $proyek->file_assessment_merge) }}"
-                            width="800px" height="600px"></iframe>
-                    </div>
-                @endif
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -3357,7 +3343,7 @@
                     LOADING_BODY.block();
                     const formData = new FormData();
                     formData.append("_token", "{{ csrf_token() }}");
-                    const sendData = await fetch(`{{ url('/nota-rekomendasi-2/${kode_proyek}/generate') }}`, {
+                    const sendData = await fetch(`{{ url('/nota-rekomendasi-2/${kode_proyek}/generate-final') }}`, {
                         method: "POST",
                         body: formData
                     }).then(res => res.json());

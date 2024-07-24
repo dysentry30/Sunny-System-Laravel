@@ -121,18 +121,28 @@
 
                                 <!--begin::Button-->
                                 @canany(['super-admin', 'admin-crm', 'approver-crm', 'user-crm'])
+                                @if ($proyek->dop != "EA")
+                                    @if ($proyek->stage < 8)
+                                        @if ($proyek->is_cancel == false)
+                                            <button type="submit" name="proyek-save" class="btn btn-sm btn-primary ms-2" id="proyek-save"
+                                                style="background-color:#008CB4">
+                                                Save</button>
+                                        @endif
+                                    @endif
+                                @else
                                     @if ($proyek->is_cancel == false)
                                         <button type="submit" name="proyek-save" class="btn btn-sm btn-primary ms-2" id="proyek-save"
                                             style="background-color:#008CB4">
                                             Save</button>
                                     @endif                                
+                                @endif
                                 @endcanany
                                 <!--end::Button-->
                                 @endif
 
                                 <!--begin::Button-->
                                 @if ($proyek->UnitKerja?->dop != "EA")
-                                    @if (($proyek->stage == 8 && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek?->is_revisi))
+                                    @if (($proyek->stage == 6 && $proyek->is_need_approval_terkontrak && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek?->is_revisi))
                                         <button type="button" class="btn btn-sm btn-success ms-2" onclick="requestApprovalTerkontrak('{{ $proyek->kode_proyek }}')">Ajukan Approval</button>
                                     @endif
                                     @if (App\Models\MatriksApprovalTerkontrakProyek::where('nip', Auth::user()->nip)->where('unit_kerja', $proyek->unit_kerja)->where("is_active", true)->first() && $proyek->ApprovalTerkontrakProyek && is_null($proyek->ApprovalTerkontrakProyek?->is_revisi) && is_null($proyek->ApprovalTerkontrakProyek?->is_approved))
@@ -142,7 +152,7 @@
                                     @if (is_null($proyek->NotaRekomendasi?->is_request_rekomendasi) && !$check_green_line && $proyek->stage == 1 && is_null($proyek->NotaRekomendasi?->is_disetujui))
                                         <input type="button" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan"
                                             style="background-color:#00b48d">
-                                    @elseif ($proyek->stage == 4 && !$check_green_line_nota_2 && is_null($proyek->is_request_rekomendasi_2) && is_null($proyek->is_disetujui_rekomendasi_2))
+                                    @elseif ($proyek->stage == 4 && !$check_green_line_nota_2 && is_null($proyek->is_request_rekomendasi_2) && is_null($proyek->is_disetujui_rekomendasi_2) && $proyek->VerifikasiProyekNota2?->is_persetujuan_approved)
                                         @if ((empty($proyek->DokumenPenentuanProjectGreenlane) && empty($proyek->DokumenTender)) || $proyek->PorsiJO->contains(function($item){return (!is_null(($item->is_greenlane) && !$item->is_greenlane) && ($item->is_hasil_assessment) && !$item->is_hasil_assessment);}))
                                             <p class="btn btn-sm btn-success ms-2 mb-0" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="bottom" data-bs-title="<b>Dokumen Form Penentuan Project Green Lane / Non Green Lane & Dokumen Tender</b><br> Wajib Diisi">Pengajuan Rekomendasi</p>
                                         @else
@@ -356,7 +366,7 @@
                         @endif                        
                     @endcanany
 
-                    @if ($proyek->is_request_rekomendasi_2 == false && !$check_green_line_nota_2 && $proyek->stage == 4)
+                    @if ($proyek->is_request_rekomendasi_2 == false && !$check_green_line_nota_2 && $proyek->stage == 4 && $proyek->VerifikasiProyekNota2?->is_persetujuan_approved)
                     <!-- begin::modal confirm send wa-->
                     <div class="modal fade w-100" style="margin-top: 120px" id="modal-send-pengajuan-nota-2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog mw-600px">
@@ -381,7 +391,7 @@
                                     <p>Uang Muka : <b class="{{ $proyek->is_uang_muka ?? "text-danger" }}">{{ $proyek->is_uang_muka ? "Ya" : "Tidak" }}</b></p>
                                     <p>Waktu Pelaksanaan Pekerjaan : <b class="{{ $proyek->waktu_pelaksanaan ?? "text-danger" }}">{{ $proyek->waktu_pelaksanaan . "Hari" ?? "*Belum Ditentukan" }}</b></p>
                                     <p>RA Klasifikasi Proyek  : <b class="{{ $proyek->klasifikasi_pasdin ?? "text-danger" }}">{{ $proyek->klasifikasi_pasdin ?? "*Belum Ditentukan" }}</b></p>
-                                    <p>Dokumen Persetujuan Pembentukan KSO  : <b class="{{ !empty($proyek->DokumenPersetujuanKSO) ?: "text-danger" }}">{{ !empty($proyek->DokumenPersetujuanKSO) ? 'Sudah' : "*Belum Ditentukan" }}</b></p>
+                                    <p>Dokumen Persetujuan Pembentukan KSO  : <b class="{{ !empty($proyek->VerifikasiProyekNota2->is_persetujuan_approved) && !empty($proyek->VerifikasiProyekNota2->nama_dokumen) ?: "text-danger" }}">{{ !empty($proyek->VerifikasiProyekNota2->is_persetujuan_approved) && !empty($proyek->VerifikasiProyekNota2->nama_dokumen) ? 'Sudah' : "*Belum Ditentukan" }}</b></p>
                                     <br>
 
                                     
@@ -392,7 +402,10 @@
                                     !empty($proyek->jenis_terkontrak) &&
                                     !empty($proyek->sistem_bayar) &&
                                     !empty($proyek->waktu_pelaksanaan) &&
-                                    !empty($proyek->DokumenPersetujuanKSO)
+                                    !empty($proyek->VerifikasiInternalPersetujuanPartner->is_persetujuan_approved) &&
+                                    !empty($proyek->VerifikasiInternalPersetujuanPartner->nama_dokumen) &&
+                                    !empty($proyek->VerifikasiProyekNota2->is_persetujuan_approved) &&
+                                    !empty($proyek->VerifikasiProyekNota2->nama_dokumen)
                                     )
                                         <input class="form-check-input" onclick="sendWa2(this)" id="confirm-send-wa" name="confirm-send-wa-2" type="checkbox">
                                         <i class="fs-6 text-primary">
@@ -749,101 +762,138 @@
                                                         @endif
                                                     @endif
 
-                                                    @if ($proyek->stage > 7)
-                                                        @if ($proyek->stage == 8 || $proyek->stage > 9)
-                                                            <a href="#" data-bs-toggle="dropdown" role="button"
-                                                                id="terkontrak" aria-expanded="false"
-                                                                aria-controls="#terkontrak"
-                                                                class="stage-button stage-is-done color-is-default"
-                                                                style="outline: 0px; cursor: pointer;" stage="8">
-                                                                Terkontrak
-                                                                &nbsp;&nbsp;
-                                                                <span class="" style="position: relative;top: 15%;"
-                                                                    stage="8"><i
-                                                                        class="bi bi-caret-down-fill text-white"></i></span>
-                                                            </a>
-                                                        @elseif($proyek->stage == 9)
-                                                            <a href="#" data-bs-toggle="dropdown" role="button"
-                                                                id="terkontrak" aria-expanded="false"
-                                                                aria-controls="#terkontrak"
-                                                                class="stage-button stage-is-done color-is-danger"
-                                                                style="outline: 0px; cursor: pointer;" stage="8">
-                                                                Terendah
-                                                                &nbsp;&nbsp;
-                                                                <span class="" style="position: relative;top: 15%;"
-                                                                    stage="8"><i
-                                                                        class="bi bi-caret-down-fill text-white"></i></span>
-                                                            </a>
-                                                        @endif
-                                                        @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
-                                                            <ul class="dropdown-menu" id="terkontrak"
-                                                                aria-labelledby="terkontrak">
-                                                                <form action="/proyek/stage-save" method="POST">
-                                                                </form>
-                                                                <form action="/proyek/stage-save" method="POST"
-                                                                    onsubmit="confirmAction(this); return false;"
-                                                                    stage="1">
-                                                                    @csrf
-                                                                    <input type="hidden" name="kode_proyek"
-                                                                        value="{{ $proyek->kode_proyek }}">
-                                                                    <li><input type="submit"
-                                                                            onclick="this.form.submitted=this.value"
-                                                                            class="dropdown-item" name="stage-terkontrak"
-                                                                            value="Terkontrak" /></li>
-                                                                    <li><input type="submit"
-                                                                            onclick="this.form.submitted=this.value"
-                                                                            class="dropdown-item" name="stage-terendah"
-                                                                            value="Terendah" /></li>
-                                                                </form>
-                                                            </ul>
-                                                        @endif
-                                                    @else
-                                                        @php
-                                                            $selisih = abs($proyek->stage - 8);
-                                                        @endphp
-                                                        @if ($selisih == 2)
-                                                            <a href="#" data-bs-toggle="dropdown" role="button"
-                                                                id="terkontrak" aria-expanded="false"
-                                                                aria-controls="#terkontrak"
-                                                                class="stage-button stage-is-not-active color-is-default"
-                                                                style="outline: 0px; cursor: pointer;" stage="8">
-                                                                Terkontrak
-                                                                &nbsp;&nbsp;
-                                                                <span class="" style="position: relative;top: 15%;"
-                                                                    stage="8"><i
-                                                                        class="bi bi-caret-down-fill text-white"></i></span>
-                                                            </a>
-                                                        @else
+                                                    @if ($proyek->dop != "EA")
+                                                        @if ($proyek->stage == 8)
                                                             <a href="#"
-                                                                class="stage-button stage-is-not-active color-is-default"
-                                                                style="outline: 0px; cursor: pointer;pointer-events: none;"
+                                                                class="stage-button stage-action stage-is-done color-is-default"
+                                                                style="outline: 0px; cursor: pointer; pointer-events: none;"
                                                                 stage="8">
                                                                 Terkontrak
                                                             </a>
+                                                        @else
+                                                            @if ((abs($proyek->stage - 6) != 1 || abs($proyek->stage - 7) != 2) && $proyek->is_need_approval_terkontrak)
+                                                                @if (!empty($proyek->ApprovalTerkontrakProyek))
+                                                                    <a href="#"
+                                                                        class="stage-button stage-action stage-is-not-active color-is-default"
+                                                                        style="outline: 0px; cursor: pointer; pointer-events: none; background-color:rgb(12, 187, 50)"
+                                                                        stage="8">
+                                                                        Waiting for Approval
+                                                                    </a>                                                                    
+                                                                @else
+                                                                    <a href="#"
+                                                                        class="stage-button stage-action stage-is-not-active color-is-default"
+                                                                        style="outline: 0px; cursor: pointer; pointer-events: none; background-color:rgb(255, 156, 51)"
+                                                                        stage="8">
+                                                                        Request Approval
+                                                                    </a>                                                                    
+                                                                @endif
+                                                            @elseif((abs($proyek->stage - 6) != 1 || abs($proyek->stage - 7) != 2) && is_null($proyek->is_need_approval_terkontrak))
+                                                                <a href="#"
+                                                                    class="stage-button stage-action stage-is-not-active color-is-default"
+                                                                    style="outline: 0px; cursor: pointer;"
+                                                                    stage="8">
+                                                                    Approval Terkontrak
+                                                                </a>
+                                                            @endif
                                                         @endif
-                                                        @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
-                                                            <ul class="dropdown-menu" id="terkontrak"
-                                                                aria-labelledby="terkontrak">
-                                                                <form action="/proyek/stage-save" method="POST">
-                                                                </form>
-                                                                <form action="/proyek/stage-save" method="POST"
-                                                                    onsubmit="confirmAction(this); return false;"
-                                                                    stage="1">
-                                                                    @csrf
-                                                                    <input type="hidden" name="kode_proyek"
-                                                                        value="{{ $proyek->kode_proyek }}">
-                                                                    <li><input type="submit"
-                                                                            onclick="this.form.submitted=this.value"
-                                                                            class="dropdown-item" name="stage-terkontrak"
-                                                                            value="Terkontrak" /></li>
-                                                                    <li><input type="submit"
-                                                                            onclick="this.form.submitted=this.value"
-                                                                            class="dropdown-item" name="stage-terendah"
-                                                                            value="Terendah" /></li>
-                                                                </form>
-                                                            </ul>
-                                                        @endif
+                                                    @else
+                                                        @if ($proyek->stage > 7)
+                                                            @if ($proyek->stage == 8 || $proyek->stage > 9)
+                                                                <a href="#" data-bs-toggle="dropdown" role="button"
+                                                                    id="terkontrak" aria-expanded="false"
+                                                                    aria-controls="#terkontrak"
+                                                                    class="stage-button stage-is-done color-is-default"
+                                                                    style="outline: 0px; cursor: pointer;" stage="8">
+                                                                    Terkontrak
+                                                                    &nbsp;&nbsp;
+                                                                    <span class="" style="position: relative;top: 15%;"
+                                                                        stage="8"><i
+                                                                            class="bi bi-caret-down-fill text-white"></i></span>
+                                                                </a>
+                                                            @elseif($proyek->stage == 9)
+                                                                <a href="#" data-bs-toggle="dropdown" role="button"
+                                                                    id="terkontrak" aria-expanded="false"
+                                                                    aria-controls="#terkontrak"
+                                                                    class="stage-button stage-is-done color-is-danger"
+                                                                    style="outline: 0px; cursor: pointer;" stage="8">
+                                                                    Terendah
+                                                                    &nbsp;&nbsp;
+                                                                    <span class="" style="position: relative;top: 15%;"
+                                                                        stage="8"><i
+                                                                            class="bi bi-caret-down-fill text-white"></i></span>
+                                                                </a>
+                                                            @endif
+                                                            @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
+                                                                <ul class="dropdown-menu" id="terkontrak"
+                                                                    aria-labelledby="terkontrak">
+                                                                    <form action="/proyek/stage-save" method="POST">
+                                                                    </form>
+                                                                    <form action="/proyek/stage-save" method="POST"
+                                                                        onsubmit="confirmAction(this); return false;"
+                                                                        stage="1">
+                                                                        @csrf
+                                                                        <input type="hidden" name="kode_proyek"
+                                                                            value="{{ $proyek->kode_proyek }}">
+                                                                        <li><input type="submit"
+                                                                                onclick="this.form.submitted=this.value"
+                                                                                class="dropdown-item" name="stage-terkontrak"
+                                                                                value="Terkontrak" /></li>
+                                                                        <li><input type="submit"
+                                                                                onclick="this.form.submitted=this.value"
+                                                                                class="dropdown-item" name="stage-terendah"
+                                                                                value="Terendah" /></li>
+                                                                    </form>
+                                                                </ul>
+                                                            @endif
+                                                        @else
+                                                            @php
+                                                                $selisih = abs($proyek->stage - 8);
+                                                            @endphp
+                                                            @if ($selisih == 2)
+                                                                <a href="#" data-bs-toggle="dropdown" role="button"
+                                                                    id="terkontrak" aria-expanded="false"
+                                                                    aria-controls="#terkontrak"
+                                                                    class="stage-button stage-is-not-active color-is-default"
+                                                                    style="outline: 0px; cursor: pointer;" stage="8">
+                                                                    Terkontrak
+                                                                    &nbsp;&nbsp;
+                                                                    <span class="" style="position: relative;top: 15%;"
+                                                                        stage="8"><i
+                                                                            class="bi bi-caret-down-fill text-white"></i></span>
+                                                                </a>
+                                                            @else
+                                                                <a href="#"
+                                                                    class="stage-button stage-is-not-active color-is-default"
+                                                                    style="outline: 0px; cursor: pointer;pointer-events: none;"
+                                                                    stage="8">
+                                                                    Terkontrak
+                                                                </a>
+                                                            @endif
+                                                            @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
+                                                                <ul class="dropdown-menu" id="terkontrak"
+                                                                    aria-labelledby="terkontrak">
+                                                                    <form action="/proyek/stage-save" method="POST">
+                                                                    </form>
+                                                                    <form action="/proyek/stage-save" method="POST"
+                                                                        onsubmit="confirmAction(this); return false;"
+                                                                        stage="1">
+                                                                        @csrf
+                                                                        <input type="hidden" name="kode_proyek"
+                                                                            value="{{ $proyek->kode_proyek }}">
+                                                                        <li><input type="submit"
+                                                                                onclick="this.form.submitted=this.value"
+                                                                                class="dropdown-item" name="stage-terkontrak"
+                                                                                value="Terkontrak" /></li>
+                                                                        <li><input type="submit"
+                                                                                onclick="this.form.submitted=this.value"
+                                                                                class="dropdown-item" name="stage-terendah"
+                                                                                value="Terendah" /></li>
+                                                                    </form>
+                                                                </ul>
+                                                            @endif
+                                                        @endif                                                        
                                                     @endif
+
 
 
                                                     {{-- @if ($proyek->stage > 9)
@@ -1089,17 +1139,41 @@
                                                     </li>
                                                     <!--end:::Tab item Perolehan-->
                                                 @endif
-
-                                                @if ($proyek->stage > 5)
-                                                    <!--begin:::Tab item Menang-->
-                                                    <li class="nav-item">
-                                                        <a class="nav-link text-active-primary pb-4"
-                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                            href="#kt_user_view_overview_menang"
-                                                            style="font-size:14px;">{{ $proyek->stage == 7 ? 'Kalah' : 'Menang' }}</a>
-                                                    </li>
-                                                    <!--end:::Tab item Menang-->
+                                                
+                                                @if ($proyek->dop != "EA")
+                                                    @if ($proyek->stage > 5 && is_null($proyek->is_need_approval_terkontrak))
+                                                        <!--begin:::Tab item Menang-->
+                                                        <li class="nav-item">
+                                                            <a class="nav-link text-active-primary pb-4"
+                                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                                href="#kt_user_view_overview_menang"
+                                                                style="font-size:14px;">{{ $proyek->stage == 7 ? 'Kalah' : 'Menang' }}</a>
+                                                        </li>
+                                                        <!--end:::Tab item Menang-->
+                                                    @endif
+                                                    @if ($proyek->stage > 5 && $proyek->is_need_approval_terkontrak)
+                                                        <!--begin:::Tab item Terkontrak-->
+                                                        <li class="nav-item">
+                                                            <a class="nav-link text-active-primary pb-4"
+                                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                                href="#kt_user_view_overview_terkontrak"
+                                                                style="font-size:14px;">{{ $proyek->stage == 9 ? 'Terendah' : 'Terkontrak' }}</a>
+                                                        </li>
+                                                        <!--end:::Tab item Terkontrak-->
+                                                    @endif                                                    
+                                                @else
+                                                    @if ($proyek->stage > 5)
+                                                        <!--begin:::Tab item Menang-->
+                                                        <li class="nav-item">
+                                                            <a class="nav-link text-active-primary pb-4"
+                                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                                href="#kt_user_view_overview_menang"
+                                                                style="font-size:14px;">{{ $proyek->stage == 7 ? 'Kalah' : 'Menang' }}</a>
+                                                        </li>
+                                                        <!--end:::Tab item Menang-->
+                                                    @endif                                                    
                                                 @endif
+                                                
                                                 @if ($proyek->stage > 7)
                                                     <!--begin:::Tab item Terkontrak-->
                                                     <li class="nav-item">
@@ -3472,11 +3546,11 @@
                                                                     <div class="d-flex flex-row align-items-center gap-2">
                                                                         <!--begin::Label-->
                                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                            style="font-size:14px;">Request Verifikasi Internal Penentuan KSO
+                                                                            style="font-size:14px;">Verifikasi Internal Penentuan Proyek KSO / Non KSO
                                                                             &nbsp;
                                                                             @if (!empty($proyek->alasan_kso) && $proyek->alasan_kso != "[]")
                                                                             <span>
-                                                                                @if (empty($proyek->VerifikasiInternalPartner) || (collect(json_decode($proyek->VerifikasiInternalPartner->revisi_note))->isNotEmpty()) && collect(json_decode($proyek->VerifikasiInternalPartner->revisi_note))->where("stage", "Request Pengajuan")->count() > 0)
+                                                                                @if (empty($proyek->VerifikasiInternalPartner) || !empty($proyek->VerifikasiInternalPartner) && (collect(json_decode($proyek->VerifikasiInternalPartner->revisi_note))->isNotEmpty()) && collect(json_decode($proyek->VerifikasiInternalPartner->revisi_note))->where("stage", "Request Pengajuan")->count() > 0)
                                                                                     <button type="button" class="btn btn-sm btn-primary" data-title="penentuan-kso" onclick="showModalRequest(this, '{{ $proyek->kode_proyek }}')">Ajukan</button>
                                                                                 @endif
                                                                             </span>
@@ -3485,11 +3559,11 @@
                                                                                 <span>
                                                                                     <p class="m-0 badge rounded-pill badge-sm text-warning">Proses Verifikasi</p>
                                                                                 </span>
-                                                                            @elseif($proyek->VerifikasiInternalPartner->is_persetujuan_approved)
+                                                                            @elseif(!empty($proyek->VerifikasiInternalPartner) && $proyek->VerifikasiInternalPartner->is_persetujuan_approved)
                                                                                 <span>
                                                                                     <p class="m-0 badge rounded-pill badge-sm text-success">Verifikasi Disetujui</p>
                                                                                 </span>
-                                                                            @elseif(!$proyek->VerifikasiInternalPartner->is_persetujuan_approved)
+                                                                            @elseif(!empty($proyek->VerifikasiInternalPartner) && !$proyek->VerifikasiInternalPartner->is_persetujuan_approved)
                                                                                 <span>
                                                                                     <p class="m-0 badge rounded-pill badge-sm text-success">Verifikasi Ditolak</p>
                                                                                 </span>
@@ -4000,12 +4074,25 @@
                                                                 <div class="d-flex flex-row align-items-center gap-2">
                                                                     <!--begin::Label-->
                                                                     <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                        style="font-size:14px;">Verifikasi Internal Persetujuan Partner
-                                                                        @if (($porsiJO->isNotEmpty() && $porsiJO->whereNotNull('is_hasil_assessment')->count() > 0))
-                                                                            @if ($isDokumenFinish)
+                                                                        style="font-size:14px;">Permohonan Persetujuan Pembentukan Kerjasama Operasi (KSO)
+                                                                        @if (($porsiJO->isNotEmpty() && ($porsiJO->every(function($item){return $item->is_greenlane;}) || $porsiJO->whereNotNull('is_hasil_assessment')->count() > 0)))
+                                                                            @if ($porsiJO->every(function($item){return $item->is_greenlane;}) || (isset($isDokumenFinish) && $isDokumenFinish))
                                                                             <span>
-                                                                                @if (empty($proyek->VerifikasiInternalPersetujuanPartner) || (collect(json_decode($proyek->VerifikasiInternalPersetujuanPartner->revisi_note))->isNotEmpty()) && collect(json_decode($proyek->VerifikasiInternalPersetujuanPartner?->revisi_note))?->where("stage", "Request Pengajuan")->count() > 0)
+                                                                                @if (empty($proyek->VerifikasiInternalPersetujuanPartner) || !empty($proyek->VerifikasiInternalPersetujuanPartner) && (collect(json_decode($proyek->VerifikasiInternalPersetujuanPartner->revisi_note))->isNotEmpty()) && collect(json_decode($proyek->VerifikasiInternalPersetujuanPartner?->revisi_note))?->where("stage", "Request Pengajuan")->count() > 0)
                                                                                     <button type="button" class="btn btn-sm btn-primary" data-title="persetujuan-kso" onclick="showModalRequest(this, '{{ $proyek->kode_proyek }}')">Ajukan</button>
+                                                                                @endif
+                                                                                @if (!empty($proyek->VerifikasiInternalPersetujuanPartner) && is_null($proyek->VerifikasiInternalPersetujuanPartner->is_persetujuan_approved))
+                                                                                    <span>
+                                                                                        <p class="m-0 badge rounded-pill badge-sm text-warning">Proses Verifikasi</p>
+                                                                                    </span>
+                                                                                @elseif(!empty($proyek->VerifikasiInternalPersetujuanPartner) && $proyek->VerifikasiInternalPersetujuanPartner->is_persetujuan_approved)
+                                                                                    <span>
+                                                                                        <p class="m-0 badge rounded-pill badge-sm text-success">Verifikasi Disetujui</p>
+                                                                                    </span>
+                                                                                @elseif(!empty($proyek->VerifikasiInternalPersetujuanPartner) && !$proyek->VerifikasiInternalPersetujuanPartner->is_persetujuan_approved)
+                                                                                    <span>
+                                                                                        <p class="m-0 badge rounded-pill badge-sm text-success">Verifikasi Ditolak</p>
+                                                                                    </span>
                                                                                 @endif
                                                                             </span>
                                                                             @endif
@@ -5272,12 +5359,25 @@
                                                                 <div class="d-flex flex-row align-items-center gap-2">
                                                                     <!--begin::Label-->
                                                                     <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                        style="font-size:14px;">Verifikasi Penentuan Proyek Green Lane / Non Green lane
+                                                                        style="font-size:14px;">Verifikasi Internal Proyek Greenlane/Non Greenlane
                                                                         @if (!empty($proyek->jenis_terkontrak) && !empty($proyek->sistem_bayar))
                                                                             <span>
-                                                                                @if (empty($proyek->VerifikasiProyekNota2) || (collect(json_decode($proyek->VerifikasiProyekNota2->revisi_note))->isNotEmpty()) && collect(json_decode($proyek->VerifikasiProyekNota2?->revisi_note))?->where("stage", "Request Pengajuan")->count() > 0)
+                                                                                @if (empty($proyek->VerifikasiProyekNota2) || !empty($proyek->VerifikasiProyekNota2) && (collect(json_decode($proyek->VerifikasiProyekNota2->revisi_note))->isNotEmpty()) && collect(json_decode($proyek->VerifikasiProyekNota2?->revisi_note))?->where("stage", "Request Pengajuan")->count() > 0)
                                                                                     <button type="button" class="btn btn-sm btn-primary" data-title="verifikasi-proyek-nr-2" onclick="showModalRequest(this, '{{ $proyek->kode_proyek }}')">Ajukan</button>
                                                                                 @endif
+                                                                            </span>
+                                                                        @endif
+                                                                        @if (!empty($proyek->VerifikasiProyekNota2) && is_null($proyek->VerifikasiProyekNota2->is_persetujuan_approved))
+                                                                            <span>
+                                                                                <p class="m-0 badge rounded-pill badge-sm text-warning">Proses Verifikasi</p>
+                                                                            </span>
+                                                                        @elseif(!empty($proyek->VerifikasiProyekNota2) && $proyek->VerifikasiProyekNota2->is_persetujuan_approved)
+                                                                            <span>
+                                                                                <p class="m-0 badge rounded-pill badge-sm text-success">Verifikasi Disetujui</p>
+                                                                            </span>
+                                                                        @elseif(!empty($proyek->VerifikasiProyekNota2) && !$proyek->VerifikasiProyekNota2->is_persetujuan_approved)
+                                                                            <span>
+                                                                                <p class="m-0 badge rounded-pill badge-sm text-success">Verifikasi Ditolak</p>
                                                                             </span>
                                                                         @endif
                                                                     </h3>
@@ -5286,7 +5386,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <br>
+                                                    {{-- <br>
                                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                         Dokumen Form Penentuan Project Green Lane / Non Green Lane
                                                     </h3>
@@ -5323,7 +5423,7 @@
                                                                 @endif
                                                             </tbody>
                                                         </table>
-                                                    </div>
+                                                    </div> --}}
                                                     <br>
                                                     <div class="row fv-row">
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
@@ -5661,7 +5761,7 @@
                                                                                 class="text-hover-primary">{{ $dokumen->nama_document }}</a>
                                                                         @else
                                                                             <a target="_blank"
-                                                                                href="{{ asset('words/' . $dokumen->id_document . '.pdf') }}"
+                                                                                href="{{ asset('dokumen-cashflow/' . $dokumen->id_document) }}"
                                                                                 class="text-hover-primary">{{ $dokumen->nama_document }}</a>
                                                                         @endif
                                                                     </td>
@@ -13110,6 +13210,13 @@
 @endsection
 
 @section('js-script')
+<script>
+    $(document).on("keydown", ":input:not(textarea)", function(event) {
+        if (event.key == "Enter") {
+            event.preventDefault();
+        }
+    });
+</script>
     <!--begin:: Dokumen File Upload Max Size-->
     <script>
         document.addEventListener("DOMContentLoaded", async () => {
@@ -13853,65 +13960,130 @@
 </script>
 
 <script>
-    function showModalRequest(elt, kode_proyek) {
+    async function showModalRequest(elt, kode_proyek) {
         let urlTarget;
         const kategori = elt.getAttribute("data-title");
+        const formData = new FormData();
+        formData.append("_token", "{{ csrf_token() }}");
+        formData.append("divisi_id", "{{ $proyek->UnitKerja->Divisi->id_divisi }}");
+        formData.append("departemen_code", "{{ $proyek->departemen_proyek }}");
+        
+        const getMatriks = await fetch(`/get-matriks-verifikasi/${kategori}`, {
+            method: "POST",
+            header: {
+                "content-type": "application/json",
+            },
+            body: formData
+        }).then(res => res.json());
 
-        Swal.fire({
-            title: 'Apakah anda yakin mengajukan proyek ini?',
-            text: 'Pastikan data sudah benar!',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#008CB4',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya'
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                LOADING_BODY.block();
-                try {
-                    const formData = new FormData();
-                    formData.append("_token", "{{ csrf_token() }}");
-                    switch (kategori) {
-                        case "penentuan-kso":
-                            urlTarget = `/verifikasi-internal-partner/request-pengajuan/${kode_proyek}`;
-                            break;
-                        case "persetujuan-kso":
-                            urlTarget = `/verifikasi-internal-persetujuan-partner/request-pengajuan/${kode_proyek}`;
-                            break;                    
-                        case "verifikasi-proyek-nr-2":
-                            urlTarget = `/verifikasi-proyek-nota-2/request-pengajuan/${kode_proyek}`;
-                            break;                    
-                        default:
-                            urlTarget = null;
-                            break;
+        if (kategori == "penentuan-kso" || kategori == "verifikasi-proyek-nr-2") {
+            Swal.fire({
+                title: 'Apakah anda yakin mengajukan proyek ini?',
+                text: 'Pastikan data sudah benar!',
+                icon: 'warning',
+                input: 'select',
+                inputOptions: getMatriks,
+                inputValidator: function (value) {
+                    return new Promise(function (resolve, reject) {
+                    if (value !== '') {
+                        resolve();
+                    } else {
+                        resolve('Anda harus memilih KAM');
                     }
-                    const req = await fetch(urlTarget, {
-                        method: 'POST',
-                        header: {
-                            "content-type": "application/json",
-                        },
-                        body: formData
-                    }).then(res => res.json());
-                    LOADING_BODY.release();
-                    if (req.Success != true) {
-                        return Swal.fire({
-                            icon: 'error',
+                    });
+                },
+                showCancelButton: true,
+                confirmButtonColor: '#008CB4',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    LOADING_BODY.block();
+                    try {
+                        switch (kategori) {
+                            case "penentuan-kso":
+                                urlTarget = `/verifikasi-internal-partner/request-pengajuan/${kode_proyek}`;
+                                break;                 
+                            case "verifikasi-proyek-nr-2":
+                                urlTarget = `/verifikasi-proyek-nota-2/request-pengajuan/${kode_proyek}`;
+                                break;                    
+                            default:
+                                urlTarget = null;
+                                break;
+                        }
+                        formData.append("nip", result.value);
+                        const req = await fetch(urlTarget, {
+                            method: 'POST',
+                            header: {
+                                "content-type": "application/json",
+                            },
+                            body: formData
+                        }).then(res => res.json());
+                        LOADING_BODY.release();
+                        if (req.Success != true) {
+                            return Swal.fire({
+                                icon: 'error',
+                                title: req.Message
+                            }).then(res => window.location.reload())
+                        }
+                        Swal.fire({
+                            icon: 'success',
                             title: req.Message
                         }).then(res => window.location.reload())
+                    } catch (error) {
+                        LOADING_BODY.release();
+                        Swal.fire({
+                            icon: 'error',
+                            title: error
+                        }).then(res => window.location.reload())
                     }
-                    Swal.fire({
-                        icon: 'success',
-                        title: req.Message
-                    }).then(res => window.location.reload())
-                } catch (error) {
-                    LOADING_BODY.release();
-                    Swal.fire({
-                        icon: 'error',
-                        title: error
-                    }).then(res => window.location.reload())
                 }
-            }
-        })
+            })
+        }else{
+            Swal.fire({
+                title: 'Apakah anda yakin mengajukan proyek ini?',
+                text: 'Pastikan data sudah benar!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#008CB4',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    LOADING_BODY.block();
+                    try {
+
+                        urlTarget = `/verifikasi-internal-persetujuan-partner/request-pengajuan/${kode_proyek}`;
+
+                        const req = await fetch(urlTarget, {
+                            method: 'POST',
+                            header: {
+                                "content-type": "application/json",
+                            },
+                            body: formData
+                        }).then(res => res.json());
+                        LOADING_BODY.release();
+                        if (req.Success != true) {
+                            return Swal.fire({
+                                icon: 'error',
+                                title: req.Message
+                            }).then(res => window.location.reload())
+                        }
+                        Swal.fire({
+                            icon: 'success',
+                            title: req.Message
+                        }).then(res => window.location.reload())
+                    } catch (error) {
+                        LOADING_BODY.release();
+                        Swal.fire({
+                            icon: 'error',
+                            title: error
+                        }).then(res => window.location.reload())
+                    }
+                }
+            })
+        }
+
     }
     
 </script>

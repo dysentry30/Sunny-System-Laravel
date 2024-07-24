@@ -452,11 +452,17 @@ class ProyekController extends Controller
             if (!empty($isExistPorsiJO)) {
                 $isExistPorsiJO->each(function ($porsi) {
                     $kriteria_partner = MasterGrupTierBUMN::where('id_pelanggan', $porsi->id_company_jo)->first();
+                    $kriteria_partner_greenlane = MasterKriteriaGreenlanePartner::where('id_pelanggan', $porsi->id_company_jo)->first();
                     if (!empty($kriteria_partner)) {
                         $porsi->is_greenlane = true;
                         $porsi->is_disetujui = true;
                     } else {
-                        $porsi->is_greenlane = false;
+                        if ($kriteria_partner_greenlane) {
+                            $porsi->is_greenlane = true;
+                            $porsi->is_disetujui = true;
+                        } else {
+                            $porsi->is_greenlane = false;
+                        }
                     }
                     if (!$porsi->is_greenlane) {
                         if (empty($porsi->score_pefindo_jo)) {
@@ -1611,20 +1617,21 @@ class ProyekController extends Controller
         $faker = new Uuid();
         $cashFlow = new CashFlowProyek();
         $file_name = $uploadedFile->getClientOriginalName();
-        $id_document = str_replace(' ', '_', $file_name) . '_' . $faker->uuid3();
+        $id_document = date("dmYHis_") . str_replace(' ', '_', $file_name);
         $nama_cashFlow = $file_name;
-        moveFileTemp($uploadedFile, $id_document);
+        // moveFileTemp($uploadedFile, $id_document);
         $cashFlow->nama_document = $nama_cashFlow;
         $cashFlow->id_document = $id_document;
         $cashFlow->kode_proyek = $kode_proyek;
         $cashFlow->save();
+        $uploadedFile->move(public_path('dokumen-cashflow/'), $id_document);
     }
     
     public function deleteCashFlow($id)
     {
         $delete = CashFlowProyek::find($id);
         // dd($delete);
-        $files = collect(File::allFiles(public_path("words")))->filter(function ($f) use ($delete) {
+        $files = collect(File::allFiles(public_path("dokumen-cashflow")))->filter(function ($f) use ($delete) {
             return str_contains($f->getFilename(), $delete->id_document);
         })->first();
         File::delete($files);
@@ -1639,13 +1646,13 @@ class ProyekController extends Controller
             $faker = new Uuid();
             $scurves = new DokumenSCurvesProyek();
             $file_name = $file->getClientOriginalName();
-            $id_document = str_replace(' ', '_', $file_name) . '_' . $faker->uuid3();
+            $id_document = date("dmYHis_") . str_replace(' ', '_', $file_name);
             $nama_scurves = $file_name;
             $scurves->nama_document = $nama_scurves;
             $scurves->id_document = $id_document;
             $scurves->kode_proyek = $kode_proyek;
             $scurves->save();
-            $file->move(public_path('dokumen-s-curves/' . $id_document));
+            $file->move(public_path('dokumen-s-curves/'), $id_document);
         }
     }
 
@@ -1668,13 +1675,13 @@ class ProyekController extends Controller
             $faker = new Uuid();
             $dokumenOther = new DokumenOtherProyek();
             $file_name = $file->getClientOriginalName();
-            $id_document = str_replace(' ', '_', $file_name) . '_' . $faker->uuid3();
+            $id_document = date("dmYHis_") . str_replace(' ', '_', $file_name);
             $nama_dokumenOther = $file_name;
             $dokumenOther->nama_document = $nama_dokumenOther;
             $dokumenOther->id_document = $id_document;
             $dokumenOther->kode_proyek = $kode_proyek;
             $dokumenOther->save();
-            $file->move(public_path('dokumen-other-proyek/' . $id_document));
+            $file->move(public_path('dokumen-other-proyek/'), $id_document);
         }
     }
 
@@ -2897,7 +2904,112 @@ class ProyekController extends Controller
             } else {
                 $request->stage = 5;
             }
+        } elseif ($request->stage == 8) {
+            $customer = $proyekStage->ProyekBerjalan->Customer ?? null;
+            if (!empty($customer)) {
+                $error_msg = collect();
+                if (empty($customer->kode_nasabah) && $proyekStage->UnitKerja->dop != 'EA') {
+                    $error_msg->push("Kode Nasabah");
+                }
+                if (empty($customer->email)) {
+                    $error_msg->push("Email");
+                }
+                if (empty($customer->address_1)) {
+                    $error_msg->push("Alamat");
+                }
+                if (empty($customer->kode_pos)) {
+                    $error_msg->push("Kode Pos");
+                }
+                if (empty($customer->fax)) {
+                    $error_msg->push("Fax");
+                }
+                if (empty($customer->phone_number)) {
+                    $error_msg->push("No Telp");
+                }
+                if (empty($customer->handphone)) {
+                    $error_msg->push("Handphone");
+                }
+                if (empty($customer->industry_sector)) {
+                    $error_msg->push("Industry Sector");
+                }
+                if (empty($customer->jenis_instansi)) {
+                    $error_msg->push("Instansi");
+                }
+                if (empty($customer->jenis_perusahaan)) {
+                    $error_msg->push("Jenis Perusahaan");
+                }
+                if (empty($customer->provinsi)) {
+                    $error_msg->push("Provinsi");
+                }
+                if (empty($customer->kota_kabupaten) && $proyekStage->UnitKerja->dop != 'EA') {
+                    $error_msg->push("Kota/Kabupaten");
+                }
+                if (empty($customer->npwp_company)) {
+                    $error_msg->push("NPWP");
+                }
+                // if (empty($proyekStage->Departemen)) {
+                //     $error_msg->push("Departemen");
+                // }
+                if (empty($customer->syarat_pembayaran)) {
+                    $error_msg->push("Term Payment");
+                }
+                if ($customer->tax == null) {
+                    $error_msg->push("Tax");
+                }
+                if ($error_msg->isNotEmpty()) {
+                    Alert::html("Error - Pelanggan !", "Untuk pindah ke stage terkontrak, pastikan data <b>Pelanggan</b> dengan field <b>" . $error_msg->join(", ", " </b>dan<b> ") . "</b> sudah terisi!", "error")->autoClose(10000);
+                    return redirect()->back();
+                }
+            } else if (empty($customer)) {
+                Alert::html("Error - Proyek !", "Untuk pindah ke stage terkontrak, pastikan field <b>Pelanggan</b> pada stage Pasar Dini sudah terpilih!", "error")->autoClose(10000);
+                return redirect()->back();
+            }
+            $sap = $customer->sap;
+            $pic = $customer->pic->filter(function ($p) {
+                return (!empty($p->nama_pic) && !empty($p->jabatan_pic) && !empty($p->email_pic) && !empty($p->phone_pic));
+            })->first();
+
+            if (empty($pic)) {
+                Alert::html("Error - PIC Pelanggan !", "Untuk pindah ke stage terkontrak, pastikan mengisi minimal <b>1 PIC Pelanggan</b> !", "error")->autoClose(10000);
+                return redirect()->back();
+            }
+
+            // dump($sap, $pic);
+            // dd();
+            if (empty($customer)) {
+                Alert::error("Error", "Pastikan Data Pelanggan sudah terisi!")->autoClose(10000);
+                return redirect()->back();
+            }
+            // http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev
+            // Begin :: Ngirim data ke nasabah online WIKA
+            $provinsi = Provinsi::where("province_name", "=", $customer->provinsi)->first() ?? Provinsi::find($customer->provinsi);
+            if (empty($provinsi)) {
+                Alert::html("Error", "Pastikan <b>Provinsi</b> pada Field <b>Pelanggan</b> sudah terisi!", "error")->autoClose(10000);
+                return redirect()->back();
+            }
+
+            $proyekStage->is_need_approval_terkontrak = true;
+
+            if ($proyekStage->nilai_perolehan != null && $proyekStage->porsi_jo != null) {
+                $nilaiPerolehan = (int) str_replace('.', '', $proyekStage->nilai_perolehan);
+                $kontrakKeseluruhan = ($nilaiPerolehan * 100) / (float) $proyekStage->porsi_jo;
+
+                $proyekStage->nilai_kontrak_keseluruhan = round($kontrakKeseluruhan);
+                $proyekStage->save();
+            }
+            if ($proyekAttach->count() == 0) {
+                Alert::error("Error", "Silahkan Isi Attachment Menang Terlebih Dahulu !");
+                return redirect()->back();
+            } else {
+                $contractManagements = ContractManagements::get()->where("project_id", "=", $proyekStage->kode_proyek)->first();
+                $request->stage = 6;
+                if (!empty($contractManagements)) {
+                    $contractManagements->stages = (int) 2;
+                    $contractManagements->save();
+                }
+            }
         };
+
 
         if (!$request->is_ajax) {
             $data = $request->all();
@@ -3240,6 +3352,7 @@ class ProyekController extends Controller
                             ]
                         ]
                     ]);
+                    $proyekStage->is_need_approval_terkontrak = true;
                 }
                 // dd($data_nasabah_online);
                 // End :: Ngirim data ke nasabah online WIKA
@@ -3474,13 +3587,23 @@ class ProyekController extends Controller
         //Check Partner di Master BUMN
         $kriteria_partner = MasterGrupTierBUMN::where('id_pelanggan', $customer->id_customer)->first();
 
+        //Check Partner di Master Kriteria Greenlane Partner
+        $kriteria_partner_greenlane = MasterKriteriaGreenlanePartner::where('id_pelanggan', $customer->id_customer)->first();
+
         if (!empty($kriteria_partner)) {
             $newPorsiJO->is_greenlane = true;
             $newPorsiJO->is_disetujui = true;
             $newPorsiJO->is_hasil_assessment = true;
             $newPorsiJO->hasil_assessment = "Disetujui";
         } else {
-            $newPorsiJO->is_greenlane = false;
+            if ($kriteria_partner_greenlane) {
+                $newPorsiJO->is_greenlane = true;
+                $newPorsiJO->is_disetujui = true;
+                $newPorsiJO->is_hasil_assessment = true;
+                $newPorsiJO->hasil_assessment = "Disetujui";
+            } else {
+                $newPorsiJO->is_greenlane = false;
+            }            
         }
 
         if (!$newPorsiJO->is_greenlane) {

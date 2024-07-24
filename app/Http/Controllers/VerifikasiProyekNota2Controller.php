@@ -33,7 +33,7 @@ class VerifikasiProyekNota2Controller extends Controller
      */
     public function index()
     {
-        $this->matriks_user = !Auth::user()->check_administrator ? Auth::user()->Pegawai->MatriksVerifikasiPartner->where('is_active', true) : MatriksApprovalVerifikasiProyekNota2::all()->where('is_active', true);
+        $this->matriks_user = !Auth::user()->check_administrator ? Auth::user()->Pegawai->MatriksApprovalVerifikasiProyekNota2->where('is_active', true) : MatriksApprovalVerifikasiProyekNota2::all()->where('is_active', true);
 
         $is_super_user = Gate::allows("super-admin");
         $unit_kerjas = $is_super_user && str_contains(Auth::user()->name, "Admin") || str_contains(Auth::user()->name, "ANDIAS") ?
@@ -131,8 +131,11 @@ class VerifikasiProyekNota2Controller extends Controller
                 $newApproval->request_pengajuan = $requestApproval->toJson();
                 $newApproval->nama_dokumen = $namaFile;
 
-                $nomorTarget = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->departemen_proyek, "Pengajuan");
-
+                // $nomorTarget = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->departemen_proyek, "Pengajuan");
+                $nomorTarget = User::where("nip", $request->get("nip"))->get();
+                if (empty($nomorTarget)) {
+                    return redirect()->back();
+                }
                 if ($newApproval->save()) {
                     foreach ($nomorTarget as $target) {
                         $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/verifikasi-proyek-nota-2?open=kt_modal_view_proyek_rekomendasi_" . $proyek->kode_proyek;
@@ -184,6 +187,7 @@ class VerifikasiProyekNota2Controller extends Controller
     public function ProsesPengajuanApproval(Request $request, VerifikasiProyekNota2 $proyek)
     {
         $data = $request->all();
+        $is_paralel = true;
 
         try {
 
@@ -210,8 +214,7 @@ class VerifikasiProyekNota2Controller extends Controller
                 $proyek->pengajuan_approved = $approvedPengajuan->toJson();
 
                 $is_done = $this->checkMatriksApproval($proyek->divisi_id, $proyek->departemen_id, $approvedPengajuan, "Pengajuan");
-                if ($is_done) {
-
+                if ($is_paralel) {
                     $proyek->stage = "Rekomendasi";
                     $proyek->is_pengajuan_approved = true;
 
@@ -225,7 +228,26 @@ class VerifikasiProyekNota2Controller extends Controller
                             return redirect()->back();
                         }
                     }
+                } else {
+                    if ($is_done) {
+
+                        $proyek->stage = "Rekomendasi";
+                        $proyek->is_pengajuan_approved = true;
+
+                        $getNomorMatriks = $this->getNomorMatriksApproval($proyek->divisi_id, $proyek->departemen_id, "Rekomendasi");
+
+                        foreach ($getNomorMatriks as $target) {
+                            $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/verifikasi-proyek-nota-2?open=kt_modal_pengajuan_verifikasi_" . $proyek->kode_proyek;
+                            $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan pemberian rekomendasi untuk proyek " . $proyek->Proyek->nama_proyek . " .\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                            $sendEmailUser = sendNotifEmail($target->Pegawai, "Permohonan Pemberian Rekomendasi Verifikasi Proyek Nota Rekomendasi 2", nl2br($message), $this->isnomorTargetActive);
+                            if (!$sendEmailUser) {
+                                return redirect()->back();
+                            }
+                        }
+                    }
                 }
+                
+                
 
                 $proyek->save();
                 Alert::success("Success", "Proyek Berhasil Disetujui");
@@ -244,6 +266,10 @@ class VerifikasiProyekNota2Controller extends Controller
                 $proyek->revisi_note = $revisiNote->toJson();
                 $proyek->is_request_pengajuan = null;
                 $proyek->request_pengajuan = null;
+                $proyek->is_pengajuan_approved = null;
+                $proyek->pengajuan_approved = null;
+                $proyek->is_rekomendasi_approved = null;
+                $proyek->rekomendasi_approved = null;
 
                 $getNomorMatriks = $this->getNomorMatriksApproval($proyek->divisi_id, $proyek->departemen_id, "Pengajuan");
                 foreach ($getNomorMatriks as $target) {
@@ -256,6 +282,8 @@ class VerifikasiProyekNota2Controller extends Controller
                 }
 
                 $proyek->save();
+                Alert::success("Success", "Proyek Berhasil Dikembalikan");
+                return redirect()->back();
             }
         } catch (\Throwable $th) {
             throw $th;
@@ -327,8 +355,12 @@ class VerifikasiProyekNota2Controller extends Controller
 
                 $proyek->is_revisi = true;
                 $proyek->revisi_note = $revisiNote->toJson();
-                $proyek->is_request_persetujuan = null;
-                $proyek->request_persetujuan = null;
+                $proyek->is_request_pengajuan = null;
+                $proyek->request_pengajuan = null;
+                $proyek->is_pengajuan_approved = null;
+                $proyek->pengajuan_approved = null;
+                $proyek->is_rekomendasi_approved = null;
+                $proyek->rekomendasi_approved = null;
 
                 $getNomorMatriks = $this->getNomorMatriksApproval($proyek->divisi_id, $proyek->departemen_id, "Pengajuan");
                 foreach ($getNomorMatriks as $target) {
@@ -341,6 +373,8 @@ class VerifikasiProyekNota2Controller extends Controller
                 }
 
                 $proyek->save();
+                Alert::success("Success", "Proyek Berhasil Dikembalikan");
+                return redirect()->back();
             }
         } catch (\Throwable $th) {
             throw $th;
@@ -395,10 +429,11 @@ class VerifikasiProyekNota2Controller extends Controller
                         return redirect()->back();
                     }
 
-                    $namaFile = self::generateFinalDokumen($request, $proyek->Proyek);
-                    // $proyek->nama_dokumen = $namaFile;
                 }
 
+                $proyek->save();
+                $namaFile = self::generateFinalDokumen($request, $proyek->Proyek);
+                $proyek->nama_dokumen = $namaFile;
                 $proyek->save();
                 Alert::success("Success", "Proyek Berhasil Disetujui");
                 return redirect()->back();
@@ -414,8 +449,12 @@ class VerifikasiProyekNota2Controller extends Controller
 
                 $proyek->is_revisi = true;
                 $proyek->revisi_note = $revisiNote;
-                $proyek->is_request_persetujuan = null;
-                $proyek->request_persetujuan = null;
+                $proyek->is_request_pengajuan = null;
+                $proyek->request_pengajuan = null;
+                $proyek->is_pengajuan_approved = null;
+                $proyek->pengajuan_approved = null;
+                $proyek->is_rekomendasi_approved = null;
+                $proyek->rekomendasi_approved = null;
 
                 $getNomorMatriks = $this->getNomorMatriksApproval($proyek->divisi_id, $proyek->departemen_id, "Rekomendasi");
                 foreach ($getNomorMatriks as $target) {
@@ -428,7 +467,55 @@ class VerifikasiProyekNota2Controller extends Controller
                 }
 
                 $proyek->save();
+                Alert::success("Success", "Proyek Berhasil Dikembalikan");
+                return redirect()->back();
             }
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    /**
+     * ? Tampilan QR Code
+     */
+    public function viewProyekQRSelected(Request $request, $kode_proyek, $nip)
+    {
+        try {
+            $ProyekNotaQrSelected = VerifikasiProyekNota2::where('kode_proyek', $kode_proyek)->first();
+            $proyekSelected = $ProyekNotaQrSelected->Proyek;
+
+            $kategori = $request->get("kategori");
+
+            switch ($kategori) {
+                case 'pengajuan':
+                    $collectPenandatangan = collect(json_decode($ProyekNotaQrSelected->pengajuan_approved));
+                    break;
+                case 'rekomendasi':
+                    $collectPenandatangan = collect(json_decode($ProyekNotaQrSelected->rekomendasi_approved));
+                    break;
+                case 'persetujuan':
+                    $collectPenandatangan = collect(json_decode($ProyekNotaQrSelected->persetujuan_approved));
+                    break;
+
+                default:
+                    $collectPenandatangan = null;
+                    break;
+            }
+
+
+            $userSelected = User::where('nip', $nip)->first();
+
+            $penandatanganSelected = $collectPenandatangan->where('nip', $userSelected->nip)->first();
+
+            if (!empty($penandatanganSelected)) {
+                $penandatanganSelected->nip = $userSelected->name ?? null;
+
+                $penandatanganSelected->jabatan = $userSelected->Pegawai?->Jabatan?->nama_jabatan ?? null;
+
+                $penandatanganSelected->tanggal = Carbon::create($penandatanganSelected->tanggal)->translatedFormat('d F Y, H:i:s');
+            }
+
+            return view('29_View_TTD_Verifikasi', ["penandatanganSelected" => $penandatanganSelected, "dataNotaRekomendasi" => $ProyekNotaQrSelected, "proyek" => $proyekSelected]);
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -543,43 +630,42 @@ class VerifikasiProyekNota2Controller extends Controller
             $approvedPersetujuan = collect(json_decode($verifikasiPartner->persetujuan_approved));
             $approvedPengajuan->each(function ($item) use ($request, $proyek, $pathQRPengajuan) {
                 $qrNamePengajuan = date('dmYHis_') . $item->nip . '_signed_Pengajuan-Verif-Internal_Partner.png';
-                $qrPathPengajuan = public_path("template-ttd\\verif-proyek-nota-2\\" . $qrNamePengajuan);
-                $urlPengajuan = $request->schemeAndHttpHost() . "?nip=" . $item->nip . "&redirectTo=/verifikasi-proyek-nota-2/" . $proyek->kode_proyek . "/" . $item->nip . "/view-qr?kategori=Pengajuan";
+                $qrPathPengajuan = public_path("template-ttd/verif-proyek-nota-2/" . $qrNamePengajuan);
+                $urlPengajuan = $request->schemeAndHttpHost() . "?nip=" . $item->nip . "&redirectTo=/verifikasi-proyek-nota-2/" . $proyek->kode_proyek . "/" . $item->nip . "/view-qr?kategori=pengajuan";
                 generateQrCode($qrNamePengajuan, $qrPathPengajuan, $urlPengajuan);
                 $pathQRPengajuan->push(collect([
                     "user" => Pegawai::where("nip", $item->nip)->first()->nama_pegawai ?? "NN",
                     "fileName" => $qrNamePengajuan,
+                    "jabatan" => Pegawai::where("nip", $item->nip)->first()?->Jabatan->nama_jabatan ?? "NN",
                 ]));
             });
 
             $approvedRekomendasi->each(function ($item) use ($request, $proyek, $pathQRRekomendasi) {
                 $qrNameRekomendasi = date('dmYHis_') . $item->nip . '_signed_Rekomendasi-verif-internal_Partner.png';
-                $qrPathRekomendasi = public_path("template-ttd\\verif-proyek-nota-2\\" . $qrNameRekomendasi);
-                $urlRekomendasi = $request->schemeAndHttpHost() . "?nip=" . $item->nip . "&redirectTo=/verifikasi-proyek-nota-2/" . $proyek->kode_proyek . "/" . $item->nip . "/view-qr?kategori=Rekomendasi";
+                $qrPathRekomendasi = public_path("template-ttd/verif-proyek-nota-2/" . $qrNameRekomendasi);
+                $urlRekomendasi = $request->schemeAndHttpHost() . "?nip=" . $item->nip . "&redirectTo=/verifikasi-proyek-nota-2/" . $proyek->kode_proyek . "/" . $item->nip . "/view-qr?kategori=rekomendasi";
                 generateQrCode($qrNameRekomendasi, $qrPathRekomendasi, $urlRekomendasi);
                 $pathQRRekomendasi->push(collect([
                     "user" => Pegawai::where("nip", $item->nip)->first()->nama_pegawai ?? "NN",
                     "fileName" => $qrNameRekomendasi,
+                    "jabatan" => Pegawai::where("nip", $item->nip)->first()?->Jabatan->nama_jabatan ?? "NN",
                 ]));
             });
 
             $approvedPersetujuan->each(function ($item) use ($request, $proyek, $pathQRPersetujuan) {
                 $qrNamePersetujuan = date('dmYHis_') . $item->nip . '_signed_Persetujuan-verif-internal_Partner.png';
-                $qrPathPersetujuan = public_path("template-ttd\\verif-proyek-nota-2\\" . $qrNamePersetujuan);
-                $urlPersetujuan = $request->schemeAndHttpHost() . "?nip=" . $item->nip . "&redirectTo=/verifikasi-proyek-nota-2/" . $proyek->kode_proyek . "/" . $item->nip . "/view-qr?kategori=Persetujuan";
+                $qrPathPersetujuan = public_path("template-ttd/verif-proyek-nota-2/" . $qrNamePersetujuan);
+                $urlPersetujuan = $request->schemeAndHttpHost() . "?nip=" . $item->nip . "&redirectTo=/verifikasi-proyek-nota-2/" . $proyek->kode_proyek . "/" . $item->nip . "/view-qr?kategori=persetujuan";
                 generateQrCode($qrNamePersetujuan, $qrPathPersetujuan, $urlPersetujuan);
                 $pathQRPersetujuan->push(collect([
                     "user" => Pegawai::where("nip", $item->nip)->first()->nama_pegawai ?? "NN",
                     "fileName" => $qrNamePersetujuan,
+                    "jabatan" => Pegawai::where("nip", $item->nip)->first()?->Jabatan->nama_jabatan ?? "NN",
                 ]));
             });
 
             $pdf = Pdf::loadView('GenerateFile.generateVerifikasiProyek', ["proyek" => $proyek, "pathQRPengajuan" => $pathQRPengajuan, "pathQRRekomendasi" => $pathQRRekomendasi, "pathQRPersetujuan" => $pathQRPersetujuan]);
             $pdf->setPaper('A4', 'landscape');
-
-            if (!File::isDirectory(public_path('file-nota-rekomendasi-2/file-verifikasi-proyek-nota-2/'))) {
-                File::makeDirectory(public_path('file-nota-rekomendasi-2/file-verifikasi-proyek-nota-2/'));
-            }
 
             $namaFile = date("dmYHis_") . $proyek->kode_proyek . "_Dokumen_Verifikasi_Proyek_Nota_2_Final.pdf";
             $pdf->save(public_path('file-nota-rekomendasi-2/file-verifikasi-proyek-nota-2/' . $namaFile));
