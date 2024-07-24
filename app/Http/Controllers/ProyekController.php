@@ -1880,7 +1880,6 @@ class ProyekController extends Controller
                 return redirect()->back();
             } else {
                 $contractManagements = ContractManagements::get()->where("project_id", "=", $proyekStage->kode_proyek)->first();
-                $request->stage = 6;
                 if (!empty($contractManagements)) {
                     $contractManagements->stages = (int) 2;
                     $contractManagements->save();

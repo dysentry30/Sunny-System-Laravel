@@ -101,8 +101,6 @@
                             <!--end::Page title-->
                             <!--begin::Actions-->
                             <div class="d-flex align-items-center py-1">
-
-                                @if ($proyek->stage != 8 || empty($proyek->ApprovalTerkontrakProyek) || (!is_null($proyek->ApprovalTerkontrakProyek?->is_revisi) && $proyek->ApprovalTerkontrakProyek?->is_revisi))
                                 <!--begin::Button-->
                                 @canany(['super-admin', 'admin-crm', 'user-crm'])
                                     <button onclick="document.location.reload()" type="reset" class="btn btn-sm btn-light btn-active-danger pe-3 mx-2" id="cancel-button">
@@ -113,7 +111,7 @@
                                 <!--begin::Button-->
                                 @canany(['super-admin', 'admin-crm', 'user-crm', 'approver-crm'])
                                     @if ($proyek->dop != "EA")
-                                        @if ($proyek->stage < 8)
+                                        @if ($proyek->stage == 8 && empty($proyek->ApprovalTerkontrakProyek))
                                             @if ($proyek->is_cancel == false)
                                                 <button type="submit" name="proyek-save" class="btn btn-sm btn-primary ms-2" id="proyek-save"
                                                     style="background-color:#008CB4">
@@ -127,13 +125,12 @@
                                                 Save</button>
                                         @endif                                
                                     @endif                             
-                                @endcanany                                    
-                                @endif
+                                @endcanany
                                 <!--end::Button-->
 
                                 <!--begin::Button-->    
                                 @if ($proyek->UnitKerja?->dop != "EA")
-                                    @if (($proyek->stage == 6 && $proyek->is_need_approval_terkontrak && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek?->is_revisi))
+                                    @if (($proyek->stage == 8 && $proyek->is_need_approval_terkontrak && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek?->is_revisi))
                                         <button type="button" class="btn btn-sm btn-success ms-2" onclick="requestApprovalTerkontrak('{{ $proyek->kode_proyek }}')">Ajukan Approval</button>
                                     @endif
                                     @if (App\Models\MatriksApprovalTerkontrakProyek::where('nip', Auth::user()->nip)->where('unit_kerja', $proyek->unit_kerja)->where("is_active", true)->first() && $proyek->ApprovalTerkontrakProyek && is_null($proyek->ApprovalTerkontrakProyek?->is_revisi) && is_null($proyek->ApprovalTerkontrakProyek->is_approved))
@@ -193,12 +190,20 @@
                                 <!--end::Button-->
 
                                 <!--begin::Button-->
-                                @if (is_null($proyek->ApprovalTerkontrakProyek) || (!is_null($proyek->ApprovalTerkontrakProyek?->is_revisi) && !$proyek->ApprovalTerkontrakProyek?->is_revisi))
-                                @canany(['super-admin', 'admin-crm', 'user-crm'])
-                                    <a class="btn btn-sm btn-light btn-active-danger ms-2" data-bs-toggle="modal"
-                                        data-bs-target="#kt_modal_cancel_proyek" id="kt_toolbar_export">Cancel Proyek
-                                    </a>                                    
-                                @endcanany                                    
+                                @if ($proyek->dop != "EA")
+                                    @if ($proyek->stage == 8 && empty($proyek->ApprovalTerkontrakProyek))
+                                        @canany(['super-admin', 'admin-crm', 'user-crm'])
+                                            <a class="btn btn-sm btn-light btn-active-danger ms-2" data-bs-toggle="modal"
+                                                data-bs-target="#kt_modal_cancel_proyek" id="kt_toolbar_export">Cancel Proyek
+                                            </a>
+                                        @endcanany                                        
+                                    @endif
+                                @else
+                                    @canany(['super-admin', 'admin-crm', 'user-crm'])
+                                        <a class="btn btn-sm btn-light btn-active-danger ms-2" data-bs-toggle="modal"
+                                            data-bs-target="#kt_modal_cancel_proyek" id="kt_toolbar_export">Cancel Proyek
+                                        </a>
+                                    @endcanany
                                 @endif
                                 <!--end::Button-->
 
@@ -663,7 +668,7 @@
                                                     @endif
 
                                                     @if ($proyek->dop != "EA")
-                                                        @if ($proyek->stage == 8)
+                                                        @if ($proyek->stage == 8 && !empty($proyek->ApprovalTerkontrakProyek) && $proyek->ApprovalTerkontrakProyek->is_approved)
                                                             <a href="#"
                                                                 class="stage-button stage-action stage-is-done color-is-default"
                                                                 style="outline: 0px; cursor: pointer; pointer-events: none;"
@@ -671,7 +676,7 @@
                                                                 Terkontrak
                                                             </a>
                                                         @else
-                                                            @if ((abs($proyek->stage - 6) != 1 || abs($proyek->stage - 7) != 2) && $proyek->is_need_approval_terkontrak)
+                                                            @if (abs($proyek->stage - 8) != 1 && $proyek->is_need_approval_terkontrak)
                                                                 @if (!empty($proyek->ApprovalTerkontrakProyek))
                                                                     <a href="#"
                                                                         class="stage-button stage-action stage-is-not-active color-is-default"
