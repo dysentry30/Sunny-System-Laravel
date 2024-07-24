@@ -7,6 +7,7 @@ use App\Models\HistoryForecast;
 use App\Models\Proyek;
 use App\Models\UnitKerja;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Carbon\Carbon;
 use stdClass;
 
@@ -766,8 +767,8 @@ class MobileController extends Controller
         $unitKerja = $request->get("unitKerja");
 
         try {
-            $proyeks = Proyek::select('kode_proyek', 'nama_proyek', 'stage', 'jadwal_pq', 'jadwal_tender')->where('tipe_proyek', 'P')->where('is_cancel', false)->where('tahun_perolehan', $tahun)->where('is_tidak_lulus_pq', false)->whereIn('stage', [1, 2, 3, 4, 5, 6, 8])->get();
-
+            $proyeks = Proyek::with(["proyekBerjalan"])->select('kode_proyek', 'nama_proyek', 'unit_kerja', 'stage', 'sumber_dana', 'jenis_proyek', 'nilaiok_awal', 'porsi_jo', 'hps_pagu', 'penawaran_tender', 'jenis_terkontrak', 'sistem_bayar', 'is_uang_muka', 'uang_muka', 'jadwal_pq', 'jadwal_tender')->where('tipe_proyek', 'P')->where('is_cancel', false)->where('tahun_perolehan', $tahun)->where('is_tidak_lulus_pq', false)->whereIn('stage', [1, 2, 3, 4, 5, 6, 8])->get();
+            
             if (str_contains($unitKerja, ',')) {
                 $arrUnitKerja = explode(',', $unitKerja);
                 $proyeks = $proyeks->whereIn("unit_kerja", $arrUnitKerja);
@@ -783,18 +784,34 @@ class MobileController extends Controller
 
                 if (!empty($proyekPrakualifikasi)) {
                     $proyekPrakualifikasi = $proyekPrakualifikasi->map(function ($proyek) {
+                        $proyek->divisi = self::getUnitKerjaProyek($proyek->unit_kerja);
+                        $proyek->jenis_proyek = $proyek->jenis_proyek == "J" ? "JO" : ($proyek->jenis_proyek == "I" ? "Internal" : ($proyek->jenis_proyek == "N" ? "External" : ""));
+                        $proyek->nilai_ok = "Rp. " . number_format((int)$proyek->nilaiok_proyek, 0, '.', ',');
+                        $proyek->nama_pelanggan = $proyek->proyekBerjalan->customer->name ?? "-";
+                        $proyek->porsi_jo = $proyek->porsi_jo . ' %';
+                        $proyek->hps_pagu = "Rp. " . number_format((int)$proyek->hps_pagu, 0, '.', ',');
+                        $proyek->uang_muka = !empty($proyek->uang_muka) ? $proyek->uang_muka . ' %' : '-';
                         $proyek->tgl_event = $proyek->jadwal_pq;
                         $proyek->event = "Pemasukan Prakualifikasi";
                         return $proyek;
-                    });
+                    })->makeHidden(["unit_kerja", "nilaiok_awal"]);
                 }
 
                 if (!empty($proyekTender)) {
                     $proyekTender = $proyekTender->map(function ($proyek) {
+                        $proyek->divisi = self::getUnitKerjaProyek($proyek->unit_kerja);
+                        $proyek->jenis_proyek = $proyek->jenis_proyek == "J" ? "JO" : ($proyek->jenis_proyek == "I" ? "Internal" : ($proyek->jenis_proyek == "N" ? "External" : ""));
+                        $proyek->nilai_ok = "Rp. " . number_format((int)$proyek->nilaiok_proyek, 0, '.', ',');
+                        $proyek->nama_pelanggan = $proyek->proyekBerjalan->customer->name ?? "-";
+                        $proyek->porsi_jo = $proyek->porsi_jo . ' %';
+                        $proyek->hps_pagu = "Rp. " . number_format((int)$proyek->hps_pagu, 0, '.', ',');
+                        $proyek->nilai_penawaran_keseluruhan = "Rp. " . number_format((int)$proyek->penawaran_tender, 0, '.', ',');
+                        $proyek->uang_muka = !empty($proyek->uang_muka) ? $proyek->uang_muka . ' %' : '-';
+                        $proyek->tgl_event = $proyek->jadwal_pq;
                         $proyek->tgl_event = $proyek->jadwal_tender;
                         $proyek->event = "Pemasukan Tender";
                         return $proyek;
-                    });
+                    })->makeHidden(["unit_kerja", "nilaiok_awal"]);
                 }
 
                 $proyeks = $proyekPrakualifikasi->merge($proyekTender)->groupBy("tgl_event");
