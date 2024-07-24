@@ -252,10 +252,10 @@ a{{-- Begin::Extend Header --}}
                                                             - Team Proyek <br>
                                                         @endif
                                                         @if ($user->check_user_mobile)
-                                                            - User Mobile <br>
+                                                            - Mobile <br>
                                                         @endif
                                                         @if ($user->check_user_ska_skt)
-                                                            - User SKA SKT <br>
+                                                            - SKA SKT <br>
                                                         @endif
                                                     </td>
                                                     <!--end::Role-->
@@ -765,13 +765,13 @@ a{{-- Begin::Extend Header --}}
                             <!--begin::Options-->
                             <label class="form-check form-check-sm form-check-custom form-check-solid me-6">
                                 <input class="form-check-input" type="checkbox" value="" id="mobile" name="mobile" />
-                                <span class="form-check-label me-8 required"><b>User Mobile</b></span>
+                                <span class="form-check-label me-8 required"><b>Mobile</b></span>
                             </label>
                             <!--end::Options-->
                             <!--begin::Options-->
                             <label class="form-check form-check-sm form-check-custom form-check-solid me-6">
                                 <input class="form-check-input" type="checkbox" value="" id="ska-skt" name="ska-skt" />
-                                <span class="form-check-label me-8 required"><b>User SKA SKT</b></span>
+                                <span class="form-check-label me-8 required"><b>SKA SKT</b></span>
                             </label>
                             <!--end::Options-->
                         </div>
