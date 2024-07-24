@@ -33,11 +33,13 @@ class UserNotAuthenticatedMiddleware
         if (Gate::allows("crm")) {
             return redirect("/dashboard");
         } elseif (Gate::allows("ccm")) {
-            return redirect("/dashboard-ccm/perolehan");
+            return redirect("/dashboard-ccm/perolehan-kontrak");
         } elseif (Gate::allows("csi")) {
             return redirect("/csi");
         } elseif (Gate::allows("ska-skt")) {
             return redirect("/ska-skt");
+        } elseif (Gate::allows("super-admin")) {
+            return redirect("/dashboard");
         }
     }
 }

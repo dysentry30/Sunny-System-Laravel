@@ -561,7 +561,20 @@ class ProyekController extends Controller
         $newProyek->status_pasdin  = $dataProyek["status-pasardini"];
         $newProyek->info_asal_proyek  = $dataProyek["info-proyek"];
         $newProyek->laporan_kualitatif_pasdin = $dataProyek["laporan-kualitatif-pasdin"];
-        $newProyek->klasifikasi_pasdin = $dataProyek["ra-klasifikasi-proyek"];
+
+        $nilaiOK = (int) str_replace('.', '', $dataProyek["nilai-rkap"]);
+
+        if ($nilaiOK > 500000000000 && $nilaiOK <= 2000000000000) {
+            $newProyek->klasifikasi_pasdin = "Proyek Besar";
+        } elseif ($nilaiOK > 250000000000 && $nilaiOK <= 500000000000) {
+            $newProyek->klasifikasi_pasdin = "Proyek Menengah";
+        } elseif ($nilaiOK > 0 && $nilaiOK <= 250000000000) {
+            $newProyek->klasifikasi_pasdin = "Proyek Kecil";
+        } elseif ($nilaiOK > 2000000000000) {
+            $newProyek->klasifikasi_pasdin = "Proyek Mega";
+        }
+        // $newProyek->klasifikasi_pasdin = $dataProyek["ra-klasifikasi-proyek"];
+        
         // if ($newProyek->jenis_proyek == "J") {
         //     $newProyek->jenis_jo = $dataProyek["jo-category"];
         // } else {
@@ -833,11 +846,13 @@ class ProyekController extends Controller
 
         // if (isset($kode_proyek) && isset($dataProyek["nilai-perolehan"]) && isset($dataProyek["nospk-external"]) && isset($dataProyek["nomor-terkontrak"]) && isset($dataProyek["tanggal-mulai-kontrak"]) && isset($dataProyek["tanggal-akhir-kontrak"])) {
         // $contractManagements = ContractManagements::get()->where("project_id", "=", $kode_proyek)->first();
-        $contractManagements = ContractManagements::where(function ($query) use ($newProyek) {
-            $query->where("project_id", "=", $newProyek->kode_proyek)
-                ->orWhere("profit_center", "=", $newProyek->profit_center);
+        $isExistcontractManagements = ContractManagements::when(!empty($newProyek->profit_center), function ($query) use ($newProyek) {
+            return $query->where("profit_center", $newProyek->profit_center);
+        })->orWhere(function ($item) use ($newProyek) {
+            $item->where("project_id", $newProyek->kode_proyek);
         })->first();
-        if (empty($contractManagements)) {
+
+        if (empty($isExistcontractManagements)) {
             $uuid = new Uuid();
             $contractManagements = new ContractManagements();
             $contractManagements->project_id = $kode_proyek;
@@ -856,23 +871,25 @@ class ProyekController extends Controller
                 $contractManagements->stages = (int) 1;
             }
             $contractManagements->value_review = 0;
+            $contractManagements->profit_center = (strlen($newProyek->kode_proyek) > 8 || strlen($newProyek->kode_proyek) < 12) && empty($newProyek->profit_center) ? $newProyek->kode_proyek : (!empty($newProyek->profit_center) ? $newProyek->profit_center : null);
             $contractManagements->save();
         } else {
-            // dd($contractManagements);
-            $contractManagements->project_id = $kode_proyek;
-            $contractManagements->no_contract = $newProyek->nomor_terkontrak;
-            $contractManagements->contract_in = $dataProyek["tanggal-mulai-kontrak"];
-            $contractManagements->contract_out = $dataProyek["tanggal-akhir-kontrak"];
-            $contractManagements->number_spk = $dataProyek["nospk-external"];
-            $contractManagements->contract_proceed = "Belum Selesai";
-            $contractManagements->value = preg_replace("/[^0-9]/i", "", $dataProyek["nilai-perolehan"]);
+            $isExistcontractManagements->project_id = $kode_proyek;
+            $isExistcontractManagements->no_contract = $newProyek->nomor_terkontrak;
+            $isExistcontractManagements->contract_in = $dataProyek["tanggal-mulai-kontrak"];
+            $isExistcontractManagements->contract_out = $dataProyek["tanggal-akhir-kontrak"];
+            $isExistcontractManagements->number_spk = $dataProyek["nospk-external"];
+            $isExistcontractManagements->contract_proceed = "Belum Selesai";
+            $isExistcontractManagements->profit_center = $newProyek->profit_center;
+            $isExistcontractManagements->value = preg_replace("/[^0-9]/i", "", $dataProyek["nilai-perolehan"]);
             if ($newProyek->stage == 8) {
-                $contractManagements->stages = (int) 2;
+                $isExistcontractManagements->stages = (int) 2;
             } else {
-                $contractManagements->stages = (int) 1;
+                $isExistcontractManagements->stages = (int) 1;
             }
-            $contractManagements->value_review = 0;
-            $contractManagements->save();
+            $isExistcontractManagements->value_review = 0;
+            $isExistcontractManagements->profit_center = (strlen($newProyek->kode_proyek) > 8 || strlen($newProyek->kode_proyek) < 12) && empty($newProyek->profit_center) ? $newProyek->kode_proyek : (!empty($newProyek->profit_center) ? $newProyek->profit_center : null);
+            $isExistcontractManagements->save();
         }
         // }
 
