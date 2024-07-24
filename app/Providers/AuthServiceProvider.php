@@ -41,9 +41,18 @@ class AuthServiceProvider extends ServiceProvider
             return $user->check_user_csi == true;
         });
 
+        Gate::define('mobile', function (User $user) {
+            return $user->check_user_mobile == true;
+        });
+
+        Gate::define('ska-skt', function (User $user) {
+            return $user->check_user_ska_skt == true;
+        });
+
         Gate::define('admin', function (User $user) {
             return $user->role_admin == true;
         });
+        
 
         Gate::define('user', function (User $user) {
             return $user->role_user == true;

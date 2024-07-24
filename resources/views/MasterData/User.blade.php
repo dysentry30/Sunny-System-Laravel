@@ -234,6 +234,8 @@ a{{-- Begin::Extend Header --}}
                                                         @if (!$user->check_administrator &&
                                                             !$user->check_admin_kontrak &&
                                                             !$user->check_user_sales &&
+                                                            !$user->check_user_mobile &&
+                                                            !$user->check_user_ska_skt &&
                                                             !$user->check_team_proyek)
                                                             <span class="text-danger">Belum ditentukan</span>
                                                         @endif
@@ -248,6 +250,12 @@ a{{-- Begin::Extend Header --}}
                                                         @endif
                                                         @if ($user->check_team_proyek)
                                                             - Team Proyek <br>
+                                                        @endif
+                                                        @if ($user->check_user_mobile)
+                                                            - User Mobile <br>
+                                                        @endif
+                                                        @if ($user->check_user_ska_skt)
+                                                            - User SKA SKT <br>
                                                         @endif
                                                     </td>
                                                     <!--end::Role-->
@@ -752,6 +760,18 @@ a{{-- Begin::Extend Header --}}
                             <label class="form-check form-check-sm form-check-custom form-check-solid me-6">
                                 <input class="form-check-input" type="checkbox" value="" id="admin-kontrak" name="admin-kontrak" />
                                 <span class="form-check-label me-8 required"><b>CCM</b></span>
+                            </label>
+                            <!--end::Options-->
+                            <!--begin::Options-->
+                            <label class="form-check form-check-sm form-check-custom form-check-solid me-6">
+                                <input class="form-check-input" type="checkbox" value="" id="mobile" name="mobile" />
+                                <span class="form-check-label me-8 required"><b>User Mobile</b></span>
+                            </label>
+                            <!--end::Options-->
+                            <!--begin::Options-->
+                            <label class="form-check form-check-sm form-check-custom form-check-solid me-6">
+                                <input class="form-check-input" type="checkbox" value="" id="ska-skt" name="ska-skt" />
+                                <span class="form-check-label me-8 required"><b>User SKA SKT</b></span>
                             </label>
                             <!--end::Options-->
                         </div>

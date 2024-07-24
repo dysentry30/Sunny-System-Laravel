@@ -128,7 +128,8 @@
                                 @endcanany
                                 <!--end::Button-->
 
-                                <!--begin::Button-->    
+                                <!--begin::Button-->
+                                @canany(['super-admin', 'approver-crm', 'user-crm'])
                                 @if ($proyek->UnitKerja?->dop != "EA")
                                     @if (($proyek->stage == 8 && $proyek->is_need_approval_terkontrak && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek?->is_revisi))
                                         <button type="button" class="btn btn-sm btn-success ms-2" onclick="requestApprovalTerkontrak('{{ $proyek->kode_proyek }}')">Ajukan Approval</button>
@@ -186,7 +187,8 @@
                                             <input type="submit" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-secondary ms-2" id="proyek-rekomendasi" disabled >
                                         </div> --}}
                                     @endif
-                                @endif
+                                @endif                                    
+                                @endcanany
                                 <!--end::Button-->
 
                                 <!--begin::Button-->

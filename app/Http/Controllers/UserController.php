@@ -349,13 +349,17 @@ class UserController extends Controller
         $is_user_sales = $request->has("user-sales") ?? false;
         $is_user_csi = $request->has("user-csi") ?? false;
         $is_team_proyek = $request->has("team-proyek") ?? false;
+        $is_user_mobile = $request->has("mobile") ?? false;
+        $is_user_ska_skt = $request->has("ska-skt") ?? false;
 
-        if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_user_csi == false && $is_team_proyek == false) {
+        if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_user_csi == false && $is_team_proyek == false && $is_user_mobile == false && $is_user_ska_skt == false) {
             $rules["administrator"] = "accepted";
             $rules["admin-kontrak"] = "accepted";
             $rules["user-sales"] = "accepted";
             $rules["user-csi"] = "accepted";
             $rules["team-proyek"] = "accepted";
+            $rules["mobile"] = "accepted";
+            $rules["ska-skt"] = "accepted";
 
             $validation = Validator::make($data, $rules, $messages);
             if ($validation->fails()) {
@@ -377,6 +381,8 @@ class UserController extends Controller
         $user->check_user_sales = $is_user_sales;
         $user->check_user_csi = $is_user_csi;
         $user->check_team_proyek = $is_team_proyek;
+        $user->check_user_mobile = $is_user_mobile;
+        $user->check_user_ska_skt = $is_user_ska_skt;
         $user->password = Hash::make("password");
 
         if ($user->save()) {
@@ -425,6 +431,8 @@ class UserController extends Controller
         $is_user_sales = $request->has("user-sales") ?? false;
         $is_user_csi = $request->has("user-csi") ?? false;
         $is_team_proyek = $request->has("team-proyek") ?? false;
+        $is_user_mobile = $request->has("mobile") ?? false;
+        $is_user_ska_skt = $request->has("ska-skt") ?? false;
         $role_admin = $request->has("role_admin") ?? false;
         $role_user = $request->has("role_user") ?? false;
         $role_approver = $request->has("role_approver") ?? false;
@@ -444,12 +452,14 @@ class UserController extends Controller
         //     // return redirect()->back();
         // }
 
-        if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_user_csi == false && $is_team_proyek == false && $role_admin == false && $role_user == false && $role_approver == false && $role_risk == false && $role_unlock == false) {
+        if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_user_csi == false && $is_team_proyek == false && $role_admin == false && $role_user == false && $role_approver == false && $role_risk == false && $role_unlock == false && $is_user_mobile == false && $is_user_ska_skt == false) {
             $rules["administrator"] = "accepted";
             $rules["admin-kontrak"] = "accepted";
             $rules["user-sales"] = "accepted";
             $rules["user-csi"] = "accepted";
             $rules["team-proyek"] = "accepted";
+            $rules["mobile"] = "accepted";
+            $rules["ska-skt"] = "accepted";
 
             $rules["role_admin"] = "accepted";
             $rules["role_user"] = "accepted";
@@ -513,6 +523,8 @@ class UserController extends Controller
         $user->check_user_sales = $is_user_sales;
         $user->check_user_csi = $is_user_csi;
         $user->check_team_proyek = $is_team_proyek;
+        $user->check_user_mobile = $is_user_mobile;
+        $user->check_user_ska_skt = $is_user_ska_skt;
 
         $user->role_admin = $role_admin;
         $user->role_user = $role_user;

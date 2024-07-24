@@ -322,6 +322,30 @@
                                                                         </label>
                                                                     </div>
                                                                     <!-- end:: Form Input Team Proyek -->
+
+                                                                    <!-- begin:: Form Input Team Proyek -->
+                                                                    <div class="form-check me-12">
+                                                                        <input class="form-check-input" type="checkbox"
+                                                                            value=""
+                                                                            {{ $user->check_user_mobile ? 'checked' : '' }}
+                                                                            name="mobile" id="mobile">
+                                                                        <label class="form-check-label" for="mobile">
+                                                                            Mobile
+                                                                        </label>
+                                                                    </div>
+                                                                    <!-- end:: Form Input Team Proyek -->
+                                                                    
+                                                                    <!-- begin:: Form Input Team Proyek -->
+                                                                    <div class="form-check me-12">
+                                                                        <input class="form-check-input" type="checkbox"
+                                                                            value=""
+                                                                            {{ $user->check_user_ska_skt ? 'checked' : '' }}
+                                                                            name="ska-skt" id="ska-skt">
+                                                                        <label class="form-check-label" for="ska-skt">
+                                                                            SKA SKT
+                                                                        </label>
+                                                                    </div>
+                                                                    <!-- end:: Form Input Team Proyek -->
                                                                 @endif
 
                                                                 <!-- end:: Form Input Group -->

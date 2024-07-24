@@ -133,7 +133,7 @@
                             </div>
                         @endif --}}
 
-                        @canany(['super-admin', 'crm', 'admin-csi', 'approver-ccm'])
+                        @canany(['super-admin', 'crm', 'admin-csi', 'approver-ccm', 'ska-skt'])
                             <div class="menu-item">
                                 <a class="menu-link " href="/proyek"
                                     style="color:white; padding-left:20px; {{ Request::Segment(1) == 'proyek' ? 'background-color:#008CB4' : '' }}">
@@ -1756,7 +1756,7 @@
                             </div>
                         @endif --}}
 
-                        @canany(['super-admin', 'admin-crm', 'user-crm'])
+                        @canany(['super-admin', 'admin-crm', 'user-crm', 'ska-skt'])
                             <!--begin::Menu Colapse-->
                             <div class="menu-item">
                                 <a class="menu-link " href="/ska-skt" style="color:white; padding-left:20px; {{ Request::Path() == 'ska-skt' ? 'background-color:#008CB4' : '' }}">
