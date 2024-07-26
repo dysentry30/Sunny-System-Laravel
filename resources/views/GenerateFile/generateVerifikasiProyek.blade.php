@@ -43,24 +43,24 @@
     @endphp
     <table style="width: 100%;">
         <tr style="margin: 0; padding:0">
-            <td style="width: 8%;">
+            <td style="width: 18%;">
                 <h4 style="margin: 0; padding:0">Nama Proyek</h4>
             </td>
             <td style="width: 2%">
                 <h4 style="margin: 0; padding:0">:</h4>
             </td>
-            <td style="width: 50%">
+            <td style="width: 80%">
                 <h4 style="margin: 0; padding:0">{{ $proyek->nama_proyek }}</h4>
             </td>
         </tr>
         <tr style="margin: 0; padding:0">
-            <td style="width: 8%">
+            <td style="width: 18%">
                 <h4 style="margin: 0; padding:0">Nilai Pagu/HPS</h4>
             </td>
             <td style="width: 2%">
                 <h4 style="margin: 0; padding:0">:</h4>
             </td>
-            <td style="width: 50%">
+            <td style="width: 80%">
                 <h4 style="margin: 0; padding:0">Rp.{{ number_format((int) str_replace('.', '', $proyek->hps_pagu), 0, '.', '.')     }}</h4>
             </td>
         </tr>
@@ -132,7 +132,7 @@
                     style="font-size: 0.8rem; margin-top: 0px;"><i>Pre Financing</i></label>
                 <br>
                 <label class="form-check-label" for="inlineCheckbox1"
-                    style="font-size: 0.8rem; margin-top: 0px;"><i>Others : _____________________________</i></label>
+                    style="font-size: 0.8rem; margin-top: 0px;"><i>Others : _________________________</i></label>
             </td>
         </tr>
     </table>
@@ -162,10 +162,12 @@
         </tr>
     </table>
     <br>
-    <p style="font-size: 0.8rem; margin-top: 0px;; margin:0px; padding:0px;">Tanggal, {{ \Carbon\Carbon::now()->translatedFormat("d F Y") }}</p>
-    <table style="width:100%; margin:0px; padding-top:0px;">
+    <p style="font-size: 0.8rem; margin-top: 0px; margin:0px; padding:0px;">Tanggal, {{ \Carbon\Carbon::now()->translatedFormat("d F Y") }}</p>
+    <br>
+    <br>
+    <table style="width:100%; margin:0px; padding:0px;">
         <tr>
-            <td style="text-align:center">
+            <td style="text-align:center; width: 33%">
                 <div class="" style="margin:0px; padding-top:5px;">
                     <b>
                         <h5 style="margin:0px; padding-top:0px;">Dibuat Oleh,</h5>
@@ -175,24 +177,24 @@
                             @if (isset($pathQRPengajuan))
                                 @foreach ($pathQRPengajuan as $ttdPengajuan)
                                     <td style="width: 100%; text-align:center">
-                                        <img src="{{ public_path('template-ttd/verif-proyek-nota-2/') . $ttdPengajuan["fileName"] }}" width="25%">
+                                        <img src="{{ public_path('template-ttd/verif-proyek-nota-2/') . $ttdPengajuan["fileName"] }}" style="scale: 5">
                                         <br>
-                                        <b><h5 style="font-size:0.8rem; margin:0px; padding-top:10px">{{ $ttdPengajuan["user"] }}</h5></b>
-                                        <b><h5 style="font-size:0.8rem; margin:0px; padding-top:0px">({{ $ttdPengajuan["jabatan"] }})</h5></b>
+                                        <b><h5 style="font-size:0.6rem; margin:0px; padding-top:10px">{{ $ttdPengajuan["user"] }}</h5></b>
+                                        <b><h5 style="font-size:0.4rem; margin:0px; padding-top:0px">({{ $ttdPengajuan["jabatan"] }})</h5></b>
                                     </td>
                                 @endforeach
                             @else
                                 <td style="width: 100%; text-align:center">
                                     <br><br><br>
-                                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">(....................................)</p>
-                                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">SubPJFs Key Account</p>
+                                    <p style="font-size:0.6rem; margin:0px; padding-top:0px;">(....................................)</p>
+                                    <p style="font-size:0.4rem; margin:0px; padding-top:0px;">SubPJFs Key Account</p>
                                 </td>
                             @endif
                         </tr>
                     </table>
                 </div>
             </td>
-            <td style="text-align:center">
+            <td style="text-align:center; width: 34%">
                 <div class="" style="margin:0px; padding-top:5px;">
                     <b>
                         <h5 style="margin:0px; padding-top:0px;">Direkomendasikan Oleh,</h5>
@@ -202,10 +204,10 @@
                             @if (isset($pathQRRekomendasi))
                                 @foreach ($pathQRRekomendasi as $ttdRekomendasi)
                                     <td style="width:100%; text-align:center">
-                                        <img src="{{ public_path('template-ttd/verif-proyek-nota-2/') . $ttdRekomendasi["fileName"] }}" width="25%">
+                                        <img src="{{ public_path('template-ttd/verif-proyek-nota-2/') . $ttdRekomendasi["fileName"] }}" style="scale: 5">
                                         <br>
-                                        <b><h5 style="font-size:0.8rem; margin:0px; padding-top:10px">{{ $ttdRekomendasi["user"] }}</h5></b>
-                                        <b><h5 style="font-size:0.8rem; margin:0px; padding-top:0px">({{ $ttdRekomendasi["jabatan"] }})</h5></b>
+                                        <b><h5 style="font-size:0.6rem; margin:0px; padding-top:10px">{{ $ttdRekomendasi["user"] }}</h5></b>
+                                        <b><h5 style="font-size:0.4rem; margin:0px; padding-top:0px">({{ $ttdRekomendasi["jabatan"] }})</h5></b>
                                     </td>    
                                 @endforeach
                             @else
@@ -226,7 +228,7 @@
                     </table>
                 </div>
             </td>
-            <td style="text-align:center">
+            <td style="text-align:center; width: 33%">
                 <div class="" style="margin:0px; padding-top:5px;">
                     <b>
                         <h5 style="margin:0px; padding-top:0px;">Disetujui Oleh,</h5>
@@ -236,10 +238,10 @@
                             @if (isset($pathQRPersetujuan))
                                 @foreach ($pathQRPersetujuan as $ttdPersetujuan)
                                     <td style="width:100%; text-align:center">
-                                        <img src="{{ public_path('template-ttd/verif-proyek-nota-2/') . $ttdPersetujuan["fileName"] }}" width="25%">
+                                        <img src="{{ public_path('template-ttd/verif-proyek-nota-2/') . $ttdPersetujuan["fileName"] }}" style="scale: 5">
                                         <br>
-                                        <b><h5 style="font-size:0.8rem; margin:0px; padding-top:10px">{{ $ttdPersetujuan["user"] }}</h5></b>
-                                        <b><h5 style="font-size:0.8rem; margin:0px; padding-top:0px">({{ $ttdPersetujuan["jabatan"] }})</h5></b>
+                                        <b><h5 style="font-size:0.6rem; margin:0px; padding-top:10px">{{ $ttdPersetujuan["user"] }}</h5></b>
+                                        <b><h5 style="font-size:0.4rem; margin:0px; padding-top:0px">({{ $ttdPersetujuan["jabatan"] }})</h5></b>
                                     </td>
                                 @endforeach
                             @else

@@ -371,56 +371,56 @@
             <td style="width: 30%"></td>
         </tr>
     </table>
-    <table style="width: 100%">
+    <table style="width: 100%; margin: 0; padding: 0">
         @php
             $collectAlasanKSO = collect(json_decode($proyek->alasan_kso));
             $countAlasanKSO = $collectAlasanKSO->count();
         @endphp
         <tr>
-            <td style="width: 2%"></td>
-            <td style="width: 30%">
-                <table style="width: 100%">
+            <td style="width: 2%;  margin: 0; padding: 0"></td>
+            <td style="width: 30%;  margin: 0; padding: 0">
+                <table style="width: 100%; margin: 0; padding: 0">
                     <tr>
-                        <td style="width: 2%"><input type="checkbox" id="opsi1" {{ $countAlasanKSO > 0 && $collectAlasanKSO->where('index', 1)->count() > 0 ? 'checked' : '' }}></td>
-                        <td style="width: 20%"><p style="margin: 0; padding:0; font-size:0.5rem">Belum memiliki Kemampuan Dasar</p></td>
+                        <td style="width: 2%;  margin: 0; padding: 0"><input type="checkbox" id="opsi1" {{ $countAlasanKSO > 0 && $collectAlasanKSO->where('index', 1)->count() > 0 ? 'checked' : '' }}></td>
+                        <td style="width: 20%;  margin: 0; padding: 0"><p style="margin: 0; padding:0; font-size:0.5rem">Belum memiliki Kemampuan Dasar</p></td>
                     </tr>
                 </table>
             </td>
-            <td style="width: 30%">
-                <table style="width: 100%">
+            <td style="width: 30%;  margin: 0; padding: 0">
+                <table style="width: 100%; margin: 0; padding: 0">
                     <tr>
-                        <td style="width: 2%"><input type="checkbox" id="opsi2" {{ $countAlasanKSO > 0 && $collectAlasanKSO->where('index', 2)->count() > 0 ? 'checked' : '' }}></td>
-                        <td style="width: 20%"><p style="margin: 0; padding:0; font-size:0.5rem">Tidak memiliki personil yang dipersyaratkan</p></td>
+                        <td style="width: 2%;  margin: 0; padding: 0"><input type="checkbox" id="opsi2" {{ $countAlasanKSO > 0 && $collectAlasanKSO->where('index', 2)->count() > 0 ? 'checked' : '' }}></td>
+                        <td style="width: 20%;  margin: 0; padding: 0"><p style="margin: 0; padding:0; font-size:0.5rem">Tidak memiliki personil yang dipersyaratkan</p></td>
                     </tr>
                 </table>
             </td>
-            <td style="width: 30%">
-                <table style="width: 100%">
+            <td style="width: 30%;  margin: 0; padding: 0">
+                <table style="width: 100%; margin: 0; padding: 0">
                     <tr>
-                        <td style="width: 2%"><input type="checkbox" id="opsi3" {{ $countAlasanKSO > 0 && $collectAlasanKSO->where('index', 3)->count() > 0 ? 'checked' : '' }}></td>
-                        <td style="width: 20%"><p style="margin: 0; padding:0; font-size:0.5rem">Tidak memiliki peralatan yang dipersyaratkan</p></td>
+                        <td style="width: 2%;  margin: 0; padding: 0"><input type="checkbox" id="opsi3" {{ $countAlasanKSO > 0 && $collectAlasanKSO->where('index', 3)->count() > 0 ? 'checked' : '' }}></td>
+                        <td style="width: 20%;  margin: 0; padding: 0"><p style="margin: 0; padding:0; font-size:0.5rem">Tidak memiliki peralatan yang dipersyaratkan</p></td>
                     </tr>
                 </table>
             </td>
         </tr>
     </table>
-    <table style="width: 100%">
+    <table style="width: 100%; margin: 0; padding: 0">
         <tr>
-            <td style="width: 2%"></td>
-            <td style="width: 25%">
-                <table style="width: 100%">
+            <td style="width: 2%;  margin: 0; padding: 0"></td>
+            <td style="width: 25%;  margin: 0; padding: 0">
+                <table style="width: 100%; margin: 0; padding: 0">
                     <tr>
-                        <td style="width: 2%"><input type="checkbox" id="opsi4" {{ $countAlasanKSO > 0 && $collectAlasanKSO->where('index', 4)->count() > 0 ? 'checked' : '' }}></td>
-                        <td style="width: 60%"><p style="margin: 0; padding:0; font-size:0.5rem">Meningkatkan peluang memenangkan lelang</p></td>
+                        <td style="width: 2%;  margin: 0; padding: 0"><input type="checkbox" id="opsi4" {{ $countAlasanKSO > 0 && $collectAlasanKSO->where('index', 4)->count() > 0 ? 'checked' : '' }}></td>
+                        <td style="width: 60%;  margin: 0; padding: 0"><p style="margin: 0; padding:0; font-size:0.5rem">Meningkatkan peluang memenangkan lelang</p></td>
                     </tr>
                 </table>
             </td>
-            <td style="width: 45%">
-                <table style="width: 100%">
+            <td style="width: 45%;  margin: 0; padding: 0">
+                <table style="width: 100%; margin: 0; padding: 0">
                     <tr>
-                        <td style="width: 2%"><input type="checkbox" id="opsi5" {{ $countAlasanKSO > 0 && $collectAlasanKSO->where('index', 5)->count() > 0 ? 'checked' : '' }}></td>
-                        <td style="width: 15%"><p style="margin: 0; padding:0; font-size:0.5rem">Alasan Lainnya, </p></td>
-                        <td style="width: 80%"><textarea id="catatan" cols="30" rows="10" style="border: 0px solid black; font-size:0.5rem; font-family: Arial, Helvetica, sans-serif; margin:0; padding: 0">{!! $countAlasanKSO > 0 && $collectAlasanKSO->where('index', 5)->count() > 0 ? $collectAlasanKSO->where('index', 5)->first()->keterangan : '' !!}</textarea></td>
+                        <td style="width: 2%;  margin: 0; padding: 0"><input type="checkbox" id="opsi5" {{ $countAlasanKSO > 0 && $collectAlasanKSO->where('index', 5)->count() > 0 ? 'checked' : '' }}></td>
+                        <td style="width: 15%;  margin: 0; padding: 0"><p style="margin: 0; padding:0; font-size:0.5rem">Alasan Lainnya, </p></td>
+                        <td style="width: 80%;  margin: 0; padding: 0"><textarea id="catatan" cols="30" rows="10" style="border: 0px solid black; font-size:0.5rem; font-family: Arial, Helvetica, sans-serif; margin:0; padding: 0">{!! $countAlasanKSO > 0 && $collectAlasanKSO->where('index', 5)->count() > 0 ? $collectAlasanKSO->where('index', 5)->first()->keterangan : '' !!}</textarea></td>
                     </tr>
                 </table>
             </td>
@@ -492,10 +492,9 @@
     <br>       
     @endforeach
     @endif
-    {{-- @if ($proyek->PorsiJO->count() > 1) --}}
+    @if ($proyek->PorsiJO?->where("is_greenlane", "!=", true)->count() > 1)
     <div class="" style="page-break-before: always;">        
-    {{-- @endif --}}
-        <br>
+    @endif
         <p style="font-size: 0.7rem; margin:5px 0px 5px 0px; padding:0"><b>D. PERSETUJUAN PENGGUNAAN FASILITAS NON CASH LOAN (NCL)</b></p>
         <table style="width: 80%">
             <tr>
@@ -528,7 +527,7 @@
                                 @if (isset($pathQRPengajuan))
                                     @foreach ($pathQRPengajuan as $ttdPengajuan)
                                         <td style="width: 100%; text-align:center">
-                                            <img src="{{ public_path('template-ttd/verif-internal-persetujuan-partner/') . $ttdPengajuan["fileName"] }}" width="35%">
+                                            <img src="{{ public_path('template-ttd/verif-internal-persetujuan-partner/') . $ttdPengajuan["fileName"] }}" style="scale: 5">
                                             <br>
                                             <b><p style="font-size:0.5rem; margin:0px; padding-top:10px">{{ $ttdPengajuan["user"] }}</p></b>
                                             <b><p style="font-size:0.4rem; margin:0px; padding-top:0px">({{ $ttdPengajuan["jabatan"] }})</p></b>
@@ -556,7 +555,7 @@
                                 @if (isset($pathQRRekomendasi))
                                     @foreach ($pathQRRekomendasi as $ttdRekomendasi)
                                         <td style="width:100%; text-align:center">
-                                            <img src="{{ public_path('template-ttd/verif-internal-persetujuan-partner/') . $ttdRekomendasi["fileName"] }}" width="35%">
+                                            <img src="{{ public_path('template-ttd/verif-internal-persetujuan-partner/') . $ttdRekomendasi["fileName"] }}" style="scale: 5">
                                             <br>
                                             <b><p style="font-size:0.5rem; margin:0px; padding-top:10px">{{ $ttdRekomendasi["user"] }}</p></b>
                                             <b><p style="font-size:0.4rem; margin:0px; padding-top:0px">({{ $ttdRekomendasi["jabatan"] }})</p></b>
@@ -584,7 +583,7 @@
                                 @if (isset($pathQRPersetujuan))
                                     @foreach ($pathQRPersetujuan as $ttdPersetujuan)
                                         <td style="width:100%; text-align:center">
-                                            <img src="{{ public_path('template-ttd/verif-internal-persetujuan-partner/') . $ttdPersetujuan["fileName"] }}" width="35%">
+                                            <img src="{{ public_path('template-ttd/verif-internal-persetujuan-partner/') . $ttdPersetujuan["fileName"] }}" style="scale: 5">
                                             <br>
                                             <b><p style="font-size:0.5rem; margin:0px; padding-top:10px">{{ $ttdPersetujuan["user"] }}</p></b>
                                             <b><p style="font-size:0.4rem; margin:0px; padding-top:0px">({{ $ttdPersetujuan["jabatan"] }})</p></b>
@@ -602,9 +601,9 @@
                 </td>
             </tr>
         </table>
-    {{-- @if ($proyek->PorsiJO->count() > 1) --}}
+    @if ($proyek->PorsiJO?->where("is_greenlane", "!=", true)->count() > 1)
     </div>
-    {{-- @endif --}}
+    @endif
 
     
     {{-- <footer>*Dokumen ini dibuat oleh sistem CRM</footer> --}}

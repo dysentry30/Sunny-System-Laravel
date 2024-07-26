@@ -13942,7 +13942,7 @@
         formData.append("divisi_id", "{{ $proyek->UnitKerja->Divisi->id_divisi }}");
         formData.append("departemen_code", "{{ $proyek->departemen_proyek }}");
         
-        const getMatriks = await fetch(`/get-matriks-verifikasi/${kategori}`, {
+        const getMatriks = await fetch(`/proyek/get-matriks-verifikasi/${kategori}`, {
             method: "POST",
             header: {
                 "content-type": "application/json",

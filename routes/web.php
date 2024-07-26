@@ -8385,7 +8385,7 @@ Route::post('copy-forecast', function (Request $request) {
     }
 });
 
-Route::post('get-matriks-verifikasi/{kategori}', function (Request $request, $kategori) {
+Route::post('/proyek/get-matriks-verifikasi/{kategori}', function (Request $request, $kategori) {
     $data = $request->all();
 
     switch ($kategori) {

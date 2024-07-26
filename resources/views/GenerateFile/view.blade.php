@@ -138,7 +138,7 @@
     <br>
     <table style="width:100%; margin:0px; padding-top:0px;">
         <tr>
-            <td style="text-align:center">
+            <td style="text-align:center; vertical-align:text-top">
                 <div class="" style="margin:0px; padding-top:5px;">
                     <b><h5 style="margin:0px; padding-top:0px;">Dibuat Oleh,</h5></b>
                     <table style="width: 100%">
@@ -146,7 +146,7 @@
                             @if (isset($pathQRPengajuan))
                                 @foreach ($pathQRPengajuan as $ttdPengajuan)
                                 <td style="width: 100%; text-align:center">
-                                    <br><br>
+                                    <br>
                                     <img src="{{ public_path('template-ttd/verif-internal-partner/') . $ttdPengajuan["fileName"] }}">
                                     <br>
                                     <b><h5 style="font-size:0.8rem; margin:0px; padding-top:10px">{{ $ttdPengajuan["user"] }}</h5></b>
@@ -161,10 +161,9 @@
                             @endif
                         </tr>
                     </table>
-                    {{-- <p style="font-size:0.8rem; margin:0px; padding-top:0px;">SubPJFs Key Account</p> --}}
                 </div>
             </td>
-            <td style="text-align:center">
+            <td style="text-align:center; vertical-align:text-top">
                 <div class="" style="margin:0px; padding-top:5px;">
                     <b><h5 style="margin:0px; padding-top:0px;">Direkomendasikan Oleh,</h5></b>
                     <table style="width:100%">
@@ -172,7 +171,7 @@
                             @if (isset($pathQRRekomendasi))
                                 @foreach ($pathQRRekomendasi as $ttdRekomendasi)
                                     <td style="width:100%; text-align:center">
-                                        <br><br>
+                                        <br>
                                         <img src="{{ public_path('template-ttd/verif-internal-partner/') . $ttdRekomendasi["fileName"] }}">
                                         <br>
                                         <b><h5 style="font-size:0.8rem; margin:0px; padding-top:10px">{{ $ttdRekomendasi["user"] }}</h5></b>
@@ -192,7 +191,7 @@
                     </table>
                 </div>
             </td>
-            <td style="text-align:center">
+            <td style="text-align:center; vertical-align:text-top">
                 <div class="" style="margin:0px; padding-top:5px;">
                     <b><h5 style="margin:0px; padding-top:0px;">Disetujui Oleh,</h5></b>
                     <table style="width:100%">
@@ -200,7 +199,7 @@
                             @if (isset($pathQRPersetujuan))
                                 @foreach ($pathQRPersetujuan as $ttdPersetujuan)
                                     <td style="width:100%; text-align:center">
-                                        <br><br>
+                                        <br>
                                         <img src="{{ public_path('template-ttd/verif-internal-partner/') . $ttdPersetujuan["fileName"] }}">
                                         <br>
                                         <b><h5 style="font-size:0.8rem; margin:0px; padding-top:10px">{{ $ttdPersetujuan["user"] }}</h5></b>
