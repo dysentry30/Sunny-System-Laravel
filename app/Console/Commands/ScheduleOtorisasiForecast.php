@@ -18,7 +18,7 @@ class ScheduleOtorisasiForecast extends Command
      *
      * @var string
      */
-    protected $signature = 'schedule:forecasts-anak';
+    protected $signature = 'schedule:forecasts';
 
     /**
      * The console command description.

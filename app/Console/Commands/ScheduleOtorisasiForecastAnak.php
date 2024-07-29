@@ -18,14 +18,14 @@ class ScheduleOtorisasiForecastAnak extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'schedule:forecasts';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Scheduller for Automatically Otorisasi Forecasts every first date of month';
 
     /**
      * Execute the console command.
