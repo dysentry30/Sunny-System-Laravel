@@ -348,7 +348,7 @@ class MobileController extends Controller
             $filterDepartemen = $request->get("departemen");
             $filterUnitKerja = $request->get("unitKerja");
             $tahunSelect = $request->get("tahun") ?? date("Y");
-            $proyeksSelected =  Proyek::select(["nama_proyek", "kode_proyek", "dop", "unit_kerja", "bulan_awal", "bulan_ri_perolehan", "bulan_pelaksanaan", "nilai_kontrak_keseluruhan", "nilai_rkap", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tipe_proyek", "tahun_perolehan", "jenis_proyek", "is_cancel"])
+            $proyeksSelected =  Proyek::select(["nama_proyek", "kode_proyek", "dop", "unit_kerja", "bulan_awal", "is_tidak_lulus_pq", "bulan_ri_perolehan", "bulan_pelaksanaan", "nilai_kontrak_keseluruhan", "nilai_rkap", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tipe_proyek", "tahun_perolehan", "jenis_proyek", "is_cancel"])
             ->where('tahun_perolehan', $tahunSelect)
                 ->where('jenis_proyek', '!=', 'I')
                 ->whereNotIn('stage', [1, 2])
@@ -397,6 +397,10 @@ class MobileController extends Controller
                         $jumlah = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->count();
                         $total = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->sum('nilai_perolehan');
                         break;
+                    case 'Tidak Lolos PQ':
+                        $jumlah = $proyek->where('is_tidak_lulus_pq', true)->count();
+                        $total = $proyek->where('is_tidak_lulus_pq', true)->sum('hps_pagu');
+                        break;
 
                     default:
                         $jumlah = 0;
@@ -413,7 +417,7 @@ class MobileController extends Controller
             $totalProyekCancel = $proyeksSelected->where("is_cancel", true)->count();
 
             $proyekIsTidakLulusPQ = new stdClass();
-            $proyekIsTidakLulusPQ->category = "Tidak Lulus PQ";
+            $proyekIsTidakLulusPQ->category = "Tidak Lolos PQ";
             $proyekIsTidakLulusPQ->jumlah = $totalProyekTidakLulusPQ;
             $proyekIsTidakLulusPQ->total_nilai = $proyeksSelected->where("stage", ">=", 3)->where("is_tidak_lulus_pq", true)->sum("hps_pagu");
 
@@ -446,7 +450,7 @@ class MobileController extends Controller
             $filterUnitKerja = $request->get('unitKerja');
             $filterTahun = $request->get('tahun') ?? date("Y");
 
-            $proyeks =  Proyek::select(["nama_proyek", "kode_proyek", "dop", "unit_kerja", "bulan_awal", "bulan_ri_perolehan", "bulan_pelaksanaan", "nilai_kontrak_keseluruhan", "nilai_rkap", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tipe_proyek", "tahun_perolehan", "jenis_proyek", "is_cancel"])
+            $proyeks =  Proyek::select(["nama_proyek", "kode_proyek", "dop", "unit_kerja", "bulan_awal", "is_tidak_lulus_pq", "bulan_ri_perolehan", "bulan_pelaksanaan", "nilai_kontrak_keseluruhan", "nilai_rkap", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tipe_proyek", "tahun_perolehan", "jenis_proyek", "is_cancel"])
                 ->where('tahun_perolehan', $filterTahun)
                 ->where('jenis_proyek', '!=', 'I')
                 ->where('tipe_proyek', 'P')
@@ -461,7 +465,8 @@ class MobileController extends Controller
                 })
                 ->when(!empty($filterUnitKerja), function ($query) use ($filterUnitKerja) {
                     $query->where('unit_kerja', $filterUnitKerja);
-                })->get();
+                })
+                ->get();
 
             switch ($filterKategori) {
                 case 'Tender Diikuti':
@@ -484,6 +489,9 @@ class MobileController extends Controller
                     break;
                 case 'Terkontrak':
                     $proyeks = $proyeks->where('stage', 8)->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->sortBy('bulan_perolehan', SORT_NUMERIC)->values();
+                    break;
+                case 'Tidak Lolos PQ':
+                    $proyeks = $proyeks->where('is_tidak_lulus_pq', true)->sortBy('bulan_perolehan', SORT_NUMERIC)->values();
                     break;
 
                 default:
@@ -525,11 +533,13 @@ class MobileController extends Controller
             $filterDepartemen = $request->get("departemen");
             $filterUnitKerja = $request->get("unitKerja");
             $tahunSelect = $request->get("tahun") ?? date("Y");
-            $proyeksSelected =  Proyek::select(["nama_proyek", "kode_proyek", "dop", "unit_kerja", "bulan_awal", "bulan_ri_perolehan", "bulan_pelaksanaan", "nilai_kontrak_keseluruhan", "nilai_rkap", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tipe_proyek", "tahun_perolehan", "jenis_proyek", "is_cancel"])
+            $proyeksSelected =  Proyek::select(["nama_proyek", "kode_proyek", "dop", "unit_kerja", "bulan_awal", "is_tidak_lulus_pq", "bulan_ri_perolehan", "bulan_pelaksanaan", "nilai_kontrak_keseluruhan", "nilai_rkap", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tipe_proyek", "tahun_perolehan", "jenis_proyek", "is_cancel"])
             ->where('tahun_perolehan', $tahunSelect)
                 ->where('jenis_proyek', '!=', 'I')
                 ->whereIn('stage', [6, 7, 8])
                 ->where('tipe_proyek', 'P')
+            ->where('is_tidak_lulus_pq', false)
+                ->where('is_cancel', false)
             ->when(!empty($filterDepartemen), function ($query) use ($filterDepartemen) {
                 if ($filterDepartemen == "PUSAT") {
                     $query->where('dop', "!=", "EA");
@@ -553,36 +563,36 @@ class MobileController extends Controller
 
                 switch ($newClass->category) {
                     case 'Menang':
-                        $jumlah = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->count();
-                        $total = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->sum(function ($proyek) {
-                            if ($proyek->nilai_perolehan != 0) {
-                                return (int)$proyek->nilai_perolehan * ($proyek->porsi_jo / 100);
+                        $jumlah = $proyek->where("penawaran_tender", "!=", 0)->count();
+                        $total = $proyek->where("penawaran_tender", "!=", 0)->sum(function ($proyek) {
+                            if ($proyek->nilai_perolehan != 0 || $proyek->nilai_perolehan != "" || $proyek->nilai_perolehan != "0") {
+                                return (int)$proyek->nilai_perolehan;
                             } else {
                                 return 0;
                             }
                         });
-                        $proyekMenang++;
+                        $proyekMenang += $jumlah;
                         break;
                     case 'Kalah':
-                        $jumlah = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->count();
-                        $total = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->sum(function ($proyek) {
-                            if ($proyek->nilai_perolehan != 0) {
-                                return (int)$proyek->nilai_perolehan * ($proyek->porsi_jo / 100);
+                        $jumlah = $proyek->where("penawaran_tender", "!=", 0)->count();
+                        $total = $proyek->where("penawaran_tender", "!=", 0)->sum(function ($proyek) {
+                            if ($proyek->nilai_perolehan != 0 || $proyek->nilai_perolehan != "" || $proyek->nilai_perolehan != "0") {
+                                return (int)$proyek->nilai_perolehan;
                             } else {
                                 return 0;
                             }
                         });
                         break;
                     case 'Terkontrak':
-                        $jumlah = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->count();
-                        $total = $proyek->where('is_tidak_lulus_pq', false)->where('is_cancel', false)->sum(function ($proyek) {
-                            if ($proyek->nilai_perolehan != 0) {
-                                return (int)$proyek->nilai_perolehan * ($proyek->porsi_jo / 100);
+                        $jumlah = $proyek->where("penawaran_tender", "!=", 0)->count();
+                        $total = $proyek->where("penawaran_tender", "!=", 0)->sum(function ($proyek) {
+                            if ($proyek->nilai_perolehan != 0 || $proyek->nilai_perolehan != "" || $proyek->nilai_perolehan != "0") {
+                                return (int)$proyek->nilai_perolehan;
                             } else {
                                 return 0;
                             }
                         });
-                        $proyekTerkontrak++;
+                        $proyekTerkontrak += $jumlah;
                         break;
 
                     default:
@@ -598,7 +608,7 @@ class MobileController extends Controller
 
             $winRate = "0%";
             if ($proyeksSelected->count() > 0) {
-                $winRate = round(($proyekMenang + $proyekTerkontrak) / $proyeksSelected->count(), 2) . "%";
+                $winRate = round(($proyekMenang + $proyekTerkontrak) / $proyeksSelected->count(), 2) * 100 . "%";
             }
 
             $data = ['data' => $proyeks->toArray(), 'winRate' => $winRate];
@@ -788,9 +798,9 @@ class MobileController extends Controller
                         $proyek->jenis_proyek = $proyek->jenis_proyek == "J" ? "JO" : ($proyek->jenis_proyek == "I" ? "Internal" : ($proyek->jenis_proyek == "N" ? "External" : ""));
                         $proyek->nilai_ok = "Rp. " . number_format((int)$proyek->nilaiok_proyek, 0, '.', ',');
                         $proyek->nama_pelanggan = $proyek->proyekBerjalan->customer->name ?? "-";
-                        $proyek->porsi_jo = $proyek->porsi_jo . ' %';
+                        $proyek->porsi_jo = !str_contains($proyek->porsi_jo, '%') ? $proyek->porsi_jo . ' %' : $proyek->porsi_jo;
                         $proyek->hps_pagu = "Rp. " . number_format((int)$proyek->hps_pagu, 0, '.', ',');
-                        $proyek->uang_muka = !empty($proyek->uang_muka) ? $proyek->uang_muka . ' %' : '-';
+                        $proyek->uang_muka = !empty($proyek->uang_muka) && !str_contains($proyek->uang_muka, "%") ? $proyek->uang_muka . ' %' : (!empty($proyek->uang_muka) && str_contains($proyek->uang_muka, "%") ? $proyek->uang_muka : '-');
                         $proyek->tgl_event = $proyek->jadwal_pq;
                         $proyek->event = "Pemasukan Prakualifikasi";
                         return $proyek;
@@ -803,10 +813,10 @@ class MobileController extends Controller
                         $proyek->jenis_proyek = $proyek->jenis_proyek == "J" ? "JO" : ($proyek->jenis_proyek == "I" ? "Internal" : ($proyek->jenis_proyek == "N" ? "External" : ""));
                         $proyek->nilai_ok = "Rp. " . number_format((int)$proyek->nilaiok_proyek, 0, '.', ',');
                         $proyek->nama_pelanggan = $proyek->proyekBerjalan->customer->name ?? "-";
-                        $proyek->porsi_jo = $proyek->porsi_jo . ' %';
+                        $proyek->porsi_jo = !str_contains($proyek->porsi_jo, '%') ? $proyek->porsi_jo . ' %' : $proyek->porsi_jo;
                         $proyek->hps_pagu = "Rp. " . number_format((int)$proyek->hps_pagu, 0, '.', ',');
                         $proyek->nilai_penawaran_keseluruhan = "Rp. " . number_format((int)$proyek->penawaran_tender, 0, '.', ',');
-                        $proyek->uang_muka = !empty($proyek->uang_muka) ? $proyek->uang_muka . ' %' : '-';
+                        $proyek->uang_muka = !empty($proyek->uang_muka) && !str_contains($proyek->uang_muka, "%") ? $proyek->uang_muka . ' %' : (!empty($proyek->uang_muka) && str_contains($proyek->uang_muka, "%") ? $proyek->uang_muka : '-');
                         $proyek->tgl_event = $proyek->jadwal_pq;
                         $proyek->tgl_event = $proyek->jadwal_tender;
                         $proyek->event = "Pemasukan Tender";

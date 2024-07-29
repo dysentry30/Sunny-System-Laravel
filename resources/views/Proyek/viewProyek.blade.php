@@ -1047,7 +1047,7 @@
                                                     <!--end:::Tab item Perolehan-->
                                                 @endif
 
-                                                @if ($proyek->dop != "EA")
+                                                {{-- @if ($proyek->dop != "EA")
                                                     @if ($proyek->stage > 5 && is_null($proyek->is_need_approval_terkontrak))
                                                         <!--begin:::Tab item Menang-->
                                                         <li class="nav-item">
@@ -1068,7 +1068,7 @@
                                                         </li>
                                                         <!--end:::Tab item Terkontrak-->
                                                     @endif                                                    
-                                                @else
+                                                @else --}}
                                                     @if ($proyek->stage > 5)
                                                         <!--begin:::Tab item Menang-->
                                                         <li class="nav-item">
@@ -1079,7 +1079,7 @@
                                                         </li>
                                                         <!--end:::Tab item Menang-->
                                                     @endif                                                    
-                                                @endif
+                                                {{-- @endif --}}
 
                                                 @if ($proyek->stage > 7)
                                                     <!--begin:::Tab item Terkontrak-->

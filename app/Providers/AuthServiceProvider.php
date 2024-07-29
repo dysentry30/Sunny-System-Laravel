@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\User;
+use App\Models\Divisi;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -63,7 +64,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('risk', function (User $user) {
-            return $user->risk == true;
+            return $user->role_risk == true;
         });
 
         Gate::define('admin-crm', function (User $user) {
@@ -86,7 +87,8 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('risk-crm',
             function (User $user) {
-                return !empty($user->Pegawai?->kode_kantor_sap) && $user->Pegawai->kode_kantor_sap == 'A112';
+                $divisiRMD = Divisi::where("nama_kantor", "RISK MANAGEMENT DIVISION")->first();
+                return !empty($user->Pegawai?->kode_kantor_sap) && $user->Pegawai->kode_kantor_sap == $divisiRMD->kode_sap;
             }
         );
 

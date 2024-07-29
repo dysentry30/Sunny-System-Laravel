@@ -590,17 +590,20 @@ class DashboardController extends Controller
             if ($stg == 6) {
                 if ($proyek->tipe_proyek == "P" && $proyek->penawaran_tender != 0 && $proyek->jenis_proyek != "I" && !$proyek->is_tidak_lulus_pq) {
                     $jumlahMenang++;
-                    $nilaiMenang += (int)$proyek->nilai_perolehan != 0 ? (int)$proyek->nilai_perolehan * ($proyek->porsi_jo / 100) : 0;
+                    // $nilaiMenang += (int)$proyek->nilai_perolehan != 0 ? (int)$proyek->nilai_perolehan * ($proyek->porsi_jo / 100) : 0;
+                    $nilaiMenang += (int)$proyek->nilai_perolehan;
                 }
             } else if ($stg == 7) {
                 if ($proyek->tipe_proyek == "P" && $proyek->penawaran_tender != 0 && $proyek->jenis_proyek != "I" && !$proyek->is_tidak_lulus_pq) {
                     $jumlahKalah++;
-                    $nilaiKalah += (int)$proyek->nilai_perolehan != 0 ? (int)$proyek->nilai_perolehan * ($proyek->porsi_jo / 100) : 0;
+                    // $nilaiKalah += (int)$proyek->nilai_perolehan != 0 ? (int)$proyek->nilai_perolehan * ($proyek->porsi_jo / 100) : 0;
+                    $nilaiKalah += (int)$proyek->nilai_perolehan;
                 }
             } else if ($stg == 3 && $proyek->is_tidak_lulus_pq) {
                 if ($proyek->tipe_proyek == "P" && $proyek->penawaran_tender != 0 && $proyek->jenis_proyek != "I") {
                     $jumlahTidakLulusPQ++;
-                    $nilaiTidakLulusPQ += (int)$proyek->nilai_perolehan != 0 ? (int)$proyek->nilai_perolehan * ($proyek->porsi_jo / 100) : 0;
+                    // $nilaiTidakLulusPQ += (int)$proyek->nilai_perolehan != 0 ? (int)$proyek->nilai_perolehan * ($proyek->porsi_jo / 100) : 0;
+                    $nilaiTidakLulusPQ += (int)$proyek->hps_pagu;
                 }
             } else if ($stg == 8) {
                 if ($proyek->tipe_proyek == "P" && $proyek->jenis_proyek != "I" && !$proyek->is_tidak_lulus_pq) {
@@ -4863,7 +4866,7 @@ class DashboardController extends Controller
                     $sheet->setCellValue('D' . $row, $this->getUnitKerjaProyek($p->unit_kerja));
                     $sheet->setCellValue('E' . $row, "Non-Retail");
                     $sheet->setCellValue('F' . $row, $this->getFullMonth($p->bulan_perolehan));
-                    $sheet->setCellValue('G' . $row, $p->nilai_perolehan != 0 ? $p->nilai_perolehan * ($p->porsi_jo / 100) : 0);
+                    $sheet->setCellValue('G' . $row, $p->nilai_perolehan != 0 ? $p->nilai_perolehan : 0);
                     $row++;
                 } else if ($p->hps_pagu != 0) {
                     $sheet->setCellValue('A' . $row, $p->nama_proyek);
@@ -5227,7 +5230,7 @@ class DashboardController extends Controller
                     $sheet->setCellValue('D' . $row, $this->getUnitKerjaProyek($p->unit_kerja));
                     $sheet->setCellValue('E' . $row, "Non-Retail");
                     $sheet->setCellValue('F' . $row, $this->getFullMonth($p->bulan_perolehan));
-                    $sheet->setCellValue('G' . $row, $p->nilai_perolehan != 0 ? $p->nilai_perolehan * ($p->porsi_jo / 100) : 0);
+                    $sheet->setCellValue('G' . $row, $p->nilai_perolehan != 0 ? $p->nilai_perolehan : 0);
                     $row++;
                 } else if ($p->hps_pagu != 0) {
                     $sheet->setCellValue('A' . $row, $p->nama_proyek);
@@ -5335,13 +5338,13 @@ class DashboardController extends Controller
             $sheet->setCellValue('D' . $row, $this->getUnitKerjaProyek($p->unit_kerja));
             if ($tipe == "Menang Tender") {
                 $sheet->setCellValue('E' . $row, $p->bulan_ri_perolehan);
-                $sheet->setCellValue('F' . $row, $p->nilai_perolehan != 0 ? $p->nilai_perolehan * ($p->porsi_jo / 100) : 0);
+                $sheet->setCellValue('F' . $row, $p->nilai_perolehan != 0 ? $p->nilai_perolehan : 0);
             } elseif ($tipe == "Terkontrak Non Retail") {
                 $sheet->setCellValue('E' . $row, $p->bulan_ri_perolehan);
                 $sheet->setCellValue('F' . $row, $p->nilai_perolehan);
             } else {
                 $sheet->setCellValue('E' . $row, $p->bulan_pelaksanaan);
-                $sheet->setCellValue('F' . $row, $p->nilai_perolehan != 0 ? $p->nilai_perolehan * ($p->porsi_jo / 100) : 0);
+                $sheet->setCellValue('F' . $row, $p->nilai_perolehan != 0 ? $p->nilai_perolehan : 0);
             }
             $row++;
         });
@@ -5441,10 +5444,10 @@ class DashboardController extends Controller
                     $sheet->setCellValue('F' . $row, $p->nilai_perolehan);
                     break;
                 case "Menang Non Retail":
-                    $sheet->setCellValue('F' . $row, $p->nilai_perolehan != 0 ? $p->nilai_perolehan * ($p->porsi_jo / 100) : 0);
+                    $sheet->setCellValue('F' . $row, $p->nilai_perolehan != 0 ? $p->nilai_perolehan : 0);
                     break;
                 case "Kalah Non Retail":
-                    $sheet->setCellValue('F' . $row, $p->nilai_perolehan != 0 ? $p->nilai_perolehan * ($p->porsi_jo / 100) : 0);
+                    $sheet->setCellValue('F' . $row, $p->nilai_perolehan != 0 ? $p->nilai_perolehan : 0);
                     break;
                 case "Tidak Lolos PQ Non Retail":
                     $sheet->setCellValue('F' . $row, $p->hps_pagu);

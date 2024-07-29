@@ -1649,7 +1649,7 @@ class ProyekController extends Controller
                 $f->save();
             }
         }
-        $cancelProyek->nilai_perolehan = 0;
+        // $cancelProyek->nilai_perolehan = 0;
         // if(!empty($historyForecasts)) {
         //     foreach ($historyForecasts as $hf) {
         //         $hf->delete();
@@ -1921,8 +1921,8 @@ class ProyekController extends Controller
                     $request->stage = 6;
                 }
             } elseif (!empty($data["stage-kalah"]) && $data["stage-kalah"] == "Kalah") {
-                $proyekStage->nilai_perolehan = 0;
-                $proyekStage->save();
+                // $proyekStage->nilai_perolehan = 0;
+                // $proyekStage->save();
 
                 if (!empty($forecasts)) {
                     $forecasts->realisasi_forecast = 0;

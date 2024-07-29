@@ -4211,12 +4211,13 @@
                     for(let filter in filtering) {
                     filter = filtering[filter];
                     let stage = "";
-                    if(type == "Terkontrak Non Retail") {
-                        totalNilaiLainnya += Number(filter.nilai_perolehan);
-                    } else {
-                        // totalNilaiLainnya += Number(filter.nilai_perolehan);
-                        totalNilaiLainnya += filter.nilai_perolehan != 0 ? Number(filter.nilai_perolehan * (filter.porsi_jo / 100)) : 0;
-                    }
+                    // if(type == "Terkontrak Non Retail") {
+                    //     totalNilaiLainnya += Number(filter.nilai_perolehan);
+                    // } else {
+                    //     totalNilaiLainnya += Number(filter.nilai_perolehan);
+                    //     // totalNilaiLainnya += filter.nilai_perolehan != 0 ? Number(filter.nilai_perolehan * (filter.porsi_jo / 100)) : 0;
+                    // }
+                    totalNilaiLainnya += Number(filter.nilai_perolehan);
                     // if(filter.tipe == "Proyek Menang") {
                     // } else {
                     //     // totalNilaiLainnya += Number(filter.nilai_rkap);
@@ -4315,11 +4316,13 @@
                     }
                     let nilai = 0;
                     if(type == "Menang Non Retail") {
-                        nilai = filter.nilai_perolehan != 0 ? filter.nilai_perolehan * (filter.porsi_jo / 100) : 0;
+                        // nilai = filter.nilai_perolehan != 0 ? filter.nilai_perolehan * (filter.porsi_jo / 100) : 0;
+                        nilai = filter.nilai_perolehan != 0 ? filter.nilai_perolehan : 0;
                     } if(type == "Terkontrak Non Retail") {
                         nilai = filter.nilai_perolehan;
                     } else {
-                        nilai = filter.nilai_perolehan != 0 ? filter.nilai_perolehan * (filter.porsi_jo / 100) : 0;
+                        // nilai = filter.nilai_perolehan != 0 ? filter.nilai_perolehan * (filter.porsi_jo / 100) : 0;
+                        nilai = filter.nilai_perolehan != 0 ? filter.nilai_perolehan : 0;
                     }
                     const unitKerja = typeof filter.unit_kerja == "object" ? filter.unit_kerja.unit_kerja : filter.unit_kerja 
                     tbodyHTML += `<tr>
@@ -4602,7 +4605,8 @@
                     if (type.trim() == "Prakualifikasi" || type.trim() == "Tender Diikuti" || type.trim() == "Kalah" || type.trim() == "Cancel" || type == "Tidak Lolos PQ") {
                         totalNilaiLainnya += Number(filter.hps_pagu);
                     } else {
-                        totalNilaiLainnya += filter.nilai_perolehan != 0 ? Number(filter.nilai_perolehan * (filter.porsi_jo / 100)) : 0;
+                        // totalNilaiLainnya += filter.nilai_perolehan != 0 ? Number(filter.nilai_perolehan * (filter.porsi_jo / 100)) : 0;
+                        totalNilaiLainnya += Number(filter.nilai_perolehan);
                         // console.log(totalNilaiLainnya, filter, "oke");
                     }
                     switch (Number(filter.stage)) {

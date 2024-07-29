@@ -886,6 +886,77 @@ class UserController extends Controller
         }
     }
 
+    public function authenticateMobile(Request $request)
+    {
+        $data = $request->all();
+        $token = $data['token'];
+        $nip = null;
+
+        //Check Validate Token WZone
+        try {
+            $validateLoginWZone = Http::withoutVerifying()->withOptions(["verify" => false])->get(env('WZONE_URL') . '/app/sso/valid', [
+                'app_secret' => env('WZONE_APP_SECRET'),
+                'token' => $token
+            ]);
+            // dd($validateLoginWZone->body());
+            if ($validateLoginWZone->successful()) {
+                //Get Data User From WZone
+                $response = $validateLoginWZone->json();
+                // $user = $validateLoginWZone->collect($key = 'data')->first();
+
+                if ($response["responseStatus"] != 0) {
+                    // dd($response["responseData"]);
+                    setLogging("login", "User Login WZONE Mobile => ",  $response["responseData"]);
+                    $nip = $response["responseData"]["nip"];
+                } else {
+                    setLogging("login", "User Login WZONE Mobile FAIL => ",  $response["responseData"]);
+                }
+                // $nip = $user['NIP'];
+            } else {
+                return redirect()->back();
+            }
+
+            if (!empty($nip)) {
+                //Check Pegawai yg login dari WZone ada di CRM atau tidak
+                $checkUserInCRM = User::where('nip', $nip)->first();
+
+                if (!empty($checkUserInCRM) && $checkUserInCRM->is_active && ($checkUserInCRM->check_administrator || $checkUserInCRM->check_user_mobile)) {
+                    Auth::login($checkUserInCRM);
+                    $user = Auth::user();
+                    $token = $user->createToken($nip)->plainTextToken;
+
+                    return response()->json([
+                        'success' => true,
+                        'user' => $user,
+                        'token' => $token,
+                        'message' => "Success",
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'user' => null,
+                        'token' => null,
+                        'message' => "Forbidden",
+                    ], 403);
+                }
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'user' => null,
+                    'token' => null,
+                    'message' => "WZONE ERROR",
+                ], 400);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'user' => null,
+                'token' => null,
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
     public function logout(Request $request)
     {
         // auth()->user()->forceFill([
