@@ -11,21 +11,21 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
-class ScheduleOtorisasiForecast extends Command
+class ScheduleOtorisasiForecastAnak extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'schedule:forecasts-anak';
+    protected $signature = 'command:name';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Scheduller for Automatically Otorisasi Forecasts every first date of month';
+    protected $description = 'Command description';
 
     /**
      * Execute the console command.
@@ -45,7 +45,7 @@ class ScheduleOtorisasiForecast extends Command
 
             $historyGroup = $historyForecast->groupBy('unit_kerja');
 
-            $unitKerja = UnitKerja::where("id_profit_center", "!=", null)->where("dop", "!=", "EA")->where("divcode", "!=", 8)->get()->groupBy("divcode")->keys();
+            $unitKerja = UnitKerja::where("id_profit_center", "!=", null)->where("dop", "EA")->where("divcode", "!=", 8)->get()->groupBy("divcode")->keys();
 
             if ($historyGroup->isNotEmpty() && $historyGroup->keys()->count() != $unitKerja->count()) {
                 $historyUnitKerja = $historyGroup->keys();
