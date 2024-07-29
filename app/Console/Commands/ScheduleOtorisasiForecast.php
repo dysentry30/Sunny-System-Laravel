@@ -36,6 +36,9 @@ class ScheduleOtorisasiForecast extends Command
     {
         try {
             DB::beginTransaction();
+            $dateStart = Carbon::create()->translatedFormat("d F Y H:i:s");
+            sendNotifEmail("andias@wikamail.id", "RUNNING JOB OTORISASI FORECAST", "Otorisasi otomatis sedang dijalankan pada hari : $dateStart", true, false);
+            sendNotifEmail("fathur.rohman2353@gmail.com", "RUNNING JOB OTORISASI FORECAST", "Otorisasi otomatis sedang dijalankan pada hari : $dateStart", true, false);
             // if (date('d') == 1 && date("m") != 1) {
             $historyForecast = HistoryForecast::join("proyeks", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("periode_prognosa", date("m") - 1)->where("tahun", date("Y"))->get();
             $forecastReal = Forecast::join("proyeks", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("periode_prognosa", date("m") - 1)->where("tahun", date("Y"))->get();
@@ -195,12 +198,18 @@ class ScheduleOtorisasiForecast extends Command
             }
 
             DB::commit();
+            $dateFinish = Carbon::create()->translatedFormat("d F Y H:i:s");
+            sendNotifEmail("andias@wikamail.id", "FINISH RUNNING JOB OTORISASI FORECAST", "Otorisasi otomatis telah selesai dijalankan pada hari : $dateFinish", true, false);
+            sendNotifEmail("fathur.rohman2353@gmail.com", "FINISH RUNNING JOB OTORISASI FORECAST", "Otorisasi otomatis telah selesai dijalankan pada hari : $dateFinish", true, false);
             $this->info('The command was successful!');
             return Command::SUCCESS;
             // }
         } catch (\Exception $e) {
             DB::rollback();
             $this->error($e->getMessage());
+            $dateFinish = Carbon::create()->translatedFormat("d F Y H:i:s");
+            sendNotifEmail("andias@wikamail.id", "FAIL RUNNING JOB OTORISASI FORECAST", "Otorisasi otomatis gagal dijalankan pada hari : $dateFinish", true, false);
+            sendNotifEmail("fathur.rohman2353@gmail.com", "FAIL RUNNING JOB OTORISASI FORECAST", "Otorisasi otomatis gagal dijalankan pada hari : $dateFinish", true, false);
             setLogging("Scheduller/ErrorOtorisasiCRM", "[Failed Otorisasi Bulan " . Carbon::now() . "]", ["message" => $e->getMessage()]);
             return Command::FAILURE;
         }
