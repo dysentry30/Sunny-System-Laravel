@@ -39,7 +39,7 @@ class ScheduleOtorisasiContract extends Command
         try {
             DB::beginTransaction();
 
-            $dateStart = Carbon::create()->translatedFormat("d F Y H:i:s");
+            $dateStart = Carbon::now()->translatedFormat("d F Y H:i:s");
             sendNotifEmail("andias@wikamail.id", "RUNNING JOB OTORISASI CONTRACT", "Otorisasi otomatis sedang dijalankan pada hari : $dateStart", true, false);
             sendNotifEmail("fathur.rohman2353@gmail.com", "RUNNING JOB OTORISASI CONTRACT", "Otorisasi otomatis sedang dijalankan pada hari : $dateStart", true, false);
 
@@ -63,21 +63,19 @@ class ScheduleOtorisasiContract extends Command
                 'perubahan_kontrak.profit_center',
                 'nilai_negatif',
                 'kd_divisi'
-            ])->join('proyek_pis_new', 'perubahan_kontrak.profit_center', '=', 'proyek_pis_new.profit_center')->get()->groupBy('profit_center');
-
+            ])->join('proyek_pis_new', 'perubahan_kontrak.profit_center', '=', 'proyek_pis_new.profit_center')->get();
+    
             if ($claims->isNotEmpty()) {
+                // $approval = new ContractApproval();
                 $approval = new ContractApproval();
                 $data_approval = $claims->map(function ($claim) use ($bulan_pelaporan, $tahun_pelaporan) {
-                    // $claim['periode'] = $periode;
                     $claim['id'] = Str::uuid()->toString();
                     $claim['periode_laporan'] = $bulan_pelaporan;
                     $claim['tahun'] = $tahun_pelaporan;
-                    $claim['unit_kerja'] = $claim->kd_divisi;
+                    $claim['unit_kerja'] = $claim->ProyekPISNew->kd_divisi;
                     $claim['is_locked'] = true;
                     $claim->nilai_negatif = $claim->nilai_negatif ?: false;
-                    // $claim['perubahan_id'] = $claim->id;
-                    // $claim->makeHidden(['Proyek', 'id']); //Untuk menghilangkan relasi agar tidak masuk ke array
-                    $claim->makeHidden(['id_perubahan_kontrak', 'kd_divisi']); //Untuk menghilangkan relasi agar tidak masuk ke array
+                    $claim->makeHidden(['ProyekPISNew', 'id_perubahan_kontrak']); //Untuk menghilangkan relasi agar tidak masuk ke array
                     return $claim;
                 });
 
@@ -92,18 +90,18 @@ class ScheduleOtorisasiContract extends Command
 
                     if ($isSuccessSendSAP) {
                         $namaProyek = $data->first()->proyek_name;
-                        $dateFinish = Carbon::create()->translatedFormat("d F Y H:i:s");
+                        $dateFinish = Carbon::now()->translatedFormat("d F Y H:i:s");
                         sendNotifEmail("andias@wikamail.id", "RUNNING JOB OTORISASI CONTRACT", "Otorisasi otomatis proyek $namaProyek berhasil dijalankan pada hari : $dateFinish", true, false);
                         sendNotifEmail("fathur.rohman2353@gmail.com", "RUNNING JOB OTORISASI CONTRACT", "Otorisasi otomatis proyek $namaProyek berhasil dijalankan pada hari : $dateFinish", true, false);
                     } else {
                         $namaProyek = $data->first()->proyek_name;
-                        $dateFinish = Carbon::create()->translatedFormat("d F Y H:i:s");
+                        $dateFinish = Carbon::now()->translatedFormat("d F Y H:i:s");
                         sendNotifEmail("andias@wikamail.id", "RUNNING JOB OTORISASI CONTRACT FAIL", "Otorisasi otomatis proyek $namaProyek gagal dijalankan pada hari : $dateFinish", true, false);
                         sendNotifEmail("fathur.rohman2353@gmail.com", "RUNNING JOB OTORISASI CONTRACT FAIL", "Otorisasi otomatis proyek $namaProyek gagal dijalankan pada hari : $dateFinish", true, false);
                     }
                 });
             } else {
-                $dateFinish = Carbon::create()->translatedFormat("d F Y H:i:s");
+                $dateFinish = Carbon::now()->translatedFormat("d F Y H:i:s");
                 sendNotifEmail("andias@wikamail.id", "RUNNING JOB OTORISASI CONTRACT FAIL", "Otorisasi otomatis gagal dijalankan pada hari : $dateFinish . Karena tidak ada proyek", true, false);
                 sendNotifEmail("fathur.rohman2353@gmail.com", "RUNNING JOB OTORISASI CONTRACT FAIL", "Otorisasi otomatis gagal dijalankan pada hari : $dateFinish . Karena tidak ada proyek", true, false);
             }
