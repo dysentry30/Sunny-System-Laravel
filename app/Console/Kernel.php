@@ -20,6 +20,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('schedule:forecast')->monthly()->runInBackground()->onSuccess(function () {
             Artisan::call("schedule:contract");
         });
+
+        $schedule->command('schedule:forecast-anak')->monthlyOn(3);
     }
 
     /**
