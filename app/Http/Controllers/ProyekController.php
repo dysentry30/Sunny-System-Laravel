@@ -895,7 +895,7 @@ class ProyekController extends Controller
 
         // dd($dataProyek);
         if ($dataProyek["nilai-perolehan"] != null && $newProyek->stage == 8 && $dataProyek["bulan-ri-perolehan"] != null) {
-            if (!empty($newProyek->bulan_ri_perolehan) && !empty($newProyek->nilai_perolehan) && $newProyek->stage == 8 && $newProyek->dop == "EA" && $newProyek->tahun_perolehan == $years) {
+            if (!empty($newProyek->bulan_ri_perolehan) && !empty($newProyek->nilai_perolehan) && $newProyek->stage == 8 && $newProyek->tahun_perolehan == $years) {
                 $editForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->where("tahun", "=", $years)->first();
                 if (!empty($editForecast)) {
                     $oldestForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", ($bulans - 1))->where("tahun", "=", $years)->first();

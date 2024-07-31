@@ -132,7 +132,53 @@
                                 @canany(['super-admin', 'approver-crm', 'user-crm'])
                                 @if ($proyek->UnitKerja?->dop != "EA")
                                     @if (($proyek->stage == 8 && $proyek->is_need_approval_terkontrak && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek?->is_revisi))
-                                        <button type="button" class="btn btn-sm btn-success ms-2" onclick="requestApprovalTerkontrak('{{ $proyek->kode_proyek }}')">Ajukan Approval</button>
+                                        <button type="button" class="btn btn-sm btn-success ms-2" data-bs-toggle="modal" data-bs-target="#modal-send-approval-terkontrak">Ajukan Approval</button>
+
+                                        <div class="modal fade w-100" style="margin-top: 120px" id="modal-send-approval-terkontrak" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog mw-600px">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Ajukan Approval Terkontrak ?</h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>Nilai Perolehan : <b class="{{ $proyek->nilai_perolehan ?? "text-danger" }}">{{ !empty($proyek->nilai_perolehan) ? "Sudah Isi" : "Belum Diisi" }}</b></p>
+                                                        <p>Bulan Ri Perolehan : <b class="{{ $proyek->bulan_ri_perolehan ?? "text-danger" }}">{{ !empty($proyek->bulan_ri_perolehan) ? "Sudah Isi" : "Belum Diisi" }}</b></p>
+                                                        <p>Nilai Kontrak Keseluruhan : <b class="{{ $proyek->penawaran_tender ?? "text-danger" }}">{{ !empty($proyek->penawaran_tender) ? "Sudah Isi" : "Belum Diisi" }}</b></p>
+                                                        <br>
+                                                        <br>
+                                                        <br>
+                
+                                                        {{-- @if (!empty($name_customer) && !empty($proyek->klasifikasi_pasdin) && !empty($proyek->SumberDana->nama_sumber) && !empty($jenis_instansi) && !empty($custNegara) && !empty($custProvinsi) && !empty($forbes_rank) && !empty($lq_rank)) --}}
+                                                        @if (!empty($proyek->nilai_perolehan) && !empty($proyek->bulan_ri_perolehan) && !empty($proyek->penawaran_tender))
+                                                            <input class="form-check-input" onclick="sendWa(this)" id="confirm-send-wa" name="confirm-send-wa" type="checkbox">
+                                                            <i class="fs-6 text-primary">
+                                                                Saya Setuju Melakukan Pengajuan dan Data Sudah Sudah Terisi Dengan Benar
+                                                            </i>
+                                                        @else
+                                                            <i class="fs-6 text-danger">*Pastikan Data Sudah Sudah Terisi Dengan Benar Sebelum Melakukan Pegajuan</i>
+                                                        @endif
+                                                    </div>
+                                                        
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-success btn-sm" id="button-send-wa" style="display: none" onclick="requestApprovalTerkontrak('{{ $proyek->kode_proyek }}')">Send <i class="bi bi-send"></i></button>
+                                                    </div>
+                
+                                                    <script>
+                                                        function sendWa(e) {
+                                                            const sendWa = e.checked;
+                                                            console.log(sendWa);
+                                                            if (sendWa == true) {
+                                                                document.getElementById("button-send-wa").style.display = "";
+                                                            } else {
+                                                                document.getElementById("button-send-wa").style.display = "none";
+                                                            }
+                                                        }
+                                                    </script>
+                                                
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endif
                                     @if (App\Models\MatriksApprovalTerkontrakProyek::where('nip', Auth::user()->nip)->where('unit_kerja', $proyek->unit_kerja)->where("is_active", true)->first() && $proyek->ApprovalTerkontrakProyek && is_null($proyek->ApprovalTerkontrakProyek?->is_revisi) && is_null($proyek->ApprovalTerkontrakProyek->is_approved))
                                         <button type="button" class="btn btn-sm btn-success ms-2" data-bs-toggle="modal" data-bs-target="#kt_modal_approval_terkontrak">Setujui Approval</button>

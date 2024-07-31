@@ -631,8 +631,10 @@
                                                 <tr>
                                                     <td class="text-center">{{$item + 1}}</td>
                                                     <td>Amandemen - {{ $item }}</td>
-                                                    <td class="text-center">{{ number_format((int)$proyek->contract_value_idr, 0, '.', '.') }}</td>
-                                                    <td class="text-center">{{ number_format((int)$proyek->contract_value_idr / 16276, 0, '.', '.') }}</td>
+                                                    <td class="text-center"> - </td>
+                                                    <td class="text-center"> - </td>
+                                                    {{-- <td class="text-center">{{ number_format((int)$proyek->contract_value_idr, 0, '.', '.') }}</td>
+                                                    <td class="text-center">{{ number_format((int)$proyek->contract_value_idr / 16276, 0, '.', '.') }}</td> --}}
                                                     {{-- <td class="text-center">100.000.000.000</td>
                                                     <td class="text-center">100.000.000.000</td> --}}
                                                 </tr>
@@ -660,41 +662,56 @@
                                                 <td class="text-center">1</td>
                                                 <td>Tanggal Efektif</td>
                                                 <td class="text-center">{{ !empty($proyek->finish_date) ? Carbon\Carbon::create($proyek->finish_date)->translatedFormat("d F Y") : "-" }}</td>
+                                                <td class="text-center"> - </td>
+                                                <td class="text-center"> - </td>
+                                                <td class="text-center"> - </td>
+                                                {{-- <td class="text-center">{{ !empty($proyek->finish_date) ? Carbon\Carbon::create($proyek->finish_date)->translatedFormat("d F Y") : "-" }}</td>
                                                 <td class="text-center">{{ !empty($proyek->finish_date) ? Carbon\Carbon::create($proyek->finish_date)->translatedFormat("d F Y") : "-" }}</td>
-                                                <td class="text-center">{{ !empty($proyek->finish_date) ? Carbon\Carbon::create($proyek->finish_date)->translatedFormat("d F Y") : "-" }}</td>
-                                                <td class="text-center">{{ !empty($proyek->finish_date) ? Carbon\Carbon::create($proyek->finish_date)->translatedFormat("d F Y") : "-" }}</td>
+                                                <td class="text-center">{{ !empty($proyek->finish_date) ? Carbon\Carbon::create($proyek->finish_date)->translatedFormat("d F Y") : "-" }}</td> --}}
                                             </tr>
                                             <tr>
                                                 <td class="text-center">2</td>
                                                 <td>BAST-1 (PHO)</td>
                                                 <td class="text-center">{{ !empty($proyek->bast1_date) ? Carbon\Carbon::create($proyek->bast1_date)->translatedFormat("d F Y") : "-" }}</td>
+                                                <td class="text-center"> - </td>
+                                                <td class="text-center"> - </td>
+                                                <td class="text-center"> - </td>
+                                                {{-- <td class="text-center">{{ !empty($bast_1) ? Carbon\Carbon::create($bast_1->tanggal_dokumen)->translatedFormat("d F Y") : "-"  }}</td>
                                                 <td class="text-center">{{ !empty($bast_1) ? Carbon\Carbon::create($bast_1->tanggal_dokumen)->translatedFormat("d F Y") : "-"  }}</td>
-                                                <td class="text-center">{{ !empty($bast_1) ? Carbon\Carbon::create($bast_1->tanggal_dokumen)->translatedFormat("d F Y") : "-"  }}</td>
-                                                <td class="text-center">{{ !empty($bast_1) ? Carbon\Carbon::create($bast_1->tanggal_dokumen)->translatedFormat("d F Y") : "-"  }}</td>
+                                                <td class="text-center">{{ !empty($bast_1) ? Carbon\Carbon::create($bast_1->tanggal_dokumen)->translatedFormat("d F Y") : "-"  }}</td> --}}
                                             </tr>
                                             <tr>
                                                 <td class="text-center">3</td>
                                                 <td>Durasi Pelaksanaan</td>
                                                 <td class="text-center">{{ $proyek->duration }}</td>
+                                                <td class="text-center"> - </td>
+                                                <td class="text-center"> - </td>
+                                                <td class="text-center"> - </td>
+                                                {{-- <td class="text-center">{{ $proyek->duration }}</td>
                                                 <td class="text-center">{{ $proyek->duration }}</td>
-                                                <td class="text-center">{{ $proyek->duration }}</td>
-                                                <td class="text-center">{{ $proyek->duration }}</td>
+                                                <td class="text-center">{{ $proyek->duration }}</td> --}}
                                             </tr>
                                             <tr>
                                                 <td class="text-center">4</td>
                                                 <td>BAST-2 (FHO)</td>
                                                 <td class="text-center">{{ !empty($proyek->bast2_date) ? Carbon\Carbon::create($proyek->bast2_date)->translatedFormat("d F Y") : "-" }}</td>
+                                                <td class="text-center"> - </td>
+                                                <td class="text-center"> - </td>
+                                                <td class="text-center"> - </td>
+                                                {{-- <td class="text-center">{{ !empty($bast_2) ? Carbon\Carbon::create($bast_2->tanggal_dokumen)->translatedFormat("d F Y") : "-"  }}</td>
                                                 <td class="text-center">{{ !empty($bast_2) ? Carbon\Carbon::create($bast_2->tanggal_dokumen)->translatedFormat("d F Y") : "-"  }}</td>
-                                                <td class="text-center">{{ !empty($bast_2) ? Carbon\Carbon::create($bast_2->tanggal_dokumen)->translatedFormat("d F Y") : "-"  }}</td>
-                                                <td class="text-center">{{ !empty($bast_2) ? Carbon\Carbon::create($bast_2->tanggal_dokumen)->translatedFormat("d F Y") : "-"  }}</td>
+                                                <td class="text-center">{{ !empty($bast_2) ? Carbon\Carbon::create($bast_2->tanggal_dokumen)->translatedFormat("d F Y") : "-"  }}</td> --}}
                                             </tr>
                                             <tr>
                                                 <td class="text-center">5</td>
                                                 <td>Durasi Pemeliharaan</td>
                                                 <td class="text-center">{{ $proyek->maintenance_duration }}</td>
+                                                <td class="text-center"> - </td>
+                                                <td class="text-center"> - </td>
+                                                <td class="text-center"> - </td>
+                                                {{-- <td class="text-center">{{ $proyek->maintenance_duration }}</td>
                                                 <td class="text-center">{{ $proyek->maintenance_duration }}</td>
-                                                <td class="text-center">{{ $proyek->maintenance_duration }}</td>
-                                                <td class="text-center">{{ $proyek->maintenance_duration }}</td>
+                                                <td class="text-center">{{ $proyek->maintenance_duration }}</td> --}}
                                             </tr>
                                         </tbody>
                                     </table>

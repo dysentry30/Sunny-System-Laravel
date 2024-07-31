@@ -510,7 +510,7 @@ class MobileController extends Controller
                 $newClass->unit_kerja = $proyek->UnitKerja->unit_kerja;
                 $newClass->tipe_proyek = $proyek->tipe_proyek == "P" ? 'Non-Retail' : 'Retail';
                 $newClass->bulan = $proyek->stage != 6 ? self::getNamaBulan((int)$proyek->bulan_pelaksanaan) : self::getNamaBulan((int)$proyek->bulan_perolehan);
-                $newClass->total_forecast = $proyek->stage != 6 ? $proyek->hps_pagu : $proyek->nilai_perolehan;
+                $newClass->total_forecast = $proyek->stage < 6 ? $proyek->hps_pagu : $proyek->nilai_perolehan;
                 return $newClass;
             });
             $data = ['data' => $proyeks->toArray()];
@@ -538,8 +538,14 @@ class MobileController extends Controller
                 ->where('jenis_proyek', '!=', 'I')
                 ->whereIn('stage', [6, 7, 8])
                 ->where('tipe_proyek', 'P')
-            ->where('is_tidak_lulus_pq', false)
-                ->where('is_cancel', false)
+            ->where(function ($query) {
+                $query->where("is_tidak_lulus_pq", null)
+                    ->orWhere("is_tidak_lulus_pq", false);
+            })
+                ->where(function ($query) {
+                    $query->where("is_cancel", null)
+                        ->orWhere("is_cancel", false);
+                })
             ->when(!empty($filterDepartemen), function ($query) use ($filterDepartemen) {
                 if ($filterDepartemen == "PUSAT") {
                     $query->where('dop', "!=", "EA");
@@ -554,6 +560,7 @@ class MobileController extends Controller
                 ->get();
 
             $proyeksGroup = $proyeksSelected?->groupBy("stage");
+            // dd($proyeksGroup["6"]->toArray());
 
             $proyekMenang = 0;
             $proyekTerkontrak = 0;
@@ -563,8 +570,8 @@ class MobileController extends Controller
 
                 switch ($newClass->category) {
                     case 'Menang':
-                        $jumlah = $proyek->where("penawaran_tender", "!=", 0)->count();
-                        $total = $proyek->where("penawaran_tender", "!=", 0)->sum(function ($proyek) {
+                        $jumlah = $proyek->where("nilai_perolehan", "!=", 0)->count();
+                        $total = $proyek->where("nilai_perolehan", "!=", 0)->sum(function ($proyek) {
                             if ($proyek->nilai_perolehan != 0 || $proyek->nilai_perolehan != "" || $proyek->nilai_perolehan != "0") {
                                 return (int)$proyek->nilai_perolehan;
                             } else {
@@ -574,8 +581,8 @@ class MobileController extends Controller
                         $proyekMenang += $jumlah;
                         break;
                     case 'Kalah':
-                        $jumlah = $proyek->where("penawaran_tender", "!=", 0)->count();
-                        $total = $proyek->where("penawaran_tender", "!=", 0)->sum(function ($proyek) {
+                        $jumlah = $proyek->where("nilai_perolehan", "!=", 0)->count();
+                        $total = $proyek->where("nilai_perolehan", "!=", 0)->sum(function ($proyek) {
                             if ($proyek->nilai_perolehan != 0 || $proyek->nilai_perolehan != "" || $proyek->nilai_perolehan != "0") {
                                 return (int)$proyek->nilai_perolehan;
                             } else {
@@ -584,8 +591,8 @@ class MobileController extends Controller
                         });
                         break;
                     case 'Terkontrak':
-                        $jumlah = $proyek->where("penawaran_tender", "!=", 0)->count();
-                        $total = $proyek->where("penawaran_tender", "!=", 0)->sum(function ($proyek) {
+                        $jumlah = $proyek->where("nilai_perolehan", "!=", 0)->count();
+                        $total = $proyek->where("nilai_perolehan", "!=", 0)->sum(function ($proyek) {
                             if ($proyek->nilai_perolehan != 0 || $proyek->nilai_perolehan != "" || $proyek->nilai_perolehan != "0") {
                                 return (int)$proyek->nilai_perolehan;
                             } else {
@@ -605,16 +612,18 @@ class MobileController extends Controller
                 $newClass->total_nilai = $total;
                 return $newClass;
             })->values();
-
             $winRate = "0%";
             if ($proyeksSelected->count() > 0) {
-                $winRate = round(($proyekMenang + $proyekTerkontrak) / $proyeksSelected->count(), 2) * 100 . "%";
+                $proyekMenang = $proyeks->where("category", "Menang")?->first()->total_nilai;
+                $proyekTerkontrak = $proyeks->where("category", "Terkontrak")?->first()->total_nilai;
+                // $winRate = round(($proyekMenang + $proyekTerkontrak) / $proyeksSelected->count(), 2) * 100 . "%";
+                $winRate = round(($proyekMenang + $proyekTerkontrak) / $proyeks->sum("total_nilai"), 2) * 100 . "%";
             }
 
             $data = ['data' => $proyeks->toArray(), 'winRate' => $winRate];
             return response()->json($data);
         } catch (\Exception $e) {
-            $data = ["Status" => false, "Message" => $e->getMessage(), "data" => [], 'winRate' => $winRate];
+            $data = ["Status" => false, "Message" => $e->getMessage(), "data" => [], 'winRate' => 0];
             return response()->json($data);
         }
     }

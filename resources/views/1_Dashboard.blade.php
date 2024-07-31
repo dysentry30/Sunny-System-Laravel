@@ -4691,13 +4691,16 @@
                         //     }
                         //     break;
                         case "Perolehan" :
-                            nilai = filter.nilai_perolehan != 0 ? filter.nilai_perolehan * (filter.porsi_jo / 100) : 0;
+                            // nilai = filter.nilai_perolehan != 0 ? filter.nilai_perolehan * (filter.porsi_jo / 100) : 0;
+                            nilai = filter.nilai_perolehan;
                             break;
                         case "Menang" :
-                            nilai = filter.nilai_perolehan != 0 ? filter.nilai_perolehan * (filter.porsi_jo / 100) : 0;
+                            // nilai = filter.nilai_perolehan != 0 ? filter.nilai_perolehan * (filter.porsi_jo / 100) : 0;
+                            nilai = filter.nilai_perolehan;
                             break;
                         case "Kalah":
-                            nilai = filter.nilai_perolehan != 0 ? filter.nilai_perolehan * (filter.porsi_jo / 100) : 0;
+                            // nilai = filter.nilai_perolehan != 0 ? filter.nilai_perolehan * (filter.porsi_jo / 100) : 0;
+                            nilai = filter.nilai_perolehan;
                             break;
                         default:
                             nilai = 0;
