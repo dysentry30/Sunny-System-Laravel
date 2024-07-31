@@ -2429,7 +2429,7 @@ class ContractManagementsController extends Controller
             ],
         ];
         $rules = [
-            "attach-file" => "required|file",
+            "attach-file" => "required|file|mimes:pdf|max:$maxSize",
             "document-name" => "required|string",
             "note" => "required|string",
             "id-contract" => "required|string",
@@ -3457,14 +3457,23 @@ class ContractManagementsController extends Controller
         $checklist_model->updated_at = null;
         $checklist_model->syncOriginal();
         // dd($checklist_model);
-        
 
-        $contract = ContractManagements::find($data["id-contract"]);
+        if (Str::isUuid($data["id-contract"])) {
+            $contract = ContractManagements::find($data["id-contract"]);
+        } else {
+            $contract = ContractManagements::where("profit_center", $data["id-contract"])->first();
+        }
+
         if (empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // return redirect()->back();
         }
+
+        $new_data->put("profit_center", $contract->profit_center);
+        $new_data->put("created_at", Carbon::now());
+        $new_data->put("updated_at", Carbon::now());
+
         try {
             if(ContractChecklist::insert($new_data->toArray())){
                 Alert::success("Success", "Checklist Manajemen Kontrak Berhasil Dibuat");
@@ -5277,13 +5286,13 @@ class ContractManagementsController extends Controller
             // }
             $messages = [
                 "required" => "Field :attribute wajib diisi",
-                "file-document" => [
+                "file-document.*" => [
                     "max" => "Upload dokumen maksimal 70 MB",
                     "mimes" => "Upload dokumen dengan format PDF"
                 ],
             ];
             $rules = [
-                "file-document" => "required|file|mimes:pdf|max:$maxSize",
+                "file-document.*" => "required|file|mimes:pdf|max:$maxSize",
                 // "id-contract" => "required|string",
             ];
             $validation = Validator::make($data, $rules, $messages);
@@ -5300,7 +5309,9 @@ class ContractManagementsController extends Controller
             }
             $validation->validate();
 
-            $contract = ContractManagements::where('profit_center', $data['profit-center'])->first();
+            $contract = ContractManagements::where(function ($query) use ($data) {
+                $query->whereNotNull("id_contract")->where("id_contract", "!=", "0")->where("id_contract", $data["profit-center"])->orWhere("profit_center", $data["profit-center"]);
+            })->first();
 
             if (empty($contract)) {
                 Alert::error('Error', 'Kontrak tidak ditemukan. Silahkan hubungi Admin!');

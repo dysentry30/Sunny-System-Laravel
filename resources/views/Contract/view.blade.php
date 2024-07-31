@@ -1015,7 +1015,10 @@
                                         @endforelse
                                     @else    
                                     @endif --}}
-                                    @forelse ($contract->DokumenAanwitjzing as $dc)
+                                    @php
+                                        $dokumenAanwitjzing = $contract->DokumenAanwitjzing->isNotEmpty() ? $contract->DokumenAanwitjzing : $contract->DokumenAanwitjzingPerolehan;
+                                    @endphp
+                                    @forelse ($dokumenAanwitjzing as $dc)
                                         <tr>
                                             <!--begin::Column-->
                                             <td>
@@ -3055,6 +3058,7 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-125px">File</th>
                                         <th class="min-w-125px">Tanggal</th>
+                                        <th class="min-w-125px">Action</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -3079,6 +3083,9 @@
                                             </td>
                                             <td>
                                                 <p class="text-gray-600 mb-1">{{ Carbon\Carbon::createFromTimeString($inputRisk->created_at)->translatedFormat("d F Y") }}</p>
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-sm btn-secondary btn-hover-danger" onclick="confirmDeleteFinalDokumen('{{ $inputRisk->id }}', null, 'dokumen-resiko')">Delete</button>
                                             </td>
                                         </tr>
                                     @empty
@@ -3942,7 +3949,10 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @forelse ($contract->ChecklistManajemen as $key => $cm)
+                                    @php
+                                        $checklistManajemen = $contract->ChecklistManajemen->isNotEmpty() ? $contract->ChecklistManajemen : $contract->ChecklistManajemenProfit;
+                                    @endphp
+                                    @forelse ($checklistManajemen as $key => $cm)
                                         <tr>
                                             <td><a onclick="getChecklistManajemen(this)" style="cursor: pointer;" data-url="/contract-management/view/{{ $contract->id_contract}}/get-manajemen-kontrak/{{ $cm->id }}" class="text-hover-primary">{{ $cm->kategori }}</a></td>
                                             <td>{{ Carbon\Carbon::create($cm->created_at)->translatedFormat("d F Y") }}</td>
@@ -6635,7 +6645,7 @@
                                 name="id-contract">
                             <input type="file" style="font-weight: normal"
                                 class="form-control form-control-solid" name="attach-file"
-                                id="attach-file-perjanjian-kso" value="" accept=".docx" placeholder="" />
+                                id="attach-file-perjanjian-kso" value="" accept=".pdf" placeholder="" />
                             <!--end::Input-->
 
                             <!--begin::Label-->
@@ -8206,7 +8216,7 @@
                                 <!--begin::Input-->
                                 <input type="hidden" name="kategori" value="Dokumen Resiko - Pelaksanaan">
                                 <input type="hidden" name="kategori-path" value="dokumen-resiko">
-                                <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".xlsx">
+                                <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                                 <!--end::Input-->
                             </div>
                                 {{-- <input type="hidden" value="{{ $contract->id_document ?? 0 }}" id="id-contract" --}}

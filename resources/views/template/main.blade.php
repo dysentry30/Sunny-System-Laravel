@@ -215,7 +215,7 @@
                                 <option {{ $year == $i ? 'selected' : '' }}>{{ $i }}</option>
                                 @endfor
                                 @else
-                                @for ($i = $year-3; $i < $year+10; $i++ )
+                                @for ($i = $year-5; $i < $year+10; $i++ )
                                 <option {{ $year == $i ? 'selected' : '' }}>{{ $i }}</option>
                                 @endfor
                                 @endif
@@ -1049,6 +1049,7 @@
             
             function returnParentElement(elt, targetInput) {
                 const inputDate = elt.querySelector(targetInput);
+                console.log(inputDate);
                 if (inputDate) {
                     return inputDate;
                 }

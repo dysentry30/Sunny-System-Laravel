@@ -188,6 +188,11 @@ class ContractManagements extends Model
         return $this->hasMany(ContractChecklist::class, "id_contract");
     }
 
+    public function ChecklistManajemenProfit()
+    {
+        return $this->hasMany(ContractChecklist::class, "profit_center", "profit_center");
+    }
+
     public function Asuransi(){
         return $this->hasMany(ContractAsuransi::class, "id_contract");
     }
@@ -206,6 +211,11 @@ class ContractManagements extends Model
     }
 
     public function DokumenAanwitjzing()
+    {
+        return $this->hasMany(DokumenAanwitjzingContract::class, 'profit_center', 'profit_center');
+    }
+
+    public function DokumenAanwitjzingPerolehan()
     {
         return $this->hasMany(DokumenAanwitjzingContract::class, 'profit_center', 'profit_center');
     }
