@@ -196,8 +196,8 @@ class ScheduleOtorisasiForecast extends Command
                         }
                     }
 
+                    self::sendDataPrognosaSAP($resultRequestToSAP);
                     setLogging("Scheduller/OtorisasiCRM", "[Otorisasi $unitKerjaProyek->unit_kerja Bulan " . Carbon::now() . "]", ["message" => "Success", "timestamp" => Carbon::now()]);
-                    // self::sendDataPrognosaSAP($resultRequestToSAP);
                 }
             }
 
