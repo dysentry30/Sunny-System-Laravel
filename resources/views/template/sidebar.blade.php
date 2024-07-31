@@ -1766,7 +1766,7 @@
                                         <i class="bi bi-person-lines-fill text-white" style="font-size: 20px"></i>
                                         <!--end::Svg Icon-->
                                     </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">SKA SKT</span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">SKK SKT</span>
                                 </a>
                             </div>
                             <!--end::Menu Colapse-->

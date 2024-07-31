@@ -111,7 +111,7 @@
                                 <!--begin::Button-->
                                 @canany(['super-admin', 'admin-crm', 'user-crm', 'approver-crm'])
                                     @if ($proyek->dop != "EA")
-                                        @if (($proyek->stage == 8 && empty($proyek->ApprovalTerkontrakProyek)) || $proyek->stage < 8)
+                                        @if (($proyek->stage == 8 && $proyek->is_need_approval_terkontrak && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek?->is_revisi))
                                             @if ($proyek->is_cancel == false)
                                                 <button type="submit" name="proyek-save" class="btn btn-sm btn-primary ms-2" id="proyek-save"
                                                     style="background-color:#008CB4">
@@ -132,53 +132,7 @@
                                 @canany(['super-admin', 'approver-crm', 'user-crm'])
                                 @if ($proyek->UnitKerja?->dop != "EA")
                                     @if (($proyek->stage == 8 && $proyek->is_need_approval_terkontrak && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek?->is_revisi))
-                                        <button type="button" class="btn btn-sm btn-success ms-2" data-bs-toggle="modal" data-bs-target="#modal-send-approval-terkontrak">Ajukan Approval</button>
-
-                                        <div class="modal fade w-100" style="margin-top: 120px" id="modal-send-approval-terkontrak" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog mw-600px">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Ajukan Approval Terkontrak ?</h1>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p>Nilai Perolehan : <b class="{{ $proyek->nilai_perolehan ?? "text-danger" }}">{{ !empty($proyek->nilai_perolehan) ? "Sudah Isi" : "Belum Diisi" }}</b></p>
-                                                        <p>Bulan Ri Perolehan : <b class="{{ $proyek->bulan_ri_perolehan ?? "text-danger" }}">{{ !empty($proyek->bulan_ri_perolehan) ? "Sudah Isi" : "Belum Diisi" }}</b></p>
-                                                        <p>Nilai Kontrak Keseluruhan : <b class="{{ $proyek->penawaran_tender ?? "text-danger" }}">{{ !empty($proyek->penawaran_tender) ? "Sudah Isi" : "Belum Diisi" }}</b></p>
-                                                        <br>
-                                                        <br>
-                                                        <br>
-                
-                                                        {{-- @if (!empty($name_customer) && !empty($proyek->klasifikasi_pasdin) && !empty($proyek->SumberDana->nama_sumber) && !empty($jenis_instansi) && !empty($custNegara) && !empty($custProvinsi) && !empty($forbes_rank) && !empty($lq_rank)) --}}
-                                                        @if (!empty($proyek->nilai_perolehan) && !empty($proyek->bulan_ri_perolehan) && !empty($proyek->penawaran_tender))
-                                                            <input class="form-check-input" onclick="sendWa(this)" id="confirm-send-wa" name="confirm-send-wa" type="checkbox">
-                                                            <i class="fs-6 text-primary">
-                                                                Saya Setuju Melakukan Pengajuan dan Data Sudah Sudah Terisi Dengan Benar
-                                                            </i>
-                                                        @else
-                                                            <i class="fs-6 text-danger">*Pastikan Data Sudah Sudah Terisi Dengan Benar Sebelum Melakukan Pegajuan</i>
-                                                        @endif
-                                                    </div>
-                                                        
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-success btn-sm" id="button-send-wa" style="display: none" onclick="requestApprovalTerkontrak('{{ $proyek->kode_proyek }}')">Send <i class="bi bi-send"></i></button>
-                                                    </div>
-                
-                                                    <script>
-                                                        function sendWa(e) {
-                                                            const sendWa = e.checked;
-                                                            console.log(sendWa);
-                                                            if (sendWa == true) {
-                                                                document.getElementById("button-send-wa").style.display = "";
-                                                            } else {
-                                                                document.getElementById("button-send-wa").style.display = "none";
-                                                            }
-                                                        }
-                                                    </script>
-                                                
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <button type="button" class="btn btn-sm btn-success ms-2" data-bs-toggle="modal" data-bs-target="#modal-send-approval-terkontrak-proyeks">Ajukan Approval</button>
                                     @endif
                                     @if (App\Models\MatriksApprovalTerkontrakProyek::where('nip', Auth::user()->nip)->where('unit_kerja', $proyek->unit_kerja)->where("is_active", true)->first() && $proyek->ApprovalTerkontrakProyek && is_null($proyek->ApprovalTerkontrakProyek?->is_revisi) && is_null($proyek->ApprovalTerkontrakProyek->is_approved))
                                         <button type="button" class="btn btn-sm btn-success ms-2" data-bs-toggle="modal" data-bs-target="#kt_modal_approval_terkontrak">Setujui Approval</button>
@@ -412,8 +366,58 @@
                         @endif                        
                     @endcanany
 
+                    @if ($proyek->UnitKerja?->dop != "EA")
+                        @if (($proyek->stage == 8 && $proyek->is_need_approval_terkontrak && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek?->is_revisi))
+                            <div class="modal fade w-100" style="margin-top: 120px" id="modal-send-approval-terkontrak-proyeks" aria-labelledby="exampleModalLabel" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog mw-600px">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Ajukan Approval Terkontrak ?</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Nilai Perolehan : <b class="{{ $proyek->nilai_perolehan ?? "text-danger" }}">{{ !empty($proyek->nilai_perolehan) ? "Sudah Isi" : "Belum Diisi" }}</b></p>
+                                            <p>Bulan Ri Perolehan : <b class="{{ $proyek->bulan_ri_perolehan ?? "text-danger" }}">{{ !empty($proyek->bulan_ri_perolehan) ? "Sudah Isi" : "Belum Diisi" }}</b></p>
+                                            <p>Nilai Kontrak Keseluruhan : <b class="{{ $proyek->penawaran_tender ?? "text-danger" }}">{{ !empty($proyek->penawaran_tender) ? "Sudah Isi" : "Belum Diisi" }}</b></p>
+                                            <br>
+                                            <br>
+                                            <br>
 
+                                            {{-- @if (!empty($name_customer) && !empty($proyek->klasifikasi_pasdin) && !empty($proyek->SumberDana->nama_sumber) && !empty($jenis_instansi) && !empty($custNegara) && !empty($custProvinsi) && !empty($forbes_rank) && !empty($lq_rank)) --}}
+                                            @if (!empty($proyek->nilai_perolehan) && !empty($proyek->bulan_ri_perolehan) && !empty($proyek->penawaran_tender))
+                                                <input class="form-check-input" onclick="sendApproval(this)" id="confirm-send-wa" name="confirm-send-wa" type="checkbox">
+                                                <i class="fs-6 text-primary">
+                                                    Saya Setuju Melakukan Pengajuan dan Data Sudah Sudah Terisi Dengan Benar
+                                                </i>
+                                            @else
+                                                <i class="fs-6 text-danger">*Pastikan Data Sudah Sudah Terisi Dengan Benar Sebelum Melakukan Pegajuan</i>
+                                            @endif
+                                        </div>
+                                            
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-success btn-sm" id="button-send-wa" style="display: none" onclick="requestApprovalTerkontrak('{{ $proyek->kode_proyek }}')">Send <i class="bi bi-send"></i></button>
+                                        </div>
 
+                                        <script>
+                                            function deleteBackdrop(){
+                                                let backdrop = document.querySelector('.modal-send-approval-terkontrak-proyeks');
+                                                backdrop.style.zIndex = 1;
+                                            }
+                                            function sendApproval(e) {
+                                                const sendApproval = e.checked;
+                                                if (sendApproval == true) {
+                                                    document.getElementById("button-send-wa").style.display = "";
+                                                } else {
+                                                    document.getElementById("button-send-wa").style.display = "none";
+                                                }
+                                            }
+                                        </script>
+                                    
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    @endif
 
                     <!--begin::Post-->
                     <div class="post d-flex flex-column-fluid" id="kt_post">
@@ -4204,6 +4208,7 @@
                                                                         <th class="w-50px text-center">No.</th>
                                                                         <th class="w-auto">Nama Pegawai</th>
                                                                         <th class="w-auto">Kategori</th>
+                                                                        <th class="w-auto">SKK SKT</th>
                                                                         <th class="w-auto">Dokumen CV Upload</th>
                                                                         <th class="w-100px"></th>
                                                                     </tr>
@@ -4232,6 +4237,13 @@
                                                                                 </a>
                                                                             </td>
                                                                             <td class="text-center">{{ $personel->kategori }}</td>
+                                                                            <td class="text-center">
+                                                                                @if ($personel->SKASKTProyek->isNotEmpty())
+                                                                                    <a href="/ska-skt?nip={{ $personel->nip }}" target="_blank"><p class="badge badge-sm m-0 bg-primary text-white">Lihat</p></a>
+                                                                                @else
+                                                                                    <p class="badge badge-sm m-0 bg-secondary text-black">Belum Ada</p>
+                                                                                @endif
+                                                                            </td>
                                                                             <td class="text-center"><a target="_blank" href="{{ asset('dokumen-cv-personel/upload/'.$personel->dokumen_cv_upload) }}" class="text-hover-primary">{{ $personel->dokumen_cv_upload }}</a></td>
                                                                             <td class="text-center">
                                                                                 <div class="d-flex flex-row align-items-center justify-content-center gap-2">

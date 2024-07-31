@@ -4863,7 +4863,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
      * View Menu SKA SKT
      */
     Route::get('/ska-skt', function (Request $request) {
+        $filter = $request->get("nip");
+
         $data = SKASKTProyek::all();
+
+        if (!empty($filter)) {
+            $data = $data->where("nip", $filter);
+        }
 
         return view('19_Menu_SKA_SKT', ['data' => $data]);
     });

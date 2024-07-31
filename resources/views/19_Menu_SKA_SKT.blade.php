@@ -3,7 +3,7 @@
 {{-- End::Extend Header --}}
 
 {{-- Begin::Title --}}
-@section('title', 'SKA SKT')
+@section('title', 'SKK SKT')
 {{-- End::Title --}}
 
 <!--begin::Main-->
@@ -43,7 +43,7 @@
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">SKA SKT
+                                <h1 class="d-flex align-items-center fs-3 my-1">SKK SKT
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -53,7 +53,7 @@
                                 <div class="d-flex align-items-center py-1">
 
                                     <!--begin::Button-->
-                                    <button type="button" class="btn btn-sm btn-primary py-3" style="background-color: #008CB4" onclick="updateSKASKT()">Update SKA SKT</button>
+                                    <button type="button" class="btn btn-sm btn-primary py-3" style="background-color: #008CB4" onclick="updateSKASKT()">Update SKK SKT</button>
                                     <!--End::Button-->
                                 </div>
                                 <!--end::Actions-->                       

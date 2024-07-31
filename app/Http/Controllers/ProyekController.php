@@ -904,15 +904,18 @@ class ProyekController extends Controller
                         $oldestForecast->kode_proyek = $newProyek->kode_proyek;
                         $oldestForecast->periode_prognosa = $bulans - 1;
                         $oldestForecast->tahun = $years;
+                        $oldestForecast->month_forecast = $dataProyek["bulan-ri-perolehan"];
                         $oldestForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
                         $oldestForecast->realisasi_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
-                        $oldestForecast->month_realisasi = (int) $newProyek->bulan_ri_perolehan;
+                        // $oldestForecast->month_realisasi = (int) $newProyek->bulan_ri_perolehan;
+                        $oldestForecast->month_realisasi =  $dataProyek["bulan-ri-perolehan"];
                         $oldestForecast->save();
                     }
-                    // $editForecast->month_forecast = $dataProyek["month-forecast"];
+                    $editForecast->month_forecast =  $dataProyek["bulan-ri-perolehan"];
                     $editForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
                     $editForecast->realisasi_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
-                    $editForecast->month_realisasi = (int) $newProyek->bulan_ri_perolehan;
+                    // $editForecast->month_realisasi = (int) $newProyek->bulan_ri_perolehan;
+                    $editForecast->month_realisasi = $dataProyek["bulan-ri-perolehan"];
                     // $editForecast->tahun = $years;
                     $editForecast->save();
                 } else {

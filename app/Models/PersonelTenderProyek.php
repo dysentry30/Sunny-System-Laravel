@@ -18,4 +18,9 @@ class PersonelTenderProyek extends Model
     {
         return $this->belongsTo(Proyek::class, 'kode_proyek', 'kode_proyek');
     }
+
+    public function SKASKTProyek()
+    {
+        return $this->hasMany(SKASKTProyek::class, 'nip', 'nip');
+    }
 }
