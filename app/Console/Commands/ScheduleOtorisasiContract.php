@@ -66,23 +66,55 @@ class ScheduleOtorisasiContract extends Command
             ])->join('proyek_pis_new', 'perubahan_kontrak.profit_center', '=', 'proyek_pis_new.profit_center')->get();
     
             if ($claims->isNotEmpty()) {
-                // $approval = new ContractApproval();
-                $approval = new ContractApproval();
-                $data_approval = $claims->map(function ($claim) use ($bulan_pelaporan, $tahun_pelaporan) {
-                    $claim['id'] = Str::uuid()->toString();
-                    $claim['periode_laporan'] = $bulan_pelaporan;
-                    $claim['tahun'] = $tahun_pelaporan;
-                    $claim['unit_kerja'] = $claim->ProyekPISNew->kd_divisi;
-                    $claim['is_locked'] = true;
-                    $claim->nilai_negatif = $claim->nilai_negatif ?: false;
-                    $claim->makeHidden(['ProyekPISNew', 'id_perubahan_kontrak']); //Untuk menghilangkan relasi agar tidak masuk ke array
-                    return $claim;
-                });
 
-                $is_success = $approval->insert($data_approval->toArray());
+                $isExistContractApproval = ContractApproval::where("periode_laporan", $bulan_pelaporan)->where("tahun", $tahun_pelaporan)->where("is_approved", true)->get()?->groupBy("profit_center");
+
+                if ($isExistContractApproval->isEmpty()) {
+                    $approval = new ContractApproval();
+                    $data_approval = $claims->map(function ($claim) use ($bulan_pelaporan, $tahun_pelaporan) {
+                        $claim['id'] = Str::uuid()->toString();
+                        $claim['periode_laporan'] = $bulan_pelaporan;
+                        $claim['tahun'] = $tahun_pelaporan;
+                        $claim['unit_kerja'] = $claim->ProyekPISNew->kd_divisi;
+                        $claim['is_locked'] = true;
+                        $claim['is_approved'] = true;
+                        $claim->nilai_negatif = $claim->nilai_negatif ?: false;
+                        $claim->makeHidden(['ProyekPISNew', 'id_perubahan_kontrak']); //Untuk menghilangkan relasi agar tidak masuk ke array
+                        return $claim;
+                    });
+
+                    $is_success = $approval->insert($data_approval->toArray());
+                } else {
+                    $claims = $claims->groupBy("profit_center");
+                    $data_approval = collect([]);
+                    $approval = new ContractApproval();
+
+                    $claimsExist = $isExistContractApproval->keys()->toArray();
+                    $claims->sortKeys()->each(function ($item, $key) use ($claimsExist, $data_approval, $bulan_pelaporan, $tahun_pelaporan) {
+                        if (!in_array($key, $claimsExist)) {
+                            $data = $item->map(function ($claim) use ($bulan_pelaporan, $tahun_pelaporan) {
+                                $claim['id'] = Str::uuid()->toString();
+                                $claim['periode_laporan'] = $bulan_pelaporan;
+                                $claim['tahun'] = $tahun_pelaporan;
+                                $claim['unit_kerja'] = $claim->ProyekPISNew->kd_divisi;
+                                $claim['is_locked'] = true;
+                                $claim['is_approved'] = true;
+                                $claim->nilai_negatif = $claim->nilai_negatif ?: false;
+                                $claim->makeHidden(['ProyekPISNew', 'id_perubahan_kontrak']); //Untuk menghilangkan relasi agar tidak masuk ke array
+                                return $claim;
+                            });
+
+                            $data_approval->push($data);
+                        }
+                    });
+
+                    if ($data_approval->isNotEmpty()) {
+                        $is_success = $approval->insert($data_approval->toArray());
+                    }
+                }
             }
 
-            $contractApprovalData = ContractApproval::where("periode_laporan", $bulan_pelaporan)->where("tahun", $tahun_pelaporan)->get()->groupBy("profit_center");
+            $contractApprovalData = ContractApproval::where("periode_laporan", $bulan_pelaporan)->where("tahun", $tahun_pelaporan)->whereNull("is_approved")->get()->groupBy("profit_center");
 
             if ($contractApprovalData->isNotEmpty()) {
                 $contractApprovalData->each(function ($data, $profit_center) use ($bulan_pelaporan, $tahun_pelaporan) {
@@ -91,26 +123,27 @@ class ScheduleOtorisasiContract extends Command
                     if ($isSuccessSendSAP) {
                         $namaProyek = $data->first()->proyek_name;
                         $dateFinish = Carbon::now()->translatedFormat("d F Y H:i:s");
-                        sendNotifEmail("andias@wikamail.id", "RUNNING JOB OTORISASI CONTRACT", "Otorisasi otomatis proyek $namaProyek berhasil dijalankan pada hari : $dateFinish", true, false);
-                        sendNotifEmail("fathur.rohman2353@gmail.com", "RUNNING JOB OTORISASI CONTRACT", "Otorisasi otomatis proyek $namaProyek berhasil dijalankan pada hari : $dateFinish", true, false);
+                        sendNotifEmail("andias@wikamail.id", "FINISH RUNNING JOB OTORISASI CONTRACT", "Otorisasi otomatis proyek $profit_center berhasil dijalankan pada hari : $dateFinish", true, false);
+                        sendNotifEmail("fathur.rohman2353@gmail.com", "FINISH RUNNING JOB OTORISASI CONTRACT", "Otorisasi otomatis proyek $profit_center berhasil dijalankan pada hari : $dateFinish", true, false);
                     } else {
                         $namaProyek = $data->first()->proyek_name;
                         $dateFinish = Carbon::now()->translatedFormat("d F Y H:i:s");
-                        sendNotifEmail("andias@wikamail.id", "RUNNING JOB OTORISASI CONTRACT FAIL", "Otorisasi otomatis proyek $namaProyek gagal dijalankan pada hari : $dateFinish", true, false);
-                        sendNotifEmail("fathur.rohman2353@gmail.com", "RUNNING JOB OTORISASI CONTRACT FAIL", "Otorisasi otomatis proyek $namaProyek gagal dijalankan pada hari : $dateFinish", true, false);
+                        sendNotifEmail("andias@wikamail.id", "FAILED RUNNING JOB OTORISASI CONTRACT", "Otorisasi otomatis proyek $profit_center gagal dijalankan pada hari : $dateFinish", true, false);
+                        sendNotifEmail("fathur.rohman2353@gmail.com", "FAILED RUNNING JOB OTORISASI CONTRACT", "Otorisasi otomatis proyek $profit_center gagal dijalankan pada hari : $dateFinish", true, false);
                     }
                 });
             } else {
                 $dateFinish = Carbon::now()->translatedFormat("d F Y H:i:s");
-                sendNotifEmail("andias@wikamail.id", "RUNNING JOB OTORISASI CONTRACT FAIL", "Otorisasi otomatis gagal dijalankan pada hari : $dateFinish . Karena tidak ada proyek", true, false);
-                sendNotifEmail("fathur.rohman2353@gmail.com", "RUNNING JOB OTORISASI CONTRACT FAIL", "Otorisasi otomatis gagal dijalankan pada hari : $dateFinish . Karena tidak ada proyek", true, false);
+                sendNotifEmail("andias@wikamail.id", "FAILED RUNNING JOB OTORISASI CONTRACT", "Otorisasi otomatis gagal dijalankan pada hari : $dateFinish . Karena tidak ada proyek", true, false);
+                sendNotifEmail("fathur.rohman2353@gmail.com", "FAILED RUNNING JOB OTORISASI CONTRACT", "Otorisasi otomatis gagal dijalankan pada hari : $dateFinish . Karena tidak ada proyek", true, false);
             }
-
+            
             DB::commit();
             return Command::SUCCESS;
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error($th->getMessage());
+            sendNotifEmail("fathur.rohman2353@gmail.com", "RUNNING JOB OTORISASI CONTRACT FAIL", $th->getMessage(), true, false);
             return Command::FAILURE;
         }
     }
@@ -121,7 +154,7 @@ class ScheduleOtorisasiContract extends Command
             ->whereIn("stage", [1, 2, 4, 5])
             ->where('profit_center', $profit_center)
             ->where('periode_laporan', '=', $periode_laporan)
-            ->where('tahun_laporan', '=', $tahun_laporan)
+            ->where('tahun', '=', $tahun_laporan)
             ->get();
         $data_claims_potential = $claims_all->map(function ($item, $key) use ($claims_all) {
 
@@ -485,10 +518,11 @@ class ScheduleOtorisasiContract extends Command
         // FOURTH STEP SEND DATA TO BW
         $closed_request = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests/$content_location/close");
         // dd($closed_request, $data_claims, $fill_data);
+        integrationLog("OTORISASI CLAIMS", $data_claims->toJson(), json_encode(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"]), $fill_data->status(), $fill_data->body(), null, null);
 
         if ($fill_data->successful() && $closed_request->successful()) {
 
-            setLogging('ccm_approval', "APPROVAL CCM => ", [
+            setLogging('Scheduller/ApprovalCCM', "APPROVAL CCM => ", [
                 "KODE_PROYEK" => $claims_all->first()?->profit_center,
                 "DATA" => $data_claims->toArray() ?? [],
                 "STATUS" => "SUCCESS"
@@ -496,7 +530,7 @@ class ScheduleOtorisasiContract extends Command
 
             return true;
         } else {
-            setLogging('ccm_approval', "APPROVAL CCM => ", [
+            setLogging('Scheduller/ErrorApprovalCCM', "APPROVAL CCM => ", [
                 "KODE_PROYEK" => $claims_all->first()?->profit_center,
                 "DATA" => $data_claims->toArray() ?? [],
                 "STATUS" => "FAILED"

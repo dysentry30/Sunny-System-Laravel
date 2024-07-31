@@ -36,12 +36,16 @@ class ScheduleOtorisasiForecastAnak extends Command
     {
         try {
             DB::beginTransaction();
+
+            $bulan = date("m") != 1 ? date("m") - 1 : 0;
+            $tahun = date("m") != 1 ? date("Y") : date("Y") - 1;
+
             $dateStart = Carbon::now()->translatedFormat("d F Y H:i:s");
             sendNotifEmail("andias@wikamail.id", "RUNNING JOB OTORISASI FORECAST", "Otorisasi otomatis sedang dijalankan pada hari : $dateStart", true, false);
             sendNotifEmail("fathur.rohman2353@gmail.com", "RUNNING JOB OTORISASI FORECAST", "Otorisasi otomatis sedang dijalankan pada hari : $dateStart", true, false);
             // if (date('d') == 1 && date("m") != 1) {
-            $historyForecast = HistoryForecast::join("proyeks", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("periode_prognosa", date("m") - 1)->where("tahun", date("Y"))->get();
-            $forecastReal = Forecast::join("proyeks", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("periode_prognosa", date("m") - 1)->where("tahun", date("Y"))->get();
+            $historyForecast = HistoryForecast::join("proyeks", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("periode_prognosa", $bulan)->where("tahun", $tahun)->get();
+            $forecastReal = Forecast::join("proyeks", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("periode_prognosa", $bulan)->where("tahun", $tahun)->get();
 
             $historyGroup = $historyForecast->groupBy('unit_kerja');
 
@@ -75,7 +79,7 @@ class ScheduleOtorisasiForecastAnak extends Command
                         $current_proyek = Proyek::find($kode_proyek);
 
                         if ($current_proyek->tipe_proyek == "R") {
-                            $history_forecast_count = HistoryForecast::where("kode_proyek", "=", $kode_proyek)->where("periode_prognosa", "=", date("m") - 1)->where("tahun", "=", date("Y"))->get();
+                            $history_forecast_count = HistoryForecast::where("kode_proyek", "=", $kode_proyek)->where("periode_prognosa", "=", $bulan)->where("tahun", "=", $tahun)->get();
                             if ($history_forecast_count->count() > 0) continue;
                             // dd($current_proyek);
                             foreach ($forecasts as $forecast) {
@@ -121,7 +125,7 @@ class ScheduleOtorisasiForecastAnak extends Command
                             }
                         } else {
 
-                            $history_forecast_count = HistoryForecast::where("kode_proyek", "=", $kode_proyek)->where("periode_prognosa", "=", date("m") - 1)->where("tahun", "=", date("Y"))->get();
+                            $history_forecast_count = HistoryForecast::where("kode_proyek", "=", $kode_proyek)->where("periode_prognosa", "=", $bulan)->where("tahun", "=", $tahun)->get();
                             if ($history_forecast_count->count() > 0) continue;
                             $history_forecast = new HistoryForecast();
 
@@ -329,5 +333,7 @@ class ScheduleOtorisasiForecastAnak extends Command
         fwrite($prognosa_log, file_get_contents(storage_path("logs/http_log.log")));
         fclose($prognosa_log);
         fclose($fp);
+
+        integrationLog("OTORISASI PROGNOSA ANAK", $data->toJson(), json_encode(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"]), $fill_data->status(), $fill_data->body(), null, null);
     }
 }

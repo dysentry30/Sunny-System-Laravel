@@ -36,12 +36,16 @@ class ScheduleOtorisasiForecast extends Command
     {
         try {
             DB::beginTransaction();
+
+            $bulan = date("m") != 1 ? date("m") - 1 : 0;
+            $tahun = date("m") != 1 ? date("Y") : date("Y") - 1;
+
             $dateStart = Carbon::now()->translatedFormat("d F Y H:i:s");
             sendNotifEmail("andias@wikamail.id", "RUNNING JOB OTORISASI FORECAST", "Otorisasi otomatis sedang dijalankan pada hari : $dateStart", true, false);
             sendNotifEmail("fathur.rohman2353@gmail.com", "RUNNING JOB OTORISASI FORECAST", "Otorisasi otomatis sedang dijalankan pada hari : $dateStart", true, false);
             // if (date('d') == 1 && date("m") != 1) {
-            $historyForecast = HistoryForecast::join("proyeks", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("periode_prognosa", date("m") - 1)->where("tahun", date("Y"))->get();
-            $forecastReal = Forecast::join("proyeks", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("periode_prognosa", date("m") - 1)->where("tahun", date("Y"))->get();
+            $historyForecast = HistoryForecast::join("proyeks", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("periode_prognosa", $bulan)->where("tahun", $tahun)->get();
+            $forecastReal = Forecast::join("proyeks", "forecasts.kode_proyek", "=", "proyeks.kode_proyek")->where("periode_prognosa", $bulan)->where("tahun", $tahun)->get();
 
             $historyGroup = $historyForecast->groupBy('unit_kerja');
 
@@ -75,7 +79,7 @@ class ScheduleOtorisasiForecast extends Command
                         $current_proyek = Proyek::find($kode_proyek);
 
                         if ($current_proyek->tipe_proyek == "R") {
-                            $history_forecast_count = HistoryForecast::where("kode_proyek", "=", $kode_proyek)->where("periode_prognosa", "=", date("m") - 1)->where("tahun", "=", date("Y"))->get();
+                            $history_forecast_count = HistoryForecast::where("kode_proyek", "=", $kode_proyek)->where("periode_prognosa", "=", $bulan)->where("tahun", "=", $tahun)->get();
                             if ($history_forecast_count->count() > 0) continue;
                             // dd($current_proyek);
                             foreach ($forecasts as $forecast) {
@@ -109,8 +113,8 @@ class ScheduleOtorisasiForecast extends Command
                                 }
                                 $history_forecast->month_rkap = (int) $forecast->month_rkap;
                                 $history_forecast->month_realisasi = $forecast->month_realisasi;
-                                $history_forecast->periode_prognosa = (int) date("m") - 1;
-                                $history_forecast->tahun = (int) date("Y");
+                                $history_forecast->periode_prognosa = (int) $bulan;
+                                $history_forecast->tahun = (int) $tahun;
 
                                 $history_forecast->is_approved_1 = 't';
                                 $history_forecast->is_request_unlock = null;
@@ -121,7 +125,7 @@ class ScheduleOtorisasiForecast extends Command
                             }
                         } else {
 
-                            $history_forecast_count = HistoryForecast::where("kode_proyek", "=", $kode_proyek)->where("periode_prognosa", "=", date("m") - 1)->where("tahun", "=", date("Y"))->get();
+                            $history_forecast_count = HistoryForecast::where("kode_proyek", "=", $kode_proyek)->where("periode_prognosa", "=", $bulan)->where("tahun", "=", $tahun)->get();
                             if ($history_forecast_count->count() > 0) continue;
                             $history_forecast = new HistoryForecast();
 
@@ -151,8 +155,8 @@ class ScheduleOtorisasiForecast extends Command
                                 $history_forecast->realisasi_forecast = $total_realisasi;
                                 $history_forecast->month_realisasi = $forecast->month_realisasi ?? 0;
                             }
-                            $history_forecast->periode_prognosa = (int) date("m") - 1;
-                            $history_forecast->tahun = (int) date("Y");
+                            $history_forecast->periode_prognosa = (int) $bulan;
+                            $history_forecast->tahun = (int) $tahun;
 
                             $history_forecast->is_approved_1 = 't';
                             $history_forecast->is_request_unlock = null;
@@ -193,7 +197,7 @@ class ScheduleOtorisasiForecast extends Command
                     }
 
                     setLogging("Scheduller/OtorisasiCRM", "[Otorisasi $unitKerjaProyek->unit_kerja Bulan " . Carbon::now() . "]", ["message" => "Success", "timestamp" => Carbon::now()]);
-                    self::sendDataPrognosaSAP($resultRequestToSAP);
+                    // self::sendDataPrognosaSAP($resultRequestToSAP);
                 }
             }
 
@@ -261,7 +265,7 @@ class ScheduleOtorisasiForecast extends Command
                         "CUSTOMER" => $forecast->Proyek->proyekBerjalan->customer->kode_bp ?? "", // kode sap di customer
                         "SBU" => $forecast->Proyek->Sbu->kode_sbu ?? "", // kode sbu di SBU
                         "AMOUNT_PROGNOSA" => (int) $forecast->periode_prognosa <= (int) $forecast->month_forecast ? (int) $forecast->nilai_forecast : 0,
-                        // "REPORT_PERIOD" => (int) (date("Y") . str_pad($forecast->periode_prognosa, 3, 0, STR_PAD_LEFT)),
+                        // "REPORT_PERIOD" => (int) ($tahun . str_pad($forecast->periode_prognosa, 3, 0, STR_PAD_LEFT)),
                         "REPORT_PERIOD" => (int) ($forecast->tahun . str_pad($forecast->periode_prognosa, 3, 0, STR_PAD_LEFT)),
                         "VERSION" => "PROG",
                     ]);
@@ -284,7 +288,7 @@ class ScheduleOtorisasiForecast extends Command
                     "CUSTOMER" => $forecast->Proyek->proyekBerjalan->customer->kode_bp ?? "", // kode sap di customer
                     "SBU" => $forecast->Proyek->Sbu->kode_sbu ?? "", // kode sbu di SBU
                     "AMOUNT_PROGNOSA" => (int) $forecast->periode_prognosa == (int) $forecast->month_realisasi ? (int) $forecast->realisasi_forecast : 0,
-                    // "REPORT_PERIOD" => (int) (date("Y") . str_pad($forecast->periode_prognosa, 3, 0, STR_PAD_LEFT)),
+                    // "REPORT_PERIOD" => (int) ($tahun . str_pad($forecast->periode_prognosa, 3, 0, STR_PAD_LEFT)),
                     "REPORT_PERIOD" => (int) ($forecast->tahun . str_pad($forecast->periode_prognosa, 3, 0, STR_PAD_LEFT)),
                     "VERSION" => "ACT",
                 ]);
@@ -329,5 +333,7 @@ class ScheduleOtorisasiForecast extends Command
         fwrite($prognosa_log, file_get_contents(storage_path("logs/http_log.log")));
         fclose($prognosa_log);
         fclose($fp);
+
+        integrationLog("OTORISASI PROGNOSA INDUK", $data->toJson(), json_encode(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"]), $fill_data->status(), $fill_data->body(), null, null);
     }
 }
