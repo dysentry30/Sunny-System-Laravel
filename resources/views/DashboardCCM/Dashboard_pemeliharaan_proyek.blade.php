@@ -289,7 +289,7 @@
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-secondary">
                                     {{-- <h2 class="m-0 text-center">{{ "SP00".sprintf("%02d", mt_rand(0, 99)) }}- {{ $proyek->UnitKerja->unit_kerja }} &nbsp; - &nbsp; {{ $proyek->nama_proyek }}</h2> --}}
-                                    <h2 class="m-0 text-center">{{ "SP00".sprintf("%02d", mt_rand(0, 99)) }}- {{ $proyek->UnitKerja->unit_kerja }} &nbsp; - &nbsp; {{ $proyek->proyek_name }}</h2>
+                                    <h2 class="m-0 text-center">{{ $proyek->profit_center }} &nbsp; - &nbsp; {{ $proyek->proyek_name }} &nbsp; - &nbsp; {{ $proyek->UnitKerja->unit_kerja }}</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -340,7 +340,7 @@
                                     <!--end::Header-->
                                     <div class="card-body py-7">
                                         <!--begin::Subtitle-->
-                                        <span class="text-white pt-1 fs-2">{{ Carbon\Carbon::create($proyek->finish_date)->translatedFormat("d M Y") ?? "-" }}</span>
+                                        <span class="text-white pt-1 fs-2">{{ Carbon\Carbon::create($proyek->contract_date)->translatedFormat("d M Y") ?? "-" }}</span>
                                         <!--end::Subtitle-->
                                     </div>
                                 </div>
@@ -364,7 +364,7 @@
                                     <!--end::Header-->
                                     <div class="card-body py-7">
                                         <!--begin::Subtitle-->
-                                        <span class="text-white pt-1 fs-2">{{ Carbon\Carbon::create($proyek->finish_date)->translatedFormat("d F Y") ?? "-" }}</span>
+                                        <span class="text-white pt-1 fs-2">{{ Carbon\Carbon::create($proyek->start_date)->translatedFormat("d F Y") ?? "-" }}</span>
                                         <!--end::Subtitle-->
                                     </div>
                                 </div>
@@ -810,7 +810,8 @@
                                                 <td class="text-center">1</td>
                                                 <td>Original</td>
                                                 <td class="text-center">{{ number_format((int)$proyek->contract_value_idr, 0, '.', '.') }}</td>
-                                                <td class="text-center">{{ number_format((int)$proyek->contract_value_idr / 16276, 0, '.', '.') }}</td>
+                                                {{-- <td class="text-center">{{ number_format((int)$proyek->contract_value_idr / 16276, 0, '.', '.') }}</td> --}}
+                                                <td class="text-center"></td>
                                                 {{-- <td class="text-center">100.000.000.000</td>
                                                 <td class="text-center">100.000.000.000</td> --}}
                                             </tr>
@@ -1017,17 +1018,17 @@
                                 </div>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col">
+                            {{-- <div class="col">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-success">
                                     <h2 class="m-0 text-center">POTENTIAL</h2>
                                 </div>
                                 <!--end::Title body-->
-                            </div>
+                            </div> --}}
                             <div class="col">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-success">
-                                    <h2 class="m-0 text-center">SUBS</h2>
+                                    <h2 class="m-0 text-center">SUBSMISSION</h2>
                                 </div>
                                 <!--end::Title body-->
                             </div>
@@ -1036,9 +1037,9 @@
                                 <div style="border-radius: 0px" class="py-2 bg-success">
                                     <h4 class="m-0 text-center">SUBMISIONS STATUS</h4>
                                     <div class="row">
-                                        <div class="col">
+                                        {{-- <div class="col">
                                             <h6 class="m-0 text-center">REVISION</h6>
-                                        </div>
+                                        </div> --}}
                                         <div class="col">
                                             <h6 class="m-0 text-center">NEGOITATION</h6>
                                         </div>
@@ -1073,7 +1074,7 @@
                                 </div>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col">
+                            {{-- <div class="col">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
@@ -1083,7 +1084,7 @@
                                     <!--end::Title body-->
                                 </a>
                                 <!--end::Title body-->
-                            </div>
+                            </div> --}}
                             <div class="col">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
@@ -1095,7 +1096,7 @@
                                 </a>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col-1">
+                            {{-- <div class="col-1">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
@@ -1105,7 +1106,7 @@
                                     <!--end::Title body-->
                                 </a>
                                 <!--end::Title body-->
-                            </div>
+                            </div> --}}
                             <div class="col-1">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
@@ -1161,7 +1162,7 @@
                                 </div>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col">
+                            {{-- <div class="col">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
@@ -1171,7 +1172,7 @@
                                     <!--end::Title body-->
                                 </a>
                                 <!--end::Title body-->
-                            </div>
+                            </div> --}}
                             <div class="col">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
@@ -1183,7 +1184,7 @@
                                 </a>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col-1">
+                            {{-- <div class="col-1">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
@@ -1193,7 +1194,7 @@
                                     <!--end::Title body-->
                                 </a>
                                 <!--end::Title body-->
-                            </div>
+                            </div> --}}
                             <div class="col-1">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
@@ -1260,13 +1261,13 @@
                                 </div>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col">
+                            {{-- <div class="col">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-success">
                                     <h2 class="m-0 text-center">POTENTIAL</h2>
                                 </div>
                                 <!--end::Title body-->
-                            </div>
+                            </div> --}}
                             <div class="col">
                                 <!--begin::Title body-->
                                 <div style="border-radius: 0px" class="card-body bg-success">
@@ -1279,9 +1280,9 @@
                                 <div style="border-radius: 0px" class="py-2 bg-success">
                                     <h4 class="m-0 text-center">SUBMISIONS STATUS</h4>
                                     <div class="row">
-                                        <div class="col">
+                                        {{-- <div class="col">
                                             <h6 class="m-0 text-center">REVISION</h6>
-                                        </div>
+                                        </div> --}}
                                         <div class="col">
                                             <h6 class="m-0 text-center">NEGOITATION</h6>
                                         </div>
@@ -1316,7 +1317,7 @@
                                 </div>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col">
+                            {{-- <div class="col">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
@@ -1326,7 +1327,7 @@
                                     <!--end::Title body-->
                                 </a>
                                 <!--end::Title body-->
-                            </div>
+                            </div> --}}
                             <div class="col">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
@@ -1338,7 +1339,7 @@
                                 </a>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col-1">
+                            {{-- <div class="col-1">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
@@ -1348,7 +1349,7 @@
                                     <!--end::Title body-->
                                 </a>
                                 <!--end::Title body-->
-                            </div>
+                            </div> --}}
                             <div class="col-1">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
@@ -1404,7 +1405,7 @@
                                 </div>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col">
+                            {{-- <div class="col">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
@@ -1414,7 +1415,7 @@
                                     <!--end::Title body-->
                                 </a>
                                 <!--end::Title body-->
-                            </div>
+                            </div> --}}
                             <div class="col">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
@@ -1426,7 +1427,7 @@
                                 </a>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col-1">
+                            {{-- <div class="col-1">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
@@ -1436,7 +1437,7 @@
                                     <!--end::Title body-->
                                 </a>
                                 <!--end::Title body-->
-                            </div>
+                            </div> --}}
                             <div class="col-1">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
@@ -1493,7 +1494,7 @@
                                 </div>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col">
+                            {{-- <div class="col">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
@@ -1501,14 +1502,14 @@
                                         @if($potensial_total_value == 0)
                                             <h2 class="m-0 text-center">0%</h2>
                                         @else
-                                            {{-- <h2 class="m-0 text-center">{{ $potensial_total_value != 0 && $proyek->nilai_perolehan != 0 ? number_format((($potensial_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" : 0 }}</h2> --}}
+                                            <h2 class="m-0 text-center">{{ $potensial_total_value != 0 && $proyek->nilai_perolehan != 0 ? number_format((($potensial_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" : 0 }}</h2>
                                             <h2 class="m-0 text-center">{{ $potensial_total_value != 0 && $proyek->contract_value_idr != 0 ? number_format((($potensial_total_value / $proyek->contract_value_idr) * 100), 2, ".", ".") . "%" : 0 }}</h2>
                                         @endif
                                     </div>
                                     <!--end::Title body-->
                                 </a>
                                 <!--end::Title body-->
-                            </div>
+                            </div> --}}
                             <div class="col">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
@@ -1525,7 +1526,7 @@
                                 </a>
                                 <!--end::Title body-->
                             </div>
-                            <div class="col-1">
+                            {{-- <div class="col-1">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
                                     <!--begin::Title body-->
@@ -1533,14 +1534,14 @@
                                         @if($revision_total_value == 0)
                                             <h2 class="m-0 text-center">0%</h2>
                                         @else
-                                            {{-- <h2 class="m-0 text-center">{{ $revision_total_value != 0 && $proyek->nilai_perolehan != 0 ? number_format((($revision_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" : 0 }}</h2> --}}
+                                            <h2 class="m-0 text-center">{{ $revision_total_value != 0 && $proyek->nilai_perolehan != 0 ? number_format((($revision_total_value / $proyek->nilai_perolehan) * 100), 2, ".", ".") . "%" : 0 }}</h2>
                                             <h2 class="m-0 text-center">{{ $revision_total_value != 0 && $proyek->contract_value_idr != 0 ? number_format((($revision_total_value / $proyek->contract_value_idr) * 100), 2, ".", ".") . "%" : 0 }}</h2>
                                         @endif
                                     </div>
                                     <!--end::Title body-->
                                 </a>
                                 <!--end::Title body-->
-                            </div>
+                            </div> --}}
                             <div class="col-1">
                                 <!--begin::Title body-->
                                 <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
@@ -1610,7 +1611,7 @@
 
                         <br>
 
-                        <!--begin::Title-->
+                        {{-- <!--begin::Title-->
                         <div class="mb-4">
                             <div class="col-12">
                                 <!--begin::Title body-->
@@ -1693,7 +1694,7 @@
                         </div>
                         <!--end::Row-->
 
-                        <br>
+                        <br> --}}
 
                         <!--begin::Title-->
                         <div class="row mb-4">

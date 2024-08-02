@@ -32,7 +32,7 @@ class ApprovalTerkontrakProyekController extends Controller
     {
         $this->matriks_user = !Auth::user()->check_administrator ? Auth::user()->Pegawai->MatriksTerkontrakProyek->where("is_active", true) : MatriksApprovalTerkontrakProyek::where("is_active", true)->get();
 
-        if (!empty($this->matriks_user)) {
+        if ($this->matriks_user->isNotEmpty()) {
             $isCanApprove = !empty(Auth::user()->Pegawai?->MatriksTerkontrakProyek?->where("is_active", true));
             $unitKerja = $this->matriks_user->map(function ($item) {
                 return $item->unit_kerja;
@@ -162,45 +162,45 @@ class ApprovalTerkontrakProyekController extends Controller
                     $bulans = $getTanggalRequest->month;
                     $years = $getTanggalRequest->year;
 
-                    if (!empty($proyek->bulan_ri_perolehan) && !empty($proyek->nilai_perolehan) && $proyek->stage == 8 && $proyek->is_need_approval_terkontrak && $proyek->tahun_perolehan == $years) {
-                        $editForecast = Forecast::where("kode_proyek", "=", $proyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->where("tahun", "=", $years)->first();
-                        if (!empty($editForecast)) {
-                            $oldestForecast = Forecast::where("kode_proyek", "=", $proyek->kode_proyek)->where("periode_prognosa", "=", ($bulans - 1))->where("tahun", "=", $years)->first();
-                            if (!empty($oldestForecast) && (int) date("d") <= 15) {
-                                // $oldestForecast = new Forecast();
-                                $oldestForecast->kode_proyek = $proyek->kode_proyek;
-                                $oldestForecast->periode_prognosa = $bulans - 1;
-                                $oldestForecast->tahun = $years;
-                                $oldestForecast->nilai_forecast = (int) str_replace('.', '', $proyek->nilai_perolehan);
-                                $oldestForecast->realisasi_forecast = (int) str_replace('.', '', $proyek->nilai_perolehan);
-                                $oldestForecast->month_realisasi = (int) $proyek->bulan_ri_perolehan;
-                                $oldestForecast->save();
-                            }
-                            $editForecast->nilai_forecast = (int) str_replace('.', '', $proyek->nilai_perolehan);
-                            $editForecast->realisasi_forecast = (int) str_replace('.', '', $proyek->nilai_perolehan);
-                            $editForecast->month_realisasi = (int) $proyek->bulan_ri_perolehan;
-                            $editForecast->save();
-                        } else {
-                            $newForecast = new Forecast();
-                            $newForecast->kode_proyek = $proyek->kode_proyek;
-                            $newForecast->month_forecast = $proyek->bulan_ri_perolehan;
-                            $newForecast->nilai_forecast = (int) str_replace('.', '', $proyek->nilai_perolehan);
-                            $newForecast->month_realisasi = $proyek->bulan_ri_perolehan;
-                            $newForecast->realisasi_forecast = (int) str_replace('.', '', $proyek->nilai_perolehan);
-                            $newForecast->periode_prognosa = $bulans;
-                            $newForecast->tahun = (int) date("Y");
-                            $newForecast->save();
-                        }
-                    }
+                    // if (!empty($proyek->bulan_ri_perolehan) && !empty($proyek->nilai_perolehan) && $proyek->stage == 8 && $proyek->is_need_approval_terkontrak && $proyek->tahun_perolehan == $years) {
+                    //     $editForecast = Forecast::where("kode_proyek", "=", $proyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->where("tahun", "=", $years)->first();
+                    //     if (!empty($editForecast)) {
+                    //         $oldestForecast = Forecast::where("kode_proyek", "=", $proyek->kode_proyek)->where("periode_prognosa", "=", ($bulans - 1))->where("tahun", "=", $years)->first();
+                    //         if (!empty($oldestForecast) && (int) date("d") <= 15) {
+                    //             // $oldestForecast = new Forecast();
+                    //             $oldestForecast->kode_proyek = $proyek->kode_proyek;
+                    //             $oldestForecast->periode_prognosa = $bulans - 1;
+                    //             $oldestForecast->tahun = $years;
+                    //             $oldestForecast->nilai_forecast = (int) str_replace('.', '', $proyek->nilai_perolehan);
+                    //             $oldestForecast->realisasi_forecast = (int) str_replace('.', '', $proyek->nilai_perolehan);
+                    //             $oldestForecast->month_realisasi = (int) $proyek->bulan_ri_perolehan;
+                    //             $oldestForecast->save();
+                    //         }
+                    //         $editForecast->nilai_forecast = (int) str_replace('.', '', $proyek->nilai_perolehan);
+                    //         $editForecast->realisasi_forecast = (int) str_replace('.', '', $proyek->nilai_perolehan);
+                    //         $editForecast->month_realisasi = (int) $proyek->bulan_ri_perolehan;
+                    //         $editForecast->save();
+                    //     } else {
+                    //         $newForecast = new Forecast();
+                    //         $newForecast->kode_proyek = $proyek->kode_proyek;
+                    //         $newForecast->month_forecast = $proyek->bulan_ri_perolehan;
+                    //         $newForecast->nilai_forecast = (int) str_replace('.', '', $proyek->nilai_perolehan);
+                    //         $newForecast->month_realisasi = $proyek->bulan_ri_perolehan;
+                    //         $newForecast->realisasi_forecast = (int) str_replace('.', '', $proyek->nilai_perolehan);
+                    //         $newForecast->periode_prognosa = $bulans;
+                    //         $newForecast->tahun = (int) date("Y");
+                    //         $newForecast->save();
+                    //     }
+                    // }
                     $generateDataNasabahOnline = self::generateNasabahOnline($proyek);
                     if ($proyek->UnitKerja->dop != "EA") {
                         self::sendDataNasabahOnline($generateDataNasabahOnline);
                     }
-                    $proyekBerjalan = ProyekBerjalans::where('kode_proyek', $proyek->kode_proyek)->first();
-                    $proyekBerjalan->stage = 8;
+                    // $proyekBerjalan = ProyekBerjalans::where('kode_proyek', $proyek->kode_proyek)->first();
+                    // $proyekBerjalan->stage = 8;
                     $proyek->is_need_approval_terkontrak = false;
                     $proyek->save();
-                    $proyekBerjalan->save();
+                    // $proyekBerjalan->save();
                 }
                 DB::commit();
                 Alert::success("Success", "Proyek berhasil disetujui");
@@ -289,9 +289,11 @@ class ApprovalTerkontrakProyekController extends Controller
             $witht = "";
         }
 
+        $alamat = substr(preg_replace('/[\x{200B}-\x{200D}\x{FEFF}]/u', ' ', $customer->address_1), 0, 255);
+
         $data_nasabah_online = collect([
             "nmnasabah" => "$customer->name",
-            "alamat" => "$customer->address_1",
+            "alamat" => "$alamat",
             "kota" => "$customer->kota_kabupaten",
             "email" => "$customer->email",
             "ext" => "-",
@@ -492,12 +494,12 @@ class ApprovalTerkontrakProyekController extends Controller
         $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm", $dataNasabah)->json();
         setLogging("Send_Nasabah_Online", "[Nasabah Online => $namaNasabah] => ", $dataNasabah->toArray());
         if (!$nasabah_online_response["status"] && !str_contains($nasabah_online_response["msg"], "sudah ada dalam nasabah online")) {
-            integrationLog("SEND NASABAH ONLINE", $dataNasabah->toJson(), null, "FAIL", $nasabah_online_response["status"], $nasabah_online_response, null, $nasabah_online_response["msg"]);
-            Alert::error("Error", $nasabah_online_response["msg"]);
+            // integrationLog("SEND NASABAH ONLINE", $dataNasabah->toJson(), null, "FAIL", $nasabah_online_response["status"], $nasabah_online_response, null, $nasabah_online_response["msg"]);
+            Alert::warning("Attention", $nasabah_online_response["msg"]);
             return redirect()->back();
         }
 
-        integrationLog("SEND NASABAH ONLINE", $dataNasabah->toJson(), null, "SUCCESS", $nasabah_online_response["status"], $nasabah_online_response);
+        // integrationLog("SEND NASABAH ONLINE", $dataNasabah->toJson(), null, "SUCCESS", $nasabah_online_response["status"], null, $nasabah_online_response);
     }
 
     private static function GUID()

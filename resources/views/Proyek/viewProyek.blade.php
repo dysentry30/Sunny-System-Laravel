@@ -111,7 +111,7 @@
                                 <!--begin::Button-->
                                 @canany(['super-admin', 'admin-crm', 'user-crm', 'approver-crm'])
                                     @if ($proyek->dop != "EA")
-                                        @if (($proyek->stage == 8 && $proyek->is_need_approval_terkontrak && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek?->is_revisi))
+                                        @if (($proyek->stage == 8 && $proyek->is_need_approval_terkontrak && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek?->is_revisi) || $proyek->stage < 8)
                                             @if ($proyek->is_cancel == false)
                                                 <button type="submit" name="proyek-save" class="btn btn-sm btn-primary ms-2" id="proyek-save"
                                                     style="background-color:#008CB4">
@@ -193,7 +193,7 @@
 
                                 <!--begin::Button-->
                                 @if ($proyek->dop != "EA")
-                                    @if ($proyek->stage == 8 && empty($proyek->ApprovalTerkontrakProyek))
+                                    @if (($proyek->stage == 8 && $proyek->is_need_approval_terkontrak && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek?->is_revisi) || $proyek->stage < 8)
                                         @canany(['super-admin', 'admin-crm', 'user-crm'])
                                             <a class="btn btn-sm btn-light btn-active-danger ms-2" data-bs-toggle="modal"
                                                 data-bs-target="#kt_modal_cancel_proyek" id="kt_toolbar_export">Cancel Proyek

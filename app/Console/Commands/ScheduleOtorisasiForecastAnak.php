@@ -177,7 +177,7 @@ class ScheduleOtorisasiForecastAnak extends Command
 
                         foreach ($forecasts as $forecast) {
 
-                            $resultRequestToSAP->push(self::generateRequestSendPrognosaSAP($forecast));
+                            // $resultRequestToSAP->push(self::generateRequestSendPrognosaSAP($forecast));
 
                             //Save Periode Berikutnya
                             if ($forecast->periode_prognosa != 12) {
@@ -197,7 +197,7 @@ class ScheduleOtorisasiForecastAnak extends Command
                     }
 
                     setLogging("Scheduller/OtorisasiCRM", "[Otorisasi $unitKerjaProyek->unit_kerja Bulan " . Carbon::now() . "]", ["message" => "Success", "timestamp" => Carbon::now()]);
-                    self::sendDataPrognosaSAP($resultRequestToSAP);
+                    // self::sendDataPrognosaSAP($resultRequestToSAP);
                 }
             }
 

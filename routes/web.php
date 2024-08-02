@@ -5165,6 +5165,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
     //     unset($p->HistoryForecasts);
     //     return $is_forecast_exist;
     // });
+    // $proyeks = Proyek::where("stage", "=", 8)->where("tahun_perolehan", "=", $periode[0])->where("unit_kerja", "=", $unitKerjaPis)->get(["id", "tanggal_selesai_pho", "tanggal_selesai_fho", "jenis_proyek", "kode_proyek", "nama_proyek", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak", "nospk_external", "porsi_jo", "nilai_kontrak_keseluruhan", "nomor_terkontrak", "nilai_valas_review", "tglspk_internal", "tanggal_terkontrak", "nilai_perolehan", "kurs_review", "klasifikasi_terkontrak", "provinsi", "negara", "sistem_bayar", "sumber_dana", "sbu", "jenis_terkontrak", "lokasi_tender", "mata_uang_review", "mata_uang_awal", "longitude", "latitude"]);
     $proyeks = Proyek::where("stage", "=", 8)->where("tahun_perolehan", "=", $periode[0])->where("unit_kerja", "=", $unitKerjaPis)->get(["id", "tanggal_selesai_pho", "tanggal_selesai_fho", "jenis_proyek", "kode_proyek", "nama_proyek", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak", "nospk_external", "porsi_jo", "nilai_kontrak_keseluruhan", "nomor_terkontrak", "nilai_valas_review", "tglspk_internal", "tanggal_terkontrak", "nilai_perolehan", "kurs_review", "klasifikasi_terkontrak", "provinsi", "negara", "sistem_bayar", "sumber_dana", "sbu", "jenis_terkontrak", "lokasi_tender", "mata_uang_review", "mata_uang_awal", "longitude", "latitude"]);
 
 
@@ -5177,7 +5178,17 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
     //     ], 400);
     // }
 
-    $proyeks = $proyeks->map(function ($p) use ($yearOtor, $periodeOtor, $request) {
+    $proyeks = $proyeks->filter(function ($proyek) {
+        if ($proyek != "EA") {
+            return !empty($proyek->ApprovalTerkontrakProyek) && $proyek->ApprovalTerkontrakProyek?->is_approved;
+        } else {
+            return $proyek;
+        }
+    })->map(function ($p) use (
+        $yearOtor,
+        $periodeOtor,
+        $request
+    ) {
         // $p->Id = $p->id;
         $p->Category = "";
         $p->title = "";

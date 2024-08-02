@@ -175,11 +175,11 @@ class ScheduleOtorisasiForecast extends Command
                         $total_realisasi = 0;
                         $total_rkap = 0;
 
-                        foreach ($forecasts as $forecast) {
+                        // foreach ($forecasts as $forecast) {
 
-                            $resultRequestToSAP->push(self::generateRequestSendPrognosaSAP($forecast));
+                        //     $resultRequestToSAP->push(self::generateRequestSendPrognosaSAP($forecast));
 
-                            //Save Periode Berikutnya
+                        //     //Save Periode Berikutnya
                             if ($forecast->periode_prognosa != 12) {
                                 $new_periode_forecast = new Forecast();
                                 $new_periode_forecast->kode_proyek = $forecast->kode_proyek;
@@ -193,10 +193,10 @@ class ScheduleOtorisasiForecast extends Command
                                 $new_periode_forecast->tahun = $forecast->tahun;
                                 $new_periode_forecast->save();
                             }
-                        }
+                        // }
                     }
 
-                    self::sendDataPrognosaSAP($resultRequestToSAP);
+                    // self::sendDataPrognosaSAP($resultRequestToSAP);
                     setLogging("Scheduller/OtorisasiCRM", "[Otorisasi $unitKerjaProyek->unit_kerja Bulan " . Carbon::now() . "]", ["message" => "Success", "timestamp" => Carbon::now()]);
                 }
             }

@@ -544,7 +544,9 @@ class ContractApprovalController extends Controller
                 $item_klaim = $cat_klaim->count();
                 $jumlah_klaim = $cat_klaim->sum("biaya_pengajuan");
                 $item_klaim_approve = $cat_klaim->where("stage", 5)->count();
-                $jumlah_klaim_approve = $cat_klaim->where("stage", 5)->sum("nilai_disetujui");
+                $jumlah_klaim_approve = $cat_klaim->where("stage", 5)->sum(function ($item) {
+                    return (int) $item->nilai_disetujui;
+                });
                 // dd($item_klaim, $jumlah_klaim);
 
                 //Kategori ANti Klaim
@@ -556,7 +558,9 @@ class ContractApprovalController extends Controller
                 $item_anti_klaim = $cat_anti_klaim->count();
                 $jumlah_anti_klaim = $cat_anti_klaim->sum("biaya_pengajuan");
                 $item_anti_klaim_approve = $cat_anti_klaim->where("stage", 5)->count();
-                $jumlah_anti_klaim_approve = $cat_anti_klaim->where("stage", 5)->sum("nilai_disetujui");
+                $jumlah_anti_klaim_approve = $cat_anti_klaim->where("stage", 5)->sum(function ($item) {
+                    return (int) $item->nilai_disetujui;
+                });
                 // dd($item_anti_klaim, $jumlah_anti_klaim);
 
                 //Kategori Klaim Asuransi
@@ -564,7 +568,9 @@ class ContractApprovalController extends Controller
                 $item_klaim_asuransi = $cat_klaim_asuransi->count();
                 $jumlah_klaim_asuransi = $cat_klaim_asuransi->sum("biaya_pengajuan");
                 $item_klaim_asuransi_approve = $cat_klaim_asuransi->where("stage", 5)->count();
-                $jumlah_klaim_asuransi_approve = $cat_klaim_asuransi->where("stage", 5)->sum("nilai_disetujui");
+                $jumlah_klaim_asuransi_approve = $cat_klaim_asuransi->where("stage", 5)->sum(function ($item) {
+                    return (int) $item->nilai_disetujui;
+                });
                 // dd($item_klaim_asuransi, $jumlah_klaim_asuransi);
 
 
