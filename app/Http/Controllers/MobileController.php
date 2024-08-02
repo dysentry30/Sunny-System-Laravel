@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Forecast;
 use App\Models\HistoryForecast;
+use App\Models\MobileNotification;
 use App\Models\Proyek;
 use App\Models\UnitKerja;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Carbon\Carbon;
 use stdClass;
+use Illuminate\Support\Str;
 
 class MobileController extends Controller
 {
@@ -856,6 +859,120 @@ class MobileController extends Controller
         }
     }
 
+    /**
+     * Get Notification In Apps
+     * @return Illuminate\Http\Response JSON
+     */
+    public function getNotificationInApps(Request $request)
+    {
+        try {
+            $nip = $request->get("nip");
+
+            if (!empty($nip)) {
+                $notifications = MobileNotification::where("nip", $nip)->get()?->makeHidden(['id']);
+                if (!empty($notifications)) {
+                    return response()->json([
+                        'success' => true,
+                        'status' => 'success',
+                        'message' => null,
+                        'data' => $notifications->toArray()
+                    ]);
+                } else {
+                    return response()->json([
+                        'success' => true,
+                        'status' => 'success',
+                        'message' => "Notifikasi Belum Tersedia",
+                        'data' => []
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'status' => 'failed',
+                    'message' => "NIP Tidak ditemukan",
+                    'data' => []
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'status' => 'failed',
+                'message' => $e->getMessage(),
+                'data' => []
+            ]);
+        }
+    }
+
+    public function inputNotification()
+    {
+        $proyeks = Proyek::where("tahun_perolehan", 2024)->where("tipe_proyek", "P")->whereIn("stage", [3, 4])->get();
+
+        $collectNotif = collect([]);
+
+
+
+        $proyeksMap = $proyeks->each(function ($item) use ($collectNotif) {
+            // if (!empty($item->jadwal_pq) && $item->jadwal_pq >= Carbon::now()) {
+            $pegawaiUnitKerja = User::where("unit_kerja", "like", "%$item->unit_kerja%")->where(function ($query) {
+                $query->where("check_administrator", true)->orWhere("check_user_mobile", true);
+            })->where("is_active", true)->get();
+
+            if ($pegawaiUnitKerja->isNotEmpty()) {
+
+                foreach ($pegawaiUnitKerja as $pegawai) {
+
+                    if (!empty($item->jadwal_pq)) {
+                        Carbon::setLocale('id');
+                        $tanggalPQ = Carbon::parse($item->jadwal_pq);
+                        $messagePQ = $tanggalPQ->diffForHumans(Carbon::now(), [
+                            'syntax' => Carbon::DIFF_RELATIVE_TO_NOW,
+                            'parts' => 1,
+                            'options' => Carbon::ONE_DAY_WORDS,
+                        ]);
+
+                        $collectNotif->push([
+                            "id" => Str::uuid(),
+                            "kode_proyek" => $item->kode_proyek,
+                            "category" => "Scheduler",
+                            "sub_category" => "Pemasukan Prakualifikasi",
+                            "message" => "Waktu Pemasukan Prakualifikasi dilakukan dalam $messagePQ",
+                            "item_date" => Carbon::create($item->jadwal_pq)->translatedFormat("d F Y"),
+                            "nip" => $pegawai->nip,
+                            "created_at" => Carbon::now(),
+                            "updated_at" => Carbon::now()
+                        ]);
+                    }
+
+                    // if (!empty($item->jadwal_tender) && $item->jadwal_tender >= Carbon::now()) {
+                    if (!empty($item->jadwal_tender)) {
+                        Carbon::setLocale('id');
+                        $tanggalTender = Carbon::parse($item->jadwal_tender);
+                        $messageTender = $tanggalTender->diffForHumans(Carbon::now(), [
+                            'syntax' => Carbon::DIFF_RELATIVE_TO_NOW,
+                            'parts' => 1,
+                            'options' => Carbon::ONE_DAY_WORDS,
+                        ]);
+
+                        $collectNotif->push([
+                            "id" => Str::uuid(),
+                            "kode_proyek" => $item->kode_proyek,
+                            "category" => "Scheduler",
+                            "sub_category" => "Pemasukan Tender",
+                            "message" => "Waktu Pemasukan Tender dilakukan dalam $messageTender",
+                            "item_date" => Carbon::create($item->jadwal_tender)->translatedFormat("d F Y"),
+                            "nip" => $pegawai->nip,
+                            "created_at" => Carbon::now(),
+                            "updated_at" => Carbon::now()
+                        ]);
+                    }
+                }
+            }
+        });
+
+        if ($collectNotif->isNotEmpty()) {
+            MobileNotification::insert($collectNotif->toArray());
+        }
+    }
 
 
 

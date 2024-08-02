@@ -5793,6 +5793,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('/get-total-competitive-index', [MobileController::class, 'GetTotalCompetitiveIndex']);
     Route::get('/get-proyek/{page}', [MobileController::class, 'getListProyek']);
     Route::post('/get-schedule', [MobileController::class, 'getSchedule']);
+    Route::post('/get-notifications', [MobileController::class, 'getNotificationInApps']);
 });
 
 Route::get('/tes-tv/{tes}', [DashboardTVController::class, 'getScheduleCampur']);
