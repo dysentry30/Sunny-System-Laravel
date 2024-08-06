@@ -113,8 +113,8 @@ class ScheduleOtorisasiForecastAnak extends Command
                                 }
                                 $history_forecast->month_rkap = (int) $forecast->month_rkap;
                                 $history_forecast->month_realisasi = $forecast->month_realisasi;
-                                $history_forecast->periode_prognosa = (int) date("m") - 1;
-                                $history_forecast->tahun = (int) date("Y");
+                                $history_forecast->periode_prognosa = (int) $bulan;
+                                $history_forecast->tahun = (int) $tahun;
 
                                 $history_forecast->is_approved_1 = 't';
                                 $history_forecast->is_request_unlock = null;
@@ -149,14 +149,15 @@ class ScheduleOtorisasiForecastAnak extends Command
                             $history_forecast->nilai_forecast = (string) $total_forecast;
                             $history_forecast->month_forecast = $farestMonth;
                             $history_forecast->rkap_forecast = (string) $total_rkap;
-                            $history_forecast->month_rkap = (int) $current_proyek->bulan_pelaksanaan ?? 1;
+                            // $history_forecast->month_rkap = (int) $current_proyek->bulan_pelaksanaan ?? 1;
+                            $history_forecast->month_rkap = (int) $current_proyek->bulan_rkap_review ?? 1;
 
                             if ($current_proyek->stage == 8) {
                                 $history_forecast->realisasi_forecast = $total_realisasi;
                                 $history_forecast->month_realisasi = $forecast->month_realisasi ?? 0;
                             }
-                            $history_forecast->periode_prognosa = (int) date("m") - 1;
-                            $history_forecast->tahun = (int) date("Y");
+                            $history_forecast->periode_prognosa = (int) $bulan;
+                            $history_forecast->tahun = (int) $tahun;
 
                             $history_forecast->is_approved_1 = 't';
                             $history_forecast->is_request_unlock = null;

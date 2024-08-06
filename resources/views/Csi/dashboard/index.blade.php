@@ -171,7 +171,7 @@
                                                         <a class="text-hover-primary" href="/csi/dashboard/{{ $item['key'] }}">{{ $item['key'] }}</a>
                                                     @endif
                                                 </td>
-                                                <td class="text-center align-center">{{ $item['sumPerDivisi'] }}</td>
+                                                <td class="text-center align-center">{{ $item['scorePerDivisi'] }}</td>
                                                 <td class="text-center align-center">{{ $item['persentasePerDivisi'] }}%</td>
                                                 <td class="text-center align-center">{{ $item['keteranganPerDivisi'] }}</td>
                                             </tr>                                                

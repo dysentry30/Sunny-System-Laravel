@@ -149,7 +149,8 @@ class ScheduleOtorisasiForecast extends Command
                             $history_forecast->nilai_forecast = (string) $total_forecast;
                             $history_forecast->month_forecast = $farestMonth;
                             $history_forecast->rkap_forecast = (string) $total_rkap;
-                            $history_forecast->month_rkap = (int) $current_proyek->bulan_pelaksanaan ?? 1;
+                            // $history_forecast->month_rkap = (int) $current_proyek->bulan_pelaksanaan ?? 1;
+                            $history_forecast->month_rkap = (int) $current_proyek->bulan_rkap_review ?? 1;
 
                             if ($current_proyek->stage == 8) {
                                 $history_forecast->realisasi_forecast = $total_realisasi;

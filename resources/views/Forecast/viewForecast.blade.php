@@ -2033,6 +2033,13 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                     {{-- Begin :: TOTAL TAHUNAN  --}}
                                                                     @php
                                                                         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
+                                                                        if ($unit_kerja_user->isEmpty()) {
+                                                                            if (auth()->user()->check_administrator) {
+                                                                                $unit_kerja_user = \App\Models\UnitKerja::whereNotIn("divcode", ["B", "C", "D", "8"])->get("divcode")->groupBy("divcode")->map(function($item, $key){
+                                                                                    return $key;
+                                                                                });                                                                                
+                                                                            }
+                                                                        }
                                                                         if (str_contains(Request::path(), "internal")) {
                                                                             $historyTotalTahunan = App\Models\Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.tahun_perolehan", "=", $year)->where("forecasts.periode_prognosa", "=", $periode)->where("forecasts.tahun", "=", $year)->get()->whereIn("unit_kerja", $unit_kerja_user->toArray())->whereNotIn("unit_kerja", ["B", "C", "D", "8"]);
                                                                         } else {

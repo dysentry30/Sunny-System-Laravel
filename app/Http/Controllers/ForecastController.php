@@ -37,7 +37,7 @@ class ForecastController extends Controller
         // $year = $year != "" ? (int) $year : (int) date("Y");
 
         if (Auth::user()->check_administrator) {
-            $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", $periode)->get();
+            $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", $periode)->where("forecasts.tahun", "=", $year)->get();
             $nilaiRKAP = Proyek::all()->where("jenis_proyek", "!=", "I");
         } else {
             $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
