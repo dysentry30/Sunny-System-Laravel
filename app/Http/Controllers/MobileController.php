@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Gate;
 use Carbon\Carbon;
 use stdClass;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+
 
 class MobileController extends Controller
 {
@@ -829,7 +831,6 @@ class MobileController extends Controller
                         $proyek->hps_pagu = "Rp. " . number_format((int)$proyek->hps_pagu, 0, '.', ',');
                         $proyek->nilai_penawaran_keseluruhan = "Rp. " . number_format((int)$proyek->penawaran_tender, 0, '.', ',');
                         $proyek->uang_muka = !empty($proyek->uang_muka) && !str_contains($proyek->uang_muka, "%") ? $proyek->uang_muka . ' %' : (!empty($proyek->uang_muka) && str_contains($proyek->uang_muka, "%") ? $proyek->uang_muka : '-');
-                        $proyek->tgl_event = $proyek->jadwal_pq;
                         $proyek->tgl_event = $proyek->jadwal_tender;
                         $proyek->event = "Pemasukan Tender";
                         return $proyek;
@@ -869,8 +870,24 @@ class MobileController extends Controller
             $nip = $request->get("nip");
 
             if (!empty($nip)) {
-                $notifications = MobileNotification::where("nip", $nip)->get()?->makeHidden(['id']);
-                if (!empty($notifications)) {
+                $notifications = MobileNotification::where("nip", $nip)->get();
+
+                if ($notifications->isNotEmpty()) {
+                    $notifications = $notifications->map(function ($value) {
+                        if ($value->sub_category == "Pemasukan Tender") {
+                            $value->date_sort = strtotime($value->Proyek->jadwal_tender);
+                        } elseif ($value->sub_category == "Pemasukan Prakualifikasi") {
+                            $value->date_sort = strtotime($value->Proyek->jadwal_pq);
+                        } else {
+                            $value->date_sort = null;
+                        }
+                        return $value;
+                    });
+                    $notifications = $notifications->makeHidden(["Proyek"])->sortByDesc("date_sort")->values();
+                    // dd($notifications->sortBy("date_sort"));
+                }
+
+                if (!empty($notifications)) {                    
                     return response()->json([
                         'success' => true,
                         'status' => 'success',
@@ -974,7 +991,54 @@ class MobileController extends Controller
         }
     }
 
+    public function readNotification(Request $request, MobileNotification $notification)
+    {
+        try {
 
+            DB::beginTransaction();
+            if (!empty($notification)) {
+                $notification->is_read = true;
+                $notification->save();
+                $proyeks = Proyek::with(["proyekBerjalan"])->select('kode_proyek', 'nama_proyek', 'unit_kerja', 'stage', 'sumber_dana', 'jenis_proyek', 'nilaiok_awal', 'porsi_jo', 'hps_pagu', 'penawaran_tender', 'jenis_terkontrak', 'sistem_bayar', 'is_uang_muka', 'uang_muka', 'jadwal_pq', 'jadwal_tender')->where("kode_proyek", $notification->kode_proyek)->first();
+                $proyeks->divisi = self::getUnitKerjaProyek($proyeks->unit_kerja);
+                $proyeks->jenis_proyek = $proyeks->jenis_proyek == "J" ? "JO" : ($proyeks->jenis_proyek == "I" ? "Internal" : ($proyeks->jenis_proyek == "N" ? "External" : ""));
+                $proyeks->nilai_ok = "Rp. " . number_format((int)$proyeks->nilaiok_proyek, 0, '.', ',');
+                $proyeks->nama_pelanggan = $proyeks->proyekBerjalan->customer->name ?? "-";
+                $proyeks->porsi_jo = !str_contains($proyeks->porsi_jo, '%') ? $proyeks->porsi_jo . ' %' : $proyeks->porsi_jo;
+                $proyeks->hps_pagu = "Rp. " . number_format((int)$proyeks->hps_pagu, 0, '.', ',');
+                $proyeks->nilai_penawaran_keseluruhan = "Rp. " . number_format((int)$proyeks->penawaran_tender, 0, '.', ',');
+                $proyeks->uang_muka = !empty($proyeks->uang_muka) && !str_contains($proyeks->uang_muka, "%") ? $proyeks->uang_muka . ' %' : (!empty($proyeks->uang_muka) && str_contains($proyeks->uang_muka, "%") ? $proyeks->uang_muka : '-');
+            } else {
+                $proyeks = collect([]);
+            }
+
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'status' => 'success',
+                'message' => null,
+                'data' => $proyeks->toArray()
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'status' => 'failed',
+                'message' => $e->getMessage(),
+                'data' => []
+            ]);
+        }
+    }
+
+    public function falseNotification()
+    {
+        try {
+            $notification = MobileNotification::where("is_read", true)->update(["is_read" => false]);
+            return response()->json("Success");
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
 
 
     private function getStage(int $stage)

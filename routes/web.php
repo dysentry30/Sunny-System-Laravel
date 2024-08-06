@@ -5804,7 +5804,13 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('/get-total-competitive-index', [MobileController::class, 'GetTotalCompetitiveIndex']);
     Route::get('/get-proyek/{page}', [MobileController::class, 'getListProyek']);
     Route::post('/get-schedule', [MobileController::class, 'getSchedule']);
-    Route::post('/get-notifications', [MobileController::class, 'getNotificationInApps']);
+
+    Route::group(['prefix' => 'notification'], function () {
+        Route::post('/input', [MobileController::class, 'inputNotification']);
+        Route::post('/get', [MobileController::class, 'getNotificationInApps']);
+        Route::get('/{notification}/read', [MobileController::class, 'readNotification']);
+        Route::get('/false', [MobileController::class, 'falseNotification']);
+    });
 });
 
 Route::get('/tes-tv/{tes}', [DashboardTVController::class, 'getScheduleCampur']);
