@@ -5812,6 +5812,12 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('/{notification}/read', [MobileController::class, 'readNotification']);
         Route::get('/false', [MobileController::class, 'falseNotification']);
     });
+
+    Route::group(['prefix' => 'approval'], function () {
+        Route::group(['prefix' => 'approval-terkontrak'], function () {
+            Route::get('/{nip}', [MobileController::class, 'getListApprovalTerkontrak']);
+        });
+    });
 });
 
 Route::get('/tes-tv/{tes}', [DashboardTVController::class, 'getScheduleCampur']);

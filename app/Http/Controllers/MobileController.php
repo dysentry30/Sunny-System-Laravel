@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ApprovalTerkontrakProyek;
 use App\Models\Forecast;
 use App\Models\HistoryForecast;
+use App\Models\MatriksApprovalTerkontrakProyek;
 use App\Models\MobileNotification;
 use App\Models\Proyek;
 use App\Models\UnitKerja;
@@ -18,9 +20,10 @@ use Illuminate\Support\Facades\DB;
 
 class MobileController extends Controller
 {
+
+    //? Dashboard Controller
     /**
      * Get Data Forecast
-     * 
      * @return Illuminate\Http\Response JSON
      */
     public function GetDataForecast(Request $request)
@@ -99,7 +102,6 @@ class MobileController extends Controller
 
     /**
      * Get Data Forecast
-     * 
      * @return Illuminate\Http\Response JSON
      */
     public function GetDataForecastNew(Request $request, $yearFilter, $monthFilter)
@@ -227,7 +229,6 @@ class MobileController extends Controller
 
     /**
      * Get Data Forecast
-     * 
      * @return Illuminate\Http\Response JSON
      */
     public function GetDataForecastAll(Request $request)
@@ -344,7 +345,6 @@ class MobileController extends Controller
 
     /**
      * Get Data Total Monitoring Proyek
-     * 
      * @return Illuminate\Http\Response JSON
      */
     public function GetTotalMonitoringProyek(Request $request)
@@ -444,7 +444,6 @@ class MobileController extends Controller
 
     /**
      * Get Data Monitoring Proyek
-     * 
      * @return Illuminate\Http\Response JSON
      */
     public function GetMonitoringProyek(Request $request)
@@ -528,7 +527,6 @@ class MobileController extends Controller
 
     /**
      * Get Data Total Monitoring Proyek
-     * 
      * @return Illuminate\Http\Response JSON
      */
     public function GetTotalCompetitiveIndex(Request $request)
@@ -635,7 +633,6 @@ class MobileController extends Controller
 
     /**
      * Get Unit Kerja
-     * 
      * @return 
      */
     public function GetUnitKerja(string $departemen)
@@ -659,7 +656,6 @@ class MobileController extends Controller
 
     /**
      * Get Data Detail Proyek Forecast
-     * 
      * @return Illuminate\Http\Response JSON
      */
     public function getListProyek(Request $request, string $page)
@@ -779,9 +775,13 @@ class MobileController extends Controller
         }
     }
 
+
+
+
+    //? Calendar Controller
+
     /**
      * Get Schedule Proyek
-     * 
      * @return Illuminate\Http\Response JSON
      */
     public function getSchedule(Request $request)
@@ -860,6 +860,11 @@ class MobileController extends Controller
         }
     }
 
+
+
+
+    //? Notification Controller
+
     /**
      * Get Notification In Apps
      * @return Illuminate\Http\Response JSON
@@ -920,6 +925,10 @@ class MobileController extends Controller
         }
     }
 
+    /**
+     * Inject Data Notification in Database
+     * @return Illuminate\Http\Response JSON
+     */
     public function inputNotification()
     {
         $proyeks = Proyek::where("tahun_perolehan", 2024)->where("tipe_proyek", "P")->whereIn("stage", [3, 4])->get();
@@ -991,6 +1000,10 @@ class MobileController extends Controller
         }
     }
 
+    /**
+     * Change Flaging Is Read and get Proyek Detail
+     * @return Illuminate\Http\Response JSON
+     */
     public function readNotification(Request $request, MobileNotification $notification)
     {
         try {
@@ -1030,6 +1043,10 @@ class MobileController extends Controller
         }
     }
 
+    /**
+     * Set Is Read Notification to False
+     * @return Illuminate\Http\Response JSON
+     */
     public function falseNotification()
     {
         try {
@@ -1040,6 +1057,88 @@ class MobileController extends Controller
         }
     }
 
+
+
+
+
+    //? Approval Terkontrak Controller
+    /**
+     * Get List Proyek Approval Terkontrak
+     * @return Illuminate\Http\Response JSON
+     */
+    public function getListApprovalTerkontrak(Request $request, $nip)
+    {
+        try {
+            $user = User::where("nip", $nip)->where("is_active", true)->first();
+
+            if (!empty($user)) {
+                $is_super_admin = $user->check_administrator;
+                $matriks_user = !$is_super_admin ? $user->Pegawai->MatriksTerkontrakProyek->where("is_active", true) : MatriksApprovalTerkontrakProyek::where("is_active", true)->get();
+                if ($matriks_user->isNotEmpty()) {
+                    $unitKerja = $matriks_user->map(function ($item) {
+                        return $item->unit_kerja;
+                    })->toArray();
+                } else {
+                    $unitKerja = !$is_super_admin ? explode(',', $user->unit_kerja) : UnitKerja::get("divcode")->toArray();
+                }
+
+                $proyeks = ApprovalTerkontrakProyek::whereIn("unit_kerja", $unitKerja)->get();
+
+                if ($proyeks->isNotEmpty()) {
+                    $proyeks = $proyeks->map(function ($item) {
+                        $status = "";
+
+                        if ($item->is_revisi) {
+                            $status = "Revisi";
+                        } elseif ($item->is_approved) {
+                            $status = "Disetujui";
+                        } elseif ($item->is_request_approval) {
+                            $status = "Pengajuan";
+                        }
+
+
+                        $newClass = new stdClass();
+                        $newClass->nama_proyek = $item->Proyek->nama_proyek;
+                        $newClass->nilai_perolehan = number_format((int)$item->Proyek->nilai_perolehan, 0, ',', '.');
+                        $newClass->status = $status;
+                        $newClass->tanggal_proyek = $status == "Disetujui" ? Carbon::parse($item->approved_on)->format('d/m/Y') : Carbon::parse($item->request_on)->format('d/m/Y');
+
+                        return $newClass;
+                    });
+                }
+
+                return response()->json([
+                    'success' => true,
+                    'status' => 'success',
+                    'message' => null,
+                    'data' => $proyeks->toArray()
+                ]);
+            } else {
+                return response('', 403)->json([
+                    'success' => false,
+                    'status' => 'failed',
+                    'message' => "User is Not Active",
+                    'data' => []
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'status' => 'failed',
+                'message' => $e->getMessage(),
+                'data' => []
+            ]);
+        }
+    }
+
+
+
+
+
+
+
+
+    //? Private Controller
 
     private function getStage(int $stage)
     {
