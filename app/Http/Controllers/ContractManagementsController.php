@@ -5149,8 +5149,8 @@ class ContractManagementsController extends Controller
         // dd($kode_spk);
         // $kode_spk = "MJBG08";
         $current = new DateTime();
-        // $str_current = $current->format('Ym');
-        $str_current = "202408";
+        $str_current = $current->format('Ym');
+        // $str_current = "202408";
         $is_exist_progress_period = ProyekProgress::where("kode_spk", "=", $kode_spk)->where("periode", "=", $str_current)->first();
         // dd($is_exist_progress_period);
         try {
@@ -5158,8 +5158,8 @@ class ContractManagementsController extends Controller
 
                 $response = Http::post('http://pis.wika.co.id/wpapi/files/getAPIQISList', [
                     "kdspk" => $kode_spk,
-                    // "period" => "$str_current"
-                    "period" => "202408"
+                    "period" => "$str_current"
+                    // "period" => "202408"
                 ]);
 
                 // dd($response->collect($key = "data")->first());
