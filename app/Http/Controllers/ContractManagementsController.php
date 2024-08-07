@@ -5145,11 +5145,12 @@ class ContractManagementsController extends Controller
         // $contract = ContractManagements::where("id_contract", "=", $data["id_contract"])->first();
         // $kode_spk = $contract->project?->kode_spk;
         $kode_spk = $nospk;
-        $proyek = ProyekPISNew::select('pemberi_kerja_code')->where('spk_intern_no', $kode_spk)->first();
+        $proyek = ProyekPISNew::select('pemberi_kerja_code', 'profit_center')->where('spk_intern_no', $kode_spk)->first();
         // dd($kode_spk);
         // $kode_spk = "MJBG08";
         $current = new DateTime();
-        $str_current = $current->format('Ym');
+        // $str_current = $current->format('Ym');
+        $str_current = "202408";
         $is_exist_progress_period = ProyekProgress::where("kode_spk", "=", $kode_spk)->where("periode", "=", $str_current)->first();
         // dd($is_exist_progress_period);
         try {
@@ -5157,7 +5158,8 @@ class ContractManagementsController extends Controller
 
                 $response = Http::post('http://pis.wika.co.id/wpapi/files/getAPIQISList', [
                     "kdspk" => $kode_spk,
-                    "period" => "$str_current"
+                    // "period" => "$str_current"
+                    "period" => "202408"
                 ]);
 
                 // dd($response->collect($key = "data")->first());
@@ -5177,84 +5179,204 @@ class ContractManagementsController extends Controller
                     if ($is_exist_progress_period) {
                         $data = $is_exist_progress_period;
                         // $data->kode_proyek = $contract->project->kode_proyek;
-                        $data->kode_spk = $kode_spk;
-                        $data->ok_review = (int)$data_response["ok_review"];
-                        $data->progress_fisik_ri = (int)$data_response["progress_fisik_ri"];
-                        $data->lama_proyek = $data_response["lamaproyek"];
-                        $data->laba_kotor_ri = (int)$data_response["laba_kotor_ri"];
-                        $data->progress_fisik_ra = (int) $data_response["progress_fisik_ra"];
-                        $data->pu_berelasi = (int) $data_response["pu_berelasi"];
-                        $data->pu_ketiga = (int) $data_response["pu_ketiga"];
-                        $data->ra_bl = (int) $data_response["ra_bl"];
-                        $data->ri_bl = (int) $data_response["ri_bl"];
-                        $data->ra_btl = (int) $data_response["ra_btl"];
-                        $data->ri_btl = (int) $data_response["ri_btl"];
-                        $data->ri_pdpk = (int) $data_response["ri_pdpk"];
-                        $data->bdd = (int) $data_response["bdd"];
-                        $data->persekot = (int) $data_response["persekot"];
-                        $data->laba_kotor_ra = (int) $data_response["laba_kotor_ra"];
-                        $data->piutang = (int) $data_response["piutang"];
-                        $data->tagbrut = (int) $data_response["tagbrut"];
-                        $data->periode = $str_current;
+                        if ($data_response["ok_review"] == "0" && $data_response["progress_fisik_ri"] == "0") {
+                            if ($data->ok_review == '0' && $data->progress_fisik_ri == '0') {
+                                $getProgressNotEmpty = ProyekProgress::where(
+                                    "kode_spk",
+                                    "=",
+                                    $kode_spk
+                                )->where("ok_review", "!=", "0")->orderBy("periode", "desc")->first();
+
+                                if (!empty($getProgressNotEmpty)) {
+                                    $data->kode_proyek = $proyek->profit_center;
+                                    $data->kode_spk = $getProgressNotEmpty->kode_spk;
+                                    $data->ok_review = $getProgressNotEmpty->ok_review;
+                                    $data->progress_fisik_ri = $getProgressNotEmpty->progress_fisik_ri;
+                                    $data->lama_proyek = $getProgressNotEmpty->lama_proyek;
+                                    $data->laba_kotor_ri = $getProgressNotEmpty->laba_kotor_ri;
+                                    $data->progress_fisik_ra = $getProgressNotEmpty->progress_fisik_ra;
+                                    $data->pu_berelasi = $getProgressNotEmpty->pu_berelasi;
+                                    $data->pu_ketiga = $getProgressNotEmpty->pu_ketiga;
+                                    $data->ra_bl = $getProgressNotEmpty->ra_bl;
+                                    $data->ri_bl = $getProgressNotEmpty->ri_bl;
+                                    $data->ra_btl = $getProgressNotEmpty->ra_btl;
+                                    $data->ri_btl = $getProgressNotEmpty->ri_btl;
+                                    $data->ri_pdpk = $getProgressNotEmpty->ri_pdpk;
+                                    $data->bdd = $getProgressNotEmpty->bdd;
+                                    $data->persekot = $getProgressNotEmpty->persekot;
+                                    $data->laba_kotor_ra = $getProgressNotEmpty->laba_kotor_ra;
+                                    $data->piutang = $getProgressNotEmpty->piutang;
+                                    $data->tagbrut = $getProgressNotEmpty->tagbrut;
+                                    $data->periode = $str_current;
+                                    $data->save();
+                                } else {
+                                    $data->kode_proyek = $proyek->profit_center;
+                                    $data->kode_spk = $kode_spk;
+                                    $data->ok_review = (int)$data_response["ok_review"];
+                                    $data->progress_fisik_ri = (int)$data_response["progress_fisik_ri"];
+                                    $data->lama_proyek = $data_response["lamaproyek"];
+                                    $data->laba_kotor_ri = (int)$data_response["laba_kotor_ri"];
+                                    $data->progress_fisik_ra = (int) $data_response["progress_fisik_ra"];
+                                    $data->pu_berelasi = (int) $data_response["pu_berelasi"];
+                                    $data->pu_ketiga = (int) $data_response["pu_ketiga"];
+                                    $data->ra_bl = (int) $data_response["ra_bl"];
+                                    $data->ri_bl = (int) $data_response["ri_bl"];
+                                    $data->ra_btl = (int) $data_response["ra_btl"];
+                                    $data->ri_btl = (int) $data_response["ri_btl"];
+                                    $data->ri_pdpk = (int) $data_response["ri_pdpk"];
+                                    $data->bdd = (int) $data_response["bdd"];
+                                    $data->persekot = (int) $data_response["persekot"];
+                                    $data->laba_kotor_ra = (int) $data_response["laba_kotor_ra"];
+                                    $data->piutang = (int) $data_response["piutang"];
+                                    $data->tagbrut = (int) $data_response["tagbrut"];
+                                    $data->periode = $str_current;
+                                    $data->save();
+                                }
+                            }
+                        } else {
+                            $data->kode_proyek = $proyek->profit_center;
+                            $data->kode_spk = $kode_spk;
+                            $data->ok_review = (int)$data_response["ok_review"];
+                            $data->progress_fisik_ri = (int)$data_response["progress_fisik_ri"];
+                            $data->lama_proyek = $data_response["lamaproyek"];
+                            $data->laba_kotor_ri = (int)$data_response["laba_kotor_ri"];
+                            $data->progress_fisik_ra = (int) $data_response["progress_fisik_ra"];
+                            $data->pu_berelasi = (int) $data_response["pu_berelasi"];
+                            $data->pu_ketiga = (int) $data_response["pu_ketiga"];
+                            $data->ra_bl = (int) $data_response["ra_bl"];
+                            $data->ri_bl = (int) $data_response["ri_bl"];
+                            $data->ra_btl = (int) $data_response["ra_btl"];
+                            $data->ri_btl = (int) $data_response["ri_btl"];
+                            $data->ri_pdpk = (int) $data_response["ri_pdpk"];
+                            $data->bdd = (int) $data_response["bdd"];
+                            $data->persekot = (int) $data_response["persekot"];
+                            $data->laba_kotor_ra = (int) $data_response["laba_kotor_ra"];
+                            $data->piutang = (int) $data_response["piutang"];
+                            $data->tagbrut = (int) $data_response["tagbrut"];
+                            $data->periode = $str_current;
+                            $data->save();
+                        }
                     } else {
-                        $data = new ProyekProgress();
-                        // $data->kode_proyek = $contract->project->kode_proyek;
-                        $data->kode_spk = $kode_spk;
-                        $data->ok_review = (int)$data_response["ok_review"];
-                        $data->progress_fisik_ri = (int)$data_response["progress_fisik_ri"];
-                        $data->lama_proyek = $data_response["lamaproyek"];
-                        $data->laba_kotor_ri = (int)$data_response["laba_kotor_ri"];
-                        $data->progress_fisik_ra = (int) $data_response["progress_fisik_ra"];
-                        $data->pu_berelasi = (int) $data_response["pu_berelasi"];
-                        $data->pu_ketiga = (int) $data_response["pu_ketiga"];
-                        $data->ra_bl = (int) $data_response["ra_bl"];
-                        $data->ri_bl = (int) $data_response["ri_bl"];
-                        $data->ra_btl = (int) $data_response["ra_btl"];
-                        $data->ri_btl = (int) $data_response["ri_btl"];
-                        $data->ri_pdpk = (int) $data_response["ri_pdpk"];
-                        $data->bdd = (int) $data_response["bdd"];
-                        $data->persekot = (int) $data_response["persekot"];
-                        $data->laba_kotor_ra = (int) $data_response["laba_kotor_ra"];
-                        $data->piutang = (int) $data_response["piutang"];
-                        $data->tagbrut = (int) $data_response["tagbrut"];
-                        $data->periode = $str_current;
+                        if ($data_response["ok_review"] == "0" && $data_response["progress_fisik_ri"] == "0") {
+
+                            $getProgressNotEmpty = ProyekProgress::where(
+                                "kode_spk",
+                                "=",
+                                $kode_spk
+                            )->where(
+                                "ok_review",
+                                "!=",
+                                "0"
+                            )->orderBy("periode", "desc")->first();
+
+                            if (!empty($getProgressNotEmpty)) {
+                                $newDataFromLastPeriode = $getProgressNotEmpty->replicate();
+                                $newDataFromLastPeriode->kode_proyek = $proyek->profit_center;
+                                $newDataFromLastPeriode->periode = $str_current;
+                                $newDataFromLastPeriode->save();
+                            } else {
+                                $data = new ProyekProgress();
+                                $data->kode_proyek = $proyek->profit_center;
+                                $data->kode_spk = $kode_spk;
+                                $data->ok_review = (int)$data_response["ok_review"];
+                                $data->progress_fisik_ri = (int)$data_response["progress_fisik_ri"];
+                                $data->lama_proyek = $data_response["lamaproyek"];
+                                $data->laba_kotor_ri = (int)$data_response["laba_kotor_ri"];
+                                $data->progress_fisik_ra = (int) $data_response["progress_fisik_ra"];
+                                $data->pu_berelasi = (int) $data_response["pu_berelasi"];
+                                $data->pu_ketiga = (int) $data_response["pu_ketiga"];
+                                $data->ra_bl = (int) $data_response["ra_bl"];
+                                $data->ri_bl = (int) $data_response["ri_bl"];
+                                $data->ra_btl = (int) $data_response["ra_btl"];
+                                $data->ri_btl = (int) $data_response["ri_btl"];
+                                $data->ri_pdpk = (int) $data_response["ri_pdpk"];
+                                $data->bdd = (int) $data_response["bdd"];
+                                $data->persekot = (int) $data_response["persekot"];
+                                $data->laba_kotor_ra = (int) $data_response["laba_kotor_ra"];
+                                $data->piutang = (int) $data_response["piutang"];
+                                $data->tagbrut = (int) $data_response["tagbrut"];
+                                $data->periode = $str_current;
+                                $data->save();
+                            }
+                        } else {
+                            $data = new ProyekProgress();
+                            $data->kode_proyek = $proyek->profit_center;
+                            $data->kode_spk = $kode_spk;
+                            $data->ok_review = (int)$data_response["ok_review"];
+                            $data->progress_fisik_ri = (int)$data_response["progress_fisik_ri"];
+                            $data->lama_proyek = $data_response["lamaproyek"];
+                            $data->laba_kotor_ri = (int)$data_response["laba_kotor_ri"];
+                            $data->progress_fisik_ra = (int) $data_response["progress_fisik_ra"];
+                            $data->pu_berelasi = (int) $data_response["pu_berelasi"];
+                            $data->pu_ketiga = (int) $data_response["pu_ketiga"];
+                            $data->ra_bl = (int) $data_response["ra_bl"];
+                            $data->ri_bl = (int) $data_response["ri_bl"];
+                            $data->ra_btl = (int) $data_response["ra_btl"];
+                            $data->ri_btl = (int) $data_response["ri_btl"];
+                            $data->ri_pdpk = (int) $data_response["ri_pdpk"];
+                            $data->bdd = (int) $data_response["bdd"];
+                            $data->persekot = (int) $data_response["persekot"];
+                            $data->laba_kotor_ra = (int) $data_response["laba_kotor_ra"];
+                            $data->piutang = (int) $data_response["piutang"];
+                            $data->tagbrut = (int) $data_response["tagbrut"];
+                            $data->periode = $str_current;
+                            $data->save();
+                        }
+
                     }
                     // if ($data->save() && $newCsi->save()) {
-                    if ($data->save()) {
-                        $status = [
-                            'kode_proyek' => $nospk,
-                            'periode' => $str_current,
-                            'status' => 'SUCCESS',
-                            'progress' => $calculate_progress,
-                            'dataPIS' => $data_response
-                        ];
-                        // Alert::success
-                        setLogging("Get_Progress_PIS", "[Progress=>" . $nospk . '=>' . $calculate_progress . ']', $status);
-                        // toast("Data berhasil disimpan", "success")->autoClose(3000);
-                        return response()->json([
-                            "status" => "success",
-                            // "link" => true
-                            "message" => "Success"
-                        ], 200);
-                        // dd("success");
-                    }
                     $status = [
                         'kode_proyek' => $nospk,
                         'periode' => $str_current,
-                        'status' => 'FAILED',
+                        'status' => 'SUCCESS',
                         'progress' => $calculate_progress,
-                        'dataPIS' => $response
+                        'dataPIS' => $data_response
                     ];
                     // Alert::success
                     setLogging("Get_Progress_PIS", "[Progress=>" . $nospk . '=>' . $calculate_progress . ']', $status);
-                    // toast("Data gagal disimpan", "error")->autoClose(3000);
+                    // toast("Data berhasil disimpan", "success")->autoClose(3000);
                     return response()->json([
                         "status" => "success",
                         // "link" => true
-                        "message" => "Failed"
-                    ], 500);
+                        "message" => "Success"
+                    ], 200);
+                    // if ($data->save()) {
+                    //     $status = [
+                    //         'kode_proyek' => $nospk,
+                    //         'periode' => $str_current,
+                    //         'status' => 'SUCCESS',
+                    //         'progress' => $calculate_progress,
+                    //         'dataPIS' => $data_response
+                    //     ];
+                    //     // Alert::success
+                    //     setLogging("Get_Progress_PIS", "[Progress=>" . $nospk . '=>' . $calculate_progress . ']', $status);
+                    //     // toast("Data berhasil disimpan", "success")->autoClose(3000);
+                    //     return response()->json([
+                    //         "status" => "success",
+                    //         // "link" => true
+                    //         "message" => "Success"
+                    //     ], 200);
+                    //     // dd("success");
+                    // }
+                    // $status = [
+                    //     'kode_proyek' => $nospk,
+                    //     'periode' => $str_current,
+                    //     'status' => 'FAILED',
+                    //     'progress' => $calculate_progress,
+                    //     'dataPIS' => $response
+                    // ];
+                    // // Alert::success
+                    // setLogging("Get_Progress_PIS", "[Progress=>" . $nospk . '=>' . $calculate_progress . ']', $status);
+                    // // toast("Data gagal disimpan", "error")->autoClose(3000);
+                    // return response()->json([
+                    //     "status" => "success",
+                    //     // "link" => true
+                    //     "message" => "Failed"
+                    // ], 500);
 
                     // dd($data);
+                } else {
+                    setLogging("Get_Progress_PIS", "[Progress ERROR=>" . $nospk . "]", []);
                 }
 
                 // return response()->json($response->json(["link" => true]), 200);
@@ -5267,7 +5389,8 @@ class ContractManagementsController extends Controller
             //     // "link" => true,
             //     "message" => $e->getMessage()
             // ], 200);
-            dd($e->getMessage());
+            // dd($e->getMessage());
+            throw $e;
         }
     }
 

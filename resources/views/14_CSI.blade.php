@@ -49,25 +49,30 @@
                             <!--begin::Panel-->
                             <div class="d-flex align-items-center" style="width: 100%;">
 
-                                {{-- <ul
-                                    class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
-                                    <!--begin:::Tab item Claim-->
-                                    <li class="nav-item">
-                                        <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
-                                            aria-selected="true" href="#kt_panel_view_1"
-                                            style="font-size:14px;">Progress 20% - 40%</a>
-                                    </li>
-                                    <!--end:::Tab item Claim-->
-
-                                    <!--begin:::Tab item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
-                                            href="#kt_panel_view_2" style="font-size:14px;">Progress 90-100%</a>
-                                    </li>
-                                    <!--end:::Tab item -->
-
-                                </ul> --}}
-
+                                <!--begin:: Input Filter-->
+                                <form action="">
+                                    <div id="filterUnit" class="d-flex align-items-center position-relative">
+                                        <select id="unit-kerja" name="filter-unit" class="form-select form-select-solid w-200px ms-2"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Unit Kerja">
+                                            <option></option>
+                                            @foreach ($unit_kerja as $unitkerja)
+                                                <option value="{{ $unitkerja->divcode }}"
+                                                    {{ $filterUnit == $unitkerja->divcode ? 'selected' : '' }}>{{ $unitkerja->unit_kerja }}</option>
+                                            @endforeach
+                                        </select>
+    
+                                        <select id="progress-filter" name="filter-progress" class="form-select form-select-solid w-200px ms-2"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Progress">
+                                            <option></option>
+                                            <option value="A" {{ $filterProgress == "A" ? "selected" : "" }}>20% - 40%</option>
+                                            <option value="B" {{ $filterProgress == "B" ? "selected" : "" }}>95% - 100%</option>
+                                        </select>
+    
+                                        <button class="btn btn-sm btn-primary ms-2" type="submit">Filter</button>
+                                        <a class="btn btn-sm btn-secondary ms-2" href="/csi">Reset</a>
+                                    </div>
+                                </form>
+                                <!--end:: Input Filter-->
                             </div>
                             <!--end::Panel-->
                         </div>
@@ -86,13 +91,13 @@
                                     <thead>
                                         <!--begin::Table row-->
                                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                            <th class="min-w-auto text-center" rowspan="2">Profit Center</th>
-                                            <th class="min-w-auto" rowspan="2">Nama Proyek</th>
-                                            <th class="min-w-auto" rowspan="2">Unit Kerja</th>
-                                            <th class="min-w-auto text-center" rowspan="2">Progress</th>
+                                            <th class="min-w-auto text-center" rowspan="3">Profit Center</th>
+                                            <th class="min-w-auto" rowspan="3">Nama Proyek</th>
+                                            <th class="min-w-auto" rowspan="3">Unit Kerja</th>
+                                            <th class="min-w-auto text-center" rowspan="3">Progress</th>
                                             <th class="min-w-auto text-center" colspan="4">Form Kepuasan Pelanggan</th>
-                                            <th class="min-w-auto text-center" rowspan="2">Nilai Akhir</th>
-                                            <th class="min-w-auto text-center" rowspan="2">Remarks</th>
+                                            <th class="min-w-auto text-center" rowspan="3">Nilai Akhir</th>
+                                            <th class="min-w-auto text-center" rowspan="3">Remarks</th>
                                             {{-- <th class="min-w-auto">ID Contract</th> --}}
                                         </tr>
                                         <!--end::Table row-->
@@ -100,6 +105,14 @@
                                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                             <th class="min-w-200px text-center" colspan="2">20 - 40 % (a)</th>
                                             <th class="min-w-200px text-center" colspan="2">95 - 100 % (b)</th>
+                                        </tr>
+                                        <!--end::Table row-->
+                                        <!--begin::Table row-->
+                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                            <th class="min-w-200px text-center">Score</th>
+                                            <th class="min-w-200px text-center">Action</th>
+                                            <th class="min-w-200px text-center">Score</th>
+                                            <th class="min-w-200px text-center">Action</th>
                                         </tr>
                                         <!--end::Table row-->
                                     </thead>
@@ -145,7 +158,7 @@
                                                 <!--End :: List Nama Proyek-->
 
                                                 <!--Begin :: List Nama Proyek-->
-                                                <td class="text-center">{{ $proyek->UnitKerja->unit_kerja }}</td>
+                                                <td class="text-center">{{ $proyek->UnitKerja->unit_kerja ?? "-" }}</td>
                                                 <!--End :: List Nama Proyek-->
 
                                                 <!--Begin :: List Progress-->
@@ -286,7 +299,7 @@
                                                 <!--End::List Nilai Akhir-->
                                                 
                                                 <!--Begin::List Remark-->
-                                                <td class="text-center"></td>
+                                                <td class="text-center">-</td>
                                                 <!--End::List Remark-->
                                             </tr>
                                         @endforeach
@@ -511,10 +524,11 @@
 <script>
     $(document).ready(function() {
         $("#csi-table").DataTable({
-            dom: '<"float-start"f><"#example"t>rtip',
-            // dom: 'Brti',
-            // dom: 'frtip',
-            pageLength: 20,
+            dom: '<"float-finish"f><"#example"t>rtip',
+            order: [
+                [8, 'desc'],
+            ],
+            pageLength: 10,
         });
     });
 </script>

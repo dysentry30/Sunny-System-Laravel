@@ -30,17 +30,55 @@ use Carbon\Carbon;
 class CSIController extends Controller
 {
     public function index(Request $request) {
-        $unit_kerja = UnitKerja::select('divcode')->where('dop', '!=', 'EA')->get();
+        $filterUnit = $request->get("filter-unit");
+        $filterProgress = $request->get("filter-progress");
+        $bulan = date('m');
+        $tahun = date('Y');
+
+        $unit_kerja = UnitKerja::where('dop', '!=', 'EA')->where("id_profit_center", "!=", null)->orderBy("id_profit_center")->get();
         $unit_kerja_filter = $unit_kerja->map(function ($unit) {
             return $unit->divcode;
         })->toArray();
         // $proyeks = Proyek::whereIn('unit_kerja', $unit_kerja_filter)->get();
         // $proyeks = ProyekPISNew::join('customers', 'pemberi_kerja_code', 'kode_nasabah')->where('entitas_proyek', '=', null)->get();
-        $proyeks = ProyekPISNew::with('Customer', 'Csi')->where('entitas_proyek', '=', null)->where('bast2_date', '>=', Carbon::now())->get();
+        $proyeks = ProyekPISNew::with('Customer', 'Csi')
+        ->where('entitas_proyek', '=', null)
+            ->where('bast2_date', '>=', Carbon::now())
+            // ->where('bast2_date', '<=', Carbon::now())
+            ->when(!empty($filterUnit), function ($query) use ($filterUnit) {
+                $query->where("kd_divisi", $filterUnit);
+            })->get();
+
+        if (!empty($filterProgress)) {
+            $proyeks = $proyeks->filter(function ($proyek) use ($tahun, $bulan, $filterProgress) {
+                $proyekProgress = $proyek->ProyekProgress?->where('periode', (string) $tahun . (string) $bulan)->first();
+
+                if (empty($proyekProgress)) {
+                    $formatPeriode = (string) $tahun . '0' . (string) $bulan - 1;
+                    $proyekProgress = $proyek->ProyekProgress
+                        ?->where('periode', $formatPeriode)
+                        ->first();
+                }
+
+                $progress = 0;
+
+                if (!empty($proyekProgress)) {
+                    $progress = $proyekProgress->ok_review && $proyekProgress->progress_fisik_ri ? (int) $proyekProgress->progress_fisik_ri / (int) $proyekProgress->ok_review : 0;
+                }
+
+                $progress = $progress * 100;
+
+                if ($filterProgress == "A") {
+                    return $progress >= 20 && $progress <= 40;
+                } else {
+                    return $progress >= 95;
+                }
+            });
+        }
         // $csi = Proyek::join("proyek_csi", "proyek_csi.no_spk", "=", "proyeks.kode_proyek")->get();
         // dd($proyeks->first());
         $csi = Csi::all();
-        return view("14_CSI", compact(["csi", "proyeks"]));
+        return view("14_CSI", compact(["csi", "proyeks", "unit_kerja", "filterUnit", "filterProgress"]));
     }
     
     public function indexCustomer(Request $request, $id = "") {
