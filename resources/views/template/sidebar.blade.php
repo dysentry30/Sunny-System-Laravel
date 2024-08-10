@@ -448,6 +448,74 @@
                                 </div>
                             {{-- @endif --}}
                         @endcanany
+                        @canany(['super-admin', 'admin-crm', 'approver-crm', 'risk-crm'])
+                            <div class="menu-item">
+                                <a class="menu-link " href="/assessment-partner-selection"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::url(), 'assessment-partner-selection') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px"> Assessment Partner
+                                        Selection</span>
+                                </a>
+                            </div>
+                        @endcanany
+                        @canany(['super-admin', 'approver-crm', 'user-crm', 'risk-crm'])
+                            <div class="menu-item">
+                                <a class="menu-link " href="/verifikasi-internal-partner"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::url(), 'verifikasi-internal-partner') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Verifikasi Internal Penentuan Proyek KSO / Non KSO</span>
+                                </a>
+                            </div>
+                        @endcanany
+
+                        @canany(['super-admin', 'approver-crm', 'user-crm', 'risk-crm'])
+                            <div class="menu-item">
+                                <a class="menu-link " href="/verifikasi-internal-persetujuan-partner"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::url(), 'verifikasi-internal-persetujuan-partner') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Permohonan Persetujuan Pembentukan Kerjasama Operasi (KSO)</span>
+                                </a>
+                            </div>
+                        @endcanany
+
+                        @canany(['super-admin', 'approver-crm', 'user-crm', 'risk-crm'])
+                            <div class="menu-item">
+                                <a class="menu-link " href="/verifikasi-proyek-nota-2"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::url(), 'verifikasi-proyek-nota-2') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Verifikasi Internal Proyek Greenlane/Non Greenlane</span>
+                                </a>
+                            </div>
+                        @endcanany
+
                         @canany(['super-admin', 'approver-ccm', 'user-crm', 'admin-crm'])
                             <div class="menu-item">
                                 <a class="menu-link " href="/approval-terkontrak-proyek"

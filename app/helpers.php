@@ -3,29 +3,30 @@
 // if(!function_exists("url_encode")) {
 // }
 
+use App\Models\User;
+use App\Models\Proyek;
 use App\Models\Customer;
 use App\Models\Provinsi;
 use App\Models\IndustryOwner;
+use App\Models\IntegrationLog;
 use PhpOffice\PhpWord\PhpWord;
+use App\Models\ExceptGreenlane;
+use App\Models\NotaRekomendasi;
 use Karriere\PdfMerge\PdfMerge;
 use Illuminate\Http\UploadedFile;
 use App\Models\KriteriaAssessment;
-use App\Models\KriteriaPenggunaJasa;
-use App\Models\KriteriaPenggunaJasaDetail;
 use App\Models\LegalitasPerusahaan;
-use App\Models\NotaRekomendasi;
-use App\Models\ExceptGreenlane;
-use App\Models\IntegrationLog;
-use App\Models\PenilaianPenggunaJasa;
-use App\Models\Proyek;
 use Illuminate\Support\Facades\Log;
-use App\Models\User;
+use App\Models\KriteriaPenggunaJasa;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Http;
+use App\Models\PenilaianPenggunaJasa;
 use PhpOffice\PhpWord\TemplateProcessor;
 use RealRashid\SweetAlert\Facades\Alert;
+use App\Models\PenilaianPartnerSelection;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Http;
+use App\Models\KriteriaPenggunaJasaDetail;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 function url_encode($url) {
@@ -3948,6 +3949,359 @@ function get_bulan(int $bulan): string
     return $name;
 }
 
+
+//? BEGIN HELPERS NOTA REKOMENDASI 2
+
+function mergeDokumenKelengkapanPartnerKSO(App\Models\PorsiJO $partner)
+{
+
+    if (empty($partner)) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Partner JO tidak ditemukan. Hubungi Admin!'
+        ]);
+    }
+
+    try {
+        $file_name = date('dmYHis') . '_dokumen_partner_merge_' . str_replace(' ', '-', $partner->Company->name) . '_' . str_replace(' ', '-', $partner->Proyek->nama_proyek);
+        $pdfMerge = new PdfMerge();
+        $consentTemp = collect(json_decode($partner->file_consent_npwp));
+        $dokumenAHU = $partner->DokumenKelengkapanPartnerKSO?->where('kategori', 'Dokumen AHU')->first();
+        $dokumenLapKeu = $partner->DokumenKelengkapanPartnerKSO?->where('kategori', 'Dokumen Laporan Keuangan')->first();
+        $dokumenSPT = $partner->DokumenKelengkapanPartnerKSO?->where('kategori', 'Dokumen Laporan SPT')->first();
+        $dokumenPengalaman = $partner->DokumenKelengkapanPartnerKSO?->where('kategori', 'Dokumen Pengalaman')->first();
+        $dokumenPenentuanKSO = $partner->Proyek?->VerifikasiInternalPartner;
+
+        foreach ($consentTemp as $file) {
+            $pdfMerge->add(public_path('consent-npwp/' . $file));
+        }
+
+        if (!empty($partner->file_pefindo_jo)) {
+            $pdfMerge->add(public_path('pefindo/' . $partner->file_pefindo_jo));
+        }
+
+        if (!empty($dokumenAHU)) {
+            $pdfMerge->add(public_path('dokumen-kelengkapan-partner/dokumen-ahu/' . $dokumenAHU->id_document));
+        }
+
+        if (!empty($dokumenLapKeu)) {
+            $pdfMerge->add(public_path('dokumen-kelengkapan-partner/dokumen-laporan-keuangan/' . $dokumenLapKeu->id_document));
+        }
+
+        if (!empty($dokumenSPT)) {
+            $pdfMerge->add(public_path('dokumen-kelengkapan-partner/dokumen-laporan-spt/' . $dokumenSPT->id_document));
+        }
+
+        if (!empty($dokumenPengalaman)) {
+            $pdfMerge->add(public_path('dokumen-kelengkapan-partner/dokumen-pengalaman/' . $dokumenPengalaman->id_document));
+        }
+
+        if (!empty($dokumenPenentuanKSO)) {
+            $pdfMerge->add(public_path('file-nota-rekomendasi-2/file-verifikasi-internal-partner/' . $dokumenPenentuanKSO->nama_dokumen));
+        }
+
+        $pdfMerge->merge(public_path("file-kelengkapan-partner" . "/" . $file_name . ".pdf"));
+
+        $partner->file_kelengkapan_merge = $file_name . '.pdf';
+        if ($partner->save()) {
+            return true;
+        }
+    } catch (\Exception $e) {
+        Alert::error("Error", $e->getMessage());
+        return redirect()->back();
+        // return response()->json([
+        //     'success' => false,
+        //     'message' => $e->getMessage()
+        // ]);
+    }
+}
+
+function createWordAssessmentPartner(App\Models\PorsiJO $porsi)
+{
+    try {
+        $phpWord = new \PhpOffice\PhpWord\PhpWord();
+        $target_path = "file-nota-rekomendasi-2/file-kriteria-partner";
+        $now = Carbon\Carbon::now();
+        $file_name = $now->format("dmYHis") . "_kriteria-partner_$porsi->kode_proyek";
+
+        $collectKriteriaDetail = $porsi->PartnerSelection->sortBy('index')->values();
+        $masterLegalitasPerusahaan = LegalitasPerusahaan::where('is_active', true)->where('nota_rekomendasi', 'Nota Rekomendasi 2')->get()->sortBy('position')->values();
+        $masterKriteriaPartner = KriteriaPenggunaJasa::where('is_active', true)->where('nota_rekomendasi', 'Nota Rekomendasi 2')->get()->sortBy('position')->values();
+        $index = 0;
+        // dd($masterLegalitasPerusahaan, $masterKriteriaPartner);
+
+        $totalScoreKriteria = $collectKriteriaDetail->sum('nilai') ?? 0;
+
+        if ($collectKriteriaDetail->isNotEmpty()) {
+            $kriteriaFinal = PenilaianPartnerSelection::all()->filter(function ($item) use ($totalScoreKriteria) {
+                return $item->dari_nilai <= $totalScoreKriteria && $item->sampai_nilai >= $totalScoreKriteria;
+            })->first()->nama ?? '-';
+        } else {
+            $kriteriaFinal = "NaN";
+        }
+
+        $section = $phpWord->addSection();
+        $section->addText("PENGEMBANGAN KRITERIA UNTUK PEMILIHAN MITRA / PARTNER KSO", ['bold' => true, 'size' => 12], ['align' => 'center']);
+        $section->addText('</w:t><w:br/><w:t>', [], ['align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0]);
+        $section->addTextBreak(1);
+
+        $table = $section->addTable('kriteria_partner', ['borderSize' => 1, 'cellMargin' => 0]);
+        $table->addRow();
+
+        $HstyleCell = ['bgColor' => 'F4B083', 'borderSize' => 1, 'borderColor' => 1];
+        $HfontStyle = ['bold' => true, 'align' => 'center', 'name' => 'Times New Roman'];
+        $cellRowSpan = ['valign' => 'center', 'bgColor' => '8496B0', 'spaceBefore' => 0, 'spaceAfter' => 0];
+        $cellRowContinue = ['bgColor' => '8496B0', 'borderSize' => 1, 'borderColor' => '000000', 'spaceBefore' => 0, 'spaceAfter' => 0];
+        $cellFontStyle = ['name' => 'Times New Roman', 'bold' => false, 'size' => 9];
+        $cellParagraphStyle = ['align' => 'left', 'spaceBefore' => 0, 'spaceAfter' => 0, 'spacing' => 0];
+        $cellParagraphStyle2 = ['align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0, 'spacing' => 0];
+
+        $table->addCell(500, ['vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '8496B0'])->addText('No.', $HfontStyle, ['spacing' => 0, 'align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0]);
+        $table->addCell(2000, $cellRowSpan)->addText('Parameter', $HfontStyle, ['spacing' => 0, 'align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0]);
+        $table->addCell(500, $cellRowSpan)->addText('Weight (%)', $HfontStyle, ['spacing' => 0, 'align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0]);
+        $table->addCell(3000, $cellRowSpan)->addText('Kriteria', $HfontStyle, ['spacing' => 0, 'align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0]);
+        $table->addCell(500, $cellRowSpan)->addText('Nilai', $HfontStyle, ['spacing' => 0, 'align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0]);
+        $table->addCell(500, $cellRowSpan)->addText('Score', $HfontStyle, ['spacing' => 0, 'align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0]);
+        $table->addCell(5000, $cellRowSpan)->addText('Keterangan', $HfontStyle, ['spacing' => 0, 'align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0]);
+
+        $table->addRow();
+        $table->addCell(500, ['vMerge' => 'continue', 'bgColor' => '8496B0']);
+        $table->addCell(2000, $cellRowSpan)->addText('(1)', $HfontStyle, ['spacing' => 0, 'align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0]);
+        $table->addCell(500, $cellRowSpan)->addText('(2)', $HfontStyle, ['spacing' => 0, 'align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0]);
+        $table->addCell(3000, $cellRowSpan)->addText('(3)', $HfontStyle, ['spacing' => 0, 'align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0]);
+        $table->addCell(500, $cellRowSpan)->addText('(4)', $HfontStyle, ['spacing' => 0, 'align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0]);
+        $table->addCell(500, $cellRowSpan)->addText('(5) = (2) * (4)', $HfontStyle, ['spacing' => 0, 'align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0]);
+        $table->addCell(5000, $cellRowSpan)->addText('(6)', $HfontStyle, ['spacing' => 0, 'align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0]);
+
+        if ($collectKriteriaDetail->isNotEmpty()) {
+            $table->addRow();
+            $table->addCell(500, ['bgColor' => 'FFFEA8']);
+            $table->addCell(3000, ['gridSpan' => 6, 'bgColor' => 'FFFEA8'])->addText('LEGALITAS (area yang harus seluruhnya terpenuhi, setelah itu akan dilakukan scoring)', $cellFontStyle, $cellParagraphStyle);
+
+            if ($masterLegalitasPerusahaan->isNotEmpty() && $porsi->PartnerSelection->isNotEmpty()) {
+                foreach ($masterLegalitasPerusahaan as $key => $mlp) {
+                    $no = $key + 1;
+                    $kriteriaSelected = $collectKriteriaDetail[$key];
+
+                    $table->addRow();
+                    $table->addCell(500)->addText($no, $cellFontStyle, $cellParagraphStyle2);
+                    $table->addCell(2000)->addText(htmlspecialchars($mlp->kategori, ENT_QUOTES), $cellFontStyle, $cellParagraphStyle);
+                    $table->addCell(500);
+                    $table->addCell(3000)->addText(htmlspecialchars($kriteriaSelected->kriteria == 1 ? $mlp->item : $mlp->item_2, ENT_QUOTES), $cellFontStyle, $cellParagraphStyle);
+                    $table->addCell(500);
+                    $table->addCell(500);
+                    $table->addCell(5000)->addText(htmlspecialchars($kriteriaSelected->keterangan, ENT_QUOTES), $cellFontStyle, $cellParagraphStyle);
+
+                    $index++;
+                }
+            }
+
+
+            if ($masterKriteriaPartner->isNotEmpty() && $porsi->PartnerSelection->isNotEmpty()) {
+                $table->addRow();
+                $table->addCell(500, ['bgColor' => 'FFFEA8']);
+                $table->addCell(3000, ['gridSpan' => 6, 'bgColor' => 'FFFEA8'])->addText('REFERENSI', $cellFontStyle, $cellParagraphStyle);
+                foreach ($masterKriteriaPartner->where('kategori', 'Referensi') as $key => $mlp) {
+                    $no = $key + 1;
+                    $kriteriaSelectedReferensi = $collectKriteriaDetail[$index];
+                    $kriteriaItemSelectedReferensi = '';
+                    switch ($kriteriaSelectedReferensi->kriteria) {
+                        case 1:
+                            $kriteriaItemSelectedReferensi = $mlp->kriteria_1;
+                            break;
+                        case 2:
+                            $kriteriaItemSelectedReferensi = $mlp->kriteria_2;
+                            break;
+                        case 3:
+                            $kriteriaItemSelectedReferensi = $mlp->kriteria_3;
+                            break;
+                        case 4:
+                            $kriteriaItemSelectedReferensi = $mlp->kriteria_4;
+                            break;
+                        default:
+                            $kriteriaItemSelectedReferensi = "Tidak Ada";
+                            break;
+                    }
+
+                    if ($mlp->kategori == "Referensi") {
+                        $table->addRow();
+                        $table->addCell(500)->addText($no, $cellFontStyle, $cellParagraphStyle2);
+                        $table->addCell(2000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($mlp->item, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
+                        $table->addCell(500)->addText($mlp->bobot, $cellFontStyle, $cellParagraphStyle2);
+                        $table->addCell(3000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($kriteriaItemSelectedReferensi, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
+                        $table->addCell(500)->addText($kriteriaSelectedReferensi->kriteria ?? '', $cellFontStyle, $cellParagraphStyle2);
+                        $table->addCell(500)->addText($kriteriaSelectedReferensi->nilai ?? '0', $cellFontStyle, $cellParagraphStyle2);
+                        $table->addCell(5000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($kriteriaSelectedReferensi->keterangan, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
+                    }
+                    $index++;
+                }
+                $table->addRow();
+                $table->addCell(500, ['bgColor' => 'FFFEA8']);
+                $table->addCell(3000, ['gridSpan' => 6, 'bgColor' => 'FFFEA8'])->addText('REPUTASI', $cellFontStyle, $cellParagraphStyle);
+                foreach ($masterKriteriaPartner->where('kategori', 'Reputasi') as $key => $mlp) {
+                    $no = $key + 1;
+                    $kriteriaSelectedReputasi = $collectKriteriaDetail[$index];
+                    $kriteriaItemSelectedReputasi = '';
+                    switch ($kriteriaSelectedReputasi->kriteria) {
+                        case 1:
+                            $kriteriaItemSelectedReputasi = $mlp->kriteria_1;
+                            break;
+                        case 2:
+                            $kriteriaItemSelectedReputasi = $mlp->kriteria_2;
+                            break;
+                        case 3:
+                            $kriteriaItemSelectedReputasi = $mlp->kriteria_3;
+                            break;
+                        case 4:
+                            $kriteriaItemSelectedReputasi = $mlp->kriteria_4;
+                            break;
+                        default:
+                            $kriteriaItemSelectedReputasi = "Tidak Ada";
+                            break;
+                    }
+
+                    if ($mlp->kategori == "Reputasi") {
+                        $table->addRow();
+                        $table->addCell(500)->addText($no, $cellFontStyle, $cellParagraphStyle2);
+                        $table->addCell(2000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($mlp->item, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
+                        $table->addCell(500)->addText($mlp->bobot, $cellFontStyle, $cellParagraphStyle2);
+                        $table->addCell(3000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($kriteriaItemSelectedReputasi, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
+                        $table->addCell(500)->addText($kriteriaSelectedReputasi->kriteria ?? '', $cellFontStyle, $cellParagraphStyle2);
+                        $table->addCell(500)->addText($kriteriaSelectedReputasi->nilai ?? '0', $cellFontStyle, $cellParagraphStyle2);
+                        $table->addCell(5000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($kriteriaSelectedReputasi->keterangan, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
+                    }
+                    $index++;
+                }
+                $table->addRow();
+                $table->addCell(500, ['bgColor' => 'FFFEA8']);
+                $table->addCell(3000, ['gridSpan' => 6, 'bgColor' => 'FFFEA8'])->addText('FINANCIAL', $cellFontStyle, $cellParagraphStyle);
+                foreach ($masterKriteriaPartner->where('kategori', 'Financial') as $key => $mlp) {
+                    $no = $key + 1;
+                    $kriteriaSelectedFinancial = $collectKriteriaDetail[$index];
+                    $kriteriaItemSelectedFinancial = '';
+                    switch ($kriteriaSelectedFinancial->kriteria) {
+                        case 1:
+                            $kriteriaItemSelectedFinancial = $mlp->kriteria_1;
+                            break;
+                        case 2:
+                            $kriteriaItemSelectedFinancial = $mlp->kriteria_2;
+                            break;
+                        case 3:
+                            $kriteriaItemSelectedFinancial = $mlp->kriteria_3;
+                            break;
+                        case 4:
+                            $kriteriaItemSelectedFinancial = $mlp->kriteria_4;
+                            break;
+                        default:
+                            $kriteriaItemSelectedFinancial = "Tidak Ada";
+                            break;
+                    }
+
+                    if ($mlp->kategori == "Financial") {
+                        $table->addRow();
+                        $table->addCell(500)->addText($no, $cellFontStyle, $cellParagraphStyle2);
+                        $table->addCell(2000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($mlp->item, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
+                        $table->addCell(500)->addText($mlp->bobot, $cellFontStyle, $cellParagraphStyle2);
+                        $table->addCell(3000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($kriteriaItemSelectedFinancial, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
+                        $table->addCell(500)->addText($kriteriaSelectedFinancial->kriteria ?? '', $cellFontStyle, $cellParagraphStyle2);
+                        $table->addCell(500)->addText($kriteriaSelectedFinancial->nilai ?? '0', $cellFontStyle, $cellParagraphStyle2);
+                        $table->addCell(5000)->addText(str_replace("\r\n", '</w:t><w:br/><w:t>', htmlspecialchars($kriteriaSelectedFinancial->keterangan, ENT_QUOTES)), $cellFontStyle, $cellParagraphStyle);
+                    }
+                    $index++;
+                }
+                $table->addRow();
+                $table->addCell(2500, ['gridSpan' => 2, 'bgColor' => '8496B0'])->addText('Total', $cellFontStyle, $cellParagraphStyle);
+                $table->addCell(500, ['bgColor' => '8496B0'])->addText($totalScoreKriteria, $cellFontStyle, $cellParagraphStyle2);
+                $table->addCell(2500, ['gridSpan' => 4, 'bgColor' => '8496B0'])->addText($kriteriaFinal, $cellFontStyle, $cellParagraphStyle2);
+            }
+        }
+
+        $section->addTextBreak(1);
+        $section->addText('Catatan untuk scoring :', ['bold' => true, 'name' => 'Times New Roman'], ['align' => 'left', 'spaceBefore' => 0, 'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(4)]);
+        $section->addText(htmlspecialchars('370 <= X <= 400 : Risiko Rendah', ENT_QUOTES), ['bold' => true, 'name' => 'Times New Roman'], ['align' => 'left', 'spaceBefore' => 0, 'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(4)]);
+        $section->addText(htmlspecialchars('313 <= X < 370 : Risiko Moderat', ENT_QUOTES), ['bold' => true, 'name' => 'Times New Roman'], ['align' => 'left', 'spaceBefore' => 0, 'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(4)]);
+        $section->addText(htmlspecialchars('225 <= X < 313 : Risiko Tinggi', ENT_QUOTES), ['bold' => true, 'name' => 'Times New Roman'], ['align' => 'left', 'spaceBefore' => 0, 'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(4)]);
+        $section->addText(htmlspecialchars('100 < X < 225 : Risiko Extream', ENT_QUOTES), ['bold' => true, 'name' => 'Times New Roman'], ['align' => 'left', 'spaceBefore' => 0, 'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(4)]);
+
+        //Save Document
+        $phpWord->save(public_path($target_path . "/" . $file_name . ".docx"));
+        \PhpOffice\PhpWord\Settings::setDefaultPaper('A4');
+
+        $templatePhpWord = \PhpOffice\PhpWord\IOFactory::load(public_path($target_path . "/" . $file_name . ".docx"));
+        $rendererName = \PhpOffice\PhpWord\Settings::PDF_RENDERER_DOMPDF;
+        // $rendererName = \PhpOffice\PhpWord\Settings::PDF_RENDERER_TCPDF;
+        $rendererLibraryPath = realpath('../vendor/dompdf/dompdf');
+        // $rendererLibraryPath = realpath('../vendor/tecnickcom/tcpdf');
+        \PhpOffice\PhpWord\Settings::setPdfRenderer($rendererName, $rendererLibraryPath);
+        $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($templatePhpWord, 'PDF');
+        $xmlWriter->save(public_path($target_path . "/" . $file_name . ".pdf"));
+        File::delete(public_path($target_path . "/" . $file_name . ".docx"));
+        $porsi->file_assessment_merge = $file_name . '.pdf';
+        $porsi->save();
+    } catch (\Exception $e) {
+        Alert::error('Error', $e->getMessage());
+        return redirect()->back();
+    }
+}
+
+function mergeFileDokumenAssessmentPartnerKSO(App\Models\PorsiJO $partner)
+{
+    if (empty($partner)) {
+        Alert::error('Error', 'Partner tidak ditemukan. Hubungi Admin!');
+        return redirect()->back();
+    }
+
+    $file_name = date('dmYHis') . '_dokumen_assessment_partner_merge_' . str_replace(' ', '-', $partner->Company->name) . '_' . str_replace(' ', '-', $partner->Proyek->nama_proyek);
+
+    // if ($proyek->is_penyusun_approved && !empty($proyek->approved_penyusun)) {
+    $kriteria_detail = $partner->PartnerSelection->sortBy('index');
+    // dd($kriteria_detail);
+    $collectFileKriteria = $kriteria_detail->map(function ($kf) {
+        $collectArr = collect([]);
+        if ($kf->id_document != null || $kf->id_document != "[]") {
+            $collectArr->push(json_decode($kf->id_document));
+        }
+        return $collectArr;
+    })
+        ->flatten()
+        ->filter(function ($k) {
+            return $k != null;
+        })
+        ->values();
+    // dd($collectFileKriteria, $partner->file_assessment_merge);
+    if ($collectFileKriteria->isEmpty()) {
+        return null;
+    }
+
+    if (empty($partner->file_assessment_merge)) {
+        return null;
+    }
+
+
+
+    $pdfMerger = new PdfMerge();
+    $pdfMerger->add(public_path('file-nota-rekomendasi-2/file-kriteria-partner/' . $partner->file_assessment_merge));
+
+    $collectFileKriteria->each(function ($cf) use ($pdfMerger) {
+        $pdfMerger->add(public_path('file-selection-partner' . '/' . $cf));
+    });
+    try {
+        $pdfMerger->merge(public_path("file-nota-rekomendasi-2/file-kriteria-partner" . "/" . $file_name . ".pdf"));
+        $partner->file_assessment_merge = $file_name . '.pdf';
+        return $partner->save();
+    } catch (\Exception $e) {
+        // dd($e);
+        throw $e;
+    }
+    // } else {
+    //     return null;
+    // }
+}
+
+
+
+
+//? END HELPERS NOTA REKOMENDASI 2
 
 /**
  * Display Error Page

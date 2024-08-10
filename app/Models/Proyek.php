@@ -216,4 +216,24 @@ class Proyek extends Model
     {
         return $this->belongsTo(ApprovalTerkontrakProyek::class, 'kode_proyek', 'kode_proyek');
     }
+
+    public function AssessmentPartnerSelection()
+    {
+        return $this->hasMany(AssessmentPartnerSelection::class, 'kode_proyek', 'kode_proyek');
+    }
+
+    public function DokumenPersetujuanKSO()
+    {
+        return $this->hasOne(DokumenPersetujuanKSO::class, 'kode_proyek', 'kode_proyek');
+    }
+
+    public function VerifikasiInternalPartner()
+    {
+        return $this->belongsTo(VerifikasiInternalPartner::class, 'kode_proyek', 'kode_proyek');
+    }
+
+    public function VerifikasiInternalPersetujuanPartner()
+    {
+        return $this->belongsTo(VerifikasiInternalPersetujuanPartner::class, 'kode_proyek', 'kode_proyek');
+    }
 }

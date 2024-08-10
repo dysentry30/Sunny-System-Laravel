@@ -120,7 +120,10 @@ use App\Http\Controllers\PenilaianPenggunaJasaController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
 use App\Http\Controllers\ApprovalTerkontrakProyekController;
+use App\Http\Controllers\VerifikasiInternalPartnerController;
+use App\Http\Controllers\AssessmentPartnerSelectionController;
 use App\Http\Controllers\KriteriaSelectionNonGreenlaneController;
+use App\Http\Controllers\VerifikasiInternalPersetujuanPartnerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -6560,6 +6563,109 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
 
     //? END MASTER DATA NOTA REKOMENDASI 2
+
+
+    //? BEGIN PARTNER SELECTION
+
+    //Begin::Yang Berhubungan dengan Proyek
+
+    //ADD::Dokumen Kelengkapan Partner
+    Route::post('/proyek/porsi-jo/upload/{id_partner}', [ProyekController::class, "uploadDokumenKelengkapanPartner"]);
+
+    //AJUKAN KSO
+    Route::post('/proyek/porsi-jo/approval', [AssessmentPartnerSelectionController::class, "pengajuanApprovalKSO"]);
+
+    //DOWNLOAD::Dokumen Kelengkapan Partner
+    Route::get('/proyek/porsi-jo/download/{id_kelengkapan}', [ProyekController::class, "downloadDokumenKelengkapanPartner"]);
+
+    // GET PEFINDO
+    Route::post('/proyek/porsi-jo/get-pefindo', [ProyekController::class, "getDataPefindo"]);
+
+    //UPDATE::Data Pefindo yg Expired
+    Route::get('/proyek/porsi-jo/{partner}/update-pefindo', [ProyekController::class, "updatePefindoExpired"]);
+
+
+    Route::post('/proyek/get-matriks-verifikasi/{kategori}', function (Request $request, $kategori) {
+        $data = $request->all();
+
+        switch ($kategori) {
+            case 'penentuan-kso':
+                $verifikasi = MatriksApprovalVerifikasiPartner::where("is_active", true)->where("kategori", "Pengajuan")->get();
+                break;
+            case 'persetujuan-kso':
+                $verifikasi = MatriksApprovalPersetujuanPartner::where("is_active", true)->where("kategori", "Pengajuan")->get();
+                break;
+                // case 'verifikasi-proyek-nr-2':
+                //     $verifikasi = MatriksApprovalVerifikasiProyekNota2::where("is_active", true)->where("kategori", "Pengajuan")->get();
+                //     break;
+
+            default:
+                $verifikasi = null;
+                break;
+        }
+
+        $collectVerifikasi = [];
+
+
+        if (!empty($verifikasi)) {
+            $verifikasi = $verifikasi?->where("divisi_id", $data["divisi_id"])->where("departemen_code", $data["departemen_code"])?->map(function ($item) {
+                return [$item->nama_pegawai => $item->kode_unit_kerja . " - " . $item->title];
+            });
+
+
+            foreach ($verifikasi->toArray() as $item) {
+                foreach ($item as $key => $value) {
+                    $collectVerifikasi[$key] = $value;
+                }
+            }
+        }
+
+
+        return response()->json($collectVerifikasi);
+    });
+
+    //End::Yang Berhubungan dengan Proyek
+
+    //Begin::Verifikasi Internal Partner Selection
+    Route::group(['prefix' => 'verifikasi-internal-partner'], function () {
+        Route::get('/', [VerifikasiInternalPartnerController::class, "index"]);
+        Route::post('/request-pengajuan/{proyek}', [VerifikasiInternalPartnerController::class, "ProsesRequestApproval"]);
+        Route::post('/pengajuan/{proyek}', [VerifikasiInternalPartnerController::class, "ProsesPengajuanApproval"]);
+        Route::post('/rekomendasi/{proyek}', [VerifikasiInternalPartnerController::class, "ProsesRekomendasiApproval"]);
+        Route::post('/persetujuan/{proyek}', [VerifikasiInternalPartnerController::class, "ProsesPersetujuanApproval"]);
+        Route::get('/{kode_proyek}/{nip}/view-qr', [VerifikasiInternalPartnerController::class, "viewProyekQRSelected"]);
+    });
+    //End::Verifikasi Internal Partner Selection
+
+    //Begin::Assessment Partner Selection
+    Route::get('/assessment-partner-selection', [AssessmentPartnerSelectionController::class, 'index']);
+    Route::post('/assessment-partner-selection/{partner}/save', [AssessmentPartnerSelectionController::class, 'store']);
+    Route::post('/assessment-partner-selection/{partner}/edit', [AssessmentPartnerSelectionController::class, 'update']);
+    Route::post('/assessment-partner-selection/delete-file', [AssessmentPartnerSelectionController::class, 'deleteFile']);
+    Route::post('/assessment-partner-selection/pengajuan/approval', [AssessmentPartnerSelectionController::class, 'setApprovalPengajuan']);
+    Route::post('/assessment-partner-selection/penyusun/approval', [AssessmentPartnerSelectionController::class, 'setApprovalPenyusun']);
+    Route::post('/assessment-partner-selection/rekomendasi/approval', [AssessmentPartnerSelectionController::class, 'setApprovalRekomendasi']);
+    Route::post('/assessment-partner-selection/pengajuan-revisi/approval', [AssessmentPartnerSelectionController::class, 'setApprovalRevisi']);
+    Route::get('/assessment-partner-selection/{partner}/generate-final', [AssessmentPartnerSelectionController::class, 'generateMergeAssessment']);
+    //End::Assessment Partner Selection
+
+
+
+    //Begin::Verifikasi Internal Persetujuan Partner Selection
+    Route::group(['prefix' => 'verifikasi-internal-persetujuan-partner'], function () {
+        Route::get('/', [VerifikasiInternalPersetujuanPartnerController::class, "index"]);
+        Route::post('/request-pengajuan/{proyek}', [VerifikasiInternalPersetujuanPartnerController::class, "ProsesRequestApproval"]);
+        Route::post('/pengajuan/{proyek}', [VerifikasiInternalPersetujuanPartnerController::class, "ProsesPengajuanApproval"]);
+        Route::post('/pengusul/{proyek}', [VerifikasiInternalPersetujuanPartnerController::class, "ProsesPengusulApproval"]);
+        Route::post('/rekomendasi/{proyek}', [VerifikasiInternalPersetujuanPartnerController::class, "ProsesRekomendasiApproval"]);
+        Route::post('/persetujuan/{proyek}', [VerifikasiInternalPersetujuanPartnerController::class, "ProsesPersetujuanApproval"]);
+        Route::get('/{kode_proyek}/{nip}/view-qr', [VerifikasiInternalPersetujuanPartnerController::class, "viewProyekQRSelected"]);
+    });
+    //End::Verifikasi Internal Persetujuan Partner Selection
+
+
+    
+    //? END PARTNER SELECTION
 
 
 

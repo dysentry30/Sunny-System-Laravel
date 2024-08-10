@@ -2,70 +2,75 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AlatProyek;
+use Carbon\Carbon;
 use App\Models\Dop;
 use App\Models\Sbu;
 use App\Models\User;
 use Faker\Core\Uuid;
+use App\Models\Negara;
 use App\Models\Proyek;
 use App\Models\Company;
 use App\Models\PorsiJO;
 use App\Models\Customer;
 use App\Models\Forecast;
 use App\Models\MataUang;
+use App\Models\Provinsi;
 use App\Models\UnitKerja;
+use App\Models\AlatProyek;
+use App\Models\Departemen;
+use App\Models\DokumenEca;
+use App\Models\DokumenIca;
+use App\Models\DokumenMou;
+use App\Models\DokumenNda;
+use App\Models\DokumenRks;
 use App\Models\SumberDana;
 use App\Models\TeamProyek;
+use App\Models\TipeProyek;
+use App\Models\JenisProyek;
+use App\Models\DokumenDraft;
 use Illuminate\Http\Request;
+use App\Models\DokumenItbTor;
 use App\Models\DokumenTender;
 use App\Models\KriteriaPasar;
+use App\Models\MasterPefindo;
 use App\Models\PesertaTender;
 use App\Models\ProyekAdendum;
 use App\Models\HistoryForecast;
+use App\Models\NotaRekomendasi;
 use App\Models\ProyekBerjalans;
 use App\Models\AttachmentMenang;
 use App\Models\ClaimManagements;
 use App\Models\RiskTenderProyek;
 use Illuminate\Http\UploadedFile;
+use App\Models\KonsultanPerencana;
+use App\Models\MasterGrupTierBUMN;
 use Illuminate\support\Facades\DB;
 use App\Models\ContractManagements;
-use App\Models\DokumenDraft;
-use App\Models\DokumenEca;
-use App\Models\DokumenIca;
-use App\Models\DokumenItbTor;
-use App\Models\DokumenMou;
-use App\Models\DokumenNda;
-use App\Models\KonsultanPerencana;
-use App\Models\ProyekKonsultanPerencana;
 use App\Models\KriteriaPasarProyek;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
+use App\Models\MasterKlasifikasiSBU;
+use App\Models\PersonelTenderProyek;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
-use App\Models\DokumenPrakualifikasi;
-use App\Models\DokumenRks;
-use App\Models\JenisProyek;
-use App\Models\Provinsi;
-use App\Models\TipeProyek;
-use App\Models\Departemen;
-use App\Models\DokumenPendukungPasdin;
-use App\Models\MatriksApprovalRekomendasi;
-use App\Models\Negara;
-use App\Models\NotaRekomendasi;
-use App\Models\PersonelTenderProyek;
-use App\Models\MasterKlasifikasiSBU;
-use App\Models\MasterSubKlasifikasiSBU;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Http;
+use App\Models\DokumenPrakualifikasi;
+use App\Models\DokumenPendukungPasdin;
+use App\Models\MasterSubKlasifikasiSBU;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use App\Models\ProyekKonsultanPerencana;
 use Illuminate\Support\Facades\Response;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use App\Models\MatriksApprovalRekomendasi;
+use App\Models\DokumenKelengkapanPartnerKSO;
+use App\Models\MasterKriteriaGreenlanePartner;
 use Google\Service\FactCheckTools\Resource\Claims;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\URL;
 
 class ProyekController extends Controller
 {
@@ -429,37 +434,44 @@ class ProyekController extends Controller
             } else {
                 $subKBLI = [];
             }
-            // // dd($teamProyek, $kriteriaProyek, $porsiJO, $pesertatender, $proyekberjalans, $departemen);
-            // $isExistPorsiJO = PorsiJO::where('kode_proyek', $proyek->kode_proyek)->get();
-            // if (!empty($isExistPorsiJO)) {
-            //     $isExistPorsiJO->each(function ($porsi) {
-            //         $kriteria_partner = MasterGrupTierBUMN::where('id_pelanggan', $porsi->id_company_jo)->first();
-            //         if (!empty($kriteria_partner)) {
-            //             $porsi->is_greenlane = true;
-            //             $porsi->is_disetujui = true;
-            //         } else {
-            //             $porsi->is_greenlane = false;
-            //         }
-            //         if (!$porsi->is_greenlane) {
-            //             if (empty($porsi->score_pefindo_jo)) {
-            //                 $checkPefindo = MasterPefindo::where('id_pelanggan', $porsi->id_company_jo)->latest()?->first();
-            //                 if (!empty($checkPefindo)) {
-            //                     $porsi->score_pefindo_jo = $checkPefindo->score;
-            //                     $porsi->file_pefindo_jo = $checkPefindo->id_document;
-            //                     $porsi->grade = $checkPefindo->grade;
-            //                     $porsi->keterangan = $checkPefindo->keterangan;
 
-            //                     if (str_contains($checkPefindo->grade, 'E')) {
-            //                         $porsi->is_disetujui = false;
-            //                     } else {
-            //                         $porsi->is_disetujui = true;
-            //                     }
-            //                 }
-            //             }
-            //         }
-            //         $porsi->save();
-            //     });
-            // }
+            $isExistPorsiJO = PorsiJO::where('kode_proyek', $proyek->kode_proyek)->get();
+            if (!empty($isExistPorsiJO)) {
+                $isExistPorsiJO->each(function ($porsi) {
+                    $kriteria_partner = MasterGrupTierBUMN::where('id_pelanggan', $porsi->id_company_jo)->first();
+                    $kriteria_partner_greenlane = MasterKriteriaGreenlanePartner::where('id_pelanggan', $porsi->id_company_jo)->first();
+                    if (!empty($kriteria_partner)) {
+                        $porsi->is_greenlane = true;
+                        $porsi->is_disetujui = true;
+                    } else {
+                        if ($kriteria_partner_greenlane) {
+                            $porsi->is_greenlane = true;
+                            $porsi->is_disetujui = true;
+                        } else {
+                            $porsi->is_greenlane = false;
+                        }
+                    }
+                    if (!$porsi->is_greenlane) {
+                        if (empty($porsi->score_pefindo_jo)) {
+                            $checkPefindo = MasterPefindo::where('id_pelanggan', $porsi->id_company_jo)->latest()?->first();
+                            if (!empty($checkPefindo)) {
+                                $porsi->score_pefindo_jo = $checkPefindo->score;
+                                $porsi->file_pefindo_jo = $checkPefindo->id_document;
+                                $porsi->grade = $checkPefindo->grade;
+                                $porsi->keterangan = $checkPefindo->keterangan;
+
+                                if (str_contains($checkPefindo->grade, 'E')) {
+                                    $porsi->is_disetujui = false;
+                                } else {
+                                    $porsi->is_disetujui = true;
+                                }
+                            }
+                        }
+                    }
+                    $porsi->save();
+                    $porsi->refresh();
+                });
+            }
             return view(
                 'Proyek/viewProyek',
                 ["proyek" => $proyek, "proyeks" => Proyek::all()],
@@ -810,6 +822,97 @@ class ProyekController extends Controller
         // $newProyek->customer= $dataProyek["customer"];
 
         // dd(isset($dataProyek["jenis-proyek"]));
+
+        if ($newProyek->dop != "EA" && $newProyek->jenis_proyek == "J") {
+            $newProyek->lingkup_pekerjaan = $dataProyek["lingkup-pekerjaan"] ?? null;
+
+            //Begin::Alasan KSO
+            if (Auth::user()->check_administrator || Gate::any(['user-crm', 'approver-crm'])) {
+                $alasan_kso = collect([]);
+                if (isset($dataProyek["checklist-alasan-kso-1"])) {
+                    $alasan_kso->push([
+                        "index" => 1,
+                        "value" => $dataProyek["checklist-alasan-kso-1"],
+                        "keterangan" => null
+                    ]);
+                }
+                if (isset($dataProyek["checklist-alasan-kso-2"])) {
+                    $alasan_kso->push([
+                        "index" => 2,
+                        "value" => $dataProyek["checklist-alasan-kso-2"],
+                        "keterangan" => null
+                    ]);
+                }
+                if (isset($dataProyek["checklist-alasan-kso-3"])) {
+                    $alasan_kso->push([
+                        "index" => 3,
+                        "value" => $dataProyek["checklist-alasan-kso-3"],
+                        "keterangan" => null
+                    ]);
+                }
+                if (isset($dataProyek["checklist-alasan-kso-4"])) {
+                    $alasan_kso->push([
+                        "index" => 4,
+                        "value" => $dataProyek["checklist-alasan-kso-4"],
+                        "keterangan" => null
+                    ]);
+                }
+                if (isset($dataProyek["checklist-alasan-kso-5"])) {
+                    $alasan_kso->push([
+                        "index" => 5,
+                        "value" => $dataProyek["checklist-alasan-kso-5"],
+                        "keterangan" => $dataProyek["alasan-kso-text"] ?? null
+                    ]);
+                }
+
+                // dd($alasan_kso);
+                $newProyek->alasan_kso = $alasan_kso->toArray() ?? null;
+            }
+            //End::Alasan KSO
+
+            //Begin::Tujuan KSO
+            if (Auth::user()->check_administrator || Gate::any(['user-crm', 'approver-crm'])) {
+                $tujuan_kso = collect([]);
+                if (isset($dataProyek["checklist-tujuan-kso-1"])) {
+                    $tujuan_kso->push([
+                        "index" => 1,
+                        "value" => $dataProyek["checklist-tujuan-kso-1"],
+                        "keterangan" => null
+                    ]);
+                }
+                if (isset($dataProyek["checklist-tujuan-kso-2"])) {
+                    $tujuan_kso->push([
+                        "index" => 2,
+                        "value" => $dataProyek["checklist-tujuan-kso-2"],
+                        "keterangan" => null
+                    ]);
+                }
+                if (isset($dataProyek["checklist-tujuan-kso-3"])) {
+                    $tujuan_kso->push([
+                        "index" => 3,
+                        "value" => $dataProyek["checklist-tujuan-kso-3"],
+                        "keterangan" => null
+                    ]);
+                }
+                if (isset($dataProyek["checklist-tujuan-kso-4"])) {
+                    $tujuan_kso->push([
+                        "index" => 4,
+                        "value" => $dataProyek["checklist-tujuan-kso-4"],
+                        "keterangan" => $dataProyek["tujuan-kso-text"] ?? null
+                    ]);
+                }
+
+                // dd($tujuan_kso);
+                $newProyek->tujuan_kso = $tujuan_kso->toArray() ?? null;
+            }
+            //End::Tujuan KSO
+
+            //Begin::Persetujuan Fasilitan NCL
+            if (Auth::user()->check_administrator || Gate::any(['user-crm', 'approver-crm'])) {
+                $newProyek->fasilitas_ncl = $dataProyek["fasilitas-ncl"] ?? null;
+            }
+            //End::Persetujuan Fasilitan NCL
+        }
 
         $kode_proyek = $newProyek->kode_proyek;
 
@@ -2446,52 +2549,179 @@ class ProyekController extends Controller
 
     public function tambahJO(Request $request, PorsiJO $newPorsiJO)
     {
-        $dataPorsiJO = $request->all();
-        // dd($dataPorsiJO);
-        $messages = [
-            "required" => "*Kolom Ini Harus Diisi !",
-        ];
-        $rules = [
-            "company-jo" => "required",
-            "porsijo-company" => "required",
-        ];
-        $validation = Validator::make($dataPorsiJO, $rules, $messages);
-        if ($validation->fails()) {
-            Alert::error('Error', "Partner JO Gagal Dibuat, Periksa Kembali !");
-        }
-        $validation->validate();
+        try {
+            DB::beginTransaction();
+            $dataPorsiJO = $request->all();
+            $proyek = Proyek::find($dataPorsiJO["porsi-kode-proyek"]);
 
-        $newPorsiJO->kode_proyek = $dataPorsiJO["porsi-kode-proyek"];
-        $newPorsiJO->company_jo = $dataPorsiJO["company-jo"];
-        $newPorsiJO->porsi_jo = $dataPorsiJO["porsijo-company"];
-        // $newPorsiJO->max_jo = $dataPorsiJO["max-porsi"];
+            if ($proyek->dop != "EA") {
 
-        $proyek = Proyek::find($dataPorsiJO["porsi-kode-proyek"]);
-        $proyek->porsi_jo = $dataPorsiJO["sisa-input"];
+                $messages = [
+                    "required" => "*Kolom Ini Harus Diisi !",
+                ];
+                $rules = [
+                    "company-jo" => "required",
+                    "porsijo-company" => "required",
+                    "kekuatan-partner" => "required",
+                    "kelemahan-partner" => "required",
+                ];
+                $validation = Validator::make($dataPorsiJO, $rules, $messages);
+                if ($validation->fails()) {
+                    Alert::error('Error', "Partner JO Gagal Dibuat, Periksa Kembali !");
+                }
+                $validation->validate();
+                $customer = Customer::find($dataPorsiJO["company-jo"]);
 
-        if ($proyek->nilai_perolehan != null && $proyek->stage == 8) {
-            $nilaiPerolehan = (int) str_replace('.', '', $proyek->nilai_perolehan);
-            $kontrakKeseluruhan = ($nilaiPerolehan * 100) / $proyek->porsi_jo;
+                $file = $request->file('file-consent-npwp');
 
-            $proyek->nilai_kontrak_keseluruhan = round($kontrakKeseluruhan);
-        } else {
-            $proyek->nilai_kontrak_keseluruhan = 0;
-        }
+                $newPorsiJO->kode_proyek = $dataPorsiJO["porsi-kode-proyek"];
+                $newPorsiJO->company_jo = $customer->name;
+                $newPorsiJO->id_company_jo = $customer->id_customer;
+                $newPorsiJO->porsi_jo = $dataPorsiJO["porsijo-company"];
+                $newPorsiJO->kekuatan_partner = $dataPorsiJO["kekuatan-partner"];
+                $newPorsiJO->kelemahan_partner = $dataPorsiJO["kelemahan-partner"];
+
+                //Check Partner di Master BUMN
+                $kriteria_partner = MasterGrupTierBUMN::where('id_pelanggan', $customer->id_customer)->first();
+
+                //Check Partner di Master Kriteria Greenlane Partner
+                $kriteria_partner_greenlane = MasterKriteriaGreenlanePartner::where('id_pelanggan', $customer->id_customer)->first();
+
+                if (!empty($kriteria_partner)) {
+                    $newPorsiJO->is_greenlane = true;
+                    $newPorsiJO->is_disetujui = true;
+                    $newPorsiJO->is_hasil_assessment = true;
+                    $newPorsiJO->hasil_assessment = "Disetujui";
+                } else {
+                    if ($kriteria_partner_greenlane) {
+                        $newPorsiJO->is_greenlane = true;
+                        $newPorsiJO->is_disetujui = true;
+                        $newPorsiJO->is_hasil_assessment = true;
+                        $newPorsiJO->hasil_assessment = "Disetujui";
+                    } else {
+                        $newPorsiJO->is_greenlane = false;
+                    }
+                }
+
+                if (!$newPorsiJO->is_greenlane) {
+                    //Check Partner di Pefindo
+                    $checkPefindo = MasterPefindo::where('id_pelanggan', $dataPorsiJO['company-jo'])->first();
+
+                    if (!empty($checkPefindo)) {
+                        $newPorsiJO->score_pefindo_jo = $checkPefindo->score;
+                        $newPorsiJO->file_pefindo_jo = $checkPefindo->id_document;
+                        $newPorsiJO->grade = $checkPefindo->grade;
+                        $newPorsiJO->keterangan = $checkPefindo->keterangan;
+
+                        if (str_contains($checkPefindo->grade, 'E')) {
+                            $newPorsiJO->is_disetujui = false;
+                        } else {
+                            $newPorsiJO->is_disetujui = true;
+                        }
+                    }
+                }
+
+
+                // $newPorsiJO->max_jo = $dataPorsiJO["max-porsi"];
+                $nama_file = collect([]);
+                if (empty($file)) {
+                    Alert::error('Error', 'Silahkan upload Dokumen terlebih dahulu!');
+                    return redirect()->back();
+                }
+                foreach ($file as $f) {
+                    $id_document = date("His_") . str_replace(' ', '_', $f->getClientOriginalName());
+                    $nama_file->push($id_document);
+                    $f->move(public_path('consent-npwp'), $id_document);
+                }
+                $newPorsiJO->file_consent_npwp = $nama_file;
 
 
 
-        if (($dataPorsiJO["sisa-input"] + $dataPorsiJO["porsijo-company"]) > 100) {
-            // dd($dataPorsiJO["sisa-input"], $dataPorsiJO["porsijo-company"]); 
-            Alert::error('Error', "Partner JO Gagal Dihapus, Hubungi Admin !");
+                $proyek = Proyek::find($dataPorsiJO["porsi-kode-proyek"]);
+                $proyek->porsi_jo = $dataPorsiJO["sisa-input"] ?? 100;
+                // dd($proyek->porsi_jo);
+
+                if ($proyek->nilai_perolehan != null && $proyek->stage == 8) {
+                    $nilaiPerolehan = (int) str_replace('.', '', $proyek->nilai_perolehan);
+                    $kontrakKeseluruhan = ($nilaiPerolehan * 100) / $proyek->porsi_jo;
+
+                    $proyek->nilai_kontrak_keseluruhan = round($kontrakKeseluruhan);
+                } else {
+                    $proyek->nilai_kontrak_keseluruhan = 0;
+                }
+
+
+
+                if (($dataPorsiJO["sisa-input"] + $dataPorsiJO["porsijo-company"]) > 100) {
+                    // dd($dataPorsiJO["sisa-input"], $dataPorsiJO["porsijo-company"]); 
+                    Alert::error('Error', "Partner JO Gagal Ditambahkan, Hubungi Admin !");
+                    return redirect()->back();
+                }
+                // dd($dataPorsiJO);
+
+                $proyek->save();
+                $newPorsiJO->save();
+                DB::commit();
+                Alert::success("Success", "Porsi JO Berhasil Ditambahkan");
+
+                return redirect()->back();
+            } else {
+
+                $messages = [
+                    "required" => "*Kolom Ini Harus Diisi !",
+                ];
+                $rules = [
+                    "company-jo" => "required",
+                    "porsijo-company" => "required",
+                ];
+                $validation = Validator::make($dataPorsiJO, $rules, $messages);
+                if ($validation->fails()) {
+                    Alert::error('Error', "Partner JO Gagal Dibuat, Periksa Kembali !");
+                }
+                $validation->validate();
+
+                $customer = Customer::find($dataPorsiJO["company-jo"]);
+
+                $newPorsiJO->kode_proyek = $dataPorsiJO["porsi-kode-proyek"];
+                $newPorsiJO->company_jo = $customer->name;
+                $newPorsiJO->id_company_jo = $customer->id_customer;
+                $newPorsiJO->porsi_jo = $dataPorsiJO["porsijo-company"];
+                // $newPorsiJO->max_jo = $dataPorsiJO["max-porsi"];
+
+                $proyek = Proyek::find($dataPorsiJO["porsi-kode-proyek"]);
+                $proyek->porsi_jo = $dataPorsiJO["sisa-input"] ?? 100;
+
+                if ($proyek->nilai_perolehan != null && $proyek->stage == 8) {
+                    $nilaiPerolehan = (int) str_replace('.', '', $proyek->nilai_perolehan);
+                    $kontrakKeseluruhan = ($nilaiPerolehan * 100) / $proyek->porsi_jo;
+
+                    $proyek->nilai_kontrak_keseluruhan = round($kontrakKeseluruhan);
+                } else {
+                    $proyek->nilai_kontrak_keseluruhan = 0;
+                }
+
+
+
+                if (($dataPorsiJO["sisa-input"] + $dataPorsiJO["porsijo-company"]) > 100) {
+                    // dd($dataPorsiJO["sisa-input"], $dataPorsiJO["porsijo-company"]); 
+                    Alert::error('Error', "Partner JO Gagal Dihapus, Hubungi Admin !");
+                    return redirect()->back();
+                }
+                // dd($dataPorsiJO);
+
+                $proyek->save();
+                $newPorsiJO->save();
+                DB::commit();
+                Alert::success("Success", "Porsi JO Berhasil Ditambahkan");
+
+                return redirect()->back();
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            Alert::error("Error", "Terjadi kesalahan. Hubungi Admin");
             return redirect()->back();
         }
-        // dd($dataPorsiJO);
-
-        $proyek->save();
-        $newPorsiJO->save();
-        Alert::success("Success", "Porsi JO Berhasil Ditambahkan");
-
-        return redirect()->back();
     }
 
     public function editJO(Request $request, $id)
@@ -2536,25 +2766,255 @@ class ProyekController extends Controller
 
     public function deleteJO($id)
     {
-        $deleteJO = PorsiJO::find($id);
-        $proyek = Proyek::find($deleteJO->kode_proyek);
-        // dd($deleteJO->porsi_jo, $deleteJO->kode_proyek);
-        $maxPorsiJo = $proyek->porsi_jo + $deleteJO->porsi_jo;
-        if ($maxPorsiJo > 100) {
-            // dd($maxPorsiJo);
-            $proyek->porsi_jo = 100;
-            $proyek->save();
-            $deleteJO->delete();
+        try {
+            DB::beginTransaction();
+            $deleteJO = PorsiJO::find($id);
+            $proyek = Proyek::find($deleteJO->kode_proyek);
 
-            Alert::warning('Error', "Partner JO Berhasil Dihapus, Hubungi Admin !");
+            if ($proyek->dop != "EA") {
+
+                $dokumenKelengkapanPartner = DokumenKelengkapanPartnerKSO::where('kode_proyek', $deleteJO->kode_proyek)->where('id_partner', $deleteJO->id)->get();
+
+                $filesKelengkapan = $dokumenKelengkapanPartner->mapWithKeys(function ($item, $key) {
+                    return [$item->kategori => $item->id_document];
+                });
+                $maxPorsiJo = $proyek->porsi_jo + $deleteJO->porsi_jo;
+                $files = collect(json_decode($deleteJO->file_consent_npwp));
+                if ($maxPorsiJo > 100) {
+                    // dd($maxPorsiJo);
+                    $proyek->porsi_jo = 100;
+                    $proyek->save();
+                    $deleteJO->delete();
+
+                    Alert::warning('Error', "Partner JO Berhasil Dihapus, Hubungi Admin !");
+                    return redirect()->back();
+                }
+                $proyek->porsi_jo = $maxPorsiJo;
+
+                $proyek->save();
+                $deleteJO->delete();
+                $dokumenKelengkapanPartner->each(function ($item) {
+                    return $item->delete();
+                });
+                if ($filesKelengkapan->isNotEmpty()) {
+                    $filesKelengkapan->each(function ($file, $key) {
+                        $formatKeyToFolder = strtolower(str_replace(' ', '-', $key));
+                        File::delete(public_path(public_path("dokumen-kelengkapan-partner/$formatKeyToFolder/$file")));
+                    });
+                }
+                if ($files->isNotEmpty()) {
+                    $files->each(function ($file) {
+                        File::delete(public_path(public_path("consent-npwp/$file")));
+                    });
+                }
+                DB::commit();
+                Alert::success("Success", "Partner JO Berhasil Dihapus");
+                return redirect()->back();
+            } else {
+                $maxPorsiJo = $proyek->porsi_jo + $deleteJO->porsi_jo;
+                if ($maxPorsiJo > 100) {
+                    // dd($maxPorsiJo);
+                    $proyek->porsi_jo = 100;
+                    $proyek->save();
+                    $deleteJO->delete();
+
+                    Alert::warning('Error', "Partner JO Berhasil Dihapus, Hubungi Admin !");
+                    return redirect()->back();
+                }
+                $proyek->porsi_jo = $maxPorsiJo;
+
+                $proyek->save();
+                $deleteJO->delete();
+                DB::commit();
+                Alert::success("Success", "Partner JO Berhasil Dihapus");
+                return redirect()->back();
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            Alert::error("Error", "Terjadi kesalahan. Hubungi Admin");
             return redirect()->back();
         }
-        $proyek->porsi_jo = $maxPorsiJo;
+    }
 
-        $proyek->save();
-        $deleteJO->delete();
-        Alert::success("Success", "Partner JO Berhasil Dihapus");
-        return redirect()->back();
+    public function uploadDokumenKelengkapanPartner(Request $request, $id_partner)
+    {
+        $partnerJO = PorsiJO::find($id_partner);
+
+        if (empty($partnerJO)) {
+            Alert::error("Error", "Partner Tidak Ditemukan. Hubungi Admin!");
+            return redirect()->back();
+        }
+
+        $data = $request->all();
+        $collectData = collect([]);
+
+        if (isset($data["dokumen-ahu-partner"])) {
+            $nama_file = $data["dokumen-ahu-partner"]->getClientOriginalName();
+            $id_document = date("His_") . str_replace(' ', '_', $nama_file);
+            $data["dokumen-ahu-partner"]->move(public_path('dokumen-kelengkapan-partner/dokumen-ahu'), $id_document);
+
+            $collectData->push([
+                "kategori" => "Dokumen AHU",
+                "id_partner" => $id_partner,
+                "kode_proyek" => $partnerJO->kode_proyek,
+                "id_document" => $id_document,
+                "nama_document" => $nama_file,
+            ]);
+        }
+
+        if (isset($data["dokumen-keuangan-partner"])) {
+            $nama_file = $data["dokumen-keuangan-partner"]->getClientOriginalName();
+            $id_document = date("His_") . str_replace(' ', '_', $nama_file);
+            $data["dokumen-keuangan-partner"]->move(public_path('dokumen-kelengkapan-partner/dokumen-laporan-keuangan'), $id_document);
+
+            $collectData->push([
+                "kategori" => "Dokumen Laporan Keuangan",
+                "id_partner" => $id_partner,
+                "kode_proyek" => $partnerJO->kode_proyek,
+                "id_document" => $id_document,
+                "nama_document" => $nama_file,
+            ]);
+        }
+
+        if (isset($data["dokumen-pengalaman-partner"])) {
+            $nama_file = $data["dokumen-pengalaman-partner"]->getClientOriginalName();
+            $id_document = date("His_") . str_replace(' ', '_', $nama_file);
+            $data["dokumen-pengalaman-partner"]->move(public_path('dokumen-kelengkapan-partner/dokumen-pengalaman'), $id_document);
+
+            $collectData->push([
+                "kategori" => "Dokumen Pengalaman",
+                "id_partner" => $id_partner,
+                "kode_proyek" => $partnerJO->kode_proyek,
+                "id_document" => $id_document,
+                "nama_document" => $nama_file,
+            ]);
+        }
+
+        if (isset($data["dokumen-spt-partner"])) {
+            $nama_file = $data["dokumen-spt-partner"]->getClientOriginalName();
+            $id_document = date("His_") . str_replace(' ', '_', $nama_file);
+            $data["dokumen-spt-partner"]->move(public_path('dokumen-kelengkapan-partner/dokumen-laporan-spt'), $id_document);
+
+            $collectData->push([
+                "kategori" => "Dokumen Laporan SPT",
+                "id_partner" => $id_partner,
+                "kode_proyek" => $partnerJO->kode_proyek,
+                "id_document" => $id_document,
+                "nama_document" => $nama_file,
+            ]);
+        }
+
+        try {
+            DokumenKelengkapanPartnerKSO::insert($collectData->toArray());
+            Alert::success('Success', "Dokumen berhasil diupload");
+            return redirect()->back();
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            Alert::error('Error', $e->getMessage());
+            return redirect()->back();
+        }
+    }
+
+    public function downloadDokumenKelengkapanPartner($id_kelengkapan)
+    {
+        $getDokumen = DokumenKelengkapanPartnerKSO::find($id_kelengkapan);
+        if (empty($getDokumen)) {
+            Alert::error('Error', "Dokumen tidak ditemukan. Hubungi Admin!");
+            return redirect()->back();
+        }
+        $kategori = strtolower(str_replace(' ', '-', $getDokumen->kategori));
+        $id_document = $getDokumen->id_document;
+
+        return response()->download(public_path("dokumen-kelengkapan-partner/$kategori/$id_document"), $getDokumen->nama_document);
+    }
+
+    public function deleteDokumenKelengkapanPartner(Request $request, $id)
+    {
+        $getDokumen = DokumenKelengkapanPartnerKSO::find($id);
+
+        if (empty($getDokumen)) {
+            Alert::error('Error', "Dokumen tidak ditemukan. Hubungi Admin!");
+            return redirect()->back();
+        }
+
+        if ($getDokumen->delete()) {
+            try {
+                File::delete(public_path("consent-npwp/$getDokumen->id_document"));
+                return response()->json([
+                    "Success" => true,
+                    "Message" => null
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    "Success" => false,
+                    "Message" => $e->getMessage()
+                ]);
+            }
+        }
+    }
+
+    public function getDataPefindo(Request $request)
+    {
+        $data = $request->all();
+        $pefindo = MasterPefindo::where('id_pelanggan', $data['id_customer'])->first();
+
+        if (!empty($pefindo)) {
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'score' => $pefindo->score,
+                    'file' => $pefindo->id_document,
+                ]
+            ]);
+        } else {
+            return response()->json([
+                'success' => true,
+                'data' => null
+            ]);
+        }
+    }
+
+    public function updatePefindoExpired(PorsiJO $partner)
+    {
+
+        try {
+            if (empty($partner)) {
+                return response()->json([
+                    'Success' => false,
+                    'Message' => 'Data tidak ditemukan'
+                ], 400);
+            }
+
+            $pefindoSelectedActive = MasterPefindo::where('id_pelanggan', $partner->id_company_jo)->where('is_active', true)->first();
+
+            if (empty($pefindoSelectedActive)) {
+                return response()->json([
+                    'Success' => false,
+                    'Message' => 'Data pefindo tidak ditemukan'
+                ], 400);
+            }
+
+            $partner->score_pefindo_jo = $pefindoSelectedActive->score;
+            $partner->file_pefindo_jo = $pefindoSelectedActive->id_document;
+            $partner->grade = $pefindoSelectedActive->grade;
+            $partner->keterangan = $pefindoSelectedActive->keterangan;
+            if (str_contains($pefindoSelectedActive->grade, "E")) {
+                $partner->is_disetujui = false;
+            }
+
+            if ($partner->save()) {
+                return response()->json([
+                    'Success' => true,
+                    'Message' => 'Data berhasil diperbaharui'
+                ], 200);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'Success' => false,
+                'Message' => $e->getMessage()
+            ], 400);
+        }
     }
 
     public function assignTeam(Request $request, TeamProyek $newTeam)
