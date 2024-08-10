@@ -528,7 +528,7 @@
             order: [
                 [8, 'desc'],
             ],
-            pageLength: 10,
+            pageLength: 20,
         });
     });
 </script>

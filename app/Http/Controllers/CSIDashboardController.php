@@ -22,7 +22,12 @@ class CSIDashboardController extends Controller
         $getYear = $request->get('get-year') ?? date('Y');
         $getMonth = $request->get('get-month') ?? '';
 
-        $CSIFinish = Csi::select(['id_csi', 'id_customer', 'no_spk', 'status', 'score_csi', 'is_setuju'])->with(['ProyekPIS'])->where('status', 'Done')->where('is_setuju', 't')->whereYear('tanggal_submit', $getYear)->get();
+        $CSIFinish = Csi::select(['id_csi', 'id_customer', 'no_spk', 'status', 'score_csi', 'is_setuju'])
+        ->with(['ProyekPIS'])
+        ->where('status', 'Done')
+        ->where('is_setuju', 't')
+        ->whereYear('tanggal_submit', $getYear)
+            ->get();
 
         if (!empty($getMonth)) {
             $CSIFinish = $CSIFinish->filter(function ($csi) use ($getMonth) {
@@ -33,10 +38,12 @@ class CSIDashboardController extends Controller
         $kategoriCSI = CsiMasterTingkatKepuasan::all();
         $masterTingkatKepuasan = CsiMasterTingkatKepuasan::all();
 
-        $CSIGroupByProyek = $CSIFinish->groupBy('no_spk');
+        $CSIGroupByProyek = $CSIFinish?->filter(function ($csi) {
+            return empty($csi->ProyekPIS->entitas_proyek) && !empty($csi->ProyekPIS->bast2_date) && $csi->ProyekPIS->bast2_date >= Carbon::now();
+        })->groupBy('no_spk');
 
         $CSIGetLastProgress = $CSIGroupByProyek?->map(function ($value, $key) {
-            $value = $value->last();
+            $value = $value?->sortBy("id_csi")->last();
             return $value;
         })->values();
 
@@ -77,7 +84,6 @@ class CSIDashboardController extends Controller
         });
 
         $CSIGroupByUnitKerja = $CSIMapWithDivisi->groupBy('unit_kerja');
-        // dd($CSIGroupByUnitKerja);
 
         $groupUnitKerja = collect(['Divisi Infrastruktur 1', 'Divisi Infrastruktur 2', 'Divisi EPCC', 'Divisi Gedung']);
 
@@ -91,7 +97,7 @@ class CSIDashboardController extends Controller
                 return (float) $value->score_csi;
             }), 2);
 
-            $averagePerDivisi = $totalPerDivisi != 0 ? round($sumPerDivisi / $totalPerDivisi, 3) : 0;
+            $averagePerDivisi = $totalPerDivisi != 0 ? round($sumPerDivisi / $totalPerDivisi, 2) : 0;
             $persentasePerDivisi = $averagePerDivisi != 0 || $masterTingkatKepuasan->count() != 0 ? round($averagePerDivisi / $masterTingkatKepuasan->count() * 100, 2) : 0;
             $keteranganPerDivisi = $masterTingkatKepuasan->filter(function ($item) use ($persentasePerDivisi) {
                 return $item->dari <= $persentasePerDivisi && $item->sampai >= $persentasePerDivisi;
@@ -136,7 +142,11 @@ class CSIDashboardController extends Controller
         $getYear = $request->get('get-year') ?? date('Y');
         $getMonth = $request->get('get-month') ?? '';
 
-        $CSIFinish = Csi::select(['id_csi', 'id_customer', 'no_spk', 'status', 'jawaban', 'score_csi', 'is_setuju'])->with(['ProyekPIS'])->where('status', 'Done')->where('is_setuju', 't')->whereYear('tanggal_submit', $getYear)->get();
+        $CSIFinish = Csi::select(['id_csi', 'id_customer', 'no_spk', 'status', 'jawaban', 'score_csi', 'is_setuju'])
+            ->with(['ProyekPIS'])
+            ->where('status', 'Done')
+            ->where('is_setuju', 't')
+            ->whereYear('tanggal_submit', $getYear)->get();
 
         if (!empty($getMonth)) {
             $CSIFinish = $CSIFinish->filter(function ($csi) use ($getMonth) {
@@ -144,10 +154,12 @@ class CSIDashboardController extends Controller
             });
         }
 
-        $CSIGroupByProyek = $CSIFinish->groupBy('no_spk');
+        $CSIGroupByProyek = $CSIFinish?->filter(function ($csi) {
+            return empty($csi->ProyekPIS->entitas_proyek) && !empty($csi->ProyekPIS->bast2_date) && $csi->ProyekPIS->bast2_date >= Carbon::now();
+        })->groupBy('no_spk');
 
         $CSIGetLastProgress = $CSIGroupByProyek?->map(function ($value, $key) {
-                $value = $value->last();
+            $value = $value?->sortBy("id_csi")->last();
                 return $value;
             })->values();
 
@@ -168,7 +180,10 @@ class CSIDashboardController extends Controller
 
             $jawabanCollect = $CSIFilterUnitKerja->where("jawaban", "!=", null)->sortBy("no_spk")->map(function ($value) {
                 return json_decode($value->jawaban);
+            })->filter(function ($item) {
+                return !empty($item);
             });
+
 
             $mapPerCSI = $jawabanCollect->map(function ($item) {
 

@@ -238,7 +238,7 @@ class ProyekController extends Controller
         } elseif ($nilaiOK > 0 && $nilaiOK <= 250000000000) {
             $newProyek->klasifikasi_pasdin = "Proyek Kecil";
         } elseif ($nilaiOK > 2000000000000) {
-            $newProyek->klasifikasi_pasdin = "Proyek Mega";
+            $newProyek->klasifikasi_pasdin = "Mega Proyek";
         }
 
 
@@ -571,7 +571,7 @@ class ProyekController extends Controller
         } elseif ($nilaiOK > 0 && $nilaiOK <= 250000000000) {
             $newProyek->klasifikasi_pasdin = "Proyek Kecil";
         } elseif ($nilaiOK > 2000000000000) {
-            $newProyek->klasifikasi_pasdin = "Proyek Mega";
+            $newProyek->klasifikasi_pasdin = "Mega Proyek";
         }
         // $newProyek->klasifikasi_pasdin = $dataProyek["ra-klasifikasi-proyek"];
         

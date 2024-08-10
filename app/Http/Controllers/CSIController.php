@@ -49,6 +49,8 @@ class CSIController extends Controller
                 $query->where("kd_divisi", $filterUnit);
             })->get();
 
+        // dd(ProyekPISNew::where('entitas_proyek', '=', null)->where("kd_divisi", "G")->get()->keyBy("profit_center"));
+
         if (!empty($filterProgress)) {
             $proyeks = $proyeks->filter(function ($proyek) use ($tahun, $bulan, $filterProgress) {
                 $proyekProgress = $proyek->ProyekProgress?->where('periode', (string) $tahun . (string) $bulan)->first();

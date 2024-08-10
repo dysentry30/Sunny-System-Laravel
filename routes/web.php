@@ -3377,7 +3377,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     //Begin::Master Group Tier
     Route::get('/master-group-tier', function (Request $request) {
-        $customer = Customer::select(['id_customer', 'name', 'jenis_instansi'])->where('jenis_instansi', 'BUMN')->get();
+        $customer = Customer::select(['id_customer', 'name', 'jenis_instansi'])->where(function($query){
+            $query->where("jenis_instansi", "BUMN")
+            ->orWhere("jenis_instansi", "Anak dan Turunan BUMN");
+        })->get();
         return view('MasterData/MasterGroupTierBUMN', ['customer' => $customer, 'data' => MasterGrupTierBUMN::all()]);
     });
     Route::post('/master-group-tier/save', function (Request $request) {
