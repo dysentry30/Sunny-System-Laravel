@@ -635,4 +635,28 @@ Route::middleware(["web"])->group(function () {
     //     return $xml_data->asXML();
     // }
     Route::get("/get-progress-csi", [ContractManagementsController::class, "getProgressFromTableProyekPISNew"]);
+
+    Route::post("/crm/v1/send-data-piutang", function (Request $request) {
+
+        try {
+            if ($request->get("key") != env("KEY_API_CRM")) {
+                return response()->json([
+                    "status" => "failed",
+                    "message" => "Invalid Key. Please Contact Support Team"
+                ], 403);
+            }
+
+            setLogging("api/piutang", "Data Piutang " . date("Y/m/d H:i:s"), $request->collect()->toArray());
+
+            return response()->json([
+                "status" => "success",
+                "message" => "Data sent successfully",
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                "status" => "failed",
+                "message" => $e->getMessage(),
+            ], 400);
+        }
+    });
 });

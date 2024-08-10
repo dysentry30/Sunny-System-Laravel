@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Class\ApprovalTerkontrakClass;
 use App\Models\ApprovalTerkontrakProyek;
 use App\Models\Forecast;
 use App\Models\HistoryForecast;
 use App\Models\MatriksApprovalTerkontrakProyek;
 use App\Models\MobileNotification;
+use App\Models\Pegawai;
 use App\Models\Proyek;
 use App\Models\UnitKerja;
 use App\Models\User;
@@ -20,6 +22,12 @@ use Illuminate\Support\Facades\DB;
 
 class MobileController extends Controller
 {
+    public $isNomorTargetActive;
+
+    public function __construct()
+    {
+        $this->isNomorTargetActive = env('IS_SEND_EMAIL');
+    }
 
     //? Dashboard Controller
     /**
@@ -1012,15 +1020,36 @@ class MobileController extends Controller
             if (!empty($notification)) {
                 $notification->is_read = true;
                 $notification->save();
-                $proyeks = Proyek::with(["proyekBerjalan"])->select('kode_proyek', 'nama_proyek', 'unit_kerja', 'stage', 'sumber_dana', 'jenis_proyek', 'nilaiok_awal', 'porsi_jo', 'hps_pagu', 'penawaran_tender', 'jenis_terkontrak', 'sistem_bayar', 'is_uang_muka', 'uang_muka', 'jadwal_pq', 'jadwal_tender')->where("kode_proyek", $notification->kode_proyek)->first();
-                $proyeks->divisi = self::getUnitKerjaProyek($proyeks->unit_kerja);
-                $proyeks->jenis_proyek = $proyeks->jenis_proyek == "J" ? "JO" : ($proyeks->jenis_proyek == "I" ? "Internal" : ($proyeks->jenis_proyek == "N" ? "External" : ""));
-                $proyeks->nilai_ok = "Rp. " . number_format((int)$proyeks->nilaiok_proyek, 0, '.', ',');
-                $proyeks->nama_pelanggan = $proyeks->proyekBerjalan->customer->name ?? "-";
-                $proyeks->porsi_jo = !str_contains($proyeks->porsi_jo, '%') ? $proyeks->porsi_jo . ' %' : $proyeks->porsi_jo;
-                $proyeks->hps_pagu = "Rp. " . number_format((int)$proyeks->hps_pagu, 0, '.', ',');
-                $proyeks->nilai_penawaran_keseluruhan = "Rp. " . number_format((int)$proyeks->penawaran_tender, 0, '.', ',');
-                $proyeks->uang_muka = !empty($proyeks->uang_muka) && !str_contains($proyeks->uang_muka, "%") ? $proyeks->uang_muka . ' %' : (!empty($proyeks->uang_muka) && str_contains($proyeks->uang_muka, "%") ? $proyeks->uang_muka : '-');
+
+                switch ($notification->category) {
+                    case "Scheduler":
+                        $proyeks = Proyek::with(["proyekBerjalan"])->select('kode_proyek', 'nama_proyek', 'unit_kerja', 'stage', 'sumber_dana', 'jenis_proyek', 'nilaiok_awal', 'porsi_jo', 'hps_pagu', 'penawaran_tender', 'jenis_terkontrak', 'sistem_bayar', 'is_uang_muka', 'uang_muka', 'jadwal_pq', 'jadwal_tender')->where("kode_proyek", $notification->kode_proyek)->first();
+                        $proyeks->divisi = self::getUnitKerjaProyek($proyeks->unit_kerja);
+                        $proyeks->jenis_proyek = $proyeks->jenis_proyek == "J" ? "JO" : ($proyeks->jenis_proyek == "I" ? "Internal" : ($proyeks->jenis_proyek == "N" ? "External" : ""));
+                        $proyeks->nilai_ok = "Rp. " . number_format((int)$proyeks->nilaiok_proyek, 0, '.', ',');
+                        $proyeks->nama_pelanggan = $proyeks->proyekBerjalan->customer->name ?? "-";
+                        $proyeks->porsi_jo = !str_contains($proyeks->porsi_jo, '%') ? $proyeks->porsi_jo . ' %' : $proyeks->porsi_jo;
+                        $proyeks->hps_pagu = "Rp. " . number_format((int)$proyeks->hps_pagu, 0, '.', ',');
+                        $proyeks->nilai_penawaran_keseluruhan = "Rp. " . number_format((int)$proyeks->penawaran_tender, 0, '.', ',');
+                        $proyeks->uang_muka = !empty($proyeks->uang_muka) && !str_contains($proyeks->uang_muka, "%") ? $proyeks->uang_muka . ' %' : (!empty($proyeks->uang_muka) && str_contains($proyeks->uang_muka, "%") ? $proyeks->uang_muka : '-');
+                        break;
+                    case "Approval":
+                        $proyeks = ApprovalTerkontrakProyek::where('kode_proyek', $notification->kode_proyek)->first();
+                        $status = "";
+                        if ($proyeks->is_revisi) {
+                            $status = "Revisi";
+                        } elseif ($proyeks->is_approved) {
+                            $status = "Disetujui";
+                        } elseif ($proyeks->is_request_approval) {
+                            $status = "Pengajuan";
+                        }
+
+                        $proyeks = collect([
+                            "kode_proyek" => $proyeks->kode_proyek,
+                            "status" => $status,
+                        ]);
+                        break;
+                }
             } else {
                 $proyeks = collect([]);
             }
@@ -1079,7 +1108,7 @@ class MobileController extends Controller
                         return $item->unit_kerja;
                     })->toArray();
                 } else {
-                    $unitKerja = !$is_super_admin ? explode(',', $user->unit_kerja) : UnitKerja::get("divcode")->toArray();
+                    $unitKerja = $is_super_admin ? UnitKerja::get("divcode")->toArray() : [];
                 }
 
                 $proyeks = ApprovalTerkontrakProyek::whereIn("unit_kerja", $unitKerja)->get();
@@ -1098,6 +1127,7 @@ class MobileController extends Controller
 
 
                         $newClass = new stdClass();
+                        $newClass->kode_proyek = $item->Proyek->kode_proyek;
                         $newClass->nama_proyek = $item->Proyek->nama_proyek;
                         $newClass->nilai_perolehan = number_format((int)$item->Proyek->nilai_perolehan, 0, ',', '.');
                         $newClass->status = $status;
@@ -1114,7 +1144,7 @@ class MobileController extends Controller
                     'data' => $proyeks->toArray()
                 ]);
             } else {
-                return response('', 403)->json([
+                return response()->json([
                     'success' => false,
                     'status' => 'failed',
                     'message' => "User is Not Active",
@@ -1129,6 +1159,240 @@ class MobileController extends Controller
                 'data' => []
             ]);
         }
+    }
+
+    /**
+     * Get List Proyek Approval Terkontrak
+     * @return Illuminate\Http\Response JSON
+     */
+    public function getProyekApprovalTerkontrak(Request $request, $nip, Proyek $proyek)
+    {
+        try {
+            $user = User::where("nip", $nip)->where("is_active", true)->first();
+
+            if (!empty($user)) {
+                $is_super_admin = $user->check_administrator;
+                $matriks_user = !$is_super_admin ? $user->Pegawai->MatriksTerkontrakProyek->where("is_active", true) : MatriksApprovalTerkontrakProyek::where("is_active", true)->get();
+                if ($matriks_user->isNotEmpty()) {
+                    $unitKerja = $matriks_user->map(function ($item) {
+                        return $item->unit_kerja;
+                    })->toArray();
+                } else {
+                    $unitKerja = $is_super_admin ? UnitKerja::get("divcode")->toArray() : [];
+                }
+
+                $proyekApproval = $proyek->ApprovalTerkontrakProyek;
+
+                if (empty($proyekApproval)) {
+                    return response()->json([
+                        'success' => false,
+                        'status' => 'failed',
+                        'message' => "Proyek tidak ditemukan, Hubungi admin!",
+                        'data' => []
+                    ]);
+                }
+
+
+                $proyek = [
+                    "kode_proyek" => $proyek->kode_proyek ?? '',
+                    "nama_proyek" => $proyek->nama_proyek ?? '',
+                    "no_spk_eksternal" => $proyek->nospk_external ?? '',
+                    "tgl_spk_internal" => Carbon::parse($proyek->tglspk_internal)->format('d/m/Y') ?? '',
+                    "tahun_ri_perolehan" => (string)$proyek->tahun_ri_perolehan ?? '',
+                    "bulan_ri_perolehan" => self::getNamaBulan($proyek->bulan_ri_perolehan) ?? '',
+                    "no_kontrak" => $proyek->nomor_terkontrak ?? '',
+                    "tgl_kontrak" => Carbon::parse($proyek->tanggal_terkontrak)->format('d/m/Y') ?? '',
+                    "tgl_mulai_kontrak" => Carbon::parse($proyek->tanggal_mulai_terkontrak)->format('d/m/Y') ?? '',
+                    "tgl_akhir_kontrak" => Carbon::parse($proyek->tanggal_akhir_terkontrak)->format('d/m/Y') ?? '',
+                    "tgl_selesai_bash_pho" => Carbon::parse($proyek->tanggal_selesai_pho)->format('d/m/Y') ?? '',
+                    "jenis_proyek" => $proyek->jenis_proyek == 'I' ? "Internal" : ($proyek->jenis_proyek == 'N' ? "Eksternal" : ($proyek->jenis_proyek == 'J' ? "JO" : '')) ?? '',
+                    "porsi_jo" => $proyek->porsi_jo ?? '',
+                    "mata_uang" => $proyek->mata_uang ?? '',
+                    "nilai_kontrak_keseluruhan" => number_format((int)($proyek->nilai_perolehan * 100 / (float) $proyek->porsi_jo), 0, ',', '.') ?? '',
+                    "nilai_kontrak_porsi_wika" => number_format((int)$proyek->nilai_perolehan, 0, ',', '.') ?? '',
+                    "klasifikasi_proyek" => $proyek->klasifikasi_pasdin ?? '',
+                    "jenis_kontrak" => $proyek->jenis_terkontrak ?? '',
+                    "laporan_terkontrak" => $proyek->laporan_terkontrak ?? '',
+                    "data_approval_terkontrak" => $proyekApproval
+                ];
+
+
+
+                return response()->json([
+                    'success' => true,
+                    'status' => 'success',
+                    'message' => null,
+                    'data' => $proyek
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'status' => 'failed',
+                    'message' => "User is Not Active",
+                    'data' => []
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'status' => 'failed',
+                'message' => $e->getMessage(),
+                'data' => []
+            ]);
+        }
+    }
+
+    /**
+     * Set Approve Proyek Approval Terkontrak
+     * @return Illuminate\Http\Response JSON
+     */
+    public function setApproveTerkontrak(Request $request, $nip, Proyek $proyek)
+    {
+        try {
+            DB::beginTransaction();
+
+            $userAction = $request->get("button-selected");
+
+            $user = User::where("nip", $nip)->where("is_active", true)->first();
+
+            if (!empty($user)) {
+                $matriks_user = !$user->check_administrator ? $user->Pegawai->MatriksTerkontrakProyek->where("is_active", true) : MatriksApprovalTerkontrakProyek::where("is_active", true)->get();
+
+                if ($matriks_user->isEmpty()) {
+                    return response()->json([
+                        'success' => false,
+                        'status' => 'failed',
+                        'message' => "Anda tidak dapat melakukan approval. Silahkan hubungi Admin",
+                        'data' => []
+                    ], 400);
+                }
+
+                $proyekApprovalSelected = ApprovalTerkontrakProyek::where("kode_proyek", $proyek->kode_proyek)->first();
+
+                if (empty($proyekApprovalSelected)) {
+                    return response()->json([
+                        'success' => false,
+                        'status' => 'failed',
+                        'message' => "Proyek tidak dapat ditemukan. Silahkan hubungi Admin",
+                        'data' => []
+                    ], 400);
+                }
+
+                $selectPicCrm = Pegawai::where("nip", $proyekApprovalSelected->request_by)->first();
+
+                if ($userAction == "approved") {
+                    $proyekApprovalSelected->is_approved = true;
+                    $proyekApprovalSelected->approved_by = $user->nip;
+                    $proyekApprovalSelected->approved_on = Carbon::now();
+                    $proyekApprovalSelected->is_request_approval = false;
+
+                    if ($proyekApprovalSelected->save()) {
+                        $url = $request->schemeAndHttpHost() . "?nip=" . $selectPicCrm->nip . "&redirectTo=/approval-terkontrak-proyek";
+                        $message = "Yth Bapak/Ibu " . $selectPicCrm->nama_pegawai . "\nDengan ini menyampaikan pemberitahuan Approval Proyek CRM Terkontrak untuk proyek " . $proyek->nama_proyek . " telah disetujui.\nSilahkan tekan link di bawah ini untuk melihatnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                        $sendEmailUser = sendNotifEmail($selectPicCrm, "Pemberitahuan Approval Proyek CRM Terkontrak", nl2br($message), $this->isNomorTargetActive);
+                        if (!$sendEmailUser) {
+                            return response()->json(
+                                [
+                                    'success' => false,
+                                    'status' => 'failed',
+                                    'message' => "Send Notifikasi Email Gagal. Mohon hubungi Admin.",
+                                    'data' => []
+                                ],
+                                400
+                            );
+                        }
+                        $generateDataNasabahOnline = ApprovalTerkontrakClass::generateNasabahOnline($proyek);
+
+                        if ($proyek->dop != "EA") {
+                            // $sendToNasabahOnline = ApprovalTerkontrakClass::sendDataNasabahOnline($generateDataNasabahOnline);
+                        }
+
+                        $proyek->is_need_approval_terkontrak = false;
+                        $proyek->save();
+                    }
+
+                    DB::commit();
+                    return response()->json([
+                        'success' => true,
+                        'status' => 'success',
+                        'message' => "Proyek berhasil disetujui",
+                        'data' => []
+                    ]);
+                } else {
+                    if (empty($request->get("revisi-nota"))) {
+                        return response()->json([
+                            'success' => false,
+                            'status' => 'failed',
+                            'message' => "Catatan Revisi wajib diisi",
+                            'data' => []
+                        ], 400);
+                    }
+
+                    $proyekApprovalSelected->is_revisi = true;
+                    $proyekApprovalSelected->revisi_by = $user->nip;
+                    $proyekApprovalSelected->revisi_on = Carbon::now();
+                    $proyekApprovalSelected->revisi_note = $request->get("revisi-nota");
+
+                    if ($proyekApprovalSelected->save()) {
+                        $selectPicCrm = Pegawai::where("nip", $proyekApprovalSelected->request_by)->first();
+                        $url = $request->schemeAndHttpHost() . "?nip=" . $selectPicCrm->nip . "&redirectTo=/proyek/view/$proyekApprovalSelected->kode_proyek";
+                        $message = "Yth Bapak/Ibu " . $selectPicCrm->nama_pegawai . "\nDengan ini menyampaikan pemberitahuan Revisi Approval Proyek CRM Terkontrak untuk proyek " . $proyek->nama_proyek . ".\nSilahkan tekan link di bawah ini untuk melihatnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                        $sendEmailUser = sendNotifEmail($selectPicCrm, "Pemberitahuan Revisi Approval Proyek CRM Terkontrak", nl2br($message), $this->isNomorTargetActive);
+                        if (!$sendEmailUser) {
+                            return response()->json(
+                                [
+                                    'success' => false,
+                                    'status' => 'failed',
+                                    'message' => "Send Notifikasi Email Gagal. Mohon hubungi Admin.",
+                                    'data' => []
+                                ],
+                                400
+                            );
+                        }
+                    }
+
+                    DB::commit();
+                    return response()->json([
+                        'success' => true,
+                        'status' => 'success',
+                        'message' => "Proyek berhasil direvisi",
+                        'data' => []
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'status' => 'failed',
+                    'message' => "User is Not Active",
+                    'data' => []
+                ], 400);
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'status' => 'failed',
+                'message' => $e->getMessage(),
+                'data' => []
+            ]);
+        }
+    }
+
+    public function setBackApprovalTerkontrak(Proyek $proyek)
+    {
+        $selectedProyek = ApprovalTerkontrakProyek::where("kode_proyek", $proyek->kode_proyek)->first();
+
+        $selectedProyek->is_request_approval = true;
+        $selectedProyek->is_approved = null;
+        $selectedProyek->approved_by = null;
+        $selectedProyek->approved_on = null;
+        $selectedProyek->is_revisi = null;
+        $selectedProyek->revisi_by = null;
+        $selectedProyek->revisi_on = null;
+        $selectedProyek->revisi_note = null;
+        $selectedProyek->save();
+
+        return response()->json("Success");
     }
 
 

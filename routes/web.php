@@ -5815,7 +5815,10 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::group(['prefix' => 'approval'], function () {
         Route::group(['prefix' => 'approval-terkontrak'], function () {
-            Route::get('/{nip}', [MobileController::class, 'getListApprovalTerkontrak']);
+            Route::get('/get-list/{nip}', [MobileController::class, 'getListApprovalTerkontrak']);
+            Route::get('/get-detail/{nip}/{proyek}', [MobileController::class, 'getProyekApprovalTerkontrak']);
+            Route::post('/set-approve/{nip}/{proyek}/approve', [MobileController::class, 'setApproveTerkontrak']);
+            Route::get('/rollback/{proyek}', [MobileController::class, 'setBackApprovalTerkontrak']);
         });
     });
 });
