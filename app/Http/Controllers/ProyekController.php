@@ -1732,10 +1732,13 @@ class ProyekController extends Controller
 
     public function getDataDepartemen($divcode)
     {
-        $unit_kerja = UnitKerja::where("divcode", "=", $divcode)->first();
-        // dd($unit_kerja);
-        $departemen = Departemen::where("kode_divisi", "=", $unit_kerja->kode_sap)->get();
-        // dd($departemen);
+        if (str_contains($divcode, 'A')) {
+            $departemen = Departemen::where("kode_divisi", "=", $divcode)->get();
+        } else {
+            $unit_kerja = UnitKerja::where("divcode", "=", $divcode)->first();
+            // dd($unit_kerja);
+            $departemen = Departemen::where("kode_divisi", "=", $unit_kerja->kode_sap)->get();
+        }
         if($departemen->isNotEmpty()){
             return response()->json([
                 "status" => "success",
@@ -1759,6 +1762,7 @@ class ProyekController extends Controller
         $dokumenTender = $proyekStage->DokumenTender;
         $periode = (int) date('m');
         $years = (int) date('Y');
+        $stageSelect = $request->stage;
         $forecasts = Forecast::where("kode_proyek", "=", $kodeProyek)->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years)->first();
         // $forecasts = $proyekStage->Forecasts->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years)->first();
         if ($proyekStage->stage == 8 && $request->is_ajax) {
@@ -1768,41 +1772,41 @@ class ProyekController extends Controller
                 "link" => true,
             ]);
         }
-        if($request->stage >= 2 && empty($proyekStage->departemen_proyek)){
-            // $request->stage = 1;
+        if ($stageSelect >= 2 && empty($proyekStage->departemen_proyek) && $proyekStage->dop != "EA") {
+            // $stageSelect = 1;
             Alert::error("Error", "Departemen Pada Pasar Dini Belum Diisi !");
-        } else if($request->stage == 2 && $proyekStage->departemen_proyek){
-            $request->stage = 2;
+        } else if ($stageSelect == 2 && $proyekStage->departemen_proyek) {
+            $stageSelect = 2;
             Alert::success("Success", "Stage berhasil diperbarui");
         }
-        if ($request->stage == 4) {
+        if ($stageSelect == 4) {
             if ($proyekStage->hps_pagu == 0) {
                 Alert::error("Error", "HPS Pagu Belum Diisi !");
-                $request->stage = 3;
+                $stageSelect = 3;
             } else {
-                $request->stage = 4;
+                $stageSelect = 4;
             }
-        } else if ($request->stage == 5) {
+        } else if ($stageSelect == 5) {
             // if ($dokumenTender->count() == 0) {
             //     // dd($dokumenTender);
             //     Alert::error("Error", "Silahkan Isi Dokumen Tender Terlebih Dahulu !");
             //     // return redirect()->back();
             // } else {
-            //     $request->stage = 5;
+            //     $stageSelect = 5;
             // }
             if ($proyekStage->penawaran_tender == 0 && $dokumenTender->count() == 0) {
                 Alert::error("Error", "Silahkan Isi Nilai Penawaran dan Dokumen Tender Terlebih Dahulu !");
-                $request->stage = 4;
+                $stageSelect = 4;
             } else if ($proyekStage->penawaran_tender == 0) {
                 Alert::error("Error", "Silahkan Isi Nilai Penawaran Terlebih Dahulu !");
-                $request->stage = 4;
+                $stageSelect = 4;
             } else if ($dokumenTender->count() == 0) {
                 Alert::error("Error", "Silahkan Isi Dokumen Tender Terlebih Dahulu !");
-                $request->stage = 4;
+                $stageSelect = 4;
             } else {
-                $request->stage = 5;
+                $stageSelect = 5;
             }
-        } elseif ($request->stage == 8) {
+        } elseif ($stageSelect == 8) {
             $customer = $proyekStage->ProyekBerjalan->Customer ?? null;
             if (!empty($customer)) {
                 $error_msg = collect();
@@ -1921,7 +1925,7 @@ class ProyekController extends Controller
                     Alert::error("Error", "Nilai Perolehan Belum Diisi !");
                     return redirect()->back();
                 } else {
-                    $request->stage = 6;
+                    $stageSelect = 6;
                 }
             } elseif (!empty($data["stage-kalah"]) && $data["stage-kalah"] == "Kalah") {
                 // $proyekStage->nilai_perolehan = 0;
@@ -1932,7 +1936,7 @@ class ProyekController extends Controller
                     $forecasts->save();
                 }
 
-                $request->stage = 7;
+                $stageSelect = 7;
             } elseif (!empty($data["stage-terkontrak"]) && $data["stage-terkontrak"] == "Terkontrak") {
                 $customer = $proyekStage->ProyekBerjalan->Customer ?? null;
                 if (!empty($customer)) {
@@ -2279,13 +2283,13 @@ class ProyekController extends Controller
                     //         }
                     //         // $nasabah_online_response = Http::post("http://nasabah.wika.co.id/index.php/mod_excel/post_json_crm_dev", $data_nasabah_online)->json();
                     //     }
-                    //     $request->stage = 8;
+                    //     $stageSelect = 8;
                     //     if (!empty($contractManagements)) {
                     //             $contractManagements->stages = (int) 2;
                     //         $contractManagements->save();
                     //     }
                     // } else {
-                        $request->stage = 8;
+                    $stageSelect = 8;
                         if (!empty($contractManagements)) {
                                 $contractManagements->stages = (int) 2;
                             $contractManagements->save();
@@ -2297,17 +2301,17 @@ class ProyekController extends Controller
                     Alert::error("Error", "Silahkan Isi Attachment Menang Lebih Dahulu !");
                     return redirect()->back();
                 } else {
-                    $request->stage = 9;
+                    $stageSelect = 9;
                 }
             } else if (isset($data["stage-tidak-lulus-pq"])) {
                 $proyekStage->is_tidak_lulus_pq = true;
-                $request->stage = 3;
+                $stageSelect = 3;
             } else if (isset($data["stage-prakualifikasi"])) {
                 $proyekStage->is_tidak_lulus_pq = false;
-                $request->stage = 3;
+                $stageSelect = 3;
             }
         }
-        $proyekStage->stage = $request->stage;
+        $proyekStage->stage = $stageSelect;
 
         $teamProyek = TeamProyek::where('kode_proyek', "=", $proyekStage->kode_proyek)->get();
         if ($teamProyek != null) {
@@ -2331,7 +2335,7 @@ class ProyekController extends Controller
             Alert::success("Success", "Stage berhasil diperbarui");
             return back();
         } else {
-            $proyekBerjalans->stage = $request->stage;
+            $proyekBerjalans->stage = $stageSelect;
             $proyekBerjalans->save();
             $proyekStage->save();
             if ($request->is_ajax) {

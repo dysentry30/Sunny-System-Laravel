@@ -963,7 +963,7 @@
                                 Request::Path() == 'matriks-approval-rekomendasi-2' ||
                                 Request::Path() == 'matriks-approval-varifikasi-proyek' ||
                                 Request::Path() == 'matriks-approval-partner' ||
-                                Request::Path() == 'matriks-approval-verifikasi-partner' ||
+                                Request::Path() == 'matriks-approval-varifikasi-partner' ||
                                 Request::Path() == 'matriks-approval-persetujuan-partner' ||
                                 Request::Path() == 'matriks-approval-paparan' ||
                                 Request::Path() == 'except-greenlane' ||
@@ -983,6 +983,7 @@
                                 Request::Path() == 'master-klasifikasi-proyek' ||
                                 Request::Path() == 'master-klasifikasi-omzet' ||
                                 Request::Path() == 'master-klasifikasi-produksi' ||
+                                Request::Path() == 'master-catatan-rekomendasi' ||
                                 Request::Path() == 'master-fortune-rank' ||
                                 Request::Path() == 'master-lq-rank' ||
                                 Request::Path() == 'masalah-hukum' ||
@@ -1056,7 +1057,7 @@
                                                 <!--end::Svg Icon-->
                                             </span>
                                             <span class="menu-title" style="font-size: 16px; padding-left: 10px">Matriks
-                                                Approval Verifikasi Proyek</span>
+                                                Approval Verifikasi Persetujuan Project Greenlane / Non Greenlane</span>
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
@@ -1083,9 +1084,9 @@
                                 @can('super-admin')
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
-                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'matriks-approval-verifikasi-partner' ? 'background-color:#008CB4' : '' }}">
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'matriks-approval-varifikasi-partner' ? 'background-color:#008CB4' : '' }}">
                                         <a class="menu-link d-flex flex-row align-items-center"
-                                            href="/matriks-approval-verifikasi-partner"
+                                            href="/matriks-approval-varifikasi-partner"
                                             style="color:white; padding-left:10px;">
                                             <span class="menu-icon">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
@@ -1093,7 +1094,7 @@
                                                 <!--end::Svg Icon-->
                                             </span>
                                             <span class="menu-title" style="font-size: 16px; padding-left: 10px">Matriks
-                                                Approval Verifikasi Partner</span>
+                                                Approval Verifikasi Internal Partner</span>
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
@@ -1112,7 +1113,7 @@
                                                 <!--end::Svg Icon-->
                                             </span>
                                             <span class="menu-title" style="font-size: 16px; padding-left: 10px">Matriks
-                                                Approval Persetujuan Partner</span>
+                                                Approval Verifikasi Persetujuan Partner</span>
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
@@ -1375,22 +1376,20 @@
                                     </div>
                                     <!--end::Menu Colapse-->
                                 @endcanany
-
+                                
                                 @canany(['super-admin', 'risk-crm'])
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
-                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'penilaian-checklist-project-selection' ? 'background-color:#008CB4' : '' }}">
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'master-catatan-rekomendasi' ? 'background-color:#008CB4' : '' }}">
                                         <a class="menu-link d-flex flex-row align-items-center"
-                                            href="/penilaian-checklist-project-selection"
-                                            style="color:white; padding-left:10px;">
+                                            href="/master-catatan-rekomendasi" style="color:white; padding-left:10px;">
                                             <span class="menu-icon">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                                 {{-- <i class="bi bi-buildings text-white"></i>                                                     --}}
                                                 <i class="bi bi-calculator-fill text-white" style="font-size: 20px"></i>
                                                 <!--end::Svg Icon-->
                                             </span>
-                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Penilaian
-                                                Risiko Partner Selection</span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Master Catatan Nota Rekomendasi 2</span>
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
