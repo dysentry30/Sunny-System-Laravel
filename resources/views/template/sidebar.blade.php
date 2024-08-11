@@ -448,6 +448,23 @@
                                 </div>
                             {{-- @endif --}}
                         @endcanany
+                        @canany(['super-admin', 'approver-crm', 'user-crm', 'risk-crm'])
+                            <div class="menu-item">
+                                <a class="menu-link " href="/nota-rekomendasi-2"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::url(), 'nota-rekomendasi-2') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Nota Rekomendasi
+                                        2</span>
+                                </a>
+                            </div>
+                        @endcanany
                         @canany(['super-admin', 'admin-crm', 'approver-crm', 'risk-crm'])
                             <div class="menu-item">
                                 <a class="menu-link " href="/assessment-partner-selection"

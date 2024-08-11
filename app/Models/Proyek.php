@@ -236,4 +236,34 @@ class Proyek extends Model
     {
         return $this->belongsTo(VerifikasiInternalPersetujuanPartner::class, 'kode_proyek', 'kode_proyek');
     }
+
+    public function VerifikasiProyekNota2()
+    {
+        return $this->belongsTo(VerifikasiProyekNota2::class, 'kode_proyek', 'kode_proyek');
+    }
+
+    public function TimTender()
+    {
+        return $this->hasMany(TimTender::class, 'kode_proyek');
+    }
+
+    public function CashFlowProyek()
+    {
+        return $this->hasMany(CashFlowProyek::class, 'kode_proyek', 'kode_proyek');
+    }
+
+    public function DokumenSCurvesProyek()
+    {
+        return $this->hasMany(DokumenSCurvesProyek::class, 'kode_proyek', 'kode_proyek');
+    }
+
+    public function DokumenOtherProyek()
+    {
+        return $this->hasMany(DokumenOtherProyek::class, 'kode_proyek', 'kode_proyek');
+    }
+
+    public function NotaRekomendasi2()
+    {
+        return $this->belongsTo(NotaRekomendasi2::class, 'kode_proyek', 'kode_proyek');
+    }
 }

@@ -106,6 +106,7 @@ use App\Models\MatriksApprovalPartnerSelection;
 use App\Models\MatriksApprovalTerkontrakProyek;
 use App\Http\Controllers\CSIDashboardController;
 use App\Http\Controllers\MasalahHukumController;
+use App\Http\Controllers\Rekomendasi2Controller;
 use App\Models\MatriksApprovalVerifikasiPartner;
 use App\Http\Controllers\DraftContractController;
 use App\Http\Controllers\KnowladgeBaseController;
@@ -113,10 +114,12 @@ use App\Http\Controllers\KriteriaPasarController;
 use App\Models\MatriksApprovalPersetujuanPartner;
 use App\Http\Controllers\AddendumContractController;
 use App\Http\Controllers\ContractApprovalController;
+use App\Models\MatriksApprovalVerifikasiProyekNota2;
 use App\Http\Controllers\KonsultanPerencanaController;
 use App\Http\Controllers\ContractManagementsController;
 use App\Http\Controllers\KriteriaPenggunaJasaController;
 use App\Http\Controllers\PenilaianPenggunaJasaController;
+use App\Http\Controllers\VerifikasiProyekNota2Controller;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
 use App\Http\Controllers\ApprovalTerkontrakProyekController;
@@ -6560,6 +6563,155 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     });
     //End::Klasifikasi Omzet Proyek
 
+    //Begin::Master Matriks Approval Verifikasi Partner
+    Route::get('/matriks-approval-varifikasi-proyek', function () {
+        $matriks_all = MatriksApprovalVerifikasiProyekNota2::with(["Pegawai", "Divisi"])
+        ->where('is_active', true)
+        ->orderBy('updated_at')
+        ->get();
+
+        $divisi_all = Divisi::all();
+        $pegawai_all = Pegawai::pluck('nama_pegawai', 'nip');
+        $departemens = Departemen::all();
+        // dd($matriks_all);
+        return view("MasterData/MatriksApprovalVerifikasiProyekNota2", compact([
+            "matriks_all",
+            "divisi_all",
+            "pegawai_all",
+            "departemens"
+        ]));
+    });
+
+    Route::post('/matriks-approval-varifikasi-proyek/save', function (Request $request) {
+        $data = $request->all();
+        // dd($data);
+        $rules = [
+            "tahun_start" => "required|numeric",
+            "bulan_start" => "required|numeric",
+            "nama-pegawai" => "required",
+            "unit-kerja" => "required",
+            // "klasifikasi-proyek" => "required",
+            "departemen" => "required",
+            "kategori" => "required",
+            "kode-unit" => "required",
+            "urutan" => "required",
+        ];
+        // $is_validate = $request->validateWithBag("post", [
+        //     "start_tahun" => "required|numeric",
+        //     "jabatan" => "required",
+        //     "unit-kerja" => "required",
+        // ]);
+        $is_invalid = validateInput($data, $rules);
+
+        if (!empty($is_invalid)) {
+            Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
+            return redirect()->back()->with("modal", $data["modal"]);
+        }
+
+        $namaPegawai = Pegawai::where(
+            'nip',
+            $data["nama-pegawai"]
+        )->first()->nama_pegawai;
+
+        $matriks = new MatriksApprovalVerifikasiProyekNota2();
+        $matriks->start_tahun = $data["tahun_start"];
+        $matriks->start_bulan = $data["bulan_start"];
+        if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
+            $matriks->finish_tahun = $data["tahun_finish"];
+            $matriks->finish_bulan = $data["bulan_finish"];
+        }
+        $matriks->is_active = isset($data["isActive"]) ? true : false;
+        // $matriks->jabatan = $data["jabatan"];
+        $matriks->nama_pegawai = $data["nama-pegawai"];
+        $matriks->title = $namaPegawai;
+        $matriks->divisi_id = $data["unit-kerja"];
+        // $matriks->klasifikasi_proyek = $data["klasifikasi-proyek"];
+        $matriks->kategori = $data["kategori"];
+        $matriks->departemen_code = $data["departemen"];
+        $matriks->kode_unit_kerja = $data["kode-unit"];
+        $matriks->urutan = $data["urutan"];
+
+        if ($matriks->save()) {
+            Alert::success('Success', "Matriks Approval Verifikasi Proyek berhasil ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error('Error', "Matriks Approval Verifikasi Proyek gagal ditambahkan");
+        return redirect()->back();
+    });
+
+    Route::post(
+        '/matriks-approval-varifikasi-proyek/update',
+        function (Request $request) {
+            $data = $request->all();
+            $rules = [
+                "tahun_start" => "required|numeric",
+                "bulan_start" => "required|numeric",
+                "nama-pegawai" => "required",
+                "unit-kerja" => "required",
+                // "klasifikasi-proyek" => "required",
+                "kategori" => "required",
+                "kode-unit" => "required",
+                "urutan" => "required",
+                "departemen" => "required"
+            ];
+            // $is_validate = $request->validateWithBag("post", [
+            //     "tahun" => "required|numeric",
+            //     "jabatan" => "required",
+            //     "unit-kerja" => "required",
+            // ]);
+            $is_invalid = validateInput($data, $rules);
+
+            if (!empty($is_invalid)) {
+                Alert::html("Error", "Field <b>$is_invalid</b> harus terisi!", "error");
+                return redirect()->back()->with("modal", $data["modal"]);
+            }
+
+            $matriks = MatriksApprovalVerifikasiProyekNota2::find($data["id-matriks-approval"]);
+            $namaPegawai = Pegawai::where('nip', $data["nama-pegawai"])->first()->nama_pegawai;
+
+            $matriks->start_bulan = $data["bulan_start"];
+            $matriks->start_tahun = $data["tahun_start"];
+            if (isset($data["tahun_finish"]) && isset($data["bulan_finish"])) {
+                $matriks->finish_tahun = $data["tahun_finish"];
+                $matriks->finish_bulan = $data["bulan_finish"];
+            }
+            $matriks->is_active = isset($data["isActive"]) ? true : false;
+            // $matriks->jabatan = $data["jabatan"];
+            $matriks->nama_pegawai = $data["nama-pegawai"];
+            $matriks->title = $namaPegawai;
+            $matriks->divisi_id = $data["unit-kerja"];
+            // $matriks->klasifikasi_proyek = $data["klasifikasi-proyek"];
+            $matriks->kategori = $data["kategori"];
+            $matriks->departemen_code = $data["departemen"];
+            $matriks->kode_unit_kerja = $data["kode-unit"];
+            $matriks->urutan = $data["urutan"];
+            // dd($matriks);
+
+            if ($matriks->save()) {
+                Alert::success('Success', "Matriks Approval Verifikasi Proyek berhasil diperbarui");
+                return redirect()->back();
+            }
+            Alert::error('Error', "Matriks Approval Verifikasi Proyek gagal diperbarui");
+            return redirect()->back();
+        }
+    );
+
+    Route::post(
+        '/matriks-approval-varifikasi-proyek/delete',
+        function (Request $request) {
+            $data = $request->all();
+            $approval_partner = MatriksApprovalVerifikasiProyekNota2::find($data["id-matriks-approval"]);
+
+            if ($approval_partner->delete()) {
+                Alert::success('Success', "Matriks Approval Verifikasi Proyek berhasil dihapus");
+                return redirect()->back();
+            }
+            Alert::error('Error', "Matriks Approval Verifikasi Proyek gagal dihapus");
+            return redirect()->back();
+        }
+    );
+    //End::Master Matriks Approval Verifikasi Partner
+
 
 
     //? END MASTER DATA NOTA REKOMENDASI 2
@@ -6595,9 +6747,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             case 'persetujuan-kso':
                 $verifikasi = MatriksApprovalPersetujuanPartner::where("is_active", true)->where("kategori", "Pengajuan")->get();
                 break;
-                // case 'verifikasi-proyek-nr-2':
-                //     $verifikasi = MatriksApprovalVerifikasiProyekNota2::where("is_active", true)->where("kategori", "Pengajuan")->get();
-                //     break;
+            case 'verifikasi-proyek-nr-2':
+                $verifikasi = MatriksApprovalVerifikasiProyekNota2::where("is_active", true)->where("kategori", "Pengajuan")->get();
+                break;
 
             default:
                 $verifikasi = null;
@@ -6649,8 +6801,6 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::get('/assessment-partner-selection/{partner}/generate-final', [AssessmentPartnerSelectionController::class, 'generateMergeAssessment']);
     //End::Assessment Partner Selection
 
-
-
     //Begin::Verifikasi Internal Persetujuan Partner Selection
     Route::group(['prefix' => 'verifikasi-internal-persetujuan-partner'], function () {
         Route::get('/', [VerifikasiInternalPersetujuanPartnerController::class, "index"]);
@@ -6664,8 +6814,50 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     //End::Verifikasi Internal Persetujuan Partner Selection
 
 
-    
     //? END PARTNER SELECTION
+
+
+
+    //? BEGIN PROJECT SELECTION
+    //Begin::Verifikasi Internal Project Selection
+    Route::group(['prefix' => 'verifikasi-proyek-nota-2'], function () {
+        Route::get('/', [VerifikasiProyekNota2Controller::class, "index"]);
+        Route::post('/request-pengajuan/{proyek}', [VerifikasiProyekNota2Controller::class, "ProsesRequestApproval"]);
+        Route::post('/pengajuan/{proyek}', [VerifikasiProyekNota2Controller::class, "ProsesPengajuanApproval"]);
+        Route::post('/rekomendasi/{proyek}', [VerifikasiProyekNota2Controller::class, "ProsesRekomendasiApproval"]);
+        Route::post('/persetujuan/{proyek}', [VerifikasiProyekNota2Controller::class, "ProsesPersetujuanApproval"]);
+        Route::get('/{kode_proyek}/{nip}/view-qr', [VerifikasiProyekNota2Controller::class, "viewProyekQRSelected"]);
+    });
+    //End::Verifikasi Internal Project Selection
+
+    //Begin::Nota Rekomendasi 2
+    Route::get('/nota-rekomendasi-2', [Rekomendasi2Controller::class, 'index']);
+
+    Route::post('/nota-rekomendasi-2/{kode_proyek}/pengajuan', [Rekomendasi2Controller::class, 'ProsesPengajuan']);
+    Route::post('/nota-rekomendasi-2/{kode_proyek}/revisi-pengajuan', [Rekomendasi2Controller::class, 'ProyekPengajuanRevisi']);
+    Route::post('/nota-rekomendasi-2/{kode_proyek}/penyusun', [Rekomendasi2Controller::class, 'ProsesPenyusun']);
+    Route::post('/nota-rekomendasi-2/{kode_proyek}/verifikasi', [Rekomendasi2Controller::class, 'ProyekVerifikasi']);
+    Route::post('/nota-rekomendasi-2/{kode_proyek}/rekomendasi', [Rekomendasi2Controller::class, 'ProyekRekomendasi']);
+    Route::post('/nota-rekomendasi-2/{kode_proyek}/persetujuan', [Rekomendasi2Controller::class, 'ProyekPersetujuan']);
+
+    Route::post('/nota-rekomendasi-2/{kode_proyek}/generate', [Rekomendasi2Controller::class, 'GenerateFileFinal']);
+
+    Route::post('/nota-rekomendasi-2/{kode_proyek}/paparan', [Rekomendasi2Controller::class, 'ProyekPemaparan']);
+    Route::post('/nota-rekomendasi-2/{kode_proyek}/paparan', [Rekomendasi2Controller::class, 'ProyekPemaparan']);
+    Route::post('/nota-rekomendasi-2/{kode_proyek}/paparan/upload', [Rekomendasi2Controller::class, 'paparanUploadFile']);
+    Route::post('/nota-rekomendasi-2/{kode_proyek}/paparan/approval', [Rekomendasi2Controller::class, 'paparanApprove']);
+
+
+    Route::post('/nota-rekomendasi-2/assessment-project-selection/detail/save', [KriteriaSelectionNonGreenlaneController::class, 'detailSave']);
+    Route::post('/nota-rekomendasi-2/assessment-project-selection/detail/edit', [KriteriaSelectionNonGreenlaneController::class, 'detailEdit']);
+    Route::post('/nota-rekomendasi-2/assessment-project-selection/delete-file', [KriteriaSelectionNonGreenlaneController::class, 'deleteFile']);
+
+    Route::post('/nota-rekomendasi-2/{kode_proyek}/upload-final', [Rekomendasi2Controller::class, 'UploadDokumenFinal']);
+
+    Route::post('/nota-rekomendasi-2/{kode_proyek}/generate-final', [Rekomendasi2Controller::class, 'mergeFinalFile']);
+
+    Route::get('/nota-rekomendasi-2/{kode_proyek}/{nip}/view-qr', [Rekomendasi2Controller::class, 'viewProyekQrCode']);
+    //? END PROJECT SELECTION
 
 
 

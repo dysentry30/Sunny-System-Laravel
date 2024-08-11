@@ -40,6 +40,7 @@ use App\Models\NotaRekomendasi;
 use App\Models\ProyekBerjalans;
 use App\Models\AttachmentMenang;
 use App\Models\ClaimManagements;
+use App\Models\NotaRekomendasi2;
 use App\Models\RiskTenderProyek;
 use Illuminate\Http\UploadedFile;
 use App\Models\KonsultanPerencana;
@@ -69,7 +70,10 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App\Models\MatriksApprovalRekomendasi;
 use App\Models\DokumenKelengkapanPartnerKSO;
+use App\Models\MasterKlasifikasiOmsetProyek;
 use App\Models\MasterKriteriaGreenlanePartner;
+use App\Models\MasterKlasifikasiProduksiProyek;
+use App\Models\MatriksApprovalNotaRekomendasi2;
 use Google\Service\FactCheckTools\Resource\Claims;
 
 class ProyekController extends Controller
@@ -679,6 +683,49 @@ class ProyekController extends Controller
 
             Alert::success('Success', "Proyek Berhasil Diajukan");
         }
+        //Begin :: Nota Rekomendasi 2
+        if (isset($dataProyek["proyek-rekomendasi-2"]) && isset($dataProyek["confirm-send-wa-2"]) && isset($dataProyek["jenis-terkontrak-new"]) && isset($dataProyek["sistem-bayar-new"])) {
+            $divisi = $newProyek->UnitKerja->Divisi->id_divisi;
+            $departemen = $newProyek->departemen_proyek;
+            $klasifikasi_proyek = $newProyek->klasifikasi_pasdin;
+            $matriks_paparan = MatriksApprovalNotaRekomendasi2::where("divisi_id", "=", $divisi)->where("klasifikasi_proyek", "=", $klasifikasi_proyek)->where("departemen_code", $departemen)->where("kategori", "=", "Pengajuan")->where('is_active', true)->get();
+            // dd($matriks_paparan);
+
+            $isnomorTargetActive = env("IS_SEND_EMAIL");
+            // $nomorDefault = "6285376444701";
+            // $nomorDefault = "085881028391";
+
+            if ($matriks_paparan->isEmpty()) {
+                Alert::error('Error', 'Matriks untuk paparan tidak ditemukan. Hubungi Admin!');
+                return redirect()->back();
+            }
+
+            foreach ($matriks_paparan as $user) {
+                $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_pengajuan_$newProyek->kode_proyek";
+                $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan pengajuan untuk Nota Rekomendasi II, " . $newProyek->ProyekBerjalan->name_customer . " untuk Proyek $newProyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Tanda Tangan Pengajuan Nota Rekomendasi II", nl2br($message), $isnomorTargetActive);
+                if (!$sendEmailUser) {
+                    return redirect()->back();
+                }
+            }
+
+            $newProyek->is_request_rekomendasi_2  = true;
+
+            $newNotaRekomendasi2 = new NotaRekomendasi2();
+            $newNotaRekomendasi2->kode_proyek = $dataProyek['kode-proyek'];
+            $newNotaRekomendasi2->unit_kerja = $newProyek->unit_kerja;
+            $newNotaRekomendasi2->klasifikasi_proyek = $newProyek->klasifikasi_proyek_nota_2;
+            $newNotaRekomendasi2->divisi_id = $newProyek->UnitKerja->Divisi->id_divisi;
+            $newNotaRekomendasi2->departemen_proyek = $newProyek->departemen_proyek;
+            $newNotaRekomendasi2->is_request_rekomendasi = true;
+
+            if ($newNotaRekomendasi2->save()) {
+                Alert::success('Success', "Proyek Berhasil Diajukan");
+            } else {
+                Alert::error('Error', "Proyek Gagal Diajukan");
+            }
+        }
+        //End :: Nota Rekomendasi 2
         // $newProyek->nama_pendek_proyek = $dataProyek["short-name"];
 
         // form PASAR POTENSIAL
@@ -825,6 +872,36 @@ class ProyekController extends Controller
 
         if ($newProyek->dop != "EA" && $newProyek->jenis_proyek == "J") {
             $newProyek->lingkup_pekerjaan = $dataProyek["lingkup-pekerjaan"] ?? null;
+            $isExistPorsiJO = PorsiJO::where('kode_proyek', $dataProyek["kode-proyek"])->get();
+            if (!empty($isExistPorsiJO)) {
+                $isExistPorsiJO->each(function ($porsi) {
+                    $kriteria_partner = MasterGrupTierBUMN::where('id_pelanggan', $porsi->id_company_jo)->first();
+                    if (!empty($kriteria_partner)) {
+                        $porsi->is_greenlane = true;
+                        $porsi->is_disetujui = true;
+                    } else {
+                        $porsi->is_greenlane = false;
+                    }
+                    if (!$porsi->is_greenlane) {
+                        if (empty($porsi->score_pefindo_jo)) {
+                            $checkPefindo = MasterPefindo::where('id_pelanggan', $porsi->id_company_jo)->first();
+                            if (!empty($checkPefindo)) {
+                                $porsi->score_pefindo_jo = $checkPefindo->score;
+                                $porsi->file_pefindo_jo = $checkPefindo->id_document;
+                                $porsi->grade = $checkPefindo->grade;
+                                $porsi->keterangan = $checkPefindo->keterangan;
+
+                                if (str_contains($checkPefindo->grade, 'E')) {
+                                    $porsi->is_disetujui = false;
+                                } else {
+                                    $porsi->is_disetujui = true;
+                                }
+                            }
+                        }
+                    }
+                    $porsi->save();
+                });
+            }
 
             //Begin::Alasan KSO
             if (Auth::user()->check_administrator || Gate::any(['user-crm', 'approver-crm'])) {
@@ -914,36 +991,65 @@ class ProyekController extends Controller
             //End::Persetujuan Fasilitan NCL
         }
 
+        if ($newProyek->dop != "EA") {
+            $urutanKlasifikasi = collect(["Proyek Kecil", "Proyek Menengah", "Proyek Besar", "Proyek Mega"]);
+            $urutanKlasifikasiOmzet = null;
+            $urutanKlasifikasiProduksi = null;
+            $klasifikasiNotaRekomendasi2 = null;
+
+            $nilaiOmzetProyek = (int)str_replace('.', '', $dataProyek["nilai-rkap"]) * ((int)$dataProyek["porsi-jo"] / 100);
+            $waktuPelaksanaanConvertBulan = (int)$dataProyek["waktu_pelaksanaan"] / 30; //Hari dijadikan bulan
+            $nilaiProduksiPerbulan = $nilaiOmzetProyek / $waktuPelaksanaanConvertBulan;
+
+            //Jika Pakai Omset Saja
+            $klasifikasiOmzetSelected = MasterKlasifikasiOmsetProyek::all()?->filter(function ($item) use ($nilaiOmzetProyek) {
+                return (float)$item->dari_nilai <= (int)$nilaiOmzetProyek && (float)$item->sampai_nilai >= (int)$nilaiOmzetProyek;
+            })->first()?->keterangan;
+
+            if (!empty($klasifikasiOmzetSelected)) {
+                $urutanKlasifikasiOmzet = $urutanKlasifikasi->filter(function ($klasifikasi) use ($klasifikasiOmzetSelected) {
+                    return $klasifikasi == $klasifikasiOmzetSelected;
+                })?->keys()?->first();
+            }
+
+            //Jika Pakai Produksi Perbulan
+            $klasifikasiProduksiSelected = MasterKlasifikasiProduksiProyek::all()?->filter(function ($item) use ($nilaiProduksiPerbulan) {
+                return (float)$item->dari_nilai <= (int)$nilaiProduksiPerbulan && (float)$item->sampai_nilai >= (int)$nilaiProduksiPerbulan;
+            })->first()?->keterangan;
+
+            if (!empty($klasifikasiProduksiSelected)) {
+                $urutanKlasifikasiProduksi = $urutanKlasifikasi->filter(function ($klasifikasi) use ($klasifikasiProduksiSelected) {
+                    return $klasifikasi == $klasifikasiProduksiSelected;
+                })?->keys()?->first();
+            }
+
+            // dd($dataProyek);
+
+            if (!empty($urutanKlasifikasiOmzet) && !empty($urutanKlasifikasiProduksi)) {
+                if ($urutanKlasifikasiProduksi < $urutanKlasifikasiOmzet) {
+                    $klasifikasiNotaRekomendasi2 = $klasifikasiProduksiSelected;
+                } else {
+                    $klasifikasiNotaRekomendasi2 = $klasifikasiOmzetSelected;
+                }
+            } elseif (!empty($urutanKlasifikasiOmzet)) {
+                $klasifikasiNotaRekomendasi2 = $klasifikasiOmzetSelected;
+            } elseif (!empty($urutanKlasifikasiOmzet)) {
+                $klasifikasiNotaRekomendasi2 = $klasifikasiProduksiSelected;
+            } else {
+                Alert::error('Error', "Terjadi kesalahan. Hubungi Admin!");
+                return redirect()->back();
+            }
+
+            $newProyek->klasifikasi_proyek_nota_2 = $klasifikasiNotaRekomendasi2;
+            $newProyek->nilai_klasifikasi_nota_2 = $nilaiOmzetProyek;
+            $newProyek->keterangan_greenlane = $dataProyek["keterangan-greenlane"];
+        }
+
+        $newProyek->waktu_pelaksanaan = $dataProyek["waktu_pelaksanaan"];
+        $newProyek->pekerjaan_utama = $dataProyek["pekerjaan-utama"];
+
         $kode_proyek = $newProyek->kode_proyek;
 
-        // Begin :: EDIT KODE PROYEK
-        // if ((isset($dataProyek["jenis-proyek"]) && $newProyek->jenis_proyek != $dataProyek["jenis-proyek"]) || (isset($dataProyek["tipe-proyek"]) && $newProyek->tipe_proyek != $dataProyek["tipe-proyek"]) || (isset($dataProyek["tahun-perolehan"]) && $newProyek->tahun_perolehan != $dataProyek["tahun-perolehan"])) {
-        //     // dd($dataProyek);
-        //     //begin::Generate Kode Proyek
-        //     $kode_proyek = str_split($dataProyek["edit-kode-proyek"]);
-        //     // $unit_kerja = $dataProyek["unit-kerja"];
-        //     $kode_proyek[1] = $dataProyek["jenis-proyek"];
-        //     $newProyek->jenis_proyek = $dataProyek["jenis-proyek"];
-
-        //     $kode_proyek[2] = $dataProyek["tipe-proyek"];
-        //     $newProyek->tipe_proyek = $dataProyek["tipe-proyek"];
-
-        //     $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
-        //     $tahun = $dataProyek["tahun-perolehan"];
-        //     $kode_tahun = $tahun == 2021 ? "A" : "O";
-        //     $kode_proyek[3] = $kode_tahun;
-
-        //     // Menggabungkan semua kode beserta nomor urut
-        //     $kode_proyek = $kode_proyek[0] . $kode_proyek[1] . $kode_proyek[2] . $kode_proyek[3] . $kode_proyek[4] . $kode_proyek[5] . $kode_proyek[6];
-        //     $newProyek->kode_proyek = $kode_proyek;
-
-        //     Alert::success('Success', "Kode Proyek Berhasil Diubah : " . $kode_proyek);
-
-        //     //end::Generate Kode Proyek
-        // } else {
-        //     Alert::toast("Edit Berhasil" , "success")->autoClose(3000);
-        // }
-        // Begin :: EDIT KODE PROYEK
 
         Alert::toast("Edit Berhasil", "success")->autoClose(3000);
 
