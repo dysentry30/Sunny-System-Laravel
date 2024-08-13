@@ -1305,8 +1305,8 @@ class MobileController extends Controller
                         }
                         $generateDataNasabahOnline = ApprovalTerkontrakClass::generateNasabahOnline($proyek);
 
-                        if ($proyek->dop != "EA") {
-                            // $sendToNasabahOnline = ApprovalTerkontrakClass::sendDataNasabahOnline($generateDataNasabahOnline);
+                        if ($proyek->dop != "EA" && env("APP_ENV") == "production") {
+                            $sendToNasabahOnline = ApprovalTerkontrakClass::sendDataNasabahOnline($generateDataNasabahOnline);
                         }
 
                         $proyek->is_need_approval_terkontrak = false;

@@ -201,7 +201,7 @@ class ApprovalTerkontrakProyekController extends Controller
                     //     }
                     // }
                     $generateDataNasabahOnline = self::generateNasabahOnline($proyek);
-                    if ($proyek->UnitKerja->dop != "EA") {
+                    if ($proyek->UnitKerja->dop != "EA" && env("APP_ENV") == "production") {
                         self::sendDataNasabahOnline($generateDataNasabahOnline);
                     }
                     // $proyekBerjalan = ProyekBerjalans::where('kode_proyek', $proyek->kode_proyek)->first();
