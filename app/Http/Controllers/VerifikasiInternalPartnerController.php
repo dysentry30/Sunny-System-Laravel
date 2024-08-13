@@ -87,16 +87,16 @@ class VerifikasiInternalPartnerController extends Controller
     public function ProsesRequestApproval(Request $request, Proyek $proyek)
     {
         try {
-            // $checkUserInMatriks = $this->checkValidateUserMatriks(Auth::user(), $proyek, "Request Pengajuan");
+            $checkUserInMatriks = $this->checkValidateUserMatriks(Auth::user(), $proyek, "Request Pengajuan");
 
-            // if (!$checkUserInMatriks) {
-            //     return response()->json([
-            //         "Success" => false,
-            //         "Message" => "Anda tidak dapat melakukan aksi ini. Silahkan Hubungi Admin!"
-            //     ]);
-            //     // Alert::error("Unautorized User", "Anda tidak dapat melakukan aksi ini. Silahkan Hubungi Admin!");
-            //     // return redirect()->back();
-            // }
+            if (!$checkUserInMatriks) {
+                return response()->json([
+                    "Success" => false,
+                    "Message" => "Anda tidak dapat melakukan aksi ini. Silahkan Hubungi Admin!"
+                ]);
+                // Alert::error("Unautorized User", "Anda tidak dapat melakukan aksi ini. Silahkan Hubungi Admin!");
+                // return redirect()->back();
+            }
 
             if (empty($request->get("nip"))) {
                 return response()->json([

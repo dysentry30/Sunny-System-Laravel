@@ -49,7 +49,8 @@
                             </div>
                             <!--end::Page title-->
 
-                            @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, '(PIC)'))
+                            {{-- @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, '(PIC)')) --}}
+                            @canany(['super-admin', 'risk-crm'])
                                 <!--begin::Actions-->
                                 <div class="d-flex align-items-center py-1">
 
@@ -59,8 +60,9 @@
                                         Tambah Pefindo</a>
 
                                 </div>
-                                <!--end::Actions-->
-                            @endif
+                                <!--end::Actions-->                                
+                            @endcanany
+                            {{-- @endif --}}
                         </div>
                         <!--end::Container-->
                     </div>
