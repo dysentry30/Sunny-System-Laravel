@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Class\sendNotification;
 use App\Models\ApprovalTerkontrakProyek;
 use App\Models\Forecast;
 use App\Models\MatriksApprovalTerkontrakProyek;
@@ -74,6 +75,9 @@ class ApprovalTerkontrakProyekController extends Controller
                         if (!$sendEmailUser) {
                             return redirect()->back();
                         }
+
+                        $sendNotification = new sendNotification();
+                        $sendNotification->sendNotificationFirebase($target->Pegawai->nip, "Approval", "Terkontrak", $proyek->kode_proyek, "Pengajuan", "revisi");
                     }
 
                     return response()->json([
@@ -99,6 +103,9 @@ class ApprovalTerkontrakProyekController extends Controller
                         if (!$sendEmailUser) {
                             return redirect()->back();
                         }
+
+                        $sendNotification = new sendNotification();
+                        $sendNotification->sendNotificationFirebase($target->Pegawai->nip, "Approval", "Terkontrak", $proyek->kode_proyek, "Pengajuan", "approve");
                     }
 
                     return response()->json([
@@ -110,6 +117,7 @@ class ApprovalTerkontrakProyekController extends Controller
                 }
             }
         } catch (\Exception $e) {
+            throw $e;
             return response()->json([
                 "Success" => true,
                 "Message" => $e->getMessage()
@@ -200,6 +208,8 @@ class ApprovalTerkontrakProyekController extends Controller
                     // $proyekBerjalan->stage = 8;
                     $proyek->is_need_approval_terkontrak = false;
                     $proyek->save();
+                    $sendNotification = new sendNotification();
+                    $sendNotification->sendNotificationFirebase($selectPicCrm->nip, "Approval", "Terkontrak", $proyek->kode_proyek, "Persetujuan", "approve");
                     // $proyekBerjalan->save();
                 }
                 DB::commit();
@@ -224,6 +234,8 @@ class ApprovalTerkontrakProyekController extends Controller
                     if (!$sendEmailUser) {
                         return redirect()->back();
                     }
+                    $sendNotification = new sendNotification();
+                    $sendNotification->sendNotificationFirebase($selectPicCrm->nip, "Approval", "Terkontrak", $proyek->kode_proyek, "Persetujuan", "revisi");
                 }
                 DB::commit();
                 Alert::success("Success", "Proyek berhasil diajukan revisi");

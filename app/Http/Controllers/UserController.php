@@ -925,6 +925,12 @@ class UserController extends Controller
                     $user = Auth::user();
                     $token = $user->createToken($nip)->plainTextToken;
 
+                    $token_fcm = $request->get("fcm-token");
+
+                    $checkUserInCRM->fcm_token = $token_fcm;
+
+                    $checkUserInCRM->save();
+
                     return response()->json([
                         'success' => true,
                         'user' => $user,
