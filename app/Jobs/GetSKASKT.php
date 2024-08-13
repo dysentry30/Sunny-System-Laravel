@@ -68,7 +68,7 @@ class GetSKASKT implements ShouldQueue
                     $totalData = $totalData + $collect['total_seluruh_data'];
 
                     $data->each(function ($item) use (&$jumlahInsert) {
-                        $isExistSKASKT = SKASKTProyek::where('nip', $item['nip'])?->where('file_sertifikat', $item['file_sertifikat'])->first();
+                        $isExistSKASKT = SKASKTProyek::where('nip', $item['nip'])?->where('no_sertifikat', $item['no_sertifikat'])->first();
 
                         if (!empty($isExistSKASKT)) {
                             $isExistSKASKT->emp_name = $item['emp_name'];

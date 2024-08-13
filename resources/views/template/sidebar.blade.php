@@ -448,7 +448,7 @@
                                 </div>
                             {{-- @endif --}}
                         @endcanany
-                        @canany(['super-admin', 'approver-crm', 'user-crm', 'risk-crm'])
+                        @canany(['super-admin', 'admin-crm', 'approver-crm', 'user-crm', 'risk-crm'])
                             <div class="menu-item">
                                 <a class="menu-link " href="/nota-rekomendasi-2"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::url(), 'nota-rekomendasi-2') ? 'background-color:#008CB4' : '' }}">
@@ -482,7 +482,7 @@
                                 </a>
                             </div>
                         @endcanany
-                        @canany(['super-admin', 'approver-crm', 'user-crm', 'risk-crm'])
+                        @canany(['super-admin', 'admin-crm', 'approver-crm', 'user-crm', 'risk-crm'])
                             <div class="menu-item">
                                 <a class="menu-link " href="/verifikasi-internal-partner"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::url(), 'verifikasi-internal-partner') ? 'background-color:#008CB4' : '' }}">
@@ -499,7 +499,7 @@
                             </div>
                         @endcanany
 
-                        @canany(['super-admin', 'approver-crm', 'user-crm', 'risk-crm'])
+                        @canany(['super-admin', 'admin-crm', 'approver-crm', 'user-crm', 'risk-crm'])
                             <div class="menu-item">
                                 <a class="menu-link " href="/verifikasi-internal-persetujuan-partner"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::url(), 'verifikasi-internal-persetujuan-partner') ? 'background-color:#008CB4' : '' }}">
@@ -516,7 +516,7 @@
                             </div>
                         @endcanany
 
-                        @canany(['super-admin', 'approver-crm', 'user-crm', 'risk-crm'])
+                        @canany(['super-admin', 'admin-crm', 'approver-crm', 'user-crm', 'risk-crm'])
                             <div class="menu-item">
                                 <a class="menu-link " href="/verifikasi-proyek-nota-2"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::url(), 'verifikasi-proyek-nota-2') ? 'background-color:#008CB4' : '' }}">

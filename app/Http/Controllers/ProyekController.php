@@ -45,7 +45,7 @@ use App\Models\RiskTenderProyek;
 use Illuminate\Http\UploadedFile;
 use App\Models\KonsultanPerencana;
 use App\Models\MasterGrupTierBUMN;
-use Illuminate\support\Facades\DB;
+use Illuminate\Support\Facades\DB;
 use App\Models\ContractManagements;
 use App\Models\KriteriaPasarProyek;
 use Illuminate\Support\Facades\Log;
@@ -904,7 +904,7 @@ class ProyekController extends Controller
             }
 
             //Begin::Alasan KSO
-            if (Auth::user()->check_administrator || Gate::any(['user-crm', 'approver-crm'])) {
+            if (Auth::user()->check_administrator || Gate::any(['user-crm', 'approver-crm', 'admin-crm'])) {
                 $alasan_kso = collect([]);
                 if (isset($dataProyek["checklist-alasan-kso-1"])) {
                     $alasan_kso->push([
@@ -948,7 +948,7 @@ class ProyekController extends Controller
             //End::Alasan KSO
 
             //Begin::Tujuan KSO
-            if (Auth::user()->check_administrator || Gate::any(['user-crm', 'approver-crm'])) {
+            if (Auth::user()->check_administrator || Gate::any(['user-crm', 'approver-crm', 'admin-crm'])) {
                 $tujuan_kso = collect([]);
                 if (isset($dataProyek["checklist-tujuan-kso-1"])) {
                     $tujuan_kso->push([
@@ -985,7 +985,7 @@ class ProyekController extends Controller
             //End::Tujuan KSO
 
             //Begin::Persetujuan Fasilitan NCL
-            if (Auth::user()->check_administrator || Gate::any(['user-crm', 'approver-crm'])) {
+            if (Auth::user()->check_administrator || Gate::any(['user-crm', 'approver-crm', 'admin-crm'])) {
                 $newProyek->fasilitas_ncl = $dataProyek["fasilitas-ncl"] ?? null;
             }
             //End::Persetujuan Fasilitan NCL
@@ -997,52 +997,55 @@ class ProyekController extends Controller
             $urutanKlasifikasiProduksi = null;
             $klasifikasiNotaRekomendasi2 = null;
 
-            $nilaiOmzetProyek = (int)str_replace('.', '', $dataProyek["nilai-rkap"]) * ((int)$dataProyek["porsi-jo"] / 100);
-            $waktuPelaksanaanConvertBulan = (int)$dataProyek["waktu_pelaksanaan"] / 30; //Hari dijadikan bulan
-            $nilaiProduksiPerbulan = $nilaiOmzetProyek / $waktuPelaksanaanConvertBulan;
+            if ($newProyek->stage == 4 && !empty($request->get("waktu_pelaksanaan"))) {
+                $nilaiOmzetProyek = (int)str_replace('.', '', $dataProyek["nilai-rkap"]) * ((int)$dataProyek["porsi-jo"] / 100);
+                $waktuPelaksanaanConvertBulan = (int)$dataProyek["waktu_pelaksanaan"] / 30; //Hari dijadikan bulan
+                $nilaiProduksiPerbulan = $nilaiOmzetProyek / $waktuPelaksanaanConvertBulan;
 
-            //Jika Pakai Omset Saja
-            $klasifikasiOmzetSelected = MasterKlasifikasiOmsetProyek::all()?->filter(function ($item) use ($nilaiOmzetProyek) {
-                return (float)$item->dari_nilai <= (int)$nilaiOmzetProyek && (float)$item->sampai_nilai >= (int)$nilaiOmzetProyek;
-            })->first()?->keterangan;
+                //Jika Pakai Omset Saja
+                $klasifikasiOmzetSelected = MasterKlasifikasiOmsetProyek::all()?->filter(function ($item) use ($nilaiOmzetProyek) {
+                    return (float)$item->dari_nilai <= (int)$nilaiOmzetProyek && (float)$item->sampai_nilai >= (int)$nilaiOmzetProyek;
+                })->first()?->keterangan;
 
-            if (!empty($klasifikasiOmzetSelected)) {
-                $urutanKlasifikasiOmzet = $urutanKlasifikasi->filter(function ($klasifikasi) use ($klasifikasiOmzetSelected) {
-                    return $klasifikasi == $klasifikasiOmzetSelected;
-                })?->keys()?->first();
-            }
+                if (!empty($klasifikasiOmzetSelected)) {
+                    $urutanKlasifikasiOmzet = $urutanKlasifikasi->filter(function ($klasifikasi) use ($klasifikasiOmzetSelected) {
+                        return $klasifikasi == $klasifikasiOmzetSelected;
+                    })?->keys()?->first();
+                }
 
-            //Jika Pakai Produksi Perbulan
-            $klasifikasiProduksiSelected = MasterKlasifikasiProduksiProyek::all()?->filter(function ($item) use ($nilaiProduksiPerbulan) {
-                return (float)$item->dari_nilai <= (int)$nilaiProduksiPerbulan && (float)$item->sampai_nilai >= (int)$nilaiProduksiPerbulan;
-            })->first()?->keterangan;
+                //Jika Pakai Produksi Perbulan
+                $klasifikasiProduksiSelected = MasterKlasifikasiProduksiProyek::all()?->filter(function ($item) use ($nilaiProduksiPerbulan) {
+                    return (float)$item->dari_nilai <= (int)$nilaiProduksiPerbulan && (float)$item->sampai_nilai >= (int)$nilaiProduksiPerbulan;
+                })->first()?->keterangan;
 
-            if (!empty($klasifikasiProduksiSelected)) {
-                $urutanKlasifikasiProduksi = $urutanKlasifikasi->filter(function ($klasifikasi) use ($klasifikasiProduksiSelected) {
-                    return $klasifikasi == $klasifikasiProduksiSelected;
-                })?->keys()?->first();
-            }
+                if (!empty($klasifikasiProduksiSelected)) {
+                    $urutanKlasifikasiProduksi = $urutanKlasifikasi->filter(function ($klasifikasi) use ($klasifikasiProduksiSelected) {
+                        return $klasifikasi == $klasifikasiProduksiSelected;
+                    })?->keys()?->first();
+                }
 
-            // dd($dataProyek);
+                // dd($dataProyek);
 
-            if (!empty($urutanKlasifikasiOmzet) && !empty($urutanKlasifikasiProduksi)) {
-                if ($urutanKlasifikasiProduksi < $urutanKlasifikasiOmzet) {
+                if (!empty($urutanKlasifikasiOmzet) && !empty($urutanKlasifikasiProduksi)) {
+                    if ($urutanKlasifikasiProduksi < $urutanKlasifikasiOmzet) {
+                        $klasifikasiNotaRekomendasi2 = $klasifikasiProduksiSelected;
+                    } else {
+                        $klasifikasiNotaRekomendasi2 = $klasifikasiOmzetSelected;
+                    }
+                } elseif (!empty($urutanKlasifikasiOmzet)) {
+                    $klasifikasiNotaRekomendasi2 = $klasifikasiOmzetSelected;
+                } elseif (!empty($urutanKlasifikasiOmzet)) {
                     $klasifikasiNotaRekomendasi2 = $klasifikasiProduksiSelected;
                 } else {
-                    $klasifikasiNotaRekomendasi2 = $klasifikasiOmzetSelected;
+                    Alert::error('Error', "Terjadi kesalahan. Hubungi Admin!");
+                    return redirect()->back();
                 }
-            } elseif (!empty($urutanKlasifikasiOmzet)) {
-                $klasifikasiNotaRekomendasi2 = $klasifikasiOmzetSelected;
-            } elseif (!empty($urutanKlasifikasiOmzet)) {
-                $klasifikasiNotaRekomendasi2 = $klasifikasiProduksiSelected;
-            } else {
-                Alert::error('Error', "Terjadi kesalahan. Hubungi Admin!");
-                return redirect()->back();
+
+                $newProyek->klasifikasi_proyek_nota_2 = $klasifikasiNotaRekomendasi2;
+                $newProyek->nilai_klasifikasi_nota_2 = $nilaiOmzetProyek;
+                $newProyek->keterangan_greenlane = $dataProyek["keterangan-greenlane"];
             }
 
-            $newProyek->klasifikasi_proyek_nota_2 = $klasifikasiNotaRekomendasi2;
-            $newProyek->nilai_klasifikasi_nota_2 = $nilaiOmzetProyek;
-            $newProyek->keterangan_greenlane = $dataProyek["keterangan-greenlane"];
         }
 
         $newProyek->waktu_pelaksanaan = $dataProyek["waktu_pelaksanaan"];
