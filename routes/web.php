@@ -106,6 +106,7 @@ use App\Models\MatriksApprovalPartnerSelection;
 use App\Models\MatriksApprovalTerkontrakProyek;
 use App\Http\Controllers\CSIDashboardController;
 use App\Http\Controllers\MasalahHukumController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Rekomendasi2Controller;
 use App\Models\MatriksApprovalVerifikasiPartner;
 use App\Http\Controllers\DraftContractController;
@@ -7637,3 +7638,5 @@ Route::post('copy-forecast', function (Request $request) {
 
 Route::get('tes-lock-change', [ContractApprovalController::class, 'lockChangeFromBackdoor']);
 Route::get('tes-approve-change', [ContractApprovalController::class, 'setApproveFromBackdoor']);
+
+Route::get('tes-notif', [NotificationController::class, 'sendNotificationApproval']);

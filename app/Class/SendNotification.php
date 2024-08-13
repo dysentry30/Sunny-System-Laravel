@@ -25,14 +25,14 @@ class sendNotification
         $user = User::where("nip", $nip)->first();
         $proyek = Proyek::find($kode_proyek);
 
-        $message = $this->setMessageNotification($proyek, $category, $sub_category, $category_approval, $status);
+        $messageing = $this->setMessageNotification($proyek, $category, $sub_category, $category_approval, $status);
 
-        $insertNotifDatabase = $this->insertNotificationToDatabase($user, $proyek, $category, $sub_category, $message[1]);
+        $insertNotifDatabase = $this->insertNotificationToDatabase($user, $proyek, $category, $sub_category, $messageing[1]);
 
         if ($insertNotifDatabase) {
             $message = CloudMessage::withTarget('token', $user->fcm_token)->withNotification([
-                "title" => $message[0],
-                "body" => $message[1]
+                "title" => $messageing[0],
+                "body" => $messageing[1]
             ])->withData($data);
 
             if ($this->messaging->send($message)) {
