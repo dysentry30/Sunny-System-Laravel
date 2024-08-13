@@ -2,8 +2,9 @@
 
 namespace App\Class;
 
-use App\Models\Provinsi;
+use Carbon\Carbon;
 use App\Models\Proyek;
+use App\Models\Provinsi;
 use Illuminate\Support\Facades\Http;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -152,9 +153,9 @@ class ApprovalTerkontrakClass
 
                             "E_MAIL" => "$customer->email",
 
-                            "VALIDFROMDATE" => now()->translatedFormat("d-m-Y"),
+                            "VALIDFROMDATE" => Carbon::now()->translatedFormat("d-m-Y"),
 
-                            "VALIDTODATE" => now()->addMonths(5)->translatedFormat("d-m-Y"),
+                            "VALIDTODATE" => Carbon::now()->addMonths(5)->translatedFormat("d-m-Y"),
 
                             "IDENTIFICATION" => [
                                 [

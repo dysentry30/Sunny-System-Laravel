@@ -2,22 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Class\ApprovalTerkontrakClass;
-use App\Models\ApprovalTerkontrakProyek;
-use App\Models\Forecast;
-use App\Models\HistoryForecast;
-use App\Models\MatriksApprovalTerkontrakProyek;
-use App\Models\MobileNotification;
-use App\Models\Pegawai;
-use App\Models\Proyek;
-use App\Models\UnitKerja;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
-use Carbon\Carbon;
 use stdClass;
+use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Proyek;
+use App\Models\Pegawai;
+use App\Models\Forecast;
+use App\Models\UnitKerja;
+use Carbon\CarbonInterface;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Models\HistoryForecast;
+use App\Models\MobileNotification;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
+use App\Class\ApprovalTerkontrakClass;
+use App\Class\sendNotification;
+use App\Models\ApprovalTerkontrakProyek;
+use App\Models\MatriksApprovalTerkontrakProyek;
 
 
 class MobileController extends Controller
@@ -982,9 +984,9 @@ class MobileController extends Controller
                         Carbon::setLocale('id');
                         $tanggalTender = Carbon::parse($item->jadwal_tender);
                         $messageTender = $tanggalTender->diffForHumans(Carbon::now(), [
-                            'syntax' => Carbon::DIFF_RELATIVE_TO_NOW,
+                            'syntax' => CarbonInterface::DIFF_RELATIVE_TO_NOW,
                             'parts' => 1,
-                            'options' => Carbon::ONE_DAY_WORDS,
+                            'options' => CarbonInterface::ONE_DAY_WORDS,
                         ]);
 
                         $collectNotif->push([
@@ -1303,12 +1305,15 @@ class MobileController extends Controller
                         }
                         $generateDataNasabahOnline = ApprovalTerkontrakClass::generateNasabahOnline($proyek);
 
-                        if ($proyek->dop != "EA") {
-                            // $sendToNasabahOnline = ApprovalTerkontrakClass::sendDataNasabahOnline($generateDataNasabahOnline);
+                        if ($proyek->dop != "EA" && env("APP_ENV") == "production") {
+                            $sendToNasabahOnline = ApprovalTerkontrakClass::sendDataNasabahOnline($generateDataNasabahOnline);
                         }
 
                         $proyek->is_need_approval_terkontrak = false;
                         $proyek->save();
+
+                        $sendNotification = new sendNotification();
+                        $sendNotification->sendNotificationFirebase($selectPicCrm->nip, "Approval", "Terkontrak", $proyek->kode_proyek, "Persetujuan", "approve");
                     }
 
                     DB::commit();
@@ -1349,6 +1354,8 @@ class MobileController extends Controller
                                 400
                             );
                         }
+                        $sendNotification = new sendNotification();
+                        $sendNotification->sendNotificationFirebase($selectPicCrm->nip, "Approval", "Terkontrak", $proyek->kode_proyek, "Persetujuan", "revisi");
                     }
 
                     DB::commit();
