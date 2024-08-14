@@ -35,6 +35,7 @@ use App\Models\KriteriaPasar;
 use App\Models\MasterPefindo;
 use App\Models\PesertaTender;
 use App\Models\ProyekAdendum;
+use App\Models\CashFlowProyek;
 use App\Models\HistoryForecast;
 use App\Models\NotaRekomendasi;
 use App\Models\ProyekBerjalans;
@@ -43,6 +44,7 @@ use App\Models\ClaimManagements;
 use App\Models\NotaRekomendasi2;
 use App\Models\RiskTenderProyek;
 use Illuminate\Http\UploadedFile;
+use App\Models\DokumenOtherProyek;
 use App\Models\KonsultanPerencana;
 use App\Models\MasterGrupTierBUMN;
 use Illuminate\Support\Facades\DB;
@@ -50,6 +52,7 @@ use App\Models\ContractManagements;
 use App\Models\KriteriaPasarProyek;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
+use App\Models\DokumenSCurvesProyek;
 use App\Models\MasterKlasifikasiSBU;
 use App\Models\PersonelTenderProyek;
 use Illuminate\Pagination\Paginator;
@@ -1207,6 +1210,15 @@ class ProyekController extends Controller
                 if (isset($dataProyek["dokumen-pendukung-pasar-dini"])) {
                     self::uploadDokumenPendukungPasdin($dataProyek["dokumen-pendukung-pasar-dini"], $kode_proyek);
                 }
+                if (isset($dataProyek["file-cashflow"])) {
+                    self::cashFlow($dataProyek["file-cashflow"], $kode_proyek);
+                }
+                if (isset($dataProyek["dokumen-scurves"])) {
+                    self::uploadDokumenSCurves($dataProyek["dokumen-scurves"], $kode_proyek);
+                }
+                if (isset($dataProyek["dokumen-other-proyek"])) {
+                    self::uploadDokumenOtherProyek($dataProyek["dokumen-other-proyek"], $kode_proyek);
+                }
             }
             $customerHistory->save();
             return redirect("/proyek/view/" . $kode_proyek);
@@ -1247,6 +1259,15 @@ class ProyekController extends Controller
                 }
                 if (isset($dataProyek["dokumen-pendukung-pasar-dini"])) {
                     self::uploadDokumenPendukungPasdin($dataProyek["dokumen-pendukung-pasar-dini"], $kode_proyek);
+                }
+                if (isset($dataProyek["file-cashflow"])) {
+                    self::cashFlow($dataProyek["file-cashflow"], $kode_proyek);
+                }
+                if (isset($dataProyek["dokumen-scurves"])) {
+                    self::uploadDokumenSCurves($dataProyek["dokumen-scurves"], $kode_proyek);
+                }
+                if (isset($dataProyek["dokumen-other-proyek"])) {
+                    self::uploadDokumenOtherProyek($dataProyek["dokumen-other-proyek"], $kode_proyek);
                 }
             }
             return redirect("/proyek/view/" . $kode_proyek);
@@ -1468,6 +1489,88 @@ class ProyekController extends Controller
         File::delete($files);
         $delete->delete();
         Alert::success("Success", "Attachment Menang Berhasil Dihapus");
+        return redirect()->back();
+    }
+
+    private function cashFlow(UploadedFile $uploadedFile, $kode_proyek)
+    {
+        $faker = new Uuid();
+        $cashFlow = new CashFlowProyek();
+        $file_name = $uploadedFile->getClientOriginalName();
+        $id_document = date("dmYHis_") . str_replace(' ', '_', $file_name);
+        $nama_cashFlow = $file_name;
+        // moveFileTemp($uploadedFile, $id_document);
+        $cashFlow->nama_document = $nama_cashFlow;
+        $cashFlow->id_document = $id_document;
+        $cashFlow->kode_proyek = $kode_proyek;
+        $cashFlow->save();
+        $uploadedFile->move(public_path('dokumen-cashflow/'), $id_document);
+    }
+
+    public function deleteCashFlow($id)
+    {
+        $delete = CashFlowProyek::find($id);
+        // dd($delete);
+        $files = collect(File::allFiles(public_path("dokumen-cashflow")))->filter(function ($f) use ($delete) {
+            return str_contains($f->getFilename(), $delete->id_document);
+        })->first();
+        File::delete($files);
+        $delete->delete();
+        Alert::success("Success", "Dokumen Cashflow Berhasil Dihapus");
+        return redirect()->back();
+    }
+
+    private function uploadDokumenSCurves($files, $kode_proyek)
+    {
+        foreach ($files as $file) {
+            $faker = new Uuid();
+            $scurves = new DokumenSCurvesProyek();
+            $file_name = $file->getClientOriginalName();
+            $id_document = date("dmYHis_") . str_replace(' ', '_', $file_name);
+            $nama_scurves = $file_name;
+            $scurves->nama_document = $nama_scurves;
+            $scurves->id_document = $id_document;
+            $scurves->kode_proyek = $kode_proyek;
+            $scurves->save();
+            $file->move(public_path('dokumen-s-curves/'), $id_document);
+        }
+    }
+
+    public function deleteDokumenSCurves($id)
+    {
+        $delete = DokumenSCurvesProyek::find($id);
+        // dd($delete);
+        $files = collect(File::allFiles(public_path("dokumen-scurves")))->filter(function ($f) use ($delete) {
+            return str_contains($f->getFilename(), $delete->id_document);
+        })->first();
+        File::delete($files);
+        $delete->delete();
+        Alert::success("Success", "Dokumen S Curves Berhasil Dihapus");
+        return redirect()->back();
+    }
+
+    private function uploadDokumenOtherProyek($files, $kode_proyek)
+    {
+        foreach ($files as $file) {
+            $faker = new Uuid();
+            $dokumenOther = new DokumenOtherProyek();
+            $file_name = $file->getClientOriginalName();
+            $id_document = date("dmYHis_") . str_replace(' ', '_', $file_name);
+            $nama_dokumenOther = $file_name;
+            $dokumenOther->nama_document = $nama_dokumenOther;
+            $dokumenOther->id_document = $id_document;
+            $dokumenOther->kode_proyek = $kode_proyek;
+            $dokumenOther->save();
+            $file->move(public_path('dokumen-other-proyek/'), $id_document);
+        }
+    }
+
+    public function deleteDokumenOtherProyek($id)
+    {
+        $delete = DokumenOtherProyek::find($id);
+        File::delete(public_path("dokumen-other-proyek/" . $delete->id_document));
+        $delete->delete();
+        Alert::success("Success", "Dokumen Berhasil Dihapus");
         return redirect()->back();
     }
 
