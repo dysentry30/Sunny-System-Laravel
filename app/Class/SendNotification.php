@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Laravel\Firebase\Facades\Firebase;
 
-class sendNotification
+class SendNotification
 {
     public $messaging;
     public function __construct()
