@@ -116,6 +116,7 @@ use App\Models\MatriksApprovalPersetujuanPartner;
 use App\Http\Controllers\AddendumContractController;
 use App\Http\Controllers\ContractApprovalController;
 use App\Models\MatriksApprovalVerifikasiProyekNota2;
+use App\Http\Controllers\DashboardFourEyesController;
 use App\Http\Controllers\KonsultanPerencanaController;
 use App\Http\Controllers\ContractManagementsController;
 use App\Http\Controllers\KriteriaPenggunaJasaController;
@@ -4616,7 +4617,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                                         $contractModel->contract_out = $is_exist_proyek->finish_date;
                                         $contractModel->value = (int) $is_exist_proyek->contract_value_idr;
                                         $contractModel->no_contract = $is_exist_proyek->contract_no;
-                                        $contractModel->number_spk = $is_exist_proyek->spk_intern_no;
+                                        $contractModel->number_spk = $is_exist_proyek->spk_intern_no ?? "";
                                         $contractModel->profit_center = $is_exist_proyek->profit_center;
                                         $collectDataContractNew->push($contractModel);
                                     }
@@ -4732,7 +4733,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                                     $contractModel->contract_out = $proyekModel->finish_date;
                                     $contractModel->value = (int) $proyekModel->contract_value_idr;
                                     $contractModel->no_contract = $proyekModel->contract_no;
-                                    $contractModel->number_spk = $is_exist_proyek->spk_intern_no;
+                                    $contractModel->number_spk = $is_exist_proyek->spk_intern_no ?? "";
                                     $contractModel->profit_center = $proyekModel->profit_center;
                                     $collectDataContractNew->push($contractModel);
                                 }
@@ -6861,16 +6862,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     //? END PROJECT SELECTION
 
 
-
-
-
-
-
-
-
-
-
-
+    //? BEGIN DASHBOARD FOUR EYES
+    Route::group(['prefix' => 'dashboard-four-eyes'], function () {
+        Route::get("/", [DashboardFourEyesController::class, 'index']);
+    });
+    //? END DASHBOARD FOUR EYES
 
 
 
