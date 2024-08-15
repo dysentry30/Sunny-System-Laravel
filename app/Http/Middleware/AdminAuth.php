@@ -129,7 +129,12 @@ class AdminAuth
             "non-green-lane",
             "AHU",
             "nota-rekomendasi-2",
-            "approval-terkontrak-proyek"
+            "approval-terkontrak-proyek",
+            "verifikasi-internal-partner",
+            "assessment-partner-selection",
+            "verifikasi-internal-persetujuan-partner",
+            "verifikasi-proyek-nota-2",
+            "nota-rekomendasi-2",
         ]);
         $allowed_url_team_proyek = join(" ", ["dashboard", "proyek", "contract-management", "review-contract", "draft-contract", "issue-project", "question", "input-risk", "laporan-bulanan", "serah-terima", "claim-management", "approval-claim", "detail-claim", "claim", "document", "user"]);
 

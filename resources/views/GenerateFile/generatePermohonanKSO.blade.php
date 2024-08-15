@@ -257,7 +257,7 @@
             }else{
                 $pemimpinKSO = $proyek->PorsiJO?->filter(function($partner)use($proyek){
                     return $partner->porsi_jo == $proyek->PorsiJO?->max('porsi_jo');
-                });
+                })->first()?->company_jo ?? "Tidak Ada";
             }
         @endphp
         <tr>
@@ -332,7 +332,10 @@
         @if ($partnerJO->isNotEmpty())
         @foreach ($partnerJO as $index => $partner)
             @php
-                $isSudahBerpartner = \App\Models\PorsiJO::where('id_company_jo', $partner->id_company_jo)->count() > 1;
+                $isSudahBerpartner = \App\Models\PorsiJO::where(function($query) use($partner){
+                $query->where("company_jo", $partner->company_jo)
+                ->orWhere("id_company_jo", $partner->id_company_jo);
+            })->count() > 1;
             @endphp
             <!--Begin::Mitra 1-->
             <tr>
@@ -341,7 +344,7 @@
                 <!--Mitra KSO-->
                 <td valign="top" style="width:20%"><p style="margin: 0; padding:0; font-size:0.5rem; text-align:start">{{ $partner->Company->name }}</p></td>
                 <!--Sudah / Belum-->
-                <td valign="top" style="width:30%"><p style="margin-left: 20px; margin-top: 0; margin-bottom: 0; padding:0; font-size:0.5rem; text-align:start">{{ $isSudahBerpartner ? 'sudah' : 'belum' }}</p></td>
+                <td valign="top" style="width:30%"><p style="margin-left: 20px; margin-top: 0; margin-bottom: 0; padding:0; font-size:0.5rem; text-align:start">{{ $isSudahBerpartner ? 'Sudah' : 'Belum' }}</p></td>
                 <!--Kekuatan-->
                 <td style="width:20%">
                     <table style="width: 100%">

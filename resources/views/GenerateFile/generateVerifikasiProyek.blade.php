@@ -186,8 +186,8 @@
                             @else
                                 <td style="width: 100%; text-align:center">
                                     <br><br><br>
-                                    <p style="font-size:0.6rem; margin:0px; padding-top:0px;">(....................................)</p>
-                                    <p style="font-size:0.4rem; margin:0px; padding-top:0px;">SubPJFs Key Account</p>
+                                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">(....................................)</p>
+                                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">SubPJFs Key Account</p>
                                 </td>
                             @endif
                         </tr>

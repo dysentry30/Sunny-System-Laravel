@@ -3958,10 +3958,10 @@
                                                                                 @if (($porsiJO->isNotEmpty() && ($porsiJO->every(function($item){return $item->is_greenlane;}) || $porsiJO->whereNotNull('is_hasil_assessment')->count() > 0)))
                                                                                     @if ($porsiJO->every(function($item){return $item->is_greenlane;}) || (isset($isDokumenFinish) && $isDokumenFinish))
                                                                                     <span>
-                                                                                        @if (empty($proyek->VerifikasiInternalPersetujuanPartner) || !empty($proyek->VerifikasiInternalPersetujuanPartner) && (collect(json_decode($proyek->VerifikasiInternalPersetujuanPartner->revisi_note))->isNotEmpty()) && collect(json_decode($proyek->VerifikasiInternalPersetujuanPartner?->revisi_note))?->where("stage", "Request Pengajuan")->count() > 0)
+                                                                                        @if (empty($proyek->VerifikasiInternalPersetujuanPartner) || !empty($proyek->VerifikasiInternalPersetujuanPartner) && (collect(json_decode($proyek->VerifikasiInternalPersetujuanPartner->revisi_note))->isNotEmpty()) && collect(json_decode($proyek->VerifikasiInternalPersetujuanPartner?->revisi_note))?->where("stage", "Pengajuan")->count() > 0)
                                                                                             <button type="button" class="btn btn-sm btn-primary" data-title="persetujuan-kso" onclick="showModalRequest(this, '{{ $proyek->kode_proyek }}')">Ajukan</button>
                                                                                         @endif
-                                                                                        @if (!empty($proyek->VerifikasiInternalPersetujuanPartner) && is_null($proyek->VerifikasiInternalPersetujuanPartner->is_persetujuan_approved))
+                                                                                        @if (!empty($proyek->VerifikasiInternalPersetujuanPartner) && is_null($proyek->VerifikasiInternalPersetujuanPartner->is_persetujuan_approved) && is_null($proyek->VerifikasiInternalPersetujuanPartner->is_revisi))
                                                                                             <span>
                                                                                                 <p class="m-0 badge rounded-pill badge-sm text-warning">Proses Verifikasi</p>
                                                                                             </span>
@@ -3971,7 +3971,7 @@
                                                                                             </span>
                                                                                         @elseif(!empty($proyek->VerifikasiInternalPersetujuanPartner) && !$proyek->VerifikasiInternalPersetujuanPartner->is_persetujuan_approved)
                                                                                             <span>
-                                                                                                <p class="m-0 badge rounded-pill badge-sm text-success">Verifikasi Ditolak</p>
+                                                                                                <p class="m-0 badge rounded-pill badge-sm text-danger">Verifikasi Ditolak</p>
                                                                                             </span>
                                                                                         @endif
                                                                                     </span>

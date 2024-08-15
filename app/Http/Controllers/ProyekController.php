@@ -1003,7 +1003,7 @@ class ProyekController extends Controller
             if ($newProyek->stage == 4 && !empty($request->get("waktu_pelaksanaan"))) {
                 $nilaiOmzetProyek = (int)str_replace('.', '', $dataProyek["nilai-rkap"]) * ((int)$dataProyek["porsi-jo"] / 100);
                 $waktuPelaksanaanConvertBulan = (int)$dataProyek["waktu_pelaksanaan"] / 30; //Hari dijadikan bulan
-                $nilaiProduksiPerbulan = $nilaiOmzetProyek / $waktuPelaksanaanConvertBulan;
+                $nilaiProduksiPerbulan = round($nilaiOmzetProyek / $waktuPelaksanaanConvertBulan);
 
                 //Jika Pakai Omset Saja
                 $klasifikasiOmzetSelected = MasterKlasifikasiOmsetProyek::all()?->filter(function ($item) use ($nilaiOmzetProyek) {
@@ -1029,7 +1029,7 @@ class ProyekController extends Controller
 
                 // dd($dataProyek);
 
-                if (!empty($urutanKlasifikasiOmzet) && !empty($urutanKlasifikasiProduksi)) {
+                if (!is_null($urutanKlasifikasiOmzet) && !is_null($urutanKlasifikasiProduksi)) {
                     if ($urutanKlasifikasiProduksi < $urutanKlasifikasiOmzet) {
                         $klasifikasiNotaRekomendasi2 = $klasifikasiProduksiSelected;
                     } else {

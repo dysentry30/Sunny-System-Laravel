@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Class\sendNotification;
+use App\Class\SendNotification;
 use App\Models\ApprovalTerkontrakProyek;
 use App\Models\Forecast;
 use App\Models\MatriksApprovalTerkontrakProyek;
@@ -76,8 +76,8 @@ class ApprovalTerkontrakProyekController extends Controller
                             return redirect()->back();
                         }
 
-                        $sendNotification = new sendNotification();
-                        $sendNotification->sendNotificationFirebase($target->Pegawai->nip, "Approval", "Terkontrak", $proyek->kode_proyek, "Pengajuan", "revisi");
+                        // $sendNotification = new SendNotification();
+                        // $sendNotification->sendNotificationFirebase($target->Pegawai->nip, "Approval", "Terkontrak", $proyek->kode_proyek, "Pengajuan", "revisi");
                     }
 
                     return response()->json([
@@ -104,8 +104,8 @@ class ApprovalTerkontrakProyekController extends Controller
                             return redirect()->back();
                         }
 
-                        $sendNotification = new sendNotification();
-                        $sendNotification->sendNotificationFirebase($target->Pegawai->nip, "Approval", "Terkontrak", $proyek->kode_proyek, "Pengajuan", "approve");
+                        // $sendNotification = new SendNotification();
+                        // $sendNotification->sendNotificationFirebase($target->Pegawai->nip, "Approval", "Terkontrak", $proyek->kode_proyek, "Pengajuan", "approve");
                     }
 
                     return response()->json([
@@ -202,15 +202,14 @@ class ApprovalTerkontrakProyekController extends Controller
                     // }
                     $generateDataNasabahOnline = self::generateNasabahOnline($proyek);
                     if ($proyek->UnitKerja->dop != "EA" && env("APP_ENV") == "production") {
-                        dd("TES");
-                        // self::sendDataNasabahOnline($generateDataNasabahOnline);
+                        self::sendDataNasabahOnline($generateDataNasabahOnline);
                     }
                     // $proyekBerjalan = ProyekBerjalans::where('kode_proyek', $proyek->kode_proyek)->first();
                     // $proyekBerjalan->stage = 8;
                     $proyek->is_need_approval_terkontrak = false;
                     $proyek->save();
-                    $sendNotification = new sendNotification();
-                    $sendNotification->sendNotificationFirebase($selectPicCrm->nip, "Approval", "Terkontrak", $proyek->kode_proyek, "Persetujuan", "approve");
+                    // $sendNotification = new SendNotification();
+                    // $sendNotification->sendNotificationFirebase($selectPicCrm->nip, "Approval", "Terkontrak", $proyek->kode_proyek, "Persetujuan", "approve");
                     // $proyekBerjalan->save();
                 }
                 DB::commit();
@@ -225,7 +224,7 @@ class ApprovalTerkontrakProyekController extends Controller
                 $proyekApprovalSelected->is_revisi = true;
                 $proyekApprovalSelected->revisi_by = Auth::user()->nip;
                 $proyekApprovalSelected->revisi_on = Carbon::now();
-                $proyekApprovalSelected->revisi_note = $request->get("revisi-nota");
+                $proyekApprovalSelected->revisi_note = $request->get("revisi-note");
 
                 if ($proyekApprovalSelected->save()) {
                     $selectPicCrm = Pegawai::where("nip", $proyekApprovalSelected->request_by)->first();
@@ -235,8 +234,8 @@ class ApprovalTerkontrakProyekController extends Controller
                     if (!$sendEmailUser) {
                         return redirect()->back();
                     }
-                    $sendNotification = new sendNotification();
-                    $sendNotification->sendNotificationFirebase($selectPicCrm->nip, "Approval", "Terkontrak", $proyek->kode_proyek, "Persetujuan", "revisi");
+                    // $sendNotification = new SendNotification();
+                    // $sendNotification->sendNotificationFirebase($selectPicCrm->nip, "Approval", "Terkontrak", $proyek->kode_proyek, "Persetujuan", "revisi");
                 }
                 DB::commit();
                 Alert::success("Success", "Proyek berhasil diajukan revisi");

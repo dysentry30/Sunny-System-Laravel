@@ -380,7 +380,15 @@
                                                                     $matriks_group = [];
                                                                     $collect_matriks = [];
                                                                 }
-                                                            } elseif ($item->is_pengajuan_approved == true && is_null($item->is_rekomendasi_approved)) {
+                                                            } elseif ($item->is_pengajuan_approved == true && is_null($item->is_pengusul_approved)) {
+                                                                $kategori_approval = 'Pengusul';
+                                                                if (array_key_exists('Pengusul', $matriks_category_array) && !empty($matriks_category_array['Pengusul'][$item->Proyek->departemen_proyek][$item->Proyek->UnitKerja->Divisi->id_divisi])) {
+                                                                    $matriks_group = $matriks_category_array['Pengusul'][$item->Proyek->departemen_proyek][$item->Proyek->UnitKerja->Divisi->id_divisi];
+                                                                    $collect_matriks = collect(json_decode($item->rekomendasi_approved))->keyBy('nip');
+                                                                } else {
+                                                                    $matriks_group = [];
+                                                                }
+                                                            } elseif ($item->is_pengusul_approved == true && is_null($item->is_rekomendasi_approved)) {
                                                                 $kategori_approval = 'Rekomendasi';
                                                                 if (array_key_exists('Rekomendasi', $matriks_category_array) && !empty($matriks_category_array['Rekomendasi'][$item->Proyek->departemen_proyek][$item->Proyek->UnitKerja->Divisi->id_divisi])) {
                                                                     $matriks_group = $matriks_category_array['Rekomendasi'][$item->Proyek->departemen_proyek][$item->Proyek->UnitKerja->Divisi->id_divisi];

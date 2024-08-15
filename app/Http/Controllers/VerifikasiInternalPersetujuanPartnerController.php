@@ -160,12 +160,12 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
                 $isExistVerifikasi->is_revisi = null;
                 $isExistVerifikasi->nama_dokumen = $namaFile;
 
-                $nomorTarget = self::getNomorMatriksApproval($isExistVerifikasi->divisi_id, $isExistVerifikasi->departemen_code, "Pengajuan");
+                $nomorTarget = self::getNomorMatriksApproval($isExistVerifikasi->divisi_id, $proyek->departemen_proyek, "Pengajuan");
 
                 if ($isExistVerifikasi->save()) {
                     foreach ($nomorTarget as $target) {
                         $url = $request->schemeAndHttpHost() . "?nip=" . $target->Pegawai->nip . "&redirectTo=/verifikasi-internal-persetujuan-partner?open=kt_modal_view_proyek_rekomendasi_" . $proyek->kode_proyek;
-                        $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini mengajukan varifikasi internal persetujuan partner untuk proyek " . $proyek->Proyek->nama_proyek . " untuk permohonan pengajuan assessment partner.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                        $message = "Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini mengajukan varifikasi internal persetujuan partner untuk proyek " . $proyek->nama_proyek . " untuk permohonan pengajuan assessment partner.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
                         $sendEmailUser = sendNotifEmail($target->Pegawai, "Permohonan Pengajuan Permohonan Persetujuan Pembentukan Kerjasama Operasi (KSO)", nl2br($message), $this->isnomorTargetActive);
                         if (!$sendEmailUser) {
                             return redirect()->back();

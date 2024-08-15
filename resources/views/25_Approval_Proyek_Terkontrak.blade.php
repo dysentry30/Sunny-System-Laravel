@@ -131,7 +131,7 @@
                                             </td>
                                             <td class="text-center">
                                                 @if ($proyekApproval->is_revisi)
-                                                <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#kt_modal_catatan_revisi">Catatan
+                                                <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#kt_modal_catatan_revisi_{{ $proyekApproval->kode_proyek }}">Catatan
                                                     Revisi</button>
                                                 @endif
                                             </td>
@@ -141,10 +141,10 @@
                                                 <div class="d-flex flex-row justify-content-center">
                                                     <button type="button" class="btn btn-sm btn-primary"
                                                         data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_approved">Approve</button>
+                                                        data-bs-target="#kt_modal_approved_{{ $proyekApproval->kode_proyek }}">Approve</button>
                                                     <button type="button" class="btn btn-sm btn-danger"
                                                         data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_revisi">Revisi</button>
+                                                        data-bs-target="#kt_modal_revisi_{{ $proyekApproval->kode_proyek }}">Revisi</button>
                                                 </div>
                                             @endif
                                             </td>                                                
@@ -166,7 +166,7 @@
                     @foreach ($proyeks as $proyekApproval)
                         <form action="/approval-terkontrak-proyek/{{ $proyekApproval->kode_proyek }}/set-approval" method="post" onsubmit="addLoading(this)">
                         @csrf
-                            <div class="modal fade" id="kt_modal_approved" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="kt_modal_approvedLabel"
+                            <div class="modal fade" id="kt_modal_approved_{{ $proyekApproval->kode_proyek }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="kt_modal_approvedLabel"
                                 aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
@@ -197,7 +197,7 @@
                     @foreach ($proyeks as $proyekApproval)
                         <form action="/approval-terkontrak-proyek/{{ $proyekApproval->kode_proyek }}/set-approval" method="post" onsubmit="addLoading(this)">
                         @csrf
-                        <div class="modal fade" id="kt_modal_revisi" aria-hidden="true" aria-labelledby="kt_modal_revisiLabel" tabindex="-1">
+                        <div class="modal fade" id="kt_modal_revisi_{{ $proyekApproval->kode_proyek }}" aria-hidden="true" aria-labelledby="kt_modal_revisiLabel" tabindex="-1">
                             <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                 <div class="modal-header">
@@ -213,12 +213,12 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                  <button type="button" class="btn btn-primary" id="next" data-bs-target="#kt_modal_revisi2" data-bs-toggle="modal">Next</button>
+                                  <button type="button" class="btn btn-primary" id="next" data-bs-target="#kt_modal_revisi2_{{ $proyekApproval->kode_proyek }}" data-bs-toggle="modal">Next</button>
                                 </div>
                               </div>
                             </div>
                           </div>
-                          <div class="modal fade" id="kt_modal_revisi2" aria-hidden="true" aria-labelledby="kt_modal_revisiLabel2" tabindex="-1">
+                          <div class="modal fade" id="kt_modal_revisi2_{{ $proyekApproval->kode_proyek }}" aria-hidden="true" aria-labelledby="kt_modal_revisiLabel2" tabindex="-1">
                             <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                 <div class="modal-header">
@@ -241,7 +241,7 @@
 
                     <!-- Begin::Modal Catatan Revisi -->
                     @foreach ($proyeks->where('is_revisi', true) as $proyekApproval)
-                        <div class="modal fade" id="kt_modal_catatan_revisi" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="kt_modal_approvedLabel" aria-hidden="true">
+                        <div class="modal fade" id="kt_modal_catatan_revisi_{{ $proyekApproval->kode_proyek }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="kt_modal_approvedLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">

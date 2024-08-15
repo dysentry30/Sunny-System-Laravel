@@ -153,7 +153,7 @@ class VerifikasiProyekNota2Controller extends Controller
                 $isExistVerifikasi->is_revisi = null;
                 $isExistVerifikasi->nama_dokumen = $namaFile;
 
-                $nomorTarget = self::getNomorMatriksApproval($isExistVerifikasi->divisi_id, $isExistVerifikasi->departemen_code, "Pengajuan");
+                $nomorTarget = User::where("nip", $request->get("nip"))->get();
 
                 if ($isExistVerifikasi->save()) {
                     foreach ($nomorTarget as $target) {
