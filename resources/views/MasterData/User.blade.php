@@ -774,6 +774,12 @@ a{{-- Begin::Extend Header --}}
                                 <span class="form-check-label me-8 required"><b>SKA SKT</b></span>
                             </label>
                             <!--end::Options-->
+                            <!--begin::Options-->
+                            <label class="form-check form-check-sm form-check-custom form-check-solid me-6">
+                                <input class="form-check-input" type="checkbox" value="" id="poc" name="poc" />
+                                <span class="form-check-label me-8 required"><b>POC</b></span>
+                            </label>
+                            <!--end::Options-->
                         </div>
                         <br>
                         <br>

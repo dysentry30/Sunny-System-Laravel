@@ -1,143 +1,147 @@
 <?php
 
-use App\Events\NotificationApproval;
+use Carbon\Carbon;
+use App\Models\Dop;
+use App\Models\Sbu;
 use App\Models\User;
+use Faker\Core\Uuid;
+use App\Models\Divisi;
 use App\Models\Proyek;
+use App\Models\Jabatan;
+use App\Models\Pegawai;
+use App\Models\Customer;
 use App\Models\Forecast;
+use App\Models\MataUang;
+use App\Models\Provinsi;
 use App\Models\UnitKerja;
+use App\Models\AlatProyek;
+use App\Models\Departemen;
+use App\Models\SumberDana;
+use App\Models\FieldChange;
+use App\Models\HistoryRKAP;
+use App\Models\JenisProyek;
 use App\Models\Opportunity;
-use App\Models\IndustryOwner;
+use Illuminate\Support\Str;
+use Termwind\Components\Dd;
+use App\Models\MasterLQRank;
+use App\Models\ProyekPISNew;
+use App\Models\SKASKTProyek;
 use Illuminate\Http\Request;
+use App\Models\IndustryOwner;
+use App\Models\MasterPefindo;
+use App\Models\PerjanjianKso;
+use App\Models\TechnicalForm;
+
+use App\Models\IndustrySector;
+use App\Models\IntegrationLog;
+use App\Models\TechnicalQuery;
 use PhpOffice\PhpWord\PhpWord;
 use App\Mail\UserPasswordEmail;
+use App\Models\ExceptGreenlane;
 use App\Models\HistoryForecast;
+use App\Models\ProyekBerjalans;
+use App\Models\SiteInstruction;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\ClaimManagements;
+use App\Models\MasterAlatProyek;
+use App\Models\MasterSumberDaya;
+use App\Models\NotaRekomendasi2;
+use App\Models\PerubahanKontrak;
+use App\Models\KriteriaGreenLine;
+use App\Models\MasterFortuneRank;
 use Illuminate\Http\UploadedFile;
+use App\Models\KriteriaAssessment;
+use App\Models\MasterGrupTierBUMN;
+use Illuminate\Routing\RouteGroup;
+use Illuminate\Support\Facades\DB;
+use App\Models\ContractChangeOrder;
+use App\Models\ContractManagements;
+use App\Models\LegalitasPerusahaan;
+use Illuminate\Support\Facades\URL;
+use App\Events\NotificationApproval;
+use App\Models\ContractChangeNotice;
+use App\Models\MasterKlasifikasiSBU;
+use App\Models\PersonelTenderProyek;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
+use App\Models\ChecklistCalonMitraKSO;
+use App\Models\ContractChangeProposal;
+use App\Models\MatriksApprovalPaparan;
+use App\Http\Controllers\CSIController;
 use App\Http\Controllers\DopController;
 use App\Http\Controllers\SbuController;
+use App\Models\MasterKlasifikasiProyek;
+use App\Models\MasterSubKlasifikasiSBU;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\FaqsController;
 use App\Http\Controllers\UserController;
+use App\Models\AnalisaHargaSatuanDetail;
+use App\Models\KriteriaPenilaianPefindo;
+use App\Models\MasterAnalisaHargaSatuan;
 use RealRashid\SweetAlert\Facades\Alert;
-use App\Http\Controllers\ApprovalTerkontrakProyekController;
 use App\Http\Controllers\ClaimController;
 use App\Http\Controllers\PasalController;
 use App\Http\Controllers\StageController;
+use App\Models\PenilaianPartnerSelection;
+use Illuminate\Support\Facades\Validator;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\ProyekController;
+use App\Models\MatriksApprovalRekomendasi;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\PiutangController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ForecastController;
+use App\Http\Controllers\MataUangController;
+use App\Models\MasterKlasifikasiOmsetProyek;
 use App\Http\Controllers\DashboardController;
-
 use App\Http\Controllers\UnitKerjaController;
-use App\Http\Controllers\SumberDanaController;
-use App\Http\Controllers\TeamProyekController;
-use App\Http\Controllers\DraftContractController;
-use App\Http\Controllers\KriteriaPasarController;
-use App\Http\Controllers\AddendumContractController;
-use App\Http\Controllers\ContractApprovalController;
-use App\Http\Controllers\ContractManagementsController;
-use App\Http\Controllers\CSIDashboardController;
-use App\Http\Controllers\CSIController;
+use App\Models\MasterCatatanNotaRekomendasi2;
+use App\Http\Controllers\CompetitorController;
 use App\Http\Controllers\DepartemenController;
 use App\Http\Controllers\DirektoratController;
-use App\Http\Controllers\DivisiController;
-use App\Http\Controllers\JenisProyekController;
-use App\Http\Controllers\KriteriaPenggunaJasaController;
-use App\Http\Controllers\KriteriaSelectionNonGreenlaneController;
-use App\Http\Controllers\PenilaianPenggunaJasaController;
-use App\Http\Controllers\MataUangController;
-use App\Http\Controllers\OtomasiApprovalController;
-use App\Http\Controllers\PegawaiController;
-use App\Http\Controllers\RekomendasiController;
+use App\Http\Controllers\SumberDanaController;
+use App\Http\Controllers\TeamProyekController;
 use App\Http\Controllers\TipeProyekController;
-use App\Http\Controllers\RoleManagementsController;
-use App\Http\Controllers\KonsultanPerencanaController;
-use App\Http\Controllers\AssessmentPartnerSelectionController;
-use App\Http\Controllers\Rekomendasi2Controller;
-use App\Http\Controllers\MasalahHukumController;
-use App\Http\Controllers\PiutangController;
-use App\Http\Controllers\CompetitorController;
-use App\Http\Controllers\KnowladgeBaseController;
-use App\Http\Controllers\VerifikasiInternalPartnerController;
-use App\Http\Controllers\VerifikasiInternalPersetujuanPartnerController;
-use App\Http\Controllers\VerifikasiProyekNota2Controller;
-use App\Models\ChecklistCalonMitraKSO;
-use App\Models\ContractManagements;
-use App\Models\ContractChangeNotice;
-use App\Models\ContractChangeOrder;
-use App\Models\ContractChangeProposal;
-use App\Models\FieldChange;
-use App\Models\IndustrySector;
-use App\Models\ClaimManagements;
-use App\Models\Customer;
-use App\Models\Departemen;
-use App\Models\Divisi;
-use App\Models\Dop;
-use App\Models\Jabatan;
-use App\Models\JenisProyek;
-use App\Models\PerjanjianKso;
-use App\Models\KriteriaAssessment;
-use App\Models\KriteriaGreenLine;
-use App\Models\KriteriaPenilaianPefindo;
-use App\Models\LegalitasPerusahaan;
-use App\Models\MasterFortuneRank;
-use App\Models\MasterLQRank;
-use App\Models\MasterPefindo;
-use App\Models\MasterGrupTierBUMN;
 use App\Models\MasterKriteriaGreenlanePartner;
-use App\Models\PenilaianPartnerSelection;
-use App\Models\PenilaianChecklistProjectSelection;
-use App\Models\MatriksApprovalPartnerSelection;
-use App\Models\MatriksApprovalPaparan;
-use App\Models\MatriksApprovalPersetujuanPartner;
-use App\Models\MatriksApprovalVerifikasiPartner;
-use App\Models\MatriksApprovalVerifikasiProyekNota2;
-use App\Models\MatriksApprovalNotaRekomendasi2;
-use App\Models\MatriksApprovalTerkontrakProyek;
-use App\Models\MasterCatatanNotaRekomendasi2;
-use App\Models\MasterKlasifikasiProyek;
-use App\Models\MasterKlasifikasiOmsetProyek;
+use App\Http\Controllers\JenisProyekController;
+use App\Http\Controllers\RekomendasiController;
 use App\Models\MasterKlasifikasiProduksiProyek;
-use App\Models\MasterAlatProyek;
-use App\Models\NotaRekomendasi2;
-use App\Models\MataUang;
-use App\Models\MatriksApprovalRekomendasi;
-use App\Models\Pegawai;
-use App\Models\Provinsi;
-use App\Models\ProyekBerjalans;
-use App\Models\Sbu;
-use App\Models\SiteInstruction;
-use App\Models\SumberDana;
-use App\Models\TechnicalForm;
-use App\Models\TechnicalQuery;
-use App\Models\PersonelTenderProyek;
-use App\Models\AlatProyek;
-use App\Models\HistoryRKAP;
-use App\Models\MasterKlasifikasiSBU;
-use App\Models\MasterSubKlasifikasiSBU;
-use App\Models\ExceptGreenlane;
-use App\Models\IntegrationLog;
-use App\Models\SKASKTProyek;
-use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
-use Carbon\Carbon;
-use Illuminate\Routing\RouteGroup;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\URL;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use App\Models\PerubahanKontrak;
-use App\Models\ProyekPISNew;
-use Illuminate\Support\Facades\Validator;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use App\Models\MatriksApprovalNotaRekomendasi2;
+use App\Models\MatriksApprovalPartnerSelection;
+use App\Models\MatriksApprovalTerkontrakProyek;
+use App\Http\Controllers\CSIDashboardController;
+use App\Http\Controllers\MasalahHukumController;
+use App\Http\Controllers\Rekomendasi2Controller;
+use App\Models\MatriksApprovalVerifikasiPartner;
+use App\Http\Controllers\DraftContractController;
+use App\Http\Controllers\KnowladgeBaseController;
+use App\Http\Controllers\KriteriaPasarController;
+use App\Models\MatriksApprovalPersetujuanPartner;
+use App\Models\PenilaianChecklistProjectSelection;
+use App\Http\Controllers\OtomasiApprovalController;
+use App\Http\Controllers\RoleManagementsController;
+use App\Http\Controllers\AddendumContractController;
+use App\Http\Controllers\ContractApprovalController;
+use App\Models\MatriksApprovalVerifikasiProyekNota2;
+use App\Http\Controllers\KonsultanPerencanaController;
+use App\Http\Controllers\ContractManagementsController;
+use App\Http\Controllers\KriteriaPenggunaJasaController;
+use App\Http\Controllers\PenilaianPenggunaJasaController;
+use App\Http\Controllers\VerifikasiProyekNota2Controller;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
-use Termwind\Components\Dd;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Faker\Core\Uuid;
-use Illuminate\Support\Str;
+use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
+use App\Http\Controllers\ApprovalTerkontrakProyekController;
+use App\Http\Controllers\MasterAnalisaHargaSatuanController;
+use App\Http\Controllers\VerifikasiInternalPartnerController;
+use App\Http\Controllers\AssessmentPartnerSelectionController;
+use App\Http\Controllers\KriteriaSelectionNonGreenlaneController;
+use App\Http\Controllers\VerifikasiInternalPersetujuanPartnerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -8421,4 +8425,145 @@ Route::post('/proyek/get-matriks-verifikasi/{kategori}', function (Request $requ
 
 
     return response()->json($collectVerifikasi);
+});
+
+Route::group(['prefix' => 'analisa-harga-satuan'], function () {
+    Route::get('/', [MasterAnalisaHargaSatuanController::class, 'index']);
+    Route::post('/save', [MasterAnalisaHargaSatuanController::class, 'insert']);
+    Route::get('/view/{masterAHS}', [MasterAnalisaHargaSatuanController::class, 'view']);
+    Route::post('/detail/save/{masterAHS}', [MasterAnalisaHargaSatuanController::class, 'insertDetail']);
+});
+
+Route::group(["prefix" => "rab-proyek"], function () {
+    Route::get('/', function () {
+        $proyeks = Proyek::where("dop", "!=", "EA")->where("tahun_perolehan", date("Y"))->where("tipe_proyek", "P")->get();
+        return view("30_RAB_POC", ["proyeks" => $proyeks]);
+    });
+
+    Route::get('/detail/{proyek}', function (Proyek $proyek) {
+        $masterAHS = MasterAnalisaHargaSatuan::all();
+        $masterSumberDaya = MasterSumberDaya::all();
+        $masterSumberDaya = $masterSumberDaya->map(function ($item) {
+            $item->volume = $item->MasterHargaSatuan->volume;
+            $item->harga_satuan = $item->MasterHargaSatuan->harga;
+            $item->jumlah = $item->MasterHargaSatuan->harga * $item->MasterHargaSatuan->volume;
+            return $item;
+        });
+
+        $masterSumberDayaNew = $masterSumberDaya->map(function ($item) use ($masterSumberDaya) {
+            $totalJumlah = $masterSumberDaya->sum("jumlah");
+            $item->bobot = round($item->jumlah / $totalJumlah, 2);
+            return $item;
+        })->sortByDesc("bobot");
+
+        $bobotKumulatif = 0;
+
+        $masterSumberDayaNewBanget = $masterSumberDaya->map(function ($item, $index) use (&$bobotKumulatif) {
+
+            if ($index == 0) {
+                $bobotKumulatif = $item->bobot;
+            } else {
+                $bobotKumulatif += $item->bobot;
+            }
+
+            $item->bobot_kumulatif = $bobotKumulatif;
+            return $item;
+        });
+        return view("31_RAB_POC_DETAIL", ["proyek" => $proyek, "masterAHS" => $masterAHS, "masterSumberDaya" => $masterSumberDayaNewBanget]);
+    });
+
+    Route::get('detail-ahs/{kode_ahs}', function (Request $request, $kode_ahs) {
+        $analisaHargaSatuanDetail = AnalisaHargaSatuanDetail::where("kode_ahs", $kode_ahs)->get();
+        $analisaHargaSatuanDetail = $analisaHargaSatuanDetail->map(function ($item) use ($analisaHargaSatuanDetail) {
+            if (str_contains(mb_substr($item->kode_sumber_daya, 0, 1), "A")) {
+                if ($item->kode_sumber_daya == "AN300000") {
+                    $item->koef = $analisaHargaSatuanDetail->filter(function ($a) {
+                        return str_contains(mb_substr($a->kode_sumber_daya, 0, 1), "D");
+                    })->sum(function ($i) {
+                        return !empty($i->MasterSumberDaya->MasterProduktivitas?->nilai_produktivitas) ? round(1 / $i->MasterSumberDaya->MasterProduktivitas?->nilai_produktivitas, 2) : 0;
+                    }) * $item->MasterSumberDaya->MasterWaste->nilai_waste;
+                } else {
+                    $item->koef = $item->MasterSumberDaya->MasterWaste->nilai_waste;
+                }
+            } elseif (str_contains(mb_substr($item->kode_sumber_daya, 0, 1), "C")) {
+                $item->koef = 1;
+            } elseif (str_contains(mb_substr($item->kode_sumber_daya, 0, 1), "D")) {
+                if ($item->kode_sumber_daya != "D1200000") {
+                    if (!empty($item->MasterSumberDaya->MasterProduktivitas?->nilai_produktivitas)) {
+                        $item->koef = round(1 / $item->MasterSumberDaya->MasterProduktivitas?->nilai_produktivitas, 4);
+                    } else {
+                        $item->koef = 0;
+                    }
+                } else {
+                    $item->koef = $analisaHargaSatuanDetail->filter(function ($a) {
+                        return str_contains(mb_substr($a->kode_sumber_daya, 0, 1), "D");
+                    })->sum(function ($i) {
+                        return !empty($i->MasterSumberDaya->MasterProduktivitas?->nilai_produktivitas) ? round(1 / $i->MasterSumberDaya->MasterProduktivitas?->nilai_produktivitas, 2) : 0;
+                    });
+                }
+            } elseif (str_contains(mb_substr($item->kode_sumber_daya, 0, 1), "E")) {
+                $item->koef = 1;
+            }
+
+            return $item;
+        });
+
+        // dd($analisaHargaSatuanDetail);
+
+
+        $materials = $analisaHargaSatuanDetail->filter(function ($ahs) {
+            return str_contains(mb_substr($ahs->kode_sumber_daya, 0, 1), "A");
+        });
+        $upahs = $analisaHargaSatuanDetail->filter(function ($ahs) {
+            return str_contains(mb_substr($ahs->kode_sumber_daya, 0, 1), "C");
+        });
+        $alats = $analisaHargaSatuanDetail->filter(function ($ahs) {
+            return str_contains(mb_substr($ahs->kode_sumber_daya, 0, 1), "D");
+        });
+        $subKons = $analisaHargaSatuanDetail->filter(function ($ahs) {
+            return str_contains(mb_substr($ahs->kode_sumber_daya, 0, 1), "E");
+        });
+
+
+        $total = $analisaHargaSatuanDetail->map(function ($item) {
+            return ["harga" => (int)$item->MasterHargaSatuan?->harga ?? 0];
+        })->sum(function ($item) {
+            return $item["harga"];
+        });
+
+        $ahs = MasterAnalisaHargaSatuan::where("kode_ahs", $kode_ahs)->first();
+
+        return view("32_RAB_POC_DETAIL_AHS", [
+            "ahs" => $ahs,
+            "materials" => $materials,
+            "upahs" => $upahs,
+            "alats" => $alats,
+            "subKons" => $subKons,
+            "total" => $total,
+        ]);
+    });
+});
+
+Route::get('/get-detail-ahs/{kode_ahs}', function ($kode_ahs) {
+    $ahsParent = MasterAnalisaHargaSatuan::where("kode_ahs", $kode_ahs)->first();
+    $analisaHargaDetail = AnalisaHargaSatuanDetail::where("kode_ahs", $kode_ahs)->get();
+    $totalVolume = $analisaHargaDetail->sum(function ($item) {
+        return (float)$item->MasterSumberDaya->MasterHargaSatuan->volume ?? 0;
+    });
+    $totalHarsat = $analisaHargaDetail->sum(function ($item) {
+        return (float)$item->MasterSumberDaya->MasterHargaSatuan->harga ?? 0;
+    });
+
+    $data = [
+        "kode_ahs" => $kode_ahs,
+        "uraian" => $ahsParent->uraian,
+        "satuan" => "",
+        "volume" => $totalVolume,
+        "harsat" => $totalHarsat,
+        "total" =>  $totalVolume * $totalHarsat,
+        "harsat_eksternal" => $totalVolume != 0 && $totalHarsat != 0 ? (int)(($totalVolume * $totalHarsat) * 1.3) / $totalVolume : 0,
+        "total_eksternal" => $totalVolume != 0 && $totalHarsat != 0 ? (int)($totalVolume * $totalHarsat) * 1.3 : 0,
+    ];
+
+    return response()->json($data);
 });

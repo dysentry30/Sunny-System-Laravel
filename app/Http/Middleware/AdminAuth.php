@@ -146,6 +146,9 @@ class AdminAuth
         if (Gate::any(['super-admin', 'admin-ccm', 'admin-crm', 'approver-crm', 'admin-csi', 'risk-crm'])) {
             return $next($request);
         }
+        if (auth()->user()->email == "user-poc@sunny.com") {
+            return $next($request);
+        }
         if (Gate::allows('ccm')) {
             $concat_allowed_url .= $allowed_url_admin_kontrak;
         }
@@ -161,6 +164,7 @@ class AdminAuth
         if (auth()->user()->check_team_proyek) {
             $concat_allowed_url .= $allowed_url_team_proyek;
         }
+        
         $path = explode(" ", str_replace("-", " ", $request->path()));
         if (count($path) > 1) {
             foreach ($path as $i => $p) {
@@ -203,6 +207,10 @@ class AdminAuth
 
 
         Alert::error('Error', 'Tidak bisa mengakses halaman ' . $path);
+
+        if (Gate::allows("poc")) {
+            return redirect("/rab-proyek");
+        }
 
         if (Gate::allows('crm')) {
             return redirect("/dashboard");

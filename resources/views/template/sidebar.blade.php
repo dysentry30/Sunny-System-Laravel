@@ -1930,6 +1930,35 @@
                             <!--end::Menu Colapse-->
                         @endcanany
 
+                        @canany(['poc'])
+                            <!--begin::Menu Colapse-->
+                            <div class="menu-item">
+                                <a class="menu-link " href="/analisa-harga-satuan"
+                                    style="color:white; padding-left:20px; {{ Request::Path() == 'analisa-harga-satuan' ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <i class="bi bi-person-lines-fill text-white" style="font-size: 20px"></i>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Master Analisa Harga Satuan</span>
+                                </a>
+                            </div>
+                            <!--end::Menu Colapse-->
+                            <!--begin::Menu Colapse-->
+                            <div class="menu-item">
+                                <a class="menu-link " href="/rab-proyek"
+                                    style="color:white; padding-left:20px; {{ Request::Path() == 'rab-proyek' ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <i class="bi bi-cash-stack text-white" style="font-size: 20px"></i>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Estimasi</span>
+                                </a>
+                            </div>
+                            <!--end::Menu Colapse-->
+                        @endcanany
+
                         <br><br><br>
 
                     </div>
