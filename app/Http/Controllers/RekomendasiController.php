@@ -528,11 +528,11 @@ class RekomendasiController extends Controller
                             //     );
                             //     return redirect()->back();
                             // });
-                            $message = nl2br("Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan hasil asesmen " . $proyek->proyekBerjalan->customer->name . " untuk permohonan pemberian rekomendasi tahap I pada proyek $proyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
-                            $sendEmailUser = sendNotifEmail($target->Pegawai, "Pemberitahuan Hasil Assessment Pengajuan Nota Rekomendasi I", $message, $this->isnomorTargetActive);
-                            if (!$sendEmailUser) {
-                                return redirect()->back();
-                            }
+                            // $message = nl2br("Yth Bapak/Ibu " . $target->Pegawai->nama_pegawai . "\nDengan ini menyampaikan hasil asesmen " . $proyek->proyekBerjalan->customer->name . " untuk permohonan pemberian rekomendasi tahap I pada proyek $proyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
+                            // $sendEmailUser = sendNotifEmail($target->Pegawai, "Pemberitahuan Hasil Assessment Pengajuan Nota Rekomendasi I", $message, $this->isnomorTargetActive);
+                            // if (!$sendEmailUser) {
+                            //     return redirect()->back();
+                            // }
                         }
 
                         // $approved_verifikasi = collect(json_decode($proyek->approved_penyusun));
@@ -1623,9 +1623,19 @@ class RekomendasiController extends Controller
             $matriks_category = MatriksApprovalRekomendasi::all()->groupBy(['klasifikasi_proyek', 'kategori']);
         } else {
             $proyeks_rekomendasi_final = NotaRekomendasi::whereIn('unit_kerja', $unit_kerjas)->where('is_request_rekomendasi', '!=', null)->get()->filter(function ($p) use ($matriks_user) {
+                if ($matriks_user->contains(function ($item) {
+                    return $item->kategori == "Penyusun" && $item->kode_unit_kerja != "RMD";
+                })) {
+                    return (!is_null($p->is_disetujui) || $p->Proyek->is_cancel);
+                }
                 return (!is_null($p->is_disetujui) && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0 || $p->Proyek->is_cancel);
             });
             $proyeks_proses_rekomendasi = NotaRekomendasi::whereIn('unit_kerja', $unit_kerjas)->where('is_request_rekomendasi', '!=', null)->get()->filter(function ($p) use ($matriks_user) {
+                if ($matriks_user->contains(function ($item) {
+                    return $item->kategori == "Penyusun" && $item->kode_unit_kerja != "RMD";
+                })) {
+                    return (is_null($p->is_disetujui) && !$p->Proyek->is_cancel);
+                }
                 return (is_null($p->is_disetujui) && $matriks_user->where("klasifikasi_proyek", $p->klasifikasi_pasdin)->count() > 0 && !$p->Proyek->is_cancel);
             });
             $matriks_category = MatriksApprovalRekomendasi::all()->groupBy(['klasifikasi_proyek', 'kategori', 'departemen']);
@@ -1819,30 +1829,29 @@ class RekomendasiController extends Controller
                 // $pdfMerger->add(public_path('file-profile-risiko' . '/' . $proyek->file_penilaian_risiko));
                 $pdfMerger->add(public_path('file-profile-risiko' . '/' . $notaRekomendasi->file_penilaian_risiko));
 
-                if (!empty($proyek->DokumenPendukungPasarDini)) {
+                if ($proyek->DokumenPendukungPasarDini->isNotEmpty()) {
                     foreach ($proyek->DokumenPendukungPasarDini as $dokumen) {
                         $pdfMerger->add(public_path('dokumen-pendukung-pasdin' . '/' . $dokumen->id_document));
                     }
                 }
 
-                if (!empty($proyek->proyekBerjalan->customer->AHU)) {
+                if ($proyek->proyekBerjalan->customer->AHU->isNotEmpty()) {
                     foreach ($proyek->proyekBerjalan->customer->AHU as $dokumen) {
                         $pdfMerger->add(public_path('customer-file' . '/' . $dokumen->file_document));
                     }
                 }
 
-                if (!empty($proyek->proyekBerjalan->customer->CompanyProfile)) {
+                if ($proyek->proyekBerjalan->customer->CompanyProfile->isNotEmpty()) {
                     foreach ($proyek->proyekBerjalan->customer->CompanyProfile as $dokumen) {
                         $pdfMerger->add(public_path('customer-file' . '/' . $dokumen->file_document));
                     }
                 }
 
-                if (!empty($proyek->proyekBerjalan->customer->LaporanKeuangan)) {
+                if ($proyek->proyekBerjalan->customer->LaporanKeuangan->isNotEmpty()) {
                     foreach ($proyek->proyekBerjalan->customer->LaporanKeuangan as $dokumen) {
                         $pdfMerger->add(public_path('customer-file' . '/' . $dokumen->file_document));
                     }
                 }
-
                 $now = \Carbon\Carbon::now();
                 $file_name = $now->format("dmYHis") . "_nota-persetujuan_" . $proyek->kode_proyek;
                 $pdfMerger->merge(public_path("file-persetujuan" . "/" . $file_name . ".pdf"));

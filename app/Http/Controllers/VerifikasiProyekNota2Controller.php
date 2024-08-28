@@ -424,7 +424,7 @@ class VerifikasiProyekNota2Controller extends Controller
                     $user = Pegawai::where("nip", $getNomorMatriks["nip"])->first();
                     $url = $request->schemeAndHttpHost() . "?nip=" . $user->nip . "&redirectTo=/verifikasi-proyek-nota-2?open=kt_modal_persetujuan_verifikasi_" . $proyek->kode_proyek;
                     $message = "Yth Bapak/Ibu " . $user->nama_pegawai . "\nDengan ini menyampaikan permohonan pemberian rekomendasi untuk proyek " . $proyek->Proyek->nama_proyek . " .\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
-                    $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Pemberian Rekomendasi Verifikasi Proyek Nota Rekomendasi 2", nl2br($message), $this->isnomorTargetActive);
+                    $sendEmailUser = sendNotifEmail($user, "Permohonan Pemberian Rekomendasi Verifikasi Proyek Nota Rekomendasi 2", nl2br($message), $this->isnomorTargetActive);
                     if (!$sendEmailUser) {
                         return redirect()->back();
                     }

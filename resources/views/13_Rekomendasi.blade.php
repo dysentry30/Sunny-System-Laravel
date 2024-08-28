@@ -472,6 +472,7 @@
                                                 <th class="min-w-auto">Progress</th>
                                                 <th class="min-w-auto">Is Cancel</th>
                                                 <th class="min-w-auto">Action</th>
+                                                <th class="min-w-auto">Rincian</th>
                                                 {{-- <th class="min-w-auto" style="display: none">Action</th> --}}
                                             </tr>
                                         </thead>
@@ -872,6 +873,12 @@
                                                                     @endif
                                                             </td>
                                                         @endif
+
+                                                        <td class="text-center">
+                                                            <a href="#kt_modal_rincian_proyek_{{ $proyek->kode_proyek }}"
+                                                                data-bs-toggle="modal"
+                                                                class="btn btn-sm btn-primary text-white">Rincian</a>
+                                                        </td>
                                                     </tr>
                                                 @endforeach
                                             {{-- @endif --}}
@@ -1046,15 +1053,18 @@
                                                             <small class="d-flex flex-row justify-content-between">
                                                                 <p class="badge {{ $style }}">{{ $status_rekomendasi }}</p>
                                                                 <br>
-                                                                @if (($matriks_user?->contains('kategori', 'Pengajuan') && $matriks_user?->where('kategori', 'Pengajuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first()) ||
+                                                                @if ($matriks_user->count() < 30 && (($matriks_user?->contains('kategori', 'Pengajuan') && $matriks_user?->where('kategori', 'Pengajuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first()) ||
                                                                 ($matriks_user?->contains('kategori', 'Penyusun') && $matriks_user?->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '>', 1)?->first())
-                                                                )
+                                                                ))
                                                                     
                                                                 @else
                                                                     @if (empty($nota_rekomendasi->file_persetujuan))
+                                                                    @if ($nota_rekomendasi->Proyek->is_cancel)
+                                                                    @else
                                                                     <button type="button" class="btn btn-primary p-2" onclick="generateFile('{{ $proyek->kode_proyek }}')">
                                                                         Generate
                                                                     </button>  
+                                                                    @endif
                                                                     @else
                                                                     <button type="button" class="btn btn-primary p-2" data-bs-toggle="modal" data-bs-target="#kt_modal_view_dokumen_persetujuan_{{ $proyek->kode_proyek }}">
                                                                         View
@@ -3266,6 +3276,232 @@
                 </div>
                 <div class="modal-footer">
 
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @php
+        $proyek = $nota_rekomendasi->Proyek;
+        $hasil_assessment = collect(json_decode($nota_rekomendasi->hasil_assessment));
+        $is_exist_customer = $proyek->proyekBerjalan?->customer;
+        $internal_score = 0;
+        $eksternal_score = 0;
+
+        if ($hasil_assessment->isNotEmpty()) {
+            $internal_score = $hasil_assessment->sum(function ($ra) {
+                if ($ra->kategori == 'Internal') {
+                    return $ra->score;
+                }
+            });
+            $eksternal_score = $hasil_assessment->sum(function ($ra) {
+                if ($ra->kategori == 'Eksternal') {
+                    return $ra->score;
+                }
+            });
+        }
+    @endphp
+    <div class="modal fade" id="kt_modal_rincian_proyek_{{ $proyek->kode_proyek }}" tabindex="-1"
+        aria-labelledby="kt_modal_rincian_proyek_{{ $proyek->kode_proyek }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detail Proyek</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"  onclick="deleteBackdrop()" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <b>
+                        <p>Nota Rekomendasi Tahap I Seleksi Pengguna Jasa Non Green Lane</p>
+                    </b>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr class="text-bg-dark">
+                                <th>No</th>
+                                <th>Item</th>
+                                <th>Uraian</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                                $nilaiKriteriaPenggunaJasa =
+                                    $nota_rekomendasi->KriteriaPenggunaJasaDetail
+                                        ?->filter(function ($score) {
+                                            return $score->item != null;
+                                        })
+                                        ->sum('nilai') ?? null;
+                                $style = 'badge-light-dark';
+                                $text = 'Belum Ditentukan';
+                                if (!empty($nilaiKriteriaPenggunaJasa)) {
+                                    $text =
+                                        App\Models\PenilaianPenggunaJasa::all()
+                                            ->filter(function ($item) use ($nilaiKriteriaPenggunaJasa) {
+                                                if ($item->dari_nilai <= $nilaiKriteriaPenggunaJasa && $item->sampai_nilai >= $nilaiKriteriaPenggunaJasa) {
+                                                    return $item;
+                                                }
+                                            })
+                                            ->first()->nama ?? '-';
+
+                                    switch ($text) {
+                                        case 'Risiko Rendah':
+                                            $style = 'badge-light-success';
+                                            break;
+                                        case 'Risiko Tinggi':
+                                            $style = 'badge-light-warning';
+                                            break;
+                                        case 'Risiko Moderat':
+                                            $style = 'badge-warning';
+                                            break;
+                                        case 'Risiko Ekstrem':
+                                            $style = 'badge-danger';
+                                            break;
+
+                                        default:
+                                            $style = '';
+                                            break;
+                                    }
+                                }
+                            @endphp
+                            <tr>
+                                <td>1</td>
+                                <td>Nama Proyek</td>
+                                <td>{{ $proyek->nama_proyek }}</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Lokasi Proyek</td>
+                                <td>{{ $proyek->Provinsi->province_name ?? '-' }}</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Nama Pengguna Jasa</td>
+                                <td>{{ $proyek->proyekBerjalan->name_customer ?? '-' }}</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Instansi Pengguna Jasa</td>
+                                <td>{{ $proyek->proyekBerjalan->Customer->jenis_instansi ?? '-' }}</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>Sumber Pendanaan Proyek</td>
+                                <td>{{ $proyek->sumber_dana }}</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>Perkiraan Nilai Proyek</td>
+                                <td>Rp. {{ number_format($proyek->nilaiok_awal, 0, '.', '.') }}</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>Kategori Proyek</td>
+                                <td>{{ $proyek->klasifikasi_pasdin ?? '-' }}</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>
+                                    <a href="/customer/view/{{ $proyek->proyekBerjalan->customer->id_customer }}/{{ $proyek->proyekBerjalan->customer->name }}"
+                                        target="_blank" class="text-hover-primary">
+                                        Assessment Eksternal Atas Pengguna Jasa
+                                    </a>
+                                </td>
+                                <td>{{ $eksternal_score ?? '-' }}</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td>
+                                    <a href="/customer/view/{{ $proyek->proyekBerjalan->customer->id_customer }}/{{ $proyek->proyekBerjalan->customer->name }}"
+                                        target="_blank" class="text-hover-primary">
+                                        Assessment Internal Atas Pengguna Jasa
+                                    </a>
+                                </td>
+                                <td>{{ $internal_score ?? '-' }}</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td>
+                                    <a href="#kt_user_edit_kriteria_{{ $proyek->kode_proyek }}" target="_blank"
+                                        data-bs-toggle="modal" class="text-hover-primary">
+                                        Profile Risiko Pengguna Jasa
+                                    </a>
+                                </td>
+                                <td>
+                                    <small class="badge {{ $style }}">
+                                        {{ $text }}
+                                    </small>
+                                    (score : {{ $nilaiKriteriaPenggunaJasa }})
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>11</td>
+                                <td>Catatan</td>
+                                <td>
+                                    @if (!is_null($nota_rekomendasi->is_penyusun_approved))
+                                        {!! nl2br($nota_rekomendasi->catatan_nota_rekomendasi) !!}
+                                    @endif
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+
+                    {{-- <textarea name="note-rekomendasi" id="note-rekomendasi" rows="4" class="form-control form-control-solid"></textarea> --}}
+                    @if (!empty($proyek->DokumenPendukungPasarDini))
+                        <h5>File Preview Pendukung Pasar Dini: </h5>
+                        <div class="text-center">
+                            @foreach ($proyek->DokumenPendukungPasarDini as $dokumen)
+                            <iframe src="{{ asset('dokumen-pendukung-pasdin' . '\\' . $dokumen->id_document) }}"
+                                width="100%" height="600px"></iframe>
+                            @endforeach
+                        </div>
+                        <hr>
+                    @endif
+                    @if (!empty($proyek->proyekBerjalan->customer->AHU))
+                        <h5>File Preview AHU: </h5>
+                        <div class="text-center">
+                            @foreach ($proyek->proyekBerjalan->customer->AHU as $dokumen)
+                            <iframe src="{{ asset('customer-file' . '\\' . $dokumen->file_document) }}"
+                                width="100%" height="600px"></iframe>
+                            @endforeach
+                        </div>
+                    @endif
+                    @if (!empty($proyek->proyekBerjalan->customer->CompanyProfile))
+                        <hr>
+                        <h5>File Preview Company Profile: </h5>
+                        <div class="text-center">
+                            @foreach ($proyek->proyekBerjalan->customer->CompanyProfile as $dokumen)
+                            <iframe src="{{ asset('customer-file' . '\\' . $dokumen->file_document) }}"
+                                width="100%" height="600px"></iframe>
+                            @endforeach
+                        </div>
+                    @endif
+                    @if (!empty($proyek->proyekBerjalan->customer->LaporanKeuangan))
+                        <hr>
+                        <h5>File Preview Laporan Keuangan: </h5>
+                        <div class="text-center">
+                            @foreach ($proyek->proyekBerjalan->customer->LaporanKeuangan as $dokumen)
+                            <iframe src="{{ asset('customer-file' . '\\' . $dokumen->file_document) }}"
+                                width="100%" height="600px"></iframe>
+                            @endforeach
+                        </div>
+                    @endif
+                    @if (!empty($nota_rekomendasi->file_pengajuan))
+                        <h5>Form Pengajuan Rekomendasi: </h5>
+                        <div class="text-center">
+                            <iframe src="{{ asset('file-pengajuan' . '\\' . $nota_rekomendasi->file_pengajuan) }}"
+                                width="100%" height="600px"></iframe>
+                        </div>
+                    @endif
+                    @if (!empty($nota_rekomendasi->file_rekomendasi))
+                        <hr>
+                        <h5>Hasil Assessment: </h5>
+                        <div class="text-center">
+                            <iframe src="{{ asset('file-rekomendasi' . '\\' . $nota_rekomendasi->file_rekomendasi) }}"
+                                width="100%" height="600px"></iframe>
+                        </div>
+                    @endif
+                </div>
+                <div class="modal-footer row">
                 </div>
             </div>
         </div>

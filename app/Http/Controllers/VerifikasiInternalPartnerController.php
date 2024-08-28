@@ -474,12 +474,12 @@ class VerifikasiInternalPartnerController extends Controller
                 return redirect()->back()->with(["modal" => $data["modal-name"]]);
             }
 
-            $checkValidateUser = $this->checkValidateUserMatriks(auth()->user(), $proyek->Proyek, "Persetujuan");
+            // $checkValidateUser = $this->checkValidateUserMatriks(auth()->user(), $proyek->Proyek, "Persetujuan");
 
-            if (!$checkValidateUser) {
-                Alert::error("Error", "Anda tidak dapat melakukan approval. Hubungi Admin!");
-                return redirect()->back()->with(["modal" => $data["modal-name"]]);
-            }
+            // if (!$checkValidateUser) {
+            //     Alert::error("Error", "Anda tidak dapat melakukan approval. Hubungi Admin!");
+            //     return redirect()->back()->with(["modal" => $data["modal-name"]]);
+            // }
 
             if (isset($data["is_approved"])) {
                 $approvedPersetujuan = collect(json_decode($proyek->persetujuan_approved));
@@ -502,7 +502,7 @@ class VerifikasiInternalPartnerController extends Controller
                     $user = Pegawai::where("nip", $getNomorMatriks["nip"])->first();
                     $url = $request->schemeAndHttpHost() . "?nip=" . $user->nip . "&redirectTo=/verifikasi-internal-partner?open=kt_modal_persetujuan_verifikasi_" . $proyek->kode_proyek;
                     $message = "Yth Bapak/Ibu " . $user->nama_pegawai . "\nDengan ini menyampaikan hasil verifikasi internal partner untuk proyek " . $proyek->Proyek->nama_proyek . " untuk permohonan pengajuan assessment partner.\n\nTerimakasih 🙏🏻";
-                    $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Pemberian Rekomendasi Verifikasi Internal Partner", nl2br($message), $this->isnomorTargetActive);
+                    $sendEmailUser = sendNotifEmail($user, "Permohonan Pemberian Rekomendasi Verifikasi Internal Partner", nl2br($message), $this->isnomorTargetActive);
                     if (!$sendEmailUser) {
                         return redirect()->back();
                     }
@@ -524,7 +524,7 @@ class VerifikasiInternalPartnerController extends Controller
                         $user = Pegawai::where("nip", $getNomorMatriks["nip"])->first();
                         $url = $request->schemeAndHttpHost() . "?nip=" . $user->nip . "&redirectTo=/verifikasi-internal-partner?open=kt_modal_persetujuan_verifikasi_" . $proyek->kode_proyek;
                         $message = "Yth Bapak/Ibu " . $user->nama_pegawai . "\nDengan ini menyampaikan hasil verifikasi internal partner untuk proyek " . $proyek->Proyek->nama_proyek . " untuk permohonan pengajuan assessment partner.\n\nTerimakasih 🙏🏻";
-                        $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Pemberian Rekomendasi Verifikasi Internal Partner", nl2br($message), $this->isnomorTargetActive);
+                        $sendEmailUser = sendNotifEmail($user, "Permohonan Pemberian Rekomendasi Verifikasi Internal Partner", nl2br($message), $this->isnomorTargetActive);
                         if (!$sendEmailUser) {
                             return redirect()->back();
                         }

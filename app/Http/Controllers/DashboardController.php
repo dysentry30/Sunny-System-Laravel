@@ -1556,7 +1556,9 @@ class DashboardController extends Controller
             $unit_kerja_get = [$request->query("unit-kerja")];
         } else if ($dop_select) {
             $dop_get = [$request->query("dop")];
-            $unit_kerja_get = [$unit_kerjas->where("dop", "=", $dop_select)->value("divcode")];
+            $unit_kerja_get = $unit_kerjas->where("dop", "=", $dop_select)->map(function ($item) {
+                return $item->divcode;
+            })->values();
             $unit_kerjas =   $unit_kerjas->where("dop", "=", $dop_select);
             // dd($dop_get, $unit_kerja_get);
         } else if ($unit_kerja_select) {
@@ -2947,7 +2949,9 @@ class DashboardController extends Controller
             $unit_kerja_get = [$request->query("unit-kerja")];
         } else if ($dop_select) {
             $dop_get = [$request->query("dop")];
-            $unit_kerja_get = [$unit_kerjas->where("dop", "=", $dop_select)->value("divcode")];
+            $unit_kerja_get = $unit_kerjas->where("dop", "=", $dop_select)->map(function ($item) {
+                return $item->divcode;
+            })->values();
             $unit_kerjas =   $unit_kerjas->where("dop", "=", $dop_select);
             // dd($dop_get, $unit_kerja_get);
         } else if ($unit_kerja_select) {
@@ -4349,8 +4353,8 @@ class DashboardController extends Controller
             // } catch (\Exception $e) {
             //     $file_modified = date_create($file);
             // }
-            // $file_modified = date_create(strtotime($file));
-            $file_modified = date_create($file);
+            $file_modified = date_create(strtotime($file));
+            // $file_modified = date_create($file);
             $now = date_create("now");
             if ($now->diff($file_modified)->i > 1) {
                 File::delete(public_path("excel/$file"));

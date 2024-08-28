@@ -646,7 +646,7 @@ Route::middleware(["web"])->group(function () {
                 ], 403);
             }
 
-            setLogging("api/piutang", "Data Piutang " . date("Y/m/d H:i:s"), $request->collect()->toArray());
+            setLogging("api/piutang", "Data Piutang =>", $request->collect()->toArray());
 
             return response()->json([
                 "status" => "success",

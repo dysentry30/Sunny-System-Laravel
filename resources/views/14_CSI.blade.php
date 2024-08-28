@@ -154,7 +154,7 @@
                                                 <!--End :: List Profit Center-->
 
                                                 <!--Begin :: List Nama Proyek-->
-                                                <td>{{ $proyek->proyek_shortname }}</td>
+                                                <td>{{ $proyek->proyek_name }}</td>
                                                 <!--End :: List Nama Proyek-->
 
                                                 <!--Begin :: List Nama Proyek-->

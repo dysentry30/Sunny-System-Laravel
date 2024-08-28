@@ -18,4 +18,8 @@ class NotaRekomendasi2 extends Model
     {
         return $this->hasMany(KriteriaProjectSelectionDetail::class, 'kode_proyek', 'kode_proyek');
     }
+    public function ProyekBerjalan()
+    {
+        return $this->hasOne(ProyekBerjalans::class, 'kode_proyek', 'kode_proyek');
+    }
 }

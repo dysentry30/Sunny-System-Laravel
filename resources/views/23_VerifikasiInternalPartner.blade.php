@@ -554,7 +554,7 @@
                                                         @endif
                                                     </td>
                                                     <td class="text-center">
-                                                        @canany(['super-admin', 'approver-crm', 'risk-crm'])
+                                                        @canany(['super-admin', 'approver-crm', 'risk-crm', 'admin-crm', 'user-crm'])
                                                             @if (!is_null($item->is_persetujuan_approved) && $item->is_persetujuan_approved)
                                                                 <a href="{{ asset('file-nota-rekomendasi-2\\file-verifikasi-internal-partner\\') . $item->nama_dokumen }}" class="btn btn-sm btn-primary text-white" target="_blank">Download</a>
                                                             @endif

@@ -87,12 +87,12 @@
                                     data-bs-target="#kt_modal_input_perubahan">
                                     New</a>
                                 </div>
-                                <div class="d-flex">
+                                {{-- <div class="d-flex">
                                     <a class="btn btn-sm btn-primary"
                                     style="background-color:#008CB4;" href="#" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_final">
                                     Upload</a>
-                                </div>
+                                </div> --}}
                                 @php
                                     $month = !empty($periode)? $periode : ((int) date('m') == 1 ? 12 : ((int)date('d') < 15 ? (int) date('m') : (int) date('m') - 1));
                                     // $is_approved = $contracts->ContractApproval?->where('periode', '=', $month)?->where('is_locked', '=', true);

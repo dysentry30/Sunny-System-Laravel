@@ -377,7 +377,8 @@
                                 </a>
                             </div>
                         @endif --}}
-
+                        @if (str_contains(Auth::user()->unit_kerja, "G") || str_contains(Auth::user()->unit_kerja, "H") || str_contains(Auth::user()->unit_kerja, "J") || str_contains(Auth::user()->unit_kerja, "P") || Auth::user()->can("super-admin"))
+                            
                         @canany(['super-admin', 'admin-crm', 'approver-crm', 'risk-crm', 'user-crm'])
                             {{-- @if (str_contains(Request::url(), '/rekomendasi')||
                                 str_contains(Request::url(), '/green-lane') ||
@@ -549,6 +550,8 @@
                                 </a>
                             </div>
                         @endcanany
+                        
+                        @endif
                         {{-- @if (auth()->user()->check_administrator || $adminPIC || auth()->user()->check_user_sales )
                             <div class="menu-item">
                                 <a class="menu-link " href="/rekomendasi"

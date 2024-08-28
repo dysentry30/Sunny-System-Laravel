@@ -264,6 +264,9 @@
                                             @forelse ($proyeks_perolehan as $proyek)
                                                 @php
                                                     $total_forecast = $proyek->Forecasts->filter(function($f) use($filterBulan, $filterTahun) {
+                                                        if (empty($filterBulan)) {
+                                                            return $f->periode_prognosa == (int) date("m") - 1 && $f->tahun == $filterTahun;
+                                                        }
                                                         // $date = date_create($f->created_at);
                                                         // return $f->periode_prognosa == (int) date("m") && date_format($date, "Y") == date("Y");
                                                         return $f->periode_prognosa == $filterBulan && $f->tahun == $filterTahun;
@@ -461,7 +464,7 @@
 
                                                     <!--begin::Email-->
                                                     <td>
-                                                        @switch($proyek->jenis_proyek)
+                                                        @switch($proyek->type_code)
                                                             @case('INTERN')
                                                                 Internal
                                                             @break
@@ -688,7 +691,7 @@
 
                                                     <!--begin::Email-->
                                                     <td>
-                                                        @switch($proyek->jenis_proyek)
+                                                        @switch($proyek->type_code)
                                                             @case('INTERN')
                                                                 Internal
                                                             @break

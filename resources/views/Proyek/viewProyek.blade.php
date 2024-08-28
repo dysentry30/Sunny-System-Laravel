@@ -130,7 +130,7 @@
                                 <!--end::Button-->
 
                                 <!--begin::Button-->
-                                @canany(['super-admin', 'approver-crm', 'user-crm'])
+                                @canany(['super-admin', 'admin-crm', 'approver-crm', 'user-crm'])
                                 @if ($proyek->UnitKerja?->dop != "EA")
                                     @if (($proyek->stage == 8 && $proyek->is_need_approval_terkontrak && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek?->is_revisi))
                                         <button type="button" class="btn btn-sm btn-success ms-2" data-bs-toggle="modal" data-bs-target="#modal-send-approval-terkontrak-proyeks">Ajukan Approval</button>
@@ -2055,7 +2055,7 @@
                                                          <div class="w-50">
                                                              <input type="file"
                                                                  class="form-control form-control-sm form-input-solid"
-                                                                 name="dokumen-pendukung-pasar-dini" accept=".pdf" {{ !is_null($proyek->NotaRekomendasi?->is_request_rekomendasi) ? "disabled" : "" }}>
+                                                                 name="dokumen-pendukung-pasar-dini" accept=".pdf" {{ is_null($proyek->NotaRekomendasi?->is_request_rekomendasi) || $proyek->NotaRekomendasi->is_revisi_pengajuan ? "" : "disabled" }}>
                                                          </div>
                                                          <h6 id="error-dokumen-pendukung-pasar-dini" class="text-danger fw-normal"
                                                              style="display: none">*File
@@ -2103,8 +2103,8 @@
                                                                         <!--end::Column-->
                                                                         <!--begin::Action-->
                                                                         <td class="text-center align-middle">
-                                                                            @canany(['super-admin', 'user-crm'])
-                                                                            @if (is_null($proyek->NotaRekomendasi?->is_request_rekomendasi))
+                                                                            @canany(['super-admin', 'user-crm', 'admin-crm'])
+                                                                            @if (is_null($proyek->NotaRekomendasi?->is_request_rekomendasi) || $proyek->NotaRekomendasi->is_revisi_pengajuan)
                                                                             <small>
                                                                                 <p data-bs-toggle="modal"
                                                                                     data-bs-target="#kt_dokumen_pendukung_pasdin_delete_{{ $dokumen->id }}"

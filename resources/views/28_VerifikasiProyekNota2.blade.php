@@ -363,7 +363,7 @@
                                                     <td class="text-center">{{ $item->UnitKerja->unit_kerja }}</td>
                                                     <td class="text-center">{{ $item->Proyek->jenis_proyek == "J" ? "JO" : ($item->Proyek->jenis_proyek == "I" ? "Internal" : ($item->Proyek->jenis_proyek == "N" ? "Eksternal" : ""))  }}</td>
                                                     <td class="text-center">{{ $item->Proyek->klasifikasi_pasdin }}</td>
-                                                    <td class="text-end">{{ number_format($item->Proyek->nilaiok_awal, 0, '', '.') }}</td>
+                                                    <td class="text-end">{{ $item->Proyek->is_rkap ? number_format($item->Proyek->nilai_rkap, 0, '.', ',') : number_format($item->Proyek->nilaiok_awal, 0, '.', ',') }}</td>
                                                     <td class="text-center">
                                                         @php
                                                             $style = '';
@@ -452,7 +452,7 @@
                                                         @endif
                                                     </td>
                                                     <td class="text-center">
-                                                        @canany(['super-admin', 'approver-crm', 'risk-crm'])
+                                                        @canany(['super-admin', 'approver-crm', 'risk-crm', 'admin-crm'])
                                                             @if ($item->is_persetujuan_approved)
                                                                 <button class="btn btn-sm btn-primary" onclick="showModalAction('kt_modal_final', '{{ $item->kode_proyek }}')">Lihat</button>
                                                             @elseif (!empty($matriks_user) && $matriks_user->where('divisi_id', $item->divisi_id)->where('departemen_code', $item->departemen_id)->where('kategori', 'Persetujuan')->first() && $item->is_rekomendasi_approved)
@@ -542,7 +542,7 @@
                                                     <td class="text-center">{{ $item->UnitKerja->unit_kerja }}</td>
                                                     <td class="text-center">{{ $item->Proyek->jenis_proyek == "J" ? "JO" : ($item->Proyek->jenis_proyek == "I" ? "Internal" : ($item->Proyek->jenis_proyek == "N" ? "Eksternal" : ""))  }}</td>
                                                     <td class="text-center">{{ $item->Proyek->klasifikasi_pasdin }}</td>
-                                                    <td class="text-end">{{ number_format($item->Proyek->nilaiok_awal, 0, '', '.') }}</td>
+                                                    <td class="text-end">{{ $item->Proyek->is_rkap ? number_format($item->Proyek->nilai_rkap, 0, '.', ',') : number_format($item->Proyek->nilaiok_awal, 0, '.', ',') }}</td>
                                                     <td class="text-center">
                                                         <p class="m-0 badge badge-sm {{ !is_null($item->is_persetujuan_approved) && $item->is_persetujuan_approved ? "bg-success" : (!is_null($item->is_persetujuan_approved) && !$item->is_persetujuan_approved ? "bg-danger" : "bg-primary") }}">{{ !is_null($item->is_persetujuan_approved) && $item->is_persetujuan_approved ? "Disetujui" : (!is_null($item->is_persetujuan_approved) && !$item->is_persetujuan_approved ? "Ditolak" : "On Process") }}</p>
                                                     </td>
@@ -555,7 +555,7 @@
                                                         @endif
                                                     </td>
                                                     <td class="text-center">
-                                                        @canany(['super-admin', 'approver-crm', 'risk-crm'])
+                                                        @canany(['super-admin', 'approver-crm', 'risk-crm', 'admin-crm'])
                                                             @if (!is_null($item->is_persetujuan_approved) && $item->is_persetujuan_approved)
                                                             <a href="{{ asset('file-nota-rekomendasi-2\\file-verifikasi-proyek-nota-2\\') . $item->nama_dokumen }}" class="btn btn-sm btn-primary text-white" target="_blank">Download</a>
                                                             @endif
@@ -684,7 +684,7 @@
                                     <tr>
                                         <td>3</td>
                                         <td>Nilai Penawaran</td>
-                                        <td>Rp.{{ number_format($proyek->Proyek->nilaiok_awal, 0, '.', ',') }}</td>
+                                        <td>Rp.{{ $proyek->Proyek->is_rkap ? number_format($proyek->Proyek->nilai_rkap, 0, '.', ',') : number_format($proyek->Proyek->nilaiok_awal, 0, '.', ',') }}</td>
                                     </tr>
                                     <tr>
                                         <td>4</td>
@@ -747,7 +747,7 @@
                                     <tr>
                                         <td>3</td>
                                         <td>Nilai Penawaran</td>
-                                        <td>Rp.{{ number_format($proyek->Proyek->nilaiok_awal, 0, '.', ',') }}</td>
+                                        <td>Rp.{{ $proyek->Proyek->is_rkap ? number_format($proyek->Proyek->nilai_rkap, 0, '.', ',') : number_format($proyek->Proyek->nilaiok_awal, 0, '.', ',')  }}</td>
                                     </tr>
                                     <tr>
                                         <td>4</td>

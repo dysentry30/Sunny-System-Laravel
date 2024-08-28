@@ -7636,3 +7636,20 @@ Route::get('tes-lock-change', [ContractApprovalController::class, 'lockChangeFro
 Route::get('tes-approve-change', [ContractApprovalController::class, 'setApproveFromBackdoor']);
 
 Route::get('tes-notif', [NotificationController::class, 'sendNotificationApproval']);
+
+Route::get('tes-generate', function (Request $request) {
+    $proyek = Proyek::find("PJPD021");
+    $hasil_assessment = collect(json_decode($proyek->NotaRekomendasi->hasil_assessment));
+    // dd($hasil_assessment);
+    createWordRekomendasi($proyek, $hasil_assessment, null);
+    // createWordNotaRekomendasiSetuju($proyek->NotaRekomendasi, $hasil_assessment, $request);
+    // createWordPersetujuanNota2($proyek->NotaRekomendasi2, $request);
+});
+
+Route::get('tes-generate-2', function (Request $request) {
+    $proyek = Proyek::find("JJPD008");
+    // $newController = new VerifikasiInternalPartnerController();
+    // $newController->generateFinalDokumen($request, $proyek);
+    // createWordNotaRekomendasiSetuju($proyek->NotaRekomendasi, $hasil_assessment, $request);
+    mergeDokumenKelengkapanProject($proyek->NotaRekomendasi2);
+});

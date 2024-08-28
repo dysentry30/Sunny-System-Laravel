@@ -5148,8 +5148,11 @@ class ContractManagementsController extends Controller
         $proyek = ProyekPISNew::select('pemberi_kerja_code', 'profit_center')->where('spk_intern_no', $kode_spk)->first();
         // dd($kode_spk);
         // $kode_spk = "MJBG08";
-        $current = new DateTime();
-        $str_current = $current->format('Ym');
+        // $current = new DateTime();
+        // $str_current = $current->format('Ym');
+        $mounth = date("m") != 1 ? date("m") - 1 : 12;
+        $year = $mounth != 12 ? date("Y") : date("Y") - 1;
+        $str_current = strlen($mounth) == 1 ? (string)$year . "0" . (string)$mounth : (string)$year . (string)$mounth;
         // $str_current = "202408";
         $is_exist_progress_period = ProyekProgress::where("kode_spk", "=", $kode_spk)->where("periode", "=", $str_current)->first();
         // dd($is_exist_progress_period);

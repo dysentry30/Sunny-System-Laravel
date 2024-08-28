@@ -37,7 +37,7 @@
             line-height: 1.5cm;
         }
     </style>
-    <h5>Lampiran 11.1. Verifikasi Internal Penentuan Proyek Green Lane atau Non Green lane</h5>
+    <h5 style="margin-top: 0; padding:0">Lampiran 11.1. Verifikasi Internal Penentuan Proyek Green Lane atau Non Green lane</h5>
     @php
         $is_green_lane_nota_2 = checkGreenLaneNota2($proyek);
     @endphp
@@ -163,7 +163,6 @@
     </table>
     <br>
     <p style="font-size: 0.8rem; margin-top: 0px; margin:0px; padding:0px;">Tanggal, {{ \Carbon\Carbon::now()->translatedFormat("d F Y") }}</p>
-    <br>
     <br>
     <table style="width:100%; margin:0px; padding:0px;">
         <tr>

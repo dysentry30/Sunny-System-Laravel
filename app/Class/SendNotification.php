@@ -30,7 +30,8 @@ class SendNotification
         $insertNotifDatabase = $this->insertNotificationToDatabase($user, $proyek, $category, $sub_category, $messageing[1]);
 
         if ($insertNotifDatabase) {
-            $message = CloudMessage::withTarget('token', $user->fcm_token)->withNotification([
+            // $message = CloudMessage::withTarget('token', $user->fcm_token)->withNotification([
+            $message = CloudMessage::withTarget('topic', "global")->withNotification([
                 "title" => $messageing[0],
                 "body" => $messageing[1]
             ])->withData($data);
