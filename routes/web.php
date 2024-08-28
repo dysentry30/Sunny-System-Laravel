@@ -8436,7 +8436,7 @@ Route::group(['prefix' => 'analisa-harga-satuan'], function () {
 
 Route::group(["prefix" => "rab-proyek"], function () {
     Route::get('/', function () {
-        $proyeks = Proyek::where("dop", "!=", "EA")->where("tahun_perolehan", date("Y"))->where("tipe_proyek", "P")->get();
+        $proyeks = Proyek::where("dop", "!=", "EA")->where("tahun_perolehan", date("Y"))->where("tipe_proyek", "P")->where("stage",  3)->where("is_cancel", false)->where("is_tidak_lulus_pq", false)->get();
         return view("30_RAB_POC", ["proyeks" => $proyeks]);
     });
 

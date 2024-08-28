@@ -95,11 +95,11 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Total Volume BOQ</td>
-                                                    <td id="total-volume-boq">530.194,79</td>
+                                                    <td id="total-volume-boq"><p class="m-0 text-end">530.194,79</p></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Total Harga BOQ</td>
-                                                    <td id="total-harga-boq">49.187,50</td>
+                                                    <td id="total-harga-boq"><p class="m-0 text-end">49.187,50</p></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -157,6 +157,55 @@
                                         @endforelse
                                     </tbody>
                                     <!--end::Table body-->
+                                    <!--begin::Table footer-->
+                                    <tfoot class="bg-primary">
+                                        <tr>
+                                            <td colspan="4" class="ps-2 text-white"><p class="m-0"><b>Total</b></p></td>
+                                            <td class="text-center text-white">
+                                                <p class="m-0">
+                                                    <b>
+                                                        {{ number_format($materials->sum(function($material){
+                                                            if (!empty($material->MasterHargaSatuan?->volume)) {
+                                                                return (int) $material->MasterHargaSatuan->volume;
+                                                            }else{
+                                                                return 0;
+                                                            }
+                                                        }), 0, ',', '.') }}
+
+                                                    </b>
+                                                </p>
+                                            </td>
+                                            <td class="text-end text-white">
+                                                <p class="m-0">
+                                                    <b>
+                                                        {{ number_format($materials->sum(function($material){
+                                                            if (!empty($material->MasterHargaSatuan?->harga)) {
+                                                                return (int) $material->MasterHargaSatuan->harga;
+                                                            } else {
+                                                                return 0;
+                                                            }                                                        
+                                                        }), 0, ',', '.') }}
+
+                                                    </b>
+                                                </p>
+                                            </td>
+                                            <td class="text-end text-white pe-2">
+                                                <p class="m-0">
+                                                    <b>
+                                                        {{ number_format($materials->sum(function($material){
+                                                            if (!empty($material->MasterHargaSatuan?->harga) && !empty($material->MasterHargaSatuan?->volume)) {
+                                                                return (int)$material->MasterHargaSatuan->volume * (int)$material->MasterHargaSatuan->harga;
+                                                            } else {
+                                                                return 0;
+                                                            }                                                    
+                                                        }), 0, ',', '.') }}
+
+                                                    </b>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                    <!--end::Table footer-->
                                 </table>
                                 <!--end::Table-->
                             </div>
@@ -204,6 +253,55 @@
                                         @endforelse
                                     </tbody>
                                     <!--end::Table body-->
+                                    <!--begin::Table footer-->
+                                    <tfoot class="bg-primary">
+                                        <tr>
+                                            <td colspan="4" class="ps-2 text-white"><p class="m-0"><b>Total</b></p></td>
+                                            <td class="text-center text-white">
+                                                <p class="m-0">
+                                                    <b>
+                                                        {{ number_format($upahs->sum(function($upah){
+                                                            if (!empty($upah->MasterHargaSatuan?->volume)) {
+                                                                return (int) $upah->MasterHargaSatuan->volume;
+                                                            }else{
+                                                                return 0;
+                                                            }
+                                                        }), 0, ',', '.') }}
+
+                                                    </b>
+                                                </p>
+                                            </td>
+                                            <td class="text-end text-white">
+                                                <p class="m-0">
+                                                    <b>
+                                                        {{ number_format($upahs->sum(function($upah){
+                                                            if (!empty($upah->MasterHargaSatuan?->harga)) {
+                                                                return (int) $upah->MasterHargaSatuan->harga;
+                                                            } else {
+                                                                return 0;
+                                                            }                                                        
+                                                        }), 0, ',', '.') }}
+
+                                                    </b>
+                                                </p>
+                                            </td>
+                                            <td class="text-end text-white pe-2">
+                                                <p class="m-0">
+                                                    <b>
+                                                        {{ number_format($upahs->sum(function($upah){
+                                                            if (!empty($upah->MasterHargaSatuan?->harga) && !empty($upah->MasterHargaSatuan?->volume)) {
+                                                                return (int)$upah->MasterHargaSatuan->volume * (int)$upah->MasterHargaSatuan->harga;
+                                                            } else {
+                                                                return 0;
+                                                            }                                                    
+                                                        }), 0, ',', '.') }}
+
+                                                    </b>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                    <!--end::Table footer-->
                                 </table>
                                 <!--end::Table-->
                             </div>
@@ -251,6 +349,55 @@
                                         @endforelse
                                     </tbody>
                                     <!--end::Table body-->
+                                    <!--begin::Table footer-->
+                                    <tfoot class="bg-primary">
+                                        <tr>
+                                            <td colspan="4" class="ps-2 text-white"><p class="m-0"><b>Total</b></p></td>
+                                            <td class="text-center text-white">
+                                                <p class="m-0">
+                                                    <b>
+                                                        {{ number_format($alats->sum(function($alat){
+                                                            if (!empty($alat->MasterHargaSatuan?->volume)) {
+                                                                return (int) $alat->MasterHargaSatuan->volume;
+                                                            }else{
+                                                                return 0;
+                                                            }
+                                                        }), 0, ',', '.') }}
+
+                                                    </b>
+                                                </p>
+                                            </td>
+                                            <td class="text-end text-white">
+                                                <p class="m-0">
+                                                    <b>
+                                                        {{ number_format($alats->sum(function($alat){
+                                                            if (!empty($alat->MasterHargaSatuan?->harga)) {
+                                                                return (int) $alat->MasterHargaSatuan->harga;
+                                                            } else {
+                                                                return 0;
+                                                            }                                                        
+                                                        }), 0, ',', '.') }}
+
+                                                    </b>
+                                                </p>
+                                            </td>
+                                            <td class="text-end text-white pe-2">
+                                                <p class="m-0">
+                                                    <b>
+                                                        {{ number_format($alats->sum(function($alat){
+                                                            if (!empty($alat->MasterHargaSatuan?->harga) && !empty($alat->MasterHargaSatuan?->volume)) {
+                                                                return (int)$alat->MasterHargaSatuan->volume * (int)$alat->MasterHargaSatuan->harga;
+                                                            } else {
+                                                                return 0;
+                                                            }                                                    
+                                                        }), 0, ',', '.') }}
+
+                                                    </b>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                    <!--end::Table footer-->
                                 </table>
                                 <!--end::Table-->
                             </div>
@@ -298,6 +445,55 @@
                                         @endforelse
                                     </tbody>
                                     <!--end::Table body-->
+                                    <!--begin::Table footer-->
+                                    <tfoot class="bg-primary">
+                                        <tr>
+                                            <td colspan="4" class="ps-2 text-white"><p class="m-0"><b>Total</b></p></td>
+                                            <td class="text-center text-white">
+                                                <p class="m-0">
+                                                    <b>
+                                                        {{ number_format($subKons->sum(function($subkon){
+                                                            if (!empty($subkon->MasterHargaSatuan?->volume)) {
+                                                                return (int) $subkon->MasterHargaSatuan->volume;
+                                                            }else{
+                                                                return 0;
+                                                            }
+                                                        }), 0, ',', '.') }}
+
+                                                    </b>
+                                                </p>
+                                            </td>
+                                            <td class="text-end text-white">
+                                                <p class="m-0">
+                                                    <b>
+                                                        {{ number_format($subKons->sum(function($subkon){
+                                                            if (!empty($subkon->MasterHargaSatuan?->harga)) {
+                                                                return (int) $subkon->MasterHargaSatuan->harga;
+                                                            } else {
+                                                                return 0;
+                                                            }                                                        
+                                                        }), 0, ',', '.') }}
+
+                                                    </b>
+                                                </p>
+                                            </td>
+                                            <td class="text-end text-white pe-2">
+                                                <p class="m-0">
+                                                    <b>
+                                                        {{ number_format($subKons->sum(function($subkon){
+                                                            if (!empty($subkon->MasterHargaSatuan?->harga) && !empty($subkon->MasterHargaSatuan?->volume)) {
+                                                                return (int)$subkon->MasterHargaSatuan->volume * (int)$subkon->MasterHargaSatuan->harga;
+                                                            } else {
+                                                                return 0;
+                                                            }                                                    
+                                                        }), 0, ',', '.') }}
+
+                                                    </b>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                    <!--end::Table footer-->
                                 </table>
                                 <!--end::Table-->
                             </div>
@@ -525,10 +721,11 @@
                 const totalHarga = document.querySelector("#total-harga-boq");
                 const totalVolume = document.querySelector("#total-volume-boq");
                 Swal.fire({title: "Calculate Berhasil", icon: 'success'}).then(()=>{
+                    localStorage.setItem("total-hps", "193.216.866.700");
                     localStorage.setItem("total-harga-boq", "25.423.189.500");
                     localStorage.setItem("total-volume-boq", "861.636");
-                    totalHarga.innerHTML = "25.423.189.500";
-                    totalVolume.innerHTML = "861.636";
+                    totalHarga.firstElementChild.innerHTML = "25.423.189.500";
+                    totalVolume.firstElementChild.innerHTML = "861.636";
                 })
             }, 5000);
         }

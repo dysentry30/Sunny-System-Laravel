@@ -95,7 +95,7 @@
                                     <tr>
                                         <td class="text-center">{{ $proyek->kode_proyek }}</td>
                                         <td class="">
-                                            <a href="/rab-proyek/detail/{{ $proyek->kode_proyek }}" class="text-black text-hover-primary">{{ $proyek->nama_proyek }}</a>
+                                            <a href="/proyek/view/{{ $proyek->kode_proyek }}?link=kt_user_view_overview_prakualifikasi" class="text-black text-hover-primary">{{ $proyek->nama_proyek }}</a>
                                         </td>
                                         <td class="text-center">{{ $proyek->jenis_proyek == "N" ? "Eksternal" : ($proyek->jenis_proyek == "I" ? "Internal" : "JO") }}</td>
                                     </tr>

@@ -3226,7 +3226,8 @@
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span class="required">HPS / Pagu (Rupiah)</span>
+                                                                    <span class="required">HPS / Pagu (Rupiah)</span> &nbsp;
+                                                                    <a href="/rab-proyek/detail/{{ $proyek->kode_proyek }}" class="btn btn-sm btn-primary">Hitung</a>
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
@@ -3234,7 +3235,7 @@
                                                                     class="form-control form-control-solid reformat"
                                                                     id="hps-pagu" name="hps-pagu"
                                                                     value="{{ number_format((int) str_replace('.', '', $proyek->hps_pagu), 0, '.', '.') }}"
-                                                                    placeholder="HPS / Pagu (Rupiah)" />
+                                                                    placeholder="HPS / Pagu (Rupiah)" readonly/>
                                                                 <!--end::Input-->
                                                             </div>
                                                             <!--end::Input group-->
@@ -5112,6 +5113,7 @@
                                                                 <!--begin::Input-->
                                                                 <input type="text"
                                                                     class="form-control form-control-solid reformat {{ $proyek->hps_pagu == null ? 'text-danger' : '' }}"
+                                                                    id="hps-pagu"
                                                                     value="{{ number_format((int) str_replace('.', '', $proyek->hps_pagu), 0, '.', '.') ?? '*HPS/Pagu Belum Ditentukan' }}"
                                                                     placeholder="HPS / Pagu (Rupiah)" readonly />
                                                                 <!--end::Input-->
@@ -6394,6 +6396,7 @@
                                                                 <!--begin::Input-->
                                                                 <input type="text"
                                                                     class="form-control form-control-solid reformat {{ $proyek->hps_pagu == null ? 'text-danger' : '' }}"
+                                                                    id="hps-pagu"
                                                                     value="{{ number_format((int) str_replace('.', '', $proyek->hps_pagu), 0, '.', '.') ?? '*HPS/Pagu Belum Ditentukan' }}"
                                                                     placeholder="HPS / Pagu (Rupiah)" readonly />
                                                                 <!--end::Input-->
@@ -13195,7 +13198,20 @@
     <script>
         document.addEventListener("DOMContentLoaded", async () => {
             setRAKlasifikasi()
+            setHpsPagu()
         })
+    </script>
+    <script>
+        function setHpsPagu() {
+            const nilai = localStorage.getItem("total-hps");
+            if (nilai != null) {
+                const hpsElt = document.querySelectorAll("#hps-pagu");
+                hpsElt.forEach(element => {
+                   element.value = nilai; 
+                });
+            }
+            
+        }
     </script>
     <script>
         var inputs = document.getElementsByTagName('input');

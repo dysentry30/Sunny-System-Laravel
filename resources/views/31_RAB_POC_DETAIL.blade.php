@@ -827,6 +827,8 @@
             buttonModalSelect.style.display = "none";
 
             const arrAHS = document.querySelectorAll(`#ahs-boq-${indexBOQSelected}`);
+            console.log(arrAHS);
+            
             let totalVolumeBOQ = 0;
             let totalHarsatBOQInternal = 0;
             let totalTotalBOQInternal = 0;
@@ -834,7 +836,6 @@
             let totalTotalBOQEksternal = 0;
 
             arrAHS.forEach(element => {
-                console.log(element.children[6].innerHTML.replace(",", "").replace(",", "").replace(",", ""));
                           
                 totalVolumeBOQ += parseInt(element.children[4].innerHTML.replace(",", "").replace(",", "").replace(",", ""));
                 totalHarsatBOQInternal += parseInt(element.children[5].innerHTML.replace(",", "").replace(",", "").replace(",", ""));
@@ -849,6 +850,21 @@
             parentBOQSelected.children[6].innerHTML = totalTotalBOQInternal.toLocaleString();
             parentBOQSelected.children[8].innerHTML = totalHarsatBOQEksternal.toLocaleString();
             parentBOQSelected.children[9].innerHTML = totalTotalBOQEksternal.toLocaleString();
+            
+            parentBOQSelected.previousElementSibling.children[3].classList.add("text-center");
+            parentBOQSelected.previousElementSibling.children[4].classList.add("text-end");
+            parentBOQSelected.previousElementSibling.children[5].classList.add("text-end");
+            parentBOQSelected.previousElementSibling.children[6].classList.add("text-end");
+            parentBOQSelected.previousElementSibling.children[8].classList.add("text-end");
+            parentBOQSelected.previousElementSibling.children[9].classList.add("text-end");
+
+            parentBOQSelected.previousElementSibling.children[3].innerHTML = "M3";
+            parentBOQSelected.previousElementSibling.children[4].innerHTML = totalVolumeBOQ.toLocaleString();
+            parentBOQSelected.previousElementSibling.children[5].innerHTML = totalHarsatBOQInternal.toLocaleString();
+            parentBOQSelected.previousElementSibling.children[6].innerHTML = totalTotalBOQInternal.toLocaleString();
+            parentBOQSelected.previousElementSibling.children[8].innerHTML = totalHarsatBOQEksternal.toLocaleString();
+            parentBOQSelected.previousElementSibling.children[9].innerHTML = totalTotalBOQEksternal.toLocaleString();
+            
 
             showingModal();
             LOADING_BODY.release();
@@ -859,8 +875,6 @@
             let newIndex = Number(elt.value);
             let newHarsatEksternal = Number(harsatEksternal) * newIndex;
             let newTotalEksternal = Number(totalEksternal) * newIndex;
-
-            console.log(indexBOQSelected);
             
             
             elt.parentElement.parentElement.children[8].innerHTML = newHarsatEksternal;

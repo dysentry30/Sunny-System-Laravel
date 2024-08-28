@@ -123,6 +123,9 @@ class ProyekController extends Controller
             // dd($unitkerjas);
             // $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan']);
             $proyeks = Proyek::with(['UnitKerja', 'proyekBerjalan']);
+        } elseif (Auth::user()->email == "user-poc@sunny.com") {
+            $proyeks = Proyek::with(['UnitKerja', 'proyekBerjalan'])->where("stage", 4)->where("is_cancel", false)->where("is_tidak_lulus_pq", false);
+            $unitkerjas = UnitKerja::all()->sortBy('id_profit_center');
         } else {
             // $proyeks = Proyek::with(['UnitKerja', 'Forecasts', 'proyekBerjalan'])->where("unit_kerja", "=", Auth::user()->unit_kerja);
             $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);

@@ -95,7 +95,7 @@
 
 
                         {{-- @if (auth()->user()->check_administrator || auth()->user()->check_user_sales || auth()->user()->check_team_proyek) --}}
-                        @canany(['super-admin', 'crm', 'admin-csi', 'approver-ccm', 'ska-skt'])
+                        {{-- @canany(['super-admin', 'crm', 'admin-csi', 'approver-ccm', 'ska-skt']) --}}
                             <div class="menu-item">
                                 <a class="menu-link " href="/proyek"
                                     style="color:white; padding-left:20px; {{ Request::Segment(1) == 'proyek' ? 'background-color:#008CB4' : '' }}">
@@ -110,7 +110,7 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">Proyek</span>
                                 </a>
                             </div>
-                        @endcanany
+                        {{-- @endcanany --}}
                         {{-- @endif --}}
 
                         {{-- @if (auth()->user()->check_administrator || auth()->user()->check_user_sales) --}}
