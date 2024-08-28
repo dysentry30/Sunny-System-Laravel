@@ -602,7 +602,7 @@
                                                 <!--end::Card body-->
                                             </div>
                                             <!--end-begin::Card column-->
-                                            <div class="row">
+                                            {{-- <div class="row">
                                                 <!--begin::Card body-->
                                                 <div class="mb-0 pt-0">
                                                     <!--begin::Card widget 20-->
@@ -625,7 +625,7 @@
                                                     <!--end::Card widget 20-->
                                                 </div>
                                                 <!--end::Card body-->
-                                            </div>
+                                            </div> --}}
                                             <!--end-begin::Card column-->
                                             <div class="row">
                                                 <!--begin::Card body-->

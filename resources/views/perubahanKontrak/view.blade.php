@@ -639,6 +639,32 @@
                         
                                                 </table>
                                                 <!--End:Table: Review-->
+
+                                                <br>
+                                                <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                    Dokumen Final
+                                                </h3>
+                                                
+                                                <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                                    <!--begin::Table head-->
+                                                    <thead>
+                                                        <!--begin::Table row-->
+                                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                            <th class="min-w-500px">File</th>
+                                                            <th class="min-w-auto">Action</th>
+                                                        </tr>
+                                                        <!--end::Table row-->
+                                                    </thead>
+                                                    <!--end::Table head-->
+                                                    <!--begin::Table body-->
+                                                    <tbody class="fw-bold text-gray-400">
+                                                        <tr>
+                                                            <td><a href="{{ asset('words') . '/' . $perubahan_kontrak->id_dokumen }}" class="text-hover-primary" target="_blank">{{ $perubahan_kontrak->dokumen_approve }}</a></td>
+                                                            <td class="text-center"><a href="{{ asset('words') . '/' . $perubahan_kontrak->id_dokumen }}" class="btn btn-sm btn-primary text-white" target="_blank">Download</a></td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <!--begin::Table body-->
+                                                </table>
                                             @endif
                                         </div>
                                     </div>
@@ -842,65 +868,95 @@
                         <!--end::Close-->
                     </div>
                     <!--end::Modal header-->
+                    <form action="/perubahan-kontrak/edit" method="POST" enctype="multipart/form-data">
                     <!--begin::Modal body-->
                     <div class="modal-body py-lg-6 px-lg-6">
 
                         <!--begin::Input group Website-->
                         <div class="fv-row mb-5">
-                            <form action="/perubahan-kontrak/edit" method="POST" enctype="multipart/form-data">
-                                @csrf
-                                <!--begin::Input-->
-                                <input type="hidden" class="modal-name" name="modal-name">
-                                <input type="hidden" class="id_contract" name="id_contract" value="{{ $contract->id_contract }}">
-                                <input type="hidden" class="profit-center" name="profit-center" value="{{ $contract->profit_center }}">
-                                <input type="hidden" class="stage" name="stage" value="5">
-                                <input type="hidden" value="{{ $perubahan_kontrak->id_perubahan_kontrak ?? 0 }}" id="id-perubahan-kontrak"
-                                    name="id-perubahan-kontrak">
-                                <!--end::Input-->
+                            @csrf
+                            <!--begin::Input-->
+                            <input type="hidden" class="modal-name" name="modal-name">
+                            <input type="hidden" class="id_contract" name="id_contract" value="{{ $contract->id_contract }}">
+                            <input type="hidden" class="profit-center" name="profit-center" value="{{ $contract->profit_center }}">
+                            <input type="hidden" class="stage" name="stage" value="5">
+                            <input type="hidden" value="{{ $perubahan_kontrak->id_perubahan_kontrak ?? 0 }}" id="id-perubahan-kontrak"
+                                name="id-perubahan-kontrak">
+                            <!--end::Input-->
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Nilai Disetujui</span>
+                                @if (empty($perubahan_kontrak->biaya_pengajuan) && $perubahan_kontrak->stage < 5)
+                                    <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                        data-bs-custom-class="custom-tooltip"
+                                        data-bs-title="Tidak dapat mengisi dampak biaya karena tidak ada di pengajuan"
+                                        data-bs-html="true"></i>
+                                    <div class="form-check form-switch {{ $perubahan_kontrak->jenis_perubahan == 'VO' ? '' : 'd-none' }}" id="div-nilai-negatif">
+                                    <input class="form-check-input" type="checkbox" name="nilai-negatif" role="switch" id="nilai-negatif" {{ $perubahan_kontrak->nilai_negatif ? "checked" : "" }} {{ !empty($perubahan_kontrak->biaya_pengajuan) ? "" : "readonly" }}>
+                                    <label class="form-check-label" for="nilai-negatif">Nilai Negatif</label>
+                                @endif
+                            </label>
+                            <!--end::Label-->
+                            @if ($perubahan_kontrak->stage < 5)
+                            <!--begin::Input-->
+                            <input type="text" name="nilai-disetujui" class="form-control form-control-solid reformat" value="{{ $perubahan_kontrak->nilai_disetujui }}" {{ !empty($perubahan_kontrak->biaya_pengajuan) ? "" : "readonly" }}/>
+                            <!--end::Input-->
+                            @else
+                            <p class="mb-3 fw-bold">Rp.{{ number_format($perubahan_kontrak->nilai_disetujui, 0, ',', '.') }}</p>
+                            @endif
+                            
+                            <div class="tanggal-disetujui">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label mt-3">
-                                    <span style="font-weight: normal">Nilai Disetujui</span>
-                                    <div class="form-check form-switch {{ $perubahan_kontrak->jenis_perubahan == 'VO' ? '' : 'd-none' }}" id="div-nilai-negatif">
-                                        <input class="form-check-input" type="checkbox" name="nilai-negatif" role="switch" id="nilai-negatif" {{ $perubahan_kontrak->nilai_negatif ? "checked" : "" }}>
-                                        <label class="form-check-label" for="nilai-negatif">Nilai Negatif</label>
-                                    </div>
+                                    <span style="font-weight: normal">Tanggal Disetujui</span>
+                                    @if ($perubahan_kontrak->stage < 5)
+                                        <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                            <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                        </a>                                        
+                                    @endif
                                 </label>
                                 <!--end::Label-->
+                                @if ($perubahan_kontrak->stage < 5)
                                 <!--begin::Input-->
-                                <input type="text" name="nilai-disetujui" class="form-control form-control-solid reformat" value="{{ $perubahan_kontrak->nilai_disetujui }}"/>
+                                <input type="date" name="tanggal-disetujui" value="{{ $perubahan_kontrak->tanggal_disetujui ?? null }}" class="form-control form-control-solid"/>
                                 <!--end::Input-->
+                                @else
+                                <p class="mb-3 fw-bold">{{ \Carbon\Carbon::parse($perubahan_kontrak->tanggal_disetujui)->translatedFormat("d F Y") }}</p>
+                                @endif
                                 
-                                <div class="tanggal-disetujui">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span style="font-weight: normal">Tanggal Disetujui</span>
-                                        <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
-                                            <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
-                                        </a>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="date" name="tanggal-disetujui" value="{{ $perubahan_kontrak->tanggal_disetujui ?? null }}" class="form-control form-control-solid"/>
-                                    <!--end::Input-->
-                                </div>
-                                
-                                <div class="waktu-disetujui">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span style="font-weight: normal">Waktu Disetujui</span>
-                                        <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
-                                            <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
-                                        </a>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="date" name="waktu-disetujui" value="{{ $perubahan_kontrak->waktu_disetujui ?? null }}" class="form-control form-control-solid"/>
-                                    <!--end::Input-->
-                                </div>
-                                
+                            </div>
+                            
+                            <div class="waktu-disetujui">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label mt-3">
-                                    <span style="font-weight: normal">Upload File</span>
+                                    <span style="font-weight: normal">Waktu Disetujui</span>
+                                    @if (!empty($perubahan_kontrak->waktu_pengajuan))
+                                        <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                            <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                        </a>
+                                    @else
+                                        <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                                            data-bs-toggle="tooltip" data-bs-placement="top"
+                                            data-bs-custom-class="custom-tooltip"
+                                            data-bs-title="Tidak dapat mengisi dampak waktu karena tidak ada di pengajuan"
+                                            data-bs-html="true"></i>
+                                    @endif
+                                </label>
+                                <!--end::Label-->
+                                @if ($perubahan_kontrak->stage < 5)
+                                <!--begin::Input-->
+                                <input type="date" name="waktu-disetujui" value="{{ $perubahan_kontrak->waktu_disetujui ?? null }}" class="form-control form-control-solid" {{ !empty($perubahan_kontrak->waktu_pengajuan) ? "" : "readonly" }}/>
+                                <!--end::Input-->
+                                @else
+                                <p class="mb-3 fw-bold">{{ !empty($perubahan_kontrak->waktu_disetujui) ? \Carbon\Carbon::parse($perubahan_kontrak->waktu_disetujui)->translatedFormat("d F Y") : "" }}</p>
+                                @endif
+                            </div>
+                            
+                            @if ($perubahan_kontrak->stage < 5)
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal" class="required">Upload File </span>
                                 </label>
                                 <!--end::Label-->
                                 
@@ -910,17 +966,21 @@
                                 id="dokumen-approve-claim" value="" accept=".pdf"
                                 placeholder="" />
                                 <!--end::Input-->
+                                <small><i>Dokumen format wajib PDF</i></small>
+                            @endif
 
-                                <!--end::Input group-->
-                                <div class="mt-5">
-                                    <button type="submit" id="save-dokumen-approve" class="btn btn-sm btn-primary"
-                                        data-bs-dismiss="modal">Save</button>
-                                </div>
-                            </form>
+                            <!--end::Input group-->
                         </div>
-
+                        
                     </div>
                     <!--end::Modal body-->
+                    @if ($perubahan_kontrak->stage < 5)
+                    <div class="modal-footer">
+                        <button type="submit" id="save-dokumen-approve" class="btn btn-sm btn-primary"
+                        data-bs-dismiss="modal">Save</button>
+                    </div>                        
+                    @endif
+                    </form>
                 </div>
                 <!--end::Modal content-->
             </div>

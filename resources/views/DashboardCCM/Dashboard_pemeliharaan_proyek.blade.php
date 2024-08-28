@@ -1065,6 +1065,26 @@
 
                         <!--begin::Table Body-->
                         @foreach ($cat_kontrak as $table)
+                            @php
+                                switch ($table["jenis_perubahan"]) {
+                                    case 'VO':
+                                        $linkDescription = "kt_user_view_claim_VO";
+                                        break;
+                                    case 'Klaim':
+                                        $linkDescription = "kt_user_view_claim";
+                                        break;
+                                    case 'Anti Klaim':
+                                        $linkDescription = "kt_user_view_overview_anticlaim";
+                                        break;
+                                    case 'Klaim Asuransi':
+                                        $linkDescription = "kt_user_view_overview_asuransi";
+                                        break;
+                                    
+                                    default:
+                                        $linkDescription = "";
+                                        break;
+                                }
+                            @endphp
                         {{-- @dd($table) --}}
                         <div class="row mb-4 mx-3">
                             <div class="col-2">
@@ -1087,7 +1107,7 @@
                             </div> --}}
                             <div class="col">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}?link={{ $linkDescription }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $table["subs"] ?? 0 }}</h2>
@@ -1109,7 +1129,7 @@
                             </div> --}}
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}?link={{ $linkDescription }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $table["nego"] ?? 0 }}</h2>
@@ -1120,7 +1140,7 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}?link={{ $linkDescription }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $table["setuju"] ?? 0 }}</h2>
@@ -1131,7 +1151,7 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}?link={{ $linkDescription }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $table["tolak"] ?? 0 }}</h2>
@@ -1142,7 +1162,7 @@
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}?link={{ $linkDescription }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center">{{ $table["dispute"] ?? 0 }}</h2>
@@ -1308,6 +1328,26 @@
                         {{-- @dd($proyek) --}}
                         <!--begin::Table Body-->
                         @foreach ($cat_kontrak as $table)
+                            @php
+                                switch ($table["jenis_perubahan"]) {
+                                    case 'VO':
+                                        $linkValue = "kt_user_view_claim_VO";
+                                        break;
+                                    case 'Klaim':
+                                        $linkValue = "kt_user_view_claim";
+                                        break;
+                                    case 'Anti Klaim':
+                                        $linkValue = "kt_user_view_overview_anticlaim";
+                                        break;
+                                    case 'Klaim Asuransi':
+                                        $linkValue = "kt_user_view_overview_asuransi";
+                                        break;
+                                    
+                                    default:
+                                        $linkValue = "";
+                                        break;
+                                }
+                            @endphp
                         {{-- @dd($table) --}}
                         <div class="row mb-4 mx-3">
                             <div class="col-2">
@@ -1330,7 +1370,7 @@
                             </div> --}}
                             <div class="col">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}?link={{ $linkValue }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && (!empty($table["subs_value"]) && $table["subs_value"] != 0) ? 'text-danger' : '' }}">{{ !empty($table["subs_value"]) ? number_format($table["subs_value"]/1000000, 0, ".", ".") : 0 }}</h2>
@@ -1352,7 +1392,7 @@
                             </div> --}}
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}?link={{ $linkValue }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && (!empty($table["nego_value"]) && $table["nego_value"] != 0) ? 'text-danger' : '' }}">{{ !empty($table["nego_value"]) ? number_format($table["nego_value"]/1000000, 0, ".", ".") : 0 }}</h2>
@@ -1363,7 +1403,7 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}?link={{ $linkValue }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && (!empty($table["setuju_value"]) && $table["setuju_value"] != 0) ? 'text-danger' : '' }}">{{ !empty($table["setuju_value"]) ? number_format($table["setuju_value"]/1000000, 0, ".", ".") : 0 }}</h2>
@@ -1374,7 +1414,7 @@
                             </div>
                             <div class="col-1">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}?link={{ $linkValue }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && (!empty($table["tolak_value"]) && $table["tolak_value"] != 0) ? 'text-danger' : '' }}">{{ !empty($table["tolak_value"]) ? number_format($table["tolak_value"]/1000000, 0, ".", ".") : 0 }}</h2>
@@ -1385,7 +1425,7 @@
                             </div>
                             <div class="col">
                                 <!--begin::Title body-->
-                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}">
+                                <a href="/claim-management/proyek/{{ $proyek->profit_center }}?link={{ $linkValue }}">
                                     <!--begin::Title body-->
                                     <div style="border-radius: 0px" class="card-body bg-secondary">
                                         <h2 class="m-0 text-center {{ $table["jenis_perubahan"] == "Anti Klaim" && (!empty($table["dispute_value"]) && $table["dispute_value"] != 0) ? 'text-danger' : '' }}">{{ !empty($table["dispute_value"]) ? number_format($table["dispute_value"]/1000000, 0, ".", ".") : 0 }}</h2>
