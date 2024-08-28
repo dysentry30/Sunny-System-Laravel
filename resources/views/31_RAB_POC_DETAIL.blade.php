@@ -48,7 +48,7 @@
                                 <!--end::Title-->
                             </div>
                             <!--end::Page title-->
-                            <a href="{{ asset("estimasi/BOQ Print.pdf") }}" class="btn btn-sm btn-primary">Print</a>
+                            <a href="{{ asset("estimasi/BoQ Print.xlsx") }}" class="btn btn-sm btn-primary">Print</a>
                         </div>
                         <!--end::Container-->
                     </div>

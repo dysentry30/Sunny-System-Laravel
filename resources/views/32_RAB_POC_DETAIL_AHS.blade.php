@@ -518,10 +518,18 @@
             }
         }
 
-        function uploadBOQ(elt){
+        function calculateTotal(elt){
             LOADING_BODY.block();
             setTimeout(() => {
                 LOADING_BODY.release();
+                const totalHarga = document.querySelector("#total-harga-boq");
+                const totalVolume = document.querySelector("#total-volume-boq");
+                Swal.fire({title: "Calculate Berhasil", icon: 'success'}).then(()=>{
+                    localStorage.setItem("total-harga-boq", "25.423.189.500");
+                    localStorage.setItem("total-volume-boq", "861.636");
+                    totalHarga.innerHTML = "25.423.189.500";
+                    totalVolume.innerHTML = "861.636";
+                })
             }, 5000);
         }
     </script>
