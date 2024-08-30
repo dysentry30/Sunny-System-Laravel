@@ -352,7 +352,7 @@
                                         <th class="min-w-auto text-center"><small>Jenis Proyek</small></th>
                                         <th class="min-w-auto text-center"><small>Tipe Proyek</small></th>
                                         <th class="min-w-auto text-center"><small>Kategori Kalah</small></th>
-                                        @if (Auth::user()->canany(['super-admin', 'admin-crm']))
+                                        @if (Auth::user()->canany(['super-admin', 'admin-crm']) || Auth::user()->email == "user-poc@sunny.com")
                                             <th class="min-w-auto text-center"><small>Action</small></th>
                                         @endif
                                     </tr>
@@ -642,19 +642,29 @@
                                             </td>
                                             <!--end::Kategori Kalah-->
 
-                                            @if (Auth::user()->canany(['super-admin', 'admin-crm']))
-                                                <!--begin::Action-->
-                                                <td class="text-center px-3">
-                                                    <!--begin::Button-->
-                                                    <button data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_delete{{ $proyek->kode_proyek }}"
-                                                        id="modal-delete"
-                                                        class="btn btn-sm btn-light btn-active-danger">Delete
-                                                    </button>
-                                                    </form>
-                                                    <!--end::Button-->
-                                                </td>
-                                                <!--end::Action-->
+                                            @if (Auth::user()->canany(['super-admin', 'admin-crm']) || Auth::user()->email == "user-poc@sunny.com")
+                                                @if (Auth::user()->email == "user-poc@sunny.com")
+                                                    <!--begin::Action-->
+                                                    <td class="text-center px-3">
+                                                    @if ($proyek->stage >= 4)
+                                                        <a href="/rab-proyek/detail/{{ $proyek->kode_proyek }}" class="btn btn-sm btn-primary text-white">Hitung</a>
+                                                    @endif
+                                                    </td>
+                                                    <!--end::Action-->
+                                                @else
+                                                    <!--begin::Action-->
+                                                    <td class="text-center px-3">
+                                                        <!--begin::Button-->
+                                                        <button data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_delete{{ $proyek->kode_proyek }}"
+                                                            id="modal-delete"
+                                                            class="btn btn-sm btn-light btn-active-danger">Delete
+                                                        </button>
+                                                        </form>
+                                                        <!--end::Button-->
+                                                    </td>
+                                                    <!--end::Action-->                                                    
+                                                @endif
                                             @endif
                                         </tr>
                                     @endforeach

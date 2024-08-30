@@ -128,7 +128,7 @@
                                                 <td>A</td>
                                                 <td>DIRECT COST</td>
                                                 <td class="text-center">74.91%</td>
-                                                <td>108,010,230,787.42</td>
+                                                <td><p class="m-0 text-end">108,010,230,787.42</p></td>
                                                 <td class="text-center">55.90%</td>
                                                 <td></td>
                                             </tr>
@@ -138,7 +138,7 @@
                                                 <td></td>
                                                 <td>1 MATERIAL</td>
                                                 <td class="text-center">38.90%</td>
-                                                <td>56,084,762,346.11</td>
+                                                <td><p class="m-0 text-end">56,084,762,346.11</p></td>
                                                 <td class="text-center">29.03%</td>
                                                 <td></td>
                                             </tr>
@@ -148,7 +148,7 @@
                                                 <td></td>
                                                 <td>2 UPAH</td>
                                                 <td class="text-center">3.53%</td>
-                                                <td>5,082,634,951.22</td>
+                                                <td><p class="m-0 text-end">5,082,634,951.22</p></td>
                                                 <td class="text-center">2.63%</td>
                                                 <td></td>
                                             </tr>
@@ -158,7 +158,7 @@
                                                 <td></td>
                                                 <td>3 ALAT</td>
                                                 <td class="text-center">15.76%</td>
-                                                <td>22,719,446,290.08</td>
+                                                <td><p class="m-0 text-end">22,719,446,290.08</p></td>
                                                 <td class="text-center">11.76%</td>
                                                 <td></td>
                                             </tr>
@@ -168,7 +168,7 @@
                                                 <td></td>
                                                 <td>4 SUBKON</td>
                                                 <td class="text-center">16.73%</td>
-                                                <td>24,123,387,200.00</td>
+                                                <td><p class="m-0 text-end">24,123,387,200.00</p></td>
                                                 <td class="text-center">12.49%</td>
                                                 <td></td>
                                             </tr>
@@ -178,7 +178,7 @@
                                                 <td>B</td>
                                                 <td>INDIRECT COST</td>
                                                 <td class="text-center">7.84%</td>
-                                                <td>11,300,000,000.00</td>
+                                                <td><p class="m-0 text-end">11,300,000,000.00</p></td>
                                                 <td class="text-center">5.85%</td>
                                                 <td></td>
                                             </tr>
@@ -228,7 +228,7 @@
                                                 <td></td>
                                                 <td>3.2 PERSONIL DIVISI</td>
                                                 <td class="text-center">0.35%</td>
-                                                <td>500,000,000.00</td>
+                                                <td><p class="m-0 text-end">500,000,000.00</p></td>
                                                 <td class="text-center">0.26%</td>
                                                 <td></td>
                                             </tr>
@@ -258,7 +258,7 @@
                                                 <td></td>
                                                 <td>6. UMU</td>
                                                 <td class="text-center">7.49%</td>
-                                                <td>10,800,000,000.00</td>
+                                                <td><p class="m-0 text-end">10,800,000,000.00</p></td>
                                                 <td class="text-center">5.59%</td>
                                                 <td></td>
                                             </tr>
@@ -268,7 +268,7 @@
                                                 <td>A+B</td>
                                                 <td>DIRECT + INDIRECT COST</td>
                                                 <td class="text-center">82.75%</td>
-                                                <td>119,310,230,787.42</td>
+                                                <td><p class="m-0 text-end">119,310,230,787.42</p></td>
                                                 <td class="text-center">61.75%</td>
                                                 <td></td>
                                             </tr>
@@ -278,7 +278,7 @@
                                                 <td>C</td>
                                                 <td>OTHER COST</td>
                                                 <td class="text-center">17.25%</td>
-                                                <td>24,871,316,991.94</td>
+                                                <td><p class="m-0 text-end">24,871,316,991.94</p></td>
                                                 <td class="text-center">12.87%</td>
                                                 <td></td>
                                             </tr>
@@ -308,7 +308,7 @@
                                                 <td></td>
                                                 <td>1.1.1 ASURANSI CAR</td>
                                                 <td class="text-center">0.60%</td>
-                                                <td>865,089,286.68</td>
+                                                <td><p class="m-0 text-end">865,089,286.68</p></td>
                                                 <td class="text-center">0.45%</td>
                                                 <td></td>
                                             </tr>
@@ -408,7 +408,7 @@
                                                 <td></td>
                                                 <td>3. PEMELIHARAAN</td>
                                                 <td class="text-center">0.50%</td>
-                                                <td>720,907,738.90</td>
+                                                <td><p class="m-0 text-end">720,907,738.90</p></td>
                                                 <td class="text-center">0.37%</td>
                                                 <td></td>
                                             </tr>
@@ -418,7 +418,7 @@
                                                 <td></td>
                                                 <td>4. RESIKO</td>
                                                 <td class="text-center">0.50%</td>
-                                                <td>720,907,738.90</td>
+                                                <td><p class="m-0 text-end">720,907,738.90</p></td>
                                                 <td class="text-center">0.37%</td>
                                                 <td></td>
                                             </tr>
@@ -448,7 +448,7 @@
                                                 <td></td>
                                                 <td>7. BEBAN PPH FINAL</td>
                                                 <td class="text-center">2.65%</td>
-                                                <td>3,820,811,016.15</td>
+                                                <td><p class="m-0 text-end">3,820,811,016.15</p></td>
                                                 <td class="text-center">1.98%</td>
                                                 <td></td>
                                             </tr>
@@ -458,7 +458,7 @@
                                                 <td></td>
                                                 <td>8. CSR</td>
                                                 <td class="text-center">3.00%</td>
-                                                <td>4,325,446,433.38</td>
+                                                <td><p class="m-0 text-end">4,325,446,433.38</p></td>
                                                 <td class="text-center">2.24%</td>
                                                 <td></td>
                                             </tr>
@@ -468,7 +468,7 @@
                                                 <td></td>
                                                 <td>8. MARGIN</td>
                                                 <td class="text-center">10.00%</td>
-                                                <td>14,418,154,777.94</td>
+                                                <td><p class="m-0 text-end">14,418,154,777.94</p></td>
                                                 <td class="text-center">7.46%</td>
                                                 <td></td>
                                             </tr>
@@ -479,7 +479,7 @@
                                                 <td></td>
                                                 <td class="text-white">TOTAL OK</td>
                                                 <td class="text-white">100%</td>
-                                                <td class="text-white">144,181,547,779.36</td>
+                                                <td class="text-white"><p class="m-0 text-end">144,181,547,779.36</p></td>
                                                 <td></td>
                                                 <td></td>
                                             </tr>
@@ -487,7 +487,7 @@
                                                 <td></td>
                                                 <td class="text-white">PPN(11%)</td>
                                                 <td class="text-white">APBN</td>
-                                                <td class="text-white">15,859,970,255.73</td>
+                                                <td class="text-white"><p class="m-0 text-end">15,859,970,255.73</p></td>
                                                 <td></td>
                                                 <td></td>
                                             </tr>
@@ -495,7 +495,7 @@
                                                 <td></td>
                                                 <td class="text-white">TOTAL INCLUDE PPN 11%</td>
                                                 <td class="text-white">100.00%</td>
-                                                <td class="text-white">160,041,518,000.00</td>
+                                                <td class="text-white"><p class="m-0 text-end">160,041,518,000.00</p></td>
                                                 <td></td>
                                                 <td></td>
                                             </tr>
@@ -503,7 +503,7 @@
                                                 <td></td>
                                                 <td class="text-white">PERKIRAAN HPS (INCLUDE PPN)</td>
                                                 <td class="text-white">100%</td>
-                                                <td class="text-white">193,216,866,700.00</td>
+                                                <td class="text-white"><p class="m-0 text-end">193,216,866,700.00</p></td>
                                                 <td></td>
                                                 <td></td>
                                             </tr>
@@ -581,10 +581,10 @@
                                             </tr>
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0 bg-primary">
                                                 <th class="min-w-150px text-white">Harga Satuan</th>
-                                                <th class="min-w-150px text-white">Total Harga Satuan</th>
+                                                <th class="min-w-150px text-white">Total Harga</th>
                                                 <th class="min-w-auto text-white">Index</th>
                                                 <th class="min-w-150px text-white">Harga Satuan</th>
-                                                <th class="min-w-150px text-white">Total Harga Satuan</th>
+                                                <th class="min-w-150px text-white">Total Harga</th>
                                             </tr>
                                             <!--end::Table row-->
                                         </thead>
@@ -851,15 +851,11 @@
             parentBOQSelected.children[8].innerHTML = totalHarsatBOQEksternal.toLocaleString();
             parentBOQSelected.children[9].innerHTML = totalTotalBOQEksternal.toLocaleString();
             
-            parentBOQSelected.previousElementSibling.children[3].classList.add("text-center");
-            parentBOQSelected.previousElementSibling.children[4].classList.add("text-end");
             parentBOQSelected.previousElementSibling.children[5].classList.add("text-end");
             parentBOQSelected.previousElementSibling.children[6].classList.add("text-end");
             parentBOQSelected.previousElementSibling.children[8].classList.add("text-end");
             parentBOQSelected.previousElementSibling.children[9].classList.add("text-end");
 
-            parentBOQSelected.previousElementSibling.children[3].innerHTML = "M3";
-            parentBOQSelected.previousElementSibling.children[4].innerHTML = totalVolumeBOQ.toLocaleString();
             parentBOQSelected.previousElementSibling.children[5].innerHTML = totalHarsatBOQInternal.toLocaleString();
             parentBOQSelected.previousElementSibling.children[6].innerHTML = totalTotalBOQInternal.toLocaleString();
             parentBOQSelected.previousElementSibling.children[8].innerHTML = totalHarsatBOQEksternal.toLocaleString();

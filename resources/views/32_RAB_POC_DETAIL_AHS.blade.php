@@ -91,7 +91,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Total Harga</td>
-                                                    <td id="total-harga-ahs">{{ number_format($total, 0, ',', '.') }}</td>
+                                                    <td id="total-harga-ahs"><p class="m-0 text-end">{{ number_format($total, 0, ',', '.') }}</p></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Total Volume BOQ</td>
@@ -160,8 +160,8 @@
                                     <!--begin::Table footer-->
                                     <tfoot class="bg-primary">
                                         <tr>
-                                            <td colspan="4" class="ps-2 text-white"><p class="m-0"><b>Total</b></p></td>
-                                            <td class="text-center text-white">
+                                            <td colspan="6" class="ps-2 text-white"><p class="m-0"><b>Total</b></p></td>
+                                            {{-- <td class="text-center text-white">
                                                 <p class="m-0">
                                                     <b>
                                                         {{ number_format($materials->sum(function($material){
@@ -188,7 +188,7 @@
 
                                                     </b>
                                                 </p>
-                                            </td>
+                                            </td> --}}
                                             <td class="text-end text-white pe-2">
                                                 <p class="m-0">
                                                     <b>
@@ -256,8 +256,8 @@
                                     <!--begin::Table footer-->
                                     <tfoot class="bg-primary">
                                         <tr>
-                                            <td colspan="4" class="ps-2 text-white"><p class="m-0"><b>Total</b></p></td>
-                                            <td class="text-center text-white">
+                                            <td colspan="6" class="ps-2 text-white"><p class="m-0"><b>Total</b></p></td>
+                                            {{-- <td class="text-center text-white">
                                                 <p class="m-0">
                                                     <b>
                                                         {{ number_format($upahs->sum(function($upah){
@@ -284,7 +284,7 @@
 
                                                     </b>
                                                 </p>
-                                            </td>
+                                            </td> --}}
                                             <td class="text-end text-white pe-2">
                                                 <p class="m-0">
                                                     <b>
@@ -352,8 +352,8 @@
                                     <!--begin::Table footer-->
                                     <tfoot class="bg-primary">
                                         <tr>
-                                            <td colspan="4" class="ps-2 text-white"><p class="m-0"><b>Total</b></p></td>
-                                            <td class="text-center text-white">
+                                            <td colspan="6" class="ps-2 text-white"><p class="m-0"><b>Total</b></p></td>
+                                            {{-- <td class="text-center text-white">
                                                 <p class="m-0">
                                                     <b>
                                                         {{ number_format($alats->sum(function($alat){
@@ -380,7 +380,7 @@
 
                                                     </b>
                                                 </p>
-                                            </td>
+                                            </td> --}}
                                             <td class="text-end text-white pe-2">
                                                 <p class="m-0">
                                                     <b>
@@ -448,8 +448,8 @@
                                     <!--begin::Table footer-->
                                     <tfoot class="bg-primary">
                                         <tr>
-                                            <td colspan="4" class="ps-2 text-white"><p class="m-0"><b>Total</b></p></td>
-                                            <td class="text-center text-white">
+                                            <td colspan="6" class="ps-2 text-white"><p class="m-0"><b>Total</b></p></td>
+                                            {{-- <td class="text-center text-white">
                                                 <p class="m-0">
                                                     <b>
                                                         {{ number_format($subKons->sum(function($subkon){
@@ -476,7 +476,7 @@
 
                                                     </b>
                                                 </p>
-                                            </td>
+                                            </td> --}}
                                             <td class="text-end text-white pe-2">
                                                 <p class="m-0">
                                                     <b>

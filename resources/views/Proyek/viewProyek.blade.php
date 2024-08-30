@@ -3227,7 +3227,7 @@
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
                                                                     <span class="required">HPS / Pagu (Rupiah)</span> &nbsp;
-                                                                    <a href="/rab-proyek/detail/{{ $proyek->kode_proyek }}" class="btn btn-sm btn-primary">Hitung</a>
+                                                                    {{-- <a href="/rab-proyek/detail/{{ $proyek->kode_proyek }}" class="btn btn-sm btn-primary">Hitung</a> --}}
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
