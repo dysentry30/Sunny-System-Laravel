@@ -361,7 +361,7 @@
                                                                 </div>
                                                                 <div class="col">
                                                                     <label class="fs-6 fw-bold form-label">
-                                                                        <span style="font-weight: normal">Dampak Biaya</span>
+                                                                        <span style="font-weight: normal">Nilai Pengajuan</span>
                                                                     </label><br>
                                                                         <span style="font-weight: normal">
                                                                             <b class="badge {{ (int) $perubahan_kontrak->biaya_pengajuan != 0 ? 'badge-primary' : 'badge-danger' }}">{{ (int) $perubahan_kontrak->biaya_pengajuan != 0 ? 'Yes' : 'No' }}</b>
@@ -393,7 +393,7 @@
                                                                 </div>
                                                                 <div class="col">
                                                                     <label class="fs-6 fw-bold form-label">
-                                                                        <span style="font-weight: normal">Biaya Disetujui</span>
+                                                                        <span style="font-weight: normal">Nilai Disetujui</span>
                                                                     </label><br>
                                                                     <b class="{{$perubahan_kontrak->jenis_perubahan == 'Anti Klaim' || $perubahan_kontrak->nilai_negatif ? 'text-danger ' : ''}}">{{ !empty($perubahan_kontrak->nilai_disetujui) ? number_format($perubahan_kontrak->nilai_disetujui, 0, ".", ".") : '-' }}</b>
                                                                 </div>
@@ -641,30 +641,39 @@
                                                 <!--End:Table: Review-->
 
                                                 <br>
-                                                <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                                    Dokumen Final
-                                                </h3>
-                                                
-                                                <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                                                    <!--begin::Table head-->
-                                                    <thead>
-                                                        <!--begin::Table row-->
-                                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                            <th class="min-w-500px">File</th>
-                                                            <th class="min-w-auto">Action</th>
-                                                        </tr>
-                                                        <!--end::Table row-->
-                                                    </thead>
-                                                    <!--end::Table head-->
-                                                    <!--begin::Table body-->
-                                                    <tbody class="fw-bold text-gray-400">
-                                                        <tr>
-                                                            <td><a href="{{ asset('words') . '/' . $perubahan_kontrak->id_dokumen }}" class="text-hover-primary" target="_blank">{{ $perubahan_kontrak->dokumen_approve }}</a></td>
-                                                            <td class="text-center"><a href="{{ asset('words') . '/' . $perubahan_kontrak->id_dokumen }}" class="btn btn-sm btn-primary text-white" target="_blank">Download</a></td>
-                                                        </tr>
-                                                    </tbody>
-                                                    <!--begin::Table body-->
-                                                </table>
+
+                                                @if ($perubahan_kontrak->stage > 4)
+                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                        Dokumen Final
+                                                    </h3>
+                                                    
+                                                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                                        <!--begin::Table head-->
+                                                        <thead>
+                                                            <!--begin::Table row-->
+                                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                <th class="min-w-500px">File</th>
+                                                                <th class="min-w-auto">Action</th>
+                                                            </tr>
+                                                            <!--end::Table row-->
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        <!--begin::Table body-->
+                                                        <tbody class="fw-bold text-gray-400">
+                                                            @if (!empty($perubahan_kontrak->id_dokumen))
+                                                                <tr>
+                                                                    <td><a href="{{ asset('words') . '/' . $perubahan_kontrak->id_dokumen }}" class="text-hover-primary" target="_blank">{{ $perubahan_kontrak->dokumen_approve }}</a></td>
+                                                                    <td class="text-center"><a href="{{ asset('words') . '/' . $perubahan_kontrak->id_dokumen }}" class="btn btn-sm btn-primary text-white" target="_blank">Download</a></td>
+                                                                </tr>                                                                
+                                                            @else
+                                                                <tr>
+                                                                    <td colspan="2">There is no data</td>
+                                                                </tr>
+                                                            @endif
+                                                        </tbody>
+                                                        <!--begin::Table body-->
+                                                    </table>                                                    
+                                                @endif
                                             @endif
                                         </div>
                                     </div>
@@ -884,18 +893,20 @@
                                 name="id-perubahan-kontrak">
                             <!--end::Input-->
                             <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
+                            <label class="fs-6 fw-bold form-label mt-3 d-flex flex-row justify-content-between gap-3">
                                 <span style="font-weight: normal">Nilai Disetujui</span>
                                 @if (empty($perubahan_kontrak->biaya_pengajuan) && $perubahan_kontrak->stage < 5)
                                     <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
                                         data-bs-toggle="tooltip" data-bs-placement="top"
                                         data-bs-custom-class="custom-tooltip"
-                                        data-bs-title="Tidak dapat mengisi dampak biaya karena tidak ada di pengajuan"
+                                        data-bs-title="Tidak dapat mengisi Nilai Pengajuan karena tidak ada di pengajuan"
                                         data-bs-html="true"></i>
                                     <div class="form-check form-switch {{ $perubahan_kontrak->jenis_perubahan == 'VO' ? '' : 'd-none' }}" id="div-nilai-negatif">
+                                @endif
+                                <div class="form-check form-switch">
                                     <input class="form-check-input" type="checkbox" name="nilai-negatif" role="switch" id="nilai-negatif" {{ $perubahan_kontrak->nilai_negatif ? "checked" : "" }} {{ !empty($perubahan_kontrak->biaya_pengajuan) ? "" : "readonly" }}>
                                     <label class="form-check-label" for="nilai-negatif">Nilai Negatif</label>
-                                @endif
+                                </div>
                             </label>
                             <!--end::Label-->
                             @if ($perubahan_kontrak->stage < 5)
@@ -1070,7 +1081,7 @@
                                 </div>
                                 <div class="col mt-3">
                                     <label class="fs-6 fw-bold form-label d-flex flex-row justify-content-between">
-                                        <span style="font-weight: normal">Dampak Biaya</span>
+                                        <span style="font-weight: normal">Nilai Pengajuan</span>
                                         <div class="form-check form-switch {{ $perubahan_kontrak->jenis_perubahan == 'VO' ? '' : 'd-none' }}" id="div-nilai-negatif">
                                             <input class="form-check-input" type="checkbox" name="nilai-negatif" role="switch" id="nilai-negatif" {{ $perubahan_kontrak->nilai_negatif ? 'checked' : '' }}>
                                             <label class="form-check-label" for="nilai-negatif">Nilai Negatif</label>

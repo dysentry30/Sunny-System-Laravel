@@ -1285,12 +1285,10 @@ class DashboardController extends Controller
                 "P"
             )->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true)->get();
         } else {
-            if ($tahun_get < 2023 && $bulan_get
-            ) {
+            if ($tahun_get < 2023 && $bulan_get) {
                 $proyeks = Proyek::where("tahun_perolehan", "=", $tahun_get)->where("stage", '!=', 1)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("dop", $dop_get)->where("bulan_pelaksanaan", "<=", $bulan_get)->where("tipe_proyek", "=", "P")->get();
                 $contract_proyeks = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $tahun_get)->where("stage", '!=', 1)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("dop", $dop_get)->where("bulan_pelaksanaan", "<=", $bulan_get)->where("tipe_proyek", "=", "P")->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true)->get();
-            } elseif ($tahun_get < 2023 && empty($bulan_get)
-            ) {
+            } elseif ($tahun_get < 2023 && empty($bulan_get)) {
                 $proyeks = Proyek::where("tahun_perolehan", "=", $tahun_get)->where("stage", '!=', 1)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("dop", $dop_get)->where("bulan_pelaksanaan", "<=", 12)->where("tipe_proyek", "=", "P")->get();
                 $contract_proyeks = Proyek::join("contract_managements", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("tahun_perolehan", "=", $tahun_get)->where("stage", '!=', 1)->whereIn("unit_kerja", $unit_kerja_get)->whereIn("dop", $dop_get)->where("bulan_pelaksanaan", "<=", 12)->where("tipe_proyek", "=", "P")->where("is_cancel", "!=", true)->where("is_tidak_lulus_pq", "!=", true)->get();
             } else {
@@ -1450,7 +1448,11 @@ class DashboardController extends Controller
         // End :: Nilai Tender Chart
 
         // Begin :: Success Rate
-        $success_rate = (int) Percentage::fromFractionAndTotal($win_counter, $proyeks->count())->asFloat();
+        $jumlahMenang = $proyeks->where("stage", 6)->where("jenis_proyek", "!=", "I")->count();
+        $jumlahTerkontrak = $proyeks->where("stage", 8)->where("jenis_proyek", "!=", "I")->count();
+        $sumProyekCompetitive = $proyeks->whereIn("stage", [6, 7, 8])->where("jenis_proyek", "!=", "I")->count();
+        $success_rate = $sumProyekCompetitive > 0 ? round(($jumlahMenang + $jumlahTerkontrak) / $sumProyekCompetitive, 2) * 100 : 0;
+        // $success_rate = (int) Percentage::fromFractionAndTotal($win_counter, $proyeks->count())->asFloat();
         // End :: Success Rate
 
         // Begin :: Clasification Column

@@ -348,20 +348,20 @@
                         <!--begin::Card Diagram Column dan Donut-->
                         <div class="row mx-3">
                             <!--begin::Card column-->
-                            <div class="col-6">
+                            <div class="col">
                                 <!--begin::COLUMN CHART-->
                                 <div id="contract-stage"></div>
                                 <!-- data table is inserted here -->
                                 <!--end::COLUMN CHART-->
                             </div>
-                            <div class="col-6">
+                            {{-- <div class="col-6">
                                 <!--begin::PIE CHART-->
                                 <figure class="highcharts-figure">
                                     <div id="tender-menang"></div>
                                     <!-- data table is inserted here -->
                                 </figure>
                                 <!--end::PIE CHART-->
-                            </div>
+                            </div> --}}
                             <!--end::Card column-->
                         </div>
                         <!--end::Card Diagram Column dan Donut-->
@@ -872,7 +872,7 @@
     <!--end::Highchart Donut Jenis Kontrak -->
 
     <!--begin::Highchart Donut Bentuk Proyek -->
-    <script>
+    {{-- <script>
         const jenisMenang = JSON.parse('{!! $menang_kontrak->toJson() !!}');
         Highcharts.chart('tender-menang', {
             chart: {
@@ -932,7 +932,7 @@
                 data: jenisMenang
             }]
         });
-    </script>
+    </script> --}}
     <!--end::Highchart Donut Bentuk Proyek -->
 
     <!--begin::Highchart Donut Bentuk Proyek -->
