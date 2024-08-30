@@ -297,7 +297,7 @@
                                                                     <th rowspan="2" class="min-w-auto">Uraian Perubahan</th>
                                                                     <th rowspan="2" class="min-w-auto">No Proposal Klaim</th>
                                                                     <th rowspan="2" class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th colspan="3" class="min-w-125px">Dampak Biaya</th>
+                                                                    <th colspan="3" class="min-w-125px">Nilai Pengajuan</th>
                                                                     <th colspan="3" class="min-w-125px">Dampak Waktu</th>
                                                                     <th rowspan="2" class="min-w-auto">Status</th>
                                                                     <th rowspan="2" class="min-w-auto text-center">Action</th>
@@ -330,7 +330,7 @@
                                                                     <td>
                                                                         {{ !empty($vo->tanggal_pengajuan) ? Carbon\Carbon::parse($vo->tanggal_pengajuan)->translatedFormat('d F Y') : '' }}
                                                                     </td>
-                                                                     <!--Begin::Dampak Biaya-->
+                                                                     <!--Begin::Nilai Pengajuan-->
                                                                     <td class="fw-bolder text-center">
                                                                         {{ (int) $vo->biaya_pengajuan != 0 ? 'Yes' : 'No' }}
                                                                     </td>
@@ -340,7 +340,7 @@
                                                                     <td>
                                                                         <p class="m-0 {{ $vo->nilai_negatif ? 'text-danger' : '' }}">{{ !empty($vo->nilai_disetujui) ? number_format($vo->nilai_disetujui, 0, ".", ".") : "-" }}</p>
                                                                     </td>
-                                                                    <!--end::Dampak Biaya-->
+                                                                    <!--end::Nilai Pengajuan-->
                                                                     <!--begin::Dampak Waktu-->
                                                                     <td class="fw-bolder text-center">
                                                                         {{ !empty($vo->waktu_pengajuan) ? 'Yes' : 'No' }}
@@ -424,7 +424,7 @@
                                                                     <th rowspan="2" class="min-w-auto">Uraian Perubahan</th>
                                                                     <th rowspan="2" class="min-w-auto">No Proposal Klaim</th>
                                                                     <th rowspan="2" class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th colspan="3" class="min-w-125px">Dampak Biaya</th>
+                                                                    <th colspan="3" class="min-w-125px">Nilai Pengajuan</th>
                                                                     <th colspan="3" class="min-w-125px">Dampak Waktu</th>
                                                                     <th rowspan="2" class="min-w-auto">Status</th>
                                                                     <th rowspan="2" class="min-w-auto text-center">Action</th>
@@ -457,7 +457,7 @@
                                                                     <td>
                                                                         {{ !empty($klaim->tanggal_pengajuan) ? Carbon\Carbon::parse($klaim->tanggal_pengajuan)->translatedFormat('d F Y') : '' }}
                                                                     </td>
-                                                                    <!--Begin::Dampak Biaya-->
+                                                                    <!--Begin::Nilai Pengajuan-->
                                                                      <td class="fw-bolder text-center">
                                                                         {{ (int) $klaim->biaya_pengajuan != 0 ? 'Yes' : 'No' }}
                                                                     </td>
@@ -467,7 +467,7 @@
                                                                     <td>
                                                                         {{ !empty($klaim->nilai_disetujui) ? number_format($klaim->nilai_disetujui, 0, ".", ".") : '-' }}
                                                                     </td>
-                                                                    <!--end::Dampak Biaya-->
+                                                                    <!--end::Nilai Pengajuan-->
                                                                     <!--begin::Dampak Waktu-->
                                                                     <td class="fw-bolder text-center">
                                                                         {{ !empty($klaim->waktu_pengajuan) ? 'Yes' : 'No' }}
@@ -551,7 +551,7 @@
                                                                     <th rowspan="2" class="min-w-auto">Uraian Perubahan</th>
                                                                     <th rowspan="2" class="min-w-auto">No Proposal Klaim</th>
                                                                     <th rowspan="2" class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th colspan="3" class="min-w-125px">Dampak Biaya</th>
+                                                                    <th colspan="3" class="min-w-125px">Nilai Pengajuan</th>
                                                                     <th colspan="3" class="min-w-125px">Dampak Waktu</th>
                                                                     <th rowspan="2" class="min-w-auto">Status</th>
                                                                     <th rowspan="2" class="min-w-auto text-center">Action</th>
@@ -584,7 +584,7 @@
                                                                     <td>
                                                                         {{ !empty($anti_klaim->tanggal_pengajuan) ? Carbon\Carbon::parse($anti_klaim->tanggal_pengajuan)->translatedFormat('d F Y') : '' }}
                                                                     </td>
-                                                                    <!--Begin::Dampak Biaya-->
+                                                                    <!--Begin::Nilai Pengajuan-->
                                                                      <td class="fw-bolder text-center">
                                                                         {{ (int) $anti_klaim->biaya_pengajuan != 0 ? 'Yes' : 'No' }}
                                                                     </td>
@@ -594,7 +594,7 @@
                                                                     <td class="text-danger">
                                                                         {{ !empty($anti_klaim->nilai_disetujui) ? number_format($anti_klaim->nilai_disetujui, 0, ".", ".") : '-' }}
                                                                     </td>
-                                                                    <!--end::Dampak Biaya-->
+                                                                    <!--end::Nilai Pengajuan-->
                                                                     <!--begin::Dampak Waktu-->
                                                                     <td class="fw-bolder text-center">
                                                                         {{ !empty($anti_klaim->waktu_pengajuan) ? 'Yes' : 'No' }}
@@ -678,7 +678,7 @@
                                                                     <th rowspan="2" class="min-w-auto">Uraian Perubahan</th>
                                                                     <th rowspan="2" class="min-w-auto">No Proposal Klaim</th>
                                                                     <th rowspan="2" class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th colspan="3" class="min-w-125px">Dampak Biaya</th>
+                                                                    <th colspan="3" class="min-w-125px">Nilai Pengajuan</th>
                                                                     <th colspan="3" class="min-w-125px">Dampak Waktu</th>
                                                                     <th rowspan="2" class="min-w-auto">Status</th>
                                                                     <th rowspan="2" class="min-w-auto text-center">Action</th>
@@ -711,7 +711,7 @@
                                                                     <td>
                                                                         {{ !empty($klaim_asuransi->tanggal_pengajuan) ? Carbon\Carbon::parse($klaim_asuransi->tanggal_pengajuan)->translatedFormat('d F Y') : '' }}
                                                                     </td>
-                                                                    <!--Begin::Dampak Biaya-->
+                                                                    <!--Begin::Nilai Pengajuan-->
                                                                      <td class="fw-bolder text-center">
                                                                         {{ (int) $klaim_asuransi->biaya_pengajuan != 0 ? 'Yes' : 'No' }}
                                                                     </td>
@@ -721,7 +721,7 @@
                                                                     <td class="text-end">
                                                                         {{ !empty($klaim_asuransi->nilai_disetujui) ? number_format($klaim_asuransi->nilai_disetujui, 0, ".", ".") : '-' }}
                                                                     </td>
-                                                                    <!--end::Dampak Biaya-->
+                                                                    <!--end::Nilai Pengajuan-->
                                                                     <!--begin::Dampak Waktu-->
                                                                     <td>
                                                                         {{ !empty($klaim_asuransi->waktu_pengajuan) ? 'Yes' : 'No' }}
@@ -805,7 +805,7 @@
                                                                     <th rowspan="2" class="min-w-auto">Uraian Perubahan</th>
                                                                     <th rowspan="2" class="min-w-auto">No Proposal Klaim</th>
                                                                     <th rowspan="2" class="min-w-auto">Tanggal Pengajuan</th>
-                                                                    <th colspan="3" class="min-w-125px">Dampak Biaya</th>
+                                                                    <th colspan="3" class="min-w-125px">Nilai Pengajuan</th>
                                                                     <th colspan="3" class="min-w-125px">Dampak Waktu</th>
                                                                     <th rowspan="2" class="min-w-auto">Status</th>
                                                                 </tr>
@@ -1019,7 +1019,7 @@
                                     </div>
                                     <div class="col mt-3">
                                         <label class="fs-6 fw-bold form-label d-flex flex-row justify-content-between">
-                                            <span style="font-weight: normal">Dampak Biaya</span>
+                                            <span style="font-weight: normal">Nilai Pengajuan</span>
                                             <div class="form-check form-switch d-none" id="div-nilai-negatif">
                                                 <input class="form-check-input" type="checkbox" name="nilai-negatif" role="switch" id="nilai-negatif">
                                                 <label class="form-check-label" for="nilai-nilai-negatif">Nilai Negatif</label>
