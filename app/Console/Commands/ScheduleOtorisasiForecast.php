@@ -197,7 +197,7 @@ class ScheduleOtorisasiForecast extends Command
                         }
                     }
 
-                    self::sendDataPrognosaSAP($resultRequestToSAP);
+                    self::sendDataPrognosaSAP($resultRequestToSAP, $unitKerjaProyek->unit_kerja);
                     setLogging("Scheduller/OtorisasiCRM", "[Otorisasi $unitKerjaProyek->unit_kerja Bulan " . Carbon::now() . "]", ["message" => "Success", "timestamp" => Carbon::now()]);
                 }
             }
@@ -298,7 +298,7 @@ class ScheduleOtorisasiForecast extends Command
         }
     }
 
-    private function sendDataPrognosaSAP($data)
+    private function sendDataPrognosaSAP($data, $unitKerja)
     {
         $results_response = collect();
         $csrf_token = "";
@@ -330,11 +330,11 @@ class ScheduleOtorisasiForecast extends Command
         // FOURTH STEP SEND DATA TO BW
         $closed_request = Http::withOptions(['debug' => $fp])->withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbpc007/requests/$content_location/close");
         $results_response->push($closed_request->body());
-        setLogging("prognosa", "Response Prognosa to SAP " . $data["unit_kerja"] . " =>", $results_response->toArray());
+        setLogging("prognosa", "Response Prognosa to SAP " . $unitKerja . " =>", $results_response->toArray());
         fwrite($prognosa_log, file_get_contents(storage_path("logs/http_log.log")));
         fclose($prognosa_log);
         fclose($fp);
 
-        integrationLog("OTORISASI PROGNOSA INDUK", $data->toJson(), json_encode(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"]), $fill_data->status(), $fill_data->body(), null, null);
+        // integrationLog("OTORISASI PROGNOSA INDUK", $data->toJson(), json_encode(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"]), $fill_data->status(), $fill_data->body(), null, null);
     }
 }

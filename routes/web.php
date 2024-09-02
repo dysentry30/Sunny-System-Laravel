@@ -7162,7 +7162,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                 "d:Id" => DB::table("proyek_code_crm")->where("kode_proyek", '=', $p->kode_proyek)->first()->uuid_crm ?? $p->id,
                 "d:Title" => $p->nama_proyek,
                 "d:UsrKontrakMulai" => $p->tanggal_mulai_terkontrak,
-                "d:UsrAkhirKontrak" => $p->tanggal_akhir_terkontrak,
+                "d:UsrAkhirKontrak" => $p->tanggal_selesai_pho,
                 "d:UsrNoSPK" => $p->nospk_external,
                 "d:UsrBASTPHO" => $p->tanggal_selesai_pho,
                 "d:UsrBASTFHO" => $p->tanggal_selesai_fho,

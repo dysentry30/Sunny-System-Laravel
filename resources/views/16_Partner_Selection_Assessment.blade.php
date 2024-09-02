@@ -2384,7 +2384,7 @@
 
                                                                 @if (!empty($d->tanggal))
                                                                     Tanggal:
-                                                                    <b>{{ Carbon\Carbon::create($d->tanggal)->translatedFormat('d F Y H:i:s') }}</b>
+                                                                    <b>{{ Carbon\Carbon::parse(date('d M Y H:i:s', strtotime($d->tanggal)))->translatedFormat('d F Y H:i:s') }}</b>
                                                                     <br>
                                                                 @endif
 
