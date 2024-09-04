@@ -350,7 +350,7 @@
                                                                     </td>
                                                                     <!--end::Dampak Waktu-->
                                                                     <td class="text-center">
-                                                                        <p class="m-0">{{ !empty($vo->biaya_pengajuan) || !empty($vo->nilai_disetujui) ? round((int)$vo->nilai_disetujui / (int)$vo->biaya_pengajuan, 2) * 100 : 0  }} %</p>
+                                                                        <p class="m-0">{{ !empty($vo->biaya_pengajuan) || !empty($vo->nilai_disetujui) ? round((int)$vo->nilai_disetujui / (int)$vo->biaya_pengajuan, 3) * 100 : 0  }} %</p>
                                                                     </td>
                                                                     @php
                                                                     $stage = "";
@@ -477,7 +477,7 @@
                                                                     </td>
                                                                     <!--end::Dampak Waktu-->
                                                                     <td class="text-center">
-                                                                        <p class="m-0">{{ !empty($klaim->biaya_pengajuan) || !empty($klaim->nilai_disetujui) ? round((int)$klaim->nilai_disetujui / (int)$klaim->biaya_pengajuan, 2) * 100 : 0  }} %</p>
+                                                                        <p class="m-0">{{ !empty($klaim->biaya_pengajuan) || !empty($klaim->nilai_disetujui) ? round((int)$klaim->nilai_disetujui / (int)$klaim->biaya_pengajuan, 3) * 100 : 0  }} %</p>
                                                                     </td>
                                                                     @php
                                                                     $stage = "";
@@ -604,7 +604,7 @@
                                                                     </td>
                                                                     <!--end::Dampak Waktu-->
                                                                     <td class="text-center">
-                                                                        <p class="m-0">{{ !empty($anti_klaim->biaya_pengajuan) || !empty($anti_klaim->nilai_disetujui) ? round((int)$anti_klaim->nilai_disetujui / (int)$anti_klaim->biaya_pengajuan, 2) * 100 : 0  }} %</p>
+                                                                        <p class="m-0">{{ !empty($anti_klaim->biaya_pengajuan) || !empty($anti_klaim->nilai_disetujui) ? round((int)$anti_klaim->nilai_disetujui / (int)$anti_klaim->biaya_pengajuan, 3) * 100 : 0  }} %</p>
                                                                     </td>
                                                                     @php
                                                                     $stage = "";
@@ -731,7 +731,7 @@
                                                                     </td>
                                                                     <!--end::Dampak Waktu-->
                                                                     <td class="text-center">
-                                                                        <p class="m-0">{{ !empty($klaim_asuransi->biaya_pengajuan) || !empty($klaim_asuransi->nilai_disetujui) ? round((int)$klaim_asuransi->nilai_disetujui / (int)$klaim_asuransi->biaya_pengajuan, 2) * 100 : 0  }} %</p>
+                                                                        <p class="m-0">{{ !empty($klaim_asuransi->biaya_pengajuan) || !empty($klaim_asuransi->nilai_disetujui) ? round((int)$klaim_asuransi->nilai_disetujui / (int)$klaim_asuransi->biaya_pengajuan, 3) * 100 : 0  }} %</p>
                                                                     </td>
                                                                     @php
                                                                     $stage = "";
