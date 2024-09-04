@@ -1467,7 +1467,7 @@ class CustomerController extends Controller
                 "status" => false,
                 "msg" => "Customer tidak ditemukan di Nasabah Online",
             ]);
-        } else if(empty($response["kdbp_sap"])) {
+        } else if (empty($response[0]["kdbp_sap"])) {
             return response()->json([
                 "status" => false,
                 "msg" => "Kode BP tidak ditemukan di kode nasabah $request->kode_nasabah",

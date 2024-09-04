@@ -457,40 +457,44 @@
                                                     </td>
                                                     <td class="text-center">
                                                         @canany(['admin-crm','approver-crm', 'risk-crm'])
-                                                            @if($assessment->is_rekomendasi_approved)
-                                                                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#generate_final_{{ $assessment->id }}">Lihat</button>
-                                                            @elseif (!empty($matriks_user) && $matriks_user->where('divisi_id', $assessment->divisi_id)->where('departemen_code', $assessment->departemen_id)->where('kategori', 'Rekomendasi')->first() && $assessment->is_penyusun_approved)
-                                                                @if (is_null($assessment->is_rekomendasi_approved))
-                                                                <button type="button" class="btn btn-sm btn-primary"
-                                                                    data-bs-target="#rekomendasi_{{ $assessment->id }}"
-                                                                    data-bs-toggle="modal">Rekomendasi</button>                                                                
-                                                                @endif
-                                                            @elseif (!empty($matriks_user) && $matriks_user->where('divisi_id', $assessment->divisi_id)->where('departemen_code', $assessment->departemen_id)->where('kategori', 'Penyusun')->first() && $assessment->is_pengajuan_approved)
-                                                                @if (empty($partner->PartnerSelection) || $partner->PartnerSelection->isEmpty())
-                                                                    @if ($partner->DokumenKelengkapanPartnerKSO->count() < 4)
-                                                                        <button type="button" data-bs-toggle="tooltip"
-                                                                            data-bs-html="true"
-                                                                            data-bs-title="<b>Belum dapat melakukan assessment,</b><br> dokumen belum lengkap"
-                                                                            class="btn btn-sm btn-secondary py-3">
-                                                                            Isi Assessment
-                                                                        </button>
-                                                                    @else
-                                                                        <a href="#"
-                                                                            data-bs-target="#kt_modal_create_assessment_{{ $assessment->id }}"
-                                                                            data-bs-toggle="modal"
-                                                                            class="btn btn-sm btn-primary py-3 text-white">
-                                                                            Isi Assessment
-                                                                        </a>
-                                                                    @endif
-                                                                @else
+                                                            @if (!empty($matriks_user))
+                                                                @if($assessment->is_rekomendasi_approved)
+                                                                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#generate_final_{{ $assessment->id }}">Lihat</button>
+                                                                @elseif (!empty($matriks_user) && $matriks_user->where('divisi_id', $assessment->divisi_id)->where('departemen_code', $assessment->departemen_id)->where('kategori', 'Rekomendasi')->first() && $assessment->is_penyusun_approved)
+                                                                    @if (is_null($assessment->is_rekomendasi_approved))
                                                                     <button type="button" class="btn btn-sm btn-primary"
-                                                                        data-bs-target="#penyusun_{{ $assessment->id }}"
-                                                                        data-bs-toggle="modal">{{ is_null($assessment->is_penyusun_approved) ? "Submit" : "Lihat Detail" }}</button>
+                                                                        data-bs-target="#rekomendasi_{{ $assessment->id }}"
+                                                                        data-bs-toggle="modal">Rekomendasi</button>                                                                
+                                                                    @endif
+                                                                @elseif (!empty($matriks_user) && $matriks_user->where('divisi_id', $assessment->divisi_id)->where('departemen_code', $assessment->departemen_id)->where('kategori', 'Penyusun')->first() && $assessment->is_pengajuan_approved)
+                                                                    @if (empty($partner->PartnerSelection) || $partner->PartnerSelection->isEmpty())
+                                                                        @if ($partner->DokumenKelengkapanPartnerKSO->count() < 4)
+                                                                            <button type="button" data-bs-toggle="tooltip"
+                                                                                data-bs-html="true"
+                                                                                data-bs-title="<b>Belum dapat melakukan assessment,</b><br> dokumen belum lengkap"
+                                                                                class="btn btn-sm btn-secondary py-3">
+                                                                                Isi Assessment
+                                                                            </button>
+                                                                        @else
+                                                                            <a href="#"
+                                                                                data-bs-target="#kt_modal_create_assessment_{{ $assessment->id }}"
+                                                                                data-bs-toggle="modal"
+                                                                                class="btn btn-sm btn-primary py-3 text-white">
+                                                                                Isi Assessment
+                                                                            </a>
+                                                                        @endif
+                                                                    @else
+                                                                        <button type="button" class="btn btn-sm btn-primary"
+                                                                            data-bs-target="#penyusun_{{ $assessment->id }}"
+                                                                            data-bs-toggle="modal">{{ is_null($assessment->is_penyusun_approved) ? "Submit" : "Lihat Detail" }}</button>
+                                                                    @endif                                                            
+                                                                @elseif (!empty($matriks_user) && $matriks_user->where('divisi_id', $assessment->divisi_id)->where('departemen_code', $assessment->departemen_id)->where('kategori', 'Pengajuan')->first())
+                                                                    <button type="button" class="btn btn-sm btn-primary"
+                                                                        data-bs-target="#pengajuan_{{ $assessment->id }}"
+                                                                        data-bs-toggle="modal">{{ is_null($assessment->is_pengajuan_approved) ? "Ajukan" : "Lihat Detail" }}</button>
                                                                 @endif                                                            
-                                                            @elseif (!empty($matriks_user) && $matriks_user->where('divisi_id', $assessment->divisi_id)->where('departemen_code', $assessment->departemen_id)->where('kategori', 'Pengajuan')->first())
-                                                                <button type="button" class="btn btn-sm btn-primary"
-                                                                    data-bs-target="#pengajuan_{{ $assessment->id }}"
-                                                                    data-bs-toggle="modal">{{ is_null($assessment->is_pengajuan_approved) ? "Ajukan" : "Lihat Detail" }}</button>
+                                                            @else
+                                                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#generate_final_{{ $assessment->id }}">Lihat</button>
                                                             @endif
 
                                                             {{-- @if ($assessment->is_rekomendasi_approved) --}}

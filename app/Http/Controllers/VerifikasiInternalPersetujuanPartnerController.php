@@ -124,7 +124,7 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
             $requestApproval = collect([
                 "nip" => Auth::user()->nip,
                 "status" => "Requested",
-                "tanggal" => Carbon::now()->translatedFormat("d F Y"),
+                "tanggal" => Carbon::now()->translatedFormat("d F Y H:i:s"),
             ]);
 
             $isExistVerifikasi = VerifikasiInternalPersetujuanPartner::where("kode_proyek", $proyek->kode_proyek)->first();
@@ -214,7 +214,7 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
                 $approvedPengajuan = $approvedPengajuan->push([
                     "nip" => auth()->user()->nip,
                     "status" => "approved",
-                    "tanggal" => Carbon::now()->translatedFormat("d F Y")
+                    "tanggal" => Carbon::now()->translatedFormat("d F Y H:i:s")
                 ]);
 
                 $proyek->pengajuan_approved = $approvedPengajuan->toJson();
@@ -246,7 +246,7 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
                     "nip" => auth()->user()->nip,
                     "status" => "Revisi",
                     "stage" => "Pengajuan",
-                    "tanggal" => Carbon::now()->translatedFormat("d F Y"),
+                    "tanggal" => Carbon::now()->translatedFormat("d F Y H:i:s"),
                     "catatan" => $data["catatan-revisi"]
                 ]);
 
@@ -298,7 +298,7 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
                 $approvedPengusul = $approvedPengusul->push([
                     "nip" => auth()->user()->nip,
                     "status" => "approved",
-                    "tanggal" => Carbon::now()->translatedFormat("d F Y")
+                    "tanggal" => Carbon::now()->translatedFormat("d F Y H:i:s")
                 ]);
 
                 $proyek->pengusul_approved = $approvedPengusul->toJson();
@@ -330,7 +330,7 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
                     "nip" => auth()->user()->nip,
                     "status" => "Revisi",
                     "stage" => "Pengusul",
-                    "tanggal" => Carbon::now()->translatedFormat("d F Y"),
+                    "tanggal" => Carbon::now()->translatedFormat("d F Y H:i:s"),
                     "catatan" => $data["catatan-revisi"]
                 ]);
 
@@ -382,7 +382,7 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
                 $approvedRekomendasi = $approvedRekomendasi->push([
                     "nip" => auth()->user()->nip,
                     "status" => "approved",
-                    "tanggal" => Carbon::now()->translatedFormat("d F Y")
+                    "tanggal" => Carbon::now()->translatedFormat("d F Y H:i:s")
                 ]);
 
                 $proyek->rekomendasi_approved = $approvedRekomendasi->toJson();
@@ -415,7 +415,7 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
                     "nip" => auth()->user()->nip,
                     "status" => "Revisi",
                     "stage" => "Rekomendasi",
-                    "tanggal" => Carbon::now()->translatedFormat("d F Y"),
+                    "tanggal" => Carbon::now()->translatedFormat("d F Y H:i:s"),
                     "catatan" => $data["catatan-revisi"]
                 ]);
 
@@ -467,7 +467,7 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
                 $approvedPersetujuan = $approvedPersetujuan->push([
                     "nip" => auth()->user()->nip,
                     "status" => "approved",
-                    "tanggal" => Carbon::now()->translatedFormat("d F Y")
+                    "tanggal" => Carbon::now()->translatedFormat("d F Y H:i:s")
                 ]);
 
                 $proyek->persetujuan_approved = $approvedPersetujuan->toJson();
@@ -504,7 +504,7 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
                     "nip" => auth()->user()->nip,
                     "status" => "Revisi",
                     "stage" => "Pengajuan",
-                    "tanggal" => Carbon::now()->translatedFormat("d F Y"),
+                    "tanggal" => Carbon::now()->translatedFormat("d F Y H:i:s"),
                     "catatan" => $data["catatan-revisi"]
                 ]);
 

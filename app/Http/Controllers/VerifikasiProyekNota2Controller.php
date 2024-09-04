@@ -115,7 +115,7 @@ class VerifikasiProyekNota2Controller extends Controller
             $requestApproval = collect([
                 "nip" => Auth::user()->nip,
                 "status" => "Requested",
-                "tanggal" => Carbon::now()->translatedFormat("d F Y"),
+                "tanggal" => Carbon::now()->translatedFormat("d F Y H:i:s"),
             ]);
 
             $isExistVerifikasi = VerifikasiProyekNota2::where("kode_proyek", $proyek->kode_proyek)->first();
@@ -208,7 +208,7 @@ class VerifikasiProyekNota2Controller extends Controller
                 $approvedPengajuan = $approvedPengajuan->push([
                     "nip" => auth()->user()->nip,
                     "status" => "approved",
-                    "tanggal" => Carbon::now()->translatedFormat("d F Y")
+                    "tanggal" => Carbon::now()->translatedFormat("d F Y H:i:s")
                 ]);
 
                 $proyek->pengajuan_approved = $approvedPengajuan->toJson();
@@ -258,7 +258,7 @@ class VerifikasiProyekNota2Controller extends Controller
                     "nip" => auth()->user()->nip,
                     "status" => "Revisi",
                     "stage" => "Pengajuan",
-                    "tanggal" => Carbon::now()->translatedFormat("d F Y"),
+                    "tanggal" => Carbon::now()->translatedFormat("d F Y H:i:s"),
                     "catatan" => $data["catatan-revisi"]
                 ]);
 
@@ -316,7 +316,7 @@ class VerifikasiProyekNota2Controller extends Controller
                 $approvedRekomendasi = $approvedRekomendasi->push([
                     "nip" => auth()->user()->nip,
                     "status" => "approved",
-                    "tanggal" => Carbon::now()->translatedFormat("d F Y")
+                    "tanggal" => Carbon::now()->translatedFormat("d F Y H:i:s")
                 ]);
 
                 $proyek->rekomendasi_approved = $approvedRekomendasi->toJson();
@@ -349,7 +349,7 @@ class VerifikasiProyekNota2Controller extends Controller
                     "nip" => auth()->user()->nip,
                     "status" => "Revisi",
                     "stage" => "Rekomendasi",
-                    "tanggal" => Carbon::now()->translatedFormat("d F Y"),
+                    "tanggal" => Carbon::now()->translatedFormat("d F Y H:i:s"),
                     "catatan" => $data["catatan-revisi"]
                 ]);
 
@@ -407,7 +407,7 @@ class VerifikasiProyekNota2Controller extends Controller
                 $approvedPersetujuan = $approvedPersetujuan->push([
                     "nip" => auth()->user()->nip,
                     "status" => "approved",
-                    "tanggal" => Carbon::now()->translatedFormat("d F Y")
+                    "tanggal" => Carbon::now()->translatedFormat("d F Y H:i:s")
                 ]);
 
                 $proyek->persetujuan_approved = $approvedPersetujuan->toJson();
@@ -442,7 +442,7 @@ class VerifikasiProyekNota2Controller extends Controller
                     "nip" => auth()->user()->nip,
                     "status" => "Revisi",
                     "stage" => "Pengajuan",
-                    "tanggal" => Carbon::now()->translatedFormat("d F Y"),
+                    "tanggal" => Carbon::now()->translatedFormat("d F Y H:i:s"),
                     "catatan" => $data["catatan-revisi"]
                 ]);
 

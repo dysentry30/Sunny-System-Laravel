@@ -348,6 +348,7 @@
                                                 <th class="min-w-auto" colspan="2">Status Pengajuan</th>
                                                 <th class="min-w-auto">Hasil Pengajuan</th>
                                                 <th class="min-w-auto">Revisi</th>
+                                                <th class="min-w-auto">Progress</th>
                                                 <th class="min-w-auto">Is Cancel</th>
                                                 <th class="min-w-auto">Action</th>
                                             </tr>
@@ -406,7 +407,7 @@
                                                                     if (!empty($collect_matriks) && $collect_matriks->isNotEmpty()) {
                                                                         $select_user = $collect_matriks
                                                                             ?->filter(function ($value, $key) use ($matriks, $collect_matriks) {
-                                                                                return $key == \App\Models\User::where('nip', '=', $matriks['nama_pegawai'])->first()?->id;
+                                                                                return $key == \App\Models\User::where('nip', '=', $matriks['nama_pegawai'])->first()?->nip;
                                                                             })
                                                                             ->first();
                                                                         if (empty($select_user)) {
@@ -445,6 +446,11 @@
                                                         @if ($item->is_revisi)
                                                             <a href="" class="badge badge-sm bg-primary">Lihat Catatan Revisi</a>
                                                         @endif
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <div class="circle bg-success" style="height:25px; width:25px; border-radius:50%;">
+                                                            <a href="#kt_modal_view_proyek_history_{{ $item->id }}" data-bs-toggle="modal" class="text-success">Klik</a>
+                                                        </div>
                                                     </td>
                                                     <td class="text-center">
                                                         @if ($item->Proyek->is_cancel)
@@ -546,7 +552,9 @@
                                                         <p class="m-0 badge badge-sm {{ !is_null($item->is_persetujuan_approved) && $item->is_persetujuan_approved ? "bg-success" : (!is_null($item->is_persetujuan_approved) && !$item->is_persetujuan_approved ? "bg-danger" : "bg-primary") }}">{{ !is_null($item->is_persetujuan_approved) && $item->is_persetujuan_approved ? "Disetujui" : (!is_null($item->is_persetujuan_approved) && !$item->is_persetujuan_approved ? "Ditolak" : "On Process") }}</p>
                                                     </td>
                                                     <td class="text-center">
-                                                        <button class="badge badge-sm bg-primary text-white" onclick="showProgressModal('{{ $item->kode_proyek }}')">Lihat Progress</button>
+                                                        <div class="circle bg-success" style="height:25px; width:25px; border-radius:50%;">
+                                                            <a href="#kt_modal_view_proyek_history_final_{{ $item->id }}" data-bs-toggle="modal" class="text-success">Klik</a>
+                                                        </div>
                                                     </td>
                                                     <td class="text-center">
                                                         @if ($item->Proyek->is_cancel)
@@ -799,8 +807,234 @@
                 </div>
             </div> 
         </form>
+
+        <!--Begin::Modal Revisi Note-->
+        <div class="modal fade" id="kt_modal_view_proyek_history_{{ $proyek->id }}" tabindex="-1"
+            aria-labelledby="kt_modal_view_proyek_history_{{ $proyek->id }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">History Verifikasi Penentuan Proyek KSO / Non KSO</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @php
+                            $pengajuan = collect(json_decode($proyek->pengajuan_approved));
+                            $rekomendasi = collect(json_decode($proyek->rekomendasi_approved));
+                            $persetujuan = collect(json_decode($proyek->persetujuan_approved));
+
+                            $data_approved_merged = collect();
+                            if ($pengajuan->isNotEmpty() || $persetujuan->isNotEmpty() || $rekomendasi->isNotEmpty()) {
+                                $data_approved_merged = collect()->mergeRecursive(['Pengajuan' => $pengajuan->flatten(), 'Rekomendasi' => $rekomendasi->flatten(), 'Persetujuan' => $persetujuan->flatten()]);
+                            }
+                        @endphp
+                        {{-- Begin :: History --}}
+                        <div class="row">
+                            @php
+                                $row = 1;
+                            @endphp
+                            <div class="timeline-centered">
+                                @forelse ($data_approved_merged as $key => $data)
+                                    @if ($data->isNotEmpty())
+                                    <article class="timeline-entry {{ $row % 2 == 0 ? 'left-aligned' : '' }}">
+
+                                        <div class="timeline-entry-inner">
+                                            <time class="timeline-time"></time>
+                                            @if ($data->contains('status', 'rejected'))
+                                                <div class="timeline-icon bg-danger">
+                                                    <i class="entypo-feather"></i>
+                                                </div>
+                                            @else
+                                                <div class="timeline-icon bg-success">
+                                                    <i class="entypo-feather"></i>
+                                                </div>
+                                            @endif
+
+                                            <div class="timeline-content">
+                                                <div class="row">
+                                                    <h5>Tanggung jawab {{ $key }} diberikan oleh:</h5>
+                                                    @foreach ($data as $d)
+                                                        <div class="card text-bg-light my-3">
+                                                            <div class="card-body">
+                                                                <small>
+                                                                    Nama:
+                                                                    <b>{{ App\Models\User::where("nip",$d->nip)->first()->name ?? "-" }}</b><br>
+                                                                    Jabatan:
+                                                                    <b>{{ App\Models\User::where("nip",$d->nip)->first()->Pegawai->Jabatan?->nama_jabatan ?? "-" }}</b><br>
+                                                                    Status Approval:
+                                                                    @if ($d->status == 'approved')
+                                                                        <span><b
+                                                                                class="text-success">Menyetujui</b></span>
+                                                                    @else
+                                                                        <span><b class="text-danger">Menolak</b></span>
+                                                                    @endif
+                                                                    <br>
+
+                                                                    @if (!empty($d->tanggal))
+                                                                        Tanggal:
+                                                                        <b>{{ $d->tanggal }}</b>
+                                                                        <br>
+                                                                    @endif
+
+                                                                    @if ($key == 'Rekomendasi')
+                                                                        Status :
+                                                                        @if ($d->status == 'approved' && !empty($d->catatan))
+                                                                            <b>Direkomendasikan Dengan Catatan</b>
+                                                                        @elseif ($d->status == 'approved')
+                                                                            <b>Direkomendasikan</b>
+                                                                        @else
+                                                                            <b class="text-danger">Tidak
+                                                                                Direkomendasikan</b>
+                                                                        @endif
+                                                                    @endif
+                                                                    <br>
+
+                                                                    @if (!empty($d->catatan))
+                                                                        Catatan:
+                                                                        <b>{!! nl2br($d->catatan) !!}</b><br>
+                                                                    @endif
+                                                                </small>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </article>
+                                    @endif
+                                    @php
+                                        $row++;
+                                    @endphp
+                                @empty
+                                    <p class="text-center"><b>Belum ada catatan revisi</b></p>
+                                @endforelse
+                            </div>
+                        </div>
+                        {{-- End :: History --}}
+                    </div>
+                    <div class="modal-footer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End::Modal Revisi Note-->
     @endforeach
     <!--End::Modal Pengajuan-->
+
+    @foreach ($dataProyekFinishVerifikasi as $proyek)
+        <!--Begin::Modal Revisi Note-->
+        <div class="modal fade" id="kt_modal_view_proyek_history_final_{{ $proyek->id }}" tabindex="-1"
+            aria-labelledby="kt_modal_view_proyek_history_{{ $proyek->id }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">History Verifikasi Penentuan Proyek KSO / Non KSO</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @php
+                            $pengajuan = collect(json_decode($proyek->pengajuan_approved));
+                            $rekomendasi = collect(json_decode($proyek->rekomendasi_approved));
+                            $persetujuan = collect(json_decode($proyek->persetujuan_approved));
+
+                            $data_approved_merged = collect();
+                            if ($pengajuan->isNotEmpty() || $persetujuan->isNotEmpty() || $rekomendasi->isNotEmpty()) {
+                                $data_approved_merged = collect()->mergeRecursive(['Pengajuan' => $pengajuan->flatten(), 'Rekomendasi' => $rekomendasi->flatten(), 'Persetujuan' => $persetujuan->flatten()]);
+                            }
+                        @endphp
+                        {{-- Begin :: History --}}
+                        <div class="row">
+                            @php
+                                $row = 1;
+                            @endphp
+                            <div class="timeline-centered">
+                                @forelse ($data_approved_merged as $key => $data)
+                                    @if ($data->isNotEmpty())
+                                    <article class="timeline-entry {{ $row % 2 == 0 ? 'left-aligned' : '' }}">
+
+                                        <div class="timeline-entry-inner">
+                                            <time class="timeline-time"></time>
+                                            @if ($data->contains('status', 'rejected'))
+                                                <div class="timeline-icon bg-danger">
+                                                    <i class="entypo-feather"></i>
+                                                </div>
+                                            @else
+                                                <div class="timeline-icon bg-success">
+                                                    <i class="entypo-feather"></i>
+                                                </div>
+                                            @endif
+
+                                            <div class="timeline-content">
+                                                <div class="row">
+                                                    <h5>Tanggung jawab {{ $key }} diberikan oleh:</h5>
+                                                    @foreach ($data as $d)
+                                                        <div class="card text-bg-light my-3">
+                                                            <div class="card-body">
+                                                                <small>
+                                                                    Nama:
+                                                                    <b>{{ App\Models\User::where("nip",$d->nip)->first()->name ?? "-" }}</b><br>
+                                                                    Jabatan:
+                                                                    <b>{{ App\Models\User::where("nip",$d->nip)->first()->Pegawai->Jabatan?->nama_jabatan ?? "-" }}</b><br>
+                                                                    Status Approval:
+                                                                    @if ($d->status == 'approved')
+                                                                        <span><b
+                                                                                class="text-success">Menyetujui</b></span>
+                                                                    @else
+                                                                        <span><b class="text-danger">Menolak</b></span>
+                                                                    @endif
+                                                                    <br>
+
+                                                                    @if (!empty($d->tanggal))
+                                                                        Tanggal:
+                                                                        <b>{{ $d->tanggal }}</b>
+                                                                        <br>
+                                                                    @endif
+
+                                                                    @if ($key == 'Rekomendasi')
+                                                                        Status :
+                                                                        @if ($d->status == 'approved' && !empty($d->catatan))
+                                                                            <b>Direkomendasikan Dengan Catatan</b>
+                                                                        @elseif ($d->status == 'approved')
+                                                                            <b>Direkomendasikan</b>
+                                                                        @else
+                                                                            <b class="text-danger">Tidak
+                                                                                Direkomendasikan</b>
+                                                                        @endif
+                                                                    @endif
+                                                                    <br>
+
+                                                                    @if (!empty($d->catatan))
+                                                                        Catatan:
+                                                                        <b>{!! nl2br($d->catatan) !!}</b><br>
+                                                                    @endif
+                                                                </small>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </article>
+                                    @endif
+                                    @php
+                                        $row++;
+                                    @endphp
+                                @empty
+                                    <p class="text-center"><b>Belum ada catatan revisi</b></p>
+                                @endforelse
+                            </div>
+                        </div>
+                        {{-- End :: History --}}
+                    </div>
+                    <div class="modal-footer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End::Modal Revisi Note-->
+    @endforeach
 
 @endsection
 

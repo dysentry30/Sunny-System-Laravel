@@ -46,12 +46,12 @@ class AssessmentPartnerSelectionController extends Controller
         $matriks_user = Auth::user()->Pegawai->MatriksPartner ?? null;
         $collectDivisiMatriksUser = $matriks_user?->groupBy('divisi_id')->keys()->values()->toArray() ?? [];
         $collectDepartemenMatriksUser = $matriks_user?->groupBy('departemen_code')->keys()->values()->toArray() ?? [];
-        if (Gate::allows('super-admin')) {
+        if (Gate::any(['super-admin', 'admin-crm'])) {
             $collectDivisiMatriksUser = [
-                '20', // INFRA 1
-                '21', // INFRA 2
-                '23', // EPCC
-                '25', // BGLN
+                '2', // INFRA 1
+                '3', // INFRA 2
+                '7', // EPCC
+                '8', // BGLN
             ];
             $collectDepartemenMatriksUser = [
                 'AB001',

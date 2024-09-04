@@ -33,7 +33,7 @@ class VerifikasiInternalPartnerController extends Controller
      */
     public function index()
     {
-        $this->matriks_user = !Auth::user()->check_administrator ? Auth::user()->Pegawai->MatriksVerifikasiPartner->where('is_active', true) : MatriksApprovalVerifikasiPartner::all()->where('is_active', true);
+        $this->matriks_user = !Auth::user()->check_administrator && !Gate::allows("admin-crm") ? Auth::user()->Pegawai->MatriksVerifikasiPartner->where('is_active', true) : MatriksApprovalVerifikasiPartner::all()->where('is_active', true);
 
         $is_super_user = Gate::allows("super-admin");
         $unit_kerjas = $is_super_user && str_contains(Auth::user()->name, "Admin") || str_contains(Auth::user()->name, "ANDIAS") ?
@@ -128,7 +128,7 @@ class VerifikasiInternalPartnerController extends Controller
             $requestApproval = collect([
                 "nip" => Auth::user()->nip,
                 "status" => "Requested",
-                "tanggal" => Carbon::now()->translatedFormat("d F Y"),
+                "tanggal" => Carbon::now()->translatedFormat("d F Y H:i:s"),
             ]);
 
             $isExistVerifikasi = VerifikasiInternalPartner::where("kode_proyek", $proyek->kode_proyek)->first();
@@ -225,7 +225,7 @@ class VerifikasiInternalPartnerController extends Controller
                 $approvedPengajuan = $approvedPengajuan->push([
                     "nip" => auth()->user()->nip,
                     "status" => "approved",
-                    "tanggal" => Carbon::now()->translatedFormat("d F Y")
+                    "tanggal" => Carbon::now()->translatedFormat("d F Y H:i:s")
                 ]);
 
                 $proyek->pengajuan_approved = $approvedPengajuan->toJson();
@@ -294,7 +294,7 @@ class VerifikasiInternalPartnerController extends Controller
                     "nip" => auth()->user()->nip,
                     "status" => "Revisi",
                     "stage" => "Pengajuan",
-                    "tanggal" => Carbon::now()->translatedFormat("d F Y"),
+                    "tanggal" => Carbon::now()->translatedFormat("d F Y H:i:s"),
                     "catatan" => $data["catatan-revisi"]
                 ]);
 
@@ -356,7 +356,7 @@ class VerifikasiInternalPartnerController extends Controller
                 $approvedRekomendasi = $approvedRekomendasi->push([
                     "nip" => auth()->user()->nip,
                     "status" => "approved",
-                    "tanggal" => Carbon::now()->translatedFormat("d F Y")
+                    "tanggal" => Carbon::now()->translatedFormat("d F Y H:i:s")
                 ]);
 
                 $proyek->rekomendasi_approved = $approvedRekomendasi->toJson();
@@ -424,7 +424,7 @@ class VerifikasiInternalPartnerController extends Controller
                     "nip" => auth()->user()->nip,
                     "status" => "Revisi",
                     "stage" => "Rekomendasi",
-                    "tanggal" => Carbon::now()->translatedFormat("d F Y"),
+                    "tanggal" => Carbon::now()->translatedFormat("d F Y H:i:s"),
                     "catatan" => $data["catatan-revisi"]
                 ]);
 
@@ -486,7 +486,7 @@ class VerifikasiInternalPartnerController extends Controller
                 $approvedPersetujuan = $approvedPersetujuan->push([
                     "nip" => auth()->user()->nip,
                     "status" => "approved",
-                    "tanggal" => Carbon::now()->translatedFormat("d F Y")
+                    "tanggal" => Carbon::now()->translatedFormat("d F Y H:i:s")
                 ]);
 
                 $proyek->persetujuan_approved = $approvedPersetujuan->toJson();
@@ -559,7 +559,7 @@ class VerifikasiInternalPartnerController extends Controller
                     "nip" => auth()->user()->nip,
                     "status" => "Revisi",
                     "stage" => "Pengajuan",
-                    "tanggal" => Carbon::now()->translatedFormat("d F Y"),
+                    "tanggal" => Carbon::now()->translatedFormat("d F Y H:i:s"),
                     "catatan" => $data["catatan-revisi"]
                 ]);
 

@@ -2916,14 +2916,15 @@
                     </div>
                     <div class="modal-body">
                         @php
+                            $approved_request = collect(json_decode($nota_rekomendasi->request_pengajuan));
                             $approved_pengajuan = collect(json_decode($nota_rekomendasi_finish->approved_rekomendasi));
                             // $approved_penyusun = collect(json_decode($proyek->approved_penyusun));
                             $approved_verifikasi = collect(json_decode($nota_rekomendasi_finish->approved_verifikasi));
                             $approved_rekomendasi = collect(json_decode($nota_rekomendasi_finish->approved_rekomendasi_final));
                             $approved_persetujuan = collect(json_decode($nota_rekomendasi_finish->approved_persetujuan));
                             $data_approved_merged = collect();
-                            if ($approved_pengajuan->isNotEmpty() || $approved_verifikasi->isNotEmpty() || $approved_rekomendasi->isNotEmpty() || $approved_persetujuan->isNotEmpty()) {
-                                $data_approved_merged = collect()->mergeRecursive(['Pengajuan' => $approved_pengajuan->flatten(), 'Penyusun' => $approved_verifikasi->flatten(), 'Rekomendasi' => $approved_rekomendasi->flatten(), 'Persetujuan' => $approved_persetujuan->flatten()]);
+                            if ($approved_pengajuan->isNotEmpty() || $approved_verifikasi->isNotEmpty() || $approved_rekomendasi->isNotEmpty() || $approved_persetujuan->isNotEmpty() || $approved_request->isNotEmpty()) {
+                                $data_approved_merged = collect()->mergeRecursive(['Request Pengajuan' => $approved_request->flatten(), 'Pengajuan' => $approved_pengajuan->flatten(), 'Penyusun' => $approved_verifikasi->flatten(), 'Rekomendasi' => $approved_rekomendasi->flatten(), 'Persetujuan' => $approved_persetujuan->flatten()]);
                             }
                         @endphp
                         {{-- Begin :: History --}}
@@ -2953,51 +2954,74 @@
                                                 <div class="timeline-content">
                                                     <div class="row">
                                                         <h5>Tanggung jawab {{ $key }} diberikan oleh:</h5>
-                                                        @foreach ($data as $d)
+                                                        @if ($key == "Request Pengajuan")
                                                             <div class="card text-bg-light my-3">
                                                                 <div class="card-body">
                                                                     <small>
                                                                         Nama:
-                                                                        <b>{{ App\Models\User::find($d->user_id)->name }}</b><br>
+                                                                        <b>{{ App\Models\User::find($data[0])->name }}</b><br>
                                                                         Jabatan:
-                                                                        <b>{{ App\Models\User::find($d->user_id)->Pegawai->Jabatan?->nama_jabatan }}</b><br>
+                                                                        <b>{{ App\Models\User::find($data[0])->Pegawai->Jabatan?->nama_jabatan }}</b><br>
                                                                         Status Approval:
-                                                                        @if ($d->status == 'approved')
-                                                                            <span><b
-                                                                                    class="text-success">Menyetujui</b></span>
-                                                                        @else
-                                                                            <span><b class="text-danger">Menolak</b></span>
-                                                                        @endif
+                                                                        <span><b class="text-success">Mengajukan</b></span>
                                                                         <br>
-
-                                                                        @if (!empty($d->tanggal))
+                                                                        
+                                                                        @if (!empty($data[2]))
                                                                             Tanggal:
-                                                                            {{-- <b>{{ Carbon\Carbon::parse($d->tanggal)->setTimezone('UTC')->translatedFormat('d F Y H:i:s') }}</b> --}}
-                                                                            <b>{{ Carbon\Carbon::parse(date('d M Y H:i:s', strtotime($d->tanggal)))->translatedFormat('d F Y H:i:s') }}</b>
+                                                                            {{-- <b>{{ Carbon\Carbon::create($data[2])->translatedFormat('d F Y H:i:s') }}</b> --}}
+                                                                            <b>{{ Carbon\Carbon::parse(date('d M Y H:i:s', strtotime($data[2])))->translatedFormat('d F Y H:i:s') }}</b>
                                                                             <br>
-                                                                        @endif
-
-                                                                        @if ($key == 'Rekomendasi')
-                                                                            Status :
-                                                                            @if ($d->status == 'approved' && !empty($d->catatan))
-                                                                                <b>Direkomendasikan Dengan Catatan</b>
-                                                                            @elseif ($d->status == 'approved')
-                                                                                <b>Direkomendasikan</b>
-                                                                            @else
-                                                                                <b class="text-danger">Tidak
-                                                                                    Direkomendasikan</b>
-                                                                            @endif
-                                                                        @endif
-                                                                        <br>
-
-                                                                        @if (!empty($d->catatan))
-                                                                            Catatan:
-                                                                            <b>{!! nl2br($d->catatan) !!}</b><br>
                                                                         @endif
                                                                     </small>
                                                                 </div>
                                                             </div>
-                                                        @endforeach
+                                                        @else
+                                                            @foreach ($data as $d)
+                                                                <div class="card text-bg-light my-3">
+                                                                    <div class="card-body">
+                                                                        <small>
+                                                                            Nama:
+                                                                            <b>{{ App\Models\User::find($d->user_id)->name }}</b><br>
+                                                                            Jabatan:
+                                                                            <b>{{ App\Models\User::find($d->user_id)->Pegawai->Jabatan?->nama_jabatan }}</b><br>
+                                                                            Status Approval:
+                                                                            @if ($d->status == 'approved')
+                                                                                <span><b
+                                                                                        class="text-success">Menyetujui</b></span>
+                                                                            @else
+                                                                                <span><b class="text-danger">Menolak</b></span>
+                                                                            @endif
+                                                                            <br>
+
+                                                                            @if (!empty($d->tanggal))
+                                                                                Tanggal:
+                                                                                {{-- <b>{{ Carbon\Carbon::parse($d->tanggal)->setTimezone('UTC')->translatedFormat('d F Y H:i:s') }}</b> --}}
+                                                                                <b>{{ Carbon\Carbon::parse(date('d M Y H:i:s', strtotime($d->tanggal)))->translatedFormat('d F Y H:i:s') }}</b>
+                                                                                <br>
+                                                                            @endif
+
+                                                                            @if ($key == 'Rekomendasi')
+                                                                                Status :
+                                                                                @if ($d->status == 'approved' && !empty($d->catatan))
+                                                                                    <b>Direkomendasikan Dengan Catatan</b>
+                                                                                @elseif ($d->status == 'approved')
+                                                                                    <b>Direkomendasikan</b>
+                                                                                @else
+                                                                                    <b class="text-danger">Tidak
+                                                                                        Direkomendasikan</b>
+                                                                                @endif
+                                                                            @endif
+                                                                            <br>
+
+                                                                            @if (!empty($d->catatan))
+                                                                                Catatan:
+                                                                                <b>{!! nl2br($d->catatan) !!}</b><br>
+                                                                            @endif
+                                                                        </small>
+                                                                    </div>
+                                                                </div>
+                                                            @endforeach
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -3176,14 +3200,15 @@
                 </div>
                 <div class="modal-body">
                     @php
+                        $approved_request = collect(json_decode($nota_rekomendasi->request_pengajuan));
                         $approved_pengajuan = collect(json_decode($nota_rekomendasi->approved_rekomendasi));
                         // $approved_penyusun = collect(json_decode($proyek->approved_penyusun));
                         $approved_verifikasi = collect(json_decode($nota_rekomendasi->approved_verifikasi));
                         $approved_rekomendasi = collect(json_decode($nota_rekomendasi->approved_rekomendasi_final));
                         $approved_persetujuan = collect(json_decode($nota_rekomendasi->approved_persetujuan));
                         $data_approved_merged = collect();
-                        if ($approved_pengajuan->isNotEmpty() || $approved_verifikasi->isNotEmpty() || $approved_rekomendasi->isNotEmpty() || $approved_persetujuan->isNotEmpty()) {
-                            $data_approved_merged = collect()->mergeRecursive(['Pengajuan' => $approved_pengajuan->flatten(), 'Penyusun' => $approved_verifikasi->flatten(), 'Rekomendasi' => $approved_rekomendasi->flatten(), 'Persetujuan' => $approved_persetujuan->flatten()]);
+                        if ($approved_pengajuan->isNotEmpty() || $approved_verifikasi->isNotEmpty() || $approved_rekomendasi->isNotEmpty() || $approved_persetujuan->isNotEmpty() || $approved_request->isNotEmpty()) {
+                            $data_approved_merged = collect()->mergeRecursive(['Request Pengajuan' => $approved_request->flatten(), 'Pengajuan' => $approved_pengajuan->flatten(), 'Penyusun' => $approved_verifikasi->flatten(), 'Rekomendasi' => $approved_rekomendasi->flatten(), 'Persetujuan' => $approved_persetujuan->flatten()]);
                         }
                     @endphp
                     {{-- Begin :: History --}}
@@ -3213,51 +3238,75 @@
                                             <div class="timeline-content">
                                                 <div class="row">
                                                     <h5>Tanggung jawab {{ $key }} diberikan oleh:</h5>
-                                                    @foreach ($data as $d)
+                                                    @if ($key == "Request Pengajuan")
                                                         <div class="card text-bg-light my-3">
                                                             <div class="card-body">
                                                                 <small>
                                                                     Nama:
-                                                                    <b>{{ App\Models\User::find($d->user_id)->name }}</b><br>
+                                                                    <b>{{ App\Models\User::find($data[0])->name }}</b><br>
                                                                     Jabatan:
-                                                                    <b>{{ App\Models\User::find($d->user_id)->Pegawai->Jabatan?->nama_jabatan }}</b><br>
+                                                                    <b>{{ App\Models\User::find($data[0])->Pegawai->Jabatan?->nama_jabatan }}</b><br>
                                                                     Status Approval:
-                                                                    @if ($d->status == 'approved')
-                                                                        <span><b
-                                                                                class="text-success">Menyetujui</b></span>
-                                                                    @else
-                                                                        <span><b class="text-danger">Menolak</b></span>
-                                                                    @endif
+                                                                    <span><b class="text-success">Mengajukan</b></span>
                                                                     <br>
-
-                                                                    @if (!empty($d->tanggal))
+                                                                    
+                                                                    @if (!empty($data[2]))
                                                                         Tanggal:
-                                                                        {{-- <b>{{ Carbon\Carbon::create($d->tanggal)->translatedFormat('d F Y H:i:s') }}</b> --}}
-                                                                        <b>{{ Carbon\Carbon::parse(date('d M Y H:i:s', strtotime($d->tanggal)))->translatedFormat('d F Y H:i:s') }}</b>
+                                                                        {{-- <b>{{ Carbon\Carbon::create($data[2])->translatedFormat('d F Y H:i:s') }}</b> --}}
+                                                                        <b>{{ Carbon\Carbon::parse(date('d M Y H:i:s', strtotime($data[2])))->translatedFormat('d F Y H:i:s') }}</b>
                                                                         <br>
-                                                                    @endif
-
-                                                                    @if ($key == 'Rekomendasi')
-                                                                        Status :
-                                                                        @if ($d->status == 'approved' && !empty($d->catatan))
-                                                                            <b>Direkomendasikan Dengan Catatan</b>
-                                                                        @elseif ($d->status == 'approved')
-                                                                            <b>Direkomendasikan</b>
-                                                                        @else
-                                                                            <b class="text-danger">Tidak
-                                                                                Direkomendasikan</b>
-                                                                        @endif
-                                                                    @endif
-                                                                    <br>
-
-                                                                    @if (!empty($d->catatan))
-                                                                        Catatan:
-                                                                        <b>{!! nl2br($d->catatan) !!}</b><br>
                                                                     @endif
                                                                 </small>
                                                             </div>
                                                         </div>
-                                                    @endforeach
+                                                    @else
+                                                        @foreach ($data as $d)
+                                                            <div class="card text-bg-light my-3">
+                                                                <div class="card-body">
+                                                                    <small>
+                                                                        Nama:
+                                                                        <b>{{ App\Models\User::find($d->user_id)->name }}</b><br>
+                                                                        Jabatan:
+                                                                        <b>{{ App\Models\User::find($d->user_id)->Pegawai->Jabatan?->nama_jabatan }}</b><br>
+                                                                        Status Approval:
+                                                                        @if (!empty($d->status))
+                                                                            @if ($d->status == 'approved')
+                                                                                <span><b class="text-success">Menyetujui</b></span>
+                                                                            @else
+                                                                                <span><b class="text-danger">Menolak</b></span>
+                                                                            @endif                                                                        
+                                                                        @endif
+                                                                        <br>
+                                                                        
+                                                                        @if (!empty($d->tanggal))
+                                                                            Tanggal:
+                                                                            {{-- <b>{{ Carbon\Carbon::create($d->tanggal)->translatedFormat('d F Y H:i:s') }}</b> --}}
+                                                                            <b>{{ Carbon\Carbon::parse(date('d M Y H:i:s', strtotime($d->tanggal)))->translatedFormat('d F Y H:i:s') }}</b>
+                                                                            <br>
+                                                                        @endif
+
+                                                                        @if ($key == 'Rekomendasi')
+                                                                            Status :
+                                                                            @if ($d->status == 'approved' && !empty($d->catatan))
+                                                                                <b>Direkomendasikan Dengan Catatan</b>
+                                                                            @elseif ($d->status == 'approved')
+                                                                                <b>Direkomendasikan</b>
+                                                                            @else
+                                                                                <b class="text-danger">Tidak
+                                                                                    Direkomendasikan</b>
+                                                                            @endif
+                                                                        @endif
+                                                                        <br>
+
+                                                                        @if (!empty($d->catatan))
+                                                                            Catatan:
+                                                                            <b>{!! nl2br($d->catatan) !!}</b><br>
+                                                                        @endif
+                                                                    </small>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>

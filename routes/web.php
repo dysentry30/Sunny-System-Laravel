@@ -6059,7 +6059,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $pefindo->id_pelanggan = $pelanggan->id_customer;
         $pefindo->bulan_start = $data['bulan'];
         $pefindo->tahun_start = $data['tahun'];
-        $pefindo->is_active = isset($data['isActive']) && ((int)$data['bulan'] + 5 < date("m")) ? false : true;
+        $pefindo->is_active = isset($data['isActive']) && ((int)$data['bulan'] + 5 < date("m") && (int)$data['tahun'] == date("Y")) ? false : true;
         $pefindo->nama_pelanggan = $pelanggan->name;
         $pefindo->score = (int)$data["score"];
         $pefindo->id_document = $id_document;

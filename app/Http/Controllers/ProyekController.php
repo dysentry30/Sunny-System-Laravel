@@ -662,8 +662,7 @@ class ProyekController extends Controller
             //     // "url" => $url
             // ]);
             // dd($send_msg_to_wa, "send");
-            $request_pengajuan = collect([
-                "user_id" => $pegawaiKAM->User->id,
+            $request_pengajuan = collect(["user_id" => Auth::user()->id,
                 "status" => "request",
                 "tanggal" => \Carbon\Carbon::now(),
             ]);
@@ -721,6 +720,13 @@ class ProyekController extends Controller
             $newNotaRekomendasi2->divisi_id = $newProyek->UnitKerja->Divisi->id_divisi;
             $newNotaRekomendasi2->departemen_proyek = $newProyek->departemen_proyek;
             $newNotaRekomendasi2->is_request_rekomendasi = true;
+
+            $request_pengajuan_nota_2 = collect([
+                "user_id" => Auth::user()->id,
+                "status" => "request",
+                "tanggal" => \Carbon\Carbon::now(),
+            ]);
+            $newNotaRekomendasi2->request_pengajuan = $request_pengajuan_nota_2->toJson();
 
             if ($newNotaRekomendasi2->save()) {
                 Alert::success('Success', "Proyek Berhasil Diajukan");

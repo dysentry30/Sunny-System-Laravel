@@ -3604,7 +3604,7 @@
                                                                                             @endphp
                                                                                             @if (!empty($files))
                                                                                             @foreach ($files as $file)
-                                                                                            <a href="{{ asset('consent-npwp/').$file }}" class="text-hover-primary">{{ $file }}</a>
+                                                                                            <a href="{{ asset('consent-npwp/') . '/'  . $file }}" class="text-hover-primary">{{ $file }}</a>
                                                                                             <hr>
                                                                                             @endforeach                                                                                                
                                                                                             @else
@@ -3692,7 +3692,7 @@
                                                                                             </td>
                                                                                         @else
                                                                                             <td class="text-center">
-                                                                                                <a href="{{ asset('pefindo/').$porsi->file_pefindo_jo }}" class="{{ $porsi->file_pefindo_jo ? 'text-hover-primary' : 'badge rounded-pill text-bg-danger' }}">{{ $porsi->file_pefindo_jo ?? 'Belum ditentukan' }}</a>
+                                                                                                <a href="{{ asset('pefindo/') . '/' . $porsi->file_pefindo_jo }}" class="{{ $porsi->file_pefindo_jo ? 'text-hover-primary' : 'badge rounded-pill text-bg-danger' }}">{{ $porsi->file_pefindo_jo ?? 'Belum ditentukan' }}</a>
                                                                                             </td>                                                                                            
                                                                                             <!--begin::Column-->
                                                                                             <td class="text-center">

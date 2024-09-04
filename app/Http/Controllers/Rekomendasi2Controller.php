@@ -156,7 +156,7 @@ class Rekomendasi2Controller extends Controller
             return !is_null($p->is_disetujui) || $p->Proyek->is_cancel;
         });
 
-        if ($matriks_user->isEmpty()) {
+        if ($matriks_user->isEmpty() && Gate::any(["admin-crm"])) {
             $collectKlasifikasi = $collectKlasifikasiPaparan = ["Proyek Kecil", "Proyek Menengah", "Proyek Besar", "Mega Proyek"];
             $proyeks_proses_paparan = $proyeks->whereIn("unit_kerja", $unit_kerjas)->whereIn('klasifikasi_proyek', $collectKlasifikasiPaparan)->whereNotNull('is_request_paparan')->whereNull('is_disetujui')->filter(function ($p) {
                 return !$p->Proyek->is_cancel;
