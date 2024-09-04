@@ -340,6 +340,16 @@
                                                             <div class="row">
                                                                 <div class="col">
                                                                     <label class="fs-6 fw-bold form-label">
+                                                                        <span style="font-weight: normal">Keterangan</span>
+                                                                    </label>
+                                                                    <textarea cols="4" name="keterangan" class="form-control" style="cursor:auto" readonly>{!! $perubahan_kontrak->keterangan !!}</textarea>
+                                                                </div>
+                                                                
+                                                            </div>
+                                                            <br>
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <label class="fs-6 fw-bold form-label">
                                                                         <span style="font-weight: normal">No Proposal Klaim</span>
                                                                     </label><br>
                                                                     <b>{{ $perubahan_kontrak->proposal_klaim }}</b>
@@ -361,7 +371,7 @@
                                                                 </div>
                                                                 <div class="col">
                                                                     <label class="fs-6 fw-bold form-label">
-                                                                        <span style="font-weight: normal">Nilai Pengajuan</span>
+                                                                        <span style="font-weight: normal">Nilai Pengajuan (Excld. PPN)</span>
                                                                     </label><br>
                                                                         <span style="font-weight: normal">
                                                                             <b class="badge {{ (int) $perubahan_kontrak->biaya_pengajuan != 0 ? 'badge-primary' : 'badge-danger' }}">{{ (int) $perubahan_kontrak->biaya_pengajuan != 0 ? 'Yes' : 'No' }}</b>
@@ -371,15 +381,17 @@
                                                                 </div>
                                                                 <div class="col">
                                                                     <label class="fs-6 fw-bold form-label">
-                                                                        <span style="font-weight: normal">Dampak Waktu</span>
+                                                                        <span style="font-weight: normal">Dampak Waktu (Hari)</span>
                                                                         {{-- <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)"
                                                                             id="start-date-modal">
                                                                             <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
                                                                         </a> --}}
                                                                     </label><br>
                                                                     <span style="font-weight: normal">
-                                                                        <b class="badge {{ !empty($perubahan_kontrak->waktu_pengajuan) ? 'badge-primary' : 'badge-danger' }}">{{ !empty($perubahan_kontrak->waktu_pengajuan) ? 'Yes' : 'No' }}</b>
-                                                                        <b>{{ !empty($perubahan_kontrak->waktu_pengajuan) ? Carbon\Carbon::create($perubahan_kontrak->waktu_pengajuan)->translatedFormat("d F Y") : '' }}</b>
+                                                                        {{-- <b class="badge {{ !empty($perubahan_kontrak->waktu_pengajuan) ? 'badge-primary' : 'badge-danger' }}">{{ !empty($perubahan_kontrak->waktu_pengajuan) ? 'Yes' : 'No' }}</b> --}}
+                                                                        {{-- <b>{{ !empty($perubahan_kontrak->waktu_pengajuan) ? Carbon\Carbon::create($perubahan_kontrak->waktu_pengajuan)->translatedFormat("d F Y") : '' }}</b> --}}
+                                                                        <b class="badge {{ !empty($perubahan_kontrak->waktu_pengajuan_new) ? 'badge-primary' : 'badge-danger' }}">{{ !empty($perubahan_kontrak->waktu_pengajuan_new) ? 'Yes' : 'No' }}</b>
+                                                                        <b>{{ $perubahan_kontrak->waktu_pengajuan_new }}</b>
                                                                     </span>
                                                                     {{-- <input type="date" name="waktu-pengajuan" value="{{Carbon\Carbon::create($perubahan_kontrak->waktu_pengajuan)->format("Y-m-d")}}" class="form-control form-control-solid" /> --}}
                                                                 </div>
@@ -393,15 +405,16 @@
                                                                 </div>
                                                                 <div class="col">
                                                                     <label class="fs-6 fw-bold form-label">
-                                                                        <span style="font-weight: normal">Nilai Disetujui</span>
+                                                                        <span style="font-weight: normal">Nilai Disetujui (Exlcd. PPN)</span>
                                                                     </label><br>
                                                                     <b class="{{$perubahan_kontrak->jenis_perubahan == 'Anti Klaim' || $perubahan_kontrak->nilai_negatif ? 'text-danger ' : ''}}">{{ !empty($perubahan_kontrak->nilai_disetujui) ? number_format($perubahan_kontrak->nilai_disetujui, 0, ".", ".") : '-' }}</b>
                                                                 </div>
                                                                 <div class="col">
                                                                     <label class="fs-6 fw-bold form-label">
-                                                                        <span style="font-weight: normal">Waktu Disetujui</span>
+                                                                        <span style="font-weight: normal">Waktu Disetujui (Hari)</span>
                                                                     </label><br>
-                                                                    <b>{{!empty($perubahan_kontrak->waktu_disetujui) ? Carbon\Carbon::create($perubahan_kontrak->waktu_disetujui)->translatedFormat("d F Y") : ''}}</b>
+                                                                    {{-- <b>{{!empty($perubahan_kontrak->waktu_disetujui) ? Carbon\Carbon::create($perubahan_kontrak->waktu_disetujui)->translatedFormat("d F Y") : ''}}</b> --}}
+                                                                    <b>{{ $perubahan_kontrak->waktu_disetujui_new }}</b>
                                                                 </div>
                                                             </div>
 
@@ -894,7 +907,7 @@
                             <!--end::Input-->
                             <!--begin::Label-->
                             <label class="fs-6 fw-bold form-label mt-3 d-flex flex-row justify-content-between gap-3">
-                                <span style="font-weight: normal">Nilai Disetujui</span>
+                                <span style="font-weight: normal">Nilai Disetujui <small><i>(Excld. PPN)</i></small></span>
                                 @if (empty($perubahan_kontrak->biaya_pengajuan) && $perubahan_kontrak->stage < 5)
                                     <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
                                         data-bs-toggle="tooltip" data-bs-placement="top"
@@ -911,7 +924,7 @@
                             <!--end::Label-->
                             @if ($perubahan_kontrak->stage < 5)
                             <!--begin::Input-->
-                            <input type="text" name="nilai-disetujui" class="form-control form-control-solid reformat" value="{{ $perubahan_kontrak->nilai_disetujui }}" {{ !empty($perubahan_kontrak->biaya_pengajuan) ? "" : "readonly" }}/>
+                            <input type="text" name="nilai-disetujui" class="form-control form-control-solid reformat" value="{{ number_format($perubahan_kontrak->nilai_disetujui, 0, ',', '.') }}" {{ !empty($perubahan_kontrak->biaya_pengajuan) ? "" : "readonly" }}/>
                             <!--end::Input-->
                             @else
                             <p class="mb-3 fw-bold">Rp.{{ number_format($perubahan_kontrak->nilai_disetujui, 0, ',', '.') }}</p>
@@ -941,11 +954,11 @@
                             <div class="waktu-disetujui">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold form-label mt-3">
-                                    <span style="font-weight: normal">Waktu Disetujui</span>
-                                    @if (!empty($perubahan_kontrak->waktu_pengajuan))
-                                        <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                    <span style="font-weight: normal">Waktu Disetujui <small><i>(Hari)</i></small></span>
+                                    @if (!empty($perubahan_kontrak->waktu_pengajuan_new))
+                                        {{-- <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
                                             <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
-                                        </a>
+                                        </a> --}}
                                     @else
                                         <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
                                             data-bs-toggle="tooltip" data-bs-placement="top"
@@ -957,10 +970,12 @@
                                 <!--end::Label-->
                                 @if ($perubahan_kontrak->stage < 5)
                                 <!--begin::Input-->
-                                <input type="date" name="waktu-disetujui" value="{{ $perubahan_kontrak->waktu_disetujui ?? null }}" class="form-control form-control-solid" {{ !empty($perubahan_kontrak->waktu_pengajuan) ? "" : "readonly" }}/>
+                                <input type="number" min="0" step="1" name="waktu-disetujui" class="form-control form-control-solid" value="{{ $perubahan_kontrak->waktu_disetujui_new }}"/>
+                                {{-- <input type="date" name="waktu-disetujui" value="{{ $perubahan_kontrak->waktu_disetujui ?? null }}" class="form-control form-control-solid" {{ !empty($perubahan_kontrak->waktu_pengajuan) ? "" : "readonly" }}/> --}}
                                 <!--end::Input-->
                                 @else
-                                <p class="mb-3 fw-bold">{{ !empty($perubahan_kontrak->waktu_disetujui) ? \Carbon\Carbon::parse($perubahan_kontrak->waktu_disetujui)->translatedFormat("d F Y") : "" }}</p>
+                                {{-- <p class="mb-3 fw-bold">{{ !empty($perubahan_kontrak->waktu_disetujui) ? \Carbon\Carbon::parse($perubahan_kontrak->waktu_disetujui)->translatedFormat("d F Y") : "" }}</p> --}}
+                                <p class="m-0"><b>{{ $perubahan_kontrak->waktu_disetujui_new }} Hari</b></p>
                                 @endif
                             </div>
                             
@@ -1063,6 +1078,15 @@
                             <div class="row">
                                 <div class="col">
                                     <label class="fs-6 fw-bold form-label">
+                                        <span style="font-weight: normal">Keterangan</span>
+                                    </label>
+                                    <textarea cols="2" name="keterangan" class="form-control form-control-solid">{!! $perubahan_kontrak->keterangan !!}</textarea>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col">
+                                    <label class="fs-6 fw-bold form-label">
                                         <span style="font-weight: normal">No Proposal Klaim</span>
                                     </label>
                                     <input type="text" name="proposal-klaim" class="form-control form-control-solid" value="{{ $perubahan_kontrak->proposal_klaim }}"/>
@@ -1081,22 +1105,26 @@
                                 </div>
                                 <div class="col mt-3">
                                     <label class="fs-6 fw-bold form-label d-flex flex-row justify-content-between">
-                                        <span style="font-weight: normal">Nilai Pengajuan</span>
+                                        <span style="font-weight: normal">Nilai Pengajuan @if ($perubahan_kontrak->jenis_perubahan != "VO")<small><i>(Excld. PPN)</i></small>@endif</span>
                                         <div class="form-check form-switch {{ $perubahan_kontrak->jenis_perubahan == 'VO' ? '' : 'd-none' }}" id="div-nilai-negatif">
                                             <input class="form-check-input" type="checkbox" name="nilai-negatif" role="switch" id="nilai-negatif" {{ $perubahan_kontrak->nilai_negatif ? 'checked' : '' }}>
                                             <label class="form-check-label" for="nilai-negatif">Nilai Negatif</label>
                                         </div>
                                     </label>
-                                    <input type="text" name="biaya-pengajuan" id="biaya-pengajuan" class="form-control form-control-solid reformat" value="{{ $perubahan_kontrak->biaya_pengajuan }}"/>
+                                    <input type="text" name="biaya-pengajuan" id="biaya-pengajuan" class="form-control form-control-solid reformat" value="{{ number_format($perubahan_kontrak->biaya_pengajuan, 0, ',', '.') }}"/>
+                                    @if ($perubahan_kontrak->jenis_perubahan == "VO")
+                                        <div id="emailHelp" class="form-text"><small><i>(Excld. PPN)</i></small></div>
+                                    @endif
                                 </div>
-                                <div class="col">
+                                <div class="col mt-3">
                                     <label class="fs-6 fw-bold form-150pxbel">
-                                        <span style="font-weight: 150px">Dampak Waktu</span>
-                                        <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                        <span style="font-weight: 150px">Dampak Waktu <small><i>(Hari)</i></small></span>
+                                        {{-- <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
                                             <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
-                                        </a>
+                                        </a> --}}
                                     </label>
-                                    <input type="date" name="waktu-pengajuan" class="form-control form-control-solid" value="{{ !empty($perubahan_kontrak->waktu_pengajuan) ? Carbon\Carbon::parse($perubahan_kontrak->waktu_pengajuan)->translatedFormat('Y-m-d') : '' }}"/>
+                                    {{-- <input type="date" name="waktu-pengajuan" class="form-control form-control-solid" value="{{ !empty($perubahan_kontrak->waktu_pengajuan) ? Carbon\Carbon::parse($perubahan_kontrak->waktu_pengajuan)->translatedFormat('Y-m-d') : '' }}"/> --}}
+                                    <input type="number" min="0" step="1" name="waktu-pengajuan" class="form-control form-control-solid mt-2" value="{{ $perubahan_kontrak->waktu_pengajuan_new }}"/>
                                 </div>
                             </div>
                             <!--end::Input group-->

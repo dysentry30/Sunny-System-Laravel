@@ -254,7 +254,7 @@
                                                                 {{-- <a href="/claim-management/proyek/{{ $claim['kode_proyek'] }}/{{ $claim['id_contract'] }}?link=kt_user_view_claim_VO" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim['profit_center'] }}</a> --}}
                                                                 <a href="/claim-management/proyek/{{ ($claim['profit_center']) }}?link=kt_user_view_claim_VO" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim['profit_center'] }}</a>
                                                             </td>
-                                                            <td>{{ $claim['nama_proyek'] }}</td>
+                                                            <td><a href="/claim-management/proyek/{{ ($claim['profit_center']) }}?link=kt_user_view_claim_VO" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim['nama_proyek'] }}</a></td>
                                                             <td>{{ $claim['unit_kerja'] }}</td>
                                                             <td class="text-center bg-secondary">{{ number_format($claim['jumlah_vo'], 0, ".", ",") }}</td>
                                                             <td class="text-center">{{ number_format($claim['total_vo'], 0, ".", ",") }}</td>
@@ -368,7 +368,7 @@
                                                                 {{-- <a href="/claim-management/proyek/{{ $claim['kode_proyek'] }}/{{ $claim['id_contract'] }}?link=kt_user_view_claim_VO" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim['profit_center'] }}</a> --}}
                                                                 <a href="/claim-management/proyek/{{ ($claim['profit_center']) }}?link=kt_user_view_claim_VO" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim['profit_center'] }}</a>
                                                             </td>
-                                                            <td>{{ $claim['nama_proyek'] }}</td>
+                                                            <td><a href="/claim-management/proyek/{{ ($claim['profit_center']) }}?link=kt_user_view_claim_VO" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claim['nama_proyek'] }}</a></td>
                                                             <td>{{ $claim['unit_kerja'] }}</td>
                                                             <td class="text-center bg-secondary">{{ number_format($claim['jumlah_vo'], 0, ".", ",") }}</td>
                                                             <td class="text-center">{{ number_format($claim['total_vo'], 0, ".", ",") }}</td>
@@ -507,7 +507,11 @@
                             }
                         }
                     },
-                        'pdf', 'print'
+                    {
+                        extend: 'pdfHtml5',
+                        orientation: 'landscape',
+                        pageSize: 'LEGAL'
+                    }
                     ],
                 fixedHeader: {
                     footer: true
@@ -544,7 +548,11 @@
                             }
                         }
                     },
-                        'pdf', 'print'
+                    {
+                        extend: 'pdfHtml5',
+                        orientation: 'landscape',
+                        pageSize: 'LEGAL'
+                    }
                     ],
                 fixedHeader: {
                     footer: true
