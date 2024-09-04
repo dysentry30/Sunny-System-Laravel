@@ -340,17 +340,18 @@
                                                                     <!--end::Nilai Pengajuan-->
                                                                     <!--begin::Dampak Waktu-->
                                                                     <td class="fw-bolder text-center">
-                                                                        {{ !empty($vo->waktu_pengajuan) ? 'Yes' : 'No' }}
+                                                                        {{ !empty($vo->waktu_pengajuan_new) ? 'Yes' : 'No' }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ !empty($vo->waktu_pengajuan) ? Carbon\Carbon::parse($vo->waktu_pengajuan)->translatedFormat('d F Y') : '-' }}
+                                                                        {{ !empty($vo->waktu_pengajuan_new) ? $vo->waktu_pengajuan_new . " Hari" : "" }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ !empty($vo->waktu_disetujui) ? Carbon\Carbon::parse($vo->waktu_disetujui)->translatedFormat('d F Y') : '-' }}
+                                                                        {{-- {{ !empty($vo->waktu_disetujui) ? Carbon\Carbon::parse($vo->waktu_disetujui)->translatedFormat('d F Y') : '-' }} --}}
+                                                                        {{ !empty($vo->waktu_disetujui_new) ? $vo->waktu_disetujui_new . " Hari" : "" }}
                                                                     </td>
                                                                     <!--end::Dampak Waktu-->
                                                                     <td class="text-center">
-                                                                        <p class="m-0">{{ !empty($vo->biaya_pengajuan) || !empty($vo->nilai_disetujui) ? round((int)$vo->nilai_disetujui / (int)$vo->biaya_pengajuan, 3) * 100 : 0  }} %</p>
+                                                                        <p class="m-0">{{ !empty($vo->biaya_pengajuan) || !empty($vo->nilai_disetujui) ? round((int)$vo->nilai_disetujui / (int)$vo->biaya_pengajuan, 4) * 100 : 0  }} %</p>
                                                                     </td>
                                                                     @php
                                                                     $stage = "";
@@ -467,17 +468,18 @@
                                                                     <!--end::Nilai Pengajuan-->
                                                                     <!--begin::Dampak Waktu-->
                                                                     <td class="fw-bolder text-center">
-                                                                        {{ !empty($klaim->waktu_pengajuan) ? 'Yes' : 'No' }}
+                                                                        {{ !empty($klaim->waktu_pengajuan_new) ? 'Yes' : 'No' }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ !empty($klaim->waktu_pengajuan) ? Carbon\Carbon::parse($klaim->waktu_pengajuan)->translatedFormat('d F Y') : '-' }}
+                                                                        {{ !empty($klaim->waktu_pengajuan_new) ? $klaim->waktu_pengajuan_new . " Hari" : "" }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ !empty($klaim->waktu_disetujui) ? Carbon\Carbon::parse($klaim->waktu_disetujui)->translatedFormat('d F Y') : '-' }}
+                                                                        {{-- {{ !empty($klaim->waktu_disetujui) ? Carbon\Carbon::parse($klaim->waktu_disetujui)->translatedFormat('d F Y') : '-' }} --}}
+                                                                        {{ !empty($klaim->waktu_disetujui_new) ? $klaim->waktu_disetujui_new . " Hari" : "" }}
                                                                     </td>
                                                                     <!--end::Dampak Waktu-->
                                                                     <td class="text-center">
-                                                                        <p class="m-0">{{ !empty($klaim->biaya_pengajuan) || !empty($klaim->nilai_disetujui) ? round((int)$klaim->nilai_disetujui / (int)$klaim->biaya_pengajuan, 3) * 100 : 0  }} %</p>
+                                                                        <p class="m-0">{{ !empty($klaim->biaya_pengajuan) || !empty($klaim->nilai_disetujui) ? round((int)$klaim->nilai_disetujui / (int)$klaim->biaya_pengajuan, 4) * 100 : 0  }} %</p>
                                                                     </td>
                                                                     @php
                                                                     $stage = "";
@@ -594,17 +596,18 @@
                                                                     <!--end::Nilai Pengajuan-->
                                                                     <!--begin::Dampak Waktu-->
                                                                     <td class="fw-bolder text-center">
-                                                                        {{ !empty($anti_klaim->waktu_pengajuan) ? 'Yes' : 'No' }}
+                                                                        {{ !empty($anti_klaim->waktu_pengajuan_new) ? 'Yes' : 'No' }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ !empty($anti_klaim->waktu_pengajuan) ? Carbon\Carbon::parse($anti_klaim->waktu_pengajuan)->translatedFormat('d F Y') : '-' }}
+                                                                        {{ !empty($anti_klaim->waktu_pengajuan_new) ? $anti_klaim->waktu_pengajuan_new . " Hari" : "" }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ !empty($anti_klaim->waktu_disetujui) ? Carbon\Carbon::parse($anti_klaim->waktu_disetujui)->translatedFormat('d F Y') : '-' }}
+                                                                        {{-- {{ !empty($anti_klaim->waktu_disetujui) ? Carbon\Carbon::parse($anti_klaim->waktu_disetujui)->translatedFormat('d F Y') : '-' }} --}}
+                                                                        {{ !empty($anti_klaim->waktu_disetujui_new) ? $anti_klaim->waktu_disetujui_new . " Hari" : "" }}
                                                                     </td>
                                                                     <!--end::Dampak Waktu-->
                                                                     <td class="text-center">
-                                                                        <p class="m-0">{{ !empty($anti_klaim->biaya_pengajuan) || !empty($anti_klaim->nilai_disetujui) ? round((int)$anti_klaim->nilai_disetujui / (int)$anti_klaim->biaya_pengajuan, 3) * 100 : 0  }} %</p>
+                                                                        <p class="m-0">{{ !empty($anti_klaim->biaya_pengajuan) || !empty($anti_klaim->nilai_disetujui) ? round((int)$anti_klaim->nilai_disetujui / (int)$anti_klaim->biaya_pengajuan, 4) * 100 : 0  }} %</p>
                                                                     </td>
                                                                     @php
                                                                     $stage = "";
@@ -721,17 +724,18 @@
                                                                     <!--end::Nilai Pengajuan-->
                                                                     <!--begin::Dampak Waktu-->
                                                                     <td>
-                                                                        {{ !empty($klaim_asuransi->waktu_pengajuan) ? 'Yes' : 'No' }}
+                                                                        {{ !empty($klaim_asuransi->waktu_pengajuan_new) ? 'Yes' : 'No' }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ !empty($klaim_asuransi->waktu_pengajuan) ? Carbon\Carbon::parse($klaim_asuransi->waktu_pengajuan)->translatedFormat('d F Y') : '-' }}
+                                                                        {{ !empty($klaim_asuransi->waktu_pengajuan_new) ? $klaim_asuransi->waktu_pengajuan_new . " Hari" : "" }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ !empty($klaim_asuransi->waktu_disetujui) ? Carbon\Carbon::parse($klaim_asuransi->waktu_disetujui)->translatedFormat('d F Y') : '-' }}
+                                                                        {{-- {{ !empty($klaim_asuransi->waktu_disetujui) ? Carbon\Carbon::parse($klaim_asuransi->waktu_disetujui)->translatedFormat('d F Y') : '-' }} --}}
+                                                                        {{ !empty($klaim_asuransi->waktu_disetujui_new) ? $klaim_asuransi->waktu_disetujui_new . " Hari" : "" }}
                                                                     </td>
                                                                     <!--end::Dampak Waktu-->
                                                                     <td class="text-center">
-                                                                        <p class="m-0">{{ !empty($klaim_asuransi->biaya_pengajuan) || !empty($klaim_asuransi->nilai_disetujui) ? round((int)$klaim_asuransi->nilai_disetujui / (int)$klaim_asuransi->biaya_pengajuan, 3) * 100 : 0  }} %</p>
+                                                                        <p class="m-0">{{ !empty($klaim_asuransi->biaya_pengajuan) || !empty($klaim_asuransi->nilai_disetujui) ? round((int)$klaim_asuransi->nilai_disetujui / (int)$klaim_asuransi->biaya_pengajuan, 4) * 100 : 0  }} %</p>
                                                                     </td>
                                                                     @php
                                                                     $stage = "";
@@ -879,13 +883,14 @@
                                                                         {{ !empty($claim->nilai_disetujui) ? number_format($claim->nilai_disetujui, 0, ".", ",") : '' }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ !empty($claim->waktu_pengajuan) ? 'Yes' : 'No' }}
+                                                                        {{ !empty($claim->waktu_pengajuan_new) ? 'Yes' : 'No' }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ !empty($claim->waktu_pengajuan) ? Carbon\Carbon::parse($claim->waktu_pengajuan)->translatedFormat('d F Y') : '-' }}
+                                                                        {{ !empty($claim->waktu_pengajuan_new) ? $claim->waktu_pengajuan_new . " Hari" : "" }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ !empty($claim->waktu_disetujui) ? Carbon\Carbon::parse($claim->waktu_disetujui)->translatedFormat('d F Y') : '-' }}
+                                                                        {{-- {{ !empty($claim->waktu_disetujui) ? Carbon\Carbon::parse($claim->waktu_disetujui)->translatedFormat('d F Y') : '-' }} --}}
+                                                                        {{ !empty($claim->waktu_disetujui_new) ? $claim->waktu_disetujui_new . " Hari" : "" }}
                                                                     </td>
                                                                     <td>
                                                                         <p class="{{$class_name}}">{{ $stage }}</p>
