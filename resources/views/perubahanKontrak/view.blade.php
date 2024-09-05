@@ -72,9 +72,9 @@
                                                 Edit</a>                                             --}}
                                                 <button type="submit" class="btn btn-sm btn-primary ms-2" form="edit-form">Save</button>
                                         @else
-                                            <a href="#" data-bs-toggle="modal" class="btn btn-sm btn-primary" id="editButton" data-bs-target="#kt_modal_input_approve_claim"
+                                            {{-- <a href="#" data-bs-toggle="modal" class="btn btn-sm btn-primary" id="editButton" data-bs-target="#kt_modal_input_approve_claim"
                                                 style="margin-left:10px;">
-                                                Edit</a>                                            
+                                                Edit</a>                                             --}}
                                             
                                         @endif
                                 @endif
@@ -322,6 +322,13 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    <div class="row">
+                                                        <div class="mb-3">
+                                                            <label for="biaya-pengajuan" class="form-label fw-bold">Uraian Perubahan</label>
+                                                            <textarea cols="2" name="uraian-perubahan" class="form-control form-control-solid">{!! $perubahan_kontrak->uraian_perubahan !!}</textarea>
+                                                        </div>
+                                                    </div>
                                                     
                                                     <div class="row">
                                                         <div class="col">
@@ -332,7 +339,7 @@
                                                                         <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
                                                                     </a>
                                                                 </label>
-                                                                <input type="text" name="tanggal-pengajuan" id="tanggal-pengajuan" class="form-control form-control-solid" value="{{ $perubahan_kontrak->tanggal_pengajuan }}">
+                                                                <input type="date" name="tanggal-pengajuan" id="tanggal-pengajuan" class="form-control form-control-solid" value="{{ $perubahan_kontrak->tanggal_pengajuan }}">
                                                             </div>
                                                         </div>
     
@@ -356,14 +363,43 @@
                                                             </div>
                                                         </div>
                                                     </div>
-    
+
+                                                    @if ($perubahan_kontrak->stage == 5)
                                                     <div class="row">
-                                                        <div class="mb-3">
-                                                            <label for="biaya-pengajuan" class="form-label fw-bold">Uraian Perubahan</label>
-                                                            <textarea cols="2" name="uraian-perubahan" class="form-control form-control-solid">{!! $perubahan_kontrak->uraian_perubahan !!}</textarea>
+                                                        <div class="col">
+                                                            <div class="mb-3">
+                                                                <label for="tanggal-disetujui" class="form-label fw-bold">
+                                                                    <span style="font-weight: normal">Tanggal Disetujui</span>
+                                                                    <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                                                        <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                                                    </a>
+                                                                </label>
+                                                                <input type="date" name="tanggal-disetujui" id="tanggal-disetujui" class="form-control form-control-solid" value="{{ $perubahan_kontrak->tanggal_disetujui }}">
+                                                            </div>
+                                                        </div>
+    
+                                                        <div class="col mt-3">
+                                                            <div class="mb-3">
+                                                                <label for="nilai-disetujui" class="form-label fw-bold d-flex flex-row justify-content-between">
+                                                                    <span style="font-weight: normal">Nilai Disetujui (Excld. PPN)</span>
+                                                                    <div class="form-check form-switch {{ $perubahan_kontrak->jenis_perubahan == "VO" ? "" : "d-none" }}" id="div-nilai-negatif">
+                                                                        <input class="form-check-input" type="checkbox" name="nilai-negatif" role="switch" id="nilai-negatif" {{ $perubahan_kontrak->jenis_perubahan == "VO" && $perubahan_kontrak->nilai_negatif ? "checked" : "" }} {{ $perubahan_kontrak->jenis_perubahan != "VO" ? "disabled" : "" }}>
+                                                                        <label class="form-check-label" for="nilai-nilai-negatif">Nilai Negatif</label>
+                                                                    </div>
+                                                                </label>
+                                                                <input type="text" name="nilai-disetujui" id="nilai-disetujui" class="form-control form-control-solid reformat" value="{{ number_format((int)$perubahan_kontrak->nilai_disetujui, 0, ',', '.') }}">
+                                                            </div>
+                                                        </div>
+    
+                                                        <div class="col mt-3">
+                                                            <div class="mb-3">
+                                                                <label for="waktu-disetujui" class="form-label fw-bold">Dampak Waktu Disetujui (Hari)</label>
+                                                                <input type="number" name="waktu-disetujui" step="1" min="0" id="waktu-disetujui" class="form-control form-control-solid reformat" value="{{ $perubahan_kontrak->waktu_disetujui_new }}">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    
+                                                    @endif
+                                                        
                                                     <div class="row">
                                                         <div class="mb-3">
                                                             <label for="biaya-pengajuan" class="form-label fw-bold">Keterangan</label>
