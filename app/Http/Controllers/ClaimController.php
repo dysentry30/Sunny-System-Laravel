@@ -2637,7 +2637,7 @@ class ClaimController extends Controller
         // $perubahan_kontrak->waktu_pengajuan = !empty($data["biaya-pengajuan"]) ? $data["waktu-pengajuan"] : null;
         $perubahan_kontrak->nilai_negatif = isset($data["nilai-negatif"]);
         $perubahan_kontrak->waktu_pengajuan_new = $data['waktu-pengajuan'];
-        $perubahan_kontrak->stage = 1;
+        $perubahan_kontrak->stage = 2;
         // dd($perubahan_kontrak);
         if ($perubahan_kontrak->save()) {
             Alert::success("Success", "Perubahan Kontrak berhasil ditambahkan");
@@ -2710,7 +2710,8 @@ class ClaimController extends Controller
             return redirect()->back();
         }
         Alert::error("Erorr", "Perubahan Kontrak gagal diperbaharui");
-        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return Redirect::back()->with("modal", $data["modal-name"]);
+        return Redirect::back();
         // }
     }
 
