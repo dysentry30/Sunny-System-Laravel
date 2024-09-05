@@ -185,8 +185,8 @@
                             @else
                                 <td style="width: 100%; text-align:center">
                                     <br><br><br>
-                                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">(....................................)</p>
-                                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">SubPJFs Key Account</p>
+                                    {{-- <p style="font-size:0.8rem; margin:0px; padding-top:0px;">(....................................)</p> --}}
+                                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">SubPJFs Key Account/Pimp. PjFS Marketing</p>
                                 </td>
                             @endif
                         </tr>
@@ -212,16 +212,16 @@
                             @else
                                 <td style="width:100%; text-align:center">
                                     <br><br><br>
-                                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">
-                                        (....................................)</p>
-                                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PJFs Marketing</p>
+                                    {{-- <p style="font-size:0.8rem; margin:0px; padding-top:0px;">
+                                        (....................................)</p> --}}
+                                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">SubPJFs/Pimp. PjFS Marketing Synergy</p>
                                 </td>
-                                <td style="width:100%; text-align:center">
+                                {{-- <td style="width:100%; text-align:center">
                                     <br><br><br>
                                     <p style="font-size:0.8rem; margin:0px; padding-top:0px;">
                                         (....................................)</p>
                                     <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PJFs Operasi</p>
-                                </td>
+                                </td> --}}
                             @endif
                         </tr>
                     </table>
@@ -246,16 +246,16 @@
                             @else
                                 <td style="width:100%; text-align:center">
                                     <br><br><br>
-                                    <p style="font-size:0.8rem; margin:0px; padding-top:0px;">
-                                        (....................................)</p>
+                                    {{-- <p style="font-size:0.8rem; margin:0px; padding-top:0px;">
+                                        (....................................)</p> --}}
                                     <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PJFK Corporate Marketing</p>
                                 </td>
-                                <td style="width:100%; text-align:center">
+                                {{-- <td style="width:100%; text-align:center">
                                     <br><br><br>
                                     <p style="font-size:0.8rem; margin:0px; padding-top:0px;">
                                         (....................................)</p>
                                     <p style="font-size:0.8rem; margin:0px; padding-top:0px;">PJPU Operasi</p>
-                                </td>                           
+                                </td>                            --}}
                             @endif
                         </tr>
                     </table>

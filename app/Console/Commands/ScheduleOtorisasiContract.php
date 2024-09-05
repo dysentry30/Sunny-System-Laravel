@@ -114,8 +114,11 @@ class ScheduleOtorisasiContract extends Command
                 }
             }
 
-            $contractApprovalData = ContractApproval::where("periode_laporan", $bulan_pelaporan)->where("tahun", $tahun_pelaporan)->whereNull("is_approved")->get()->groupBy("profit_center");
-
+            $contractApprovalData = ContractApproval::where("periode_laporan", $bulan_pelaporan)->where("tahun", $tahun_pelaporan)->where("is_approved", true)->get()->groupBy("profit_center");
+            setLogging('Scheduller/ErrorApprovalCCM', "APPROVAL CCM => ", [
+                "DATA" => $contractApprovalData->toArray() ?? [],
+                "STATUS" => "SUCCESS"
+            ]);
             if ($contractApprovalData->isNotEmpty()) {
                 $contractApprovalData->each(function ($data, $profit_center) use ($bulan_pelaporan, $tahun_pelaporan) {
                     $isSuccessSendSAP = self::sendDataSAP($profit_center, $bulan_pelaporan, $tahun_pelaporan);
@@ -521,7 +524,7 @@ class ScheduleOtorisasiContract extends Command
         // FOURTH STEP SEND DATA TO BW
         $closed_request = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests/$content_location/close");
         // dd($closed_request, $data_claims, $fill_data);
-        integrationLog("OTORISASI CLAIMS", $data_claims->toJson(), json_encode(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"]), $fill_data->status(), $fill_data->body(), null, null);
+        // integrationLog("OTORISASI CLAIMS", $data_claims->toJson(), json_encode(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"]), $fill_data->status(), $fill_data->body(), null, null);
 
         if ($fill_data->successful() && $closed_request->successful()) {
 

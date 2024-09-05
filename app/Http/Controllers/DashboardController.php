@@ -4361,8 +4361,13 @@ class DashboardController extends Controller
             // } catch (\Exception $e) {
             //     $file_modified = date_create($file);
             // }
+            if (!empty($file)) {
+                $file_modified = date_create($file);
+            } else {
+                $file_modified = date_create(strtotime($file));
+            }
             // $file_modified = date_create(strtotime($file));
-            $file_modified = date_create($file);
+            // $file_modified = date_create($file);
             $now = date_create("now");
             if ($now->diff($file_modified)->i > 1) {
                 File::delete(public_path("excel/$file"));
