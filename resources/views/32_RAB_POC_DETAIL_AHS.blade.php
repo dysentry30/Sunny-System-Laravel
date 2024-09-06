@@ -49,7 +49,7 @@
                             </div>
                             <div class="d-flex flex-row gap-3">
                                 <button class="btn btn-sm btn-success" onclick="calculateTotal()">Calculate</button>
-                                <button class="btn btn-sm btn-primary">Save</button>
+                                <button class="btn btn-sm btn-primary" onclick="calculateTotal()">Save</button>
                             </div>
                             <!--end::Page title-->
                         </div>

@@ -1933,6 +1933,32 @@
                         @canany(['poc'])
                             <!--begin::Menu Colapse-->
                             <div class="menu-item">
+                                <a class="menu-link " href="/master-sumber-daya"
+                                    style="color:white; padding-left:20px; {{ Request::Path() == 'master-sumber-daya' ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <i class="bi bi-person-lines-fill text-white" style="font-size: 20px"></i>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Master Sumber Daya</span>
+                                </a>
+                            </div>
+                            <!--end::Menu Colapse-->
+                            <!--begin::Menu Colapse-->
+                            <div class="menu-item">
+                                <a class="menu-link " href="/master-harga-satuan"
+                                    style="color:white; padding-left:20px; {{ Request::Path() == 'master-harga-satuan' ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <i class="bi bi-person-lines-fill text-white" style="font-size: 20px"></i>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Master Harga Satuan</span>
+                                </a>
+                            </div>
+                            <!--end::Menu Colapse-->
+                            <!--begin::Menu Colapse-->
+                            <div class="menu-item">
                                 <a class="menu-link " href="/analisa-harga-satuan"
                                     style="color:white; padding-left:20px; {{ Request::Path() == 'analisa-harga-satuan' ? 'background-color:#008CB4' : '' }}">
                                     <span class="menu-icon">

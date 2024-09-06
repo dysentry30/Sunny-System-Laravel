@@ -80,6 +80,7 @@ use App\Http\Controllers\UserController;
 use App\Models\AnalisaHargaSatuanDetail;
 use App\Models\KriteriaPenilaianPefindo;
 use App\Models\MasterAnalisaHargaSatuan;
+use App\Models\MasterHargaSatuan;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\ClaimController;
 use App\Http\Controllers\PasalController;
@@ -8566,4 +8567,14 @@ Route::get('/get-detail-ahs/{kode_ahs}', function ($kode_ahs) {
     ];
 
     return response()->json($data);
+});
+
+Route::get('/master-sumber-daya', function () {
+    $masterSumberDaya = MasterSumberDaya::all();
+    return view("MasterData/MasterSumberDaya", ["masterSumberDaya" => $masterSumberDaya]);
+});
+
+Route::get('/master-harga-satuan', function () {
+    $masterHargaSatuan = MasterHargaSatuan::all();
+    return view("MasterData/MasterHargaSatuan", ["masterHargaSatuan" => $masterHargaSatuan]);
 });
