@@ -339,7 +339,7 @@
                                                                         <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
                                                                     </a>
                                                                 </label>
-                                                                <input type="date" name="tanggal-pengajuan" id="tanggal-pengajuan" class="form-control form-control-solid" value="{{ $perubahan_kontrak->tanggal_pengajuan }}">
+                                                                <input type="date" name="tanggal-pengajuan" id="tanggal-pengajuan" class="form-control form-control-solid" value="{{ !empty($perubahan_kontrak->tanggal_pengajuan) ? \Carbon\Carbon::parse($perubahan_kontrak->tanggal_pengajuan)->translatedFormat("Y-m-d") : '' }}">
                                                             </div>
                                                         </div>
     
@@ -416,7 +416,7 @@
                             <!--end::Header Contract-->
                             
                             <!--begin::Content Card-->
-                            <div class="row">
+                            {{-- <div class="row">
                                 <div class="col">
                                     <div class="card card-flush h-lg-80 my-5">
                                         <div class="card-body">
@@ -449,7 +449,6 @@
                                                             $jenisDokumen = $perubahan_kontrak->JenisDokumen;
                                                         }
                                                     @endphp
-                                                    {{-- @dd($jenisDokumen) --}}
                                                     @forelse ($jenisDokumen as $jd)
                                                         @php
                                                             $list_instruksi_owner = explode(",", $jd->list_instruksi_owner);
@@ -540,7 +539,6 @@
                                                     <thead>
                                                         <!--begin::Table row-->
                                                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                            {{-- <th class="min-w-125px">Nama Dokumen</th> --}}
                                                             <th class="min-w-125px">Dibuat Oleh</th>
                                                             <th class="min-w-125px">Dibuat Tanggal</th>
                                                             <th class="min-w-125px">Catatan</th>
@@ -563,12 +561,6 @@
                                                             @forelse ($dokumenPendukungs as $dokumen_pendukung)
                                                                 <tr>
                                                                     <!--begin::Name-->
-                                                                    {{-- <td>
-                                                                        <p class="text-gray-600 mb-1">{{ $dokumen_pendukung->document_name }}
-                                                                        </p>
-                                                                    </td> --}}
-                                                                    <!--end::Name-->
-                                                                    <!--begin::Name-->
                                                                     <td>
                                                                         <p class="text-gray-600 mb-1">{{ $dokumen_pendukung->User->name }}
                                                                         </p>
@@ -578,7 +570,6 @@
                                                                     <td>
                                                                         <p class="text-gray-600 mb-1">
                                                                             {{ Carbon\Carbon::createFromTimeString(($dokumen_pendukung->created_at))->translatedFormat("d F Y") }}
-                                                                            {{-- {{ date_format(new DateTime($dokumen_pendukung->created_at), 'd-m-Y') }} --}}
                                                                         </p>
                                                                     </td>
                                                                     <!--end::Kode-->
@@ -657,6 +648,383 @@
                                             @endif
                                         </div>
                                     </div>
+                                </div>
+                            </div> --}}
+
+                            <div class="card card-flush h-lg-80 my-5">
+                                <div class="card-body">
+
+                                    <!--Begin :: Dokumen Site Instruction-->
+                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                        Dokumen Site Instruction
+                                        <a href="#" Id="Plus" data-bs-toggle="modal" onclick="showModalUpload('site-instruction')">+</a>
+                                    </h3>
+
+                                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                        <!--begin::Table head-->
+                                        <thead>
+                                            <!--begin::Table row-->
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-125px">No. Dokumen</th>
+                                                <th class="min-w-125px">Tanggal</th>
+                                                <th class="min-w-125px">Uraian</th>
+                                                <th class="min-w-125px">File</th>
+                                                <th class="min-w-125px">Action</th>
+                                            </tr>
+                                            <!--end::Table row-->
+                                        </thead>
+                                        <!--end::Table head-->
+                                        <!--begin::Table body-->
+                                        <tbody class="fw-bold text-gray-400">
+                                            <!--Begin::Row-->
+                                            @forelse ($perubahan_kontrak->SiteInstruction as $dokumen)
+                                                <tr>
+                                                    <td>{{ $dokumen->nomor_dokumen }}</td>
+                                                    <td class="text-center">{{ !empty($dokumen->tanggal_dokumen) ? \Carbon\Carbon::parse($dokumen->tanggal_dokumen)->translatedFormat("d F Y") : '-' }}</td>
+                                                    <td>{{ $dokumen->uraian_dokumen }}</td>
+                                                    <td class="text-center">{{ $dokumen->nama_document }}</td>
+                                                    <td>
+                                                        <div class="d-flex flex-row align-items-center justify-content-center gap-2">
+                                                            <a href="/contract-management/dokumen-site-instruction/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
+                                                            <button type="button" class="btn btn-sm btn-danger text-white" onclick="confirmDelete(this, 'site-instruction', '{{ $dokumen->id_document }}')">Delete</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>                                            
+                                            @empty
+                                                <tr>
+                                                    <td colspan="5" class="text-center">No Data</td>
+                                                </tr>
+                                            @endforelse
+                                            <!--End::Row-->
+                                        </tbody>
+                                        <!--end::Table body-->
+                                    </table>
+                                    <br>
+                                    <!--End :: Dokumen Site Instruction-->
+
+                                    <!--Begin :: Dokumen Technical Form-->
+                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                        Dokumen Technical Form
+                                        <a href="#" Id="Plus" data-bs-toggle="modal" onclick="showModalUpload('technical-form')">+</a>
+                                    </h3>
+
+                                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                        <!--begin::Table head-->
+                                        <thead>
+                                            <!--begin::Table row-->
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-125px">No. Dokumen</th>
+                                                <th class="min-w-125px">Tanggal</th>
+                                                <th class="min-w-125px">Uraian</th>
+                                                <th class="min-w-125px">File</th>
+                                                <th class="min-w-125px">Action</th>
+                                            </tr>
+                                            <!--end::Table row-->
+                                        </thead>
+                                        <!--end::Table head-->
+                                        <!--begin::Table body-->
+                                        <tbody class="fw-bold text-gray-400">
+                                            <!--Begin::Row-->
+                                            @forelse ($perubahan_kontrak->TechnicalForm as $dokumen)
+                                                <tr>
+                                                    <td>{{ $dokumen->nomor_dokumen }}</td>
+                                                    <td class="text-center">{{ !empty($dokumen->tanggal_dokumen) ? \Carbon\Carbon::parse($dokumen->tanggal_dokumen)->translatedFormat("d F Y") : '-' }}</td>
+                                                    <td>{{ $dokumen->uraian_dokumen }}</td>
+                                                    <td class="text-center">{{ $dokumen->nama_document }}</td>
+                                                    <td>
+                                                        <div class="d-flex flex-row align-items-center justify-content-center gap-2">
+                                                            <a href="/contract-management/dokumen-technical-form/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
+                                                            <button type="button" class="btn btn-sm btn-danger text-white" onclick="confirmDelete(this, 'technical-form', '{{ $dokumen->id_document }}')">Delete</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>                                            
+                                            @empty
+                                                <tr>
+                                                    <td colspan="5" class="text-center">No Data</td>
+                                                </tr>
+                                            @endforelse
+                                            <!--End::Row-->
+                                        </tbody>
+                                        <!--end::Table body-->
+                                    </table>
+                                    <br>
+                                    <!--End :: Dokumen Technical Form-->
+
+                                    <!--Begin :: Dokumen Technical Query-->
+                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                        Dokumen Technical Query
+                                        <a href="#" Id="Plus" data-bs-toggle="modal" onclick="showModalUpload('technical-query')">+</a>
+                                    </h3>
+
+                                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                        <!--begin::Table head-->
+                                        <thead>
+                                            <!--begin::Table row-->
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-125px">No. Dokumen</th>
+                                                <th class="min-w-125px">Tanggal</th>
+                                                <th class="min-w-125px">Uraian</th>
+                                                <th class="min-w-125px">File</th>
+                                                <th class="min-w-125px">Action</th>
+                                            </tr>
+                                            <!--end::Table row-->
+                                        </thead>
+                                        <!--end::Table head-->
+                                        <!--begin::Table body-->
+                                        <tbody class="fw-bold text-gray-400">
+                                            <!--Begin::Row-->
+                                            @forelse ($perubahan_kontrak->TechnicalQuery as $dokumen)
+                                                <tr>
+                                                    <td>{{ $dokumen->nomor_dokumen }}</td>
+                                                    <td class="text-center">{{ !empty($dokumen->tanggal_dokumen) ? \Carbon\Carbon::parse($dokumen->tanggal_dokumen)->translatedFormat("d F Y") : '-' }}</td>
+                                                    <td>{{ $dokumen->uraian_dokumen }}</td>
+                                                    <td class="text-center">{{ $dokumen->nama_document }}</td>
+                                                    <td>
+                                                        <div class="d-flex flex-row align-items-center justify-content-center gap-2">
+                                                            <a href="/contract-management/dokumen-technical-query/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
+                                                            <button type="button" class="btn btn-sm btn-danger text-white" onclick="confirmDelete(this, 'technical-query', '{{ $dokumen->id_document }}')">Delete</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>                                            
+                                            @empty
+                                                <tr>
+                                                    <td colspan="5" class="text-center">No Data</td>
+                                                </tr>
+                                            @endforelse
+                                            <!--End::Row-->
+                                        </tbody>
+                                        <!--end::Table body-->
+                                    </table>
+                                    <br>
+                                    <!--End :: Dokumen Technical Query-->
+
+                                    <!--Begin :: Dokumen Field Design Change-->
+                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                        Dokumen Field Design Change
+                                        <a href="#" Id="Plus" data-bs-toggle="modal" onclick="showModalUpload('field-design-change')">+</a>
+                                    </h3>
+
+                                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                        <!--begin::Table head-->
+                                        <thead>
+                                            <!--begin::Table row-->
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-125px">No. Dokumen</th>
+                                                <th class="min-w-125px">Tanggal</th>
+                                                <th class="min-w-125px">Uraian</th>
+                                                <th class="min-w-125px">File</th>
+                                                <th class="min-w-125px">Action</th>
+                                            </tr>
+                                            <!--end::Table row-->
+                                        </thead>
+                                        <!--end::Table head-->
+                                        <!--begin::Table body-->
+                                        <tbody class="fw-bold text-gray-400">
+                                            <!--Begin::Row-->
+                                            @forelse ($perubahan_kontrak->FieldChange as $dokumen)
+                                                <tr>
+                                                    <td>{{ $dokumen->nomor_dokumen }}</td>
+                                                    <td class="text-center">{{ !empty($dokumen->tanggal_dokumen) ? \Carbon\Carbon::parse($dokumen->tanggal_dokumen)->translatedFormat("d F Y") : '-' }}</td>
+                                                    <td>{{ $dokumen->uraian_dokumen }}</td>
+                                                    <td class="text-center">{{ $dokumen->nama_document }}</td>
+                                                    <td>
+                                                        <div class="d-flex flex-row align-items-center justify-content-center gap-2">
+                                                            <a href="/contract-management/dokumen-field-design-change/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
+                                                            <button type="button" class="btn btn-sm btn-danger text-white" onclick="confirmDelete(this, 'field-design-, '{{ $dokumen->id_document }}'change')">Delete</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="5" class="text-center">No Data</td>
+                                                </tr>
+                                            @endforelse
+                                            <!--End::Row-->
+                                        </tbody>
+                                        <!--end::Table body-->
+                                    </table>
+                                    <br>
+                                    <!--End :: Dokumen Field Design Change-->
+
+                                    <!--Begin :: Dokumen Contract Change Notice-->
+                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                        Dokumen Contract Change Notice
+                                        <a href="#" Id="Plus" data-bs-toggle="modal" onclick="showModalUpload('change-notice')">+</a>
+                                    </h3>
+
+                                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                        <!--begin::Table head-->
+                                        <thead>
+                                            <!--begin::Table row-->
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-125px">No. Dokumen</th>
+                                                <th class="min-w-125px">Tanggal</th>
+                                                <th class="min-w-125px">Uraian</th>
+                                                <th class="min-w-125px">File</th>
+                                                <th class="min-w-125px">Action</th>
+                                            </tr>
+                                            <!--end::Table row-->
+                                        </thead>
+                                        <!--end::Table head-->
+                                        <!--begin::Table body-->
+                                        <tbody class="fw-bold text-gray-400">
+                                            <!--Begin::Row-->
+                                            @forelse ($perubahan_kontrak->ChangeNotice as $dokumen)
+                                                <tr>
+                                                    <td>{{ $dokumen->nomor_dokumen }}</td>
+                                                    <td class="text-center">{{ !empty($dokumen->tanggal_dokumen) ? \Carbon\Carbon::parse($dokumen->tanggal_dokumen)->translatedFormat("d F Y") : '-' }}</td>
+                                                    <td>{{ $dokumen->uraian_dokumen }}</td>
+                                                    <td class="text-center">{{ $dokumen->nama_document }}</td>
+                                                    <td>
+                                                        <div class="d-flex flex-row align-items-center justify-content-center gap-2">
+                                                            <a href="/contract-management/dokumen-change-notice/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
+                                                            <button type="button" class="btn btn-sm btn-danger text-white" onclick="confirmDelete(this, 'change-notice', '{{ $dokumen->id_document }}')">Delete</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="5" class="text-center">No Data</td>
+                                                </tr>
+                                            @endforelse
+                                            <!--End::Row-->
+                                        </tbody>
+                                        <!--end::Table body-->
+                                    </table>
+                                    <br>
+                                    <!--End :: Dokumen Contract Change Notice-->
+
+                                    <!--Begin :: Dokumen Contract Change Proposal-->
+                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                        Dokumen Contract Change Proposal
+                                        <a href="#" Id="Plus" data-bs-toggle="modal" onclick="showModalUpload('change-proposal')">+</a>
+                                    </h3>
+
+                                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                        <!--begin::Table head-->
+                                        <thead>
+                                            <!--begin::Table row-->
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-125px">No. Dokumen</th>
+                                                <th class="min-w-125px">Tanggal</th>
+                                                <th class="min-w-125px">Uraian</th>
+                                                <th class="min-w-125px">File</th>
+                                                <th class="min-w-125px">Action</th>
+                                            </tr>
+                                            <!--end::Table row-->
+                                        </thead>
+                                        <!--end::Table head-->
+                                        <!--begin::Table body-->
+                                        <tbody class="fw-bold text-gray-400">
+                                            <!--Begin::Row-->
+                                            @forelse ($perubahan_kontrak->ChangeProposal as $dokumen)
+                                                <tr>
+                                                    <td>{{ $dokumen->nomor_dokumen }}</td>
+                                                    <td class="text-center">{{ !empty($dokumen->tanggal_dokumen) ? \Carbon\Carbon::parse($dokumen->tanggal_dokumen)->translatedFormat("d F Y") : '-' }}</td>
+                                                    <td>{{ $dokumen->uraian_dokumen }}</td>
+                                                    <td class="text-center">{{ $dokumen->nama_document }}</td>
+                                                    <td>
+                                                        <div class="d-flex flex-row align-items-center justify-content-center gap-2">
+                                                            <a href="/contract-management/dokumen-change-proposal/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
+                                                            <button type="button" class="btn btn-sm btn-danger text-white" onclick="confirmDelete(this, 'change-proposal', '{{ $dokumen->id_document }}')">Delete</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="5" class="text-center">No Data</td>
+                                                </tr>
+                                            @endforelse
+                                            <!--End::Row-->
+                                        </tbody>
+                                        <!--end::Table body-->
+                                    </table>
+                                    <br>
+                                    <!--End :: Dokumen Contract Change Proposal-->
+
+                                    <!--Begin :: Dokumen Contract Change Order-->
+                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                        Dokumen Contract Change Order
+                                        <a href="#" Id="Plus" data-bs-toggle="modal" onclick="showModalUpload('change-order')">+</a>
+                                    </h3>
+
+                                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                        <!--begin::Table head-->
+                                        <thead>
+                                            <!--begin::Table row-->
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-125px">No. Dokumen</th>
+                                                <th class="min-w-125px">Tanggal</th>
+                                                <th class="min-w-125px">Uraian</th>
+                                                <th class="min-w-125px">File</th>
+                                                <th class="min-w-125px">Action</th>
+                                            </tr>
+                                            <!--end::Table row-->
+                                        </thead>
+                                        <!--end::Table head-->
+                                        <!--begin::Table body-->
+                                        <tbody class="fw-bold text-gray-400">
+                                            <!--Begin::Row-->
+                                            @forelse ($perubahan_kontrak->ChangeOrder as $dokumen)
+                                                <tr>
+                                                    <td>{{ $dokumen->nomor_dokumen }}</td>
+                                                    <td class="text-center">{{ !empty($dokumen->tanggal_dokumen) ? \Carbon\Carbon::parse($dokumen->tanggal_dokumen)->translatedFormat("d F Y") : '-' }}</td>
+                                                    <td>{{ $dokumen->uraian_dokumen }}</td>
+                                                    <td class="text-center">{{ $dokumen->nama_document }}</td>
+                                                    <td>
+                                                        <div class="d-flex flex-row align-items-center justify-content-center gap-2">
+                                                            <a href="/contract-management/dokumen-change-order/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
+                                                            <button type="button" class="btn btn-sm btn-danger text-white" onclick="confirmDelete(this, 'change-order', '{{ $dokumen->id_document }}')">Delete</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="5" class="text-center">No Data</td>
+                                                </tr>
+                                            @endforelse
+                                            <!--End::Row-->
+                                        </tbody>
+                                        <!--end::Table body-->
+                                    </table>
+                                    <br>
+                                    <!--End :: Dokumen Contract Change Order-->
+                                    
+                                    
+                                    <!--Begin :: Dokumen Final Change-->
+                                    @if ($perubahan_kontrak->stage > 4)
+                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                            Dokumen Final
+                                        </h3>
+                                        
+                                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                            <!--begin::Table head-->
+                                            <thead>
+                                                <!--begin::Table row-->
+                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                    <th class="min-w-500px">File</th>
+                                                    <th class="min-w-auto">Action</th>
+                                                </tr>
+                                                <!--end::Table row-->
+                                            </thead>
+                                            <!--end::Table head-->
+                                            <!--begin::Table body-->
+                                            <tbody class="fw-bold text-gray-400">
+                                                @if (!empty($perubahan_kontrak->id_dokumen))
+                                                    <tr>
+                                                        <td><a href="{{ asset('words') . '/' . $perubahan_kontrak->id_dokumen }}" class="text-hover-primary" target="_blank">{{ $perubahan_kontrak->dokumen_approve }}</a></td>
+                                                        <td class="text-center"><a href="{{ asset('words') . '/' . $perubahan_kontrak->id_dokumen }}" class="btn btn-sm btn-primary text-white" target="_blank">Download</a></td>
+                                                    </tr>                                                                
+                                                @else
+                                                    <tr>
+                                                        <td colspan="2">There is no data</td>
+                                                    </tr>
+                                                @endif
+                                            </tbody>
+                                            <!--begin::Table body-->
+                                        </table>                                                    
+                                    @endif
+                                    <!--End :: Dokumen Final Change-->
                                 </div>
                             </div>
                             <!--end::Content Card-->
@@ -1112,6 +1480,78 @@
         </div>
         <!--End::Modal - Edit Claim-->
 
+        <!--Begin::Modal - Upload Dokumen Pendukung-->
+        <div class="modal fade" id="kt_modal_upload_file" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-700px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Upload File</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+                        <form id="upload-file" action="" method="POST" enctype="multipart/form-data" onsubmit="addLoading(this)">
+                            @csrf
+                            <input type="hidden" name="id-perubahan-kontrak" value="{{ $perubahan_kontrak->id_perubahan_kontrak }}">
+
+                            <div class="mb-3">
+                                <label for="nomor-dokumen" class="form-label required">Nomor Dokumen</label>
+                                <input type="text" class="form-control" id="nomor-dokumen" name="nomor-dokumen" autofocus>
+                            </div>
+
+                            <div class="mb-3">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3 required">
+                                    <span style="font-weight: normal">Tanggal Dokumen</span>
+                                    <a class="btn btn-sm" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                        <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                    </a>
+                                </label>
+                                <input type="date" name="tanggal-dokumen" value="" class="form-control"/>
+                                <!--end::Label-->
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="uraian-dokumen" class="form-label required">Uraian</label>
+                                <textarea name="uraian-dokumen" id="uraian-dokumen" cols="15" class="form-control"></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="upload-dokumen" class="form-label required">Upload Dokumen</label>
+                                <input type="file" class="form-control" accept=".pdf" id="upload-dokumen" name="upload-dokumen">
+                                <div class="form-text">Upload dokumen dengan format .pdf</div>
+                            </div>
+                        </form>
+                    </div>
+                    <!--end::Modal body-->
+                    
+                    <!--begin::Modal footer-->
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-sm btn-primary" form="upload-file">Save</button>
+                        <button type="button" class="btn btn-sm btn-hover-danger btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                    <!--end::Modal footer-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--begin::Modal dialog-->
+        </div>
+        <!--End::Modal - Upload Dokumen Pendukung-->
+
         <!--end::Content-->
     </div>
     <!--end::Container-->
@@ -1267,6 +1707,60 @@
         // }
     </script>
 
+    <script>
+        function showModalUpload(kategori) {
+            const modalId = document.getElementById('kt_modal_upload_file');
+            const modal = new bootstrap.Modal(modalId, {
+                backdrop : "static"
+            });            
+            modal.show();
+
+            const formElt = modalId.querySelector('#upload-file');            
+            formElt.setAttribute('action', `/claim-management/${kategori}/upload`);            
+        }
+
+        function addLoading(elt) {
+            LOADING_BODY.block();
+            elt.form.submit();
+        }
+
+        function confirmDelete(elt, kategori, idDocument) {
+            Swal.fire({
+                title: '',
+                text: "Apakah anda yakin?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: '#008CB4',
+                cancelButtonColor: '#BABABA',
+                confirmButtonText: 'Ya'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    LOADING_BODY.block();
+                    const formData = new FormData();
+                    formData.append("_token", "{{ csrf_token() }}");
+                    formData.append("kategori", kategori);
+                    formData.append("id-document", idDocument);
+                    formData.append("profit-center", '{{ $perubahan_kontrak->profit_center }}');
+                    const sendData = await fetch(`/claim-management/dokumen-claim/dokumen-${kategori}/delete`, {
+                        method: "POST",
+                        body: formData
+                    }).then(res => res.json());
+                    if (sendData.success) {
+                        LOADING_BODY.release();
+                        Swal.fire({title: sendData.message, icon: 'success'}).then(()=>{
+                            location.reload();
+                        })
+                    } else{
+                        LOADING_BODY.release();
+                        Swal.fire({title: sendData.message, icon: 'error'}).then(()=>{
+                            location.reload();
+                        })
+                    }
+                }
+    
+            })
+        }
+    </script>
 @endsection
 
 {{-- @section('aside')

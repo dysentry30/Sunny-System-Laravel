@@ -388,7 +388,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::get('/contract-management/view/{id_contract}/draft-contract/{draftContracts}', [ContractManagementsController::class, 'draftContractView']);
 
     // Route::get('/contract-management/view/{id_contract}/perubahan-kontrak/{perubahan_kontrak}', [ContractManagementsController::class, 'perubahanKontrakView']);
-    Route::get('/contract-management/view/{profit_center}/perubahan-kontrak/{perubahan_kontrak}', [ContractManagementsController::class, 'perubahanKontrakView']);
+    Route::get('/claim-management/view/{profit_center}/perubahan-kontrak/{perubahan_kontrak}', [ContractManagementsController::class, 'perubahanKontrakView']);
 
     Route::get('/review-contract/view/{id_contract}/{stage}', [ContractManagementsController::class, 'reviewKontrakView']);
     
@@ -519,6 +519,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/claim-contract/negosiasi/upload', [ClaimController::class, 'claimNegosiasiUpload']);
 
     Route::post('/claim-contract/disetujui/upload', [ClaimController::class, 'claimDisetujuiUpload']);
+
+
+
+    Route::post('/claim-management/{kategori}/upload', [ClaimController::class, 'dokumenClaim']);
+    Route::post('/claim-management/dokumen-claim/{kategori}/delete', [ClaimController::class, 'dokumenClaimDelete']);
     // end :: Claim Management
 
 

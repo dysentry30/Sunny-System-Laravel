@@ -3993,10 +3993,10 @@
                             <!--Begin::Document Site Instruction-->
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Site Instruction
-                                @if (empty($is_approved) || $is_approved->isEmpty())
+                                {{-- @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_dokumen_site_instruction">+</a>
-                                @endif
+                                @endif --}}
                             </h3>
                             <!--begin:Table:Dokumen Site Instruction-->
                             
@@ -4055,7 +4055,7 @@
                                                 <!--begin::Nomor Dokumen-->
                                                 <td>
                                                     <div class="d-flex flex-row align-items-center justify-content-center">
-                                                        <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-site-instruction/{{ $site_instruction->id_instruction }}/delete')">Delete</button>
+                                                        {{-- <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-site-instruction/{{ $site_instruction->id_instruction }}/delete')">Delete</button> --}}
                                                     </div>
                                                 </td>
                                                 <!--end::Nomor Dokumen-->
@@ -4085,10 +4085,10 @@
                             <!--Begin::Document Technical Form-->
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Technical Form
-                                @if (empty($is_approved) || $is_approved->isEmpty())
+                                {{-- @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_dokumen_technical_form">+</a>
-                                @endif
+                                @endif --}}
                             </h3>
                             
                             <!--begin:: Table Dokumen Technical Form-->
@@ -4146,7 +4146,7 @@
                                             <!--begin::Nomor Dokumen-->
                                             <td>
                                                 <div class="d-flex flex-row align-items-center justify-content-center">
-                                                    <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-technical-form/{{ $technical_form->id_technical_form }}/delete')">Delete</button>
+                                                    {{-- <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-technical-form/{{ $technical_form->id_technical_form }}/delete')">Delete</button> --}}
                                                 </div>
                                             </td>
                                             <!--end::Nomor Dokumen-->
@@ -4176,10 +4176,10 @@
                             <!--Begin::Document Technical Query-->
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Technical Query
-                                @if (empty($is_approved) || $is_approved->isEmpty())
+                                {{-- @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_dokumen_technical_query">+</a>
-                                @endif
+                                @endif --}}
                             </h3>
                             <!--begin:: Table Dokumen Technical Query-->
                             <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
@@ -4236,7 +4236,7 @@
                                             <!--begin::Nomor Dokumen-->
                                             <td>
                                                 <div class="d-flex flex-row align-items-center justify-content-center">
-                                                    <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-technical-query/{{ $technical_query->technical_query }}/delete')">Delete</button>
+                                                    {{-- <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-technical-query/{{ $technical_query->technical_query }}/delete')">Delete</button> --}}
                                                 </div>
                                             </td>
                                             <!--end::Nomor Dokumen-->
@@ -4266,10 +4266,10 @@
                             <!--Begin::Document Field Design Change-->
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Field Design Change
-                                @if (empty($is_approved) || $is_approved->isEmpty())
+                                {{-- @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_dokumen_field_design_change">+</a>
-                                @endif
+                                @endif --}}
                             </h3>
 
                             <!--begin:: Table Dokumen Field Design Change-->
@@ -4327,7 +4327,7 @@
                                             <!--begin::Nomor Dokumen-->
                                             <td>
                                                 <div class="d-flex flex-row align-items-center justify-content-center">
-                                                    <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-field-design-change/{{ $field_change->id_field_change }}/delete')">Delete</button>
+                                                    {{-- <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-field-design-change/{{ $field_change->id_field_change }}/delete')">Delete</button> --}}
                                                 </div>
                                             </td>
                                             <!--end::Nomor Dokumen-->
@@ -4356,10 +4356,10 @@
                             <!--Begin::Document Contract Change Notice-->
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Contract Change Notice
-                                @if (empty($is_approved) || $is_approved->isEmpty())
+                                {{-- @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_dokumen_contract_change_notice">+</a>
-                                @endif
+                                @endif --}}
                             </h3>
 
                             <!--begin:: Table Dokumen Contract Change Notice-->
@@ -4417,7 +4417,7 @@
                                             <!--begin::Nomor Dokumen-->
                                             <td>
                                                 <div class="d-flex flex-row align-items-center justify-content-center">
-                                                    <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-contract-change-notice/{{ $change_notice->id_change_notice }}/delete')">Delete</button>
+                                                    {{-- <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-contract-change-notice/{{ $change_notice->id_change_notice }}/delete')">Delete</button> --}}
                                                 </div>
                                             </td>
                                             <!--end::Nomor Dokumen-->
@@ -4446,10 +4446,10 @@
                             <!--Begin::Document Contract Change Proposal-->
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Contract Change Proposal
-                                @if (empty($is_approved) || $is_approved->isEmpty())
+                                {{-- @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_dokumen_contract_change_proposal">+</a>
-                                @endif
+                                @endif --}}
                             </h3>
 
                             <!--begin:: Table Dokumen Contract Change Proposal-->
@@ -4507,7 +4507,7 @@
                                             <!--begin::Nomor Dokumen-->
                                             <td>
                                                 <div class="d-flex flex-row align-items-center justify-content-center">
-                                                    <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-contract-change-proposal/{{ $change_proposal->id_change_proposal }}/delete')">Delete</button>
+                                                    {{-- <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-contract-change-proposal/{{ $change_proposal->id_change_proposal }}/delete')">Delete</button> --}}
                                                 </div>
                                             </td>
                                             <!--end::Nomor Dokumen-->
@@ -4536,10 +4536,10 @@
                             <!--Begin::Document Contract Change Order-->
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Contract Change Order
-                                @if (empty($is_approved) || $is_approved->isEmpty())
+                                {{-- @if (empty($is_approved) || $is_approved->isEmpty())
                                 <a target="_blank" href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_dokumen_contract_change_order">+</a>
-                                @endif
+                                @endif --}}
                             </h3>
 
                             <!--begin:: Table Dokumen Contract Change Order-->
@@ -4597,7 +4597,7 @@
                                             <!--begin::Nomor Dokumen-->
                                             <td>
                                                 <div class="d-flex flex-row align-items-center justify-content-center">
-                                                    <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-contract-change-order/{{ $change_order->id_change_order }}/delete')">Delete</button>
+                                                    {{-- <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-contract-change-order/{{ $change_order->id_change_order }}/delete')">Delete</button> --}}
                                                 </div>
                                             </td>
                                             <!--end::Nomor Dokumen-->

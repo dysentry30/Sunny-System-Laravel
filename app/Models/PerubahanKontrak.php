@@ -31,4 +31,33 @@ class PerubahanKontrak extends Model
     {
         return $this->belongsTo(ProyekPISNew::class, "profit_center", "profit_center");
     }
+
+    public function SiteInstruction()
+    {
+        return $this->hasMany(SiteInstruction::class, "perubahan_id", "id_perubahan_kontrak");
+    }
+    public function TechnicalForm()
+    {
+        return $this->hasMany(TechnicalForm::class, "perubahan_id", "id_perubahan_kontrak");
+    }
+    public function TechnicalQuery()
+    {
+        return $this->hasMany(TechnicalQuery::class, "perubahan_id", "id_perubahan_kontrak");
+    }
+    public function FieldChange()
+    {
+        return $this->hasMany(FieldChange::class, "perubahan_id", "id_perubahan_kontrak");
+    }
+    public function ChangeNotice()
+    {
+        return $this->hasMany(ContractChangeNotice::class, "perubahan_id", "id_perubahan_kontrak");
+    }
+    public function ChangeOrder()
+    {
+        return $this->hasMany(ContractChangeOrder::class, "perubahan_id", "id_perubahan_kontrak");
+    }
+    public function ChangeProposal()
+    {
+        return $this->hasMany(ContractChangeProposal::class, "perubahan_id", "id_perubahan_kontrak");
+    }
 }

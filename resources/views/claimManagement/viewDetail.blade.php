@@ -316,8 +316,8 @@
                                                                 <tr>
                                                                     <td class="text-center">{{ ++$key }}</td>
                                                                     <td>
-                                                                        {{-- <a href="/contract-management/view/{{$vo->id_contract}}/perubahan-kontrak/{{$vo->id_perubahan_kontrak}}{{ isset($vo->periode) ? "?periode=".$vo->periode."&tahun=".$vo->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1"> --}}
-                                                                        <a href="/contract-management/view/{{$vo->profit_center}}/perubahan-kontrak/{{$vo->id_perubahan_kontrak}}{{ isset($vo->periode) ? "?periode=".$vo->periode."&tahun=".$vo->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                                        {{-- <a href="/claim-management/view/{{$vo->id_contract}}/perubahan-kontrak/{{$vo->id_perubahan_kontrak}}{{ isset($vo->periode) ? "?periode=".$vo->periode."&tahun=".$vo->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1"> --}}
+                                                                        <a href="/claim-management/view/{{$vo->profit_center}}/perubahan-kontrak/{{$vo->id_perubahan_kontrak}}{{ isset($vo->periode) ? "?periode=".$vo->periode."&tahun=".$vo->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
                                                                         {{ $vo->uraian_perubahan }}
                                                                         </a>
                                                                     </td>
@@ -435,8 +435,8 @@
                                                                 <tr>
                                                                     <td class="text-center">{{ ++$key }}</td>
                                                                     <td>
-                                                                        {{-- <a href="/contract-management/view/{{$klaim->id_contract}}/perubahan-kontrak/{{$klaim->id_perubahan_kontrak}}{{ isset($klaim->periode) ? "?periode=".$klaim->periode."&tahun=".$klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1"> --}}
-                                                                        <a href="/contract-management/view/{{$klaim->profit_center}}/perubahan-kontrak/{{$klaim->id_perubahan_kontrak}}{{ isset($klaim->periode) ? "?periode=".$klaim->periode."&tahun=".$klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                                        {{-- <a href="/claim-management/view/{{$klaim->id_contract}}/perubahan-kontrak/{{$klaim->id_perubahan_kontrak}}{{ isset($klaim->periode) ? "?periode=".$klaim->periode."&tahun=".$klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1"> --}}
+                                                                        <a href="/claim-management/view/{{$klaim->profit_center}}/perubahan-kontrak/{{$klaim->id_perubahan_kontrak}}{{ isset($klaim->periode) ? "?periode=".$klaim->periode."&tahun=".$klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
                                                                         {{ $klaim->uraian_perubahan }}
                                                                         </a>
                                                                     </td>
@@ -554,8 +554,8 @@
                                                                 <tr>
                                                                     <td class="text-center">{{ ++$key }}</td>
                                                                     <td>
-                                                                        {{-- <a href="/contract-management/view/{{$anti_klaim->id_contract}}/perubahan-kontrak/{{$anti_klaim->id_perubahan_kontrak}}{{ isset($anti_klaim->periode) ? "?periode=".$anti_klaim->periode."&tahun=".$anti_klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1"> --}}
-                                                                        <a href="/contract-management/view/{{$anti_klaim->profit_center}}/perubahan-kontrak/{{$anti_klaim->id_perubahan_kontrak}}{{ isset($anti_klaim->periode) ? "?periode=".$anti_klaim->periode."&tahun=".$anti_klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                                        {{-- <a href="/claim-management/view/{{$anti_klaim->id_contract}}/perubahan-kontrak/{{$anti_klaim->id_perubahan_kontrak}}{{ isset($anti_klaim->periode) ? "?periode=".$anti_klaim->periode."&tahun=".$anti_klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1"> --}}
+                                                                        <a href="/claim-management/view/{{$anti_klaim->profit_center}}/perubahan-kontrak/{{$anti_klaim->id_perubahan_kontrak}}{{ isset($anti_klaim->periode) ? "?periode=".$anti_klaim->periode."&tahun=".$anti_klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
                                                                         {{ $anti_klaim->uraian_perubahan }}
                                                                         </a>
                                                                     </td>
@@ -673,8 +673,8 @@
                                                                 <tr>
                                                                     <td class="text-center">{{ ++$key }}</td>
                                                                     <td>
-                                                                        {{-- <a href="/contract-management/view/{{$klaim_asuransi->id_contract}}/perubahan-kontrak/{{$klaim_asuransi->id_perubahan_kontrak}}{{ isset($klaim_asuransi->periode) ? "?periode=".$klaim_asuransi->periode."&tahun=".$klaim_asuransi->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1"> --}}
-                                                                        <a href="/contract-management/view/{{$klaim_asuransi->profit_center}}/perubahan-kontrak/{{$klaim_asuransi->id_perubahan_kontrak}}{{ isset($klaim_asuransi->periode) ? "?periode=".$klaim_asuransi->periode."&tahun=".$klaim_asuransi->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                                        {{-- <a href="/claim-management/view/{{$klaim_asuransi->id_contract}}/perubahan-kontrak/{{$klaim_asuransi->id_perubahan_kontrak}}{{ isset($klaim_asuransi->periode) ? "?periode=".$klaim_asuransi->periode."&tahun=".$klaim_asuransi->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1"> --}}
+                                                                        <a href="/claim-management/view/{{$klaim_asuransi->profit_center}}/perubahan-kontrak/{{$klaim_asuransi->id_perubahan_kontrak}}{{ isset($klaim_asuransi->periode) ? "?periode=".$klaim_asuransi->periode."&tahun=".$klaim_asuransi->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
                                                                         {{ $klaim_asuransi->uraian_perubahan }}
                                                                         </a>
                                                                     </td>
