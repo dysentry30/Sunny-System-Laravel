@@ -388,7 +388,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::get('/contract-management/view/{id_contract}/draft-contract/{draftContracts}', [ContractManagementsController::class, 'draftContractView']);
 
     // Route::get('/contract-management/view/{id_contract}/perubahan-kontrak/{perubahan_kontrak}', [ContractManagementsController::class, 'perubahanKontrakView']);
-    Route::get('/claim-management/view/{profit_center}/perubahan-kontrak/{perubahan_kontrak}', [ContractManagementsController::class, 'perubahanKontrakView']);
+    Route::get('/contract-management/view/{profit_center}/perubahan-kontrak/{perubahan_kontrak}', [ContractManagementsController::class, 'perubahanKontrakView']);
 
     Route::get('/review-contract/view/{id_contract}/{stage}', [ContractManagementsController::class, 'reviewKontrakView']);
     
@@ -519,11 +519,6 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/claim-contract/negosiasi/upload', [ClaimController::class, 'claimNegosiasiUpload']);
 
     Route::post('/claim-contract/disetujui/upload', [ClaimController::class, 'claimDisetujuiUpload']);
-
-
-
-    Route::post('/claim-management/{kategori}/upload', [ClaimController::class, 'dokumenClaim']);
-    Route::post('/claim-management/dokumen-claim/{kategori}/delete', [ClaimController::class, 'dokumenClaimDelete']);
     // end :: Claim Management
 
 
@@ -6913,7 +6908,9 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
     //     return $is_forecast_exist;
     // });
     // $proyeks = Proyek::where("stage", "=", 8)->where("tahun_perolehan", "=", $periode[0])->where("unit_kerja", "=", $unitKerjaPis)->get(["id", "tanggal_selesai_pho", "tanggal_selesai_fho", "jenis_proyek", "kode_proyek", "nama_proyek", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak", "nospk_external", "porsi_jo", "nilai_kontrak_keseluruhan", "nomor_terkontrak", "nilai_valas_review", "tglspk_internal", "tanggal_terkontrak", "nilai_perolehan", "kurs_review", "klasifikasi_terkontrak", "provinsi", "negara", "sistem_bayar", "sumber_dana", "sbu", "jenis_terkontrak", "lokasi_tender", "mata_uang_review", "mata_uang_awal", "longitude", "latitude"]);
-    $proyeks = Proyek::where("stage", "=", 8)->where("tahun_perolehan", "=", $periode[0])->where("unit_kerja", "=", $unitKerjaPis)->get(["id", "tanggal_selesai_pho", "tanggal_selesai_fho", "jenis_proyek", "kode_proyek", "nama_proyek", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak", "nospk_external", "porsi_jo", "nilai_kontrak_keseluruhan", "nomor_terkontrak", "nilai_valas_review", "tglspk_internal", "tanggal_terkontrak", "nilai_perolehan", "kurs_review", "klasifikasi_terkontrak", "provinsi", "negara", "sistem_bayar", "sumber_dana", "sbu", "jenis_terkontrak", "lokasi_tender", "mata_uang_review", "mata_uang_awal", "longitude", "latitude"]);
+    $proyeks = Proyek::where("stage", "=",
+        8
+    )->where("tahun_perolehan", "=", $periode[0])->where("unit_kerja", "=", $unitKerjaPis)->get(["id", "tanggal_selesai_pho", "dop", "tipe_proyek", "stage", "tanggal_selesai_fho", "jenis_proyek", "kode_proyek", "nama_proyek", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak", "nospk_external", "porsi_jo", "nilai_kontrak_keseluruhan", "nomor_terkontrak", "nilai_valas_review", "tglspk_internal", "tanggal_terkontrak", "nilai_perolehan", "kurs_review", "klasifikasi_terkontrak", "provinsi", "negara", "sistem_bayar", "sumber_dana", "sbu", "jenis_terkontrak", "lokasi_tender", "mata_uang_review", "mata_uang_awal", "longitude", "latitude"]);
 
 
     // if (isset($request->unitkerjaid)) {
@@ -6926,7 +6923,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
     // }
 
     $proyeks = $proyeks->filter(function ($proyek) {
-        if ($proyek != "EA") {
+        if ($proyek->dop != "EA") {
             return !empty($proyek->ApprovalTerkontrakProyek) && $proyek->ApprovalTerkontrakProyek?->is_approved;
         } else {
             return $proyek;
@@ -7187,6 +7184,8 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                 "d:UsrLongitude" => $p->longitude,
                 "d:UsrLatitude" => $p->latitude,
                 "d:UsrKatsap" => $kode_sap,
+                "d:UsrTipeProyek" => $p->tipe_proyek,
+                "d:UsrStage" => $p->stage,
             ],
         ];
         // $p->ap_id = "";
@@ -7257,6 +7256,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
         unset($p->nilai_kontrak_keseluruhan, $p->nilai_valas_review, $p->tanggal_terkontrak, $p->nilai_perolehan, $p->kurs_review, $p->klasifikasi_terkontrak);
         unset($p->nomor_terkontrak, $p->tglspk_internal, $p->provinsi, $p->sumber_dana);
         unset($p->provinsi, $p->negara, $p->sistem_bayar, $p->sumber_dana, $p->sbu, $p->jenis_terkontrak, $p->lokasi_tender, $p->mata_uang_review, $p->mata_uang_awal);
+        unset($p->dop, $p->tipe_proyek, $p->stage);
         return $p;
     });
     $data = $proyeks->toArray();

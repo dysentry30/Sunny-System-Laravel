@@ -652,8 +652,8 @@
                                                 <!--end::Card body-->
                                             </div>
                                             <!--end::Card column-->
-                                            <h2>MANKON</h2>
-                                            <div class="row">
+                                            {{-- <h2>MANKON</h2> --}}
+                                            {{-- <div class="row">
                                                 <!--begin::Card body-->
                                                 <div class="mb-3 pt-0">
                                                     <!--begin::Card widget 20-->
@@ -663,18 +663,6 @@
                                                             <!--begin::Title-->
                                                             <div class="card-title d-flex flex-column">
                                                                 <!--begin::Amount-->
-                                                                {{-- <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2 tender-review-text" id="data-items">0</span> --}}
-                                                                {{-- @php
-                                                                    $tenderReview = 0;
-                                                                    foreach ($proyeks as $key => $p) {
-                                                                        $contract = $p->ContractManagements;
-                                                                        if (!empty($contract)){
-                                                                            if ($p->ContractManagements->reviewProjects->isNotEmpty() && $p->ContractManagements->inputRisks->isNotEmpty() && $p->ContractManagements->questionsProjects->isNotEmpty()) {
-                                                                                $tenderReview += 1;
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                @endphp --}}
                                                                 <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2" id="id-tender-review">{{ $tender_review }}</span>
                                                                 <!--end::Amount-->
                                                                 <!--begin::Subtitle-->
@@ -685,17 +673,14 @@
                                                         </div>
                                                         <!--end::Header-->
                                                         <!--begin::Card body-->
-                                                        {{-- <div class="card-body d-flex align-items-end pt-0">
-                                                            
-                                                        </div> --}}
                                                         <!--end::Card body-->
                                                     </div>
                                                     <!--end::Card widget 20-->
                                                 </div>
                                                 <!--end::Card body-->
-                                            </div>
+                                            </div> --}}
                                             <!--end-begin::Card column-->
-                                            <div class="row">
+                                            {{-- <div class="row">
                                                 <!--begin::Card body-->
                                                 <div class="mb-6 pt-0">
                                                     <!--begin::Card widget 20-->
@@ -715,15 +700,12 @@
                                                         </div>
                                                         <!--end::Header-->
                                                         <!--begin::Card body-->
-                                                        {{-- <div class="card-body d-flex align-items-end pt-0">
-                                                            
-                                                        </div> --}}
                                                         <!--end::Card body-->
                                                     </div>
                                                     <!--end::Card widget 20-->
                                                 </div>
                                                 <!--end::Card body-->
-                                            </div>
+                                            </div> --}}
                                             <!--end::Card column-->
                                         </div>
                                         <!--end::Card Status-->
@@ -859,7 +841,7 @@
                                                 <!--end::Card body-->
                                             </div>
                                             <!--end-begin::Card column-->
-                                            <br>
+                                            {{-- <br>
                                             <div class="row">
                                                 <!--begin::Card body-->
                                                 <div class="pt-0 mt-9">
@@ -883,7 +865,7 @@
                                                     <!--end::Card widget 20-->
                                                 </div>
                                                 <!--end::Card body-->
-                                            </div>
+                                            </div> --}}
                                             <!--end::Card column-->
                                         </div>
                                         <!--end::Card Status-->
