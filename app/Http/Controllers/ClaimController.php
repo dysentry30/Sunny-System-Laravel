@@ -3113,7 +3113,7 @@ class ClaimController extends Controller
 
         if (empty($periode)) {
             if (!empty($filterStatus)) {
-                $claims = PerubahanKontrak::where("profit_ceter", "=", $profitCenter)->where("stage", "=", $filterStatus)->get();
+                $claims = PerubahanKontrak::where("profit_center", "=", $profitCenter)->where("stage", "=", $filterStatus)->get();
             } else {
                 $claims = PerubahanKontrak::where("profit_center", "=", $profitCenter)->get();
             }
