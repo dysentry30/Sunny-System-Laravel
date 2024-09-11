@@ -2847,7 +2847,7 @@ class ProyekController extends Controller
                             $parentHoldingExist = MasterKriteriaGreenlanePartner::where('id_pelanggan', $customerHolding->id_customer)->first();
                             if (!empty($parentHoldingExist)) {
                                 $newPorsiJO->is_greenlane = true;
-                                $porsi->is_disetujui = true;
+                                $newPorsiJO->is_disetujui = true;
                             }
                         }
                     }
