@@ -8369,7 +8369,7 @@
 <script>
     function getValueInstansi(e) {
         const value = e.value;
-        console.log(value);
+        // console.log(value);
         // if(value.includes("BUMN")) {
         //     document.querySelector("#group-tier-div").style.display = "";
         // } else {

@@ -33,7 +33,8 @@ class VerifikasiProyekNota2Controller extends Controller
      */
     public function index()
     {
-        $this->matriks_user = !Auth::user()->check_administrator ? Auth::user()->Pegawai->MatriksApprovalVerifikasiProyekNota2->where('is_active', true) : MatriksApprovalVerifikasiProyekNota2::all()->where('is_active', true);
+        // $this->matriks_user = !Auth::user()->check_administrator ? Auth::user()->Pegawai->MatriksApprovalVerifikasiProyekNota2->where('is_active', true) : MatriksApprovalVerifikasiProyekNota2::all()->where('is_active', true);
+        $this->matriks_user = !Auth::user()->check_administrator && !Gate::allows("admin-crm") ? Auth::user()->Pegawai->MatriksApprovalVerifikasiProyekNota2->where('is_active', true) : MatriksApprovalVerifikasiProyekNota2::all()->where('is_active', true);
 
         $is_super_user = Gate::allows("super-admin");
         $unit_kerjas = $is_super_user && str_contains(Auth::user()->name, "Admin") || str_contains(Auth::user()->name, "ANDIAS") ?

@@ -456,6 +456,14 @@ class ProyekController extends Controller
                             $porsi->is_disetujui = true;
                         } else {
                             $porsi->is_greenlane = false;
+                            if ($porsi->Company?->nama_holding) {
+                                $customerHolding = Customer::find($porsi->Company->nama_holding);
+                                $parentHoldingExist = MasterKriteriaGreenlanePartner::where('id_pelanggan', $customerHolding->id_customer)->first();
+                                if (!empty($parentHoldingExist)) {
+                                    $porsi->is_greenlane = true;
+                                    $porsi->is_disetujui = true;
+                                }
+                            }                            
                         }
                     }
                     if (!$porsi->is_greenlane) {
@@ -885,11 +893,26 @@ class ProyekController extends Controller
             if (!empty($isExistPorsiJO)) {
                 $isExistPorsiJO->each(function ($porsi) {
                     $kriteria_partner = MasterGrupTierBUMN::where('id_pelanggan', $porsi->id_company_jo)->first();
+                    $kriteria_partner_greenlane = MasterKriteriaGreenlanePartner::where('id_pelanggan', $porsi->id_company_jo)->first();
                     if (!empty($kriteria_partner)) {
                         $porsi->is_greenlane = true;
                         $porsi->is_disetujui = true;
                     } else {
-                        $porsi->is_greenlane = false;
+                        if ($kriteria_partner_greenlane) {
+                            $porsi->is_greenlane = true;
+                            $porsi->is_disetujui = true;
+                        } else {
+                            $porsi->is_greenlane = false;
+
+                            if ($porsi->Company?->nama_holding) {
+                                $customerHolding = Customer::find($porsi->Company->nama_holding);
+                                $parentHoldingExist = MasterKriteriaGreenlanePartner::where('id_pelanggan', $customerHolding->id_customer)->first();
+                                if (!empty($parentHoldingExist)) {
+                                    $porsi->is_greenlane = true;
+                                    $porsi->is_disetujui = true;
+                                }
+                            }
+                        }
                     }
                     if (!$porsi->is_greenlane) {
                         if (empty($porsi->score_pefindo_jo)) {
@@ -2818,6 +2841,15 @@ class ProyekController extends Controller
                         $newPorsiJO->hasil_assessment = "Disetujui";
                     } else {
                         $newPorsiJO->is_greenlane = false;
+
+                        if (!empty($customer->nama_holding)) {
+                            $customerHolding = Customer::find($customer->nama_holding);
+                            $parentHoldingExist = MasterKriteriaGreenlanePartner::where('id_pelanggan', $customerHolding->id_customer)->first();
+                            if (!empty($parentHoldingExist)) {
+                                $newPorsiJO->is_greenlane = true;
+                                $porsi->is_disetujui = true;
+                            }
+                        }
                     }
                 }
 

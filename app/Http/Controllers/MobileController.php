@@ -1305,7 +1305,7 @@ class MobileController extends Controller
                         }
                         $generateDataNasabahOnline = ApprovalTerkontrakClass::generateNasabahOnline($proyek);
 
-                        if ($proyek->dop != "EA" && env("APP_ENV") == "production") {
+                        if ($proyek->dop != "EA" && env("APP_ENV") == "production" && empty($proyek->proyekBerjalan->customer->kode_bp)) {
                             $sendToNasabahOnline = ApprovalTerkontrakClass::sendDataNasabahOnline($generateDataNasabahOnline);
                         }
 
