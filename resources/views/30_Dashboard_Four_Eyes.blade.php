@@ -1038,7 +1038,7 @@
                 thead.style.position = "sticky";
                 thead.style.top = 0;
                 const headerRow = document.createElement('tr');
-                const headers = ['Nama Proyek', 'Nama Owner', "Unit Kerja", "Jenis Instansi", "Posisi Wika", "Klasifikasi Proyek"];
+                const headers = ['Nama Proyek', "Nama Partner", "Unit Kerja", "Jenis Instansi", "Posisi Wika", "Klasifikasi Proyek"];
                 headers.forEach(headerText => {
                     const th = document.createElement('th');
                     th.textContent = headerText;
@@ -1050,21 +1050,24 @@
                 proyeks.forEach(proyek => {                    
                     const dataRow = document.createElement('tr');
                     const nameProyekCell = document.createElement('td');
-                    const nameOwnerCell = document.createElement('td');
+                    // const nameOwnerCell = document.createElement('td');
+                    const namePartnerCell = document.createElement('td');
                     const unitKerjaCell = document.createElement('td');
                     const jenisInstansiCell = document.createElement('td');
                     const posisiWikaCell = document.createElement('td');
                     const klasifikasiProyekCell = document.createElement('td');
                     
                     nameProyekCell.innerHTML = proyek.nama_proyek;
-                    nameOwnerCell.innerHTML = proyek.nama_owner;
+                    // nameOwnerCell.innerHTML = proyek.nama_owner;
+                    namePartnerCell.innerHTML = proyek.nama_owner;
                     unitKerjaCell.innerHTML = proyek.unit_kerja;
                     jenisInstansiCell.innerHTML = proyek.jenis_instansi;
                     posisiWikaCell.innerHTML = proyek.posisi_wika;
                     klasifikasiProyekCell.innerHTML = proyek.klasifikasi_proyek;
         
                     dataRow.appendChild(nameProyekCell);
-                    dataRow.appendChild(nameOwnerCell);
+                    // dataRow.appendChild(nameOwnerCell);
+                    dataRow.appendChild(namePartnerCell);
                     dataRow.appendChild(unitKerjaCell);
                     dataRow.appendChild(jenisInstansiCell);
                     dataRow.appendChild(posisiWikaCell);
@@ -1087,69 +1090,69 @@
             }            
         }
 
-        function generateTablePefindo(point, kategori) {
-            try {
+        // function generateTablePefindo(point, kategori) {
+        //     try {
 
-                const partners = point.proyeks;
+        //         const partners = point.proyeks;
                               
                 
-                const tableContainer = document.getElementById(`table-container-${kategori}`);
-                const pieChartContainer = document.getElementById(kategori);            
+        //         const tableContainer = document.getElementById(`table-container-${kategori}`);
+        //         const pieChartContainer = document.getElementById(kategori);            
                 
-                // Clear previous table
-                tableContainer.innerHTML = '';
+        //         // Clear previous table
+        //         tableContainer.innerHTML = '';
     
-                // Create table elements
-                const table = document.createElement('table');
-                const thead = document.createElement('thead');
-                const tbody = document.createElement('tbody');
+        //         // Create table elements
+        //         const table = document.createElement('table');
+        //         const thead = document.createElement('thead');
+        //         const tbody = document.createElement('tbody');
     
-                // Create header row
-                thead.style.position = "sticky";
-                thead.style.top = 0;
-                const headerRow = document.createElement('tr');
-                const headers = ['Nama Pelanggan', 'Grade', "Score", "Keterangan"];
-                headers.forEach(headerText => {
-                    const th = document.createElement('th');
-                    th.textContent = headerText;
-                    headerRow.appendChild(th);
-                });
-                thead.appendChild(headerRow);
+        //         // Create header row
+        //         thead.style.position = "sticky";
+        //         thead.style.top = 0;
+        //         const headerRow = document.createElement('tr');
+        //         const headers = ['Nama Pelanggan', 'Grade', "Score", "Keterangan"];
+        //         headers.forEach(headerText => {
+        //             const th = document.createElement('th');
+        //             th.textContent = headerText;
+        //             headerRow.appendChild(th);
+        //         });
+        //         thead.appendChild(headerRow);
     
-                // Create data row
-                partners.forEach(partner => {                    
-                    const dataRow = document.createElement('tr');
-                    const nameOwnerCell = document.createElement('td');
-                    const gradeCell = document.createElement('td');
-                    const scoreCell = document.createElement('td');
-                    const keteranganCell = document.createElement('td');
+        //         // Create data row
+        //         partners.forEach(partner => {                    
+        //             const dataRow = document.createElement('tr');
+        //             const nameOwnerCell = document.createElement('td');
+        //             const gradeCell = document.createElement('td');
+        //             const scoreCell = document.createElement('td');
+        //             const keteranganCell = document.createElement('td');
                     
-                    nameOwnerCell.innerHTML = partner.nama_pelanggan;
-                    gradeCell.innerHTML = partner.grade;
-                    scoreCell.innerHTML = partner.score;
-                    keteranganCell.innerHTML = partner.keterangan;
+        //             nameOwnerCell.innerHTML = partner.nama_pelanggan;
+        //             gradeCell.innerHTML = partner.grade;
+        //             scoreCell.innerHTML = partner.score;
+        //             keteranganCell.innerHTML = partner.keterangan;
 
-                    dataRow.appendChild(nameOwnerCell);
-                    dataRow.appendChild(gradeCell);
-                    dataRow.appendChild(scoreCell);
-                    dataRow.appendChild(keteranganCell);
+        //             dataRow.appendChild(nameOwnerCell);
+        //             dataRow.appendChild(gradeCell);
+        //             dataRow.appendChild(scoreCell);
+        //             dataRow.appendChild(keteranganCell);
 
-                    tbody.appendChild(dataRow);
-                });
+        //             tbody.appendChild(dataRow);
+        //         });
     
-                // Append table elements to the table
-                table.appendChild(thead);
-                table.appendChild(tbody);
+        //         // Append table elements to the table
+        //         table.appendChild(thead);
+        //         table.appendChild(tbody);
     
-                // Append table to the container
-                tableContainer.appendChild(table);
-                pieChartContainer.nextElementSibling.classList.remove("d-none");
+        //         // Append table to the container
+        //         tableContainer.appendChild(table);
+        //         pieChartContainer.nextElementSibling.classList.remove("d-none");
     
-                pieChartContainer.style.display = "none";                
-            } catch (error) {
-                alert(error);
-            }            
-        }
+        //         pieChartContainer.style.display = "none";                
+        //     } catch (error) {
+        //         alert(error);
+        //     }            
+        // }
     </script>
     <!--End::Table Partner Selection-->
 

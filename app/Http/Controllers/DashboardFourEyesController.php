@@ -350,10 +350,12 @@ class DashboardFourEyesController extends Controller
                     $posisiWika = "WIKA Leader";
                 }
 
-                $jenis_instansi = Customer::where(function ($query) use ($partner) {
+                $partnerProyek = Customer::where(function ($query) use ($partner) {
                     $query->where("id_customer", $partner->id_partner)
                         ->orWhere("name", $partner->company_jo);
-                })->first()?->jenis_instansi ?? null;
+                })->first();
+
+                $jenis_instansi = $partnerProyek?->jenis_instansi ?? null;
 
                 // $kriteria_partner = MasterGrupTierBUMN::where('id_pelanggan', $partner->id_company_jo)->first();
                 $kriteria_partner_greenlane = MasterKriteriaGreenlanePartner::where('id_pelanggan', $partner->id_company_jo)->first();
@@ -417,6 +419,7 @@ class DashboardFourEyesController extends Controller
                 "nama_proyek" => $nama_proyek,
                 "unit_kerja" => $unit_kerja,
                 "nama_owner" => $nama_owner,
+                "nama_partner" => $partnerProyek->name ?? null,
                 "posisi_wika" => $posisiWika,
                 "jenis_instansi" => $jenis_instansi ?? null,
                 "hasil_profile_risiko_internal" => $hasil_profile_risiko,
