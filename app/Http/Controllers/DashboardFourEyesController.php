@@ -32,8 +32,7 @@ class DashboardFourEyesController extends Controller
         $unitKerjaSelect = $request->get("unit-kerja") ?? null;
         $tahunSelect = $request->get("tahun") ?? null;
 
-        $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
-
+        
         if (Auth::user()->check_administrator) {
             $exceptUnitkerja = ["B", "C", "D", "8", "F", "L", "N", "O", "U"];
             if ($tahun >= 2023) {
@@ -41,14 +40,16 @@ class DashboardFourEyesController extends Controller
             } else {
                 $unitKerja = UnitKerja::orderBy('unit_kerja')->get()->where("dop", "!=", "EA")->whereNotIn("divcode", ["B", "C", "D", "8"])->sortBy('id_profit_center');
             }
-
+            
             $dops = Dop::where("dop", "!=", "EA")->orderBy('dop')->get()?->keyBy('dop')->keys()->sort();
             if (date("Y") >= 2024) {
                 $dops = $dops->filter(function ($item) {
                     return $item != "DOP 3";
                 });
             }
+            $unit_kerja_user = $unitKerja->keyBy("divcode")->keys();
         } else {
+            $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : collect(Auth::user()->unit_kerja);
             $exceptUnitkerja = ["B", "C", "D", "8", "F", "L", "N", "O", "U"];
             if ($tahun >= 2023) {
                 $unitKerja = UnitKerja::get()->whereIn("divcode", $unit_kerja_user->toArray())->where("dop", "!=", "EA")->whereNotIn("divcode", $exceptUnitkerja)->sortBy('id_profit_center');
@@ -74,6 +75,7 @@ class DashboardFourEyesController extends Controller
         ->where("dop", "!=", "EA")
         ->where("tipe_proyek", "P")
         ->where("is_cancel", false)
+            ->whereIn("unit_kerja", $unit_kerja_user->toArray())
         ->when(!empty($dopSelect), function ($query) use ($dopSelect) {
             $query->where("dop", $dopSelect);
         })
@@ -321,6 +323,7 @@ class DashboardFourEyesController extends Controller
         ->where("dop", "!=", "EA")
         ->where("tipe_proyek", "P")
         ->where("is_cancel", false)
+            ->whereIn("unit_kerja", $unit_kerja_user->toArray())
         ->when(!empty($dopSelect), function ($query) use ($dopSelect) {
             $query->where("dop", $dopSelect);
         })
@@ -349,22 +352,20 @@ class DashboardFourEyesController extends Controller
 
                 $jenis_instansi = $partner->proyekBerjalan->customer->jenis_instansi ?? null;
 
-                $kriteria_partner = MasterGrupTierBUMN::where('id_pelanggan', $partner->id_company_jo)->first();
+                // $kriteria_partner = MasterGrupTierBUMN::where('id_pelanggan', $partner->id_company_jo)->first();
                 $kriteria_partner_greenlane = MasterKriteriaGreenlanePartner::where('id_pelanggan', $partner->id_company_jo)->first();
 
-                if (!empty($kriteria_partner)) {
+                if ($kriteria_partner_greenlane) {
                     $is_greenlane = true;
+                    $hasil_profile_risiko = "Greenlane";
+                    $hasil_profile_risiko_eksternal = "Greenlane";
                 } else {
-                    if ($kriteria_partner_greenlane) {
-                        $is_greenlane = true;
-                    } else {
-                        $is_greenlane = false;
-                        if ($partner->proyekBerjalan->customer?->nama_holding) {
-                            $customerHolding = Customer::find($partner->proyekBerjalan->customer->nama_holding);
-                            $parentHoldingExist = MasterKriteriaGreenlanePartner::where('id_pelanggan', $customerHolding->id_customer)->first();
-                            if (!empty($parentHoldingExist)) {
-                                $is_greenlane = true;
-                            }
+                    $is_greenlane = false;
+                    if ($partner->proyekBerjalan->customer?->nama_holding) {
+                        $customerHolding = Customer::find($partner->proyekBerjalan->customer->nama_holding);
+                        $parentHoldingExist = MasterKriteriaGreenlanePartner::where('id_pelanggan', $customerHolding->id_customer)->first();
+                        if (!empty($parentHoldingExist)) {
+                            $is_greenlane = true;
                         }
                     }
                 }
@@ -387,11 +388,23 @@ class DashboardFourEyesController extends Controller
                     } else {
                         $hasil_profile_risiko = "Belum Diajukan";
                     }
+
+                    $checkPefindo = MasterPefindo::where(function ($query) use ($partner) {
+                        $query->where("id_pelanggan", $partner->id_partner)->orWhere("nama_pelanggan", $partner->company_jo);
+                    })->first();
+
+                    if (!empty($checkPefindo)) {
+                        $hasil_profile_risiko_eksternal = $checkPefindo->keterangan;
+                    } else {
+                        $hasil_profile_risiko_eksternal = "Belum isi Pefindo";
+                    }
                 } else {
                     $hasil_profile_risiko = null;
+                    $hasil_profile_risiko_eksternal = "Greenlane";
                 }
             } else {
                 $posisiWika = "Tidak KSO";
+                $hasil_profile_risiko_eksternal = null;
             }
 
 
@@ -403,6 +416,7 @@ class DashboardFourEyesController extends Controller
                 "posisi_wika" => $posisiWika,
                 "jenis_instansi" => $jenis_instansi ?? null,
                 "hasil_profile_risiko_internal" => $hasil_profile_risiko ?? null,
+                "hasil_profile_risiko_eksternal" => $hasil_profile_risiko_eksternal,
                 "klasifikasi_proyek" => $partner->klasifikasi_pasdin ?? "Belum isi",
             ]);
         });
@@ -425,10 +439,15 @@ class DashboardFourEyesController extends Controller
             return ["name" => $key, "y" => $proyek->count(), "proyeks" => $proyek, "persentase" => $proyek->count() > 0 ? round(($proyek->count() / $dataPartnerSelection->count()) * 100, 2) : 0];
         })->values()->toJson();
 
-        $profileRisikoEksternalPartner = MasterPefindo::where("is_active", true)->get()?->groupBy("keterangan");
+        // $profileRisikoEksternalPartner = MasterPefindo::where("is_active", true)->get()?->groupBy("keterangan");
 
-        $pieChatProfileRisikoEksternalPartner = $profileRisikoEksternalPartner?->map(function ($partner, $key) use ($profileRisikoEksternalPartner) {
-            return ["name" => $key, "y" => $partner->count(), "proyeks" => $partner, "persentase" => $partner->count() > 0 ? round(($partner->count() / $profileRisikoEksternalPartner->count()) * 100, 2) : 0];
+        // $pieChatProfileRisikoEksternalPartner = $profileRisikoEksternalPartner?->map(function ($partner, $key) use ($profileRisikoEksternalPartner) {
+        //     return ["name" => $key, "y" => $partner->count(), "proyeks" => $partner, "persentase" => $partner->count() > 0 ? round(($partner->count() / $profileRisikoEksternalPartner->count()) * 100, 2) : 0];
+        // })->values()->toJson();
+        $pieChatProfileRisikoEksternalPartner = $dataPartnerSelection?->groupBy("hasil_profile_risiko_eksternal")->filter(function ($partner, $key) {
+            return !empty($key);
+        })->map(function ($partner, $key) use ($dataPartnerSelection) {
+            return ["name" => $key, "y" => $partner->count(), "proyeks" => $partner, "persentase" => $partner->count() > 0 ? round(($partner->count() / $dataPartnerSelection->count()) * 100, 2) : 0];
         })->values()->toJson();
 
         // dd($pieChatProfileRisikoEksternalPartner);

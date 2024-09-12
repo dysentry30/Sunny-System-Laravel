@@ -858,7 +858,7 @@
                     point: {
                         events: {
                             click: function () {
-                                generateTablePefindo(this, 'profile-kso-eksternal');
+                                generateTablePartner(this, 'profile-kso-eksternal');
                             }
                         }
                     }
