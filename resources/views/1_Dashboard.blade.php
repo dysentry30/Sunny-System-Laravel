@@ -139,7 +139,7 @@
                                             <!--end:::Tab item Forecast Internal-->
 
                                             <!--begin:::Tab item Forecast Internal-->
-                                            @canany(['super-admin', 'admin-crm', 'risk-crm'])
+                                            @canany(['super-admin', 'risk-crm'])
                                                 <li class="nav-item">
                                                     <a class="nav-link text-active-primary pb-4"  href="/dashboard-four-eyes"
                                                         style="font-size:14px;">Dashboard Four Eyes Principle</a>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\MatriksApprovalPersetujuanPartner;
 use App\Models\Pegawai;
 use App\Models\Proyek;
+use App\Models\PorsiJO;
 use App\Models\UnitKerja;
 use App\Models\User;
 use App\Models\VerifikasiInternalPersetujuanPartner;
@@ -529,6 +530,26 @@ class VerifikasiInternalPersetujuanPartnerController extends Controller
         } catch (\Throwable $th) {
             throw $th;
         }
+    }
+
+    /**
+     * ? Get Dokumen Assessment KSO
+     */
+    public function getDokumenAssessment($kode_proyek)
+    {
+        $assessmentPartner = PorsiJO::where("kode_proyek", $kode_proyek)->get();
+        $dokumenAssessment = collect([]);
+        $assessmentPartner->each(function ($partner) use ($dokumenAssessment) {
+            if (!is_null($partner->file_assessment_merge)) {
+                $dokumenAssessment->push($partner->file_assessment_merge);
+            }
+        });
+
+        return response()->json([
+            "success" => true,
+            "message" => null,
+            "data" => $dokumenAssessment->toArray()
+        ]);
     }
 
     /**

@@ -232,7 +232,7 @@ class KriteriaPenggunaJasaController extends Controller
         //     return redirect()->back()->with("modal", $data["modal"]);
         // }
 
-        $masterKriteriaPenggunaJasa = KriteriaPenggunaJasa::all();
+        $masterKriteriaPenggunaJasa = KriteriaPenggunaJasa::where('nota_rekomendasi', 'Nota Rekomendasi 1')->get()->sortBy('position')->values();
 
         // $collectKriteriaDetail = [];
         // $files = collect($request->file("dokumen_penilaian"));

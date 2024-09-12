@@ -661,9 +661,9 @@
                             </table>
                             <br>
                             <hr>
-                            <h2>Form Verifikasi Persetujuan KSO</h2>
-                            <div class="text-center p-4">
-                                <iframe src="{{ asset("file-nota-rekomendasi-2\\file-verifikasi-internal-persetujuan-partner\\") . $proyek->nama_dokumen }}" width="100%" height="800px"></iframe>
+                            <h2>Form Verifikasi Persetujuan KSO &nbsp;&nbsp;<span><i class="bi bi-eye-fill fs-3 text-hover-primary" style="cursor: pointer;" onclick="showDocumentVerifikasi(this, '{{ $proyek->nama_dokumen }}')"></i></span></h2>
+                            <div class="text-center">
+                                
                             </div>
                         </div>
                         @if ($proyek->is_pengajuan_approved || (collect(json_decode($proyek->pengajuan_approved))->contains('nip', auth()->user()->nip) && collect(json_decode($proyek->pengajuan_approved))?->first()?->status == 'approved'))
@@ -723,9 +723,9 @@
                             </table>
                             <br>
                             <hr>
-                            <h2>Form Verifikasi Persetujuan KSO</h2>
-                            <div class="text-center p-4">
-                                <iframe src="{{ asset("file-nota-rekomendasi-2\\file-verifikasi-internal-persetujuan-partner\\") . $proyek->nama_dokumen }}" width="100%" height="800px"></iframe>
+                            <h2>Form Verifikasi Persetujuan KSO &nbsp;&nbsp;<span><i class="bi bi-eye-fill fs-3 text-hover-primary" style="cursor: pointer;" onclick="showDocumentVerifikasi(this, '{{ $proyek->nama_dokumen }}')"></i></span></h2>
+                            <div class="text-center">
+                                
                             </div>
                         </div>
                         @if ($proyek->is_pengusul_approved || (collect(json_decode($proyek->pengusul_approved))->contains('nip', auth()->user()->nip) && collect(json_decode($proyek->pengusul_approved))?->first()?->status == 'approved'))
@@ -785,9 +785,15 @@
                             </table>
                             <br>
                             <hr>
-                            <h2>Form Verifikasi Persetujuan KSO</h2>
+                            <h2>Form Verifikasi Persetujuan KSO &nbsp;&nbsp;<span><i class="bi bi-eye-fill fs-3 text-hover-primary" style="cursor: pointer;" onclick="showDocumentVerifikasi(this, '{{ $proyek->nama_dokumen }}')"></i></span></h2>
                             <div class="text-center">
-                                <iframe src="{{ asset("file-nota-rekomendasi-2\\file-verifikasi-internal-persetujuan-partner\\") . $proyek->nama_dokumen }}" width="100%" height="800px"></iframe>
+                                
+                            </div>
+                            <br>
+                            <hr>
+                            <h2>Form Assessment Partner KSO &nbsp;&nbsp;<span><i class="bi bi-eye-fill fs-3 text-hover-primary" style="cursor: pointer;" onclick="showDocumentAssessment(this, '{{ $proyek->kode_proyek }}')"></i></span></h2>
+                            <div class="text-center">
+                                
                             </div>
                         </div>
                         @if ($proyek->is_rekomendasi_approved || (collect(json_decode($proyek->rekomendasi_approved))->contains('nip', auth()->user()->nip) && collect(json_decode($proyek->rekomendasi_approved))?->first()?->status == 'approved'))
@@ -848,9 +854,15 @@
                             </table>
                             <br>
                             <hr>
-                            <h2>Form Verifikasi Persetujuan KSO</h2>
+                            <h2>Form Verifikasi Persetujuan KSO &nbsp;&nbsp;<span><i class="bi bi-eye-fill fs-3 text-hover-primary" style="cursor: pointer;" onclick="showDocumentVerifikasi(this, '{{ $proyek->nama_dokumen }}')"></i></span></h2>
                             <div class="text-center">
-                                <iframe src="{{ asset("file-nota-rekomendasi-2\\file-verifikasi-internal-persetujuan-partner\\") . $proyek->nama_dokumen }}" width="100%" height="800px"></iframe>
+                                
+                            </div>
+                            <br>
+                            <hr>
+                            <h2>Form Assessment Partner KSO &nbsp;&nbsp;<span><i class="bi bi-eye-fill fs-3 text-hover-primary" style="cursor: pointer;" onclick="showDocumentAssessment(this, '{{ $proyek->kode_proyek }}')"></i></span></h2>
+                            <div class="text-center">
+                                
                             </div>
                         </div>
                         @if ($proyek->is_persetujuan_approved || (collect(json_decode($proyek->persetujuan_approved))->contains('nip', auth()->user()->nip) && collect(json_decode($proyek->persetujuan_approved))?->first()?->status == 'approved'))
@@ -1285,6 +1297,73 @@
             const form = modalId.parentElement.setAttribute('action', `/verifikasi-internal-persetujuan-partner/${kategori}/${id}`)
 
             modalSelected.show();
+        }
+
+        function showDocumentVerifikasi(elt, link) {
+            try {
+                const containerDocument = elt.parentElement.parentElement.nextElementSibling;
+                const classAttributes = elt.getAttribute("class");
+                 
+                if (classAttributes.includes("bi-eye-fill")) {
+                    if (containerDocument.children.length < 1) {
+                        const iframeElt = document.createElement("iframe");
+                        iframeElt.src = `{{ asset('file-nota-rekomendasi-2/file-verifikasi-internal-persetujuan-partner') . "/" }}${link}`;
+                        iframeElt.setAttribute("width", "100%");
+                        iframeElt.setAttribute("height", "800px");
+
+                        containerDocument.appendChild(iframeElt);
+                    }else{
+                        containerDocument.style.display = ""; 
+                    }
+                    elt.classList.remove("bi-eye-fill");
+                    elt.classList.add("bi-eye-slash-fill");
+                }else{
+                    elt.classList.remove("bi-eye-slash-fill");
+                    elt.classList.add("bi-eye-fill");
+                    containerDocument.style.display = "none";
+                }
+
+                
+            } catch (error) {
+                alert(error.message);
+            }            
+        }
+
+        async function showDocumentAssessment(elt, kodeProyek) {
+            try {
+                const containerDocument = elt.parentElement.parentElement.nextElementSibling;
+                const classAttributes = elt.getAttribute("class");
+                 
+                if (classAttributes.includes("bi-eye-fill")) {
+                    if (containerDocument.children.length < 1) {
+                        const res = await fetch(`/verifikasi-internal-persetujuan-partner/get-dokumen/${kodeProyek}`).then(res => res.json());
+                        let files = [];
+                        if (res.success) {
+                            files = res.data;
+                            files?.forEach(file => {
+                                const iframeElt = document.createElement("iframe");
+                                iframeElt.src = `{{ asset('file-nota-rekomendasi-2/file-kriteria-partner') . "/" }}${file}`;
+                                iframeElt.setAttribute("width", "100%");
+                                iframeElt.setAttribute("height", "800px");
+        
+                                containerDocument.appendChild(iframeElt);
+                            });
+                        }                        
+                    }else{
+                        containerDocument.style.display = ""; 
+                    }
+                    elt.classList.remove("bi-eye-fill");
+                    elt.classList.add("bi-eye-slash-fill");
+                }else{
+                    elt.classList.remove("bi-eye-slash-fill");
+                    elt.classList.add("bi-eye-fill");
+                    containerDocument.style.display = "none";
+                }
+
+                
+            } catch (error) {
+                alert(error.message);
+            }            
         }
     </script>
 @endsection

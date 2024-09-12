@@ -6812,6 +6812,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         Route::post('/rekomendasi/{proyek}', [VerifikasiInternalPersetujuanPartnerController::class, "ProsesRekomendasiApproval"]);
         Route::post('/persetujuan/{proyek}', [VerifikasiInternalPersetujuanPartnerController::class, "ProsesPersetujuanApproval"]);
         Route::get('/{kode_proyek}/{nip}/view-qr', [VerifikasiInternalPersetujuanPartnerController::class, "viewProyekQRSelected"]);
+        Route::get('/get-dokumen/{kode_proyek}', [VerifikasiInternalPersetujuanPartnerController::class, "getDokumenAssessment"]);
     });
     //End::Verifikasi Internal Persetujuan Partner Selection
 
