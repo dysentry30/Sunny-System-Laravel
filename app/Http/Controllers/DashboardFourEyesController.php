@@ -350,7 +350,10 @@ class DashboardFourEyesController extends Controller
                     $posisiWika = "WIKA Leader";
                 }
 
-                $jenis_instansi = $partner->proyekBerjalan->customer->jenis_instansi ?? null;
+                $jenis_instansi = Customer::where(function ($query) use ($partner) {
+                    $query->where("id_customer", $partner->id_partner)
+                        ->orWhere("name", $partner->company_jo);
+                })->first()?->jenis_instansi ?? null;
 
                 // $kriteria_partner = MasterGrupTierBUMN::where('id_pelanggan', $partner->id_company_jo)->first();
                 $kriteria_partner_greenlane = MasterKriteriaGreenlanePartner::where('id_pelanggan', $partner->id_company_jo)->first();
@@ -399,11 +402,12 @@ class DashboardFourEyesController extends Controller
                         $hasil_profile_risiko_eksternal = "Belum isi Pefindo";
                     }
                 } else {
-                    $hasil_profile_risiko = null;
+                    $hasil_profile_risiko = "Greenlane";
                     $hasil_profile_risiko_eksternal = "Greenlane";
                 }
             } else {
                 $posisiWika = "Tidak KSO";
+                $hasil_profile_risiko = null;
                 $hasil_profile_risiko_eksternal = null;
             }
 
@@ -415,7 +419,7 @@ class DashboardFourEyesController extends Controller
                 "nama_owner" => $nama_owner,
                 "posisi_wika" => $posisiWika,
                 "jenis_instansi" => $jenis_instansi ?? null,
-                "hasil_profile_risiko_internal" => $hasil_profile_risiko ?? null,
+                "hasil_profile_risiko_internal" => $hasil_profile_risiko,
                 "hasil_profile_risiko_eksternal" => $hasil_profile_risiko_eksternal,
                 "klasifikasi_proyek" => $partner->klasifikasi_pasdin ?? "Belum isi",
             ]);
@@ -426,7 +430,7 @@ class DashboardFourEyesController extends Controller
         })->values()->toJson();
 
         $pieChatJenisInstansiPartner = $dataPartnerSelection->groupBy("jenis_instansi")->map(function ($proyek, $key) use ($dataPartnerSelection) {
-            if (empty($key)) {
+            if (empty($key) || $key == "") {
                 return ["name" => "Belum isi", "y" => $proyek->count(), "proyeks" => $proyek, "persentase" => $proyek->count() > 0 ? round(($proyek->count() / $dataPartnerSelection->count()) * 100, 2) : 0];
             }
             return ["name" => $key, "y" => $proyek->count(), "proyeks" => $proyek, "persentase" => $proyek->count() > 0 ? round(($proyek->count() / $dataPartnerSelection->count()) * 100, 2) : 0];
