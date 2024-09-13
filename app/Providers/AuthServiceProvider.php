@@ -134,6 +134,10 @@ class AuthServiceProvider extends ServiceProvider
                 return $user->role_admin && $user->is_unlock;
             }
         );
+
+        Gate::define('user-scm', function (User $user) {
+            return $user->check_user_sales && $user->role_scm;
+        });
         //
     }
 }

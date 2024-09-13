@@ -30,7 +30,7 @@ class UserNotAuthenticatedMiddleware
             return $next($request);
         }
 
-        if (Gate::allows("crm")) {
+        if (Gate::allows("crm") && !Gate::allows("user-scm")) {
             return redirect("/dashboard");
         } elseif (Gate::allows("ccm")) {
             return redirect("/dashboard-ccm/perolehan-kontrak");
@@ -40,6 +40,8 @@ class UserNotAuthenticatedMiddleware
             return redirect("/ska-skt");
         } elseif (Gate::allows("super-admin")) {
             return redirect("/dashboard");
+        } else if (Gate::allows("user-scm")) {
+            return redirect("/proyek");
         }
     }
 }

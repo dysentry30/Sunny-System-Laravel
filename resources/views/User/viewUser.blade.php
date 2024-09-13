@@ -421,6 +421,20 @@
                                                                             </div>
                                                                             <!-- end:: Form Input Team Proyek -->
                                                                         @endcan
+
+                                                                        @can('super-admin')
+                                                                            <!-- begin:: Form Input Team Proyek -->
+                                                                            <div class="form-check me-12">
+                                                                                <input class="role form-check-input" type="checkbox"
+                                                                                    value="risk"
+                                                                                    {{ $user->role_scm == 1 ? 'checked' : '' }}
+                                                                                    name="role_scm" id="role_scm" onchange="checkAplikasi(this)">
+                                                                                <label class="form-check-label" for="role_scm">
+                                                                                    SCM
+                                                                                </label>
+                                                                            </div>
+                                                                            <!-- end:: Form Input Team Proyek -->
+                                                                        @endcan
                                                                     @endcannot
                                                                 @endif
 

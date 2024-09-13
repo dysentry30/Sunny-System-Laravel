@@ -821,7 +821,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/proyek/cancel-modal/{kode_proyek}', [ProyekController::class, 'cancelProyek']);
 
     // Stage Update 
-    Route::post('/proyek/stage-save', [ProyekController::class, 'stage']);
+    $can = "can:super-admin|admin-crm|user-crm";
+    Route::post('/proyek/stage-save', [ProyekController::class, 'stage'])->can($can);
 
     Route::get('/proyek/get-departemen/{divcode}', [ProyekController::class, "getDataDepartemen"]);
 

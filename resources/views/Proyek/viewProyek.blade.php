@@ -1438,6 +1438,7 @@
                                                      <!--End::Col-->
                                                      <!--begin::Col-->
                                                      @if (!empty($proyekberjalans))
+                                                     @canany(['super-admin', 'admin-crm', 'user-crm', 'risk-crm'])
                                                          <div class="col-2">
                                                              <!--begin::Input group Website-->
                                                              <div class="fv-row mb-7">
@@ -1457,6 +1458,7 @@
                                                              </div>
                                                              <!--end::Input group-->
                                                          </div>
+                                                     @endcanany
                                                      @endif
                                                      <!--End::Col-->
                                                      <div class="col-6">
@@ -3423,9 +3425,11 @@
                                                                             &nbsp;
                                                                             @if (!empty($proyek->alasan_kso) && $proyek->alasan_kso != "[]")
                                                                             <span>
+                                                                                @canany(['super-admin', 'admin-crm', 'user-crm', 'approver-crm'])
                                                                                 @if (empty($proyek->VerifikasiInternalPartner) || !empty($proyek->VerifikasiInternalPartner) && (collect(json_decode($proyek->VerifikasiInternalPartner->revisi_note))->isNotEmpty()) && collect(json_decode($proyek->VerifikasiInternalPartner->revisi_note))->where("stage", "Request Pengajuan")->count() > 0)
                                                                                     <button type="button" class="btn btn-sm btn-primary" data-title="penentuan-kso" onclick="showModalRequest(this, '{{ $proyek->kode_proyek }}')">Ajukan</button>
-                                                                                @endif
+                                                                                @endif                                                                                    
+                                                                                @endcanany
                                                                             </span>
                                                                             @endif
                                                                             @if (!empty($proyek->VerifikasiInternalPartner) && is_null($proyek->VerifikasiInternalPartner->is_persetujuan_approved))
@@ -3958,9 +3962,11 @@
                                                                                 @if (($porsiJO->isNotEmpty() && ($porsiJO->every(function($item){return $item->is_greenlane;}) || $porsiJO->whereNotNull('is_hasil_assessment')->count() > 0)))
                                                                                     @if ($porsiJO->every(function($item){return $item->is_greenlane;}) || (isset($isDokumenFinish) && $isDokumenFinish))
                                                                                     <span>
+                                                                                        @canany(['super-admin', 'admin-crm', 'user-crm', 'approver-crm'])
                                                                                         @if (empty($proyek->VerifikasiInternalPersetujuanPartner) || !empty($proyek->VerifikasiInternalPersetujuanPartner) && (collect(json_decode($proyek->VerifikasiInternalPersetujuanPartner->revisi_note))->isNotEmpty()) && collect(json_decode($proyek->VerifikasiInternalPersetujuanPartner?->revisi_note))?->where("stage", "Pengajuan")->count() > 0)
                                                                                             <button type="button" class="btn btn-sm btn-primary" data-title="persetujuan-kso" onclick="showModalRequest(this, '{{ $proyek->kode_proyek }}')">Ajukan</button>
-                                                                                        @endif
+                                                                                        @endif                                                                                            
+                                                                                        @endcanany
                                                                                         @if (!empty($proyek->VerifikasiInternalPersetujuanPartner) && is_null($proyek->VerifikasiInternalPersetujuanPartner->is_persetujuan_approved) && is_null($proyek->VerifikasiInternalPersetujuanPartner->is_revisi))
                                                                                             <span>
                                                                                                 <p class="m-0 badge rounded-pill badge-sm text-warning">Proses Verifikasi</p>
@@ -5094,9 +5100,11 @@
                                                                         style="font-size:14px;">Verifikasi Internal Proyek Greenlane/Non Greenlane
                                                                         @if (!empty($proyek->jenis_terkontrak) && !empty($proyek->sistem_bayar))
                                                                             <span>
+                                                                                @canany(['super-admin', 'admin-crm', 'user-crm', 'approver-crm'])
                                                                                 @if (empty($proyek->VerifikasiProyekNota2) || !empty($proyek->VerifikasiProyekNota2) && (collect(json_decode($proyek->VerifikasiProyekNota2->revisi_note))->isNotEmpty()) && collect(json_decode($proyek->VerifikasiProyekNota2?->revisi_note))?->where("stage", "Request Pengajuan")->count() > 0)
                                                                                     <button type="button" class="btn btn-sm btn-primary" data-title="verifikasi-proyek-nr-2" onclick="showModalRequest(this, '{{ $proyek->kode_proyek }}')">Ajukan</button>
-                                                                                @endif
+                                                                                @endif                                                                                    
+                                                                                @endcanany
                                                                             </span>
                                                                         @endif
                                                                         @if (!empty($proyek->VerifikasiProyekNota2) && is_null($proyek->VerifikasiProyekNota2->is_persetujuan_approved))

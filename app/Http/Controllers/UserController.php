@@ -139,11 +139,15 @@ class UserController extends Controller
                 $request->session()->regenerate();
                 if (!Gate::allows('user-csi')) {
                     if (Auth::user()->is_active) {
-                        $redirect = $request->schemeAndHttpHost() . $request->get("redirect-to");
-                        if (!empty($redirect)) {
-                            return redirect()->intended($redirect);
+                        if (!Gate::allows("user-scm")) {
+                            $redirect = $request->schemeAndHttpHost() . $request->get("redirect-to");
+                            if (!empty($redirect)) {
+                                return redirect()->intended($redirect);
+                            }
+                            return redirect()->intended("/dashboard");
+                        } else {
+                            return redirect()->intended("/proyek");
                         }
-                        return redirect()->intended("/dashboard");
                     } else {
                         Auth::logout();
                         Alert::error("USER NON ACTIVE", "Hubungi Admin (PIC)");
@@ -438,6 +442,7 @@ class UserController extends Controller
         $role_approver = $request->has("role_approver") ?? false;
         $role_risk = $request->has("role_risk") ?? false;
         $role_unlock = $request->has("role_unlock") ?? false;
+        $role_scm = $request->has("role_scm") ?? false;
 
 
         // if ($validation->fails()) {
@@ -452,7 +457,7 @@ class UserController extends Controller
         //     // return redirect()->back();
         // }
 
-        if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_user_csi == false && $is_team_proyek == false && $role_admin == false && $role_user == false && $role_approver == false && $role_risk == false && $role_unlock == false && $is_user_mobile == false && $is_user_ska_skt == false) {
+        if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_user_csi == false && $is_team_proyek == false && $role_admin == false && $role_user == false && $role_approver == false && $role_risk == false && $role_unlock == false && $role_scm == false && $is_user_mobile == false && $is_user_ska_skt == false) {
             $rules["administrator"] = "accepted";
             $rules["admin-kontrak"] = "accepted";
             $rules["user-sales"] = "accepted";
@@ -466,6 +471,7 @@ class UserController extends Controller
             $rules["role_approver"] = "accepted";
             $rules["role_risk"] = "accepted";
             $rules["role_unlock"] = "accepted";
+            $rules["role_scm"] = "accepted";
 
             Alert::error("Error", "Pilih Hak Akses Terlebih Dahulu");
             $request->old("nip");
@@ -531,6 +537,7 @@ class UserController extends Controller
         $user->role_approver = $role_approver;
         $user->role_risk = $role_risk;
         $user->is_unlock = $role_unlock;
+        $user->role_scm = $role_scm;
 
         // if (isset($data['proyeks'])) {
         //     $proyekSelectedCollect = collect($data['proyeks']);
@@ -851,7 +858,11 @@ class UserController extends Controller
                         Auth::login($checkUserInCRM);
                         if (Auth::check()) {
                             $request->session()->regenerate();
-                            return redirect()->intended("/dashboard");
+                            if (!Gate::allows("user-scm")) {
+                                return redirect()->intended("/dashboard");
+                            } else {
+                                return redirect()->intended("/proyek");
+                            }
                         } else {
                             dd([
                                 "Success" => false,

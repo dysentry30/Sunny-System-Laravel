@@ -67,20 +67,22 @@
                     <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;">
 
                         @canany(['super-admin', 'crm', 'ccm', 'csi'])
-                            <div class="menu-item">
-                                <a class="menu-link " href="/dashboard"
-                                    style="color:white; padding-left:20px; padding-top:10px; {{ str_contains(Request::Path(), 'dashboard') ? 'background-color:#008CB4' : '' }}">
-                                    <span class="menu-icon">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                        <span class="svg-icon svg-icon-2">
-                                            <img alt="Logo" src="/media/icons/duotune/creatio/dashboards.svg"
-                                                class="h-35px logo" />
+                            @cannot('user-scm')
+                                <div class="menu-item">
+                                    <a class="menu-link " href="/dashboard"
+                                        style="color:white; padding-left:20px; padding-top:10px; {{ str_contains(Request::Path(), 'dashboard') ? 'background-color:#008CB4' : '' }}">
+                                        <span class="menu-icon">
+                                            <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                            <span class="svg-icon svg-icon-2">
+                                                <img alt="Logo" src="/media/icons/duotune/creatio/dashboards.svg"
+                                                    class="h-35px logo" />
+                                            </span>
+                                            <!--end::Svg Icon-->
                                         </span>
-                                        <!--end::Svg Icon-->
-                                    </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Dashboard</span>
-                                </a>
-                            </div>
+                                        <span class="menu-title" style="font-size: 16px; padding-left: 10px">Dashboard</span>
+                                    </a>
+                                </div>                                
+                            @endcannot
                         @endcanany
 
                         {{-- @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
@@ -101,20 +103,22 @@
                         @endif --}}
                         
                         @canany(['super-admin', 'crm', 'admin-csi'])
-                        <div class="menu-item">
-                            <a class="menu-link " href="/customer"
-                                style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'customer') ? 'background-color:#008CB4' : '' }}">
-                                <span class="menu-icon">
-                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                    <span class="svg-icon svg-icon-2">
-                                        <img alt="Logo" src="/media/icons/duotune/creatio/account.svg"
-                                            class="h-30px logo" />
+                            @cannot('user-scm')
+                            <div class="menu-item">
+                                <a class="menu-link " href="/customer"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'customer') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/account.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
                                     </span>
-                                    <!--end::Svg Icon-->
-                                </span>
-                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Pelanggan</span>
-                            </a>
-                        </div>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Pelanggan</span>
+                                </a>
+                            </div>                                    
+                            @endcannot
                         @endcanany
                         {{-- @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
                             <div class="menu-item">
@@ -166,23 +170,25 @@
                             </div>
                         @endif --}}
                         @canany(['super-admin', 'crm'])
-                        @php
-                            $month = date('d') < 5 ? date('m') - 1 : date('m');
-                        @endphp
-                            <div class="menu-item">
-                                <a class="menu-link " href="/forecast/{{ (int)$month }}/{{ (int) date("Y") }}"
-                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'forecast') ? 'background-color:#008CB4' : '' }}">
-                                    <span class="menu-icon">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                        <span class="svg-icon svg-icon-2">
-                                            <i class="bi bi-bar-chart-fill text-white"
-                                                style="font-size: 18px; margin-left:7px"></i>
+                            @cannot('user-scm')
+                            @php
+                                $month = date('d') < 5 ? date('m') - 1 : date('m');
+                            @endphp
+                                <div class="menu-item">
+                                    <a class="menu-link " href="/forecast/{{ (int)$month }}/{{ (int) date("Y") }}"
+                                        style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'forecast') ? 'background-color:#008CB4' : '' }}">
+                                        <span class="menu-icon">
+                                            <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                            <span class="svg-icon svg-icon-2">
+                                                <i class="bi bi-bar-chart-fill text-white"
+                                                    style="font-size: 18px; margin-left:7px"></i>
+                                            </span>
+                                            <!--end::Svg Icon-->
                                         </span>
-                                        <!--end::Svg Icon-->
-                                    </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Forecast</span>
-                                </a>
-                            </div>
+                                        <span class="menu-title" style="font-size: 16px; padding-left: 10px">Forecast</span>
+                                    </a>
+                                </div>                                    
+                            @endcannot
                         @endcanany
                         {{-- @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
                             <div class="menu-item">
@@ -570,6 +576,7 @@
                         @endif --}}
 
                         @canany(['super-admin', 'crm'])
+                            @cannot('user-scm')
                             <div class="menu-item">
                                 <a class="menu-link"
                                     data-bs-toggle="collapse" href="#tender-collapse" role="button"
@@ -616,7 +623,8 @@
                                     </a>
                                 </div>
                                 <!--end::Menu Colapse-->
-                            </div>                            
+                            </div>  
+                            @endcannot
                         @endcanany
                         {{-- @if (auth()->user()->check_administrator || $adminPIC || auth()->user()->check_user_sales )
                                 <div class="menu-item">
@@ -1643,22 +1651,24 @@
                         @endcanany
 
                         @canany(['super-admin', 'crm'])
-                        {{-- @if (auth()->user()->check_administrator || auth()->user()->check_user_sales) --}}
-                            <div class="menu-item">
-                                <a class="menu-link " href="/rkap"
-                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'rkap') ? 'background-color:#008CB4' : '' }}">
-                                    <span class="menu-icon">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                        <span class="svg-icon svg-icon-2">
-                                            <i class="bi bi-chat-left-dots-fill text-white"
-                                                style="font-size: 18px; margin-left:7px"></i>
+                            @cannot('user-scm')
+                            {{-- @if (auth()->user()->check_administrator || auth()->user()->check_user_sales) --}}
+                                <div class="menu-item">
+                                    <a class="menu-link " href="/rkap"
+                                        style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'rkap') ? 'background-color:#008CB4' : '' }}">
+                                        <span class="menu-icon">
+                                            <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                            <span class="svg-icon svg-icon-2">
+                                                <i class="bi bi-chat-left-dots-fill text-white"
+                                                    style="font-size: 18px; margin-left:7px"></i>
+                                            </span>
+                                            <!--end::Svg Icon-->
                                         </span>
-                                        <!--end::Svg Icon-->
-                                    </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Group RKAP</span>
-                                </a>
-                            </div>
-                        {{-- @endif                             --}}
+                                        <span class="menu-title" style="font-size: 16px; padding-left: 10px">Group RKAP</span>
+                                    </a>
+                                </div>
+                            {{-- @endif                             --}}
+                            @endcannot
                         @endcanany
                         
                         {{-- @canany(['super-admin'])
