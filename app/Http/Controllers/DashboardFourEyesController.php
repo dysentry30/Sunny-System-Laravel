@@ -419,7 +419,7 @@ class DashboardFourEyesController extends Controller
                 "nama_proyek" => $nama_proyek,
                 "unit_kerja" => $unit_kerja,
                 "nama_owner" => $nama_owner,
-                "nama_partner" => $partnerProyek->name ?? null,
+                "nama_partner" => $partner->company_jo ?? null,
                 "posisi_wika" => $posisiWika,
                 "jenis_instansi" => $jenis_instansi ?? null,
                 "hasil_profile_risiko_internal" => $hasil_profile_risiko,

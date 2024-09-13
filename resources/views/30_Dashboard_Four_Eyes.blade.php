@@ -1059,7 +1059,7 @@
                     
                     nameProyekCell.innerHTML = proyek.nama_proyek;
                     // nameOwnerCell.innerHTML = proyek.nama_owner;
-                    namePartnerCell.innerHTML = proyek.nama_owner;
+                    namePartnerCell.innerHTML = proyek.nama_partner;
                     unitKerjaCell.innerHTML = proyek.unit_kerja;
                     jenisInstansiCell.innerHTML = proyek.jenis_instansi;
                     posisiWikaCell.innerHTML = proyek.posisi_wika;
