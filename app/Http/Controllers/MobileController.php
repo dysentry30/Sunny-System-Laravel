@@ -14,11 +14,14 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\HistoryForecast;
 use App\Models\MobileNotification;
+use App\Services\sendNotification;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
-use App\Class\ApprovalTerkontrakClass;
-use App\Class\sendNotification;
+use App\Models\PenilaianPenggunaJasa;
 use App\Models\ApprovalTerkontrakProyek;
+use App\Services\OwnerSelectionServices;
+use App\Services\ApprovalTerkontrakClass;
 use App\Models\MatriksApprovalTerkontrakProyek;
 
 
@@ -1407,6 +1410,440 @@ class MobileController extends Controller
 
 
 
+    //? Owner Selection Controller
+
+    /**
+     * List Proyek Owner Selection
+     */
+    public function listProyekOwnerSelection(Request $request, $nip)
+    {
+        try {
+            $ownerSelectionService = new OwnerSelectionServices($nip);
+            $resultOwnerSelection = $ownerSelectionService->listProyek($request);
+
+            // $proyeks_proses_rekomendasi = $resultOwnerSelection["proyeks_proses_rekomendasi"];
+            // $proyeks_proses_rekomendasi = $proyeks_proses_rekomendasi->map(function ($proyek) {
+            //     $newClass = new stdClass();
+            //     $newClass->kode_proyek = $proyek->kode_proyek;
+            //     $newClass->nama_proyek = $proyek->Proyek?->nama_proyek;
+            //     $newClass->unit_kerja = !empty($proyek->Proyek?->unit_kerja) ? self::getUnitKerjaProyek($proyek->Proyek?->unit_kerja) : null;
+            //     $newClass->sumber_dana = $proyek->Proyek?->sumber_dana;
+            //     $newClass->nilai_ok = $proyek->Proyek?->nilaiok_awal;
+            //     $newClass->tanggal_request = Carbon::parse($proyek->updated_at)->translatedFormat('d/m/Y');
+            //     $newClass->stage = self::getStageOwnerSelection($proyek);
+            //     return $newClass;
+            // });
+
+            // $proyeks_rekomendasi_final = $resultOwnerSelection["proyeks_rekomendasi_final"];
+            // $proyeks_rekomendasi_final = $proyeks_rekomendasi_final->map(function ($proyek) {
+            //     $newClass = new stdClass();
+            //     $newClass->kode_proyek = $proyek->kode_proyek;
+            //     $newClass->nama_proyek = $proyek->Proyek?->nama_proyek;
+            //     $newClass->unit_kerja = !empty($proyek->Proyek?->unit_kerja) ? self::getUnitKerjaProyek($proyek->Proyek?->unit_kerja) : null;
+            //     $newClass->sumber_dana = $proyek->Proyek?->sumber_dana;
+            //     $newClass->nilai_ok = $proyek->Proyek?->nilaiok_awal;
+            //     $newClass->tanggal_request = Carbon::parse($proyek->updated_at)->translatedFormat('d/m/Y');
+            //     $newClass->stage = self::getStageOwnerSelection($proyek);
+            //     return $newClass;
+            // });
+
+            $proyeks_list = $resultOwnerSelection["proyeks_list"]->map(function ($proyek) {
+                $newClass = new stdClass();
+                $newClass->kode_proyek = $proyek->kode_proyek;
+                $newClass->nama_proyek = $proyek->Proyek?->nama_proyek;
+                $newClass->unit_kerja = !empty($proyek->Proyek?->unit_kerja) ? self::getUnitKerjaProyek($proyek->Proyek?->unit_kerja) : null;
+                $newClass->sumber_dana = $proyek->Proyek?->sumber_dana;
+                $newClass->nilai_ok = "Rp." . number_format($proyek->Proyek?->nilaiok_awal, 0, '.', '.') ?? "-";
+                $newClass->tanggal_request = Carbon::parse($proyek->updated_at)->translatedFormat('d/m/Y');
+                $newClass->stage = self::getStageOwnerSelection($proyek);
+                return $newClass;
+            });
+
+            return response()->json([
+                "success" => true,
+                "message" => null,
+                // "data" => ["proyeks_proses_rekomendasi" => $proyeks_proses_rekomendasi->toArray(), "proyeks_rekomendasi_final" => $proyeks_rekomendasi_final->toArray()]
+                "data" => ["proyeks_list" => $proyeks_list->toArray()]
+            ]);
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            return response()->json([
+                "success" => false,
+                "message" => $th->getMessage(),
+                "data" => null
+            ]);
+        }
+    }
+
+    /**
+     * List Detail Owner Selection
+     */
+    public function listDetailProyekOwnerSelection($nip, $kode_proyek, $stage)
+    {
+        try {
+            $user = User::where("nip", $nip)->first();
+            $ownerSelectionService = new OwnerSelectionServices($nip);
+            $proyekGet = $ownerSelectionService->getProyek($kode_proyek, substr($stage, 6));
+
+            if (is_string($proyekGet)) {
+                return response()->json([
+                    "success" => false,
+                    "message" => $proyekGet,
+                    "data" => null
+                ]);
+            }
+
+            $proyekSelected = $proyekGet["proyeks"];
+            $userAccess = $proyekGet["userAccess"];
+
+            if (!empty($proyekSelected->hasil_assessment)) {
+                $hasil_assessment = collect(json_decode($proyekSelected->hasil_assessment));
+
+                $internal_score = 0;
+                $eksternal_score = 0;
+
+                if ($hasil_assessment->isNotEmpty()) {
+                    $internal_score = $hasil_assessment->sum(function ($ra) {
+                        if ($ra->kategori == 'Internal') {
+                            return $ra->score;
+                        }
+                    });
+                    $eksternal_score = $hasil_assessment->sum(function ($ra) {
+                        if ($ra->kategori == 'Eksternal') {
+                            return $ra->score;
+                        }
+                    });
+                }
+            } else {
+                $internal_score = "Belum melaksanakan Assessment";
+                $eksternal_score = "Belum melaksanakan Assessment";
+            }
+
+            if ($proyekSelected->KriteriaPenggunaJasaDetail->isNotEmpty() && !$proyekSelected->KriteriaPenggunaJasaDetail->every("nilai", 0)) {
+                $nilaiKriteriaPenggunaJasa = $proyekSelected->KriteriaPenggunaJasaDetail
+                    ?->filter(function ($score) {
+                        return $score->item != null;
+                    })
+                    ->sum('nilai') ?? null;
+
+                if (!empty($nilaiKriteriaPenggunaJasa)) {
+                    $hasilProfileRisiko = PenilaianPenggunaJasa::all()->filter(function ($item) use ($nilaiKriteriaPenggunaJasa) {
+                        if ($item->dari_nilai <= $nilaiKriteriaPenggunaJasa && $item->sampai_nilai >= $nilaiKriteriaPenggunaJasa) {
+                            return $item;
+                        }
+                    })->first()->nama ?? 'Belum Ditentukan';
+                }
+            } else {
+                $nilaiKriteriaPenggunaJasa = "Belum Ditentukan";
+                $hasilProfileRisiko = "Belum Ditentukan";
+            }
+
+            //=========================================================================================================================================//
+            //File - file
+            //=========================================================================================================================================//
+
+            if (!empty($proyekSelected->Proyek?->DokumenPendukungPasarDini)) {
+                $filePendukungPasdin = $proyekSelected->Proyek->DokumenPendukungPasarDini->map(function ($file) {
+                    return public_path("dokumen-pendukung-pasdin\\") . $file->id_document;
+                });
+            } else {
+                $filePendukungPasdin = [];
+            }
+
+            if (!empty($proyekSelected->Proyek?->proyekBerjalan?->customer?->AHU)) {
+                $fileAHU = $proyekSelected->Proyek?->proyekBerjalan?->customer?->AHU->map(function ($file) {
+                    return public_path("customer-file\\") . $file->file_document;
+                });
+            } else {
+                $fileAHU = [];
+            }
+
+            if (!empty($proyekSelected->Proyek?->proyekBerjalan?->customer?->CompanyProfile)) {
+                $fileCompanyProfile = $proyekSelected->Proyek?->proyekBerjalan?->customer?->CompanyProfile->map(function ($file) {
+                    return public_path("customer-file\\") . $file->file_document;
+                });
+            } else {
+                $fileCompanyProfile = [];
+            }
+
+            if (!empty($proyekSelected->Proyek?->proyekBerjalan?->customer?->LaporanKeuangan)) {
+                $fileLaporanKeuangan = $proyekSelected->Proyek?->proyekBerjalan?->customer?->LaporanKeuangan->map(function ($file) {
+                    return public_path("customer-file\\") . $file->file_document;
+                });
+            } else {
+                $fileLaporanKeuangan = [];
+            }
+
+            if (!empty($proyekSelected->file_pengajuan)) {
+                $filePengajuan = public_path("file-pengajuan\\") . $proyekSelected->file_pengajuan;
+            } else {
+                $filePengajuan = null;
+            }
+
+            if (!empty($proyekSelected->file_rekomendasi)) {
+                $fileAssessment = public_path("file-rekomendasi\\") . $proyekSelected->file_rekomendasi;
+            } else {
+                $fileAssessment = null;
+            }
+
+            if (!empty($proyekSelected->file_penilaian_risiko)) {
+                $filePenilaianRisiko = public_path("file-profile-risiko\\") . $proyekSelected->file_penilaian_risiko;
+            } else {
+                $filePenilaianRisiko = null;
+            }
+
+            //=========================================================================================================================================//
+
+
+            //=========================================================================================================================================//
+            //Is Edit
+            //=========================================================================================================================================//
+            if (!empty($userAccess)) {
+                if ($userAccess->contains('kategori', 'Persetujuan')  && $userAccess->where('kategori', 'Persetujuan')?->where('departemen', $proyekSelected->departemen_code)?->where('unit_kerja', $proyekSelected->divisi_id)?->where("klasifikasi_proyek", $proyekSelected->klasifikasi_pasdin)?->first() && $proyekSelected->is_recommended) {
+                    if ($proyekSelected->is_disetujui || (collect(json_decode($proyekSelected->approved_persetujuan))->contains('user_id', $user->id) && collect(json_decode($proyekSelected->approved_persetujuan))?->first()?->status == 'approved')) {
+                        $isEdit = false;
+                    } else {
+                        $isEdit = true;
+                    }
+                } elseif ($userAccess->contains('kategori', 'Rekomendasi') && $userAccess->where('kategori', 'Rekomendasi')?->where('departemen', $proyekSelected->departemen_code)?->where('unit_kerja', $proyekSelected->divisi_id)?->where("klasifikasi_proyek", $proyekSelected->klasifikasi_pasdin)?->first() && $proyekSelected->is_verifikasi_approved) {
+                    if ($proyekSelected->is_recommended || (collect(json_decode($proyekSelected->approved_rekomendasi_final))->contains('user_id', $user->id) && collect(json_decode($proyekSelected->approved_rekomendasi_final))?->first()?->status == 'approved')) {
+                        $isEdit = false;
+                    } else {
+                        $isEdit = true;
+                    }
+                } elseif ($userAccess->contains('kategori', 'Verifikasi') && $userAccess->where('kategori', 'Verifikasi')?->where('departemen', $proyekSelected->departemen_code)?->where('unit_kerja', $proyekSelected->divisi_id)?->where("klasifikasi_proyek", $proyekSelected->klasifikasi_pasdin)?->first() && $proyekSelected->is_penyusun_approved) {
+                    if ($proyekSelected->is_request_rekomendasi || (($userAccess->filter(function ($value) use ($proyekSelected) {
+                        return $value->unit_kerja == $proyekSelected->divisi_id &&
+                            $value->klasifikasi_proyek == $proyekSelected->klasifikasi_pasdin &&
+                            $value->departemen == $proyekSelected->departemen_code &&
+                            $value->kategori == "Verifikasi" &&
+                            $value->urutan > 1;
+                    })->count() > 0 && (collect(json_decode($proyekSelected->approved_verifikasi))->isEmpty())))) {
+                        $isEdit = false;
+                    } else {
+                        if ($proyekSelected->is_verifikasi_approved || (collect(json_decode($proyekSelected->approved_verifikasi))->contains('user_id', $user->id) && collect(json_decode($proyekSelected->approved_verifikasi))?->first()?->status == 'approved')) {
+                            $isEdit = false;
+                        } else {
+                            $isEdit = true;
+                        }
+                    }
+                } elseif ($userAccess->contains('kategori', 'Pengajuan') && $userAccess->where('kategori', 'Pengajuan')?->where('departemen', $proyekSelected->departemen_code)?->where('unit_kerja', $proyekSelected->divisi_id)?->where("klasifikasi_proyek", $proyekSelected->klasifikasi_pasdin)?->first()) {
+                    if (!empty($nota_rekomendasi->approved_rekomendasi)) {
+                        $isEdit = false;
+                    } else {
+                        $isEdit = true;
+                    }
+                } else {
+                    $isEdit = false;
+                }
+            } else {
+                $isEdit = false;
+            }
+            //=========================================================================================================================================//
+
+
+            //=========================================================================================================================================//
+            //Catatan
+            //=========================================================================================================================================//
+            $catatanRekomendasi = [];
+            $catatanPersetujuan = [];
+
+            if (!empty($proyekSelected->approved_rekomendasi_final)) {
+                $catatanRekomendasi = collect(json_decode($proyekSelected->approved_rekomendasi_final))->map(function ($user) {
+                    return ["user" => User::find($user->user_id)?->name, "catatan" => $user->catatan];
+                });
+            }
+
+            if (!empty($proyekSelected->approved_persetujuan)) {
+                $catatanPersetujuan = collect(json_decode($proyekSelected->approved_persetujuan))->map(function ($user) {
+                    return ["user" => User::find($user->user_id)?->name, "catatan" => $user->catatan];
+                });
+            }
+
+            $notaRekomendasiNewClass = collect([]);
+            $notaRekomendasiNewClass->push([
+                "nama_proyek" => $proyekSelected->Proyek->nama_proyek,
+                "kode_proyek" => $proyekSelected->Proyek->kode_proyek,
+                "lokasi_proyek" => $proyekSelected->Proyek->Provinsi->province_name ?? "-",
+                "nama_instansi" => $proyekSelected->Proyek?->proyekBerjalan?->name_customer ?? "-",
+                "jenis_instansi" => $proyekSelected->Proyek?->proyekBerjalan?->Customer->jenis_instansi ?? "-",
+                "sumber_dana" => $proyekSelected->Proyek?->sumber_dana ?? "-",
+                "klasifikasi_proyek" => $proyekSelected->Proyek?->klasifikasi_pasdin ?? "-",
+                "nilai_ok" => "Rp." . number_format($proyekSelected->Proyek?->nilaiok_awal, 0, '.', '.') ?? "-",
+                "assessment_internal" => $internal_score,
+                "assessment_eksternal" => $eksternal_score,
+                "hasil_profile_risiko" => $hasilProfileRisiko,
+                "nilai_profile_risiko" => $nilaiKriteriaPenggunaJasa,
+                "catatan_assessment" => $proyekSelected->catatan_nota_rekomendasi,
+                "files_owner_selection" => [
+                    "file_pendukung_pasdin" => $filePendukungPasdin,
+                    "file_ahu" => $fileAHU,
+                    "file_company_profile" => $fileCompanyProfile,
+                    "file_laporan_keuangan" => $fileLaporanKeuangan,
+                    "file_form_pengajuan_rekomendasi" => $filePengajuan,
+                    "file_hasil_assessment" => $fileAssessment,
+                    "file_profile_risiko" => $filePenilaianRisiko,
+                ],
+                "catatan_nota_rekomendasi" => [
+                    "catatan_perekomendasi" => $catatanRekomendasi,
+                    "catatan_persetujuan" => $catatanPersetujuan
+                ],
+                "stage" => self::getStageOwnerSelection($proyekSelected),
+                "is_edit" => $isEdit
+            ]);
+
+            return response()->json([
+                "success" => true,
+                "message" => null,
+                "data" => $notaRekomendasiNewClass->toArray()
+            ]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage(),
+                "data" => null
+            ]);
+        }
+    }
+
+    /**
+     * Proses Approval Pengajuan
+     */
+    public function setApprovePengajuan(Request $request, $nip, $kode_proyek)
+    {
+        try {
+            $ownerSelectionService = new OwnerSelectionServices($nip);
+            $prosesApproval = $ownerSelectionService->approvalPengajuan($request, $kode_proyek);
+
+            if ($prosesApproval[0]) {
+                return response()->json([
+                    "success" => true,
+                    "message" => $prosesApproval[1],
+                    "data" => null
+                ]);
+            } else {
+                Log::error($prosesApproval[1]);
+                return response()->json([
+                    "success" => true,
+                    "message" => $prosesApproval[1],
+                    "data" => null
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage(),
+                "data" => null
+            ]);
+        }
+    }
+
+    /**
+     * Proses Approval Verifikasi
+     */
+    public function setApproveVerifikasi(Request $request, $nip, $kode_proyek)
+    {
+        try {
+            $ownerSelectionService = new OwnerSelectionServices($nip);
+            $prosesApproval = $ownerSelectionService->approvalVerifikasi($request, $kode_proyek);
+
+            if ($prosesApproval[0]) {
+                return response()->json([
+                    "success" => true,
+                    "message" => $prosesApproval[1],
+                    "data" => null
+                ]);
+            } else {
+                Log::error($prosesApproval[1]);
+                return response()->json([
+                    "success" => true,
+                    "message" => $prosesApproval[1],
+                    "data" => null
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage(),
+                "data" => null
+            ]);
+        }
+    }
+
+    /**
+     * Proses Approval Rekomendasi
+     */
+    public function setApproveRekomendasi(Request $request, $nip, $kode_proyek)
+    {
+        try {
+            $ownerSelectionService = new OwnerSelectionServices($nip);
+            $prosesApproval = $ownerSelectionService->approvalRekomendasi($request, $kode_proyek);
+
+            if ($prosesApproval[0]) {
+                return response()->json([
+                    "success" => true,
+                    "message" => $prosesApproval[1],
+                    "data" => null
+                ]);
+            } else {
+                Log::error($prosesApproval[1]);
+                return response()->json([
+                    "success" => true,
+                    "message" => $prosesApproval[1],
+                    "data" => null
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage(),
+                "data" => null
+            ]);
+        }
+    }
+
+    /**
+     * Proses Approval Persetujuan
+     */
+    public function setApprovePersetujuan(Request $request, $nip, $kode_proyek)
+    {
+        try {
+            $ownerSelectionService = new OwnerSelectionServices($nip);
+            $prosesApproval = $ownerSelectionService->approvalPersetujuan($request, $kode_proyek);
+
+            if ($prosesApproval[0]) {
+                return response()->json([
+                    "success" => true,
+                    "message" => $prosesApproval[1],
+                    "data" => null
+                ]);
+            } else {
+                Log::error($prosesApproval[1]);
+                return response()->json([
+                    "success" => true,
+                    "message" => $prosesApproval[1],
+                    "data" => null
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage(),
+                "data" => null
+            ]);
+        }
+    }
+
+
+
+
+
+
 
 
     //? Private Controller
@@ -1503,5 +1940,32 @@ class MobileController extends Controller
     {
         $unitKerjaSelected = UnitKerja::where("divcode", $unitKerja)->first();
         return $unitKerjaSelected->unit_kerja;
+    }
+
+    private function getStageOwnerSelection($notaRekomendasi)
+    {
+        if (empty($notaRekomendasi)) {
+            return null;
+        }
+
+        if ($notaRekomendasi->is_request_rekomendasi && !$notaRekomendasi->review_assessment) {
+            $stage = "Proses Pengajuan";
+        } elseif ($notaRekomendasi->review_assessment == true && (is_null($notaRekomendasi->is_draft_recommend_note) || $notaRekomendasi->is_draft_recommend_note)) {
+            $stage = "Proses Penyusunan";
+        } elseif (!is_null($notaRekomendasi->is_penyusun_approved) && $notaRekomendasi->is_penyusun_approved && is_null($notaRekomendasi->is_verifikasi_approved)) {
+            $stage = "Proses Verifikasi";
+        } elseif ($notaRekomendasi->is_verifikasi_approved == true && is_null($notaRekomendasi->is_recommended)) {
+            $stage = "Proses Rekomendasi";
+        } elseif ($notaRekomendasi->is_recommended == true && is_null($notaRekomendasi->is_disetujui)) {
+            $stage = "Proses Penyetujuan";
+        } elseif (!is_null($notaRekomendasi->is_disetujui) && $notaRekomendasi->is_disetujui == false) {
+            $stage = "Ditolak";
+        } elseif ($notaRekomendasi->is_disetujui) {
+            $stage = "Disetujui";
+        } else {
+            $stage = "Error";
+        }
+
+        return $stage;
     }
 }

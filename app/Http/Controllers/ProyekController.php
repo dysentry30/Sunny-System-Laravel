@@ -675,23 +675,41 @@ class ProyekController extends Controller
                 "tanggal" => \Carbon\Carbon::now(),
             ]);
 
-            $newNotaRekomendasi = new NotaRekomendasi();
-            $newNotaRekomendasi->kode_proyek = $newProyek->kode_proyek;
-            $newNotaRekomendasi->unit_kerja = $newProyek->unit_kerja;
-            $newNotaRekomendasi->divisi_id = $divisi;
-            $newNotaRekomendasi->departemen_code = $departemen;
-            $newNotaRekomendasi->klasifikasi_pasdin = $newProyek->klasifikasi_pasdin;
-            $newNotaRekomendasi->is_request_rekomendasi = true;
-            $newNotaRekomendasi->request_pengajuan = $request_pengajuan->toJson();
+            $isExistNotaRekomendasi = NotaRekomendasi::where("kode_proyek", $newProyek->kode_proyek)->first();
 
-            if (!$newNotaRekomendasi->save()) {
-                Alert::error('Error', "Proyek Gagal Diajukan");
-                return redirect()->back();
+            if (empty($isExistNotaRekomendasi)) {
+                $newNotaRekomendasi = new NotaRekomendasi();
+                $newNotaRekomendasi->kode_proyek = $newProyek->kode_proyek;
+                $newNotaRekomendasi->unit_kerja = $newProyek->unit_kerja;
+                $newNotaRekomendasi->divisi_id = $divisi;
+                $newNotaRekomendasi->departemen_code = $departemen;
+                $newNotaRekomendasi->klasifikasi_pasdin = $newProyek->klasifikasi_pasdin;
+                $newNotaRekomendasi->is_request_rekomendasi = true;
+                $newNotaRekomendasi->request_pengajuan = $request_pengajuan->toJson();
+
+                if (!$newNotaRekomendasi->save()) {
+                    Alert::error('Error', "Proyek Gagal Diajukan");
+                    return redirect()->back();
+                }
+
+                $newProyek->is_request_rekomendasi  = true;
+
+                Alert::success('Success', "Proyek Berhasil Diajukan");
+            } else {
+                $isExistNotaRekomendasi->is_request_rekomendasi = true;
+                $isExistNotaRekomendasi->request_pengajuan = $request_pengajuan->toJson();
+                $isExistNotaRekomendasi->approved_rekomendasi = null;
+
+                if (!$isExistNotaRekomendasi->save()) {
+                    Alert::error('Error', "Proyek Gagal Diajukan");
+                    return redirect()->back();
+                }
+
+                $newProyek->is_request_rekomendasi  = true;
+
+                Alert::success('Success', "Proyek Berhasil Diajukan");
             }
-            
-            $newProyek->is_request_rekomendasi  = true;
 
-            Alert::success('Success', "Proyek Berhasil Diajukan");
         }
         //Begin :: Nota Rekomendasi 2
         if (isset($dataProyek["proyek-rekomendasi-2"]) && isset($dataProyek["confirm-send-wa-2"]) && isset($dataProyek["jenis-terkontrak-new"]) && isset($dataProyek["sistem-bayar-new"])) {

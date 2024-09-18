@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Class;
+namespace App\Services;
 
 use Carbon\Carbon;
 use App\Models\Proyek;
@@ -11,9 +11,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 class ApprovalTerkontrakClass
 {
     // public $proyek;
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public static function generateNasabahOnline(Proyek $proyek, $isMobile = false)
     {

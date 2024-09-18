@@ -237,7 +237,7 @@
                     <!--end::Toolbar-->
 
                     @canany(['super-admin', 'approver-crm', 'user-crm', 'admin-crm'])
-                        @if ($proyek->is_request_rekomendasi == false && !$check_green_line && $proyek->stage == 1)
+                        @if (is_null($proyek->NotaRekomendasi?->is_request_rekomendasi) && !$check_green_line && $proyek->stage == 1)
                         <!-- begin::modal confirm send wa-->
                         <div class="modal fade w-100" style="margin-top: 120px" id="modal-send-pengajuan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog mw-600px">

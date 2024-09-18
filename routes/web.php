@@ -7568,6 +7568,17 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('/set-approve/{nip}/{proyek}/approve', [MobileController::class, 'setApproveTerkontrak']);
             Route::get('/rollback/{proyek}', [MobileController::class, 'setBackApprovalTerkontrak']);
         });
+
+        Route::group(['prefix' => 'owner-selection'], function () {
+            Route::get('/get-list/{nip}', [MobileController::class, 'listProyekOwnerSelection']);
+            Route::get('/get-detail/{nip}/{kode_proyek}/{stage}', [MobileController::class, 'listDetailProyekOwnerSelection']);
+            Route::group(['prefix' => 'set-approval'], function () {
+                Route::post('/pengajuan/{nip}/{kode_proyek}', [MobileController::class, 'setApprovePengajuan']);
+                Route::post('/verifikasi/{nip}/{kode_proyek}', [MobileController::class, 'setApproveVerifikasi']);
+                Route::post('/rekomendasi/{nip}/{kode_proyek}', [MobileController::class, 'setApproveRekomendasi']);
+                Route::post('/persetujuan/{nip}/{kode_proyek}', [MobileController::class, 'setApprovePersetujuan']);
+            });
+        });
     });
 });
 

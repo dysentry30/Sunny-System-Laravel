@@ -229,7 +229,7 @@ class RekomendasiController extends Controller
             // createWordPengajuan($proyek, $hasil_assessment, $is_proyek_mega, $url);
             // createWordPengajuan($proyek, $hasil_assessment, $is_proyek_mega, $request->schemaAndHttpHost());
             createWordNotaRekomendasiPengajuan($notaRekomendasi, $request);
-            // createWordRekomendasi($proyek, $hasil_assessment, $is_proyek_mega);
+            createWordRekomendasi($proyek, $hasil_assessment, $is_proyek_mega);
             $notaRekomendasi->review_assessment = true;
             $notaRekomendasi->is_request_rekomendasi = false;
             $notaRekomendasi->hasil_assessment = $hasil_assessment;
