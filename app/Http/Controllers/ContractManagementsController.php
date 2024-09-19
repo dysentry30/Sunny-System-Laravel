@@ -4027,6 +4027,7 @@ class ContractManagementsController extends Controller
                     $uploadFinal->nama_document = $collectFile[$i]["nama_file"];
                     $uploadFinal->category = $data["kategori"];
                     $uploadFinal->profit_center = $contract->profit_center;
+                    $uploadFinal->upload_by = Auth::user()->nip;
                     if (isset($data['stage'])) {
                         $uploadFinal->stage = $data['stage'];
                     }
@@ -4054,6 +4055,7 @@ class ContractManagementsController extends Controller
                 $uploadFinal->id_document = $id_document;
                 $uploadFinal->nama_document = $nama_file;
                 $uploadFinal->profit_center = $contract->profit_center;
+                $uploadFinal->upload_by = Auth::user()->nip;
                 $uploadFinal->category = $data["kategori"];
                 if (isset($data['stage'])) {
                     $uploadFinal->stage = $data['stage'];
@@ -4097,6 +4099,7 @@ class ContractManagementsController extends Controller
             $uploadFinal->id_document = $id_document;
             $uploadFinal->nama_document = $nama_file;
             $uploadFinal->profit_center = $contract->profit_center;
+            $uploadFinal->upload_by = Auth::user()->nip;
             $uploadFinal->category = $data["kategori"];
             if (isset($data['stage'])) {
                 $uploadFinal->stage = $data['stage'];
@@ -4187,6 +4190,7 @@ class ContractManagementsController extends Controller
         }
 
         $kategori->profit_center = $contract->profit_center;
+        $kategori->upload_by = Auth::user()->nip;
 
         if ($kategori->save()) {
             if (!empty($data["file-document"])) {

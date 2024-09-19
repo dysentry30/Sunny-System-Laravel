@@ -950,9 +950,137 @@
 
                         <!--begin::Card title-->
                         <div class="card-title m-0">
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Dokumen ITB / TOR <i>(Data diinput dari CRM)</i>
+                                {{-- <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-custom-class="custom-tooltip"
+                                data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
+                                data-bs-html="true"></i> --}}
+                                {{-- @if (!empty($contract->project?->DokumenItbTor->toArray()))
+                                    <a href="#" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_upload_itb_tor" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
+                                @endif --}}
+                                {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_risk_proyek">+</a> --}}
+                            </h3>
+
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nama</th>
+                                        <th class="min-w-125px">Tanggal</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @if (!empty($contract->project?->DokumenItbTor))
+                                    @forelse ($contract->project?->DokumenItbTor as $nda)
+                                        <tr>
+                                            <td>
+                                                <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
+                                            </td>
+                                            <td>
+                                                {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="2" class="text-center">
+                                                <b>There is no data</b>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
+
+                            </table>
+                            @php
+                            // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen ITB/TOR")->first();
+                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
+                                $query->where('profit_center', "=", $contract->profit_center)
+                                ->orWhere("id_contract", "=", $contract->id_contract);
+                            })->where('category', '=', "Dokumen ITB/TOR")->first();
+                            @endphp
+                            <!--End:Table: Review-->
+                            {{-- @if (!empty($uploadFile))
+                            <a target="_blank" href="{{ asset('contract-managements/dokumen-itb-tor/'.$uploadFile->id_document) }}" class="text-hover-primary">
+                            <small><b>Download File :</b> {{ $uploadFile->nama_document }}</small>
+                            </a>
+                            @endif --}}
+
+
+                            <br><br>
+                            <!--End:Table: Review-->
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Dokumen RKS / Project Spesification <i>(Data diinput dari CRM)</i>
+                                {{-- <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
+                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-custom-class="custom-tooltip"
+                                data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
+                                data-bs-html="true"></i> --}}
+                                {{-- @if (!empty($contract->project?->DokumenRks->toArray()))
+                                    <a href="#" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_upload_rks" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
+                                @endif --}}
+                                {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_risk_proyek">+</a> --}}
+                            </h3>
+
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nama</th>
+                                        <th class="min-w-125px">Tanggal</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @if (!empty($contract->project?->DokumenRks))
+                                    @forelse ($contract->project?->DokumenRks as $nda)
+                                        <tr>
+                                            <td>
+                                                <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
+                                            </td>
+                                            <td>
+                                                {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="2" class="text-center">
+                                                <b>There is no data</b>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
+
+                            </table>
+                            @php
+                            // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen RKS / Project Spesification")->first();
+                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
+                                $query->where('profit_center', "=", $contract->profit_center)
+                                ->orWhere("id_contract", "=", $contract->id_contract);
+                            })->where('category', '=', "Dokumen RKS / Project Spesification")->first();
+                            @endphp
+                            <!--End:Table: Review-->
+                            <br><br>
 
                             <h3 class="fw-bolder m-0 mb-3" id="HeadDetail" style="font-size:14px;">
-                                Aanwitjzing
+                                Aanwijzing
                                 @if (!empty($contract->questionsProjects->toArray()))
                                     <a href="#" onclick="exportToExcel(this, '#data-aanwitjzing')" class="">(Klik di sini untuk Export ke Excel)</a>
                                 @endif
@@ -1586,10 +1714,10 @@
                                 data-bs-custom-class="custom-tooltip"
                                 data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
                                 data-bs-html="true"></i> --}}
-                                @if (!empty($contract->project?->DokumenNda->toArray()))
+                                {{-- @if (!empty($contract->project?->DokumenNda->toArray())) --}}
                                     <a href="#" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_upload_nda" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
-                                @endif  
+                                    data-bs-target="#kt_modal_upload_nda" id="Plus" class="">+</a>
+                                {{-- @endif   --}}
                                 {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_risk_proyek">+</a> --}}
                             </h3>
@@ -1602,53 +1730,14 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-125px">Nama</th>
                                         <th class="min-w-125px">Tanggal</th>
+                                        <th class="min-w-125px">Upload By</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    {{-- @if ($contract->inputRisks->contains('stage', 0))
-                                        @forelse ($contract->inputRisks as $inputRisk)
-                                            @if ($inputRisk->stage == 0)
-                                                <tr>
-                                                    <!--begin::Column-->
-                                                    <td>
-                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->resiko }}</p>
-                                                    </td>
-                                                    <!--end::Column-->
-                                                    <!--begin::Column-->
-                                                    <td>
-                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->penyebab }}</p>
-                                                    </td>
-                                                    <!--end::Column-->
-                                                    <!--begin::Kode=-->
-                                                    <td>
-                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->dampak }}</p>
-                                                    </td>
-                                                    <!--end::Kode=-->
-                                                    <!--begin::Unit=-->
-                                                    <td>
-                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->mitigasi }}</p>
-                                                    </td>
-                                                    <!--end::Unit=-->
-                                                </tr>
-                                            @endif
-                                        @empty
-                                            <tr>
-                                                <td colspan="4" class="text-center">
-                                                    <h6><b>There is no data</b></h6>
-                                                </td>
-                                            </tr>
-                                        @endforelse
-                                    @else
-                                        <tr>
-                                            <td colspan="4" class="text-center">
-                                                <h6><b>There is no data</b></h6>
-                                            </td>
-                                        </tr>
-                                    @endif --}}
-                                    @if (!empty($contract->project?->DokumenNda))
+                                    {{-- @if (!empty($contract->project?->DokumenNda))
                                     @forelse ($contract->project?->DokumenNda as $nda)
                                         <tr>
                                             <td>
@@ -1664,26 +1753,46 @@
                                         </tr>
                                     @endforelse
                                         
-                                    @endif
+                                    @endif --}}
+
+                                    @php
+                                        $dokumen_nda = $contract->UploadFinal->where('category', '=', "Dokumen NDA");
+                                    @endphp
+
+                                    @forelse ($dokumen_nda as $nda)
+                                        <tr>
+                                            <td>
+                                                <a href="{{ asset('contract-managements/dokumen-nda/'.$nda->id_document) }}" target="_blank" class="text-hover-primary">{{ $nda->nama_document }}</a>
+                                            </td>
+                                            <td class="text-center">
+                                                {{ \Carbon\Carbon::parse($nda->created_at)->translatedFormat("d F Y") }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ \App\Models\User::where("nip", $nda->upload_by)->first()?->name }}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <td colspan="3" class="text-center"><b>There is no data</b></td>
+                                    @endforelse
                                 </tbody>
                                 <!--end::Table body-->
                                 
 
                             </table>
                             <!--End:Table: Review-->
-                            @php
-                            // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen NDA")->first();
+                            {{-- @php
+                            $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen NDA")->first();
                             $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
                                 $query->where('profit_center', "=", $contract->profit_center)
                                 ->orWhere("id_contract", "=", $contract->id_contract);
                             })->where('category', '=', "Dokumen NDA")->first();
-                            @endphp
+                            @endphp --}}
                             <!--End:Table: Review-->
-                            @if (!empty($uploadFile))
+                            {{-- @if (!empty($uploadFile))
                             <a target="_blank" href="{{ asset('contract-managements/dokumen-nda/'.$uploadFile->id_document) }}" class="text-hover-primary">
                             <small><b>Download File :</b> {{ $uploadFile->nama_document }}</small>
                             </a>
-                            @endif
+                            @endif --}}
                             <br>
                             <br>
 
@@ -1694,10 +1803,10 @@
                                 data-bs-custom-class="custom-tooltip"
                                 data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
                                 data-bs-html="true"></i> --}}
-                                @if (!empty($contract->project?->DokumenMou->toArray()))
+                                {{-- @if (!empty($contract->project?->DokumenMou->toArray())) --}}
                                     <a href="#" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_upload_mou" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
-                                @endif
+                                    data-bs-target="#kt_modal_upload_mou" id="Plus">+</a>
+                                {{-- @endif --}}
                                 {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_risk_proyek">+</a> --}}
                             </h3>
@@ -1710,13 +1819,14 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-125px">Nama</th>
                                         <th class="min-w-125px">Tanggal</th>
+                                        <th class="min-w-125px">Upload By</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @if (!empty($contract->project?->DokumenMou))
+                                    {{-- @if (!empty($contract->project?->DokumenMou))
                                     @forelse ($contract->project?->DokumenMou as $nda)
                                         <tr>
                                             <td>
@@ -1733,13 +1843,32 @@
                                             </td>
                                         </tr>
                                     @endforelse
-                                    @endif
+                                    @endif --}}
+                                    @php
+                                        $dokumen_mou = $contract->UploadFinal->where('category', '=', "Dokumen MOU");
+                                    @endphp
+
+                                    @forelse ($dokumen_mou as $mou)
+                                        <tr>
+                                            <td>
+                                                <a href="{{ asset('contract-managements/dokumen-mou/'.$mou->id_document) }}" target="_blank" class="text-hover-primary">{{ $mou->nama_document }}</a>
+                                            </td>
+                                            <td class="text-center">
+                                                {{ \Carbon\Carbon::parse($mou->created_at)->translatedFormat("d F Y") }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ \App\Models\User::where("nip", $mou->upload_by)->first()?->name }}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <td colspan="3" class="text-center"><b>There is no data</b></td>
+                                    @endforelse
                                 </tbody>
                                 <!--end::Table body-->
 
                             </table>
                             <!--End:Table: Review-->
-                            @php
+                            {{-- @php
                             // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen MOU")->first();
                             $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
                                 $query->where('profit_center', "=", $contract->profit_center)
@@ -1751,7 +1880,7 @@
                             <a target="_blank" href="{{ asset('contract-managements/dokumen-mou/'.$uploadFile->id_document) }}" class="text-hover-primary">
                             <small><b>Download File :</b> {{ $uploadFile->nama_document }}</small>
                             </a>
-                            @endif
+                            @endif --}}
 
                             <br><br>
 
@@ -1762,10 +1891,10 @@
                                 data-bs-custom-class="custom-tooltip"
                                 data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
                                 data-bs-html="true"></i> --}}
-                                @if (!empty($contract->project?->DokumenEca->toArray()))
+                                {{-- @if (!empty($contract->project?->DokumenEca->toArray())) --}}
                                     <a href="#" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_upload_eca" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
-                                @endif
+                                    data-bs-target="#kt_modal_upload_eca" id="Plus">+</a>
+                                {{-- @endif --}}
                                 {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_risk_proyek">+</a> --}}
                             </h3>
@@ -1778,13 +1907,14 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-125px">Nama</th>
                                         <th class="min-w-125px">Tanggal</th>
+                                        <th class="min-w-125px">Upload By</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @if (!empty($contract->project->DokumenEca))
+                                    {{-- @if (!empty($contract->project->DokumenEca))
                                     @forelse ($contract->project->DokumenEca as $nda)
                                         <tr>
                                             <td>
@@ -1801,13 +1931,32 @@
                                             </td>
                                         </tr>
                                     @endforelse
-                                    @endif
+                                    @endif --}}
+                                    @php
+                                        $dokumen_eca = $contract->UploadFinal->where('category', '=', "Dokumen ECA");
+                                    @endphp
+
+                                    @forelse ($dokumen_eca as $eca)
+                                        <tr>
+                                            <td>
+                                                <a href="{{ asset('contract-managements/dokumen-eca/'.$eca->id_document) }}" target="_blank" class="text-hover-primary">{{ $eca->nama_document }}</a>
+                                            </td>
+                                            <td class="text-center">
+                                                {{ \Carbon\Carbon::parse($eca->created_at)->translatedFormat("d F Y") }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ \App\Models\User::where("nip", $eca->upload_by)->first()?->name }}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <td colspan="3" class="text-center"><b>There is no data</b></td>
+                                    @endforelse
                                 </tbody>
                                 <!--end::Table body-->
 
                             </table>
                             <!--End:Table: Review-->
-                            @php
+                            {{-- @php
                             // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen ECA")->first();
                             $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
                                 $query->where('profit_center', "=", $contract->profit_center)
@@ -1819,7 +1968,7 @@
                             <a target="_blank" href="{{ asset('contract-managements/dokumen-eca/'.$uploadFile->id_document) }}" class="text-hover-primary">
                             <small><b>Download File :</b> {{ $uploadFile->nama_document }}</small>
                             </a>
-                            @endif
+                            @endif --}}
 
                             <br><br>
 
@@ -1831,10 +1980,10 @@
                                 data-bs-custom-class="custom-tooltip"
                                 data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
                                 data-bs-html="true"></i> --}}
-                                @if (!empty($contract->project?->DokumenIca->toArray()))
+                                {{-- @if (!empty($contract->project?->DokumenIca->toArray())) --}}
                                     <a href="#" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_upload_ica" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
-                                @endif
+                                    data-bs-target="#kt_modal_upload_ica" id="Plus">+</a>
+                                {{-- @endif --}}
                                 {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_risk_proyek">+</a> --}}
                             </h3>
@@ -1847,13 +1996,14 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-125px">Nama</th>
                                         <th class="min-w-125px">Tanggal</th>
+                                        <th class="min-w-125px">Upload By</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @if (!empty($contract->project?->DokumenIca))
+                                    {{-- @if (!empty($contract->project?->DokumenIca))
                                     @forelse ($contract->project?->DokumenIca as $nda)
                                         <tr>
                                             <td>
@@ -1870,13 +2020,32 @@
                                             </td>
                                         </tr>
                                     @endforelse   
-                                    @endif
+                                    @endif --}}
+                                    @php
+                                        $dokumen_ica = $contract->UploadFinal->where('category', '=', "Dokumen ICA");
+                                    @endphp
+
+                                    @forelse ($dokumen_ica as $ica)
+                                        <tr>
+                                            <td>
+                                                <a href="{{ asset('contract-managements/dokumen-ica/'.$ica->id_document) }}" target="_blank" class="text-hover-primary">{{ $ica->nama_document }}</a>
+                                            </td>
+                                            <td class="text-center">
+                                                {{ \Carbon\Carbon::parse($ica->created_at)->translatedFormat("d F Y") }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ \App\Models\User::where("nip", $ica->upload_by)->first()?->name }}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <td colspan="3" class="text-center"><b>There is no data</b></td>
+                                    @endforelse
                                 </tbody>
                                 <!--end::Table body-->
 
                             </table>
                             <!--End:Table: Review-->
-                            @php
+                            {{-- @php
                             // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen ICA")->first();
                             $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
                                 $query->where('profit_center', "=", $contract->profit_center)
@@ -1888,142 +2057,8 @@
                             <a target="_blank" href="{{ asset('contract-managements/dokumen-ica/'.$uploadFile->id_document) }}" class="text-hover-primary">
                             <small><b>Download File :</b> {{ $uploadFile->nama_document }}</small>
                             </a>
-                            @endif
+                            @endif --}}
 
-                            <br><br>
-                            
-                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                Dokumen ITB / TOR
-                                {{-- <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
-                                data-bs-toggle="tooltip" data-bs-placement="top"
-                                data-bs-custom-class="custom-tooltip"
-                                data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
-                                data-bs-html="true"></i> --}}
-                                @if (!empty($contract->project?->DokumenItbTor->toArray()))
-                                    <a href="#" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_upload_itb_tor" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
-                                @endif
-                                {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_risk_proyek">+</a> --}}
-                            </h3>
-
-                            <!--begin:Table: Review-->
-                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                                <!--begin::Table head-->
-                                <thead>
-                                    <!--begin::Table row-->
-                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-125px">Nama</th>
-                                        <th class="min-w-125px">Tanggal</th>
-                                    </tr>
-                                    <!--end::Table row-->
-                                </thead>
-                                <!--end::Table head-->
-                                <!--begin::Table body-->
-                                <tbody class="fw-bold text-gray-400">
-                                    @if (!empty($contract->project?->DokumenItbTor))
-                                    @forelse ($contract->project?->DokumenItbTor as $nda)
-                                        <tr>
-                                            <td>
-                                                <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
-                                            </td>
-                                            <td>
-                                                {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="2" class="text-center">
-                                                <b>There is no data</b>
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                    @endif
-                                </tbody>
-                                <!--end::Table body-->
-
-                            </table>
-                            @php
-                            // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen ITB/TOR")->first();
-                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Dokumen ITB/TOR")->first();
-                            @endphp
-                            <!--End:Table: Review-->
-                            @if (!empty($uploadFile))
-                            <a target="_blank" href="{{ asset('contract-managements/dokumen-itb-tor/'.$uploadFile->id_document) }}" class="text-hover-primary">
-                            <small><b>Download File :</b> {{ $uploadFile->nama_document }}</small>
-                            </a>
-                            @endif
-
-
-                            <br><br>
-                            <!--End:Table: Review-->
-                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                Dokumen RKS / Project Spesification
-                                {{-- <i class="bi-info-circle-fill" class="btn btn-secondary mx-4"
-                                data-bs-toggle="tooltip" data-bs-placement="top"
-                                data-bs-custom-class="custom-tooltip"
-                                data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
-                                data-bs-html="true"></i> --}}
-                                @if (!empty($contract->project?->DokumenRks->toArray()))
-                                    <a href="#" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_upload_rks" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
-                                @endif
-                                {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_risk_proyek">+</a> --}}
-                            </h3>
-
-                            <!--begin:Table: Review-->
-                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                                <!--begin::Table head-->
-                                <thead>
-                                    <!--begin::Table row-->
-                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-125px">Nama</th>
-                                        <th class="min-w-125px">Tanggal</th>
-                                    </tr>
-                                    <!--end::Table row-->
-                                </thead>
-                                <!--end::Table head-->
-                                <!--begin::Table body-->
-                                <tbody class="fw-bold text-gray-400">
-                                    @if (!empty($contract->project?->DokumenRks))
-                                    @forelse ($contract->project?->DokumenRks as $nda)
-                                        <tr>
-                                            <td>
-                                                <a target="_blank" href="{{asset("/words/$nda->id_document.pdf")}}" class="text-hover-primary">{{$nda->nama_dokumen}}</a>
-                                            </td>
-                                            <td>
-                                                {{Carbon\Carbon::createFromTimeString($nda->created_at)->translatedFormat("d F Y")}}
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="2" class="text-center">
-                                                <b>There is no data</b>
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                    @endif
-                                </tbody>
-                                <!--end::Table body-->
-
-                            </table>
-                            @php
-                            // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen RKS / Project Spesification")->first();
-                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Dokumen RKS / Project Spesification")->first();
-                            @endphp
-                            <!--End:Table: Review-->
-                            @if (!empty($uploadFile))
-                            <a target="_blank" href="{{ asset('contract-managements/dokumen-rks/'.$uploadFile->id_document) }}" class="text-hover-primary">
-                            <small><b>Download File :</b> {{ $uploadFile->nama_document }}</small>
-                            </a>
-                            @endif
                             <br><br>
                             <!--End:Table: Review-->
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
@@ -2033,10 +2068,10 @@
                                 data-bs-custom-class="custom-tooltip"
                                 data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
                                 data-bs-html="true"></i> --}}
-                                @if (!empty($contract->project?->DokumenDraft->toArray()))
+                                {{-- @if (!empty($contract->project?->DokumenDraft->toArray())) --}}
                                     <a href="#" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_upload_draft" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
-                                @endif
+                                    data-bs-target="#kt_modal_upload_draft" id="Plus">+</a>
+                                {{-- @endif --}}
                                 {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_risk_proyek">+</a> --}}
                             </h3>
@@ -2049,13 +2084,14 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-125px">Nama</th>
                                         <th class="min-w-125px">Tanggal</th>
+                                        <th class="min-w-125px">Upload By</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @if ($contract->project?->DokumenDraft)
+                                    {{-- @if ($contract->project?->DokumenDraft)
                                     @forelse ($contract->project?->DokumenDraft as $nda)
                                         <tr>
                                             <td>
@@ -2072,13 +2108,32 @@
                                             </td>
                                         </tr>
                                     @endforelse
-                                    @endif
+                                    @endif --}}
+                                    @php
+                                        $dokumen_draft_kontrak = $contract->UploadFinal->where('category', '=', "Dokumen Draft Kontrak");
+                                    @endphp
+
+                                    @forelse ($dokumen_draft_kontrak as $draft_kontrak)
+                                        <tr>
+                                            <td>
+                                                <a href="{{ asset('contract-managements/dokumen-draft-kontrak/'.$draft_kontrak->id_document) }}" target="_blank" class="text-hover-primary">{{ $draft_kontrak->nama_document }}</a>
+                                            </td>
+                                            <td class="text-center">
+                                                {{ \Carbon\Carbon::parse($draft_kontrak->created_at)->translatedFormat("d F Y") }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ \App\Models\User::where("nip", $draft_kontrak->upload_by)->first()?->name }}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <td colspan="3" class="text-center"><b>There is no data</b></td>
+                                    @endforelse
                                 </tbody>
                                 <!--end::Table body-->
 
                             </table>
                             <!--End:Table: Review-->
-                            @php
+                            {{-- @php
                             // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Draft Kontrak")->first();
                             $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
                                 $query->where('profit_center', "=", $contract->profit_center)
@@ -2090,7 +2145,7 @@
                             <a target="_blank" href="{{ asset('contract-managements/dokumen-draft-kontrak/'.$uploadFile->id_document) }}" class="text-hover-primary">
                             <small><b>Download File :</b> {{ $uploadFile->nama_document }}</small>
                             </a>
-                            @endif
+                            @endif --}}
                             <br><br>
 
                             <!--End:Table: Review-->
@@ -2101,10 +2156,10 @@
                                 data-bs-custom-class="custom-tooltip"
                                 data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
                                 data-bs-html="true"></i> --}}
-                                @if (!empty($contract->project?->AttachmentMenang->toArray()))
+                                {{-- @if (!empty($contract->project?->AttachmentMenang->toArray())) --}}
                                     <a href="#" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_upload_loi" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
-                                @endif
+                                    data-bs-target="#kt_modal_upload_loi" id="Plus">+</a>
+                                {{-- @endif --}}
                                 {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_risk_proyek">+</a> --}}
                             </h3>
@@ -2117,13 +2172,14 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-125px">Nama</th>
                                         <th class="min-w-125px">Tanggal</th>
+                                        <th class="min-w-125px">Upload By</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @if ($contract->project?->AttachmentMenang)
+                                    {{-- @if ($contract->project?->AttachmentMenang)
                                     @forelse ($contract->project?->AttachmentMenang as $nda)
                                         <tr>
                                             <td>
@@ -2140,13 +2196,32 @@
                                             </td>
                                         </tr>
                                     @endforelse
-                                    @endif
+                                    @endif --}}
+                                    @php
+                                        $dokumen_loi = $contract->UploadFinal->where('category', '=', "Dokumen LOI");
+                                    @endphp
+
+                                    @forelse ($dokumen_loi as $loi)
+                                        <tr>
+                                            <td>
+                                                <a href="{{ asset('contract-managements/dokumen-loi/'.$loi->id_document) }}" target="_blank" class="text-hover-primary">{{ $loi->nama_document }}</a>
+                                            </td>
+                                            <td class="text-center">
+                                                {{ \Carbon\Carbon::parse($loi->created_at)->translatedFormat("d F Y") }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ \App\Models\User::where("nip", $loi->upload_by)->first()?->name }}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <td colspan="3" class="text-center"><b>There is no data</b></td>
+                                    @endforelse
                                 </tbody>
                                 <!--end::Table body-->
 
                             </table>
                             <!--End:Table: Review-->
-                            @php
+                            {{-- @php
                             // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen LOI")->first();
                             $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
                                 $query->where('profit_center', "=", $contract->profit_center)
@@ -2158,7 +2233,7 @@
                             <a target="_blank" href="{{ asset('contract-managements/dokumen-loi/'.$uploadFile->id_document) }}" class="text-hover-primary">
                             <small><b>Download File :</b> {{ $uploadFile->nama_document }}</small>
                             </a>
-                            @endif
+                            @endif --}}
     
                         </div>
                         
@@ -17214,6 +17289,7 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" name="kategori" value="Dokumen ECA">
+                            <input type="hidden" name="kategori-path" value="dokumen-eca">
                             <input type="hidden" name="status" value="Final">
                             <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf">
                             <!--end::Input-->
@@ -17463,7 +17539,7 @@
                             <input type="hidden" name="kategori" value="Dokumen Draft Kontrak">
                             <input type="hidden" name="kategori-path" value="dokumen-draft-kontrak">
                             <input type="hidden" name="status" value="Final">
-                            <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
                             <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
@@ -17525,7 +17601,7 @@
                             <input type="hidden" name="kategori" value="Dokumen LOI">
                             <input type="hidden" name="kategori-path" value="dokumen-loi">
                             <input type="hidden" name="status" value="Final">
-                            <input type="file" name="file-document[]" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
+                            <input type="file" name="file-document" id="file-document" class="form-control form-control-solid" accept=".pdf" multiple>
                             <!--end::Input-->
                         </div>
                             <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" id="id-contract"
