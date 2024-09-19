@@ -502,6 +502,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('claim-management/view/{claim_management}', [ClaimController::class, 'show']);
 
+    Route::get('/claim-management/view/{profit_center}/perubahan-kontrak/{perubahan_kontrak}', [ContractManagementsController::class, 'perubahanKontrakView']);
+
     Route::post('/approval-claim/save', [ClaimController::class, 'store']);
 
     Route::post('/approval-claim/delete', [ClaimController::class, 'delete']);
