@@ -95,7 +95,7 @@ class OwnerSelectionServices
         }
     }
 
-    public function getProyek($kode_proyek, $posisiSekarang)
+    public function getProyek($kode_proyek)
     {
         try {
 
@@ -522,29 +522,29 @@ class OwnerSelectionServices
 
                         $notaRekomendasi->is_recommended = true;
                     }
-                }
+                } else {
+                    if (!$is_paralel) {
+                        $matriks_approval = self::getUserMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Rekomendasi");
+                        $matriks_sekarang = self::getUrutanUserMatriksApprovalSekarang($this->userSelected->nip, $proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Rekomendasi");
+                        $check_urutan_user = $matriks_approval->contains(function ($user) use ($matriks_sekarang) {
+                            return $user->urutan == $matriks_sekarang + 1;
+                        });
 
-                $message = "Proyek berhasil disetujui";
-            } else {
-                if (!$is_paralel) {
-                    $matriks_approval = self::getUserMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Rekomendasi");
-                    $matriks_sekarang = self::getUrutanUserMatriksApprovalSekarang($this->userSelected->nip, $proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Rekomendasi");
-                    $check_urutan_user = $matriks_approval->contains(function ($user) use ($matriks_sekarang) {
-                        return $user->urutan == $matriks_sekarang + 1;
-                    });
-
-                    if ($check_urutan_user) {
-                        $get_nomor = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Rekomendasi", (int)$matriks_sekarang + 1);
-                        foreach ($get_nomor as $user) {
-                            $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyek->kode_proyek";
-                            $message = nl2br("Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan Permohonan tanda tangan Persetujuan Nota Rekomendasi Tahap I untuk Proyek $proyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
-                            $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Tanda Tangan Persetujuan Nota Rekomendasi I", $message, $this->isnomorTargetActive);
-                            if (!$sendEmailUser) {
-                                return [false, "Error sending email"];
+                        if ($check_urutan_user) {
+                            $get_nomor = self::getNomorMatriksApproval($proyek->UnitKerja->Divisi->id_divisi, $proyek->klasifikasi_pasdin, $proyek->departemen_proyek, "Rekomendasi", (int)$matriks_sekarang + 1);
+                            foreach ($get_nomor as $user) {
+                                $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/rekomendasi?open=kt_modal_view_proyek_$proyek->kode_proyek";
+                                $message = nl2br("Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan Permohonan tanda tangan Persetujuan Nota Rekomendasi Tahap I untuk Proyek $proyek->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻");
+                                $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Tanda Tangan Persetujuan Nota Rekomendasi I", $message, $this->isnomorTargetActive);
+                                if (!$sendEmailUser) {
+                                    return [false, "Error sending email"];
+                                }
                             }
                         }
                     }
                 }
+
+                $message = "Proyek berhasil disetujui";
             }
 
             if ($notaRekomendasi->save() && $proyek->save()) {

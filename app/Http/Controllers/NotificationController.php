@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Class\SendNotification;
+use App\Services\SendNotification;
 use Google\Client as GoogleClient;
 use Illuminate\Http\Request;
 

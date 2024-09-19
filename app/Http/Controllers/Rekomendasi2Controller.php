@@ -233,7 +233,7 @@ class Rekomendasi2Controller extends Controller
 
                     foreach ($matriks_paparan as $user) {
                         $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_req_paparan_$proyekSelected->kode_proyek";
-                        $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan pengajuan tanggal paparan untuk Nota Rekomendasi II, " . $proyekSelected->Proyek->proyekBerjalan->name_customer . " untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                        $message = "Yth Bapak/Ibu " . $user->Pegawai->nama_pegawai . "\nDengan ini menyampaikan permohonan pengajuan tanggal paparan untuk Nota Rekomendasi II, " . $proyekSelected->proyekBerjalan->name_customer . " untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
                         $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Pengajuan Waktu Paparan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
                         if (!$sendEmailUser) {
                             return redirect()->back();
@@ -621,7 +621,7 @@ class Rekomendasi2Controller extends Controller
             foreach ($nomorTarget as $user) {
 
                 $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai?->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_history_revisi_pengajuan_$proyekSelected->kode_proyek";
-                $message = "Yth Bapak/Ibu " . $user->Pegawai?->nama_pegawai . "\nDengan ini menyampaikan pemberitahuan revisi untuk Nota Rekomendasi II, " . $proyekSelected->Proyek->proyekBerjalan->name_customer . " untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                $message = "Yth Bapak/Ibu " . $user->Pegawai?->nama_pegawai . "\nDengan ini menyampaikan pemberitahuan revisi untuk Nota Rekomendasi II, " . $proyekSelected->proyekBerjalan->name_customer . " untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
                 $sendEmailUser = sendNotifEmail($user->Pegawai, "Pemberitahuan Revisi Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
                 if (!$sendEmailUser) {
                     return redirect()->back();
@@ -1005,7 +1005,7 @@ class Rekomendasi2Controller extends Controller
 
             foreach ($nomorTargetPaparan as $user) {
                 $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai?->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_req_paparan_setuju_$proyekSelected->kode_proyek";
-                $message = "Yth Bapak/Ibu " . $user->Pegawai?->nama_pegawai . "\nDengan ini menyampaikan permohonan persetujuan waktu paparan untuk Nota Rekomendasi II, " . $proyekSelected->Proyek->proyekBerjalan->name_customer . " untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                $message = "Yth Bapak/Ibu " . $user->Pegawai?->nama_pegawai . "\nDengan ini menyampaikan permohonan persetujuan waktu paparan untuk Nota Rekomendasi II, " . $proyekSelected->proyekBerjalan->name_customer . " untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
                 $sendEmailUser = sendNotifEmail($user->Pegawai, "Permohonan Persetujuan Waktu Paparan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
                 if (!$sendEmailUser) {
                     return redirect()->back();
@@ -1022,7 +1022,7 @@ class Rekomendasi2Controller extends Controller
                 // }
 
                 $url = $request->schemeAndHttpHost() . "?nip=" . $user->Pegawai?->nip . "&redirectTo=/nota-rekomendasi-2?open=kt_modal_view_req_paparan_setuju_$proyekSelected->kode_proyek";
-                $message = "Yth Bapak/Ibu " . $user->Pegawai?->nama_pegawai . "\nDengan ini menyampaikan pemberitahuan waktu paparan untuk Nota Rekomendasi II, " . $proyekSelected->Proyek->proyekBerjalan->name_customer . " untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
+                $message = "Yth Bapak/Ibu " . $user->Pegawai?->nama_pegawai . "\nDengan ini menyampaikan pemberitahuan waktu paparan untuk Nota Rekomendasi II, " . $proyekSelected->proyekBerjalan->name_customer . " untuk Proyek $proyekSelected->nama_proyek.\nSilahkan tekan link di bawah ini untuk proses selanjutnya.\n\n$url\n\nTerimakasih 🙏🏻";
                 $sendEmailUser = sendNotifEmail($user->Pegawai, "Pemberitahuan Waktu Paparan Nota Rekomendasi II", nl2br($message), $this->isnomorTargetActive);
                 if (!$sendEmailUser) {
                     return redirect()->back();

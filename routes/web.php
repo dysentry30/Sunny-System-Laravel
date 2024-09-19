@@ -821,8 +821,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/proyek/cancel-modal/{kode_proyek}', [ProyekController::class, 'cancelProyek']);
 
     // Stage Update 
-    $can = "can:super-admin|admin-crm|user-crm";
-    Route::post('/proyek/stage-save', [ProyekController::class, 'stage'])->can($can);
+    Route::post('/proyek/stage-save', [ProyekController::class, 'stage'])->middleware('can:super-admin,admin-crm,user-crm');
 
     Route::get('/proyek/get-departemen/{divcode}', [ProyekController::class, "getDataDepartemen"]);
 
@@ -7571,12 +7570,23 @@ Route::group(['prefix' => 'v1'], function () {
 
         Route::group(['prefix' => 'owner-selection'], function () {
             Route::get('/get-list/{nip}', [MobileController::class, 'listProyekOwnerSelection']);
-            Route::get('/get-detail/{nip}/{kode_proyek}/{stage}', [MobileController::class, 'listDetailProyekOwnerSelection']);
+            Route::get('/get-detail/{nip}/{kode_proyek}', [MobileController::class, 'listDetailProyekOwnerSelection']);
             Route::group(['prefix' => 'set-approval'], function () {
                 Route::post('/pengajuan/{nip}/{kode_proyek}', [MobileController::class, 'setApprovePengajuan']);
                 Route::post('/verifikasi/{nip}/{kode_proyek}', [MobileController::class, 'setApproveVerifikasi']);
                 Route::post('/rekomendasi/{nip}/{kode_proyek}', [MobileController::class, 'setApproveRekomendasi']);
                 Route::post('/persetujuan/{nip}/{kode_proyek}', [MobileController::class, 'setApprovePersetujuan']);
+            });
+        });
+
+        Route::group(['prefix' => 'project-selection'], function () {
+            Route::get('/get-list/{nip}', [MobileController::class, 'listProyekProjectSelection']);
+            Route::get('/get-detail/{nip}/{kode_proyek}', [MobileController::class, 'listProyekProjectSelection']);
+            Route::group(['prefix' => 'set-approval'], function () {
+                Route::post('/pengajuan/{nip}/{kode_proyek}', [MobileController::class, 'setApprovePengajuanProjectSelection']);
+                Route::post('/verifikasi/{nip}/{kode_proyek}', [MobileController::class, 'setApproveVerifikasiProjectSelection']);
+                Route::post('/rekomendasi/{nip}/{kode_proyek}', [MobileController::class, 'setApproveRekomendasiProjectSelection']);
+                Route::post('/persetujuan/{nip}/{kode_proyek}', [MobileController::class, 'setApproveRekomendasiProjectSelection']);
             });
         });
     });
