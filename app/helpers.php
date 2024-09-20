@@ -9,6 +9,7 @@ use App\Models\Customer;
 use App\Models\Provinsi;
 use App\Models\IndustryOwner;
 use App\Models\IntegrationLog;
+use App\Models\Pegawai;
 use PhpOffice\PhpWord\PhpWord;
 use App\Models\ExceptGreenlane;
 use App\Models\NotaRekomendasi;
@@ -4373,7 +4374,7 @@ function checkGreenLaneNota2($proyek)
     }
 }
 
-function createWordPengajuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekomendasi)
+function createWordPengajuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekomendasi, $nip)
 {
     $phpWord = new \PhpOffice\PhpWord\PhpWord();
     $proyek = $proyekNotaRekomendasi->Proyek;
@@ -4382,7 +4383,8 @@ function createWordPengajuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekomen
     $now = Carbon\Carbon::now();
     $file_name = $now->format("dmYHis") . "_nota-pengajuan_$proyek->kode_proyek";
 
-    $pegawaiPengajuan = Auth::user()->Pegawai;
+    // $pegawaiPengajuan = Auth::user()->Pegawai;
+    $pegawaiPengajuan = Pegawai::where("nip", $nip)->first();
     $QrNamePengajuan = date("dmYHis_") . "pengajuan_" . $pegawaiPengajuan->nip . "-" . $proyekNotaRekomendasi->kode_proyek . ".png";
     $pathQrPengajuan = public_path('/file-nota-rekomendasi-2/qr-code/pengajuan/' . $QrNamePengajuan);
     $urlPenyusun = Request::schemeAndHttpHost() . "?nip=$pegawaiPengajuan->nip&redirectTo=/nota-rekomendasi-2/" . $proyekNotaRekomendasi->kode_proyek . "/" . $pegawaiPengajuan->nip . "/view-qr?kategori=pengajuan";
@@ -4484,8 +4486,8 @@ function createWordPengajuanNota2(App\Models\NotaRekomendasi2 $proyekNotaRekomen
     $section->addText($now->translatedFormat("d F Y"), ["bold" => true], ["align" => "center"]);
     // $section->addTextBreak(1);
     $section->addText("$" . "{tandaTangan}", ["bold" => false], ["align" => "center"]);
-    $section->addText("( " . Auth::user()->name . " )", ["bold" => true, "size" => 10], ["align" => "center"]);
-    $section->addText(Auth::user()->Pegawai->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
+    $section->addText("( " . $pegawaiPengajuan->nama_pegawai . " )", ["bold" => true, "size" => 10], ["align" => "center"]);
+    $section->addText($pegawaiPengajuan->Jabatan?->nama_jabatan, ["bold" => true], ["align" => "center"]);
     $section->addTextBreak(1);
     $section->addText("Catatan :");
     $section->addText("Dokumen Pemilihan atau dokumen pendukung lainnya harap di upload dalam aplikasi CRM.");

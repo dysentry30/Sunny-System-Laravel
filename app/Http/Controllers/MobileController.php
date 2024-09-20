@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
 use App\Models\PenilaianPenggunaJasa;
+use App\Models\PenilaianChecklistProjectSelection;
+use App\Models\MasterCatatanNotaRekomendasi2;
 use App\Models\ApprovalTerkontrakProyek;
 use App\Services\OwnerSelectionServices;
 use App\Services\ApprovalTerkontrakClass;
@@ -1670,7 +1672,7 @@ class MobileController extends Controller
                 "jenis_instansi" => $proyekSelected->Proyek?->proyekBerjalan?->Customer->jenis_instansi ?? "-",
                 "sumber_dana" => $proyekSelected->Proyek?->sumber_dana ?? "-",
                 "klasifikasi_proyek" => $proyekSelected->Proyek?->klasifikasi_pasdin ?? "-",
-                "nilai_ok" => "Rp." . number_format($proyekSelected->Proyek?->nilaiok_awal, 0, '.', '.') ?? "-",
+                "nilai_ok" => "Rp." . number_format($proyekSelected->Proyek->is_rkap ? $proyekSelected->Proyek->nilai_rkap : $proyekSelected->Proyek->nilaiok_awal, 0, '', '.') ?? "-",
                 "assessment_internal" => $internal_score,
                 "assessment_eksternal" => $eksternal_score,
                 "hasil_profile_risiko" => $hasilProfileRisiko,
@@ -1901,6 +1903,19 @@ class MobileController extends Controller
             $proyekSelected = $proyekGet["proyeks"];
             $userAccess = $proyekGet["userAccess"];
 
+            //Posisi WIKA
+            $partners = collect([]);
+
+            if ($proyekSelected->Proyek->PorsiJO->isNotEmpty()) {
+                $partners = $proyekSelected->Proyek->PorsiJO->map(function ($partner) use ($proyekSelected) {
+                    return [
+                        "nama_partner" => $partner->company_jo,
+                        "porsi" => $partner->porsi_jo . "%",
+                        "posisi_wika" => $proyekSelected->Proyek->porsi_jo < 50 ? "WIKA Member" : "WIKA Leader"
+                    ];
+                });
+            }
+
             // File-file
             if (!empty($proyekSelected->file_pengajuan)) {
                 $filePengajuan = url("file-nota-rekomendasi-2/file-pengajuan") . '/' . $proyekSelected->file_pengajuan;
@@ -1920,6 +1935,12 @@ class MobileController extends Controller
                 $fileAssessment = null;
             }
 
+            if (!empty($proyekSelected->file_persetujuan)) {
+                $filePersetujuan = url("file-nota-rekomendasi-2/file-persetujuan") . '/' . $proyekSelected->file_persetujuan;
+            } else {
+                $filePersetujuan = null;
+            }
+
             //Catatan Proses
             $catatanRekomendasi = [];
             $catatanPersetujuan = [];
@@ -1936,28 +1957,58 @@ class MobileController extends Controller
                 });
             }
 
+            //Hasil Assessment
+            if ($proyekSelected->KriteriaProjectSelectionDetail->isNotEmpty() && !$proyekSelected->KriteriaProjectSelectionDetail->every("nilai", 0)) {
+                $nilaiKriteriaProjectSelection = $proyekSelected->KriteriaProjectSelectionDetail
+                    ?->sum('nilai') ?? null;
+
+                if (!empty($nilaiKriteriaProjectSelection)) {
+                    $hasilProfileRisiko = PenilaianChecklistProjectSelection::all()->filter(function ($item) use ($nilaiKriteriaProjectSelection) {
+                        if ($item->dari_nilai <= $nilaiKriteriaProjectSelection && $item->sampai_nilai >= $nilaiKriteriaProjectSelection) {
+                            return $item;
+                        }
+                    })->first()->nama ?? 'Belum Ditentukan';
+                } else {
+                    $hasilProfileRisiko = "Belum Ditentukan";
+                }
+            } else {
+                $nilaiKriteriaProjectSelection = "Belum Ditentukan";
+                $hasilProfileRisiko = "Belum Ditentukan";
+            }
+
+            //Catatan Assessment
+            $catatanAssessment = collect(json_decode($proyekSelected->catatan_master))->where('checked', true)?->keyBy('urutan');
+            $urutanCatatan = MasterCatatanNotaRekomendasi2::select(['kategori', 'urutan'])->where('is_active', true)->orderBy('urutan')->get()->toArray();
+
+            $catatanAssessmentCollect = collect([]);
+            if (!empty($catatanAssessment)) {
+                $catatanAssessmentCollect = $catatanAssessment->map(function ($p, $key) use ($urutanCatatan) {
+                    return ["kategori" => $urutanCatatan[$key - 1]["kategori"], "uraian" => $p->uraian];
+                });
+            }
+
 
             //=========================================================================================================================================//
             //Is Edit
             //=========================================================================================================================================//
             if (!empty($userAccess)) {
-                if ($userAccess->contains('kategori', 'Persetujuan')  && $userAccess->where('kategori', 'Persetujuan')?->where('departemen', $proyekSelected->departemen_code)?->where('unit_kerja', $proyekSelected->divisi_id)?->where("klasifikasi_proyek", $proyekSelected->klasifikasi_pasdin)?->first() && $proyekSelected->is_recommended) {
+                if ($userAccess->contains('kategori', 'Persetujuan')  && $userAccess->where('kategori', 'Persetujuan')?->where('departemen_code', $proyekSelected->departemen_proyek)?->where('divisi_id', $proyekSelected->divisi_id)?->where("klasifikasi_proyek", $proyekSelected->klasifikasi_proyek)?->first() && $proyekSelected->is_rekomendasi_approved) {
                     if ($proyekSelected->is_disetujui || (collect(json_decode($proyekSelected->approved_persetujuan))->contains('user_id', $user->id) && collect(json_decode($proyekSelected->approved_persetujuan))?->first()?->status == 'approved')) {
                         $isEdit = false;
                     } else {
                         $isEdit = true;
                     }
-                } elseif ($userAccess->contains('kategori', 'Rekomendasi') && $userAccess->where('kategori', 'Rekomendasi')?->where('departemen', $proyekSelected->departemen_code)?->where('unit_kerja', $proyekSelected->divisi_id)?->where("klasifikasi_proyek", $proyekSelected->klasifikasi_pasdin)?->first() && $proyekSelected->is_verifikasi_approved) {
+                } elseif ($userAccess->contains('kategori', 'Rekomendasi') && $userAccess->where('kategori', 'Rekomendasi')?->where('departemen_code', $proyekSelected->departemen_proyek)?->where('divisi_id', $proyekSelected->divisi_id)?->where("klasifikasi_proyek", $proyekSelected->klasifikasi_proyek)?->first() && $proyekSelected->is_verifikasi_approved) {
                     if ($proyekSelected->is_rekomendasi_approved || (collect(json_decode($proyekSelected->approved_rekomendasi))->contains('user_id', $user->id) && collect(json_decode($proyekSelected->approved_rekomendasi))?->first()?->status == 'approved')) {
                         $isEdit = false;
                     } else {
                         $isEdit = true;
                     }
-                } elseif ($userAccess->contains('kategori', 'Verifikasi') && $userAccess->where('kategori', 'Verifikasi')?->where('departemen', $proyekSelected->departemen_code)?->where('unit_kerja', $proyekSelected->divisi_id)?->where("klasifikasi_proyek", $proyekSelected->klasifikasi_pasdin)?->first() && $proyekSelected->is_penyusun_approved) {
+                } elseif ($userAccess->contains('kategori', 'Verifikasi') && $userAccess->where('kategori', 'Verifikasi')?->where('departemen_code', $proyekSelected->departemen_proyek)?->where('divisi_id', $proyekSelected->divisi_id)?->where("klasifikasi_proyek", $proyekSelected->klasifikasi_proyek)?->first() && $proyekSelected->is_penyusun_approved) {
                     if ($proyekSelected->is_request_rekomendasi || (($userAccess->filter(function ($value) use ($proyekSelected) {
-                        return $value->unit_kerja == $proyekSelected->divisi_id &&
-                            $value->klasifikasi_proyek == $proyekSelected->klasifikasi_pasdin &&
-                            $value->departemen == $proyekSelected->departemen_code &&
+                        return $value->divisi_id == $proyekSelected->divisi_id &&
+                            $value->klasifikasi_proyek == $proyekSelected->klasifikasi_proyek &&
+                            $value->departemen_code == $proyekSelected->departemen_proyek &&
                             $value->kategori == "Verifikasi" &&
                             $value->urutan > 1;
                     })->count() > 0 && (collect(json_decode($proyekSelected->approved_verifikasi))->isEmpty())))) {
@@ -1969,8 +2020,8 @@ class MobileController extends Controller
                             $isEdit = true;
                         }
                     }
-                } elseif ($userAccess->contains('kategori', 'Pengajuan') && $userAccess->where('kategori', 'Pengajuan')?->where('departemen', $proyekSelected->departemen_code)?->where('unit_kerja', $proyekSelected->divisi_id)?->where("klasifikasi_proyek", $proyekSelected->klasifikasi_pasdin)?->first()) {
-                    if (!empty($nota_rekomendasi->approved_pengajuan)) {
+                } elseif ($userAccess->contains('kategori', 'Pengajuan') && $userAccess->where('kategori', 'Pengajuan')?->where('departemen_code', $proyekSelected->departemen_proyek)?->where('divisi_id', $proyekSelected->divisi_id)?->where("klasifikasi_proyek", $proyekSelected->klasifikasi_proyek)?->first()) {
+                    if (!empty($proyekSelected->approved_pengajuan)) {
                         $isEdit = false;
                     } else {
                         $isEdit = true;
@@ -1991,12 +2042,23 @@ class MobileController extends Controller
                 "jenis_instansi" => $proyekSelected->Proyek?->proyekBerjalan?->Customer->jenis_instansi ?? "-",
                 "sumber_dana" => $proyekSelected->Proyek?->sumber_dana ?? "-",
                 "klasifikasi_proyek" => $proyekSelected->Proyek?->klasifikasi_pasdin ?? "-",
-                "nilai_ok" => "Rp." . number_format($proyekSelected->Proyek?->nilaiok_awal, 0, '.', '.') ?? "-",
+                "nilai_penawaran" => "Rp." . number_format($proyekSelected->Proyek->is_rkap ? $proyekSelected->Proyek->nilai_rkap : $proyekSelected->Proyek->nilaiok_awal, 0, '', '.') ?? "-",
                 "catatan_assessment" => $proyekSelected->catatan_nota_rekomendasi,
-                "files_owner_selection" => [
+                "jenis_kontrak" => $proyekSelected->Proyek?->jenis_terkontrak ?? "-",
+                "cara_pembayaran" => $proyekSelected->Proyek?->sistem_bayar ?? "-",
+                "uang_muka" => $proyekSelected->Proyek->is_uang_muka ? "Ya" . " | " . $proyekSelected->Proyek->uang_muka . "%" : "Tidak",
+                "waktu_pelaksanaan" => $proyekSelected->Proyek?->waktu_pelaksanaan . " Hari" ?? "-",
+                "pekerjaan_utama" => $proyekSelected->Proyek?->pekerjaan_utama ?? "-",
+                "is_kso" => $proyekSelected->Proyek?->jenis_proyek == "J" ? "Ya" : "Tidak",
+                "list_partner" => $partners->toArray(),
+                "hasil_profile_risiko" => $hasilProfileRisiko,
+                "nilai_profile_risiko" => $nilaiKriteriaProjectSelection,
+                "list_kategori_catatan" => $catatanAssessmentCollect->values()->toArray(),
+                "files_project_selection" => [
                     "file_pengajuan" => $filePengajuan,
                     "file_kelengkapan" => $fileKelengkapan,
                     "file_profile_risiko" => $fileAssessment,
+                    "file_persetujuan" => $filePersetujuan,
                 ],
                 "catatan_nota_rekomendasi" => [
                     "catatan_perekomendasi" => $catatanRekomendasi,
@@ -2038,8 +2100,7 @@ class MobileController extends Controller
                 ]);
             } else {
                 Log::error($prosesApproval[1]);
-                return response()->json([
-                    "success" => true,
+                return response()->json(["success" => false,
                     "message" => $prosesApproval[1],
                     "data" => null
                 ]);
@@ -2071,8 +2132,7 @@ class MobileController extends Controller
                 ]);
             } else {
                 Log::error($prosesApproval[1]);
-                return response()->json([
-                    "success" => true,
+                return response()->json(["success" => false,
                     "message" => $prosesApproval[1],
                     "data" => null
                 ]);
@@ -2104,8 +2164,7 @@ class MobileController extends Controller
                 ]);
             } else {
                 Log::error($prosesApproval[1]);
-                return response()->json([
-                    "success" => true,
+                return response()->json(["success" => false,
                     "message" => $prosesApproval[1],
                     "data" => null
                 ]);
@@ -2137,8 +2196,7 @@ class MobileController extends Controller
                 ]);
             } else {
                 Log::error($prosesApproval[1]);
-                return response()->json([
-                    "success" => true,
+                return response()->json(["success" => false,
                     "message" => $prosesApproval[1],
                     "data" => null
                 ]);
@@ -2292,9 +2350,9 @@ class MobileController extends Controller
             $stage = "Proses Penyusunan";
         } elseif (!is_null($notaRekomendasi->is_penyusun_approved) && $notaRekomendasi->is_penyusun_approved && is_null($notaRekomendasi->is_verifikasi_approved)) {
             $stage = "Proses Verifikasi";
-        } elseif ($notaRekomendasi->is_verifikasi_approved == true && is_null($notaRekomendasi->is_recommended)) {
+        } elseif ($notaRekomendasi->is_verifikasi_approved == true && is_null($notaRekomendasi->is_rekomendasi_approved)) {
             $stage = "Proses Rekomendasi";
-        } elseif ($notaRekomendasi->is_recommended == true && is_null($notaRekomendasi->is_disetujui)) {
+        } elseif ($notaRekomendasi->is_rekomendasi_approved == true && is_null($notaRekomendasi->is_disetujui)) {
             $stage = "Proses Penyetujuan";
         } elseif (!is_null($notaRekomendasi->is_disetujui) && $notaRekomendasi->is_disetujui == false) {
             $stage = "Ditolak";

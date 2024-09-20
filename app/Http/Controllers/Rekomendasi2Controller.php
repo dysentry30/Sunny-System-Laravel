@@ -251,7 +251,7 @@ class Rekomendasi2Controller extends Controller
                     }
                 }
 
-                createWordPengajuanNota2($proyekPengajuan);
+                createWordPengajuanNota2($proyekPengajuan, Auth::user()->nip);
                 $proyekPengajuan->is_pengajuan_approved = true;
                 $proyekPengajuan->is_request_rekomendasi = false;
                 $proyekPengajuan->is_request_paparan = true;
