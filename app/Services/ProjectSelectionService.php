@@ -234,13 +234,13 @@ class ProjectSelectionService
                         }
                     }
                 }
-
+                
 
                 createWordPengajuanNota2($notaRekomendasi, $this->userSelected->nip);
                 $notaRekomendasi->is_pengajuan_approved = true;
                 $notaRekomendasi->is_request_rekomendasi = false;
                 $notaRekomendasi->is_request_paparan = true;
-
+                
                 if ($notaRekomendasi->save() && $proyek->save()) {
                     DB::commit();
                     return [true, "Proyek Berhasil Disetujui"];

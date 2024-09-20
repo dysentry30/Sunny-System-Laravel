@@ -2100,7 +2100,8 @@ class MobileController extends Controller
                 ]);
             } else {
                 Log::error($prosesApproval[1]);
-                return response()->json(["success" => false,
+                return response()->json([
+                    "success" => false,
                     "message" => $prosesApproval[1],
                     "data" => null
                 ]);
@@ -2132,7 +2133,8 @@ class MobileController extends Controller
                 ]);
             } else {
                 Log::error($prosesApproval[1]);
-                return response()->json(["success" => false,
+                return response()->json([
+                    "success" => false,
                     "message" => $prosesApproval[1],
                     "data" => null
                 ]);
@@ -2164,7 +2166,8 @@ class MobileController extends Controller
                 ]);
             } else {
                 Log::error($prosesApproval[1]);
-                return response()->json(["success" => false,
+                return response()->json([
+                    "success" => false,
                     "message" => $prosesApproval[1],
                     "data" => null
                 ]);
@@ -2196,7 +2199,8 @@ class MobileController extends Controller
                 ]);
             } else {
                 Log::error($prosesApproval[1]);
-                return response()->json(["success" => false,
+                return response()->json([
+                    "success" => false,
                     "message" => $prosesApproval[1],
                     "data" => null
                 ]);
