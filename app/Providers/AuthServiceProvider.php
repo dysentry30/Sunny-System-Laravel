@@ -6,6 +6,8 @@ use App\Models\User;
 use App\Models\Divisi;
 use Illuminate\Support\Facades\Gate;
 use App\Models\MatriksApprovalChangeManagement;
+use App\Models\UserMenuManagement;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -159,6 +161,34 @@ class AuthServiceProvider extends ServiceProvider
             }
 
             return MatriksApprovalChangeManagement::where("nip", $user->nip)->where("profit_center", $profit_center)->exists();
+        });
+
+        Gate::define('access-menu-read', function (User $user, $menu) {
+            return UserMenuManagement::where("nip", $user->nip)
+            ->where("menu", $menu)
+                ->where("read", true)
+                ->exits();
+        });
+
+        Gate::define('access-menu-create', function (User $user, $menu) {
+            return UserMenuManagement::where("nip", $user->nip)
+            ->where("menu", $menu)
+                ->where("create", true)
+                ->exits();
+        });
+
+        Gate::define('access-menu-update', function (User $user, $menu) {
+            return UserMenuManagement::where("nip", $user->nip)
+            ->where("menu", $menu)
+                ->where("update", true)
+                ->exits();
+        });
+
+        Gate::define('access-menu-delete', function (User $user, $menu) {
+            return UserMenuManagement::where("nip", $user->nip)
+            ->where("menu", $menu)
+                ->where("delete", true)
+                ->exits();
         });
         //
     }

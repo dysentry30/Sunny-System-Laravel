@@ -20,6 +20,10 @@ return new class extends Migration
                 $table->foreign("nip")->references("nip")->on("users")->onDelete("cascade");
                 $table->text("aplikasi");
                 $table->text("menu");
+                $table->boolean("create")->default(false);
+                $table->boolean("read")->default(false);
+                $table->boolean("update")->default(false);
+                $table->boolean("delete")->default(false);
                 $table->timestamps();
             });
         }

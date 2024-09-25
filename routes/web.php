@@ -15,6 +15,7 @@ use App\Models\Provinsi;
 use App\Models\UnitKerja;
 use App\Models\AlatProyek;
 use App\Models\Departemen;
+use App\Models\MasterMenu;
 use App\Models\SumberDana;
 use App\Models\FieldChange;
 use App\Models\JenisProyek;
@@ -31,6 +32,7 @@ use App\Models\PerjanjianKso;
 use App\Models\TechnicalForm;
 use App\Models\IndustrySector;
 use App\Models\IntegrationLog;
+use App\Models\MenuManagement;
 use App\Models\TechnicalQuery;
 use PhpOffice\PhpWord\PhpWord;
 use App\Mail\UserPasswordEmail;
@@ -42,6 +44,7 @@ use App\Models\SiteInstruction;
 use Karriere\PdfMerge\PdfMerge;
 use App\Models\MasterAlatProyek;
 use App\Models\KriteriaGreenLine;
+use App\Models\MasterApplication;
 use App\Models\MasterFortuneRank;
 use Illuminate\Http\UploadedFile;
 use App\Models\KriteriaAssessment;
@@ -6879,9 +6882,66 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
 
 
+    //? BEGIN USER MANAGEMENT
+    Route::get('/list-menu-management', function (Request $request) {
+        $collectApplication = MasterApplication::all()->sortBy("urutan")->values();
+        return view("MasterData.MenuListManagement", ["collectApplication" => $collectApplication]);
+    });
 
+    Route::get('/menu-managements/{kode_aplikasi}', function (Request $request, $kode_aplikasi) {
+        $masterAplikasi = MasterApplication::all()->sortBy("urutan")->values();
+        $collectMenu = MasterMenu::all()->groupBy("kode_parrent")->map(function ($item) {
+            return $item->sortBy("urutan");
+        })->flatten();
 
+        $isExistAplikasi = MenuManagement::where("kode_aplikasi", $kode_aplikasi)->get();
 
+        return view("MasterData.MenuManagement", ["collectMenu" => $collectMenu, 'masterAplikasi' => $masterAplikasi, 'kode_aplikasi' => $kode_aplikasi, 'isExistAplikasi' => $isExistAplikasi]);
+    });
+
+    Route::post('/menu-managements/{kode_aplikasi}/save', function (Request $request, $kode_aplikasi) {
+        $menuList = $request->get("menu-list");
+
+        if (count($menuList) < 1) {
+            Alert::error("Error", "List Menu Wajib Diisi Minimal 1");
+            return redirect()->back();
+        }
+
+        try {
+            DB::beginTransaction();
+
+            // Fetch existing menus related to this user
+            $existingMenus = MenuManagement::where('kode_aplikasi', $kode_aplikasi)->pluck('kode_menu')->toArray();
+
+            // Find the menus that need to be added and deleted
+            $menusToAdd = array_diff($menuList, $existingMenus);
+            $menusToDelete = array_diff($existingMenus, $menuList);
+
+            // Insert new menus
+            foreach ($menusToAdd as $menuId) {
+                MenuManagement::create([
+                    'kode_aplikasi' => $kode_aplikasi,
+                    'kode_menu' => $menuId
+                ]);
+            }
+
+            // Delete unchecked menus
+            if (!empty($menusToDelete)) {
+                MenuManagement::where('kode_aplikasi', $kode_aplikasi)
+                    ->whereIn('kode_menu', $menusToDelete)
+                    ->delete();
+            }
+
+            DB::commit();
+            Alert::success("Success", "Data berhasil diperbaharui");
+            return redirect()->back();
+        } catch (\Exception $e) {
+            DB::rollback();
+            Alert::error("Error", $e->getMessage());
+            return redirect()->back();
+        }
+    });
+    //? END USER MANAGEMENT
 
 
 });

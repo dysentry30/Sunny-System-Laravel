@@ -58,4 +58,9 @@ class User extends Authenticatable
     public function Pegawai() {
         return $this->hasOne(Pegawai::class, "nip", "nip");
     }
+
+    public function UserMenuManagement()
+    {
+        return $this->hasMany(UserMenuManagement::class, 'nip', 'nip');
+    }
 }

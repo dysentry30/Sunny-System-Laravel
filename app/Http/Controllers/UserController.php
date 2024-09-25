@@ -2,27 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\LockForeacastEvent;
+use Exception;
+use App\Models\Dop;
 use App\Models\User;
 use Faker\Core\Uuid;
+use App\Models\Pegawai;
 use App\Models\UnitKerja;
+use App\Models\MasterMenu;
 use Illuminate\Support\Str;
+use App\Models\ProyekPISNew;
 use Illuminate\Http\Request;
+use App\Models\MenuManagement;
 use App\Mail\UserPasswordEmail;
+use App\Models\RoleManagements;
+use App\Models\MasterApplication;
+use Illuminate\Http\UploadedFile;
+use App\Events\LockForeacastEvent;
 use App\Models\NotificationsModel;
+use App\Models\UserMenuManagement;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Events\NotificationPasswordReset;
-use App\Models\Dop;
-use App\Models\Pegawai;
-use App\Models\ProyekPISNew;
-use App\Models\RoleManagements;
-use Exception;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -407,14 +412,54 @@ class UserController extends Controller
         // ->where('profit_center', '!=', null)
         // ->orderBy('proyek_name')
         // ->get();
+        
         if (empty($user)) {
             Alert::error("Error", "User tidak ditemukan");
             return redirect("user");
         }
-        return view("/User/viewUser", ["user" => $user, "unit_kerjas" => UnitKerja::all(), "dops" => Dop::with("UnitKerjas")->get()->sortBy("dop")]);
+
+        $collectMenu = MasterMenu::all()->groupBy("kode_parrent")->map(function ($item) {
+            return $item->sortBy("urutan");
+        })->flatten();
+
+        $collectAplikasi = MasterApplication::all();
+
+        $userManagementSelected = UserMenuManagement::where("nip", $user->nip)->get();
+
+        $menuSelected = collect([]);
+
+        $menuManagement = MenuManagement::all();
+
+        if ($userManagementSelected->isEmpty()) {
+            if ($user->check_administrator) {
+                $menuSelected = $collectMenu;
+            }
+
+            if ($user->check_user_sales) {
+                $menuFilter = $menuManagement->where("kode_aplikasi", "CRM");
+                $menuSelected->push($menuFilter);
+            }
+
+            if ($user->check_admin_kontrak) {
+                $menuFilter = $menuManagement->where("kode_aplikasi", "CCM");
+                $menuSelected->push($menuFilter);
+            }
+
+            if ($user->check_user_csi) {
+                $menuFilter = $menuManagement->where("kode_aplikasi", "CSI");
+                $menuSelected->push($menuFilter);
+            }
+
+            if ($user->check_user_mobile) {
+                $menuFilter = $menuManagement->where("kode_aplikasi", "MOB");
+                $menuSelected->push($menuFilter);
+            }
+        }
+
+        return view("/User/viewUser", ["user" => $user, "unit_kerjas" => UnitKerja::all(), "dops" => Dop::with("UnitKerjas")->get()->sortBy("dop"), 'collectMenu' => $collectMenu, 'userManagementSelected' => $userManagementSelected, 'menuSelected' => $menuSelected?->flatten(), 'collectAplikasi' => $collectAplikasi]);
     }
 
-    public function update(Request $request)
+    public function updateOld(Request $request)
     {
         $data = $request->all();
         // dd($data);
@@ -573,6 +618,130 @@ class UserController extends Controller
         
         if ($user->save()) {
             Alert::success("Success", "User berhasil diperbarui.")->autoClose(3000);
+            return redirect()->back();
+        }
+    }
+
+    public function update(Request $request)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            $data = $request->all();
+
+            $messages = [
+                "required" => "This field is required",
+            ];
+            $rules = [
+                "nip" => "required",
+                "name-user" => "required",
+                "email" => "required",
+                "phone-number" => "required",
+                "aplikasi" => "required|array"
+            ];
+
+            $validation = Validator::make($data, $rules, $messages);
+            if ($validation->fails()) {
+                dd($validation->errors());
+                Alert::error('Error', "User gagal diperbaharui, Periksa Kembali !");
+            }
+
+            $validation->fails();
+
+            $is_administrator = false;
+            $is_admin_kontrak = false;
+            $is_user_sales = false;
+            $is_user_csi = false;
+            $is_user_mobile = false;
+
+            // Loop aplikasi yang dipilih
+            foreach ($data['aplikasi'] as $aplikasi) {
+                switch ($aplikasi) {
+                    case 'SUPER':
+                        $is_administrator = true;
+                        break;
+                    case 'CRM':
+                        $is_user_sales = true;
+                        break;
+                    case 'CCM':
+                        $is_admin_kontrak = true;
+                        break;
+                    case 'CSI':
+                        $is_user_csi = true;
+                        break;
+                    case 'MOB':
+                        $is_user_mobile = true;
+                        break;
+                }
+
+                $selectedMenus = [];
+
+                // Loop menu yang dipilih
+                foreach ($data['menus'] as $kodeMenu => $menuData) {
+                    // Update atau buat baru berdasarkan kombinasi nip, aplikasi, dan menu
+                    $menu = UserMenuManagement::updateOrCreate(
+                        [
+                            'nip' => $data["nip"],
+                            'aplikasi' => $aplikasi,
+                            'menu' => $kodeMenu
+                        ],
+                        [
+                            'create' => isset($menuData['create']) ? 1 : 0,
+                            'read' => isset($menuData['read']) ? 1 : 0,
+                            'update' => isset($menuData['update']) ? 1 : 0,
+                            'delete' => isset($menuData['delete']) ? 1 : 0,
+                        ]
+                    );
+
+                    // Simpan ID menu yang dipilih
+                    $selectedMenus[] = $menu->menu;
+                }
+
+                // Hapus menu yang tidak dipilih untuk aplikasi saat ini
+                UserMenuManagement::where('nip', $data["nip"])
+                ->where('aplikasi', $aplikasi)
+                    ->whereNotIn('menu', $selectedMenus) // Hapus menu yang tidak dipilih
+                    ->delete();
+            }
+
+
+            $user = User::find($data["user-id"]);
+            $user->nip = $data["nip"];
+            $user->name = $data["name-user"];
+            $user->email = $data["email"];
+            $user->no_hp = $data["phone-number"];
+
+            $user->is_active = $request->has("is-active");
+
+            $user->unit_kerja = count($data["unit-kerja"]) > 1 ? join(",", $data["unit-kerja"]) : $data["unit-kerja"][0];
+
+            $user->check_administrator = $is_administrator;
+            $user->check_admin_kontrak = $is_admin_kontrak;
+            $user->check_user_sales = $is_user_sales;
+            $user->check_user_csi = $is_user_csi;
+            $user->check_user_mobile = $is_user_mobile;
+
+
+            if (isset($data['proyeks'])) {
+                $user->proyeks_selected = $data['list-proyek'];
+            } else {
+                $user->proyeks_selected = null;
+            }
+            // $user->alamat = $data["alamat"];
+            DB::commit();
+
+            if ($user->save()) {
+                Alert::success("Success", "User berhasil diperbarui.")->autoClose(3000);
+                return redirect()->back();
+            }
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $request->old("nip");
+            $request->old("name-user");
+            $request->old("email");
+            $request->old("phone-number");
+            Alert::error("Error", $th->getMessage());
             return redirect()->back();
         }
     }
