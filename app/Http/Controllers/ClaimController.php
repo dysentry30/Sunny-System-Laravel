@@ -646,7 +646,8 @@ class ClaimController extends Controller
         $perubahan_kontrak->dokumen_approve = $nama_file;
 
         $perubahan_kontrak->save();
-        moveFileTemp($file, explode(".", $id_document)[0]);
+        // moveFileTemp($file, explode(".", $id_document)[0]);
+        moveFileTemp($file, substr($id_document, 0, -4));
         Alert::success("Success", "Perubahan Kontrak berhasil ditambahkan");
         return redirect()->back();
     }

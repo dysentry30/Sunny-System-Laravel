@@ -2841,13 +2841,11 @@ class ContractManagementsController extends Controller
             "numeric" => "Field :attribute harus numeric",
             "string" => "Field :attribute harus text",
             "date" => "Field :attribute harus format tanggal",
-            "ba-defect" => [
-                "max" => "Upload dokumen maksimal 70 MB",
-                "mimes" => "Upload dokumen dengan format PDF"
-            ],
+            "ba-defect.*.max" => "Upload dokumen maksimal 70 MB",
+            "ba-defect.*.mimes" => "Upload dokumen dengan format PDF"
         ];
         $rules = [
-            "ba-defect" => "required|file|mimes:pdf|max:$maxSize",
+            "ba-defect.*" => "required|file|mimes:pdf|max:$maxSize",
             "id-contract" => "required",
         ];
         $validation = Validator::make($data, $rules, $messages);
@@ -3957,6 +3955,7 @@ class ContractManagementsController extends Controller
             "Dokumen RKS / Project Spesification",
             "Dokumen Draft Kontrak",
             "Dokumen LOI",
+            "Dokumen BA Defect"
         ];
 
         $messages = [
@@ -3966,11 +3965,21 @@ class ContractManagementsController extends Controller
                 "mimes" => "Upload dokumen dengan format PDF"
             ],
         ];
-        $rules = [
-            "id-contract" => "required",
-            "file-document" => "required|file|mimes:pdf|max:$maxSize",
-            "kategori-path" => "required"
-        ];
+
+        if (is_array($file)) {
+            $rules = [
+                "id-contract" => "required",
+                "file-document.*" => "required|file|mimes:pdf|max:$maxSize",
+                "kategori-path" => "required"
+            ];
+        } else {
+            $rules = [
+                "id-contract" => "required",
+                "file-document" => "required|file|mimes:pdf|max:$maxSize",
+                "kategori-path" => "required"
+            ];
+        }
+        
         if (isset($data['status_dokumen'])) {
             $addRules = ['status_dokumen' => "required|string"];
             array_push($rules, $addRules);

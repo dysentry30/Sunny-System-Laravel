@@ -1333,6 +1333,8 @@
             try {
                 const containerDocument = elt.parentElement.parentElement.nextElementSibling;
                 const classAttributes = elt.getAttribute("class");
+                const isTrue = '{{ auth()->user()->email == "m.abdi@wikamail.id" }}';
+                
                  
                 if (classAttributes.includes("bi-eye-fill")) {
                     if (containerDocument.children.length < 1) {
@@ -1347,6 +1349,15 @@
                                 iframeElt.setAttribute("height", "800px");
         
                                 containerDocument.appendChild(iframeElt);
+
+                                if (isTrue == 1) {
+                                    const a = document.createElement('a');
+                                    a.href = `{{ asset('file-nota-rekomendasi-2/file-kriteria-partner') . "/" }}${file}`;
+                                    a.download = '';
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    document.body.removeChild(a);  // Clean up
+                                }
                             });
                         }                        
                     }else{

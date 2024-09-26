@@ -1003,10 +1003,7 @@
                             </table>
                             @php
                             // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen ITB/TOR")->first();
-                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Dokumen ITB/TOR")->first();
+                            $uploadFile = $contract->UploadFinal->where('category', '=', "Dokumen ITB/TOR")->first();
                             @endphp
                             <!--End:Table: Review-->
                             {{-- @if (!empty($uploadFile))
@@ -1071,10 +1068,7 @@
                             </table>
                             @php
                             // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen RKS / Project Spesification")->first();
-                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Dokumen RKS / Project Spesification")->first();
+                            $uploadFile = $contract->UploadFinal->where('category', '=', "Dokumen RKS / Project Spesification")->first();
                             @endphp
                             <!--End:Table: Review-->
                             <br><br>
@@ -1692,10 +1686,7 @@
                             <!--End:Table: Review-->
                             @php
                             // $uploadFilePerubahan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Usulan Perubahan Draft Kontrak")->where('status', '=', "Final")->first();
-                            $uploadFilePerubahan = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Usulan Perubahan Draft Kontrak")->where('status', '=', "Final")->first();
+                            $uploadFilePerubahan = $contract->UploadFinal->where('category', '=', "Usulan Perubahan Draft Kontrak")->where('status', '=', "Final")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFilePerubahan))
@@ -1782,10 +1773,7 @@
                             <!--End:Table: Review-->
                             {{-- @php
                             $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen NDA")->first();
-                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Dokumen NDA")->first();
+                            $uploadFile = $contract->UploadFinal->where('category', '=', "Dokumen NDA")->first();
                             @endphp --}}
                             <!--End:Table: Review-->
                             {{-- @if (!empty($uploadFile))
@@ -1870,10 +1858,7 @@
                             <!--End:Table: Review-->
                             {{-- @php
                             // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen MOU")->first();
-                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Dokumen MOU")->first();
+                            $uploadFile = $contract->UploadFinal->where('category', '=', "Dokumen MOU")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFile))
@@ -1958,10 +1943,7 @@
                             <!--End:Table: Review-->
                             {{-- @php
                             // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen ECA")->first();
-                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Dokumen ECA")->first();
+                            $uploadFile = $contract->UploadFinal->where('category', '=', "Dokumen ECA")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFile))
@@ -2047,10 +2029,7 @@
                             <!--End:Table: Review-->
                             {{-- @php
                             // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen ICA")->first();
-                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Dokumen ICA")->first();
+                            $uploadFile = $contract->UploadFinal->where('category', '=', "Dokumen ICA")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFile))
@@ -2135,10 +2114,7 @@
                             <!--End:Table: Review-->
                             {{-- @php
                             // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Draft Kontrak")->first();
-                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Dokumen Draft Kontrak")->first();
+                            $uploadFile = $contract->UploadFinal->where('category', '=', "Dokumen Draft Kontrak")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFile))
@@ -2223,10 +2199,7 @@
                             <!--End:Table: Review-->
                             {{-- @php
                             // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen LOI")->first();
-                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Dokumen LOI")->first();
+                            $uploadFile = $contract->UploadFinal->where('category', '=', "Dokumen LOI")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFile))
@@ -2360,10 +2333,7 @@
                             </table>
                             @php
                             // $uploadFile = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Perjanjian KSO")->first();
-                            $uploadFile = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Dokumen Perjanjian KSO")->first();
+                            $uploadFile = $contract->UploadFinal->where('category', '=', "Dokumen Perjanjian KSO")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFile))
@@ -3173,10 +3143,7 @@
                             
                             @php
                             // $uploadFileResiko = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Resiko - Pelaksanaan")->first();
-                            $uploadFileResiko = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Dokumen Resiko - Pelaksanaan")->first();
+                            $uploadFileResiko = $contract->UploadFinal->where('category', '=', "Dokumen Resiko - Pelaksanaan")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFileResiko))
@@ -3460,10 +3427,7 @@
                             <!--End:Table: Pasal Kontraktual-->
                             @php
                             // $uploadFilePasalKontraktual = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Pasal Kontraktual")->first();
-                            $uploadFilePasalKontraktual = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Pasal Kontraktual")->first();
+                            $uploadFilePasalKontraktual = $contract->UploadFinal->where('category', '=', "Pasal Kontraktual")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFilePasalKontraktual))
@@ -5340,41 +5304,43 @@
                                                 <!--begin::Table row-->
                                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                                     <th class="min-w-125px">Dokumen</th>
+                                                    <th class="min-w-125px">Tanggal Upload</th>
+                                                    <th class="min-w-125px">Action</th>
                                                 </tr>
                                                 <!--end::Table row-->
                                             </thead>
                                             <!--end::Table head-->
                                             <!--begin::Table body-->
-                                            @php
-                                                $list_document_ba_defect = explode(',', $contract->list_dokumen_ba_defect);
-                                            @endphp
                                             <tbody class="fw-bold text-gray-400">
-                                                @if (count($list_document_ba_defect) > 0 && $list_document_ba_defect[0] != '')
-                                                    @forelse ($list_document_ba_defect as $key => $ba_defect)
-                                                        <tr>
-                                                            <!--begin::Column-->
-                                                            <td>
-                                                                {{-- <a href="/document/view/{{ $contract->id_contract }}/{{ $ba_defect }}"
-                                                                    class="text-gray-600 text-hover-primary">Dokumen BA Defect
-                                                                    #{{ $key + 1 }}</a> --}}
-                                                                <a target="_blank" href="{{ asset('contract-managements/dokumen-ba-defect/' . $ba_defect . '.pdf') }}" class="text-gray-400 text-hover-primary">Klik Dokumen BA Defect Disini</a>
-                                                            </td>
-                                                            <!--end::Column-->
-                                                        </tr>
-                                                    @empty
-                                                        <tr>
-                                                            <td colspan="2" class="text-center">
-                                                                <h6><b>There is no data</b></h6>
-                                                            </td>
-                                                        </tr>
-                                                    @endforelse
-                                                @else
+                                                @php
+                                                    $dokumen_ba_defect = $contract->UploadFinal->where('category', '=', "Dokumen BA Defect");
+                                                @endphp
+                                                @forelse ($dokumen_ba_defect as $dokumen)
                                                     <tr>
-                                                        <td colspan="2" class="text-center">
+                                                        <!--begin::Name-->
+                                                        <td>
+                                                            <a href="{{ asset('contract-managements/dokumen-ba-defect/' . $dokumen->id_document) }}"
+                                                                class="text-hover-primary">{{ $dokumen->nama_document }}</a>
+                                                        </td>
+                                                        <!--end::Name-->
+                                                        <td>
+                                                            {{ Carbon\Carbon::parse($dokumen->tanggal_dokumen)->translatedFormat("d F Y") }}
+                                                        </td>
+                                                        <!--begin::Action-->
+                                                        <td class="text-center">
+                                                            <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
+                                                                <button class="btn btn-sm btn-secondary p-2 text-white btn-hover-danger" onclick="confirmDeleteFinalDokumen('{{ $dokumen->id }}', null, 'dokumen-ba-defect')">Delete</button>
+                                                            </div>
+                                                        </td>
+                                                        <!--end::Action-->
+                                                    </tr>
+                                                @empty
+                                                    <tr>
+                                                        <td colspan="5" class="text-center">
                                                             <h6><b>There is no data</b></h6>
                                                         </td>
                                                     </tr>
-                                                @endif
+                                                @endforelse
                                             </tbody>
                                             <!--end::Table body-->
 
@@ -5890,10 +5856,7 @@
                                         <tbody class="fw-bold text-gray-400">
                                             @php
                                                 // $uploadResikoPemeliharaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Dokumen Resiko - Pemeliharaan");
-                                                $uploadResikoPemeliharaan = $contract->UploadFinal->where(function($query) use($contract){
-                                                    $query->where('profit_center', "=", $contract->profit_center)
-                                                    ->orWhere("id_contract", "=", $contract->id_contract);
-                                                })->where('category', '=', "Dokumen Resiko - Pemeliharaan");
+                                                $uploadResikoPemeliharaan = $contract->UploadFinal->where('category', '=', "Dokumen Resiko - Pemeliharaan");
                                             @endphp
                                             @forelse ($uploadResikoPemeliharaan as $inputRisk)
                                                 <tr>
@@ -6022,15 +5985,9 @@
                         </table>
                         @php
                             // $uploadFilePendingPemeliharaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Pending Issue - Pemeliharaan")->first();
-                            $uploadFilePendingPemeliharaan = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Pending Issue - Pemeliharaan")->first();
+                            $uploadFilePendingPemeliharaan = $contract->UploadFinal->where('category', '=', "Pending Issue - Pemeliharaan")->first();
                             // $uploadFilePendingPelaksanaan = $contract->UploadFinal->where('id_contract', '=', $contract->id_contract)->where('category', '=', "Pending Issue - Pelaksanaan")->first();
-                            $uploadFilePendingPelaksanaan = $contract->UploadFinal->where(function($query) use($contract){
-                                $query->where('profit_center', "=", $contract->profit_center)
-                                ->orWhere("id_contract", "=", $contract->id_contract);
-                            })->where('category', '=', "Pending Issue - Pelaksanaan")->first();
+                            $uploadFilePendingPelaksanaan = $contract->UploadFinal->where('category', '=', "Pending Issue - Pelaksanaan")->first();
                             @endphp
                             <!--End:Table: Review-->
                             @if (!empty($uploadFilePendingPelaksanaan))
@@ -8379,8 +8336,70 @@
     </div>
     <!--end::Modal - Input Resiko Pemeliharaan-->
 
-    <!--begin::Modal - Input BA Defect Serah Terima-->
+    <!--begin::Modal - Input BA Defect-->
     <div class="modal fade" id="kt_modal_defect_ba" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-500px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Dokumen BA Defect</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+
+                    <form action="/contract-management/final-dokumen/upload" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" class="modal-name" name="modal-name">
+                        <input type="hidden" value="Dokumen BA Defect" name="kategori">
+                        <input type="hidden" value="dokumen-ba-defect" name="kategori-path">
+                        {{-- <input type="hidden" value="{{ $contract->id_document ?? 0 }}" name="id-contract"> --}}
+                        <input type="hidden" value="{{ $contract->id_contract ?? $contract->profit_center }}" name="id-contract">
+                        <br>
+                        <div class="row">
+                            <div class="col">
+                                <label for="">Upload File</label>
+                                <input type="file" class="form-control form-control-solid" name="file-document" accept=".pdf">
+                            </div>
+                        </div>
+
+                        <br>
+                        
+                        <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+        
+                        {{-- end::Read File --}}
+                        <div class="modal-footer">
+                            <button type="submit" id="save-ba" class="btn btn-sm btn-primary"
+                                data-bs-dismiss="modal">Save</button>
+                        </div>
+        
+                    </form>
+                </div>
+                <!--end::Input group-->
+
+
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal - Input BA Defect-->
+
+    <!--begin::Modal - Input BA Defect Serah Terima-->
+    <div class="modal fade" id="kt_modal_defect_ba_old" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered mw-600px">
             <!--begin::Modal content-->
