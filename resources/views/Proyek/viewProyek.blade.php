@@ -9364,6 +9364,234 @@
             <!--end::modal EDIT ALAT-->
             <!--END::ALAT-->
 
+            <!--begin::modal ADD TIM TENDER-->
+            <form onsubmit="disabledSubmitButton(this)" action="/proyek/tim-tender/add" method="post"
+                enctype="multipart/form-data">
+                @csrf
+                <div class="modal fade" id="kt_modal_tim_tender" tabindex="-1" aria-hidden="true">
+                    <!--begin::Modal dialog-->
+                    <div class="modal-dialog modal-dialog-centered mw-600px">
+                        <!--begin::Modal content-->
+                        <div class="modal-content">
+                            <!--begin::Modal header-->
+                            <div class="modal-header">
+                                <!--begin::Modal title-->
+                                <h2>Tambah Tim Tender :</h2>
+                                <input type="hidden" name="kode-proyek" value="{{ $proyek->kode_proyek }}">
+                                <!--end::Modal title-->
+                                <!--begin::Close-->
+                                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                    <span class="svg-icon svg-icon-1">
+                                        <i class="bi bi-x-lg"></i>
+                                    </span>
+                                    <!--end::Svg Icon-->
+                                </div>
+                                <!--end::Close-->
+                            </div>
+                            <!--end::Modal header-->
+
+                            <!--begin::Modal body-->
+                            <div class="modal-body py-lg-6 px-lg-6">
+
+                                <!--begin::Row-->
+                                <div class="row fv-row">
+                                    <!--begin::Col-->
+                                    <div class="col">
+                                        <!--begin::Input group Website-->
+                                        <div class="fv-row mb-7">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                <span class="required">Nama Pegawai</span>
+                                            </label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <select id="nama_pegawai" name="nama_pegawai"
+                                                class="form-select form-select-solid" data-control="select2"
+                                                data-hide-search="false" data-placeholder="Pilih Pegawai">
+                                                <option></option>
+                                            </select>
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Input group-->
+                                        <!--begin::Input group Website-->
+                                        <div class="fv-row mb-7">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                <span class="required">Posisi</span>
+                                            </label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <select id="posisi" name="posisi"
+                                                class="form-select form-select-solid" data-control="select2"
+                                                data-hide-search="true" data-placeholder="Pilih Posisi">
+                                                <option></option>
+                                                <option value="Ketua">Ketua</option>
+                                                <option value="Anggota">Anggota</option>
+                                            </select>
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Input group-->
+                                    </div>
+                                </div>
+                                <!--End begin::Row-->
+
+                            </div>
+                            <div class="modal-footer">
+
+                                <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                                    id="new_save" style="background-color:#008CB4">Save</button>
+
+                            </div>
+                            <!--end::Modal body-->
+                        </div>
+                        <!--end::Modal content-->
+                    </div>
+                    <!--end::Modal dialog-->
+                </div>
+            </form>
+            <!--end::modal ADD TIM TENDER-->
+
+            <!--begin::modal EDIT TIM TENDER-->
+            @foreach ($proyek->TimTender as $timTender)
+                <form action="/proyek/tim-tender/{{ $timTender->id }}/edit" method="post"
+                    enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="kode-proyek" value="{{ $proyek->kode_proyek }}">
+                    <div class="modal fade" id="kt_modal_edit_tim_tender_{{ $timTender->id }}" tabindex="-1"
+                        aria-hidden="true">
+                        <!--begin::Modal dialog-->
+                        <div class="modal-dialog modal-dialog-centered mw-800px">
+                            <!--begin::Modal content-->
+                            <div class="modal-content">
+                                <!--begin::Modal header-->
+                                <div class="modal-header">
+                                    <!--begin::Modal title-->
+                                    <h2>Edit Konsultan Perencana :</h2>
+                                    <!--end::Modal title-->
+                                    <!--begin::Close-->
+                                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                        <span class="svg-icon svg-icon-1">
+                                            <i class="bi bi-x-lg"></i>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </div>
+                                    <!--end::Close-->
+                                </div>
+                                <!--end::Modal header-->
+
+                                <!--begin::Modal body-->
+                                <div class="modal-body py-lg-6 px-lg-6">
+
+                                    <!--begin::Row-->
+                                    <div class="row fv-row">
+                                        <!--begin::Col-->
+                                        <div class="col">
+                                            <!--begin::Input group Website-->
+                                            <div class="fv-row mb-7">
+                                                <!--begin::Label-->
+                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                    <span class="required">Nama Pegawai</span>
+                                                </label>
+                                                <!--end::Label-->
+                                                <!--begin::Input-->
+                                                <select id="nama_pegawai-{{ $timTender->id }}" name="nama_pegawai"
+                                                    class="form-select form-select-solid" data-control="select2"
+                                                    data-hide-search="false" data-placeholder="Pilih Pegawai">
+                                                    <option></option>
+                                                </select>
+                                                <!--end::Input-->
+                                            </div>
+                                            <!--end::Input group-->
+                                            <!--begin::Input group Website-->
+                                            <div class="fv-row mb-7">
+                                                <!--begin::Label-->
+                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                    <span class="required">Posisi</span>
+                                                </label>
+                                                <!--end::Label-->
+                                                <!--begin::Input-->
+                                                <select id="posisi-{{ $timTender->id }}" name="posisi"
+                                                    class="form-select form-select-solid" data-control="select2"
+                                                    data-hide-search="true" data-placeholder="Pilih Posisi">
+                                                    <option></option>
+                                                    <option value="Ketua" {{ $timTender->posisi == "Ketua" ? 'selected' : '' }}>Ketua</option>
+                                                    <option value="Anggota" {{ $timTender->posisi == "Anggota" ? 'selected' : '' }}>Anggota</option>
+                                                </select>
+                                                <!--end::Input-->
+                                            </div>
+                                            <!--end::Input group-->
+                                        </div>
+                                    </div>
+                                    <!--End begin::Row-->
+
+                                </div>
+                                <div class="modal-footer">
+
+                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                                        id="new_save" style="background-color:#008CB4">Save</button>
+
+                                </div>
+                                <!--end::Modal body-->
+                            </div>
+                            <!--end::Modal content-->
+                        </div>
+                        <!--end::Modal dialog-->
+                    </div>
+                </form>
+            @endforeach
+            <!--end::modal EDIT TIM TENDER-->
+
+            <!--begin::DELETE TIM TENDER-->
+            @foreach ($proyek->TimTender as $timTender)
+                <form action="/proyek/tim-tender/{{ $timTender->id }}/delete" method="post"
+                    enctype="multipart/form-data">
+                    @method('delete')
+                    @csrf
+                    <div class="modal fade" id="kt_tim_tender_delete_{{ $timTender->id }}" tabindex="-1"
+                        aria-hidden="true">
+                        <!--begin::Modal dialog-->
+                        <div class="modal-dialog modal-dialog-centered mw-800px">
+                            <!--begin::Modal content-->
+                            <div class="modal-content">
+                                <!--begin::Modal header-->
+                                <div class="modal-header">
+                                    <!--begin::Modal title-->
+                                    <h2>Hapus Tim Tender : {{ $timTender->Pegawai?->nama_pegawai }}
+                                    </h2>
+                                    <!--end::Modal title-->
+                                    <!--begin::Close-->
+                                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                        <span class="svg-icon svg-icon-1">
+                                            <i class="bi bi-x-lg"></i>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </div>
+                                    <!--end::Close-->
+                                </div>
+                                <!--end::Modal header-->
+                                <!--begin::Modal body-->
+                                <div class="modal-body py-lg-6 px-lg-6">
+                                    Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                                    <br>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                                </div>
+                                <!--end::Input group-->
+
+                            </div>
+                            <!--end::Modal body-->
+                        </div>
+                        <!--end::Modal content-->
+                    </div>
+                    <!--end::Modal dialog-->
+                </form>
+            @endforeach
+            <!--end::DELETE TIM TENDER-->
+
             <!--begin::modal ADD PESERTA TENDER-->
             <form onsubmit="disabledSubmitButton(this)" action="/proyek/peserta-tender/add" method="post"
                 enctype="multipart/form-data">
@@ -12123,6 +12351,42 @@
         })
         const perPage = 10;
         $(document).ready(function() {
+            $("#nama_pegawai").select2({
+                ajax: {
+                    url: '/proyek/get-data-pegawai',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term,
+                            perPage: perPage,
+                            page: params.page || 1
+                        };
+                    },
+                    processResults: function (data, params) {
+
+                        params.page = params.page || 1
+
+                        const isPagination = data.hasOwnProperty('data') && Array.isArray(data.data) ? true : false
+                        const optionData = isPagination ? data.data : data;
+                        const options = optionData.map(item => {
+                            return {
+                                id: item.nip, 
+                                text: item.nip + ' - ' + item.nama_pegawai
+                            }
+                        })
+                        return {
+                            results: options,
+                            pagination: {
+                                more: isPagination ? (params.page * (perPage || 10)) < data.total : false
+                            }
+                        }
+                    },
+                    cache: true,
+                    minimumResultsForSearch: 0
+                },
+                dropdownParent: $('#kt_modal_tim_tender'),
+            });
             $("#nomor_rangka").select2({
                 ajax: {
                     url: '/proyek/get-data-alat',

@@ -1506,10 +1506,10 @@
                             {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_input_resiko_perolehan">+</a> --}}
                                 {{-- @if (empty($is_approved) || $is_approved->isEmpty()) --}}
-                                @if ($contract->project?->RiskTenderProyek->isNotEmpty())
+                                {{-- @if ($contract->project?->RiskTenderProyek->isNotEmpty()) --}}
                                     <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_resiko_perolehan">+</a>
-                                @endif
+                                {{-- @endif --}}
                                 {{-- @endif --}}
                         </h3>
 

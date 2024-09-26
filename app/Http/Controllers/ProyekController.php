@@ -43,6 +43,7 @@ use App\Models\AttachmentMenang;
 use App\Models\ClaimManagements;
 use App\Models\NotaRekomendasi2;
 use App\Models\RiskTenderProyek;
+use App\Models\TimTender;
 use Illuminate\Http\UploadedFile;
 use App\Models\DokumenOtherProyek;
 use App\Models\KonsultanPerencana;
@@ -3423,6 +3424,67 @@ class ProyekController extends Controller
             return redirect()->back();
         }
         Alert::error("Error", "Catatan Peserta Tender Gagal Diubah");
+        return redirect()->back();
+    }
+
+    public function tambahTimTender(Request $request,  TimTender $newTimTender)
+    {
+        $data = $request->all();
+        $messages = [
+            "required" => "*Kolom Ini Harus Diisi !",
+        ];
+        $rules = [
+            "nama_pegawai" => "required",
+            "posisi" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Tim Tender Gagal Ditambahkan, Periksa Kembali !");
+        }
+
+        $validation->validate();
+        $newTimTender->nip_pegawai = $data["nama_pegawai"];
+        $newTimTender->posisi = $data["posisi"];
+        $newTimTender->kode_proyek = $data["kode-proyek"];
+
+        $newTimTender->save();
+        Alert::success("Success", "Tim Tender Berhasil Ditambahkan");
+        return redirect()->back();
+    }
+
+    public function editTimTender(Request $request, $id)
+    {
+        $data = $request->all();
+        // dd($data);
+        $messages = [
+            "required" => "*Kolom Ini Harus Diisi !",
+        ];
+        $rules = [
+            "nama_pegawai" => "required",
+            "posisi" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Tim Tender Gagal Diubah, Periksa Kembali !");
+        }
+
+        $validation->validate();
+
+        $editTim = TimTender::find($id);
+        $editTim->nip_pegawai = $data["nama_pegawai"];
+        $editTim->posisi = $data["posisi"];
+        $editTim->kode_proyek = $data["kode-proyek"];
+
+        $editTim->save();
+        Alert::success("Success", "Tim Tender Berhasil Diubah");
+        return redirect()->back();
+    }
+
+    public function deleteTimTender($id)
+    {
+        $deleteTender = TimTender::find($id);
+        $deleteTender->delete();
+        Alert::success("Success", "Tim Tender Berhasil Dihapus");
         return redirect()->back();
     }
 
