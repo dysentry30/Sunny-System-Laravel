@@ -78,21 +78,23 @@
                         @foreach ($menusGroup as $key => $menus)
                             @if (empty($key))
                                 @foreach ($menus->unique()?->sortBy("urutan")?->values() as $menu)
-                                    @if (!empty($menu->path))
-                                        <div class="menu-item">
-                                            <a class="menu-link " href="{{ $menu->path }}"
-                                                style="color:white; padding-left:20px; padding-top:10px; {{ str_contains($menu->path, Request::Path()) ? 'background-color:#008CB4' : '' }}">
-                                                <span class="menu-icon">
-                                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                                    <span class="svg-icon svg-icon-2">
-                                                        {!! $menu->icon !!}
+                                    @can('access-menu-read', $menu->kode_menu)
+                                        @if (!empty($menu->path))
+                                            <div class="menu-item">
+                                                <a class="menu-link " href="{{ $menu->path }}"
+                                                    style="color:white; padding-left:20px; padding-top:10px; {{ Request::Segment(1) == substr($menu->path, 1) ? 'background-color:#008CB4' : '' }}">
+                                                    <span class="menu-icon">
+                                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                        <span class="svg-icon svg-icon-2">
+                                                            {!! $menu->icon !!}
+                                                        </span>
+                                                        <!--end::Svg Icon-->
                                                     </span>
-                                                    <!--end::Svg Icon-->
-                                                </span>
-                                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">{{ $menu->nama_menu }}</span>
-                                            </a>
-                                        </div>
-                                    @endif
+                                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">{{ $menu->nama_menu }}</span>
+                                                </a>
+                                            </div>
+                                        @endif                                        
+                                    @endcan
                                 @endforeach
                             @else
                                 @php
@@ -114,19 +116,21 @@
 
                                     <div class="collapse" id="collapseExample">
                                         @foreach ($menus->unique()?->sortBy("urutan")?->values() as $menuChild)
-                                            <!--begin::Menu Colapse-->
-                                            <div id="#kt_aside_menu" data-kt-menu="true"
-                                                style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ str_contains($menuChild, Request::Path()) ? 'background-color:#008CB4' : '' }}">
-                                                <a class="menu-link " href="{{ $menuChild->path }}" style="color:white; padding-left:20px;">
-                                                    <span class="menu-icon">
-                                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                                        {!! $menuChild->icon !!}
-                                                        <!--end::Svg Icon-->
-                                                    </span>
-                                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">{{ $menuChild->nama_menu }}</span>
-                                                </a>
-                                            </div>
-                                            <!--end::Menu Colapse-->                                            
+                                            @can('access-menu-read', $menuChild->kode_menu)
+                                                <!--begin::Menu Colapse-->
+                                                <div id="#kt_aside_menu" data-kt-menu="true"
+                                                    style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ str_contains($menuChild, Request::Path()) ? 'background-color:#008CB4' : '' }}">
+                                                    <a class="menu-link " href="{{ $menuChild->path }}" style="color:white; padding-left:20px;">
+                                                        <span class="menu-icon">
+                                                            <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                            {!! $menuChild->icon !!}
+                                                            <!--end::Svg Icon-->
+                                                        </span>
+                                                        <span class="menu-title" style="font-size: 16px; padding-left: 10px">{{ $menuChild->nama_menu }}</span>
+                                                    </a>
+                                                </div>
+                                                <!--end::Menu Colapse-->                                                                                            
+                                            @endcan
                                         @endforeach
                                     </div>
                                 </div>

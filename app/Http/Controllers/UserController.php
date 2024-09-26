@@ -142,26 +142,47 @@ class UserController extends Controller
             if (Auth::attempt($credentials) && Auth::check()) {
                 // dd(Auth::user());
                 $request->session()->regenerate();
+
                 if (!Gate::allows('user-csi')) {
-                    if (Auth::user()->is_active) {
-                        if (!Gate::allows("user-scm")) {
-                            $redirect = $request->schemeAndHttpHost() . $request->get("redirect-to");
-                            if (!empty($redirect)) {
-                                return redirect()->intended($redirect);
-                            }
-                            return redirect()->intended("/dashboard");
-                        } else {
-                            return redirect()->intended("/proyek");
-                        }
-                    } else {
-                        Auth::logout();
-                        Alert::error("USER NON ACTIVE", "Hubungi Admin (PIC)");
-                        return redirect()->intended("/");
+                    $redirect = $request->schemeAndHttpHost() . $request->get("redirect-to");
+                    if (!empty($redirect)) {
+                        return redirect()->intended($redirect);
                     }
+
+                    $path = Auth::user()->UserMenuManagement?->map(function ($userMenu) {
+                        return $userMenu->MasterMenu;
+                    })?->sortBy("urutan")?->first()->path;
+
+                    if (!empty($redirect)) {
+                        return redirect()->intended($redirect);
+                    }
+
+                    return redirect()->intended($path);
                 } else {
-                    // Alert::success('Selamat Datang', "Silahkan Mengisi Survey Berikut");
                     return redirect()->intended("/csi/customer-survey");
                 }
+
+
+                // if (!Gate::allows('user-csi')) {
+                //     if (Auth::user()->is_active) {
+                //         if (!Gate::allows("user-scm")) {
+                //             $redirect = $request->schemeAndHttpHost() . $request->get("redirect-to");
+                //             if (!empty($redirect)) {
+                //                 return redirect()->intended($redirect);
+                //             }
+                //             return redirect()->intended("/dashboard");
+                //         } else {
+                //             return redirect()->intended("/proyek");
+                //         }
+                //     } else {
+                //         Auth::logout();
+                //         Alert::error("USER NON ACTIVE", "Hubungi Admin (PIC)");
+                //         return redirect()->intended("/");
+                //     }
+                // } else {
+                //     // Alert::success('Selamat Datang', "Silahkan Mengisi Survey Berikut");
+                //     return redirect()->intended("/csi/customer-survey");
+                // }
             }
         }
         Alert::error("Login Gagal", "Pastikan Email dan Password Benar");
@@ -1027,11 +1048,15 @@ class UserController extends Controller
                         Auth::login($checkUserInCRM);
                         if (Auth::check()) {
                             $request->session()->regenerate();
-                            if (!Gate::allows("user-scm")) {
-                                return redirect()->intended("/dashboard");
-                            } else {
-                                return redirect()->intended("/proyek");
-                            }
+                            $path = Auth::user()->UserMenuManagement?->map(function ($userMenu) {
+                                return $userMenu->MasterMenu;
+                            })?->sortBy("urutan")?->first()->path;
+                            // if (!Gate::allows("user-scm")) {
+                            //     return redirect()->intended("/dashboard");
+                            // } else {
+                            //     return redirect()->intended("/proyek");
+                            // }
+                            return redirect()->intended($path);
                         } else {
                             dd([
                                 "Success" => false,

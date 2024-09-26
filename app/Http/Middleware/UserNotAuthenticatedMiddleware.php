@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class UserNotAuthenticatedMiddleware
@@ -30,18 +31,28 @@ class UserNotAuthenticatedMiddleware
             return $next($request);
         }
 
-        if (Gate::allows("crm") && !Gate::allows("user-scm")) {
-            return redirect("/dashboard");
-        } elseif (Gate::allows("ccm")) {
-            return redirect("/dashboard-ccm/perolehan-kontrak");
-        } elseif (Gate::allows("csi")) {
-            return redirect("/csi");
-        } elseif (Gate::allows("ska-skt")) {
-            return redirect("/ska-skt");
-        } elseif (Gate::allows("super-admin")) {
-            return redirect("/dashboard");
-        } else if (Gate::allows("user-scm")) {
-            return redirect("/proyek");
+        $path = Auth::user()->UserMenuManagement?->map(function ($userMenu) {
+            return $userMenu->MasterMenu;
+        })->groupBy("kode_parrent")->first()?->sortBy("urutan")->first()->path;
+
+        if (!Gate::allows('user-csi')) {
+            return redirect($path);
+        } else {
+            return redirect()->intended("/csi/customer-survey");
         }
+
+        // if (Gate::allows("crm") && !Gate::allows("user-scm")) {
+        //     return redirect("/dashboard");
+        // } elseif (Gate::allows("ccm")) {
+        //     return redirect("/dashboard-ccm/perolehan-kontrak");
+        // } elseif (Gate::allows("csi")) {
+        //     return redirect("/csi");
+        // } elseif (Gate::allows("ska-skt")) {
+        //     return redirect("/ska-skt");
+        // } elseif (Gate::allows("super-admin")) {
+        //     return redirect("/dashboard");
+        // } else if (Gate::allows("user-scm")) {
+        //     return redirect("/proyek");
+        // }
     }
 }

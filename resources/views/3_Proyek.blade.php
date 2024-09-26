@@ -68,7 +68,7 @@
 
                             <!--end::Page title-->
                             {{-- @if (auth()->user()->check_administrator || auth()->user()->check_user_sales) --}}
-                            @canany(['super-admin', 'user-crm', 'admin-crm'])
+                            @can('access-menu-create', 'PRYK')
                             <!--begin::Actions-->
                             <div class="d-flex align-items-center py-1">
 
@@ -124,9 +124,9 @@
                                 <!--end::Wrapper-->
 
 
-                            </div>
-                            <!--end::Actions-->                                
-                            @endcanany
+                            </div>                                
+                            @endcan
+                            <!--end::Actions-->
                             {{-- @endif --}}
                         </div>
                         <!--end::Container-->
@@ -721,20 +721,22 @@
                                             </td>
                                             <!--end::Kategori Kalah-->
 
-                                            @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") || str_contains(auth()->user()->email, "@sunny"))
-                                                <!--begin::Action-->
-                                                <td class="text-center px-3">
-                                                    <!--begin::Button-->
-                                                    <button data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_delete{{ $proyek->kode_proyek }}"
-                                                        id="modal-delete"
-                                                        class="btn btn-sm btn-light btn-active-danger">Delete
-                                                    </button>
-                                                    </form>
-                                                    <!--end::Button-->
-                                                </td>
-                                                <!--end::Action-->
-                                            @endif
+                                            {{-- @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") || str_contains(auth()->user()->email, "@sunny")) --}}
+                                            @can('access-menu-delete', "PRYK}")
+                                            <!--begin::Action-->
+                                            <td class="text-center px-3">
+                                                <!--begin::Button-->
+                                                <button data-bs-toggle="modal"
+                                                    data-bs-target="#kt_modal_delete{{ $proyek->kode_proyek }}"
+                                                    id="modal-delete"
+                                                    class="btn btn-sm btn-light btn-active-danger">Delete
+                                                </button>
+                                                </form>
+                                                <!--end::Button-->
+                                            </td>
+                                            <!--end::Action-->                                                
+                                            @endcan
+                                            {{-- @endif --}}
                                         </tr>
                                     @endforeach
                                 </tbody>

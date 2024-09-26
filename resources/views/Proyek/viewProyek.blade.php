@@ -110,7 +110,8 @@
                                 <!--end::Button-->
 
                                 <!--begin::Button-->
-                                @canany(['super-admin', 'admin-crm', 'user-crm', 'approver-crm'])
+                                {{-- @canany(['super-admin', 'admin-crm', 'user-crm', 'approver-crm']) --}}
+                                @can('access-menu-update', "PRYK")
                                     @if ($proyek->dop != "EA")
                                         @if (($proyek->stage == 8 && $proyek->is_need_approval_terkontrak && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek?->is_revisi) || $proyek->stage < 8)
                                             @if ($proyek->is_cancel == false)
@@ -125,12 +126,14 @@
                                                 style="background-color:#008CB4">
                                                 Save</button>
                                         @endif                                
-                                    @endif                             
-                                @endcanany
+                                    @endif                                    
+                                @endcan
+                                {{-- @endcanany --}}
                                 <!--end::Button-->
 
                                 <!--begin::Button-->
-                                @canany(['super-admin', 'admin-crm', 'approver-crm', 'user-crm'])
+                                {{-- @canany(['super-admin', 'admin-crm', 'approver-crm', 'user-crm']) --}}
+                                @can('access-menu-edit', "PRYK")
                                 @if ($proyek->UnitKerja?->dop != "EA")
                                     @if (($proyek->stage == 8 && $proyek->is_need_approval_terkontrak && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek?->is_revisi))
                                         <button type="button" class="btn btn-sm btn-success ms-2" data-bs-toggle="modal" data-bs-target="#modal-send-approval-terkontrak-proyeks">Ajukan Approval</button>
@@ -150,11 +153,13 @@
                                                     style="background-color:#00b48d">
                                         @endif    
                                     @endif
-                                @endif                                    
-                                @endcanany
+                                @endif
+                                @endcan
+                                {{-- @endcanany --}}
                                 <!--end::Button-->
 
                                 <!--begin::Button-->
+                                @can('access-menu-edit', "PRYK")
                                 @if ($proyek->dop != "EA")
                                     @if (($proyek->stage == 8 && $proyek->is_need_approval_terkontrak && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek?->is_revisi) || $proyek->stage < 8)
                                         @canany(['super-admin', 'admin-crm', 'user-crm'])
@@ -169,7 +174,8 @@
                                             data-bs-target="#kt_modal_cancel_proyek" id="kt_toolbar_export">Cancel Proyek
                                         </a>
                                     @endcanany
-                                @endif
+                                @endif                                    
+                                @endcan
                                 <!--end::Button-->
 
                                 <!--begin::Action-->

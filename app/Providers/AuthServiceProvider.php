@@ -167,28 +167,28 @@ class AuthServiceProvider extends ServiceProvider
             return UserMenuManagement::where("nip", $user->nip)
             ->where("menu", $menu)
                 ->where("read", true)
-                ->exits();
+                ->exists();
         });
 
         Gate::define('access-menu-create', function (User $user, $menu) {
             return UserMenuManagement::where("nip", $user->nip)
             ->where("menu", $menu)
                 ->where("create", true)
-                ->exits();
+            ->exists();
         });
 
         Gate::define('access-menu-update', function (User $user, $menu) {
             return UserMenuManagement::where("nip", $user->nip)
             ->where("menu", $menu)
                 ->where("update", true)
-                ->exits();
+            ->exists();
         });
 
         Gate::define('access-menu-delete', function (User $user, $menu) {
             return UserMenuManagement::where("nip", $user->nip)
             ->where("menu", $menu)
                 ->where("delete", true)
-                ->exits();
+            ->exists();
         });
         //
     }
