@@ -1619,7 +1619,7 @@ class ContractApprovalController extends Controller
         $approval = ContractApproval::select([
             "contract_approval_new.*",
             "proyek_pis_new.kd_divisi",
-        ])->join("proyek_pis_new", "contract_approval_new.profit_center", "=", "proyek_pis_new.profit_center")->where("periode_laporan", $data["periode"])->where("tahun", date("Y"))->where("kd_divisi", $data["unitKerja"])->get()->groupBy("profit_center");
+        ])->join("proyek_pis_new", "contract_approval_new.profit_center", "=", "proyek_pis_new.profit_center")->where("periode_laporan", $data["periode"])->where("tahun", date("Y"))->where("contract_approval_new.kd_divisi", $data["unitKerja"])->get()->groupBy("profit_center");
 
         foreach ($approval as $profit_center => $approve) {
             // $update = $approve->update(['is_approved' => "t"]);

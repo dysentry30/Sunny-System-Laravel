@@ -114,6 +114,8 @@ class ScheduleOtorisasiContract extends Command
                 }
             }
 
+            DB::commit();
+
             $contractApprovalData = ContractApproval::where("periode_laporan", $bulan_pelaporan)->where("tahun", $tahun_pelaporan)->where("is_approved", true)->get()->groupBy("profit_center");
             setLogging('Scheduller/ErrorApprovalCCM', "APPROVAL CCM => ", [
                 "DATA" => $contractApprovalData->toArray() ?? [],
@@ -124,13 +126,13 @@ class ScheduleOtorisasiContract extends Command
                     $isSuccessSendSAP = self::sendDataSAP($profit_center, $bulan_pelaporan, $tahun_pelaporan);
 
                     $dateFinish = Carbon::now()->translatedFormat("d F Y H:i:s");
-                    sendNotifEmail("andias@wikamail.id", "FINISH RUNNING JOB OTORISASI CONTRACT $profit_center", "Otorisasi otomatis proyek $profit_center berhasil dijalankan pada hari : $dateFinish", true, false);
-                    sendNotifEmail("fathur.rohman2353@gmail.com", "FINISH RUNNING JOB OTORISASI CONTRACT $profit_center", "Otorisasi otomatis proyek $profit_center berhasil dijalankan pada hari : $dateFinish", true, false);
+                    // sendNotifEmail("andias@wikamail.id", "FINISH RUNNING JOB OTORISASI CONTRACT $profit_center", "Otorisasi otomatis proyek $profit_center berhasil dijalankan pada hari : $dateFinish", true, false);
+                    // sendNotifEmail("fathur.rohman2353@gmail.com", "FINISH RUNNING JOB OTORISASI CONTRACT $profit_center", "Otorisasi otomatis proyek $profit_center berhasil dijalankan pada hari : $dateFinish", true, false);
                     if ($isSuccessSendSAP) {
                         $namaProyek = $data->first()->proyek_name;
                         $dateFinish = Carbon::now()->translatedFormat("d F Y H:i:s");
-                        sendNotifEmail("andias@wikamail.id", "FINISH RUNNING JOB OTORISASI CONTRACT", "Otorisasi otomatis proyek $profit_center berhasil dijalankan pada hari : $dateFinish", true, false);
-                        sendNotifEmail("fathur.rohman2353@gmail.com", "FINISH RUNNING JOB OTORISASI CONTRACT", "Otorisasi otomatis proyek $profit_center berhasil dijalankan pada hari : $dateFinish", true, false);
+                        // sendNotifEmail("andias@wikamail.id", "FINISH RUNNING JOB OTORISASI CONTRACT", "Otorisasi otomatis proyek $profit_center berhasil dijalankan pada hari : $dateFinish", true, false);
+                        // sendNotifEmail("fathur.rohman2353@gmail.com", "FINISH RUNNING JOB OTORISASI CONTRACT", "Otorisasi otomatis proyek $profit_center berhasil dijalankan pada hari : $dateFinish", true, false);
                     } else {
                         $namaProyek = $data->first()->proyek_name;
                         $dateFinish = Carbon::now()->translatedFormat("d F Y H:i:s");
@@ -140,11 +142,10 @@ class ScheduleOtorisasiContract extends Command
                 });
             } else {
                 $dateFinish = Carbon::now()->translatedFormat("d F Y H:i:s");
-                sendNotifEmail("andias@wikamail.id", "FAILED RUNNING JOB OTORISASI CONTRACT", "Otorisasi otomatis gagal dijalankan pada hari : $dateFinish . Karena tidak ada proyek", true, false);
+                // sendNotifEmail("andias@wikamail.id", "FAILED RUNNING JOB OTORISASI CONTRACT", "Otorisasi otomatis gagal dijalankan pada hari : $dateFinish . Karena tidak ada proyek", true, false);
                 sendNotifEmail("fathur.rohman2353@gmail.com", "FAILED RUNNING JOB OTORISASI CONTRACT", "Otorisasi otomatis gagal dijalankan pada hari : $dateFinish . Karena tidak ada proyek", true, false);
             }
             
-            DB::commit();
             return Command::SUCCESS;
         } catch (\Throwable $th) {
             DB::rollBack();
