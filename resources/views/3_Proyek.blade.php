@@ -68,7 +68,7 @@
 
                             <!--end::Page title-->
                             {{-- @if (auth()->user()->check_administrator || auth()->user()->check_user_sales) --}}
-                            @canany(['super-admin', 'user-crm'])
+                            @canany(['super-admin', 'user-crm', 'admin-crm'])
                             <!--begin::Actions-->
                             <div class="d-flex align-items-center py-1">
 
@@ -79,7 +79,48 @@
                                     New</button>
 
                                 <!--begin::Wrapper-->
-                                
+                                <div class="me-4" style="margin-left:10px;">
+                                    <!--begin::Menu-->
+                                    <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary"
+                                        data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                        <i class="bi bi-folder2-open"></i>Action</a>
+                                    <!--begin::Menu 1-->
+                                    <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true"
+                                        id="kt_menu_6155ac804a1c2">
+                                        <!--begin::Header-->
+                                        <div class="px-7 py-5">
+                                            <div class="fs-5 text-dark fw-bolder">Choose actions:</div>
+                                        </div>
+                                        <!--end::Header-->
+                                        <!--begin::Menu separator-->
+                                        <div class="separator border-gray-200"></div>
+                                        <!--end::Menu separator-->
+                                        <!--begin::Form-->
+                                        <div class="">
+                                            <!--begin::Item-->
+                                            {{-- <button type="submit"
+                                                class="btn btn-active-primary dropdown-item rounded-0"
+                                                data-bs-toggle="modal" data-bs-target="#kt_modal_import"
+                                                id="kt_toolbar_import">
+                                                <i class="bi bi-file-earmark-spreadsheet"></i>Import Excel
+                                            </button> --}}
+                                            {{-- <a href="/proyek/export-proyek"
+                                                class="btn btn-active-primary dropdown-item rounded-0"
+                                                id="kt_toolbar_export">
+                                                <i class="bi bi-download"></i>Export Excel
+                                            </a> --}}
+                                            <a target="_blank" href="/proyek-datatables/set"
+                                                class="btn btn-active-primary dropdown-item rounded-0"
+                                                id="kt_toolbar_export">
+                                                <i class="bi bi-file-earmark-spreadsheet"></i>Set Data - proyek
+                                            </a>
+                                            <!--end::Item-->
+                                        </div>
+                                        <!--end::Form-->
+                                    </div>
+                                    <!--end::Menu 1-->
+                                    <!--end::Menu-->
+                                </div>
                                 <!--end::Wrapper-->
 
 
