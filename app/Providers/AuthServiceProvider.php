@@ -4,8 +4,9 @@ namespace App\Providers;
 
 use App\Models\User;
 use App\Models\Divisi;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use App\Models\MatriksApprovalChangeManagement;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -137,6 +138,27 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('user-scm', function (User $user) {
             return $user->check_user_sales && $user->role_scm;
+        });
+
+        Gate::define("lock-change", function (User $user, $profit_center) {
+            if ($user->check_administrator) {
+                return true;
+            }
+
+            if (!empty($user->proyeks_selected)) {
+                $proyekCollect = collect(json_decode($user->proyeks_selected));
+                return $user->check_admin_kontrak && $proyekCollect->contains($profit_center);
+            }
+
+            return false;
+        });
+
+        Gate::define('approve-change', function (User $user, $profit_center) {
+            if ($user->check_administrator) {
+                return true;
+            }
+
+            return MatriksApprovalChangeManagement::where("nip", $user->nip)->where("profit_center", $profit_center)->exists();
         });
         //
     }

@@ -3097,13 +3097,14 @@ class ClaimController extends Controller
         // $filterBulan = $request->query("bulan-perubahan");
         $filterStatus = $request->query("stage");
         // dd($filterStatus);
-        // $filterBulan = $data["bulan-perubahan"];
+        // $filterBulan = $data["bulan-proyek"];
         $data = $request->all();
         $link = $data["link"] ?? "kt_user_view_claim_VO";
-        $periode = isset($data["periode"]) ? (int) $data["periode"] : '';
+        // $periode = isset($data["periode"]) ? (int) $data["periode"] : '';
+        $periode = $request->get("periode") ?? (int) date("m");
+        $tahun = $request->get("tahun") ?? (int) date("Y");
+        // $tahun = isset($data["tahun"]) ? (int) $data["tahun"] : "";
 
-        $tahun = isset($data["tahun"]) ? (int) $data["tahun"] : "";
-        // dd($periode);
         $user = Auth::user();
         // dd($user->Pegawai);
 
@@ -3112,7 +3113,7 @@ class ClaimController extends Controller
         $contracts = ContractManagements::where("profit_center", "=", $profitCenter)->first();
         // dd($contracts);
 
-        if (empty($periode)) {
+        if ($periode == (int)date("m")) {
             if (!empty($filterStatus)) {
                 $claims = PerubahanKontrak::where("profit_center", "=", $profitCenter)->where("stage", "=", $filterStatus)->get();
             } else {
@@ -3120,9 +3121,9 @@ class ClaimController extends Controller
             }
         } else {
             if (!empty($filterStatus)) {
-                $claims = ContractApproval::where("profit_center", "=", $profitCenter)->where("stage", "=", $filterStatus)->where("periode", "=", $periode)->where("tahun", "=", $tahun)->get();
+                $claims = ContractApproval::where("profit_center", "=", $profitCenter)->where("stage", "=", $filterStatus)->where("periode_laporan", "=", $periode)->where("tahun", "=", $tahun)->get();
             } else {
-                $claims = ContractApproval::where("profit_center", "=", $profitCenter)->where("periode", "=", $periode)->where("tahun", "=", $tahun)->get();
+                $claims = ContractApproval::where("profit_center", "=", $profitCenter)->where("periode_laporan", "=", $periode)->where("tahun", "=", $tahun)->get();
             }
         }
 
@@ -3191,7 +3192,23 @@ class ClaimController extends Controller
         // dd($claims_vo);
 
         return view("claimManagement/viewDetail", compact([
-            "contracts", "claims_vo", "claims_klaim", "claims_anti_klaim", "claims_klaim_asuransi", "proyek", "claim_all", "link", "periode", "user", "profitCenter", "totalClaimVO", "totalClaimKlaim", "totalClaimAntiKlaim", "totalClaimKlaimAsuransi", "totalClaimAll"
+            "contracts",
+            "claims_vo",
+            "claims_klaim",
+            "claims_anti_klaim",
+            "claims_klaim_asuransi",
+            "proyek",
+            "claim_all",
+            "link",
+            "periode",
+            "tahun",
+            "user",
+            "profitCenter",
+            "totalClaimVO",
+            "totalClaimKlaim",
+            "totalClaimAntiKlaim",
+            "totalClaimKlaimAsuransi",
+            "totalClaimAll"
         ]));
     }
 

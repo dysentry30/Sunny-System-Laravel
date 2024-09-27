@@ -90,7 +90,7 @@
                                         class="form-select form-select-solid select2-hidden-accessible mx-3"
                                         data-control="select2" data-hide-search="true" data-placeholder="Bulan"
                                         tabindex="-1" aria-hidden="true">
-                                        <option {{ $month == '' ? 'selected' : '' }}></option>
+                                        {{-- <option {{ $month == '' ? 'selected' : '' }}></option> --}}
                                         <option value="1" {{ $filterBulan == 1 ? 'selected' : '' }}>Januari</option>
                                         <option value="2" {{ $filterBulan == 2 ? 'selected' : '' }}>Februari</option>
                                         <option value="3" {{ $filterBulan == 3 ? 'selected' : '' }}>Maret</option>
@@ -262,7 +262,9 @@
 
                                                 <div class="col-3 ps-5">
                                                     {{-- @if ($user->check_administrator || ($user->Pegawai->kode_jabatan == 410 && $user->Pegawai->kode_fungsi_bidang == 30100)) --}}
-                                                    @if ($user->check_administrator || auth()->user()->can("admin-ccm"))
+                                                    @canany(['approve-change', 'lock-change'], $history['profit_center'])
+                                                        {{-- @if ($user->check_administrator || auth()->user()->can("admin-ccm")) --}}
+                                                        @can('approve-change', $history['profit_center'])
                                                         <div class="d-flex flex-column flex-md-row gap-4 justify-content-center">
                                                             @if ($history['is_approved'] == "t")
                                                                     <a class="btn btn-success btn-sm disabled d-flex align-items-center">Approved</a>
@@ -281,8 +283,10 @@
                                                                 <a class="btn btn-primary btn-sm d-flex align-items-center" onclick="confirmAction(this, '{{ $history['profit_center'] }}')">Approve</a>
                                                                 <a class="btn btn-secondary btn-sm d-flex align-items-center" onclick="confirmAction(this, '{{ $history['profit_center'] }}')">Cancel</a>
                                                             @endif
-                                                        </div>
-                                                    @else
+                                                        </div>                                                            
+                                                        @endcan
+                                                        {{-- @else --}}
+                                                        @can('lock-change', $history['profit_center'])
                                                         <div class="d-flex flex-column flex-md-row gap-4 justify-content-center">
                                                             @if ($history['is_approved'] == "t")
                                                                 <a class="btn btn-success btn-sm d-flex align-items-center disabled">Approved</a>
@@ -300,8 +304,10 @@
                                                             @else
                                                                 <a class="btn btn-success btn-sm d-flex align-items-center disabled">Menunggu untuk approval...</a>
                                                             @endif
-                                                        </div>
-                                                    @endif
+                                                        </div>                                                            
+                                                        @endcan
+                                                        {{-- @endif                                                         --}}
+                                                    @endcanany
                                                 </div>
                                             </div>
                                         </div>
@@ -364,6 +370,7 @@
                     if(sendData.link){
                         window.location.reload();
                     }
+                    LOADING_BODY.release();
                 }else{
                     const formData = new FormData();
                     formData.append("_token", "{{ csrf_token() }}");
@@ -375,6 +382,7 @@
                     if(sendData.link){
                         window.location.reload();
                     }
+                    LOADING_BODY.release();
                 }
             }
 

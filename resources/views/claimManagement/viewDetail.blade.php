@@ -99,11 +99,12 @@
                                     $is_approved = \App\Models\ContractApproval::where(function($query) use($contracts){
                                         $query->where('id_contract', $contracts->id_contract)
                                         ->orWhere('profit_center', $contracts->profit_center);
-                                    })->where('is_locked', '=', true)->count() > 0;
+                                    })->where('is_locked', '=', true)->where("periode_laporan", $month)->count() > 0;
                                 @endphp
                                 <!--Jika User adalah Manager & Contract Management-->
                                 {{-- @if (($user->Pegawai?->kode_jabatan == 410 && $user->Pegawai?->kode_fungsi_bidang == 30100) || auth()->user()->check_administrator) --}}
-                                @if ((auth()->user()->can('ccm') && !empty(auth()->user()->proyek_selected)) || auth()->user()->check_administrator)
+                                {{-- @if ((auth()->user()->can('ccm') && !empty(auth()->user()->proyek_selected)) || auth()->user()->check_administrator) --}}
+                                @can('lock-change', $contracts->profit_center)
                                     <!--begin::Button-->
                                     @if ($contracts->where('stages', '!=', 1)->get()->isNotEmpty())
                                         {{-- @if (empty($is_approved) || $is_approved->isEmpty()) --}}
@@ -125,9 +126,12 @@
                                     {{-- @dump($periode) --}}
                                     <script>
                                         async function lockBulananContract() {
+                                            const eltPeriode = document.querySelector('#periode');
+                                            const selectedOption = eltPeriode.options[eltPeriode.selectedIndex].innerHTML;
+                                            
                                             Swal.fire({
-                                                title: '',
-                                                text: "Yakin Lock Bulan Ini?",
+                                                title: `Yakin Lock Bulan <b>${selectedOption}</b>?`,
+                                                text: 'Aksi ini tidak dapat dikembalikan!',
                                                 icon: "warning",
                                                 showCancelButton: true,
                                                 confirmButtonColor: '#008CB4',
@@ -142,7 +146,7 @@
                                                     formData.append("profit_center", "{{ $contracts->profit_center }}")
                                                     formData.append("kode_proyek", "{{ $contracts->project_id }}")
                                                     formData.append("periode", "{{ $periode }}")
-                                                    formData.append("tahun", "{{ (int) date('Y') }}")
+                                                    formData.append("tahun", "{{ (int) $tahun }}")
                                                     const sendData = await fetch("/contract-management/set-lock", {
                                                         method: "POST",
                                                         body: formData
@@ -150,12 +154,15 @@
                                                     if (sendData.link) {
                                                         window.location.reload();
                                                     }
+                                                }else{
+                                                    LOADING_BODY.release();
                                                 }
 
                                             })
                                         }
-                                    </script>
-                                @endif
+                                    </script>                                    
+                                @endcan
+                                {{-- @endif --}}
                                 @if ($claim_all->isNotEmpty())
                                 <div class="d-flex">
                                     <a href="#" onclick="exportToExcel(this, '#view_KlaimAll')" class="btn btn-sm btn-primary"
@@ -184,29 +191,49 @@
                                 <div class="col-xl-15">
                                     <div class="card card-flush h-lg-100 mt-7" id="kt_contacts_main">
                                         <div class="card-body pt-5 pb-0">
-                                            <form action="" class="d-flex flex-row w-auto" method="get">
-                                                <!--Begin:: Select Options-->
-                                                {{-- <select style="display: none !important" id="column" name="column" onchange="changes(this)"
-                                                    class="form-select form-select-solid select2-hidden-accessible"
-                                                    style="margin-right: 2rem" data-control="select2" data-hide-search="true"
-                                                    data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1"
-                                                    aria-hidden="true">
-                                                    <option value="unit_kerja" {{$column == "unit_kerja" ? "selected" : ""}}>Unit Kerja</option>
-                                                    <option value="jenis_proyek" {{$column == "jenis_proyek" ? "selected" : ""}}>Jenis Proyek</option>
-                
-                                                </select> --}}
-                                                <!--End:: Select Options-->
-                
-                                                 <!--begin::Select Options-->
-                                                 {{-- <div style="" id="filterBulan" class="d-flex align-items-center position-relative me-2"> --}}
-                                                    {{-- <select id="bulan-perubahan" name="bulan-perubahan" onchange="this.form.submit()"
-                                                        class="form-select form-select-solid select2-hidden-accessible"
+                                            <form action="" class="d-flex flex-row" method="get">
+                                                <!--begin::Select Options-->
+                                                <div style="" id="filterTahun" class="d-flex align-items-center position-relative me-3">
+                                                    <select id="tahun" name="tahun"
+                                                        class="form-select form-select-solid select2-hidden-accessible mx-3"
                                                         data-control="select2" data-hide-search="true" data-placeholder="Tahun"
                                                         tabindex="-1" aria-hidden="true">
-                                                        <option></option>
-                                                        <option selected>{{date("M")}}</option>
-                                                    </select> --}}
-                                                {{-- </div> --}}
+                                                        @if ($tahun == null)
+                                                            @for ($i = 2021; $i <= (int) date('Y'); $i++)
+                                                                <option value="{{ $i }}" {{ $tahun == $i ? 'selected' : '' }}>
+                                                                    {{ $i }}</option>
+                                                            @endfor
+                                                        @else
+                                                            @for ($i = 2021; $i <= (int) date('Y'); $i++)
+                                                                <option value="{{ $i }}" {{ $tahun == $i ? 'selected' : '' }}>
+                                                                    {{ $i }}</option>
+                                                            @endfor
+                                                        @endif
+                                                    </select>
+                                                </div>
+                                                <!--end::Select Options-->
+                
+                                                <!--begin::Select Options-->
+                                                <div style="" id="filterBulan" class="d-flex align-items-center position-relative me-5">
+                                                    <select id="periode" name="periode"
+                                                        class="form-select form-select-solid select2-hidden-accessible mx-3"
+                                                        data-control="select2" data-hide-search="true" data-placeholder="Bulan"
+                                                        tabindex="-1" aria-hidden="true">
+                                                        <option {{ $month == '' ? 'selected' : '' }}></option>
+                                                        <option value="1" {{ $periode == 1 ? 'selected' : '' }}>Januari</option>
+                                                        <option value="2" {{ $periode == 2 ? 'selected' : '' }}>Februari</option>
+                                                        <option value="3" {{ $periode == 3 ? 'selected' : '' }}>Maret</option>
+                                                        <option value="4" {{ $periode == 4 ? 'selected' : '' }}>April</option>
+                                                        <option value="5" {{ $periode == 5 ? 'selected' : '' }}>Mei</option>
+                                                        <option value="6" {{ $periode == 6 ? 'selected' : '' }}>Juni</option>
+                                                        <option value="7" {{ $periode == 7 ? 'selected' : '' }}>Juli</option>
+                                                        <option value="8" {{ $periode == 8 ? 'selected' : '' }}>Agustus</option>
+                                                        <option value="9" {{ $periode == 9 ? 'selected' : '' }}>September</option>
+                                                        <option value="10" {{ $periode == 10 ? 'selected' : '' }}>Oktober</option>
+                                                        <option value="11" {{ $periode == 11 ? 'selected' : '' }}>November</option>
+                                                        <option value="12" {{ $periode == 12 ? 'selected' : '' }}>Desember</option>
+                                                    </select>
+                                                </div>
                                                 <!--end::Select Options-->
                 
                                                 <div id="filterStatus" class="d-flex align-items-center position-relative">
@@ -215,7 +242,7 @@
                                                         data-control="select2" data-hide-search="true" data-placeholder="Status"
                                                         tabindex="-1" aria-hidden="true">
                                                         <option></option>
-                                                        <option value="1">Draft</option>
+                                                        {{-- <option value="1">Draft</option> --}}
                                                         <option value="2">Diajukan</option>
                                                         <option value="3">Revisi</option>
                                                         <option value="4">Negoisasi</option>
@@ -234,7 +261,9 @@
                                                     
                                                 <script>
                                                     function resetFilter() {
-                                                        window.location.href = "/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $contracts->id_contract }}";
+                                                        const periodeLaporan = '{{ $periode }}'
+                                                        const tahunLaporan = '{{ $tahun }}'
+                                                        window.location.href = `/claim-management/proyek/{{ $proyek->kode_proyek }}/{{ $contracts->id_contract }}?periode=${periodeLaporan}&tahun=${tahunLaporan}`;
                                                     }
                                                 </script>
                                                 <!--end:: RESET-->

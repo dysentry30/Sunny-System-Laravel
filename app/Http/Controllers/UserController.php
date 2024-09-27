@@ -917,6 +917,7 @@ class UserController extends Controller
 
                 if ($response["responseStatus"] != 0) {
                     // dd($response["responseData"]);
+                    $response["responseData"]["fcm_token"] = $request->get("fcm-token");
                     setLogging("login", "User Login WZONE Mobile => ",  $response["responseData"]);
                     $nip = $response["responseData"]["nip"];
                 } else {

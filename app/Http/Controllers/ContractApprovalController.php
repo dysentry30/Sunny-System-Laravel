@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ContractApproval;
-use App\Models\ContractManagements;
-use App\Models\PerubahanKontrak;
-use App\Models\ProyekPISNew;
+use stdClass;
 use App\Models\UnitKerja;
-use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Str;
+use App\Models\ProyekPISNew;
 use Illuminate\Http\Request;
+use App\Models\ContractApproval;
+use App\Models\PerubahanKontrak;
+use Illuminate\Support\Facades\DB;
+use App\Models\ContractManagements;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
-use stdClass;
-use Illuminate\Support\Facades\Log;
+use RealRashid\SweetAlert\Facades\Alert;
+use App\Models\MatriksApprovalChangeManagement;
 
 
 class ContractApprovalController extends Controller
@@ -68,6 +70,8 @@ class ContractApprovalController extends Controller
             $uraian_formatted = substr(preg_replace('/\s+/', ' ', str_replace('"', '', $item->uraian_perubahan)), 0, 255);
             $uraian_formatted = substr(preg_replace('/[\x{200B}-\x{200D}\x{FEFF}]/u', ' ', $uraian_formatted), 0, 255);
 
+            $isProposalDuplicate = $claims_all->where("proposal_klaim", $item->proposal_klaim)->count() > 1;
+
             // $profit_center = $item->Proyeks->profit_center;
             $profit_center = $item->profit_center;
             $newClass = new stdClass();
@@ -107,23 +111,63 @@ class ContractApprovalController extends Controller
 
             if ($item->stage == 5) {
                 if ($item->jenis_perubahan == "VO") {
-                    if ($item->nilai_negatif) {
-                        $newClass->CLAIM_AMOUNT = 0 - (int)$item->nilai_disetujui;
+                    if ($isProposalDuplicate) {
+                        $sumClaimAmount = $claims_all->where("proposal_klaim", $item->proposal_klaim)->sum(function ($change) {
+                            if ($change->nilai_negatif) {
+                                return 0 - (int)$change->nilai_disetujui;
+                            } else {
+                                return $change->nilai_disetujui;
+                            }
+                        });
+
+                        $newClass->CLAIM_AMOUNT = $sumClaimAmount;
+                    } else {
+                        if ($item->nilai_negatif) {
+                            $newClass->CLAIM_AMOUNT = 0 - (int)$item->nilai_disetujui;
+                        } else {
+                            $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
+                        }
+                    }
+                } else {
+                    if ($isProposalDuplicate) {
+                        $sumClaimAmount = $claims_all->where("proposal_klaim", $item->proposal_klaim)->sum(function ($change) {
+                            return $change->nilai_disetujui;
+                        });
+
+                        $newClass->CLAIM_AMOUNT = $sumClaimAmount;
                     } else {
                         $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
                     }
-                } else {
-                    $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
                 }
             } else {
                 if ($item->jenis_perubahan == "VO") {
-                    if ($item->nilai_negatif) {
-                        $newClass->CLAIM_AMOUNT = 0 - (int)$item->biaya_pengajuan;
+                    if ($isProposalDuplicate) {
+                        $sumClaimAmount = $claims_all->where("proposal_klaim", $item->proposal_klaim)->sum(function ($change) {
+                            if ($change->nilai_negatif) {
+                                return 0 - (int)$change->biaya_pengajuan;
+                            } else {
+                                return $change->biaya_pengajuan;
+                            }
+                        });
+
+                        $newClass->CLAIM_AMOUNT = $sumClaimAmount;
+                    } else {
+                        if ($item->nilai_negatif) {
+                            $newClass->CLAIM_AMOUNT = 0 - (int)$item->biaya_pengajuan;
+                        } else {
+                            $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
+                        }
+                    }
+                } else {
+                    if ($isProposalDuplicate) {
+                        $sumClaimAmount = $claims_all->where("proposal_klaim", $item->proposal_klaim)->sum(function ($change) {
+                            return $change->nilai_disetujui;
+                        });
+
+                        $newClass->CLAIM_AMOUNT = $sumClaimAmount;
                     } else {
                         $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
                     }
-                } else {
-                    $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
                 }
             }
 
@@ -170,6 +214,8 @@ class ContractApprovalController extends Controller
             $uraian_formatted = substr(preg_replace('/\s+/', ' ', str_replace('"', '', $item->uraian_perubahan)), 0, 255);
             $uraian_formatted = substr(preg_replace('/[\x{200B}-\x{200D}\x{FEFF}]/u', ' ', $uraian_formatted), 0, 255);
 
+            $isProposalDuplicate = $claims_all->where("proposal_klaim", $item->proposal_klaim)->count() > 1;
+
             // $profit_center = $item->Proyeks->profit_center;
             $profit_center = $item->profit_center;
             $newClass = new stdClass();
@@ -199,23 +245,63 @@ class ContractApprovalController extends Controller
 
             if ($item->stage == 5) {
                 if ($item->jenis_perubahan == "VO") {
-                    if ($item->nilai_negatif) {
-                        $newClass->CLAIM_AMOUNT = 0 - (int)$item->nilai_disetujui;
+                    if ($isProposalDuplicate) {
+                        $sumClaimAmount = $claims_all->where("proposal_klaim", $item->proposal_klaim)->sum(function ($change) {
+                            if ($change->nilai_negatif) {
+                                return 0 - (int)$change->nilai_disetujui;
+                            } else {
+                                return $change->nilai_disetujui;
+                            }
+                        });
+
+                        $newClass->CLAIM_AMOUNT = $sumClaimAmount;
+                    } else {
+                        if ($item->nilai_negatif) {
+                            $newClass->CLAIM_AMOUNT = 0 - (int)$item->nilai_disetujui;
+                        } else {
+                            $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
+                        }
+                    }
+                } else {
+                    if ($isProposalDuplicate) {
+                        $sumClaimAmount = $claims_all->where("proposal_klaim", $item->proposal_klaim)->sum(function ($change) {
+                            return $change->nilai_disetujui;
+                        });
+
+                        $newClass->CLAIM_AMOUNT = $sumClaimAmount;
                     } else {
                         $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
                     }
-                } else {
-                    $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
                 }
             } else {
                 if ($item->jenis_perubahan == "VO") {
-                    if ($item->nilai_negatif) {
-                        $newClass->CLAIM_AMOUNT = 0 - (int)$item->biaya_pengajuan;
+                    if ($isProposalDuplicate) {
+                        $sumClaimAmount = $claims_all->where("proposal_klaim", $item->proposal_klaim)->sum(function ($change) {
+                            if ($change->nilai_negatif) {
+                                return 0 - (int)$change->biaya_pengajuan;
+                            } else {
+                                return $change->biaya_pengajuan;
+                            }
+                        });
+
+                        $newClass->CLAIM_AMOUNT = $sumClaimAmount;
+                    } else {
+                        if ($item->nilai_negatif) {
+                            $newClass->CLAIM_AMOUNT = 0 - (int)$item->biaya_pengajuan;
+                        } else {
+                            $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
+                        }
+                    }
+                } else {
+                    if ($isProposalDuplicate) {
+                        $sumClaimAmount = $claims_all->where("proposal_klaim", $item->proposal_klaim)->sum(function ($change) {
+                            return $change->nilai_disetujui;
+                        });
+
+                        $newClass->CLAIM_AMOUNT = $sumClaimAmount;
                     } else {
                         $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
                     }
-                } else {
-                    $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
                 }
             }
 
@@ -263,7 +349,7 @@ class ContractApprovalController extends Controller
 
             $uraian_formatted = substr(preg_replace('/\s+/', ' ', str_replace('"', '', $item->uraian_perubahan)), 0, 255);
             $uraian_formatted = substr(preg_replace('/[\x{200B}-\x{200D}\x{FEFF}]/u', ' ', $uraian_formatted), 0, 255);
-
+            $isProposalDuplicate = $claims_all->where("proposal_klaim", $item->proposal_klaim)->count() > 1;
             // $profit_center = $item->Proyeks->profit_center;
             $profit_center = $item->profit_center;
             $newClass = new stdClass();
@@ -295,23 +381,63 @@ class ContractApprovalController extends Controller
 
             if ($item->stage == 5) {
                 if ($item->jenis_perubahan == "VO") {
-                    if ($item->nilai_negatif) {
-                        $newClass->CLAIM_AMOUNT = 0 - (int)$item->nilai_disetujui;
+                    if ($isProposalDuplicate) {
+                        $sumClaimAmount = $claims_all->where("proposal_klaim", $item->proposal_klaim)->sum(function ($change) {
+                            if ($change->nilai_negatif) {
+                                return 0 - (int)$change->nilai_disetujui;
+                            } else {
+                                return $change->nilai_disetujui;
+                            }
+                        });
+
+                        $newClass->CLAIM_AMOUNT = $sumClaimAmount;
+                    } else {
+                        if ($item->nilai_negatif) {
+                            $newClass->CLAIM_AMOUNT = 0 - (int)$item->nilai_disetujui;
+                        } else {
+                            $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
+                        }
+                    }
+                } else {
+                    if ($isProposalDuplicate) {
+                        $sumClaimAmount = $claims_all->where("proposal_klaim", $item->proposal_klaim)->sum(function ($change) {
+                            return $change->nilai_disetujui;
+                        });
+
+                        $newClass->CLAIM_AMOUNT = $sumClaimAmount;
                     } else {
                         $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
                     }
-                } else {
-                    $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
                 }
             } else {
                 if ($item->jenis_perubahan == "VO") {
-                    if ($item->nilai_negatif) {
-                        $newClass->CLAIM_AMOUNT = 0 - (int)$item->biaya_pengajuan;
+                    if ($isProposalDuplicate) {
+                        $sumClaimAmount = $claims_all->where("proposal_klaim", $item->proposal_klaim)->sum(function ($change) {
+                            if ($change->nilai_negatif) {
+                                return 0 - (int)$change->biaya_pengajuan;
+                            } else {
+                                return $change->biaya_pengajuan;
+                            }
+                        });
+
+                        $newClass->CLAIM_AMOUNT = $sumClaimAmount;
+                    } else {
+                        if ($item->nilai_negatif) {
+                            $newClass->CLAIM_AMOUNT = 0 - (int)$item->biaya_pengajuan;
+                        } else {
+                            $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
+                        }
+                    }
+                } else {
+                    if ($isProposalDuplicate) {
+                        $sumClaimAmount = $claims_all->where("proposal_klaim", $item->proposal_klaim)->sum(function ($change) {
+                            return $change->nilai_disetujui;
+                        });
+
+                        $newClass->CLAIM_AMOUNT = $sumClaimAmount;
                     } else {
                         $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
                     }
-                } else {
-                    $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
                 }
             }
             
@@ -369,58 +495,68 @@ class ContractApprovalController extends Controller
         //SAP PRODUCTION
 
         // FIRST STEP SEND DATA TO BW
-        $csrf_token = "";
-        $content_location = "";
-        // $response = getAPI("https://wtappbw-qas.wika.co.id:44350/sap/bw4/v1/push/dataStores/yodaltes4/requests", [], [], false);
-        // $http = Http::withBasicAuth("WIKA_API", "WikaWika2022");
-        $get_token = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => "Fetch"])->get("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests");
-        $csrf_token = $get_token->header("x-csrf-token");
-        $cookie = "";
-        collect($get_token->cookies()->toArray())->each(function ($c) use (&$cookie) {
-            $cookie .= $c["Name"] . "=" . $c["Value"] . ";";
-        });
+        if (env("APP_ENV") == "production") {
 
-        // SECOND STEP SEND DATA TO BW
-        $get_content_location = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests");
-        $content_location = $get_content_location->header("content-location");
+            $csrf_token = "";
+            $content_location = "";
+            // $response = getAPI("https://wtappbw-qas.wika.co.id:44350/sap/bw4/v1/push/dataStores/yodaltes4/requests", [], [], false);
+            // $http = Http::withBasicAuth("WIKA_API", "WikaWika2022");
+            $get_token = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => "Fetch"])->get("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests");
+            $csrf_token = $get_token->header("x-csrf-token");
+            $cookie = "";
+            collect($get_token->cookies()->toArray())->each(function ($c) use (&$cookie) {
+                $cookie .= $c["Name"] . "=" . $c["Value"] . ";";
+            });
+
+            // SECOND STEP SEND DATA TO BW
+            $get_content_location = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests");
+            $content_location = $get_content_location->header("content-location");
 
 
-        // THIRD STEP SEND DATA TO BW
-        // dd($new_class->toJson());
-        $fill_data = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/dataSend?request=$content_location&datapid=1", $data_claims->toArray());
+            // THIRD STEP SEND DATA TO BW
+            // dd($new_class->toJson());
+            $fill_data = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/dataSend?request=$content_location&datapid=1", $data_claims->toArray());
 
-        // FOURTH STEP SEND DATA TO BW
-        $closed_request = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests/$content_location/close");
-        // dd($closed_request, $data_claims, $fill_data);
+            // FOURTH STEP SEND DATA TO BW
+            $closed_request = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests/$content_location/close");
+            // dd($closed_request, $data_claims, $fill_data);
 
-        if ($fill_data->successful() && $closed_request->successful()) {
+            if ($fill_data->successful() && $closed_request->successful()) {
 
-            $this->setLogging('ccm_approval', "APPROVAL CCM => ", [
-                "KODE_PROYEK" => $claims_all->first()?->profit_center,
-                "DATA" => $data_claims->toArray() ?? [],
-                "STATUS" => "SUCCESS"
-            ]);
+                $this->setLogging('ccm_approval', "APPROVAL CCM => ", [
+                    "KODE_PROYEK" => $claims_all->first()?->profit_center,
+                    "DATA" => $data_claims->toArray() ?? [],
+                    "STATUS" => "SUCCESS"
+                ]);
 
-            $response_success = [
-                "statusCode" => 200,
-                "message" => "success"
-            ];
+                $response_success = [
+                    "statusCode" => 200,
+                    "message" => "success"
+                ];
 
-            return response()->json($response_success);
-        } else {
-            $this->setLogging('ccm_approval', "APPROVAL CCM => ", [
-                "KODE_PROYEK" => $claims_all->first()?->profit_center,
-                "DATA" => $data_claims->toArray() ?? [],
-                "STATUS" => "FAILED"
-            ]);
+                return response()->json($response_success);
+            } else {
+                $this->setLogging('ccm_approval', "APPROVAL CCM => ", [
+                    "KODE_PROYEK" => $claims_all->first()?->profit_center,
+                    "DATA" => $data_claims->toArray() ?? [],
+                    "STATUS" => "FAILED"
+                ]);
 
-            $response_success = [
-                "statusCode" => 400,
-                "message" => "failed"
-            ];
+                $response_success = [
+                    "statusCode" => 400,
+                    "message" => "failed"
+                ];
 
-            return response()->json($response_success);
+                return response()->json($response_success);
+            }
         }
+
+        $response_success = [
+            "statusCode" => 200,
+            "message" => "success"
+        ];
+
+        return response()->json($response_success);
     }
 
     public function index(Request $request){
@@ -428,11 +564,12 @@ class ContractApprovalController extends Controller
         $filterUnit = $request->query("filter-unit");
         $filterJenis = $request->query("filter-jenis");
         $filterTahun = $request->query("tahun-proyek") ?? (int) date("Y");
-        $filterBulan = $request->query("bulan-proyek") ?? "";
+        $filterBulan = $request->query("bulan-proyek") ?? (int) date('m');
         // dd($filterBulan);
 
         $year = (int) date("Y");
-        $month = (int) date('m') == 1 ? 12 : ((int)date('d') < 15 ? (int) date('m') : (int) date('m') - 1);
+        // $month = (int) date('m') == 1 ? 12 : ((int)date('d') < 15 ? (int) date('m') : (int) date('m') - 1);
+        // $month = (int) date('m');
 
         $tahun_proyeks = ContractApproval::get()->sortByDesc("tahun")->groupBy("tahun")->keys();
         $periode = (int)date("m") == 12 ? 1 : (int)date("m")-1;
@@ -458,14 +595,14 @@ class ContractApprovalController extends Controller
             $unit_kerja_get = !empty($request->query("filter-unit")) ? [$request->query("filter-unit")] : $unitkerjas->toArray();
 
             if (!empty($filterBulan) && $filterTahun >= 2023) {
-                $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode_laporan", "=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->get()->groupBy('kode_proyek');
+                $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode_laporan", "=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->get()->groupBy('profit_center');
             }else{
                 if($filterTahun < 2023 && !empty($filterBulan)){
-                    $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode_laporan", "=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->get()->groupBy('kode_proyek');
+                    $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode_laporan", "=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->get()->groupBy('profit_center');
                 }elseif($filterTahun < 2023 && empty($filterBulan)){
-                    $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode_laporan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->get()->groupBy('kode_proyek');
+                    $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode_laporan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->get()->groupBy('profit_center');
                 }else{
-                    $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode_laporan", "=", $month)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->get()->groupBy('kode_proyek');
+                    $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode_laporan", "=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->get()->groupBy('profit_center');
                 }    
             }
 
@@ -491,29 +628,32 @@ class ContractApprovalController extends Controller
 
             $unit_kerja_get = !empty($request->query("filter-unit")) ? [$request->query("filter-unit")] : $unitkerjas->toArray();
 
-            if (Gate::any(["admin-ccm"])) {
+            $collectProfitCenterApprover = MatriksApprovalChangeManagement::where("nip", Auth::user()->nip)->pluck("profit_center");
+
+            // if (Gate::any(["admin-ccm"])) {
+            if ($collectProfitCenterApprover?->isNotEmpty()) {
                 if (!empty($filterBulan) && $filterTahun >= 2023) {
-                    $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode_laporan", "=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->get()->groupBy('kode_proyek');
+                    $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode_laporan", "=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->whereIn("profit_center", $collectProfitCenterApprover->toArray())->get()->groupBy('profit_center');
                 } else {
                     if ($filterTahun < 2023 && !empty($filterBulan)) {
-                        $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode_laporan", "=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->get()->groupBy('kode_proyek');
+                        $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode_laporan", "=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->whereIn("profit_center", $collectProfitCenterApprover->toArray())->get()->groupBy('profit_center');
                     } elseif ($filterTahun < 2023 && empty($filterBulan)) {
-                        $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode_laporan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->get()->groupBy('kode_proyek');
+                        $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode_laporan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->whereIn("profit_center", $collectProfitCenterApprover->toArray())->get()->groupBy('profit_center');
                     } else {
-                        $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode_laporan", "=", $month)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->get()->groupBy('kode_proyek');
+                        $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode_laporan", "=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->whereIn("profit_center", $collectProfitCenterApprover->toArray())->get()->groupBy('profit_center');
                     }
                 }
             } elseif (Gate::any(["user-ccm"]) && !empty(Auth::user()->proyeks_selected)) {
                 $proyekSelected = !empty(Auth::user()->proyeks_selected) ? json_decode(Auth::user()->proyeks_selected) : [];
                 if (!empty($filterBulan) && $filterTahun >= 2023) {
-                    $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode_laporan", "=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->whereIn('profit_center', $proyekSelected)->get()->groupBy('kode_proyek');
+                    $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode_laporan", "=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->whereIn('profit_center', $proyekSelected)->get()->groupBy('profit_center');
                 } else {
                     if ($filterTahun < 2023 && !empty($filterBulan)) {
-                        $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode_laporan", "=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->whereIn('profit_center', $proyekSelected)->get()->groupBy('kode_proyek');
+                        $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode_laporan", "=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->whereIn('profit_center', $proyekSelected)->get()->groupBy('profit_center');
                     } elseif ($filterTahun < 2023 && empty($filterBulan)) {
-                        $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode_laporan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->whereIn('profit_center', $proyekSelected)->get()->groupBy('kode_proyek');
+                        $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode_laporan", "<=", 12)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->whereIn('profit_center', $proyekSelected)->get()->groupBy('profit_center');
                     } else {
-                        $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode_laporan", "=", $month)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->whereIn('profit_center', $proyekSelected)->get()->groupBy('kode_proyek');
+                        $contract_approval = ContractApproval::where("tahun", "=", $filterTahun)->where("periode_laporan", "=", $filterBulan)->whereIn("unit_kerja", $unit_kerja_get)->where("is_locked", "!=", false)->whereIn('profit_center', $proyekSelected)->get()->groupBy('profit_center');
                     }
                 }
             } else {
@@ -576,40 +716,40 @@ class ContractApprovalController extends Controller
 
                 switch ($approval->first()->periode_laporan) {
                     case 1:
-                        $month = "Januari";
+                        $namaBulan = "Januari";
                         break;
                     case 2:
-                        $month = "Februari";
+                        $namaBulan = "Februari";
                         break;
                     case 3:
-                        $month = "Maret";
+                        $namaBulan = "Maret";
                         break;
                     case 4:
-                        $month = "April";
+                        $namaBulan = "April";
                         break;
                     case 5:
-                        $month = "Mei";
+                        $namaBulan = "Mei";
                         break;
                     case 6:
-                        $month = "Juni";
+                        $namaBulan = "Juni";
                         break;
                     case 7:
-                        $month = "Juli";
+                        $namaBulan = "Juli";
                         break;
                     case 8:
-                        $month = "Agustus";
+                        $namaBulan = "Agustus";
                         break;
                     case 9:
-                        $month = "September";
+                        $namaBulan = "September";
                         break;
                     case 10:
-                        $month = "Oktober";
+                        $namaBulan = "Oktober";
                         break;
                     case 11:
-                        $month = "November";
+                        $namaBulan = "November";
                         break;
                     case 12:
-                        $month = "Desember";
+                        $namaBulan = "Desember";
                         break;
                 }
 
@@ -636,7 +776,7 @@ class ContractApprovalController extends Controller
                     'jumlah_klaim_asuransi_approve' => $jumlah_klaim_asuransi_approve,
                     // 'nilai_kontrak' => $approval->first()->Proyeks->nilai_kontrak ?? 0,
                     'nilai_kontrak' => $approval->first()->ProyekPISNew->contract_value_idr ?? 0,
-                    'periode' => $month,
+                    'periode' => $namaBulan,
                     // 'unit_kerja' => $approval->first()->Proyeks->UnitKerja->unit_kerja,
                     'unit_kerja' => $approval->first()->ProyekPISNew->UnitKerja->unit_kerja,
                     'is_approved' => $approval->first()->is_approved,
@@ -652,7 +792,7 @@ class ContractApprovalController extends Controller
 
         // $is_exist_history = ContractApproval::where("periode_laporan", $periode)->where("is_locked", "!=", false)->get();
         // dd($contract_approval->groupBy('kode_proyek'));
-        return view("15_CCM_Approval", compact(["approvals", "tahun_proyeks", "filterTahun", "month", "filterBulan", "unit_kerjas_select", "filterUnit", "user"]));
+        return view("15_CCM_Approval", compact(["approvals", "tahun_proyeks", "filterTahun", "filterBulan", "unit_kerjas_select", "filterUnit", "user"]));
     }
 
     // public function lockApproval(Request $request){
@@ -779,10 +919,20 @@ class ContractApprovalController extends Controller
     public function lockApprovalRev(Request $request)
     {
         $data = $request->all();
+        $periode = $request->get("periode");
+
+        if (empty($periode)) {
+            Alert::error("Error", "Terjadi Kesalahan, Hubungi Admin!");
+            return response()->json([
+                "status" => "error",
+                "link" => false,
+            ]);
+        }
+        
         $approval = ContractApproval::where(function ($query) use ($data) {
             $query->where('id_contract', $data['id_contract'])
             ->orWhere('profit_center', $data['profit_center']);
-        })->where('periode_laporan', '=', $data["periode"])->get();
+        })->where('periode_laporan', '=', (int)$periode)->get();
         $claims = PerubahanKontrak::select(['id_perubahan_kontrak',
             'kode_proyek',
             'id_contract',
@@ -803,7 +953,6 @@ class ContractApprovalController extends Controller
             ->orWhere('profit_center', $data['profit_center']);
         })->get();
 
-        // dd($approval);
         if ($approval->isNotEmpty()) {
             try {
                 $approval = $approval->keyBy('perubahan_id')->map(function ($item, $key) use ($claims) {
@@ -817,6 +966,7 @@ class ContractApprovalController extends Controller
                     $item->nilai_disetujui = $claim->nilai_disetujui;
                     $item->waktu_disetujui = $claim->waktu_disetujui;
                     $item->stage = $claim->stage;
+                    $item->kd_divisi = $claim->ProyekPISNew->kd_divisi;
                     $item->is_locked = true;
                     $item->save();
                     return true;
@@ -858,19 +1008,28 @@ class ContractApprovalController extends Controller
             // $approval->stage = 1;
         } else {
             try {
-                if ((int)date('d') < 15) {
-                    if ((int)date('m') == 1) {
-                        $periode = 1;
-                    } else {
-                        $periode = (int)date("m");
-                    }
-                } else {
-                    if ((int)date('m') == 1) {
-                        $periode = 12;
-                    } else {
-                        $periode = (int)date("m") - 1;
+                // if ((int)date('d') < 15) {
+                //     if ((int)date('m') == 1) {
+                //         $periode = 1;
+                //     } else {
+                //         $periode = (int)date("m");
+                //     }
+                // } else {
+                //     if ((int)date('m') == 1) {
+                //         $periode = 12;
+                //     } else {
+                //         $periode = (int)date("m") - 1;
+                //     }
+                // }
+
+                if ((int)$periode == (int)date("m")) {
+                    if ((int) date("d") < 15) {
+                        if ($periode != 1) {
+                            $periode = (int)$periode - 1;
+                        }
                     }
                 }
+
                 $approval = new ContractApproval();
                 $data_approval = $claims->map(function ($claim) use ($periode) {
                     // $claim['periode'] = $periode;
@@ -881,6 +1040,7 @@ class ContractApprovalController extends Controller
                     $claim['unit_kerja'] = $claim->ProyekPISNew->kd_divisi;
                     $claim['is_locked'] = true;
                     $claim->nilai_negatif = $claim->nilai_negatif ?: false;
+                    $claim["kd_divisi"] = $claim->ProyekPISNew->kd_divisi;
                     // $claim['perubahan_id'] = $claim->id;
                     // $claim->makeHidden(['Proyek', 'id']); //Untuk menghilangkan relasi agar tidak masuk ke array
                     $claim->makeHidden(['ProyekPISNew', 'id_perubahan_kontrak']); //Untuk menghilangkan relasi agar tidak masuk ke array
@@ -956,54 +1116,69 @@ class ContractApprovalController extends Controller
         $month = (int) date('m') == 1 ? 12 : ((int)date('d') < 15 ? (int) date('m') : (int) date('m') - 1);
 
         $periode = !empty($data['periode']) ? $data['periode'] : $month;
+        DB::beginTransaction();
+        try {
+            // $approval = ContractApproval::where("id_contract", "=", $id_contract)->where("periode_laporan", $periode);
+            $approval = ContractApproval::where(function ($query) use ($id_contract) {
+                $query->where("id_contract", $id_contract)
+                    ->orWhere("profit_center", $id_contract);
+            })->where("periode_laporan", $periode);
+            // dd($periode, $approval->update(['is_approved' => $data['approve']]));
 
-        // $approval = ContractApproval::where("id_contract", "=", $id_contract)->where("periode_laporan", $periode);
-        $approval = ContractApproval::where(function ($query) use ($id_contract) {
-            $query->where("id_contract", $id_contract)
-                ->orWhere("profit_center", $id_contract);
-        })->where("periode_laporan", $periode);
-        // dd($periode, $approval->update(['is_approved' => $data['approve']]));
+            // $approval->is_approved = $data["approve"];
 
-        // $approval->is_approved = $data["approve"];
+            // $approval->save();
 
-        // $approval->save();
+            // dd($this->sendDataSAP($id_contract, $periode));
 
-        // dd($this->sendDataSAP($id_contract, $periode));
-
-        if ($data["approve"] == 't') {
-            $update = $approval->update(['is_approved' => $data['approve']]);
-            if ($update) {
-                $get_response = $this->sendDataSAP($id_contract, $periode);
-                if ($get_response->original["statusCode"] == 200) {
-                    Alert::success("success", "Contract berhasil di Approve");
-                    return response()->json([
-                        "status" => "success",
-                        "link" => true,
-                    ]);
-                }else{
-                    Alert::error("error", "Contract gagal di Approve");
+            if (
+                $data["approve"] == 't'
+            ) {
+                $update = $approval->update(['is_approved' => $data['approve']]);
+                if ($update) {
+                    $get_response = $this->sendDataSAP($id_contract, $periode);
+                    if ($get_response->original["statusCode"] == 200) {
+                        DB::commit();
+                        Alert::success("success", "Contract berhasil di Approve");
+                        return response()->json([
+                            "status" => "success",
+                            "link" => true,
+                        ]);
+                    } else {
+                        DB::rollback();
+                        Alert::error("error", "Contract gagal di Approve");
+                        return response()->json([
+                            "status" => "error",
+                            "link" => false,
+                        ]);
+                    }
+                } else {
+                    DB::rollback();
+                    Alert::error("error", "Contract gagal di Approve, Hubungi Admin");
                     return response()->json([
                         "status" => "error",
                         "link" => false,
                     ]);
                 }
             } else {
-                Alert::error("error", "Contract gagal di Approve, Hubungi Admin");
-                return response()->json([
-                    "status" => "error",
-                    "link" => false,
-                ]);
+                $update = $approval->update(['is_approved' => $data['approve']]);
+                if ($update) {
+                    DB::commit();
+                    return response()->json([
+                        "status" => "success",
+                        "link" => true,
+                    ]);
+                }
             }
-
-        }else{
-            $update = $approval->update(['is_approved' => $data['approve']]);
-            if ($update) {
-                return response()->json([
-                "status" => "success",
-                "link" => true,
-                ]);
-            }
+        } catch (\Exception $e) {
+            DB::rollback();
+            Alert::error("error", $e->getMessage());
+            return response()->json([
+                "status" => "error",
+                "link" => false,
+            ]);
         }
+
 
     }
 
@@ -1411,6 +1586,7 @@ class ContractApprovalController extends Controller
                 $claim['tahun'] = date('Y');
                 $claim['unit_kerja'] = $claim->kd_divisi;
                 $claim['is_locked'] = true;
+                $claim['kd_divisi'] = $claim->ProyekPISNew->kd_divisi;;
                 $claim->nilai_negatif = $claim->nilai_negatif ?: false;
                 // $claim['perubahan_id'] = $claim->id;
                 // $claim->makeHidden(['Proyek', 'id']); //Untuk menghilangkan relasi agar tidak masuk ke array

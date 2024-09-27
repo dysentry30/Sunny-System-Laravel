@@ -199,7 +199,7 @@ class ScheduleOtorisasiContract extends Command
 
             $uraian_formatted = substr(preg_replace('/\s+/', ' ', str_replace('"', '', $item->uraian_perubahan)), 0, 255);
             $uraian_formatted = substr(preg_replace('/[\x{200B}-\x{200D}\x{FEFF}]/u', ' ', $uraian_formatted), 0, 255);
-
+            $isProposalDuplicate = $claims_all->where("proposal_klaim", $item->proposal_klaim)->count() > 1;
             // $profit_center = $item->Proyeks->profit_center;
             $profit_center = $item->profit_center;
             $newClass = new stdClass();
@@ -239,23 +239,63 @@ class ScheduleOtorisasiContract extends Command
 
             if ($item->stage == 5) {
                 if ($item->jenis_perubahan == "VO") {
-                    if ($item->nilai_negatif) {
-                        $newClass->CLAIM_AMOUNT = 0 - (int)$item->nilai_disetujui;
+                    if ($isProposalDuplicate) {
+                        $sumClaimAmount = $claims_all->where("proposal_klaim", $item->proposal_klaim)->sum(function ($change) {
+                            if ($change->nilai_negatif) {
+                                return 0 - (int)$change->nilai_disetujui;
+                            } else {
+                                return $change->nilai_disetujui;
+                            }
+                        });
+
+                        $newClass->CLAIM_AMOUNT = $sumClaimAmount;
+                    } else {
+                        if ($item->nilai_negatif) {
+                            $newClass->CLAIM_AMOUNT = 0 - (int)$item->nilai_disetujui;
+                        } else {
+                            $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
+                        }
+                    }
+                } else {
+                    if ($isProposalDuplicate) {
+                        $sumClaimAmount = $claims_all->where("proposal_klaim", $item->proposal_klaim)->sum(function ($change) {
+                            return $change->nilai_disetujui;
+                        });
+
+                        $newClass->CLAIM_AMOUNT = $sumClaimAmount;
                     } else {
                         $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
                     }
-                } else {
-                    $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
                 }
             } else {
                 if ($item->jenis_perubahan == "VO") {
-                    if ($item->nilai_negatif) {
-                        $newClass->CLAIM_AMOUNT = 0 - (int)$item->biaya_pengajuan;
+                    if ($isProposalDuplicate) {
+                        $sumClaimAmount = $claims_all->where("proposal_klaim", $item->proposal_klaim)->sum(function ($change) {
+                            if ($change->nilai_negatif) {
+                                return 0 - (int)$change->biaya_pengajuan;
+                            } else {
+                                return $change->biaya_pengajuan;
+                            }
+                        });
+
+                        $newClass->CLAIM_AMOUNT = $sumClaimAmount;
+                    } else {
+                        if ($item->nilai_negatif) {
+                            $newClass->CLAIM_AMOUNT = 0 - (int)$item->biaya_pengajuan;
+                        } else {
+                            $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
+                        }
+                    }
+                } else {
+                    if ($isProposalDuplicate) {
+                        $sumClaimAmount = $claims_all->where("proposal_klaim", $item->proposal_klaim)->sum(function ($change) {
+                            return $change->nilai_disetujui;
+                        });
+
+                        $newClass->CLAIM_AMOUNT = $sumClaimAmount;
                     } else {
                         $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
                     }
-                } else {
-                    $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
                 }
             }
 
@@ -301,7 +341,7 @@ class ScheduleOtorisasiContract extends Command
 
             $uraian_formatted = substr(preg_replace('/\s+/', ' ', str_replace('"', '', $item->uraian_perubahan)), 0, 255);
             $uraian_formatted = substr(preg_replace('/[\x{200B}-\x{200D}\x{FEFF}]/u', ' ', $uraian_formatted), 0, 255);
-
+            $isProposalDuplicate = $claims_all->where("proposal_klaim", $item->proposal_klaim)->count() > 1;
             // $profit_center = $item->Proyeks->profit_center;
             $profit_center = $item->profit_center;
             $newClass = new stdClass();
@@ -331,23 +371,63 @@ class ScheduleOtorisasiContract extends Command
 
             if ($item->stage == 5) {
                 if ($item->jenis_perubahan == "VO") {
-                    if ($item->nilai_negatif) {
-                        $newClass->CLAIM_AMOUNT = 0 - (int)$item->nilai_disetujui;
+                    if ($isProposalDuplicate) {
+                        $sumClaimAmount = $claims_all->where("proposal_klaim", $item->proposal_klaim)->sum(function ($change) {
+                            if ($change->nilai_negatif) {
+                                return 0 - (int)$change->nilai_disetujui;
+                            } else {
+                                return $change->nilai_disetujui;
+                            }
+                        });
+
+                        $newClass->CLAIM_AMOUNT = $sumClaimAmount;
+                    } else {
+                        if ($item->nilai_negatif) {
+                            $newClass->CLAIM_AMOUNT = 0 - (int)$item->nilai_disetujui;
+                        } else {
+                            $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
+                        }
+                    }
+                } else {
+                    if ($isProposalDuplicate) {
+                        $sumClaimAmount = $claims_all->where("proposal_klaim", $item->proposal_klaim)->sum(function ($change) {
+                            return $change->nilai_disetujui;
+                        });
+
+                        $newClass->CLAIM_AMOUNT = $sumClaimAmount;
                     } else {
                         $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
                     }
-                } else {
-                    $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
                 }
             } else {
                 if ($item->jenis_perubahan == "VO") {
-                    if ($item->nilai_negatif) {
-                        $newClass->CLAIM_AMOUNT = 0 - (int)$item->biaya_pengajuan;
+                    if ($isProposalDuplicate) {
+                        $sumClaimAmount = $claims_all->where("proposal_klaim", $item->proposal_klaim)->sum(function ($change) {
+                            if ($change->nilai_negatif) {
+                                return 0 - (int)$change->biaya_pengajuan;
+                            } else {
+                                return $change->biaya_pengajuan;
+                            }
+                        });
+
+                        $newClass->CLAIM_AMOUNT = $sumClaimAmount;
+                    } else {
+                        if ($item->nilai_negatif) {
+                            $newClass->CLAIM_AMOUNT = 0 - (int)$item->biaya_pengajuan;
+                        } else {
+                            $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
+                        }
+                    }
+                } else {
+                    if ($isProposalDuplicate) {
+                        $sumClaimAmount = $claims_all->where("proposal_klaim", $item->proposal_klaim)->sum(function ($change) {
+                            return $change->nilai_disetujui;
+                        });
+
+                        $newClass->CLAIM_AMOUNT = $sumClaimAmount;
                     } else {
                         $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
                     }
-                } else {
-                    $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
                 }
             }
 
@@ -395,7 +475,7 @@ class ScheduleOtorisasiContract extends Command
 
             $uraian_formatted = substr(preg_replace('/\s+/', ' ', str_replace('"', '', $item->uraian_perubahan)), 0, 255);
             $uraian_formatted = substr(preg_replace('/[\x{200B}-\x{200D}\x{FEFF}]/u', ' ', $uraian_formatted), 0, 255);
-
+            $isProposalDuplicate = $claims_all->where("proposal_klaim", $item->proposal_klaim)->count() > 1;
             // $profit_center = $item->Proyeks->profit_center;
             $profit_center = $item->profit_center;
             $newClass = new stdClass();
@@ -427,23 +507,63 @@ class ScheduleOtorisasiContract extends Command
 
             if ($item->stage == 5) {
                 if ($item->jenis_perubahan == "VO") {
-                    if ($item->nilai_negatif) {
-                        $newClass->CLAIM_AMOUNT = 0 - (int)$item->nilai_disetujui;
+                    if ($isProposalDuplicate) {
+                        $sumClaimAmount = $claims_all->where("proposal_klaim", $item->proposal_klaim)->sum(function ($change) {
+                            if ($change->nilai_negatif) {
+                                return 0 - (int)$change->nilai_disetujui;
+                            } else {
+                                return $change->nilai_disetujui;
+                            }
+                        });
+
+                        $newClass->CLAIM_AMOUNT = $sumClaimAmount;
+                    } else {
+                        if ($item->nilai_negatif) {
+                            $newClass->CLAIM_AMOUNT = 0 - (int)$item->nilai_disetujui;
+                        } else {
+                            $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
+                        }
+                    }
+                } else {
+                    if ($isProposalDuplicate) {
+                        $sumClaimAmount = $claims_all->where("proposal_klaim", $item->proposal_klaim)->sum(function ($change) {
+                            return $change->nilai_disetujui;
+                        });
+
+                        $newClass->CLAIM_AMOUNT = $sumClaimAmount;
                     } else {
                         $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
                     }
-                } else {
-                    $newClass->CLAIM_AMOUNT = (int)$item->nilai_disetujui;
                 }
             } else {
                 if ($item->jenis_perubahan == "VO") {
-                    if ($item->nilai_negatif) {
-                        $newClass->CLAIM_AMOUNT = 0 - (int)$item->biaya_pengajuan;
+                    if ($isProposalDuplicate) {
+                        $sumClaimAmount = $claims_all->where("proposal_klaim", $item->proposal_klaim)->sum(function ($change) {
+                            if ($change->nilai_negatif) {
+                                return 0 - (int)$change->biaya_pengajuan;
+                            } else {
+                                return $change->biaya_pengajuan;
+                            }
+                        });
+
+                        $newClass->CLAIM_AMOUNT = $sumClaimAmount;
+                    } else {
+                        if ($item->nilai_negatif) {
+                            $newClass->CLAIM_AMOUNT = 0 - (int)$item->biaya_pengajuan;
+                        } else {
+                            $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
+                        }
+                    }
+                } else {
+                    if ($isProposalDuplicate) {
+                        $sumClaimAmount = $claims_all->where("proposal_klaim", $item->proposal_klaim)->sum(function ($change) {
+                            return $change->nilai_disetujui;
+                        });
+
+                        $newClass->CLAIM_AMOUNT = $sumClaimAmount;
                     } else {
                         $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
                     }
-                } else {
-                    $newClass->CLAIM_AMOUNT = (int)$item->biaya_pengajuan;
                 }
             }
 
@@ -501,48 +621,52 @@ class ScheduleOtorisasiContract extends Command
         //SAP PRODUCTION
 
         // FIRST STEP SEND DATA TO BW
-        $csrf_token = "";
-        $content_location = "";
-        // $response = getAPI("https://wtappbw-qas.wika.co.id:44350/sap/bw4/v1/push/dataStores/yodaltes4/requests", [], [], false);
-        // $http = Http::withBasicAuth("WIKA_API", "WikaWika2022");
-        $get_token = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => "Fetch"])->get("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests");
-        $csrf_token = $get_token->header("x-csrf-token");
-        $cookie = "";
-        collect($get_token->cookies()->toArray())->each(function ($c) use (&$cookie) {
-            $cookie .= $c["Name"] . "=" . $c["Value"] . ";";
-        });
+        if (env("APP_ENV") == "production") {
+            $csrf_token = "";
+            $content_location = "";
+            // $response = getAPI("https://wtappbw-qas.wika.co.id:44350/sap/bw4/v1/push/dataStores/yodaltes4/requests", [], [], false);
+            // $http = Http::withBasicAuth("WIKA_API", "WikaWika2022");
+            $get_token = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => "Fetch"])->get("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests");
+            $csrf_token = $get_token->header("x-csrf-token");
+            $cookie = "";
+            collect($get_token->cookies()->toArray())->each(function ($c) use (&$cookie) {
+                $cookie .= $c["Name"] . "=" . $c["Value"] . ";";
+            });
 
-        // SECOND STEP SEND DATA TO BW
-        $get_content_location = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests");
-        $content_location = $get_content_location->header("content-location");
+            // SECOND STEP SEND DATA TO BW
+            $get_content_location = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests");
+            $content_location = $get_content_location->header("content-location");
 
 
-        // THIRD STEP SEND DATA TO BW
-        // dd($new_class->toJson());
-        $fill_data = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/dataSend?request=$content_location&datapid=1", $data_claims->toArray());
+            // THIRD STEP SEND DATA TO BW
+            // dd($new_class->toJson());
+            $fill_data = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/dataSend?request=$content_location&datapid=1", $data_claims->toArray());
 
-        // FOURTH STEP SEND DATA TO BW
-        $closed_request = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests/$content_location/close");
-        // dd($closed_request, $data_claims, $fill_data);
-        // integrationLog("OTORISASI CLAIMS", $data_claims->toJson(), json_encode(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"]), $fill_data->status(), $fill_data->body(), null, null);
+            // FOURTH STEP SEND DATA TO BW
+            $closed_request = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests/$content_location/close");
+            // dd($closed_request, $data_claims, $fill_data);
+            // integrationLog("OTORISASI CLAIMS", $data_claims->toJson(), json_encode(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"]), $fill_data->status(), $fill_data->body(), null, null);
 
-        if ($fill_data->successful() && $closed_request->successful()) {
+            if ($fill_data->successful() && $closed_request->successful()) {
 
-            setLogging('Scheduller/ApprovalCCM', "APPROVAL CCM => ", [
-                "KODE_PROYEK" => $claims_all->first()?->profit_center,
-                "DATA" => $data_claims->toArray() ?? [],
-                "STATUS" => "SUCCESS"
-            ]);
+                setLogging('Scheduller/ApprovalCCM', "APPROVAL CCM => ", [
+                    "KODE_PROYEK" => $claims_all->first()?->profit_center,
+                    "DATA" => $data_claims->toArray() ?? [],
+                    "STATUS" => "SUCCESS"
+                ]);
 
-            return true;
-        } else {
-            setLogging('Scheduller/ErrorApprovalCCM', "APPROVAL CCM => ", [
-                "KODE_PROYEK" => $claims_all->first()?->profit_center,
-                "DATA" => $data_claims->toArray() ?? [],
-                "STATUS" => "FAILED"
-            ]);
+                return true;
+            } else {
+                setLogging('Scheduller/ErrorApprovalCCM', "APPROVAL CCM => ", [
+                    "KODE_PROYEK" => $claims_all->first()?->profit_center,
+                    "DATA" => $data_claims->toArray() ?? [],
+                    "STATUS" => "FAILED"
+                ]);
 
-            return false;
+                return false;
+            }
         }
+
+        return true;
     }
 }
