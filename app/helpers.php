@@ -1670,7 +1670,7 @@ function createWordProfileRisikoNew($kode_proyek)
     // $section->addTextBreak(1);
     $section->addText("Catatan untuk skoring :", ['size' => 8, 'bold' => true], ['align' => 'left']);
     $section->addTextRun(['spaceAfter' => 0])->addText(htmlspecialchars("340 <= X <= 400         : Risiko Rendah"), ['size' => 8, 'bgColor' => $kriteriaFinal == "Risiko Rendah" ? 'FFB77D' : ''], ['align' => 'left']);
-    $section->addTextRun(['spaceAfter' => 0])->addText(htmlspecialchars("260 <= X <= 240         : Risiko Moderat"), ['size' => 8, 'bgColor' => $kriteriaFinal == "Risiko Moderat" ? 'FFB77D' : ''], ['align' => 'left']);
+    $section->addTextRun(['spaceAfter' => 0])->addText(htmlspecialchars("260 <= X <= 340         : Risiko Moderat"), ['size' => 8, 'bgColor' => $kriteriaFinal == "Risiko Moderat" ? 'FFB77D' : ''], ['align' => 'left']);
     $section->addTextRun(['spaceAfter' => 0])->addText(htmlspecialchars("180 <= X <= 260         : Risiko Tinggi"), ['size' => 8, 'bgColor' => $kriteriaFinal == "Risiko Tinggi" ? 'FFB77D' : ''], ['align' => 'left']);
     $section->addTextRun(['spaceAfter' => 0])->addText(htmlspecialchars("100 <= X <= 180         : Risiko Ekstrim"), ['size' => 8, 'bgColor' => $kriteriaFinal == "Risiko Ekstrim" ? 'FFB77D' : ''], ['align' => 'left']);
     //End::Rumus
