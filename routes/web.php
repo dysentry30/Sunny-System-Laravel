@@ -41,8 +41,10 @@ use App\Models\ProyekBerjalans;
 use App\Models\SiteInstruction;
 use Karriere\PdfMerge\PdfMerge;
 use App\Models\MasterAlatProyek;
+use App\Models\MasterSumberDaya;
 use App\Models\KriteriaGreenLine;
 use App\Models\MasterFortuneRank;
+use App\Models\MasterHargaSatuan;
 use Illuminate\Http\UploadedFile;
 use App\Models\KriteriaAssessment;
 use App\Models\MasterGrupTierBUMN;
@@ -70,7 +72,9 @@ use App\Models\MasterSubKlasifikasiSBU;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\FaqsController;
 use App\Http\Controllers\UserController;
+use App\Models\AnalisaHargaSatuanDetail;
 use App\Models\KriteriaPenilaianPefindo;
+use App\Models\MasterAnalisaHargaSatuan;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\ClaimController;
 use App\Http\Controllers\PasalController;
@@ -125,6 +129,7 @@ use App\Http\Controllers\VerifikasiProyekNota2Controller;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
 use App\Http\Controllers\ApprovalTerkontrakProyekController;
+use App\Http\Controllers\MasterAnalisaHargaSatuanController;
 use App\Http\Controllers\VerifikasiInternalPartnerController;
 use App\Http\Controllers\AssessmentPartnerSelectionController;
 use App\Http\Controllers\KriteriaSelectionNonGreenlaneController;
@@ -7603,62 +7608,215 @@ Route::get('/testing-qr', function (Request $request) {
     return createWordNotaRekomendasiPengajuan($notaRekomendasi, $request);
 });
 
-Route::get('insert-bulan-rkap', function () {
-    $proyeks = Proyek::where("tahun_perolehan", 2024)->where("tipe_proyek", "P")->where("is_rkap", true)->whereNotNull("bulan_rkap")->get();
+// Route::get('insert-bulan-rkap', function () {
+//     $proyeks = Proyek::where("tahun_perolehan", 2024)->where("tipe_proyek", "P")->where("is_rkap", true)->whereNotNull("bulan_rkap")->get();
 
-    $proyeks->each(function ($proyek) {
-        $proyek->bulan_rkap_review = $proyek->bulan_rkap;
-        $proyek->nilai_rkap_review = $proyek->nilai_ok_rkap;
-        $proyek->save();
-    });
+//     $proyeks->each(function ($proyek) {
+//         $proyek->bulan_rkap_review = $proyek->bulan_rkap;
+//         $proyek->nilai_rkap_review = $proyek->nilai_ok_rkap;
+//         $proyek->save();
+//     });
 
-    dd($proyeks->where("bulan_rkap_review", "!=", null));
+//     dd($proyeks->where("bulan_rkap_review", "!=", null));
+// });
+
+// Route::post('copy-forecast', function (Request $request) {
+//     $data = $request->all();
+
+//     try {
+//         DB::beginTransaction();
+
+//         $historyForecast = HistoryForecast::where("periode_prognosa", $data["periode_prognosa"])->where("tahun", $data["tahun"])->get();
+
+//         $totalData = 0;
+
+//         $isExistForecastPeriode = Forecast::where("periode_prognosa", $data["periode_prognosa"])->where("tahun", $data["tahun"])->get();
+
+//         if ($isExistForecastPeriode->isNotEmpty()) {
+//             DB::table('forecasts')->where("periode_prognosa", $data["periode_prognosa"])->where("tahun", $data["tahun"])->delete();
+//         }
+
+//         $historyForecast->each(function ($h) use (&$totalData) {
+//             $newForecast = new Forecast();
+//             $newForecast->kode_proyek = $h->kode_proyek;
+//             $newForecast->nilai_forecast = $h->nilai_forecast;
+//             $newForecast->month_forecast = $h->month_forecast;
+//             $newForecast->rkap_forecast = $h->rkap_forecast;
+//             $newForecast->month_rkap = $h->month_rkap;
+//             $newForecast->realisasi_forecast = $h->realisasi_forecast;
+//             $newForecast->month_realisasi = $h->month_realisasi;
+//             $newForecast->periode_prognosa = $h->periode_prognosa + 1;
+//             $newForecast->tahun = $h->tahun;
+//             $newForecast->save();
+//             $totalData++;
+//         });
+
+//         DB::commit();
+//         return response()->json([
+//             "success" => true,
+//             "totalData" => $totalData
+//         ]);
+//     } catch (\Exception $e) {
+//         DB::rollBack();
+//         return response()->json([
+//             "success" => false,
+//             "totalData" => 0,
+//             "message" => $e->getMessage()
+//         ]);
+//     }
+// });
+
+
+Route::group(['prefix' => 'analisa-harga-satuan'], function () {
+    Route::get('/', [MasterAnalisaHargaSatuanController::class, 'index']);
+    Route::post('/save', [MasterAnalisaHargaSatuanController::class, 'insert']);
+    Route::get('/view/{masterAHS}', [MasterAnalisaHargaSatuanController::class, 'view']);
+    Route::post('/detail/save/{masterAHS}', [MasterAnalisaHargaSatuanController::class, 'insertDetail']);
 });
 
-Route::post('copy-forecast', function (Request $request) {
-    $data = $request->all();
+Route::group(["prefix" => "rab-proyek"], function () {
+    Route::get('/', function () {
+        $proyeks = Proyek::where("dop", "!=", "EA")->where("tahun_perolehan", date("Y"))->where("tipe_proyek", "P")->where("stage",  3)->where("is_cancel", false)->where("is_tidak_lulus_pq", false)->get();
+        return view("30_RAB_POC", ["proyeks" => $proyeks]);
+    });
 
-    try {
-        DB::beginTransaction();
-
-        $historyForecast = HistoryForecast::where("periode_prognosa", $data["periode_prognosa"])->where("tahun", $data["tahun"])->get();
-
-        $totalData = 0;
-
-        $isExistForecastPeriode = Forecast::where("periode_prognosa", $data["periode_prognosa"])->where("tahun", $data["tahun"])->get();
-
-        if ($isExistForecastPeriode->isNotEmpty()) {
-            DB::table('forecasts')->where("periode_prognosa", $data["periode_prognosa"])->where("tahun", $data["tahun"])->delete();
-        }
-
-        $historyForecast->each(function ($h) use (&$totalData) {
-            $newForecast = new Forecast();
-            $newForecast->kode_proyek = $h->kode_proyek;
-            $newForecast->nilai_forecast = $h->nilai_forecast;
-            $newForecast->month_forecast = $h->month_forecast;
-            $newForecast->rkap_forecast = $h->rkap_forecast;
-            $newForecast->month_rkap = $h->month_rkap;
-            $newForecast->realisasi_forecast = $h->realisasi_forecast;
-            $newForecast->month_realisasi = $h->month_realisasi;
-            $newForecast->periode_prognosa = $h->periode_prognosa + 1;
-            $newForecast->tahun = $h->tahun;
-            $newForecast->save();
-            $totalData++;
+    Route::get('/detail/{proyek}', function (Proyek $proyek) {
+        $masterAHS = MasterAnalisaHargaSatuan::all();
+        $masterSumberDaya = MasterSumberDaya::all();
+        $masterSumberDaya = $masterSumberDaya->map(function ($item) {
+            $item->volume = $item->MasterHargaSatuan->volume;
+            $item->harga_satuan = $item->MasterHargaSatuan->harga;
+            $item->jumlah = $item->MasterHargaSatuan->harga * $item->MasterHargaSatuan->volume;
+            return $item;
         });
 
-        DB::commit();
-        return response()->json([
-            "success" => true,
-            "totalData" => $totalData
+        $masterSumberDayaNew = $masterSumberDaya->map(function ($item) use ($masterSumberDaya) {
+            $totalJumlah = $masterSumberDaya->sum("jumlah");
+            $item->bobot = round($item->jumlah / $totalJumlah, 2);
+            return $item;
+        })->sortByDesc("bobot");
+
+        $bobotKumulatif = 0;
+
+        $masterSumberDayaNewBanget = $masterSumberDaya->map(function ($item, $index) use (&$bobotKumulatif) {
+
+            if ($index == 0) {
+                $bobotKumulatif = $item->bobot;
+            } else {
+                $bobotKumulatif += $item->bobot;
+            }
+
+            $item->bobot_kumulatif = $bobotKumulatif;
+            return $item;
+        });
+        return view("31_RAB_POC_DETAIL", ["proyek" => $proyek, "masterAHS" => $masterAHS, "masterSumberDaya" => $masterSumberDayaNewBanget]);
+    });
+
+    Route::get('detail-ahs/{kode_ahs}', function (Request $request, $kode_ahs) {
+        $analisaHargaSatuanDetail = AnalisaHargaSatuanDetail::where("kode_ahs", $kode_ahs)->get();
+        $analisaHargaSatuanDetail = $analisaHargaSatuanDetail->map(function ($item) use ($analisaHargaSatuanDetail) {
+            if (str_contains(mb_substr($item->kode_sumber_daya, 0, 1), "A")) {
+                if ($item->kode_sumber_daya == "AN300000") {
+                    $item->koef = $analisaHargaSatuanDetail->filter(function ($a) {
+                        return str_contains(mb_substr($a->kode_sumber_daya, 0, 1), "D");
+                    })->sum(function ($i) {
+                        return !empty($i->MasterSumberDaya->MasterProduktivitas?->nilai_produktivitas) ? round(1 / $i->MasterSumberDaya->MasterProduktivitas?->nilai_produktivitas, 2) : 0;
+                    }) * $item->MasterSumberDaya->MasterWaste->nilai_waste;
+                } else {
+                    $item->koef = $item->MasterSumberDaya->MasterWaste->nilai_waste;
+                }
+            } elseif (str_contains(mb_substr($item->kode_sumber_daya, 0, 1), "C")) {
+                $item->koef = 1;
+            } elseif (str_contains(mb_substr($item->kode_sumber_daya, 0, 1), "D")) {
+                if ($item->kode_sumber_daya != "D1200000") {
+                    if (!empty($item->MasterSumberDaya->MasterProduktivitas?->nilai_produktivitas)) {
+                        $item->koef = round(1 / $item->MasterSumberDaya->MasterProduktivitas?->nilai_produktivitas, 4);
+                    } else {
+                        $item->koef = 0;
+                    }
+                } else {
+                    $item->koef = $analisaHargaSatuanDetail->filter(function ($a) {
+                        return str_contains(mb_substr($a->kode_sumber_daya, 0, 1), "D");
+                    })->sum(function ($i) {
+                        return !empty($i->MasterSumberDaya->MasterProduktivitas?->nilai_produktivitas) ? round(1 / $i->MasterSumberDaya->MasterProduktivitas?->nilai_produktivitas, 2) : 0;
+                    });
+                }
+            } elseif (str_contains(mb_substr($item->kode_sumber_daya, 0, 1), "E")) {
+                $item->koef = 1;
+            }
+
+            return $item;
+        });
+
+        // dd($analisaHargaSatuanDetail);
+
+
+        $materials = $analisaHargaSatuanDetail->filter(function ($ahs) {
+            return str_contains(mb_substr($ahs->kode_sumber_daya, 0, 1), "A");
+        });
+        $upahs = $analisaHargaSatuanDetail->filter(function ($ahs) {
+            return str_contains(mb_substr($ahs->kode_sumber_daya, 0, 1), "C");
+        });
+        $alats = $analisaHargaSatuanDetail->filter(function ($ahs) {
+            return str_contains(mb_substr($ahs->kode_sumber_daya, 0, 1), "D");
+        });
+        $subKons = $analisaHargaSatuanDetail->filter(function ($ahs) {
+            return str_contains(mb_substr($ahs->kode_sumber_daya, 0, 1), "E");
+        });
+
+
+        $total = $analisaHargaSatuanDetail->map(function ($item) {
+            return ["harga" => (int)$item->MasterHargaSatuan?->harga ?? 0];
+        })->sum(function ($item) {
+            return $item["harga"];
+        });
+
+        $ahs = MasterAnalisaHargaSatuan::where("kode_ahs", $kode_ahs)->first();
+
+        return view("32_RAB_POC_DETAIL_AHS", [
+            "ahs" => $ahs,
+            "materials" => $materials,
+            "upahs" => $upahs,
+            "alats" => $alats,
+            "subKons" => $subKons,
+            "total" => $total,
         ]);
-    } catch (\Exception $e) {
-        DB::rollBack();
-        return response()->json([
-            "success" => false,
-            "totalData" => 0,
-            "message" => $e->getMessage()
-        ]);
-    }
+    });
+});
+
+Route::get('/get-detail-ahs/{kode_ahs}', function ($kode_ahs) {
+    $ahsParent = MasterAnalisaHargaSatuan::where("kode_ahs", $kode_ahs)->first();
+    $analisaHargaDetail = AnalisaHargaSatuanDetail::where("kode_ahs", $kode_ahs)->get();
+    $totalVolume = $analisaHargaDetail->sum(function ($item) {
+        return (float)$item->MasterSumberDaya->MasterHargaSatuan->volume ?? 0;
+    });
+    $totalHarsat = $analisaHargaDetail->sum(function ($item) {
+        return (float)$item->MasterSumberDaya->MasterHargaSatuan->harga ?? 0;
+    });
+
+    $data = [
+        "kode_ahs" => $kode_ahs,
+        "uraian" => $ahsParent->uraian,
+        "satuan" => "",
+        "volume" => $totalVolume,
+        "harsat" => $totalHarsat,
+        "total" =>  $totalVolume * $totalHarsat,
+        "harsat_eksternal" => $totalVolume != 0 && $totalHarsat != 0 ? (int)(($totalVolume * $totalHarsat) * 1.3) / $totalVolume : 0,
+        "total_eksternal" => $totalVolume != 0 && $totalHarsat != 0 ? (int)($totalVolume * $totalHarsat) * 1.3 : 0,
+    ];
+
+    return response()->json($data);
+});
+
+
+Route::get('/master-sumber-daya', function () {
+    $masterSumberDaya = MasterSumberDaya::all();
+    return view("MasterData/MasterSumberDaya", ["masterSumberDaya" => $masterSumberDaya]);
+});
+
+Route::get('/master-harga-satuan', function () {
+    $masterHargaSatuan = MasterHargaSatuan::all();
+    return view("MasterData/MasterHargaSatuan", ["masterHargaSatuan" => $masterHargaSatuan]);
 });
 
 Route::get('tes-lock-change', [ContractApprovalController::class, 'lockChangeFromBackdoor']);
