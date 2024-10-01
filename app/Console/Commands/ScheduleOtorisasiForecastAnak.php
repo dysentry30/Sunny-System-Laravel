@@ -35,7 +35,6 @@ class ScheduleOtorisasiForecastAnak extends Command
     public function handle()
     {
         try {
-            DB::beginTransaction();
 
             $bulan = date("m") != 1 ? date("m") - 1 : 0;
             $tahun = date("m") != 1 ? date("Y") : date("Y") - 1;
@@ -72,6 +71,8 @@ class ScheduleOtorisasiForecastAnak extends Command
                 $forecastGroupUnitKerja = $forecastReal->groupBy("unit_kerja");
 
                 foreach ($forecastGroupUnitKerja as $unitKerja => $dataForecast) {
+                    DB::beginTransaction();
+
                     $unitKerjaProyek = UnitKerja::where("divcode", $unitKerja)->first();
                     $forecastGroupProyek = $dataForecast->groupBy("kode_proyek");
 
@@ -197,12 +198,16 @@ class ScheduleOtorisasiForecastAnak extends Command
                         }
                     }
 
+                    DB::commit();
+                    $dataForecastSendSAP = $resultRequestToSAP->filter(function ($forecast) {
+                        return !empty($forecast);
+                    });
+                    self::sendDataPrognosaSAP($dataForecastSendSAP, $unitKerjaProyek->unit_kerja);
                     setLogging("Scheduller/OtorisasiCRM", "[Otorisasi $unitKerjaProyek->unit_kerja Bulan " . Carbon::now() . "]", ["message" => "Success", "timestamp" => Carbon::now()]);
-                    self::sendDataPrognosaSAP($resultRequestToSAP, $unitKerjaProyek->unit_kerja);
+                    sleep(10);
                 }
             }
 
-            DB::commit();
             $dateFinish = Carbon::now()->translatedFormat("d F Y H:i:s");
             sendNotifEmail("andias@wikamail.id", "FINISH RUNNING JOB OTORISASI FORECAST", "Otorisasi otomatis telah selesai dijalankan pada hari : $dateFinish", true, false);
             sendNotifEmail("fathur.rohman2353@gmail.com", "FINISH RUNNING JOB OTORISASI FORECAST", "Otorisasi otomatis telah selesai dijalankan pada hari : $dateFinish", true, false);
@@ -331,10 +336,11 @@ class ScheduleOtorisasiForecastAnak extends Command
         $closed_request = Http::withOptions(['debug' => $fp])->withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbpc007/requests/$content_location/close");
         $results_response->push($closed_request->body());
         setLogging("prognosa", "Response Prognosa to SAP " . $unitKerja . " =>", $results_response->toArray());
+        setLogging("prognosa", "SEND PROGNOSA TO SAP " . $unitKerja . " =>", $data->toArray());
         fwrite($prognosa_log, file_get_contents(storage_path("logs/http_log.log")));
         fclose($prognosa_log);
         fclose($fp);
 
-        // integrationLog("OTORISASI PROGNOSA ANAK", $data->toJson(), json_encode(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"]), $fill_data->status(), $fill_data->body(), null, null);
+        // integrationLog("OTORISASI PROGNOSA INDUK", $data->toJson(), json_encode(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"]), $fill_data->status(), $fill_data->body(), null, null);
     }
 }
