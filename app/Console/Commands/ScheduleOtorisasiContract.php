@@ -124,11 +124,34 @@ class ScheduleOtorisasiContract extends Command
             if ($contractApprovalData->isNotEmpty()) {
                 $contractApprovalData->each(function ($data, $profit_center) use ($bulan_pelaporan, $tahun_pelaporan) {
                     $isSuccessSendSAP = self::sendDataSAP($profit_center, $bulan_pelaporan, $tahun_pelaporan);
+                    sleep(10);
 
                     $dateFinish = Carbon::now()->translatedFormat("d F Y H:i:s");
                     // sendNotifEmail("andias@wikamail.id", "FINISH RUNNING JOB OTORISASI CONTRACT $profit_center", "Otorisasi otomatis proyek $profit_center berhasil dijalankan pada hari : $dateFinish", true, false);
                     // sendNotifEmail("fathur.rohman2353@gmail.com", "FINISH RUNNING JOB OTORISASI CONTRACT $profit_center", "Otorisasi otomatis proyek $profit_center berhasil dijalankan pada hari : $dateFinish", true, false);
                     if ($isSuccessSendSAP) {
+
+                        $data->each(function ($item) {
+                            $newClaim = new PerubahanKontrak();
+                            $newClaim->profit_center = $item->profit_center;
+                            $newClaim->id_contract = $item->id_contract ?? null;
+                            $newClaim->jenis_perubahan = $item->jenis_perubahan;
+                            $newClaim->tanggal_perubahan = $item->tanggal_perubahan;
+                            $newClaim->uraian_perubahan = $item->uraian_perubahan;
+                            $newClaim->keterangan = $item->keterangan;
+                            $newClaim->proposal_klaim = $item->proposal_klaim;
+                            $newClaim->tanggal_pengajuan = $item->tanggal_pengajuan;
+                            $newClaim->biaya_pengajuan = !empty($item->biaya_pengajuan) ? str_replace(".", "", $item->biaya_pengajuan) : null;
+                            // $newClaim->waktu_pengajuan = !empty($data["biaya-pengajuan"]) ? $data["waktu-pengajuan"] : null;
+                            $newClaim->nilai_negatif = $item->nilai_negatif;
+                            $newClaim->waktu_pengajuan_new = $item->waktu_pengajuan_new;
+                            $newClaim->periode_laporan = $item->periode_laporan != 12 ? $item->periode_laporan + 1 : 1;
+                            $newClaim->tahun = $item->tahun;
+                            $newClaim->stage = $item->stage;
+
+                            $newClaim->save();
+                        });
+
                         $namaProyek = $data->first()->proyek_name;
                         $dateFinish = Carbon::now()->translatedFormat("d F Y H:i:s");
                         // sendNotifEmail("andias@wikamail.id", "FINISH RUNNING JOB OTORISASI CONTRACT", "Otorisasi otomatis proyek $profit_center berhasil dijalankan pada hari : $dateFinish", true, false);
@@ -163,7 +186,14 @@ class ScheduleOtorisasiContract extends Command
             ->where('periode_laporan', '=', $periode_laporan)
             ->where('tahun', '=', $tahun_laporan)
             ->get();
-        $data_claims_potential = $claims_all->map(function ($item, $key) use ($claims_all) {
+
+        if ($claims_all->isEmpty()) {
+            return true;
+        }
+
+        $tanggalLaporan = (int) (date("Y") . sprintf('%02d', $periode_laporan) . $tahun_laporan);
+
+        $data_claims_potential = $claims_all->map(function ($item, $key) use ($claims_all, $tanggalLaporan) {
 
             $item_claim = $claims_all->groupBy("jenis_perubahan")->filter(function ($i, $key) use ($item) {
                 return $key == $item->jenis_perubahan;
@@ -206,7 +236,7 @@ class ScheduleOtorisasiContract extends Command
             $newClass = new stdClass();
 
             $newClass->NO_PROPOSAL_CLAIM = $item->proposal_klaim;
-            $newClass->TANGGAL = (int) date("Ymd");
+            $newClass->TANGGAL = $tanggalLaporan;
             $newClass->PROFIT_CTR = "$profit_center";
             $newClass->PROJECT_DEF = "$profit_center";
             $newClass->COMP_CODE = "A000";
@@ -317,7 +347,7 @@ class ScheduleOtorisasiContract extends Command
 
         $data_claims_submission = $claims_all->filter(function ($item) {
             return $item->stage >= 2;
-        })->map(function ($item, $key) use ($claims_all) {
+        })->map(function ($item, $key) use ($claims_all, $tanggalLaporan) {
 
             $item_claim = $claims_all->groupBy("jenis_perubahan")->filter(function ($i, $key) use ($item) {
                 return $key == $item->jenis_perubahan;
@@ -348,7 +378,7 @@ class ScheduleOtorisasiContract extends Command
             $newClass = new stdClass();
 
             $newClass->NO_PROPOSAL_CLAIM = $item->proposal_klaim;
-            $newClass->TANGGAL = (int) date("Ymd");
+            $newClass->TANGGAL = $tanggalLaporan;
             $newClass->PROFIT_CTR = "$profit_center";
             $newClass->PROJECT_DEF = "$profit_center";
             $newClass->COMP_CODE = "A000";
@@ -449,7 +479,7 @@ class ScheduleOtorisasiContract extends Command
 
         $data_claims_filter = $claims_all->filter(function ($item) {
             return $item->stage == 4 || $item->stage == 5;
-        })->map(function ($item, $key) use ($claims_all) {
+        })->map(function ($item, $key) use ($claims_all, $tanggalLaporan) {
 
             $item_claim = $claims_all->groupBy("jenis_perubahan")->filter(function ($i, $key) use ($item) {
                 return $key == $item->jenis_perubahan;
@@ -482,7 +512,7 @@ class ScheduleOtorisasiContract extends Command
             $newClass = new stdClass();
 
             $newClass->NO_PROPOSAL_CLAIM = $item->proposal_klaim;
-            $newClass->TANGGAL = (int) date("Ymd");
+            $newClass->TANGGAL = $tanggalLaporan;
             $newClass->PROFIT_CTR = "$profit_center";
             $newClass->PROJECT_DEF = "$profit_center";
             $newClass->COMP_CODE = "A000";
@@ -623,6 +653,7 @@ class ScheduleOtorisasiContract extends Command
 
         // FIRST STEP SEND DATA TO BW
         if (env("APP_ENV") == "production") {
+            $results_response = collect();
             $csrf_token = "";
             $content_location = "";
             // $response = getAPI("https://wtappbw-qas.wika.co.id:44350/sap/bw4/v1/push/dataStores/yodaltes4/requests", [], [], false);
@@ -642,26 +673,33 @@ class ScheduleOtorisasiContract extends Command
             // THIRD STEP SEND DATA TO BW
             // dd($new_class->toJson());
             $fill_data = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/dataSend?request=$content_location&datapid=1", $data_claims->toArray());
+            $results_response->push($fill_data->body());
 
             // FOURTH STEP SEND DATA TO BW
             $closed_request = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests/$content_location/close");
+            $results_response->push($closed_request->body());
             // dd($closed_request, $data_claims, $fill_data);
             // integrationLog("OTORISASI CLAIMS", $data_claims->toJson(), json_encode(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"]), $fill_data->status(), $fill_data->body(), null, null);
 
             if ($fill_data->successful() && $closed_request->successful()) {
-
+                $data_claims_array = $data_claims->toArray() ?? [];
+                $data_claims_array["PERIODE"] = $tanggalLaporan;
                 setLogging('Scheduller/ApprovalCCM', "APPROVAL CCM => ", [
                     "KODE_PROYEK" => $claims_all->first()?->profit_center,
-                    "DATA" => $data_claims->toArray() ?? [],
-                    "STATUS" => "SUCCESS"
+                    "DATA" => $data_claims_array,
+                    "STATUS" => "SUCCESS",
+                    "RESPONSE SAP" => $results_response->toArray()
                 ]);
 
                 return true;
             } else {
+                $data_claims_array = $data_claims->toArray() ?? [];
+                $data_claims_array["PERIODE"] = $tanggalLaporan;
                 setLogging('Scheduller/ErrorApprovalCCM', "APPROVAL CCM => ", [
                     "KODE_PROYEK" => $claims_all->first()?->profit_center,
-                    "DATA" => $data_claims->toArray() ?? [],
-                    "STATUS" => "FAILED"
+                    "DATA" => $data_claims_array,
+                    "STATUS" => "FAILED",
+                    "RESPONSE SAP" => $results_response->toArray()
                 ]);
 
                 return false;

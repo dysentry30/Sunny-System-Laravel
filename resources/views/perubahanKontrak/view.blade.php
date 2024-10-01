@@ -51,7 +51,7 @@
                                 <!--begin::Button-->
                                 @if (isset($perubahan_kontrak->periode))
                                     @if ($perubahan_kontrak->is_locked != true)
-                                        <button class="btn btn-sm btn-danger" onclick="deleteAction('claim-management/{{ $perubahan_kontrak->id_perubahan_kontrak }}/delete')">Delete</button>
+                                        <button class="btn btn-sm btn-danger" onclick="deleteAction('claim-management/{{ $perubahan_kontrak->id_perubahan_kontrak }}/delete?periode={{ $filterBulan }}&tahun={{ $filterTahun }}')">Delete</button>
                                         @if ($perubahan_kontrak->stage < 5)
                                             {{-- <a href="#" data-bs-toggle="modal" class="btn btn-sm btn-primary" id="editButton" data-bs-target="#kt_modal_edit_perubahan"
                                                 style="margin-left:10px;">
@@ -65,7 +65,7 @@
                                         @endif
                                     @endif
                                 @else
-                                <button class="btn btn-sm btn-danger" onclick="deleteAction('claim-management/{{ $perubahan_kontrak->id_perubahan_kontrak }}/delete')">Delete</button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteAction('claim-management/{{ $perubahan_kontrak->id_perubahan_kontrak }}/delete?periode={{ $filterBulan }}&tahun={{ $filterTahun }}')">Delete</button>
                                 @if ($perubahan_kontrak->stage < 5)
                                             {{-- <a href="#" data-bs-toggle="modal" class="btn btn-sm btn-primary" id="editButton" data-bs-target="#kt_modal_edit_perubahan"
                                                 style="margin-left:10px;">
@@ -241,7 +241,8 @@
                                                     <ul class="dropdown-menu">
                                                         @if ($perubahan_kontrak->stage == 6)
                                                             <form action=""></form>
-                                                            <form action="/stage/perubahan-kontrak/save" method="POST">
+                                                            {{-- <form action="/stage/perubahan-kontrak/save" method="POST"> --}}
+                                                            <form action="/claim-management/stage/save" method="POST">
                                                                 {{-- <li><a href="#" class="dropdown-item clicked-stage" stage="5">Dispute</a></li> --}}
                                                                 @csrf
                                                                 <input type="hidden" name="id_perubahan_kontrak" value="{{ $perubahan_kontrak->id_perubahan_kontrak }}">
@@ -291,6 +292,8 @@
                                     <div class="card card-flush h-lg-80 my-5" id="kt_contacts_main">
                                         <form action="/claim-management/update/{{ $perubahan_kontrak->id_perubahan_kontrak }}" method="POST" id="edit-form" onsubmit="nilaiMinusChecked()">
                                             @csrf
+                                            <input type="hidden" name="periode-laporan" value="{{ $filterBulan }}">
+                                            <input type="hidden" name="tahun" value="{{ $filterTahun }}">
                                             <div class="card-body pt-5">
                                                 <div class="row g-7 pt-7">
                                                     <div class="row">
@@ -1206,7 +1209,7 @@
         <!--begin::Modal - Input Approve Claim -->
         <div class="modal fade" id="kt_modal_input_approve_claim" tabindex="-1" aria-hidden="true">
             <!--begin::Modal dialog-->
-            <div class="modal-dialog modal-dialog-centered mw-600px">
+            <div class="modal-dialog modal-dialog-centered mw-800px">
                 <!--begin::Modal content-->
                 <div class="modal-content">
                     <!--begin::Modal header-->
@@ -1225,7 +1228,7 @@
                         <!--end::Close-->
                     </div>
                     <!--end::Modal header-->
-                    <form action="/perubahan-kontrak/edit" method="POST" enctype="multipart/form-data">
+                    <form action="/claim-management/approve/edit" method="POST" enctype="multipart/form-data">
                     <!--begin::Modal body-->
                     <div class="modal-body py-lg-6 px-lg-6">
 
@@ -1233,12 +1236,13 @@
                         <div class="fv-row mb-5">
                             @csrf
                             <!--begin::Input-->
-                            <input type="hidden" class="modal-name" name="modal-name">
-                            <input type="hidden" class="id_contract" name="id_contract" value="{{ $contract->id_contract }}">
-                            <input type="hidden" class="profit-center" name="profit-center" value="{{ $contract->profit_center }}">
+                            <input type="hidden" id="modal-name" name="modal-name">
+                            <input type="hidden" id="id_contract" name="id_contract" value="{{ $contract->id_contract }}">
+                            <input type="hidden" id="profit-center" name="profit-center" value="{{ $contract->profit_center }}">
+                            <input type="hidden" id="periode-laporan" name="periode-laporan" value="{{ $filterBulan }}">
+                            <input type="hidden" id="tahun" name="tahun" value="{{ $filterTahun }}">
                             <input type="hidden" class="stage" name="stage" value="5">
-                            <input type="hidden" value="{{ $perubahan_kontrak->id_perubahan_kontrak ?? 0 }}" id="id-perubahan-kontrak"
-                                name="id-perubahan-kontrak">
+                            <input type="hidden" value="{{ $perubahan_kontrak->id_perubahan_kontrak ?? 0 }}" id="id-perubahan-kontrak" name="id-perubahan-kontrak">
                             <!--end::Input-->
                             <!--begin::Label-->
                             <label class="fs-6 fw-bold form-label mt-3 d-flex flex-row justify-content-between gap-3">
@@ -1249,9 +1253,8 @@
                                         data-bs-custom-class="custom-tooltip"
                                         data-bs-title="Tidak dapat mengisi Nilai Pengajuan karena tidak ada di pengajuan"
                                         data-bs-html="true"></i>
-                                    <div class="form-check form-switch {{ $perubahan_kontrak->jenis_perubahan == 'VO' ? '' : 'd-none' }}" id="div-nilai-negatif">
                                 @endif
-                                <div class="form-check form-switch">
+                                <div class="form-check form-switch {{ $perubahan_kontrak->jenis_perubahan == 'VO' ? '' : 'd-none' }}" id="div-nilai-negatif">
                                     <input class="form-check-input" type="checkbox" name="nilai-negatif" role="switch" id="nilai-negatif" {{ $perubahan_kontrak->nilai_negatif ? "checked" : "" }} {{ !empty($perubahan_kontrak->biaya_pengajuan) ? "" : "readonly" }}>
                                     <label class="form-check-label" for="nilai-negatif">Nilai Negatif</label>
                                 </div>
@@ -1585,7 +1588,7 @@
                 formData.append("stage", step);
 
 
-                const setStage = await fetch("/stage/perubahan-kontrak/save", {
+                const setStage = await fetch("/claim-management/stage/save", {
                     method: "POST",
                     header: {
                         "content-type": "application/json",

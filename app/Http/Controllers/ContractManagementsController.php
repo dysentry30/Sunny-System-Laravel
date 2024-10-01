@@ -4334,24 +4334,28 @@ class ContractManagementsController extends Controller
         return view("perubahanKontrak/view", compact(["contract", "perubahan_kontrak"]));
     }
 
-    public function perubahanKontrakView(Request $request, $profit_center, $id_perubahan_kontrak)
+    public function perubahanKontrakView(Request $request, $id_perubahan_kontrak)
     {
 
         $data = $request->all();
         $filterBulan = isset($data['periode']) ? $data['periode'] : date('m');
         $filterTahun = isset($data['tahun']) ? $data['tahun'] : date('Y');
 
-        if (isset($data['periode']) && isset($data['tahun'])) {
-            $perubahan_kontrak = ContractApproval::find($id_perubahan_kontrak);
-        } else {
-            $perubahan_kontrak = PerubahanKontrak::find($id_perubahan_kontrak);
-        }
+        $perubahan_kontrak = PerubahanKontrak::where('id_perubahan_kontrak', $id_perubahan_kontrak)->where("periode_laporan", (int)$filterBulan)->where("tahun", (int)$filterTahun)->first();
+        // if (isset($data['periode']) && isset($data['tahun'])) {
+        //     $perubahan_kontrak = ContractApproval::where('id', $id_perubahan_kontrak)->where("periode_laporan", (int)$filterBulan)->where("tahun", (int)$filterTahun)->first();
+        //     if (empty($perubahan_kontrak)) {
+        //         $perubahan_kontrak = PerubahanKontrak::where('id_perubahan_kontrak', $id_perubahan_kontrak)->where("periode_laporan", (int)$filterBulan)->where("tahun", (int)$filterTahun)->first();
+        //     }
+        // } else {
+        //     $perubahan_kontrak = PerubahanKontrak::where('id_perubahan_kontrak', $id_perubahan_kontrak)->where("periode_laporan", (int)$filterBulan)->where("tahun", (int)$filterTahun)->first();
+        // }
 
         // $contract = ContractManagements::find(url_decode($id_contract));
-        $contract = ContractManagements::where('profit_center', $profit_center)->first();
+        $contract = ContractManagements::where('profit_center', $perubahan_kontrak->profit_center)->first();
 
         // dd($data, $perubahan_kontrak);
-        return view("perubahanKontrak/view", compact(["contract", "perubahan_kontrak"]));
+        return view("perubahanKontrak/view", compact(["contract", "perubahan_kontrak", "filterBulan", "filterTahun"]));
     }
 
     public function getChecklistManajemenKontrak(ContractManagements $id_contract, ContractChecklist $id) {

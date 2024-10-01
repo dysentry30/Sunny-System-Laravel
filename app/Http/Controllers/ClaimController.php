@@ -610,48 +610,6 @@ class ClaimController extends Controller
         return redirect("/claim-management");
     }
 
-    public function perubahanKontrakEdit(Request $request)
-    {
-        $data = $request->all();
-        $file = $request->file("dokumen-approve");
-
-        $validateInput = validateInput($data, [
-            'tanggal-disetujui' => 'required|date',
-            'dokumen-approve' => 'required|file|mimes:pdf',
-        ]);
-
-        if (!empty($validateInput)) {
-            Alert::html("Error", "Pastikan field <b>$validateInput</b> terisi dengan benar!", "error");
-            return redirect()->back();
-        }
-
-        $id_document = date("His_") . $file->getClientOriginalName();
-        $nama_file = $file->getClientOriginalName();
-
-        $perubahan_kontrak = PerubahanKontrak::find($data["id-perubahan-kontrak"]);
-        // dd($perubahan_kontrak->DokumenPendukungs);
-
-        // if ($perubahan_kontrak->DokumenPendukungs->isEmpty()) {
-        //     Alert::error("Erorr", "Input Dokumen Pendukung terlebih dahulu");
-        //     return redirect()->back();
-        // }
-
-        $perubahan_kontrak->stage = $data["stage"];
-        $perubahan_kontrak->nilai_disetujui = str_replace(".", "", $data["nilai-disetujui"]);
-        $perubahan_kontrak->tanggal_disetujui = $data["tanggal-disetujui"];
-        // $perubahan_kontrak->waktu_disetujui = $data["waktu-disetujui"];
-        $perubahan_kontrak->id_dokumen = $id_document;
-        $perubahan_kontrak->nilai_negatif = isset($data['nilai-negatif']);
-        $perubahan_kontrak->waktu_disetujui_new = $data['waktu-disetujui'];
-        $perubahan_kontrak->dokumen_approve = $nama_file;
-
-        $perubahan_kontrak->save();
-        // moveFileTemp($file, explode(".", $id_document)[0]);
-        moveFileTemp($file, substr($id_document, 0, -4));
-        Alert::success("Success", "Perubahan Kontrak berhasil ditambahkan");
-        return redirect()->back();
-    }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -1471,7 +1429,7 @@ class ClaimController extends Controller
                 $proyeks_all = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->whereIn("kd_divisi", $unit_kerja_get)->where('contract_managements.stages', 2)->where('contract_managements.profit_center', '!=', null)->get();
                 $proyeks_all_pemeliharaan = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->whereIn("kd_divisi", $unit_kerja_get)->where('contract_managements.stages', 3)->where('contract_managements.profit_center', '!=', null)->get();
                 //Pelaksanaan
-                $proyeks_all = $proyeks_all->map(function ($proyek) use (&$totalVOAll, &$totalClaimAll, &$totalAntiClaimAll, &$totalClaimAsuransiAll, &$totalVOAllApproved, &$totalClaimAllApproved, &$totalAntiClaimAllApproved, &$totalClaimAsuransiAllApproved, &$jumlahVOAll, &$jumlahClaimAll, &$jumlahAntiClaimAll, &$jumlahClaimAsuransiAll, &$jumlahVOAllApproved, &$jumlahClaimAllApproved, &$jumlahAntiClaimAllApproved, &$jumlahClaimAsuransiAllApproved) {
+                $proyeks_all = $proyeks_all->map(function ($proyek) use (&$totalVOAll, &$totalClaimAll, &$totalAntiClaimAll, &$totalClaimAsuransiAll, &$totalVOAllApproved, &$totalClaimAllApproved, &$totalAntiClaimAllApproved, &$totalClaimAsuransiAllApproved, &$jumlahVOAll, &$jumlahClaimAll, &$jumlahAntiClaimAll, &$jumlahClaimAsuransiAll, &$jumlahVOAllApproved, &$jumlahClaimAllApproved, &$jumlahAntiClaimAllApproved, &$jumlahClaimAsuransiAllApproved, $filterBulan, $filterTahun) {
                     $result = [];
                     // $result['kode_proyek'] = $proyek->kode_proyek;
                     $result['profit_center'] = $proyek->profit_center;
@@ -1480,7 +1438,7 @@ class ClaimController extends Controller
                     $result['unit_kerja'] = $proyek->UnitKerja->unit_kerja;
 
                     if ($proyek->PerubahanKontrak->isNotEmpty()) {
-                        $claim = $proyek->PerubahanKontrak;
+                        $claim = $proyek->PerubahanKontrak->where("periode_laporan", $filterBulan)->where("tahun", $filterTahun);
                         $item_vo = 0;
                         $item_vo_approved = 0;
                         $cat_vo = $claim->where("jenis_perubahan", "=", "VO");
@@ -1663,7 +1621,9 @@ class ClaimController extends Controller
                     &$jumlahVOAllApprovedPemeliharaan,
                     &$jumlahClaimAllApprovedPemeliharaan,
                     &$jumlahAntiClaimAllApprovedPemeliharaan,
-                    &$jumlahClaimAsuransiAllApprovedPemeliharaan
+                    &$jumlahClaimAsuransiAllApprovedPemeliharaan,
+                    $filterBulan,
+                    $filterTahun,
                 ) {
                     $result = [];
                     // $result['kode_proyek'] = $proyek->kode_proyek;
@@ -1673,7 +1633,7 @@ class ClaimController extends Controller
                     $result['unit_kerja'] = $proyek->UnitKerja->unit_kerja;
 
                     if ($proyek->PerubahanKontrak->isNotEmpty()) {
-                        $claim = $proyek->PerubahanKontrak;
+                        $claim = $proyek->PerubahanKontrak->where("periode_laporan", $filterBulan)->where("tahun", $filterTahun);
                         $item_vo = 0;
                         $item_vo_approved = 0;
                         $cat_vo = $claim->where("jenis_perubahan", "=", "VO");
@@ -1838,36 +1798,64 @@ class ClaimController extends Controller
                 });
             } else {
 
-                $proyeks_all = ContractApproval::join(
-                    "proyek_pis_new",
-                    "proyek_pis_new.profit_center",
-                    "=",
-                    "contract_approval_new.profit_center"
-                )->where("periode_laporan", '=', $filterBulan)->where(
-                    "tahun",
-                    "=",
+                // $proyeks_all = ContractApproval::join(
+                //     "proyek_pis_new",
+                //     "proyek_pis_new.profit_center",
+                //     "=",
+                //     "contract_approval_new.profit_center"
+                // )->where("periode_laporan", '=', $filterBulan)->where(
+                //     "tahun",
+                //     "=",
+                //     $filterTahun
+                // )->get()->groupBy('profit_center');
+
+                // $proyeks_all_pemeliharaan = ContractApproval::join(
+                //     "proyek_pis_new",
+                //     "proyek_pis_new.profit_center",
+                //     "=",
+                //     "contract_approval_new.profit_center"
+                // )->where("periode_laporan", '=', $filterBulan)->where("tahun", $filterTahun)->get()->filter(function ($item) {
+                //     return $item->ContractManagements->stages == 3;
+                // })->groupBy('profit_center');
+
+                $proyeks_all = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->whereIn("kd_divisi", $unit_kerja_get)->where('contract_managements.stages', 2)->where('contract_managements.profit_center', '!=', null)->get();
+                $proyeks_all_pemeliharaan = ProyekPISNew::join("contract_managements", "contract_managements.profit_center", "=", "proyek_pis_new.profit_center")->whereIn("kd_divisi", $unit_kerja_get)->where('contract_managements.stages', 3)->where('contract_managements.profit_center', '!=', null)->get();
+
+                $proyeks_all = $proyeks_all->map(function ($proyek, $key) use (
+                    &$totalVOAll,
+                    &$totalClaimAll,
+                    &$totalAntiClaimAll,
+                    &$totalClaimAsuransiAll,
+                    &$totalVOAllApproved,
+                    &$totalClaimAllApproved,
+                    &$totalAntiClaimAllApproved,
+                    &$totalClaimAsuransiAllApproved,
+                    &$jumlahVOAll,
+                    &$jumlahClaimAll,
+                    &$jumlahAntiClaimAll,
+                    &$jumlahClaimAsuransiAll,
+                    &$jumlahVOAllApproved,
+                    &$jumlahClaimAllApproved,
+                    &$jumlahAntiClaimAllApproved,
+                    &$jumlahClaimAsuransiAllApproved,
+                    $filterBulan,
                     $filterTahun
-                )->get()->groupBy('profit_center');
-
-                $proyeks_all_pemeliharaan = ContractApproval::join(
-                    "proyek_pis_new",
-                    "proyek_pis_new.profit_center",
-                    "=",
-                    "contract_approval_new.profit_center"
-                )->where("periode_laporan", '=', $filterBulan)->where("tahun", $filterTahun)->get()->filter(function ($item) {
-                    return $item->ContractManagements->stages == 3;
-                })->groupBy('profit_center');
-
-                $proyeks_all = $proyeks_all->map(function ($proyek, $key) use (&$totalVOAll, &$totalClaimAll, &$totalAntiClaimAll, &$totalClaimAsuransiAll, &$totalVOAllApproved, &$totalClaimAllApproved, &$totalAntiClaimAllApproved, &$totalClaimAsuransiAllApproved, &$jumlahVOAll, &$jumlahClaimAll, &$jumlahAntiClaimAll, &$jumlahClaimAsuransiAll, &$jumlahVOAllApproved, &$jumlahClaimAllApproved, &$jumlahAntiClaimAllApproved, &$jumlahClaimAsuransiAllApproved) {
+                ) {
                     $result = [];
-                    // $result['kode_proyek'] = $proyek->kode_proyek;
-                    $result['profit_center'] = $key;
-                    $result['nama_proyek'] = $proyek->first()->ProyekPISNew->proyek_name;
-                    // $result['id_contract'] = $proyek->ContractManagements->id_contract;
-                    $result['unit_kerja'] = $proyek->first()->ProyekPISNew->UnitKerja?->unit_kerja;
+                    // // $result['kode_proyek'] = $proyek->kode_proyek;
+                    // $result['profit_center'] = $key;
+                    // $result['nama_proyek'] = $proyek->first()->ProyekPISNew->proyek_name;
+                    // // $result['id_contract'] = $proyek->ContractManagements->id_contract;
+                    // $result['unit_kerja'] = $proyek->first()->ProyekPISNew->UnitKerja?->unit_kerja;
 
-                    if ($proyek->isNotEmpty()) {
-                        $claim = $proyek;
+                    $result['profit_center'] = $proyek->profit_center;
+                    $result['nama_proyek'] = $proyek->proyek_name;
+                    $result['unit_kerja'] = $proyek->UnitKerja->unit_kerja;
+
+                    // if ($proyek->isNotEmpty()) {
+                    if ($proyek->PerubahanKontrak->isNotEmpty()) {
+                        // $claim = $proyek;
+                        $claim = $proyek->PerubahanKontrak->where("periode_laporan", $filterBulan)->where("tahun", $filterTahun);
                         $item_vo = 0;
                         $item_vo_approved = 0;
                         $cat_vo = $claim->where("jenis_perubahan", "=", "VO");
@@ -2051,17 +2039,26 @@ class ClaimController extends Controller
                     &$jumlahVOAllApprovedPemeliharaan,
                     &$jumlahClaimAllApprovedPemeliharaan,
                     &$jumlahAntiClaimAllApprovedPemeliharaan,
-                    &$jumlahClaimAsuransiAllApprovedPemeliharaan
+                    &$jumlahClaimAsuransiAllApprovedPemeliharaan,
+                    $filterBulan,
+                    $filterTahun,
                 ) {
                     $result = [];
-                    // $result['kode_proyek'] = $proyek->kode_proyek;
-                    $result['profit_center'] = $key;
-                    $result['nama_proyek'] = $proyek->first()->ProyekPISNew->proyek_name;
-                    // $result['id_contract'] = $proyek->ContractManagements->id_contract;
-                    $result['unit_kerja'] = $proyek->first()->ProyekPISNew->UnitKerja?->unit_kerja;
+                    // // $result['kode_proyek'] = $proyek->kode_proyek;
+                    // $result['profit_center'] = $key;
+                    // $result['nama_proyek'] = $proyek->first()->ProyekPISNew->proyek_name;
+                    // // $result['id_contract'] = $proyek->ContractManagements->id_contract;
+                    // $result['unit_kerja'] = $proyek->first()->ProyekPISNew->UnitKerja?->unit_kerja;
 
-                    if ($proyek->isNotEmpty()) {
-                        $claim = $proyek;
+                    $result['profit_center'] = $proyek->profit_center;
+                    $result['nama_proyek'] = $proyek->proyek_name;
+                    // $result['id_contract'] = $proyek->ContractManagements->id_contract;
+                    $result['unit_kerja'] = $proyek->UnitKerja->unit_kerja;
+
+                    // if ($proyek->isNotEmpty()) {
+                    if ($proyek->PerubahanKontrak->isNotEmpty()) {
+                        // $claim = $proyek;
+                        $claim = $proyek->PerubahanKontrak->where("periode_laporan", $filterBulan)->where("tahun", $filterTahun);
                         $item_vo = 0;
                         $item_vo_approved = 0;
                         $cat_vo = $claim->where("jenis_perubahan", "=", "VO");
@@ -3122,15 +3119,18 @@ class ClaimController extends Controller
         } else {
             if (!empty($filterStatus)) {
                 $claims = ContractApproval::where("profit_center", "=", $profitCenter)->where("stage", "=", $filterStatus)->where("periode_laporan", "=", $periode)->where("tahun", "=", $tahun)->get();
+                if ($claims->isEmpty()) {
+                    $claims = PerubahanKontrak::where("profit_center", "=", $profitCenter)->where("stage", "=", $filterStatus)->where("periode_laporan", "=", $periode)->where("tahun", "=", $tahun)->get();
+                }
             } else {
                 $claims = ContractApproval::where("profit_center", "=", $profitCenter)->where("periode_laporan", "=", $periode)->where("tahun", "=", $tahun)->get();
+                if ($claims->isEmpty()) {
+                    $claims = PerubahanKontrak::where("profit_center", "=", $profitCenter)->where("periode_laporan", "=", $periode)->where("tahun", "=", $tahun)->get();
+                }
             }
         }
 
         // dd(ContractApproval::where("id_contract", "=", $id_contract)->where("periode", "<=", $periode)->get());
-
-
-        // dd($contract);
 
         $totalClaimVO = 0;
         $totalClaimKlaim = 0;
@@ -3142,7 +3142,7 @@ class ClaimController extends Controller
             "profit_center",
             "=",
             $profitCenter
-        )->get()?->map(function ($item) use (&$totalClaimAll) {
+        )->where("periode_laporan", "=", $periode)->where("tahun", "=", $tahun)->get()?->map(function ($item) use (&$totalClaimAll) {
             if ($item->jenis_perubahan == "VO") {
                 if ($item->nilai_negatif) {
                     $item->biaya_pengajuan = 0 - (int) $item->biaya_pengajuan;
@@ -3275,6 +3275,8 @@ class ClaimController extends Controller
         // $perubahan_kontrak->waktu_pengajuan = !empty($data["biaya-pengajuan"]) ? $data["waktu-pengajuan"] : null;
         $perubahan_kontrak->nilai_negatif = isset($data["nilai-negatif"]);
         $perubahan_kontrak->waktu_pengajuan_new = $data['waktu-pengajuan'];
+        $perubahan_kontrak->periode_laporan = $data['periode-laporan'];
+        $perubahan_kontrak->tahun = $data['tahun'];
         $perubahan_kontrak->stage = 2;
         // dd($perubahan_kontrak);
         if ($perubahan_kontrak->save()) {
@@ -3342,6 +3344,8 @@ class ClaimController extends Controller
         // $perubahan_kontrak->waktu_pengajuan = !empty($data["waktu-pengajuan"]) ? $data["waktu-pengajuan"] : null;
         $perubahan_kontrak->nilai_negatif = isset($data["nilai-negatif"]);
         $perubahan_kontrak->waktu_pengajuan_new = $data['waktu-pengajuan'];
+        $perubahan_kontrak->periode_laporan = $data['periode-laporan'];
+        $perubahan_kontrak->tahun = $data['tahun'];
         // dd($perubahan_kontrak);
         if ($perubahan_kontrak->save()) {
             Alert::success("Success", "Perubahan Kontrak berhasil diperbaharui");
@@ -3351,6 +3355,50 @@ class ClaimController extends Controller
         // return Redirect::back()->with("modal", $data["modal-name"]);
         return Redirect::back();
         // }
+    }
+
+    public function approveClaim(Request $request)
+    {
+        $data = $request->all();
+        $file = $request->file("dokumen-approve");
+
+        $validateInput = validateInput($data, [
+            'tanggal-disetujui' => 'required|date',
+            'dokumen-approve' => 'required|file|mimes:pdf',
+        ]);
+
+        if (!empty($validateInput)) {
+            Alert::html("Error", "Pastikan field <b>$validateInput</b> terisi dengan benar!", "error");
+            return redirect()->back();
+        }
+
+        $id_document = date("His_") . $file->getClientOriginalName();
+        $nama_file = $file->getClientOriginalName();
+
+        $perubahan_kontrak = PerubahanKontrak::find($data["id-perubahan-kontrak"]);
+        // dd($perubahan_kontrak->DokumenPendukungs);
+
+        // if ($perubahan_kontrak->DokumenPendukungs->isEmpty()) {
+        //     Alert::error("Erorr", "Input Dokumen Pendukung terlebih dahulu");
+        //     return redirect()->back();
+        // }
+
+        $perubahan_kontrak->stage = $data["stage"];
+        $perubahan_kontrak->nilai_disetujui = str_replace(".", "", $data["nilai-disetujui"]);
+        $perubahan_kontrak->tanggal_disetujui = $data["tanggal-disetujui"];
+        // $perubahan_kontrak->waktu_disetujui = $data["waktu-disetujui"];
+        $perubahan_kontrak->id_dokumen = $id_document;
+        $perubahan_kontrak->nilai_negatif = isset($data['nilai-negatif']);
+        $perubahan_kontrak->waktu_disetujui_new = $data['waktu-disetujui'];
+        $perubahan_kontrak->periode_laporan = $data['periode-laporan'];
+        $perubahan_kontrak->tahun = $data['tahun'];
+        $perubahan_kontrak->dokumen_approve = $nama_file;
+
+        $perubahan_kontrak->save();
+        // moveFileTemp($file, explode(".", $id_document)[0]);
+        moveFileTemp($file, substr($id_document, 0, -4));
+        Alert::success("Success", "Perubahan Kontrak berhasil ditambahkan");
+        return redirect()->back();
     }
 
     public function claimDelete(PerubahanKontrak $id)

@@ -79,28 +79,36 @@
                                 <!--end::Title-->
                             </div>
                             <!--end::Page title-->
+                            @php
+                                // $month = !empty($periode)? $periode : ((int) date('m') == 1 ? 12 : ((int)date('d') < 15 ? (int) date('m') : (int) date('m') - 1));
+                                $month = $periode;
+                                $year = $tahun;
+                                // $is_approved = $contracts->ContractApproval?->where('periode', '=', $month)?->where('is_locked', '=', true);
+                                $is_approved = \App\Models\ContractApproval::where(function($query) use($contracts){
+                                    $query->where('id_contract', $contracts->id_contract)
+                                    ->orWhere('profit_center', $contracts->profit_center);
+                                })->where('is_locked', '=', true)->where("periode_laporan", $month)->where("tahun", $year)->count() > 0;
+                                // })->where('is_locked', '=', true)->where("periode_laporan", $month)->count() > 0;
+                            @endphp
                             <!--begin::Actions-->
                             <div class="d-flex align-items-center justify-content-end py-1 gap-3">
-                                <div class="d-flex">
-                                    <a class="btn btn-sm btn-primary"
-                                    style="background-color:#008CB4;" href="#" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_input_perubahan">
-                                    New</a>
-                                </div>
+                            @can('lock-change', $contracts->profit_center)
+                                @if (!$is_approved)
+                                    <div class="d-flex">
+                                        <a class="btn btn-sm btn-primary"
+                                        style="background-color:#008CB4;" href="#" data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_input_perubahan">
+                                        New</a>
+                                    </div>
+                                @endif
+                            @endcan
                                 {{-- <div class="d-flex">
                                     <a class="btn btn-sm btn-primary"
                                     style="background-color:#008CB4;" href="#" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_final">
                                     Upload</a>
                                 </div> --}}
-                                @php
-                                    $month = !empty($periode)? $periode : ((int) date('m') == 1 ? 12 : ((int)date('d') < 15 ? (int) date('m') : (int) date('m') - 1));
-                                    // $is_approved = $contracts->ContractApproval?->where('periode', '=', $month)?->where('is_locked', '=', true);
-                                    $is_approved = \App\Models\ContractApproval::where(function($query) use($contracts){
-                                        $query->where('id_contract', $contracts->id_contract)
-                                        ->orWhere('profit_center', $contracts->profit_center);
-                                    })->where('is_locked', '=', true)->where("periode_laporan", $month)->count() > 0;
-                                @endphp
+                                
                                 <!--Jika User adalah Manager & Contract Management-->
                                 {{-- @if (($user->Pegawai?->kode_jabatan == 410 && $user->Pegawai?->kode_fungsi_bidang == 30100) || auth()->user()->check_administrator) --}}
                                 {{-- @if ((auth()->user()->can('ccm') && !empty(auth()->user()->proyek_selected)) || auth()->user()->check_administrator) --}}
@@ -345,8 +353,8 @@
                                                                 <tr>
                                                                     <td class="text-center">{{ ++$key }}</td>
                                                                     <td>
-                                                                        {{-- <a href="/claim-management/view/{{$vo->id_contract}}/perubahan-kontrak/{{$vo->id_perubahan_kontrak}}{{ isset($vo->periode) ? "?periode=".$vo->periode."&tahun=".$vo->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1"> --}}
-                                                                        <a href="/claim-management/view/{{$vo->profit_center}}/perubahan-kontrak/{{$vo->id_perubahan_kontrak}}{{ isset($vo->periode) ? "?periode=".$vo->periode."&tahun=".$vo->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                                        {{-- <a href="/claim-management/view/{{$vo->profit_center}}/perubahan-kontrak/{{$vo->id_perubahan_kontrak}}{{ isset($vo->periode_laporan) ? "?periode=".$vo->periode_laporan."&tahun=".$vo->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1"> --}}
+                                                                        <a href="/claim-management/{{$vo->id_perubahan_kontrak}}/detail{{ isset($vo->periode_laporan) ? "?periode=".$vo->periode_laporan."&tahun=".$vo->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
                                                                         {{ $vo->uraian_perubahan }}
                                                                         </a>
                                                                     </td>
@@ -414,7 +422,7 @@
                                                                         </small>
                                                                     </td>
                                                                     <td class="text-center">
-                                                                        <button class="btn btn-sm btn-danger" onclick="deleteAction('perubahan-kontrak/{{ $vo->id_perubahan_kontrak }}/delete')">Delete</button>
+                                                                        <button class="btn btn-sm btn-danger" onclick="deleteAction('perubahan-kontrak/{{ $vo->id_perubahan_kontrak }}/delete?periode={{ $periode }}&tahun={{ $tahun }}')">Delete</button>
                                                                     </td>
                                                                 </tr>
                                                                 @empty
@@ -464,8 +472,8 @@
                                                                 <tr>
                                                                     <td class="text-center">{{ ++$key }}</td>
                                                                     <td>
-                                                                        {{-- <a href="/claim-management/view/{{$klaim->id_contract}}/perubahan-kontrak/{{$klaim->id_perubahan_kontrak}}{{ isset($klaim->periode) ? "?periode=".$klaim->periode."&tahun=".$klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1"> --}}
-                                                                        <a href="/claim-management/view/{{$klaim->profit_center}}/perubahan-kontrak/{{$klaim->id_perubahan_kontrak}}{{ isset($klaim->periode) ? "?periode=".$klaim->periode."&tahun=".$klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                                        {{-- <a href="/claim-management/view/{{$klaim->profit_center}}/perubahan-kontrak/{{$klaim->id_perubahan_kontrak}}{{ isset($klaim->periode_laporan) ? "?periode=".$klaim->periode_laporan."&tahun=".$klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1"> --}}
+                                                                        <a href="/claim-management/{{$klaim->id_perubahan_kontrak}}/detail{{ isset($klaim->periode_laporan) ? "?periode=".$klaim->periode_laporan."&tahun=".$klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
                                                                         {{ $klaim->uraian_perubahan }}
                                                                         </a>
                                                                     </td>
@@ -533,7 +541,7 @@
                                                                         </small>
                                                                     </td>
                                                                     <td class="text-center">
-                                                                        <button class="btn btn-sm btn-danger" onclick="deleteAction('perubahan-kontrak/{{ $klaim->id_perubahan_kontrak }}/delete')">Delete</button>
+                                                                        <button class="btn btn-sm btn-danger" onclick="deleteAction('perubahan-kontrak/{{ $klaim->id_perubahan_kontrak }}/delete?periode={{ $periode }}&tahun={{ $tahun }}')">Delete</button>
                                                                     </td>
                                                                 </tr>
                                                                 @empty
@@ -583,8 +591,8 @@
                                                                 <tr>
                                                                     <td class="text-center">{{ ++$key }}</td>
                                                                     <td>
-                                                                        {{-- <a href="/claim-management/view/{{$anti_klaim->id_contract}}/perubahan-kontrak/{{$anti_klaim->id_perubahan_kontrak}}{{ isset($anti_klaim->periode) ? "?periode=".$anti_klaim->periode."&tahun=".$anti_klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1"> --}}
-                                                                        <a href="/claim-management/view/{{$anti_klaim->profit_center}}/perubahan-kontrak/{{$anti_klaim->id_perubahan_kontrak}}{{ isset($anti_klaim->periode) ? "?periode=".$anti_klaim->periode."&tahun=".$anti_klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                                        {{-- <a href="/claim-management/view/{{$anti_klaim->profit_center}}/perubahan-kontrak/{{$anti_klaim->id_perubahan_kontrak}}{{ isset($anti_klaim->periode_laporan) ? "?periode=".$anti_klaim->periode_laporan."&tahun=".$anti_klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1"> --}}
+                                                                        <a href="/claim-management/{{$anti_klaim->id_perubahan_kontrak}}/detail{{ isset($anti_klaim->periode_laporan) ? "?periode=".$anti_klaim->periode_laporan."&tahun=".$anti_klaim->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
                                                                         {{ $anti_klaim->uraian_perubahan }}
                                                                         </a>
                                                                     </td>
@@ -652,7 +660,7 @@
                                                                         </small>
                                                                     </td>
                                                                     <td class="text-center">
-                                                                        <button class="btn btn-sm btn-danger" onclick="deleteAction('perubahan-kontrak/{{ $anti_klaim->id_perubahan_kontrak }}/delete')">Delete</button>
+                                                                        <button class="btn btn-sm btn-danger" onclick="deleteAction('perubahan-kontrak/{{ $anti_klaim->id_perubahan_kontrak }}/delete?periode={{ $periode }}&tahun={{ $tahun }}')">Delete</button>
                                                                     </td>
                                                                 </tr>
                                                                 @empty
@@ -702,8 +710,8 @@
                                                                 <tr>
                                                                     <td class="text-center">{{ ++$key }}</td>
                                                                     <td>
-                                                                        {{-- <a href="/claim-management/view/{{$klaim_asuransi->id_contract}}/perubahan-kontrak/{{$klaim_asuransi->id_perubahan_kontrak}}{{ isset($klaim_asuransi->periode) ? "?periode=".$klaim_asuransi->periode."&tahun=".$klaim_asuransi->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1"> --}}
-                                                                        <a href="/claim-management/view/{{$klaim_asuransi->profit_center}}/perubahan-kontrak/{{$klaim_asuransi->id_perubahan_kontrak}}{{ isset($klaim_asuransi->periode) ? "?periode=".$klaim_asuransi->periode."&tahun=".$klaim_asuransi->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
+                                                                        {{-- <a href="/claim-management/view/{{$klaim_asuransi->profit_center}}/perubahan-kontrak/{{$klaim_asuransi->id_perubahan_kontrak}}{{ isset($klaim_asuransi->periode_laporan) ? "?periode=".$klaim_asuransi->periode_laporan."&tahun=".$klaim_asuransi->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1"> --}}
+                                                                        <a href="/claim-management/{{$klaim_asuransi->id_perubahan_kontrak}}/detail{{ isset($klaim_asuransi->periode_laporan) ? "?periode=".$klaim_asuransi->periode_laporan."&tahun=".$klaim_asuransi->tahun : "" }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">
                                                                         {{ $klaim_asuransi->uraian_perubahan }}
                                                                         </a>
                                                                     </td>
@@ -771,7 +779,7 @@
                                                                         </small>
                                                                     </td>
                                                                     <td class="text-center">
-                                                                        <button class="btn btn-sm btn-danger" onclick="deleteAction('perubahan-kontrak/{{ $klaim_asuransi->id_perubahan_kontrak }}/delete')">Delete</button>
+                                                                        <button class="btn btn-sm btn-danger" onclick="deleteAction('perubahan-kontrak/{{ $klaim_asuransi->id_perubahan_kontrak }}/delete?periode={{ $periode }}&tahun={{ $tahun }}')">Delete</button>
                                                                     </td>
                                                                 </tr>
                                                                 @empty
@@ -950,11 +958,15 @@
                         <!--begin::Modal body-->
                         <div class="modal-body py-lg-6 px-lg-6">
                             <!--begin::Input group Website-->
-                            <form action="/perubahan-kontrak/upload" method="POST"
+                            <form action="/claim-management/save" method="POST"
                                 enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" value="{{ $contracts->id_contract ?? 0 }}" id="id-contract"
                                     name="id-contract">
+                                <input type="hidden" value="{{ $periode }}" id="periode-laporan"
+                                    name="periode-laporan">
+                                <input type="hidden" value="{{ $tahun }}" id="tahun"
+                                    name="tahun">
                                 <input type="hidden" class="modal-name" name="modal-name">
                                 {{-- <input type="hidden" id="kode-proyek" name="kode-proyek" value="{{ $proyek->kode_proyek }}"> --}}
                                 <input type="hidden" id="profit-center" name="profit-center" value="{{ $contracts->profit_center }}">

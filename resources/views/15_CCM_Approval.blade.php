@@ -266,19 +266,21 @@
                                                         {{-- @if ($user->check_administrator || auth()->user()->can("admin-ccm")) --}}
                                                         @can('approve-change', $history['profit_center'])
                                                         <div class="d-flex flex-column flex-md-row gap-4 justify-content-center">
-                                                            @if ($history['is_approved'] == "t")
+                                                            @if ($history['is_approved'] == true)
                                                                     <a class="btn btn-success btn-sm disabled d-flex align-items-center">Approved</a>
-                                                                    @if($history['is_request_unlock'] == "t")
-                                                                        @can('unlock-ccm')
-                                                                        <form action="/history-approval/set-unlock" method="post">
-                                                                            @csrf
-                                                                            <input type="hidden" name="id_contract" value="{{ $history['id_contract'] }}">
-                                                                            <button type="submit" class="btn btn-secondary btn-sm d-flex align-items-center">Unlock</button>
-                                                                        </form>
-                                                                        @endcan
-                                                                    @endif
-                                                            @elseif($history['is_approved'] == "f")
+                                                            @elseif($history['is_approved'] === false)
                                                                 <button class="btn btn-danger btn-sm disabled">Approval Ditolak</button>
+                                                                @if($history['is_request_unlock'] == true)
+                                                                    {{-- @can('unlock-ccm') --}}
+                                                                    <form action="/history-approval/set-unlock" method="post">
+                                                                        @csrf
+                                                                        <input type="hidden" name="profit_center" value="{{ $history['profit_center'] }}">
+                                                                        <input type="hidden" name="periode" value="{{ $filterBulan }}">
+                                                                        <input type="hidden" name="tahun" value="{{ $filterTahun }}">
+                                                                        <button type="submit" class="btn btn-secondary btn-sm d-flex align-items-center">Unlock</button>
+                                                                    </form>
+                                                                    {{-- @endcan --}}
+                                                                @endif
                                                             @else
                                                                 <a class="btn btn-primary btn-sm d-flex align-items-center" onclick="confirmAction(this, '{{ $history['profit_center'] }}')">Approve</a>
                                                                 <a class="btn btn-secondary btn-sm d-flex align-items-center" onclick="confirmAction(this, '{{ $history['profit_center'] }}')">Cancel</a>
@@ -288,19 +290,29 @@
                                                         {{-- @else --}}
                                                         @can('lock-change', $history['profit_center'])
                                                         <div class="d-flex flex-column flex-md-row gap-4 justify-content-center">
-                                                            @if ($history['is_approved'] == "t")
+                                                            @if ($history['is_approved'] == true)
                                                                 <a class="btn btn-success btn-sm d-flex align-items-center disabled">Approved</a>
-                                                                @if($history['is_request_unlock'] == "t")
+                                                                @elseif($history['is_approved'] === false)
+                                                                <a class="btn btn-danger btn-sm d-flex align-items-center disabled">Approve Ditolak</a>
+                                                                @if($history['is_request_unlock'] == true)
                                                                 <a class="btn btn-success btn-sm d-flex align-items-center disabled">Menunggu Unlock...</a>
+                                                                @elseif($history['is_request_unlock'] === false)
+                                                                <form action="/history-approval/delete" method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="profit_center" value="{{ $history['profit_center'] }}">
+                                                                    <input type="hidden" name="periode" value="{{ $filterBulan }}">
+                                                                    <input type="hidden" name="tahun" value="{{ $filterTahun }}">
+                                                                    <button type="submit" class="btn btn-secondary btn-sm d-flex align-items-center">Hapus History</button>
+                                                                </form>
                                                                 @else
                                                                 <form action="/history-approval/request-unlock" method="POST">
                                                                     @csrf
-                                                                    <input type="hidden" name="id_contract" value="{{ $history['id_contract'] }}">
+                                                                    <input type="hidden" name="profit_center" value="{{ $history['profit_center'] }}">
+                                                                    <input type="hidden" name="periode" value="{{ $filterBulan }}">
+                                                                    <input type="hidden" name="tahun" value="{{ $filterTahun }}">
                                                                     <button type="submit" class="btn btn-secondary btn-sm d-flex align-items-center">Request Unlock</button>
                                                                 </form>
                                                                 @endif
-                                                            @elseif($history['is_approved'] == "f")
-                                                                <a class="btn btn-danger btn-sm d-flex align-items-center disabled">Approve Ditolak</a>
                                                             @else
                                                                 <a class="btn btn-success btn-sm d-flex align-items-center disabled">Menunggu untuk approval...</a>
                                                             @endif
@@ -375,6 +387,7 @@
                     const formData = new FormData();
                     formData.append("_token", "{{ csrf_token() }}");
                     formData.append("approve", "f");
+                    formData.append("periode", "{{ $filterBulan }}");
                     const sendData = await fetch(`/history-approval/set-approve/${id_contract}`,{
                         method: "POST",
                         body: formData

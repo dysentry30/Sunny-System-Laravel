@@ -32,7 +32,10 @@ class ContractApprovalController extends Controller
                     ->orWhere("profit_center", $id_contract);
             })
             ->where('periode_laporan', '=', $periode)->get();
-        $data_claims_potential = $claims_all->map(function ($item, $key) use ($claims_all) {
+
+        $tanggalLaporan = (int) (date("Y") . sprintf('%02d', $periode) . date('d'));
+
+        $data_claims_potential = $claims_all->map(function ($item, $key) use ($claims_all, $tanggalLaporan) {
 
             $item_claim = $claims_all->groupBy("jenis_perubahan")->filter(function ($i, $key) use ($item) {
                 return $key == $item->jenis_perubahan;
@@ -77,7 +80,7 @@ class ContractApprovalController extends Controller
             $newClass = new stdClass();
 
             $newClass->NO_PROPOSAL_CLAIM = $item->proposal_klaim;
-            $newClass->TANGGAL = (int) date("Ymd");
+            $newClass->TANGGAL = $tanggalLaporan;
             $newClass->PROFIT_CTR = "$profit_center";
             $newClass->PROJECT_DEF = "$profit_center";
             $newClass->COMP_CODE = "A000";
@@ -188,7 +191,7 @@ class ContractApprovalController extends Controller
 
         $data_claims_submission = $claims_all->filter(function ($item) {
             return $item->stage >= 2;
-        })->map(function ($item, $key) use ($claims_all) {
+        })->map(function ($item, $key) use ($claims_all, $tanggalLaporan) {
 
             $item_claim = $claims_all->groupBy("jenis_perubahan")->filter(function ($i, $key) use ($item) {
                 return $key == $item->jenis_perubahan;
@@ -221,7 +224,7 @@ class ContractApprovalController extends Controller
             $newClass = new stdClass();
 
             $newClass->NO_PROPOSAL_CLAIM = $item->proposal_klaim;
-            $newClass->TANGGAL = (int) date("Ymd");
+            $newClass->TANGGAL = $tanggalLaporan;
             $newClass->PROFIT_CTR = "$profit_center";
             $newClass->PROJECT_DEF = "$profit_center";
             $newClass->COMP_CODE = "A000";
@@ -322,7 +325,7 @@ class ContractApprovalController extends Controller
 
         $data_claims_filter = $claims_all->filter(function ($item) {
             return $item->stage == 4 || $item->stage == 5;
-        })->map(function ($item, $key) use ($claims_all) {
+        })->map(function ($item, $key) use ($claims_all, $tanggalLaporan) {
 
             $item_claim = $claims_all->groupBy("jenis_perubahan")->filter(function($i, $key) use($item){
                 return $key == $item->jenis_perubahan;
@@ -355,7 +358,7 @@ class ContractApprovalController extends Controller
             $newClass = new stdClass();
 
             $newClass->NO_PROPOSAL_CLAIM = $item->proposal_klaim;
-            $newClass->TANGGAL = (int) date("Ymd");
+            $newClass->TANGGAL = $tanggalLaporan;
             $newClass->PROFIT_CTR = "$profit_center";
             $newClass->PROJECT_DEF = "$profit_center";
             $newClass->COMP_CODE = "A000";
@@ -522,10 +525,11 @@ class ContractApprovalController extends Controller
             // dd($closed_request, $data_claims, $fill_data);
 
             if ($fill_data->successful() && $closed_request->successful()) {
-
+                $data_claims_array = $data_claims->toArray() ?? [];
+                $data_claims_array["PERIODE"] = $tanggalLaporan;
                 $this->setLogging('ccm_approval', "APPROVAL CCM => ", [
                     "KODE_PROYEK" => $claims_all->first()?->profit_center,
-                    "DATA" => $data_claims->toArray() ?? [],
+                    "DATA" => $data_claims_array,
                     "STATUS" => "SUCCESS"
                 ]);
 
@@ -536,9 +540,11 @@ class ContractApprovalController extends Controller
 
                 return response()->json($response_success);
             } else {
+                $data_claims_array = $data_claims->toArray() ?? [];
+                $data_claims_array["PERIODE"] = $tanggalLaporan;
                 $this->setLogging('ccm_approval', "APPROVAL CCM => ", [
                     "KODE_PROYEK" => $claims_all->first()?->profit_center,
-                    "DATA" => $data_claims->toArray() ?? [],
+                    "DATA" => $data_claims_array,
                     "STATUS" => "FAILED"
                 ]);
 
@@ -779,7 +785,7 @@ class ContractApprovalController extends Controller
                     'periode' => $namaBulan,
                     // 'unit_kerja' => $approval->first()->Proyeks->UnitKerja->unit_kerja,
                     'unit_kerja' => $approval->first()->ProyekPISNew->UnitKerja->unit_kerja,
-                    'is_approved' => $approval->first()->is_approved,
+                    'is_approved' => is_null($approval->first()->is_approved) ? null : ($approval->first()->is_approved ?: false),
                     'is_request_unlock' => $approval->first()->is_request_unlock,
                 ];
             });
@@ -1074,15 +1080,18 @@ class ContractApprovalController extends Controller
     public function setUnlock(Request $request){
         $data = $request->all();
 
-        $month = (int)date("m") == 1 ? 12 : (int)date("m")-1;
+        // $month = (int)date("m") == 1 ? 12 : (int)date("m")-1;
+        $periodeLaporan = $request->get("periode") ?? null;
+        $tahunLaporan = $request->get("tahun") ?? null;
 
-        $approval = ContractApproval::where("id_contract", "=", $data["id_contract"])->where("periode_laporan", $month)->first();
+        $approval = ContractApproval::where("profit_center", "=", $data["profit_center"])->where("periode_laporan", $periodeLaporan)->where("tahun", $tahunLaporan);
 
-        $approval->is_request_unlock = null;
-        $approval->is_locked = false;
-        $approval->is_approved = null;
+        $update = $approval->update(['is_request_unlock' => false]);
+        // $approval->is_request_unlock = null;
+        // $approval->is_locked = false;
+        // $approval->is_approved = null;
 
-        if($approval->save()){
+        if ($update) {
             Alert::success("success", "Contract berhasil di unlock");
             return redirect()->back();
         }else{
@@ -1091,17 +1100,49 @@ class ContractApprovalController extends Controller
         }
     }
 
+    public function deleteHistory(Request $request)
+    {
+        $data = $request->all();
+
+        $periodeLaporan = $request->get("periode") ?? null;
+        $tahunLaporan = $request->get("tahun") ?? null;
+
+        DB::beginTransaction();
+
+        try {
+            $approval = ContractApproval::where("profit_center", "=", $data["profit_center"])->where("periode_laporan", $periodeLaporan)->where("tahun", $tahunLaporan);
+
+            if ($approval->delete()) {
+                DB::commit();
+                Alert::success("success", "Contract berhasil di Hapus");
+                return redirect()->back();
+            } else {
+                DB::rollBack();
+                Alert::error("error", "Contract gagal di Hapus");
+                return redirect()->back();
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Alert::error("error", $e->getMessage());
+            return redirect()->back();
+        }
+    }
+
     public function requestUnlock(Request $request){
         $data = $request->all();
 
-        $month = (int)date("m") == 1 ? 12 : (int)date("m")-1;
+        // $month = (int)date("m") == 1 ? 12 : (int)date("m")-1;
+        $periodeLaporan = $request->get("periode") ?? null;
+        $tahunLaporan = $request->get("tahun") ?? null;
 
-        $approval = ContractApproval::where("id_contract", "=", $data["id_contract"])->where("periode_laporan", $month)->first();
+        $approval = ContractApproval::where("profit_center", "=", $data["profit_center"])->where("periode_laporan", $periodeLaporan)->where("tahun", $tahunLaporan);
 
-        $approval->total_request_unlock = $approval->total_request_unlock + 1;
-        $approval->is_request_unlock = "t";
+        // $approval->total_request_unlock = $approval->total_request_unlock + 1;
+        // $approval->is_request_unlock = "t";
 
-        if($approval->save()){
+        $update = $approval->update(['is_request_unlock' => true]);
+
+        if ($update) {
             Alert::success("success", "Mohon tunggu untuk di unlock oleh PIC");
             return redirect()->back();
         }else{
@@ -1115,7 +1156,7 @@ class ContractApprovalController extends Controller
 
         $month = (int) date('m') == 1 ? 12 : ((int)date('d') < 15 ? (int) date('m') : (int) date('m') - 1);
 
-        $periode = !empty($data['periode']) ? $data['periode'] : $month;
+        $periode = $request->get("periode") ?? $month;
         DB::beginTransaction();
         try {
             // $approval = ContractApproval::where("id_contract", "=", $id_contract)->where("periode_laporan", $periode);
@@ -1137,7 +1178,28 @@ class ContractApprovalController extends Controller
                 $update = $approval->update(['is_approved' => $data['approve']]);
                 if ($update) {
                     $get_response = $this->sendDataSAP($id_contract, $periode);
+                    
                     if ($get_response->original["statusCode"] == 200) {
+                        $approval->each(function ($item) {
+                            $newClaim = new PerubahanKontrak();
+                            $newClaim->profit_center = $item->profit_center;
+                            $newClaim->id_contract = $item->id_contract ?? null;
+                            $newClaim->jenis_perubahan = $item->jenis_perubahan;
+                            $newClaim->tanggal_perubahan = $item->tanggal_perubahan;
+                            $newClaim->uraian_perubahan = $item->uraian_perubahan;
+                            $newClaim->keterangan = $item->keterangan;
+                            $newClaim->proposal_klaim = $item->proposal_klaim;
+                            $newClaim->tanggal_pengajuan = $item->tanggal_pengajuan;
+                            $newClaim->biaya_pengajuan = !empty($item->biaya_pengajuan) ? str_replace(".", "", $item->biaya_pengajuan) : null;
+                            // $newClaim->waktu_pengajuan = !empty($data["biaya-pengajuan"]) ? $data["waktu-pengajuan"] : null;
+                            $newClaim->nilai_negatif = $item->nilai_negatif;
+                            $newClaim->waktu_pengajuan_new = $item->waktu_pengajuan_new;
+                            $newClaim->periode_laporan = $item->periode_laporan != 12 ? $item->periode_laporan + 1 : 1;
+                            $newClaim->tahun = $item->tahun;
+                            $newClaim->stage = $item->stage;
+
+                            $newClaim->save();
+                        });
                         DB::commit();
                         Alert::success("success", "Contract berhasil di Approve");
                         return response()->json([
@@ -1590,7 +1652,7 @@ class ContractApprovalController extends Controller
                 $claim->nilai_negatif = $claim->nilai_negatif ?: false;
                 // $claim['perubahan_id'] = $claim->id;
                 // $claim->makeHidden(['Proyek', 'id']); //Untuk menghilangkan relasi agar tidak masuk ke array
-                $claim->makeHidden(['id_perubahan_kontrak', 'kd_divisi']); //Untuk menghilangkan relasi agar tidak masuk ke array
+                $claim->makeHidden(['id_perubahan_kontrak', 'ProyekPISNew']); //Untuk menghilangkan relasi agar tidak masuk ke array
                 return $claim;
             });
             // dd($data_approval);

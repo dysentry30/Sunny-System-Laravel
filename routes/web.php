@@ -388,7 +388,6 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::get('/contract-management/view/{id_contract}/draft-contract/{draftContracts}', [ContractManagementsController::class, 'draftContractView']);
 
     // Route::get('/contract-management/view/{id_contract}/perubahan-kontrak/{perubahan_kontrak}', [ContractManagementsController::class, 'perubahanKontrakView']);
-    Route::get('/contract-management/view/{profit_center}/perubahan-kontrak/{perubahan_kontrak}', [ContractManagementsController::class, 'perubahanKontrakView']);
 
     Route::get('/review-contract/view/{id_contract}/{stage}', [ContractManagementsController::class, 'reviewKontrakView']);
     
@@ -458,6 +457,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post("/history-approval/request-unlock", [ContractApprovalController::class, "requestUnlock"]);
 
+    Route::post("/history-approval/delete", [ContractApprovalController::class, "deleteHistory"]);
+
     //end :: History Approval CCM
 
     //begin :: Menu History Approval
@@ -485,42 +486,50 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('claim-management', [ClaimController::class, 'index']);
 
+    Route::get('/claim-management/{perubahan_kontrak}/detail', [ContractManagementsController::class, 'perubahanKontrakView']);
+
     // Route::get('claim-management/proyek/{kode_proyek}/{jenis_claim}', [ClaimController::class, 'viewClaim']);
     Route::get('claim-management/proyek/{kode_proyek}/{id_contract}', [ClaimController::class, 'view']);
 
     Route::get('claim-management/proyek/{profit_center}', [ClaimController::class, 'viewClaimNew']);
+
+    Route::post('/claim-management/stage/save', [StageController::class, "stagePerubahanKontrakSave"]);
     
     // Route::get('claim-management/view/{kode_proyek}', [ClaimController::class, 'viewClaim']);
 
     Route::get('/claim-management/{proyek}/{contract}/new',  [ClaimController::class, 'new']);
 
-    Route::post('/claim-management/save', [ClaimController::class, 'save']);
+    // Route::post('/claim-management/save', [ClaimController::class, 'save']);
 
+    Route::post("/claim-management/save", [ClaimController::class, "newClaim"]);
+    
     Route::post('/claim-management/{id}/delete', [ClaimController::class, 'claimDelete']);
-
+    
     Route::post("/claim-management/update/{id}", [ClaimController::class, "editClaim"]);
 
-    Route::get('claim-management/view/{claim_management}', [ClaimController::class, 'show']);
+    Route::post("/claim-management/approve/edit", [ClaimController::class, "approveClaim"]);
+
+    Route::get('/claim-management/view/{claim_management}', [ClaimController::class, 'show']);
 
     Route::get('/claim-management/view/{profit_center}/perubahan-kontrak/{perubahan_kontrak}', [ContractManagementsController::class, 'perubahanKontrakView']);
 
-    Route::post('/approval-claim/save', [ClaimController::class, 'store']);
+    // Route::post('/approval-claim/save', [ClaimController::class, 'store']);
 
-    Route::post('/approval-claim/delete', [ClaimController::class, 'delete']);
+    // Route::post('/approval-claim/delete', [ClaimController::class, 'delete']);
 
-    Route::post('/claim-management/update', [ClaimController::class, 'update']);
+    // Route::post('/claim-management/update', [ClaimController::class, 'update']);
 
-    Route::post('/detail-claim/save', [ClaimController::class, 'detailSave']);
+    // Route::post('/detail-claim/save', [ClaimController::class, 'detailSave']);
 
-    Route::post('/claim/stage/save', [ClaimController::class, 'claimStage']);
+    // Route::post('/claim/stage/save', [ClaimController::class, 'claimStage']);
 
-    Route::post('/claim-contract/draft/upload', [ClaimController::class, 'claimDraftUpload']);
+    // Route::post('/claim-contract/draft/upload', [ClaimController::class, 'claimDraftUpload']);
 
-    Route::post('/claim-contract/diajukan/upload', [ClaimController::class, 'claimDiajukanUpload']);
+    // Route::post('/claim-contract/diajukan/upload', [ClaimController::class, 'claimDiajukanUpload']);
 
-    Route::post('/claim-contract/negosiasi/upload', [ClaimController::class, 'claimNegosiasiUpload']);
+    // Route::post('/claim-contract/negosiasi/upload', [ClaimController::class, 'claimNegosiasiUpload']);
 
-    Route::post('/claim-contract/disetujui/upload', [ClaimController::class, 'claimDisetujuiUpload']);
+    // Route::post('/claim-contract/disetujui/upload', [ClaimController::class, 'claimDisetujuiUpload']);
     // end :: Claim Management
 
 
@@ -3717,14 +3726,6 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post("/mom-meeting/upload", [ContractManagementsController::class, "momMeeting"]);
 
-    Route::post("/perubahan-kontrak/upload", [ClaimController::class, "newClaim"]);
-
-    Route::post("/perubahan-kontrak/edit", [ClaimController::class, "perubahanKontrakEdit"]);
-
-    Route::post("/perubahan-kontrak/{id}/delete", [ClaimController::class, "claimDelete"]);
-
-    Route::post("/perubahan-kontrak/update/{id}", [ClaimController::class, "editClaim"]);
-
     Route::post("/perubahan-kontrak/update", [ContractManagementsController::class, "uploadPerubahanKontrak"]);
 
     Route::post("/pasal-kontraktual/upload", [ContractManagementsController::class, "uploadPasalKontraktual"]);
@@ -3773,8 +3774,6 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/stage/save', [StageController::class, "stageSave"]);
 
     Route::post('/stage/addendum/save', [StageController::class, "stageAddendumSave"]);
-
-    Route::post('/stage/perubahan-kontrak/save', [StageController::class, "stagePerubahanKontrakSave"]);
 
     Route::post('/pasal/save', [PasalController::class, "pasalSave"]);
 
