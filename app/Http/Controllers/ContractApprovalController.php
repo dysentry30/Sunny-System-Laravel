@@ -1687,7 +1687,28 @@ class ContractApprovalController extends Controller
             // $update = $approve->update(['is_approved' => "t"]);
             $get_response = $this->sendDataSAP($profit_center, $data["periode"]);
             if ($get_response->original["statusCode"] == 200) {
+                $approve->each(function ($item) {
+                    $newClaim = new PerubahanKontrak();
+                    $newClaim->profit_center = $item->profit_center;
+                    $newClaim->id_contract = $item->id_contract ?? null;
+                    $newClaim->jenis_perubahan = $item->jenis_perubahan;
+                    $newClaim->tanggal_perubahan = $item->tanggal_perubahan;
+                    $newClaim->uraian_perubahan = $item->uraian_perubahan;
+                    $newClaim->keterangan = $item->keterangan;
+                    $newClaim->proposal_klaim = $item->proposal_klaim;
+                    $newClaim->tanggal_pengajuan = $item->tanggal_pengajuan;
+                    $newClaim->biaya_pengajuan = !empty($item->biaya_pengajuan) ? str_replace(".", "", $item->biaya_pengajuan) : null;
+                    // $newClaim->waktu_pengajuan = !empty($data["biaya-pengajuan"]) ? $data["waktu-pengajuan"] : null;
+                    $newClaim->nilai_negatif = $item->nilai_negatif;
+                    $newClaim->waktu_pengajuan_new = $item->waktu_pengajuan_new;
+                    $newClaim->periode_laporan = $item->periode_laporan != 12 ? $item->periode_laporan + 1 : 1;
+                    $newClaim->tahun = $item->tahun;
+                    $newClaim->stage = $item->stage;
+
+                    $newClaim->save();
+                });
                 dump("success");
+                sleep(2);
             } else {
                 dump("fail");
             }
