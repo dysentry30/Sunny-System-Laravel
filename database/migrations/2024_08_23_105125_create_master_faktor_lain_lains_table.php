@@ -16,8 +16,8 @@ return new class extends Migration
         if (!Schema::hasTable('master_faktor_lain_lain')) {
             Schema::create('master_faktor_lain_lain', function (Blueprint $table) {
                 $table->uuid("id")->primary();
-                $table->string("kode_sumber_daya");
-                $table->foreign("kode_sumber_daya")->references("kode_sumber_daya")->on("master_sumber_daya");
+                $table->string("resource_code");
+                $table->foreign("resource_code")->references("code")->on("master_sumber_daya");
                 $table->text("faktor");
                 $table->timestamps();
             });

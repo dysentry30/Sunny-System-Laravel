@@ -16,8 +16,8 @@ return new class extends Migration
         if (!Schema::hasTable('analisa_harga_satuan_details')) {
             Schema::create('analisa_harga_satuan_details', function (Blueprint $table) {
                 $table->uuid('id')->primary();
-                $table->string('kode_sumber_daya', 15);
-                $table->foreign('kode_sumber_daya')->references('kode_sumber_daya')->on('master_sumber_daya')->onDelete('cascade');
+                $table->string('resource_code', 15);
+                $table->foreign('resource_code')->references('code')->on('master_sumber_daya')->onDelete('cascade');
                 $table->string('kode_ahs', 15);
                 $table->foreign('kode_ahs')->references('kode_ahs')->on('master_analisa_harga_satuan')->onDelete('cascade');
                 $table->timestamps();
