@@ -70,27 +70,48 @@
 
                                     <ul
                                     class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
-                                        <!--begin:::Tab item Claim-->
+                                        <!--begin:::Tab item-->
+                                        <li class="nav-item">
+                                            <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
+                                                aria-selected="true" href="#kt_view_data_umum"
+                                                style="font-size:14px;">DATA UMUM</a>
+                                        </li>
+                                        <!--end:::Tab item-->
+                                        <!--begin:::Tab item-->
+                                        <li class="nav-item">
+                                            <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
+                                                aria-selected="true" href="#kt_view_boq_ekstern"
+                                                style="font-size:14px;">BOQ EKSTERN</a>
+                                        </li>
+                                        <!--end:::Tab item-->
+                                        <!--begin:::Tab item-->
+                                        <li class="nav-item">
+                                            <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
+                                                aria-selected="true" href="#kt_view_analisa_harsat"
+                                                style="font-size:14px;">ANALISA HARSAT</a>
+                                        </li>
+                                        <!--end:::Tab item-->
+                                        <!--begin:::Tab item-->
+                                        <li class="nav-item">
+                                            <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
+                                                aria-selected="true" href="#kt_view_sumber_daya"
+                                                style="font-size:14px;">SUMBER DAYA</a>
+                                        </li>
+                                        <!--end:::Tab item-->
+                                        <!--begin:::Tab item-->
+                                        <li class="nav-item">
+                                            <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
+                                                aria-selected="true" href="#kt_view_pareto_harsat"
+                                                style="font-size:14px;">PARETO HARSAT</a>
+                                        </li>
+                                        <!--end:::Tab item-->
+                                        <!--begin:::Tab item-->
                                         <li class="nav-item">
                                             <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
                                                 aria-selected="true" href="#kt_view_resume"
-                                                style="font-size:14px;">Resume</a>
+                                                style="font-size:14px;">RESUME</a>
                                         </li>
-                                        <!--end:::Tab item Claim-->
-                                        <!--begin:::Tab item Claim-->
-                                        <li class="nav-item">
-                                            <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
-                                                aria-selected="true" href="#kt_view_pareto"
-                                                style="font-size:14px;">Pareto</a>
-                                        </li>
-                                        <!--end:::Tab item Claim-->
-                                        <!--begin:::Tab item Claim-->
-                                        <li class="nav-item">
-                                            <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
-                                                aria-selected="true" href="#kt_view_perhitungan"
-                                                style="font-size:14px;">Perhitungan</a>
-                                        </li>
-                                        <!--end:::Tab item Claim-->
+                                        <!--end:::Tab item-->
                                     </ul>
 
                                 </div>
@@ -105,6 +126,51 @@
                         <div class="overflow-scroll card-body pt-0 ">
                             <!--Begin :: Tab Content-->
                             <div id="tab-content" class="tab-content">
+
+                                <!--Begin :: Tab Pane - Data Umum-->
+                                <div class="tab-pane fade show active" id="kt_view_data_umum">
+                                    <table class="table align-middle table-bordered border-dark fs-6 gy-2" id="data-umum">
+                                        <!--begin::Table head-->
+                                        <thead>
+                                            <!--begin::Table row-->
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0 bg-primary">
+                                                <th class="min-w-auto text-white">No</th>
+                                                <th class="min-w-auto text-white">Kategori</th>
+                                                <th class="min-w-500px text-white">Uraian</th>
+                                            </tr>
+                                            <!--begin::Table row-->
+                                        </thead>
+                                        <!--end::Table head-->
+                                        <!--begin::Table Body-->
+                                        <tbody>
+                                            @php
+                                                $no = 1;
+                                            @endphp
+                                            @foreach ($dataUmumField as $key => $value)
+                                                @if (is_array($value))
+                                                    <tr>
+                                                        <td class="text-center">{{ $no++ }}</td>
+                                                        <td>{{ $key }}</td>
+                                                        <td>
+                                                            @foreach ($value as $partner)
+                                                                <p>{{ $partner["nama_partner"] }} <span>| Porsi KSO: {{ $partner["porsi_jo"] }}%</span></p>
+                                                                <hr>
+                                                            @endforeach
+                                                        </td>
+                                                    </tr>
+                                                @else
+                                                    <tr>
+                                                        <td class="text-center">{{ $no++ }}</td>
+                                                        <td>{{ $key }}</td>
+                                                        <td>{{ $value }}</td>
+                                                    </tr>                                                    
+                                                @endif
+                                            @endforeach
+                                        </tbody>
+                                        <!--end::Table Body-->
+                                    </table>
+                                </div>
+                                <!--End :: Tab Pane - Data Umum-->
 
                                 <!--Begin :: Tab Pane - Resuma-->
                                 <div class="tab-pane fade" id="kt_view_resume">
@@ -521,7 +587,7 @@
                                 <!--End :: Tab Pane - Resuma-->
 
                                 <!--Begin :: Tab Pane - Pareto-->
-                                <div class="tab-pane fade" id="kt_view_pareto">
+                                <div class="tab-pane fade" id="kt_view_pareto_harsat">
                                     <table class="table align-middle table-bordered border-dark fs-6 gy-2" id="example2">
                                         <!--begin::Table head-->
                                         <thead>
@@ -557,7 +623,7 @@
                                 <!--End :: Tab Pane - Pareto-->
 
                                 <!--Begin :: Tab Pane - Perhitungan-->
-                                <div class="tab-pane fade show active" id="kt_view_perhitungan" role="tabpanel">
+                                <div class="tab-pane fade" id="kt_view_boq_ekstern" role="tabpanel">
                                     <div class="d-flex flex-row justify-content-end gap-3 my-5">
                                         <button type="button" class="btn btn-primary" onclick="tambahTahap()">Tambah Tahap</button>
                                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal_kt_upload_boq">Upload BOQ</button>
@@ -784,7 +850,7 @@
 
             const parentBOQSelected = document.getElementById(`boq-${indexBOQSelected}`);
 
-            const req = await fetch(`{{ url('/get-detail-ahs/${optionSelected}') }}`, {
+            const req = await fetch(`{{ url('/estimasi-proyek/get-detail-ahs/${optionSelected}') }}`, {
                 method: 'GET',
             }).then(res => res.json());            
 
@@ -808,7 +874,7 @@
 
             cell1.innerHTML = req.kode_ahs;
             cell2.innerHTML = parentBOQSelected.firstElementChild.innerHTML;
-            cell3.innerHTML = `<a href="/rab-proyek/detail-ahs/${req.kode_ahs}" class="text-hover-primary text-black" target="_blank">${req.uraian}</a>`;
+            cell3.innerHTML = `<a href="/estimasi-proyek/detail-ahs/${req.kode_ahs}" class="text-hover-primary text-black" target="_blank">${req.uraian}</a>`;
             cell4.innerHTML = req.satuan;
             cell5.innerHTML = req.volume.toLocaleString();
             cell6.innerHTML = req.harsat.toLocaleString();

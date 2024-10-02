@@ -90,6 +90,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\PiutangController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\EstimasiController;
 use App\Http\Controllers\ForecastController;
 use App\Http\Controllers\MataUangController;
 use App\Models\MasterKlasifikasiOmsetProyek;
@@ -7674,139 +7675,13 @@ Route::group(['prefix' => 'analisa-harga-satuan'], function () {
     Route::post('/detail/save/{masterAHS}', [MasterAnalisaHargaSatuanController::class, 'insertDetail']);
 });
 
-Route::group(["prefix" => "rab-proyek"], function () {
-    Route::get('/', function () {
-        $proyeks = Proyek::where("dop", "!=", "EA")->where("tahun_perolehan", date("Y"))->where("tipe_proyek", "P")->where("stage",  3)->where("is_cancel", false)->where("is_tidak_lulus_pq", false)->get();
-        return view("30_RAB_POC", ["proyeks" => $proyeks]);
-    });
-
-    Route::get('/detail/{proyek}', function (Proyek $proyek) {
-        $masterAHS = MasterAnalisaHargaSatuan::all();
-        $masterSumberDaya = MasterSumberDaya::all();
-        $masterSumberDaya = $masterSumberDaya->map(function ($item) {
-            $item->volume = $item->MasterHargaSatuan->volume;
-            $item->harga_satuan = $item->MasterHargaSatuan->harga;
-            $item->jumlah = $item->MasterHargaSatuan->harga * $item->MasterHargaSatuan->volume;
-            return $item;
-        });
-
-        $masterSumberDayaNew = $masterSumberDaya->map(function ($item) use ($masterSumberDaya) {
-            $totalJumlah = $masterSumberDaya->sum("jumlah");
-            $item->bobot = round($item->jumlah / $totalJumlah, 2);
-            return $item;
-        })->sortByDesc("bobot");
-
-        $bobotKumulatif = 0;
-
-        $masterSumberDayaNewBanget = $masterSumberDaya->map(function ($item, $index) use (&$bobotKumulatif) {
-
-            if ($index == 0) {
-                $bobotKumulatif = $item->bobot;
-            } else {
-                $bobotKumulatif += $item->bobot;
-            }
-
-            $item->bobot_kumulatif = $bobotKumulatif;
-            return $item;
-        });
-        return view("31_RAB_POC_DETAIL", ["proyek" => $proyek, "masterAHS" => $masterAHS, "masterSumberDaya" => $masterSumberDayaNewBanget]);
-    });
-
-    Route::get('detail-ahs/{kode_ahs}', function (Request $request, $kode_ahs) {
-        $analisaHargaSatuanDetail = AnalisaHargaSatuanDetail::where("kode_ahs", $kode_ahs)->get();
-        $analisaHargaSatuanDetail = $analisaHargaSatuanDetail->map(function ($item) use ($analisaHargaSatuanDetail) {
-            if (str_contains(mb_substr($item->kode_sumber_daya, 0, 1), "A")) {
-                if ($item->kode_sumber_daya == "AN300000") {
-                    $item->koef = $analisaHargaSatuanDetail->filter(function ($a) {
-                        return str_contains(mb_substr($a->kode_sumber_daya, 0, 1), "D");
-                    })->sum(function ($i) {
-                        return !empty($i->MasterSumberDaya->MasterProduktivitas?->nilai_produktivitas) ? round(1 / $i->MasterSumberDaya->MasterProduktivitas?->nilai_produktivitas, 2) : 0;
-                    }) * $item->MasterSumberDaya->MasterWaste->nilai_waste;
-                } else {
-                    $item->koef = $item->MasterSumberDaya->MasterWaste->nilai_waste;
-                }
-            } elseif (str_contains(mb_substr($item->kode_sumber_daya, 0, 1), "C")) {
-                $item->koef = 1;
-            } elseif (str_contains(mb_substr($item->kode_sumber_daya, 0, 1), "D")) {
-                if ($item->kode_sumber_daya != "D1200000") {
-                    if (!empty($item->MasterSumberDaya->MasterProduktivitas?->nilai_produktivitas)) {
-                        $item->koef = round(1 / $item->MasterSumberDaya->MasterProduktivitas?->nilai_produktivitas, 4);
-                    } else {
-                        $item->koef = 0;
-                    }
-                } else {
-                    $item->koef = $analisaHargaSatuanDetail->filter(function ($a) {
-                        return str_contains(mb_substr($a->kode_sumber_daya, 0, 1), "D");
-                    })->sum(function ($i) {
-                        return !empty($i->MasterSumberDaya->MasterProduktivitas?->nilai_produktivitas) ? round(1 / $i->MasterSumberDaya->MasterProduktivitas?->nilai_produktivitas, 2) : 0;
-                    });
-                }
-            } elseif (str_contains(mb_substr($item->kode_sumber_daya, 0, 1), "E")) {
-                $item->koef = 1;
-            }
-
-            return $item;
-        });
-
-        // dd($analisaHargaSatuanDetail);
-
-
-        $materials = $analisaHargaSatuanDetail->filter(function ($ahs) {
-            return str_contains(mb_substr($ahs->kode_sumber_daya, 0, 1), "A");
-        });
-        $upahs = $analisaHargaSatuanDetail->filter(function ($ahs) {
-            return str_contains(mb_substr($ahs->kode_sumber_daya, 0, 1), "C");
-        });
-        $alats = $analisaHargaSatuanDetail->filter(function ($ahs) {
-            return str_contains(mb_substr($ahs->kode_sumber_daya, 0, 1), "D");
-        });
-        $subKons = $analisaHargaSatuanDetail->filter(function ($ahs) {
-            return str_contains(mb_substr($ahs->kode_sumber_daya, 0, 1), "E");
-        });
-
-
-        $total = $analisaHargaSatuanDetail->map(function ($item) {
-            return ["harga" => (int)$item->MasterHargaSatuan?->harga ?? 0];
-        })->sum(function ($item) {
-            return $item["harga"];
-        });
-
-        $ahs = MasterAnalisaHargaSatuan::where("kode_ahs", $kode_ahs)->first();
-
-        return view("32_RAB_POC_DETAIL_AHS", [
-            "ahs" => $ahs,
-            "materials" => $materials,
-            "upahs" => $upahs,
-            "alats" => $alats,
-            "subKons" => $subKons,
-            "total" => $total,
-        ]);
-    });
+Route::group(["prefix" => "estimasi-proyek"], function () {
+    Route::get('/', [EstimasiController::class, 'index']);
+    Route::get('/detail/{proyek}', [EstimasiController::class, 'view']);
+    Route::get('detail-ahs/{kode_ahs}', [EstimasiController::class, 'viewDetailAHS']);
+    Route::get('/get-detail-ahs/{kode_ahs}', [EstimasiController::class, 'getDetailAHS']);
 });
 
-Route::get('/get-detail-ahs/{kode_ahs}', function ($kode_ahs) {
-    $ahsParent = MasterAnalisaHargaSatuan::where("kode_ahs", $kode_ahs)->first();
-    $analisaHargaDetail = AnalisaHargaSatuanDetail::where("kode_ahs", $kode_ahs)->get();
-    $totalVolume = $analisaHargaDetail->sum(function ($item) {
-        return (float)$item->MasterSumberDaya->MasterHargaSatuan->volume ?? 0;
-    });
-    $totalHarsat = $analisaHargaDetail->sum(function ($item) {
-        return (float)$item->MasterSumberDaya->MasterHargaSatuan->harga ?? 0;
-    });
-
-    $data = [
-        "kode_ahs" => $kode_ahs,
-        "uraian" => $ahsParent->uraian,
-        "satuan" => "",
-        "volume" => $totalVolume,
-        "harsat" => $totalHarsat,
-        "total" =>  $totalVolume * $totalHarsat,
-        "harsat_eksternal" => $totalVolume != 0 && $totalHarsat != 0 ? (int)(($totalVolume * $totalHarsat) * 1.3) / $totalVolume : 0,
-        "total_eksternal" => $totalVolume != 0 && $totalHarsat != 0 ? (int)($totalVolume * $totalHarsat) * 1.3 : 0,
-    ];
-
-    return response()->json($data);
-});
 
 
 Route::get('/master-sumber-daya', function () {
