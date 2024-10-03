@@ -11,5 +11,5 @@ class BoqDetail extends Model
     use HasUuids;
     public $table = 'boq_detail';
 
-    protected $fillable = ['kode_proyek', 'uraian_pekerjaan', 'satuan', 'volume', 'level', 'index'];
+    protected $fillable = ['kode_proyek', 'uraian_pekerjaan', 'satuan', 'volume', 'level', 'index', 'kode_boq'];
 }
