@@ -145,7 +145,7 @@ class UserController extends Controller
                                 return redirect()->intended($redirect);
                             }
                             if (Auth::user()->email == "user-poc@sunny.com") {
-                                return redirect()->intended("/rab-proyek");
+                                return redirect()->intended("/estimasi-proyek");
                             }
                             return redirect()->intended("/dashboard");
                         } else {

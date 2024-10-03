@@ -209,7 +209,7 @@ class AdminAuth
         Alert::error('Error', 'Tidak bisa mengakses halaman ' . $path);
 
         if (Gate::allows("poc")) {
-            return redirect("/rab-proyek");
+            return redirect("/estimasi-proyek");
         }
         if (Gate::allows('crm')) {
             return redirect("/dashboard");

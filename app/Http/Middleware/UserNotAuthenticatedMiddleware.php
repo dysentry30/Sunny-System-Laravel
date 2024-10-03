@@ -32,7 +32,7 @@ class UserNotAuthenticatedMiddleware
 
 
         if (Gate::allows("poc")) {
-            return redirect("/rab-proyek");
+            return redirect("/estimasi-proyek");
         }
 
         if (Gate::allows("crm") && !Gate::allows("user-scm")) {
