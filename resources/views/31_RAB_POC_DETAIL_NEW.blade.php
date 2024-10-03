@@ -672,7 +672,7 @@
                                             <tbody class="fw-bold text-gray-600" id="body-table">
                                                 @foreach ($dataDetailBOQ as $data)
                                                     <tr>
-                                                        <td>-</td>
+                                                        <td>{{ $data->kode_boq }}</td>
                                                         <td>
                                                             <input type="text" class="form-control" name="kode_tahap[]" value="{{ $data->kode_tahap }}">
                                                             <input type="hidden" name="index[]" value="{{ $data->id }}">
