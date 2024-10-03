@@ -30,6 +30,11 @@ class UserNotAuthenticatedMiddleware
             return $next($request);
         }
 
+
+        if (Gate::allows("poc")) {
+            return redirect("/rab-proyek");
+        }
+
         if (Gate::allows("crm") && !Gate::allows("user-scm")) {
             return redirect("/dashboard");
         } elseif (Gate::allows("ccm")) {

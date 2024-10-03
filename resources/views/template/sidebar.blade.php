@@ -65,7 +65,8 @@
 
                     <!--begin::Menu-->
                     <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;">
-
+                        @if (Auth::user()->email != 'user-poc@sunny.com')
+                            
                         @canany(['super-admin', 'crm', 'ccm', 'csi'])
                             @cannot('user-scm')
                                 <div class="menu-item">
@@ -1885,61 +1886,6 @@
                             <!--end::Menu Colapse-->
                         @endcanany
 
-                        @can('super-admin')
-                            <!--begin::Menu Colapse-->
-                            <div class="menu-item">
-                                <a class="menu-link " href="/master-sumber-daya"
-                                    style="color:white; padding-left:20px; {{ Request::Path() == 'master-sumber-daya' ? 'background-color:#008CB4' : '' }}">
-                                    <span class="menu-icon">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                        <i class="bi bi-person-lines-fill text-white" style="font-size: 20px"></i>
-                                        <!--end::Svg Icon-->
-                                    </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Master Sumber Daya</span>
-                                </a>
-                            </div>
-                            <!--end::Menu Colapse-->
-                            <!--begin::Menu Colapse-->
-                            <div class="menu-item">
-                                <a class="menu-link " href="/master-harga-satuan"
-                                    style="color:white; padding-left:20px; {{ Request::Path() == 'master-harga-satuan' ? 'background-color:#008CB4' : '' }}">
-                                    <span class="menu-icon">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                        <i class="bi bi-person-lines-fill text-white" style="font-size: 20px"></i>
-                                        <!--end::Svg Icon-->
-                                    </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Master Harga Satuan</span>
-                                </a>
-                            </div>
-                            <!--end::Menu Colapse-->
-                            <!--begin::Menu Colapse-->
-                            <div class="menu-item">
-                                <a class="menu-link " href="/analisa-harga-satuan"
-                                    style="color:white; padding-left:20px; {{ Request::Path() == 'analisa-harga-satuan' ? 'background-color:#008CB4' : '' }}">
-                                    <span class="menu-icon">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                        <i class="bi bi-person-lines-fill text-white" style="font-size: 20px"></i>
-                                        <!--end::Svg Icon-->
-                                    </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Master Analisa Harga Satuan</span>
-                                </a>
-                            </div>
-                            <!--end::Menu Colapse-->
-                            <!--begin::Menu Colapse-->
-                            <div class="menu-item">
-                                <a class="menu-link " href="/estimasi-proyek"
-                                    style="color:white; padding-left:20px; {{ Request::Path() == 'estimasi-proyek' ? 'background-color:#008CB4' : '' }}">
-                                    <span class="menu-icon">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                        <i class="bi bi-cash-stack text-white" style="font-size: 20px"></i>
-                                        <!--end::Svg Icon-->
-                                    </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Estimasi</span>
-                                </a>
-                            </div>
-                            <!--end::Menu Colapse-->
-                        @endcan
-
 
                         @canany(['super-admin', 'admin-crm'])
                         {{-- @if (auth()->user()->check_administrator || $adminPIC) --}}
@@ -2070,6 +2016,66 @@
                             <!--end::Menu Colapse-->
                         </div>
                         @endcanany
+                        @endif
+
+                        {{-- @can('super-admin') --}}
+                        @if (Auth::user()->email == "user-poc@sunny.com")
+                        
+                            <!--begin::Menu Colapse-->
+                            <div class="menu-item">
+                                <a class="menu-link " href="/master-sumber-daya"
+                                    style="color:white; padding-left:20px; {{ Request::Path() == 'master-sumber-daya' ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <i class="bi bi-person-lines-fill text-white" style="font-size: 20px"></i>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Master Sumber Daya</span>
+                                </a>
+                            </div>
+                            <!--end::Menu Colapse-->
+                            <!--begin::Menu Colapse-->
+                            <div class="menu-item">
+                                <a class="menu-link " href="/master-harga-satuan"
+                                    style="color:white; padding-left:20px; {{ Request::Path() == 'master-harga-satuan' ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <i class="bi bi-person-lines-fill text-white" style="font-size: 20px"></i>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Master Harga Satuan</span>
+                                </a>
+                            </div>
+                            <!--end::Menu Colapse-->
+                            <!--begin::Menu Colapse-->
+                            <div class="menu-item">
+                                <a class="menu-link " href="/analisa-harga-satuan"
+                                    style="color:white; padding-left:20px; {{ Request::Path() == 'analisa-harga-satuan' ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <i class="bi bi-person-lines-fill text-white" style="font-size: 20px"></i>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Master Analisa Harga Satuan</span>
+                                </a>
+                            </div>
+                            <!--end::Menu Colapse-->
+                            <!--begin::Menu Colapse-->
+                            <div class="menu-item">
+                                <a class="menu-link " href="/estimasi-proyek"
+                                    style="color:white; padding-left:20px; {{ Request::Path() == 'estimasi-proyek' ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <i class="bi bi-cash-stack text-white" style="font-size: 20px"></i>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Estimasi</span>
+                                </a>
+                            </div>
+                            <!--end::Menu Colapse-->
+                        {{-- @endcan --}}
+                            
+                        @endif
 
                         <br><br><br>
 
