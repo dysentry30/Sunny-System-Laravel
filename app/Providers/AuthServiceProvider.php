@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App\Models\User;
 use App\Models\Divisi;
-use Illuminate\Support\Facades\Gate;
 use App\Models\MatriksApprovalChangeManagement;
 use App\Models\UserMenuManagement;
 use Illuminate\Support\Facades\Gate;
