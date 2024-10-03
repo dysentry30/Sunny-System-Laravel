@@ -674,10 +674,12 @@
                                                     <tr>
                                                         <td>{{ $data->kode_boq }}</td>
                                                         <td>
-                                                            <input type="text" class="form-control" name="kode_tahap[]" value="{{ $data->kode_tahap }}">
+                                                            <input type="text" class="form-control" name="kode_tahap_parent[]" value="{{ $data->kode_tahap_parent }}">
                                                             <input type="hidden" name="index[]" value="{{ $data->id }}">
                                                         </td>
-                                                        <td>-</td>
+                                                        <td>
+                                                            <input type="text" class="form-control" name="kode_tahap_child[]" value="{{ $data->kode_tahap_child }}">
+                                                        </td>
                                                         <td>{{ $data->uraian_pekerjaan }}</td>
                                                         <td class="text-center">{{ $data->satuan }}</td>
                                                         <td class="text-end">{{ number_format($data->volume, 0, ',', '.') }}</td>

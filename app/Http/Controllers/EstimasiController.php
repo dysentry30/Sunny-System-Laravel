@@ -240,11 +240,13 @@ class EstimasiController extends Controller
         try {
             DB::beginTransaction();
             $collectIndex = $request->get("index");
-            $collectKodeTahap = $request->get("kode_tahap");
+            $collectKodeTahapParent = $request->get("kode_tahap_parent");
+            $collectKodeTahapChild = $request->get("kode_tahap_child");
 
             foreach ($collectIndex as $key => $id) {
                 $selectBOQ = BoqDetail::find($id);
-                $selectBOQ->kode_tahap = $collectKodeTahap[$key];
+                $selectBOQ->kode_tahap_parent = $collectKodeTahapParent[$key];
+                $selectBOQ->kode_tahap_child = $collectKodeTahapChild[$key];
                 $selectBOQ->save();
             }
 
