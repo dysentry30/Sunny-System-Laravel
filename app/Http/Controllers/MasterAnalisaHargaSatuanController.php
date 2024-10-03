@@ -20,7 +20,7 @@ class MasterAnalisaHargaSatuanController extends Controller
 
     public function view(Request $request, MasterAnalisaHargaSatuan $masterAHS)
     {
-        $masterSumberDaya = MasterSumberDaya::all();
+        $masterSumberDaya = MasterSumberDaya::select(['code', 'parent_code', 'description', 'uoms_name', 'material_code', 'jenis_material', 'material_name', 'valuation_class_code', 'valuation_class_name', 'keterangan'])->get();
         $masterSumberDayaDetail = AnalisaHargaSatuanDetail::where("kode_ahs", $masterAHS->kode_ahs)->get();
         return view('MasterData.MasterAnalisaHargaDetail', ['masterSumberDaya' => $masterSumberDaya, 'masterAHS' => $masterAHS, 'masterSumberDayaDetail' => $masterSumberDayaDetail]);
     }

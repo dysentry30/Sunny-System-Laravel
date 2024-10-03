@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Proyek;
+use App\Models\BoqDetail;
+use App\Imports\BoqImport;
 use Illuminate\Http\Request;
 use App\Models\MasterSumberDaya;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\AnalisaHargaSatuanDetail;
 use App\Models\MasterAnalisaHargaSatuan;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -22,33 +26,7 @@ class EstimasiController extends Controller
     {
         try {
             $masterAHS = MasterAnalisaHargaSatuan::all();
-            $masterSumberDaya = MasterSumberDaya::all();
-            $masterSumberDaya = $masterSumberDaya->map(function ($item) {
-                $item->volume = $item->MasterHargaSatuan->volume;
-                $item->harga_satuan = $item->MasterHargaSatuan->harga;
-                $item->jumlah = $item->MasterHargaSatuan->harga * $item->MasterHargaSatuan->volume;
-                return $item;
-            });
-
-            $masterSumberDayaNew = $masterSumberDaya->map(function ($item) use ($masterSumberDaya) {
-                $totalJumlah = $masterSumberDaya->sum("jumlah");
-                $item->bobot = round($item->jumlah / $totalJumlah, 2);
-                return $item;
-            })->sortByDesc("bobot");
-
-            $bobotKumulatif = 0;
-
-            $masterSumberDayaNewBanget = $masterSumberDaya->map(function ($item, $index) use (&$bobotKumulatif) {
-
-                if ($index == 0) {
-                    $bobotKumulatif = $item->bobot;
-                } else {
-                    $bobotKumulatif += $item->bobot;
-                }
-
-                $item->bobot_kumulatif = $bobotKumulatif;
-                return $item;
-            });
+            $dataDetailBOQ = BoqDetail::where("kode_proyek", $proyek->kode_proyek)->orderBy("index")->get();
 
             if ($proyek->jenis_proyek == "J") {
                 if ($proyek->PorsiJO->isNotEmpty()) {
@@ -63,6 +41,7 @@ class EstimasiController extends Controller
             }
 
             $dataUmumField = [
+                "KODE PROYEK" => $proyek->kode_proyek,
                 "NAMA PROYEK" => $proyek->nama_proyek,
                 "LOKASI PEKERJAAN" => $proyek->Provinsi->province_name ?? "",
                 "TAHUN TENDER" => $proyek->tahun_perolehan ?? "",
@@ -111,7 +90,7 @@ class EstimasiController extends Controller
                 "SVP OPERASI" => "",
 
             ];
-            return view("31_RAB_POC_DETAIL", ["proyek" => $proyek, "masterAHS" => $masterAHS, "masterSumberDaya" => $masterSumberDayaNewBanget, 'dataUmumField' => $dataUmumField]);
+            return view("31_RAB_POC_DETAIL_NEW", ["proyek" => $proyek, "masterAHS" => $masterAHS, 'dataUmumField' => $dataUmumField, 'dataDetailBOQ' => $dataDetailBOQ]);
         } catch (\Throwable $th) {
             Alert::error("Error", $th->getMessage());
             return redirect()->back();
@@ -230,6 +209,53 @@ class EstimasiController extends Controller
                 "harsat_eksternal" => null,
                 "total_eksternal" => null,
             ], 500);
+        }
+    }
+
+    public function uploadBOQ(Request $request)
+    {
+        try {
+            $request->validate([
+                'file' => 'required|mimes:xlsx',
+                'kode_proyek' => 'required|string',  // Tambahkan validasi untuk kode proyek
+            ]);
+
+            // Ambil kode proyek dari request
+            $kodeProyek = $request->kode_proyek;
+
+            // Lakukan import dan masukkan kode proyek ke dalam BoqImport
+            Excel::import(new BoqImport($kodeProyek), $request->file('file'));
+
+            Alert::success("Success", "Data Berhasil Di Upload");
+            return redirect('/estimasi-proyek/detail/' . $request->kode_proyek . '#kt_view_boq_ekstern');
+        } catch (\Throwable $th) {
+            Alert::error("Error", $th->getMessage());
+            return redirect()->back();
+        }
+    }
+
+    public function editBOQ(Request $request, Proyek $proyek)
+    {
+
+        try {
+            DB::beginTransaction();
+            $collectIndex = $request->get("index");
+            $collectKodeTahap = $request->get("kode_tahap");
+
+            foreach ($collectIndex as $key => $id) {
+                $selectBOQ = BoqDetail::find($id);
+                $selectBOQ->kode_tahap = $collectKodeTahap[$key];
+                $selectBOQ->save();
+            }
+
+            DB::commit();
+
+            Alert::success("Success", "Data berhasil di edit");
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Alert::error("Error", $th->getMessage());
+            return redirect()->back();
         }
     }
 }

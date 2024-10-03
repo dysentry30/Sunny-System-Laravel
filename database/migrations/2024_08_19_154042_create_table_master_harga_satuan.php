@@ -17,7 +17,7 @@ return new class extends Migration
             Schema::create('master_harga_satuan', function (Blueprint $table) {
                 $table->uuid('id')->primary();
                 $table->string("resource_code");
-                $table->foreign("resource_code")->references("code")->on("master_sumber_daya")->onDelete("cascade");
+                // $table->foreign("resource_code")->references("code")->on("master_sumber_daya")->onDelete("cascade");
                 $table->string("harga");
                 $table->string("province_id");
                 $table->foreign("province_id")->references("province_id")->on("province")->onDelete("cascade");

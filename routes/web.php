@@ -64,6 +64,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Models\ContractChangeProposal;
 use App\Models\MatriksApprovalPaparan;
+use Illuminate\Support\Facades\Schema;
 use App\Http\Controllers\CSIController;
 use App\Http\Controllers\DopController;
 use App\Http\Controllers\SbuController;
@@ -7680,13 +7681,57 @@ Route::group(["prefix" => "estimasi-proyek"], function () {
     Route::get('/detail/{proyek}', [EstimasiController::class, 'view']);
     Route::get('detail-ahs/{kode_ahs}', [EstimasiController::class, 'viewDetailAHS']);
     Route::get('/get-detail-ahs/{kode_ahs}', [EstimasiController::class, 'getDetailAHS']);
+    Route::post('/upload', [EstimasiController::class, 'uploadBOQ']);
+    Route::post('/detail/{proyek}/edit', [EstimasiController::class, 'editBOQ']);
 });
 
 
+Route::group(["prefix" => "master-sumber-daya"], function () {
+    Route::get('/', function () {
+        return view("MasterData/MasterSumberDaya");
+    });
 
-Route::get('/master-sumber-daya', function () {
-    $masterSumberDaya = MasterSumberDaya::all();
-    return view("MasterData/MasterSumberDaya", ["masterSumberDaya" => $masterSumberDaya]);
+    Route::get('/datatable', function (Request $request) {
+
+        $draw = $request->has('draw') ? intval($request->input('draw')) : 0;
+        $start = (int)$request->input('start');
+        $length = (int)$request->input('length');
+
+        $page = ceil(($start + 1) / $length);
+
+        $search = !empty($request->input('search')) ? $request->input('search')["value"] : null;
+
+        $data = MasterSumberDaya::addSelect(array_map(function ($item) {
+            return 'master_sumber_daya.' . $item;
+        }, ['id', 'code', 'parent_code', 'name', 'uoms_name', 'material_code', 'jenis_material', 'material_name', 'valuation_class_code', 'valuation_class_name', 'keterangan']))
+        ->when(!empty($search), function ($query) use ($search) {
+            $query->whereRaw('LOWER(code) LIKE ?', ['%' . strtolower($search) . '%'])
+                ->orWhereRaw('LOWER(parent_code) LIKE ?', ['%' . strtolower($search) . '%'])
+                ->orWhereRaw('LOWER(name) LIKE ?', ['%' . strtolower($search) . '%'])
+                ->orWhereRaw('LOWER(uoms_name) LIKE ?', ['%' . strtolower($search) . '%'])
+                ->orWhereRaw('LOWER(material_code) LIKE ?', ['%' . strtolower($search) . '%'])
+                ->orWhereRaw('LOWER(jenis_material) LIKE ?', ['%' . strtolower($search) . '%'])
+                ->orWhereRaw('LOWER(material_name) LIKE ?', ['%' . strtolower($search) . '%'])
+                ->orWhereRaw('LOWER(valuation_class_code) LIKE ?', ['%' . strtolower($search) . '%'])
+                ->orWhereRaw('LOWER(valuation_class_name) LIKE ?', ['%' . strtolower($search) . '%'])
+                ->orWhereRaw('LOWER(keterangan) LIKE ?', ['%' . strtolower($search) . '%']);
+        })
+            ->orderBy('code', 'ASC');
+
+        if ($length > 0) {
+            $data = $data->paginate($length, ['*'], 'page', $page);
+        } else {
+            $data = $data->get();
+        }
+
+        return response()->json([
+            'draw' => $draw,
+            'recordsTotal' => $length > 0 ? $data->total() : $data->count(),
+            'recordsFiltered' => $length > 0 ? $data->total() : $data->count(),
+            'data' => $length > 0 ? $data->items() : $data
+        ]);
+    });
+
 });
 
 Route::get('/master-harga-satuan', function () {
@@ -7714,4 +7759,9 @@ Route::get('tes-generate-2', function (Request $request) {
     // $newController->generateFinalDokumen($request, $proyek);
     // createWordNotaRekomendasiSetuju($proyek->NotaRekomendasi, $hasil_assessment, $request);
     mergeDokumenKelengkapanProject($proyek->NotaRekomendasi2);
+});
+
+Route::get('/get-sumber-daya', function (Request $request) {
+    $getResponse = Http::get('https://e-catalogue.wika.co.id/index.php/api/resources_code');
+    // dd($getResponse->collect()->first());
 });

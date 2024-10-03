@@ -266,4 +266,9 @@ class Proyek extends Model
     {
         return $this->belongsTo(NotaRekomendasi2::class, 'kode_proyek', 'kode_proyek');
     }
+
+    public function BoqDetail()
+    {
+        return $this->hasMany(BoqDetail::class, 'kode_proyek', 'kode_proyek');
+    }
 }

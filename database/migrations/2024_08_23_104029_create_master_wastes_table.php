@@ -17,7 +17,7 @@ return new class extends Migration
             Schema::create('master_waste', function (Blueprint $table) {
                 $table->uuid("id")->primary();
                 $table->string("resource_code");
-                $table->foreign("resource_code")->references("code")->on("master_sumber_daya");
+                // $table->foreign("resource_code")->references("code")->on("master_sumber_daya");
                 $table->float("nilai_waste");
                 $table->timestamps();
             });

@@ -35,9 +35,9 @@
     <!-- end::Froala CSS -->
 
     <!-- begin::DataTables -->
-    <link rel="stylesheet" href="datatables/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="datatables/fixedColumns.dataTables.min.css">
-    <link rel="stylesheet" href="datatables/buttons.dataTables.min.css">    
+    <link rel="stylesheet" href="/datatables/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="/datatables/fixedColumns.dataTables.min.css">
+    <link rel="stylesheet" href="/datatables/buttons.dataTables.min.css">    
     <!-- end::DataTables -->
     
     <!-- Begin:: Leaflet Map -->

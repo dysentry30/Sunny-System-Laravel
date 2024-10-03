@@ -1,4 +1,4 @@
-a{{-- Begin::Extend Header --}}
+{{-- Begin::Extend Header --}}
 @extends('template.main')
 {{-- End::Extend Header --}}
 
@@ -76,14 +76,21 @@ a{{-- Begin::Extend Header --}}
                                 <br>
 
                                 <!--begin::Table-->
-                                <table class="table table-hover align-middle table-row-dashed fs-6 gy-2" id="user_table">
+                                <table class="table table-hover align-middle table-row-dashed fs-6 gy-2" id="sumber-daya-detail-table">
                                     <!--begin::Table head-->
                                     <thead>
                                         <!--begin::Table row-->
                                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                            <th class="min-w-auto">Kode Sumber Daya</th>
-                                            <th class="min-w-400px">Uraian</th>
-                                            <th class="min-w-auto">Satuan</th>
+                                            <th class="min-w-auto">Code</th>
+                                            <th class="min-w-auto">Parent Code</th>
+                                            <th class="min-w-auto">Description</th>
+                                            <th class="min-w-auto">Uoms Name</th>
+                                            <th class="min-w-auto">Material Code</th>
+                                            <th class="min-w-auto">Jenis Material</th>
+                                            <th class="min-w-auto">Nama Material</th>
+                                            <th class="min-w-auto">Valuation Class Code</th>
+                                            <th class="min-w-auto">Valuation Class Name</th>
+                                            <th class="min-w-auto">Keterangan</th>
                                             <th class="min-w-auto">Action</th>
                                         </tr>
                                         <!--end::Table row-->
@@ -92,11 +99,18 @@ a{{-- Begin::Extend Header --}}
                                     <!--begin::Table body-->
                                     <tbody class="fw-bold text-gray-600">
                                         <!--begin::Table row-->
-                                        @foreach ($masterSumberDaya as $sumber_daya)
+                                        {{-- @foreach ($masterSumberDaya as $sumber_daya)
                                         <tr>
-                                            <td class="text-center">{{ $sumber_daya->kode_sumber_daya }}</td>
-                                            <td>{{ $sumber_daya->uraian }}</td>
-                                            <td class="text-center">{{ $sumber_daya->satuan }}</td>
+                                            <td class="text-center">{{ $sumber_daya->code }}</td>
+                                            <td class="text-start">{{ $sumber_daya->parent_code }}</td>
+                                            <td class="text-start">{{ $sumber_daya->description }}</td>
+                                            <td class="text-center">{{ $sumber_daya->uoms_name }}</td>
+                                            <td class="text-center">{{ $sumber_daya->material_code }}</td>
+                                            <td class="text-center">{{ $sumber_daya->jenis_material }}</td>
+                                            <td class="text-start">{{ $sumber_daya->material_name }}</td>
+                                            <td class="text-start">{{ $sumber_daya->valuation_class_code }}</td>
+                                            <td class="text-start">{{ $sumber_daya->valuation_class_name }}</td>
+                                            <td class="text-start">{{ $sumber_daya->keterangan }}</td>
                                             <td class="text-center">
                                                 <input class="form-check-input mt-0" type="checkbox"
                                                 value="{{ $sumber_daya->kode_sumber_daya }}"
@@ -107,7 +121,7 @@ a{{-- Begin::Extend Header --}}
                                                 }) ? "checked" : "" }}>
                                             </td>
                                         </tr>
-                                        @endforeach
+                                        @endforeach --}}
                                         <!--end::Table row-->
                                     </tbody>
                                     <!--end::Table body-->
@@ -140,26 +154,108 @@ a{{-- Begin::Extend Header --}}
 @section('js-script')
     <!--begin::Data Tables-->
     <script src="/datatables/jquery.dataTables.min.js"></script>
-    <script src="/datatables/dataTables.buttons.min.js"></script>
-    <script src="/datatables/buttons.html5.min.js"></script>
-    <script src="/datatables/buttons.colVis.min.js"></script>
-    <script src="/datatables/jszip.min.js"></script>
-    <script src="/datatables/pdfmake.min.js"></script>
-    <script src="/datatables/vfs_fonts.js"></script>
     
     
     <script>
-        $(document).ready(function() {
-            $('#user_table').DataTable( {
-                dom: '<"float-start"f><"#user_table"t>rtip',
-                // dom: 'frtip',
-                pageLength : 15,
-                // ordering : false,
-                // buttons: [
-                //     'copy', 'csv', 'excel', 'pdf', 'print'
-                // ]
-            } );
-        } );
+        let selectedIds = []; // Array untuk menyimpan ID checkbox yang dipilih
+
+        const configDataTable = {};
+        configDataTable.processing = true
+        configDataTable.serverSide = true
+        configDataTable.destroy = true
+        configDataTable.search = false
+        configDataTable.paging = true
+        configDataTable.pageLength = 30
+        configDataTable.dom = '<"float-start me-3"f><"#example"t>rtip'
+
+        document.addEventListener("DOMContentLoaded", () => {
+            configDataTable.ajax = {
+                dataType: "JSON",
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                url:"{{ url('master-sumber-daya/datatable') }}",
+                type: "GET"
+            },
+
+            configDataTable.columns = [ 
+                {
+                    data: 'code',
+                    className: 'align-midle text-center'
+                },
+                {
+                    data: 'parent_code',
+                    className: 'align-midle'
+                },
+                {
+                    data: 'name',
+                    className: 'align-midle'
+                },
+                {
+                    data: 'uoms_name',
+                    className: 'align-midle text-center'
+                },
+                {
+                    data: 'material_code',
+                    className: 'align-midle text-center'
+                },
+                {
+                    data: 'jenis_material',
+                    className: 'align-midle text-center'
+                },
+                {
+                    data: 'material_name',
+                    className: 'align-midle'
+                },
+                {
+                    data: 'valuation_class_code',
+                    className: 'align-midle text-center'
+                },
+                {
+                    data: 'valuation_class_name',
+                    className: 'align-midle'
+                },
+                {
+                    data: 'keterangan',
+                    className: 'align-midle'
+                },
+                {
+                    data: null, // Kolom untuk checkbox
+                    orderable: false,
+                    render: function (data, type, row) {
+                        // Cek apakah ID row sudah dipilih
+                        let isChecked = selectedIds.includes(row.id) ? 'checked' : '';
+                        return `<input type="checkbox" class="row-checkbox form-check-input" data-id="${row.id}" ${isChecked}>`;
+                    },
+                    className: 'align-middle text-center'
+                },
+            ];
+
+            configDataTable.drawCallback = function () {
+                // Ketika tabel di-*render* ulang (misalnya setelah search atau paginate), set ulang status checkbox
+                $('#sumber-daya-detail-table tbody input.row-checkbox').each(function () {
+                    let id = $(this).data('id');
+                    if (selectedIds.includes(id)) {
+                        $(this).prop('checked', true);
+                    }
+                });
+                console.log(selectedIds);
+            }
+
+            const dataTable = $('#sumber-daya-detail-table').DataTable(configDataTable);
+        });
+
+        // Event listener untuk checkbox per baris
+        $('#sumber-daya-detail-table tbody').on('change', 'input.row-checkbox', function () {
+            let id = $(this).data('id');
+            if ($(this).is(':checked')) {
+                if (!selectedIds.includes(id)) {
+                    selectedIds.push(id); // Tambahkan ID ke array jika belum ada
+                }
+            } else {
+                selectedIds = selectedIds.filter(item => item !== id); // Hapus ID dari array jika tidak dicentang
+            }
+        });
+        
     </script>
     <!--end::Data Tables-->
 

@@ -17,7 +17,7 @@ return new class extends Migration
             Schema::create('master_produktivitas', function (Blueprint $table) {
                 $table->uuid("id")->primary();
                 $table->string("resource_code");
-                $table->foreign("resource_code")->references("code")->on("master_sumber_daya");
+                // $table->foreign("resource_code")->references("code")->on("master_sumber_daya");
                 $table->boolean("is_rumus")->default("false");
                 $table->string("nilai_produktivitas");
                 $table->float("bbm")->nullable();

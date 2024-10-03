@@ -17,9 +17,9 @@ return new class extends Migration
             Schema::create('analisa_harga_satuan_details', function (Blueprint $table) {
                 $table->uuid('id')->primary();
                 $table->string('resource_code', 15);
-                $table->foreign('resource_code')->references('code')->on('master_sumber_daya')->onDelete('cascade');
+                // $table->foreign('resource_code')->references('code')->on('master_sumber_daya')->onDelete('cascade');
                 $table->string('kode_ahs', 15);
-                $table->foreign('kode_ahs')->references('kode_ahs')->on('master_analisa_harga_satuan')->onDelete('cascade');
+                // $table->foreign('kode_ahs')->references('kode_ahs')->on('master_analisa_harga_satuan')->onDelete('cascade');
                 $table->timestamps();
             });
         }
