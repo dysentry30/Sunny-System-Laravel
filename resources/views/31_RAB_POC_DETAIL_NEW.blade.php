@@ -81,7 +81,7 @@
                                         <li class="nav-item">
                                             <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" aria-controls="kt_view_boq_ekstern"
                                                 aria-selected="false" href="#kt_view_boq_ekstern"
-                                                style="font-size:14px;">BOQ EKSTERN</a>
+                                                style="font-size:14px;">BOQ</a>
                                         </li>
                                         <!--end:::Tab item-->
                                         <!--begin:::Tab item-->
@@ -103,6 +103,20 @@
                                             <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
                                                 aria-selected="false" href="#kt_view_pareto_harsat"
                                                 style="font-size:14px;">PARETO HARSAT</a>
+                                        </li>
+                                        <!--end:::Tab item-->
+                                        <!--begin:::Tab item-->
+                                        <li class="nav-item">
+                                            <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
+                                                aria-selected="false" href="#kt_view_pareto_harsat"
+                                                style="font-size:14px;">PARETO SUMBER DAYA</a>
+                                        </li>
+                                        <!--end:::Tab item-->
+                                        <!--begin:::Tab item-->
+                                        <li class="nav-item">
+                                            <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
+                                                aria-selected="false" href="#kt_view_pareto_harsat"
+                                                style="font-size:14px;">BOQ INTERNAL</a>
                                         </li>
                                         <!--end:::Tab item-->
                                         <!--begin:::Tab item-->
