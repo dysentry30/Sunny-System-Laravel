@@ -60,4 +60,8 @@ class PerubahanKontrak extends Model
     {
         return $this->hasMany(ContractChangeProposal::class, "perubahan_id", "id_perubahan_kontrak");
     }
+    public function BeritaAcaraKesepakatan()
+    {
+        return $this->hasMany(BeritaAcaraKesepakatan::class, "perubahan_id", "id_perubahan_kontrak");
+    }
 }

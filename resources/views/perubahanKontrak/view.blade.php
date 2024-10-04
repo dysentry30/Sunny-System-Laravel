@@ -688,7 +688,7 @@
                                                     <td class="text-center">{{ $dokumen->nama_document }}</td>
                                                     <td>
                                                         <div class="d-flex flex-row align-items-center justify-content-center gap-2">
-                                                            <a href="/contract-management/dokumen-site-instruction/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
+                                                            <a href="/claim-management/dokumen-site-instruction/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
                                                             <button type="button" class="btn btn-sm btn-danger text-white" onclick="confirmDelete(this, 'site-instruction', '{{ $dokumen->id_document }}')">Delete</button>
                                                         </div>
                                                     </td>
@@ -705,7 +705,7 @@
                                     <br>
                                     <!--End :: Dokumen Site Instruction-->
 
-                                    <!--Begin :: Dokumen Technical Form-->
+                                    {{-- <!--Begin :: Dokumen Technical Form-->
                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                         Dokumen Technical Form
                                         <a href="#" Id="Plus" data-bs-toggle="modal" onclick="showModalUpload('technical-form')">+</a>
@@ -736,7 +736,7 @@
                                                     <td class="text-center">{{ $dokumen->nama_document }}</td>
                                                     <td>
                                                         <div class="d-flex flex-row align-items-center justify-content-center gap-2">
-                                                            <a href="/contract-management/dokumen-technical-form/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
+                                                            <a href="/claim-management/dokumen-technical-form/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
                                                             <button type="button" class="btn btn-sm btn-danger text-white" onclick="confirmDelete(this, 'technical-form', '{{ $dokumen->id_document }}')">Delete</button>
                                                         </div>
                                                     </td>
@@ -751,9 +751,9 @@
                                         <!--end::Table body-->
                                     </table>
                                     <br>
-                                    <!--End :: Dokumen Technical Form-->
+                                    <!--End :: Dokumen Technical Form--> --}}
 
-                                    <!--Begin :: Dokumen Technical Query-->
+                                    {{-- <!--Begin :: Dokumen Technical Query-->
                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                         Dokumen Technical Query
                                         <a href="#" Id="Plus" data-bs-toggle="modal" onclick="showModalUpload('technical-query')">+</a>
@@ -784,7 +784,7 @@
                                                     <td class="text-center">{{ $dokumen->nama_document }}</td>
                                                     <td>
                                                         <div class="d-flex flex-row align-items-center justify-content-center gap-2">
-                                                            <a href="/contract-management/dokumen-technical-query/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
+                                                            <a href="/claim-management/dokumen-technical-query/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
                                                             <button type="button" class="btn btn-sm btn-danger text-white" onclick="confirmDelete(this, 'technical-query', '{{ $dokumen->id_document }}')">Delete</button>
                                                         </div>
                                                     </td>
@@ -799,9 +799,9 @@
                                         <!--end::Table body-->
                                     </table>
                                     <br>
-                                    <!--End :: Dokumen Technical Query-->
+                                    <!--End :: Dokumen Technical Query--> --}}
 
-                                    <!--Begin :: Dokumen Field Design Change-->
+                                    {{-- <!--Begin :: Dokumen Field Design Change-->
                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                         Dokumen Field Design Change
                                         <a href="#" Id="Plus" data-bs-toggle="modal" onclick="showModalUpload('field-design-change')">+</a>
@@ -832,7 +832,7 @@
                                                     <td class="text-center">{{ $dokumen->nama_document }}</td>
                                                     <td>
                                                         <div class="d-flex flex-row align-items-center justify-content-center gap-2">
-                                                            <a href="/contract-management/dokumen-field-design-change/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
+                                                            <a href="/claim-management/dokumen-field-design-change/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
                                                             <button type="button" class="btn btn-sm btn-danger text-white" onclick="confirmDelete(this, 'field-design-, '{{ $dokumen->id_document }}'change')">Delete</button>
                                                         </div>
                                                     </td>
@@ -847,11 +847,11 @@
                                         <!--end::Table body-->
                                     </table>
                                     <br>
-                                    <!--End :: Dokumen Field Design Change-->
+                                    <!--End :: Dokumen Field Design Change--> --}}
 
                                     <!--Begin :: Dokumen Contract Change Notice-->
                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                        Dokumen Contract Change Notice
+                                        Dokumen Notice dan Korespondensi
                                         <a href="#" Id="Plus" data-bs-toggle="modal" onclick="showModalUpload('change-notice')">+</a>
                                     </h3>
 
@@ -880,7 +880,7 @@
                                                     <td class="text-center">{{ $dokumen->nama_document }}</td>
                                                     <td>
                                                         <div class="d-flex flex-row align-items-center justify-content-center gap-2">
-                                                            <a href="/contract-management/dokumen-change-notice/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
+                                                            <a href="/claim-management/dokumen-change-notice/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
                                                             <button type="button" class="btn btn-sm btn-danger text-white" onclick="confirmDelete(this, 'change-notice', '{{ $dokumen->id_document }}')">Delete</button>
                                                         </div>
                                                     </td>
@@ -899,7 +899,7 @@
 
                                     <!--Begin :: Dokumen Contract Change Proposal-->
                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                        Dokumen Contract Change Proposal
+                                        Dokumen Proposal
                                         <a href="#" Id="Plus" data-bs-toggle="modal" onclick="showModalUpload('change-proposal')">+</a>
                                     </h3>
 
@@ -928,7 +928,7 @@
                                                     <td class="text-center">{{ $dokumen->nama_document }}</td>
                                                     <td>
                                                         <div class="d-flex flex-row align-items-center justify-content-center gap-2">
-                                                            <a href="/contract-management/dokumen-change-proposal/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
+                                                            <a href="/claim-management/dokumen-change-proposal/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
                                                             <button type="button" class="btn btn-sm btn-danger text-white" onclick="confirmDelete(this, 'change-proposal', '{{ $dokumen->id_document }}')">Delete</button>
                                                         </div>
                                                     </td>
@@ -945,7 +945,55 @@
                                     <br>
                                     <!--End :: Dokumen Contract Change Proposal-->
 
-                                    <!--Begin :: Dokumen Contract Change Order-->
+                                    <!--Begin :: Dokumen Berita Acara Kelengkapan-->
+                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                        Dokumen Berita Acara Kelengkapan
+                                        <a href="#" Id="Plus" data-bs-toggle="modal" onclick="showModalUpload('berita-acara-kesepakatan')">+</a>
+                                    </h3>
+
+                                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                        <!--begin::Table head-->
+                                        <thead>
+                                            <!--begin::Table row-->
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-125px">No. Dokumen</th>
+                                                <th class="min-w-125px">Tanggal</th>
+                                                <th class="min-w-125px">Uraian</th>
+                                                <th class="min-w-125px">File</th>
+                                                <th class="min-w-125px">Action</th>
+                                            </tr>
+                                            <!--end::Table row-->
+                                        </thead>
+                                        <!--end::Table head-->
+                                        <!--begin::Table body-->
+                                        <tbody class="fw-bold text-gray-400">
+                                            <!--Begin::Row-->
+                                            @forelse ($perubahan_kontrak->BeritaAcaraKesepakatan as $dokumen)
+                                                <tr>
+                                                    <td>{{ $dokumen->nomor_dokumen }}</td>
+                                                    <td class="text-center">{{ !empty($dokumen->tanggal_dokumen) ? \Carbon\Carbon::parse($dokumen->tanggal_dokumen)->translatedFormat("d F Y") : '-' }}</td>
+                                                    <td>{{ $dokumen->uraian_dokumen }}</td>
+                                                    <td class="text-center">{{ $dokumen->nama_document }}</td>
+                                                    <td>
+                                                        <div class="d-flex flex-row align-items-center justify-content-center gap-2">
+                                                            <a href="/claim-management/dokumen-berita-acara-kesepakatan/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
+                                                            <button type="button" class="btn btn-sm btn-danger text-white" onclick="confirmDelete(this, 'berita-acara-kesepakatan', '{{ $dokumen->id_document }}')">Delete</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="5" class="text-center">No Data</td>
+                                                </tr>
+                                            @endforelse
+                                            <!--End::Row-->
+                                        </tbody>
+                                        <!--end::Table body-->
+                                    </table>
+                                    <br>
+                                    <!--End :: Dokumen Contract Change Proposal-->
+
+                                    {{-- <!--Begin :: Dokumen Contract Change Order-->
                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                         Dokumen Contract Change Order
                                         <a href="#" Id="Plus" data-bs-toggle="modal" onclick="showModalUpload('change-order')">+</a>
@@ -976,7 +1024,7 @@
                                                     <td class="text-center">{{ $dokumen->nama_document }}</td>
                                                     <td>
                                                         <div class="d-flex flex-row align-items-center justify-content-center gap-2">
-                                                            <a href="/contract-management/dokumen-change-order/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
+                                                            <a href="/claim-management/dokumen-change-order/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
                                                             <button type="button" class="btn btn-sm btn-danger text-white" onclick="confirmDelete(this, 'change-order', '{{ $dokumen->id_document }}')">Delete</button>
                                                         </div>
                                                     </td>
@@ -991,7 +1039,7 @@
                                         <!--end::Table body-->
                                     </table>
                                     <br>
-                                    <!--End :: Dokumen Contract Change Order-->
+                                    <!--End :: Dokumen Contract Change Order--> --}}
                                     
                                     
                                     <!--Begin :: Dokumen Final Change-->

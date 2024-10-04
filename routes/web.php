@@ -513,6 +513,12 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('/claim-management/view/{profit_center}/perubahan-kontrak/{perubahan_kontrak}', [ContractManagementsController::class, 'perubahanKontrakView']);
 
+    Route::post('/claim-management/{kategori_file}/upload', [ClaimController::class, 'dokumenClaim']);
+
+    Route::post('/claim-management/dokumen-claim/{kategori_file}/delete', [ClaimController::class, 'dokumenClaimDelete']);
+
+    Route::get('/claim-management/{kategori_file}/{id_document}/download', [ClaimController::class, 'downloadDokumenChangeManagements']);
+    
     // Route::post('/approval-claim/save', [ClaimController::class, 'store']);
 
     // Route::post('/approval-claim/delete', [ClaimController::class, 'delete']);

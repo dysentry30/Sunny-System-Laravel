@@ -31,6 +31,7 @@ use App\Models\ContractChangeNotice;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use App\Models\ClaimContractDiajukan;
+use App\Models\BeritaAcaraKesepakatan;
 use App\Models\ClaimContractDisetujui;
 use App\Models\ClaimContractNegoisasi;
 use App\Models\ContractChangeProposal;
@@ -3493,6 +3494,9 @@ class ClaimController extends Controller
                 case 'change-proposal':
                     $newDokumen = new ContractChangeProposal();
                     break;
+                case 'berita-acara-kesepakatan':
+                    $newDokumen = new BeritaAcaraKesepakatan();
+                    break;
 
                 default:
                     $newDokumen = null;
@@ -3561,6 +3565,9 @@ class ClaimController extends Controller
                 case 'change-proposal':
                     $documentSelected = ContractChangeProposal::where("profit_center", $profit_center)->where("id_document", $id_document)->first();
                     break;
+                case 'berita-acara-kesepakatan':
+                    $documentSelected = BeritaAcaraKesepakatan::where("profit_center", $profit_center)->where("id_document", $id_document)->first();
+                    break;
 
                 default:
                     $documentSelected = null;
@@ -3581,8 +3588,56 @@ class ClaimController extends Controller
                 "message" => $e->getMessage(),
             ]);
         }
+    }
 
+    public function downloadDokumenChangeManagements($kategori_file, $id)
+    {
+        try {
+            switch ($kategori_file) {
+                case "dokumen-site-instruction":
+                    $modelClass = new SiteInstruction();
+                    break;
+                case "dokumen-technical-form":
+                    $modelClass = new TechnicalForm();
+                    break;
+                case "dokumen-technical-query":
+                    $modelClass = new TechnicalQuery();
+                    break;
+                case "dokumen-field-design-change":
+                    $modelClass = new FieldChange();
+                    break;
+                case "dokumen-change-notice":
+                    $modelClass = new ContractChangeNotice();
+                    break;
+                case "dokumen-change-order":
+                    $modelClass = new ContractChangeOrder();
+                    break;
+                case "dokumen-change-proposal":
+                    $modelClass = new ContractChangeProposal();
+                    break;
+                case "dokumen-berita-acara-kesepakatan":
+                    $modelClass = new BeritaAcaraKesepakatan();
+                    break;
+                default:
+                    $modelClass = null;
+            }
 
+            if (empty($modelClass)) {
+                Alert::error('Error', "Kategori tidak diitemukan, Hubungi Admin!");
+                return redirect()->back();
+            }
 
+            $file = $modelClass->where('id_document', $id)->first();
+
+            if (File::exists(public_path('contract-managements/' . $kategori_file . '/' . $id))) {
+                return response()->download(public_path('contract-managements/' . $kategori_file . '/' . $id), $file->nama_document);
+            } else {
+                Alert::error('Error', "File tidak diitemukan, Hubungi Admin!");
+                return redirect()->back();
+            }
+        } catch (\Exception $e) {
+            Alert::error('Error', $e->getMessage());
+            return redirect()->back();
+        }
     }
 }
