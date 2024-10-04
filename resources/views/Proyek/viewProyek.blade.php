@@ -5649,7 +5649,7 @@
                                                                                  class="text-hover-primary">{{ $dokumen->nama_document }}</a>
                                                                          @else
                                                                              <a target="_blank"
-                                                                                 href="{{ asset('words/' . $dokumen->id_document . '.pdf') }}"
+                                                                                 href="{{ asset('dokumen-s-curves/' . $dokumen->id_document) }}"
                                                                                  class="text-hover-primary">{{ $dokumen->nama_document }}</a>
                                                                          @endif
                                                                      </td>
@@ -5729,7 +5729,7 @@
                                                                                  class="text-hover-primary">{{ $dokumen->nama_document }}</a>
                                                                          @else
                                                                              <a target="_blank"
-                                                                                 href="{{ asset('words/' . $dokumen->id_document . '.pdf') }}"
+                                                                                 href="{{ asset('dokumen-other-proyek/' . $dokumen->id_document) }}"
                                                                                  class="text-hover-primary">{{ $dokumen->nama_document }}</a>
                                                                          @endif
                                                                      </td>

@@ -200,7 +200,7 @@ class DashboardController extends Controller
                     )->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year)->where("forecasts.periode_prognosa", "=", $month != "" ? (string) $month : (int) date("m"))->where("forecasts.tahun", "=", $year)->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
                 }
             } else {
-                if ($nilaiHistoryForecast->count() < 1 || !$nilaiHistoryForecast->every(function ($history) {
+                if ($nilaiHistoryForecast->whereIn("unit_kerja", $unit_kerja_user->toArray())->count() < 1 || !$nilaiHistoryForecast->whereIn("unit_kerja", $unit_kerja_user->toArray())?->every(function ($history) {
                     return $history->is_approved_1 == true;
                 })) {
                     // if ((int)date('d') < 5) {

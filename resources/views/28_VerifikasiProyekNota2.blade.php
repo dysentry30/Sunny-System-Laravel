@@ -490,7 +490,7 @@
                                                                         <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_rekomendasi_verifikasi_{{ $item->kode_proyek }}">Approve</button>
                                                                     @endif
                                                                 @endif
-                                                            @elseif (!empty($matriks_user) && $matriks_user->where('divisi_id', $item->divisi_id)->where('departemen_code', $item->departemen_id)->where('kategori', 'Pengajuan')->first() && is_null($item->is_pengajuan_approved))
+                                                            @elseif (!empty($matriks_user) && $matriks_user->where('divisi_id', $item->divisi_id)->where('departemen_code', $item->departemen_id)->where('kategori', 'Pengajuan')->first() && is_null($item->is_pengajuan_approved) && !Gate::any(["super-admin", "admin-crm"]))
                                                                 @if (!$item->is_request_pengajuan || (($matriks_user->filter(function($value)use($item){
                                                                     return $value->divisi_id == $item->divisi_id &&
                                                                     $value->departemen_code == $item->departemen_id &&

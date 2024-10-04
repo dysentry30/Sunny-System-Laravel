@@ -33,6 +33,15 @@ class ContractApprovalController extends Controller
             })
             ->where('periode_laporan', '=', $periode)->get();
 
+        if ($claims_all->isEmpty()) {
+            $response_success = [
+                "statusCode" => 200,
+                "message" => "success"
+            ];
+
+            return response()->json($response_success);
+        }
+
         $tanggalLaporan = (int) (date("Y") . sprintf('%02d', $periode) . date('d'));
 
         $data_claims_potential = $claims_all->map(function ($item, $key) use ($claims_all, $tanggalLaporan) {
@@ -499,7 +508,7 @@ class ContractApprovalController extends Controller
 
         // FIRST STEP SEND DATA TO BW
         if (env("APP_ENV") == "production") {
-
+            $results_response = collect();
             $csrf_token = "";
             $content_location = "";
             // $response = getAPI("https://wtappbw-qas.wika.co.id:44350/sap/bw4/v1/push/dataStores/yodaltes4/requests", [], [], false);
@@ -519,9 +528,10 @@ class ContractApprovalController extends Controller
             // THIRD STEP SEND DATA TO BW
             // dd($new_class->toJson());
             $fill_data = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie, "content-type" => "application/json"])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/dataSend?request=$content_location&datapid=1", $data_claims->toArray());
-
+            $results_response->push($fill_data->body());
             // FOURTH STEP SEND DATA TO BW
             $closed_request = Http::withBasicAuth("WIKA_API", "WikaWikaWika2022")->withHeaders(["x-csrf-token" => $csrf_token, "Cookie" => $cookie])->post("https://wtappbw-prd.wika.co.id:44360/sap/bw4/v1/push/dataStores/zosbi006/requests/$content_location/close");
+            $results_response->push($closed_request->body());
             // dd($closed_request, $data_claims, $fill_data);
 
             if ($fill_data->successful() && $closed_request->successful()) {
@@ -530,7 +540,8 @@ class ContractApprovalController extends Controller
                 $this->setLogging('ccm_approval', "APPROVAL CCM => ", [
                     "KODE_PROYEK" => $claims_all->first()?->profit_center,
                     "DATA" => $data_claims_array,
-                    "STATUS" => "SUCCESS"
+                    "STATUS" => "SUCCESS",
+                    "RESPONSE SAP" => $results_response->toArray()
                 ]);
 
                 $response_success = [
@@ -545,7 +556,8 @@ class ContractApprovalController extends Controller
                 $this->setLogging('ccm_approval', "APPROVAL CCM => ", [
                     "KODE_PROYEK" => $claims_all->first()?->profit_center,
                     "DATA" => $data_claims_array,
-                    "STATUS" => "FAILED"
+                    "STATUS" => "FAILED",
+                    "RESPONSE SAP" => $results_response->toArray()
                 ]);
 
                 $response_success = [
@@ -1632,8 +1644,10 @@ class ContractApprovalController extends Controller
             'stage',
             'perubahan_kontrak.profit_center',
             'nilai_negatif',
+            'periode_laporan',
+            'tahun',
             'kd_divisi'
-        ])->join('proyek_pis_new', 'perubahan_kontrak.profit_center', '=', 'proyek_pis_new.profit_center')->get()->groupBy('kd_divisi');
+        ])->join('proyek_pis_new', 'perubahan_kontrak.profit_center', '=', 'proyek_pis_new.profit_center')->where("periode_laporan", (int)$data["periode"])->where("tahun", (int)$data["tahun"])->get()->groupBy('kd_divisi');
 
         $claimsFilter = $claims->filter(function ($item, $key) use ($data) {
             return $key == $data["unitKerja"];

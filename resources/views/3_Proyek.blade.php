@@ -212,6 +212,10 @@
                                             <option value="7" {{ $filterStage == '7' ? 'selected' : '' }}>Kalah</option>
                                             <option value="8" {{ $filterStage == '8' ? 'selected' : '' }}>Terkontrak
                                             </option>
+                                            <option value="11" {{ $filterStage == '11' ? 'selected' : '' }}>Tidak Lulus PQ
+                                            </option>
+                                            <option value="12" {{ $filterStage == '12' ? 'selected' : '' }}>Cancel
+                                            </option>
                                             {{-- <option value="9" {{ $filterStage == '9' ? 'selected' : '' }}>Terendah</option> --}}
                                             {{-- <option value="10" {{ $filterStage == '10' ? 'selected' : '' }}>Selesai</option> --}}
                                         </select>

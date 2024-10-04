@@ -4341,7 +4341,11 @@ class ContractManagementsController extends Controller
         $filterBulan = isset($data['periode']) ? $data['periode'] : date('m');
         $filterTahun = isset($data['tahun']) ? $data['tahun'] : date('Y');
 
-        $perubahan_kontrak = PerubahanKontrak::where('id_perubahan_kontrak', $id_perubahan_kontrak)->where("periode_laporan", (int)$filterBulan)->where("tahun", (int)$filterTahun)->first();
+        if (Str::isUuid($id_perubahan_kontrak)) {
+            $perubahan_kontrak = ContractApproval::where('id', $id_perubahan_kontrak)->where("periode_laporan", (int)$filterBulan)->where("tahun", (int)$filterTahun)->first();
+        } else {
+            $perubahan_kontrak = PerubahanKontrak::where('id_perubahan_kontrak', $id_perubahan_kontrak)->where("periode_laporan", (int)$filterBulan)->where("tahun", (int)$filterTahun)->first();
+        }
         // if (isset($data['periode']) && isset($data['tahun'])) {
         //     $perubahan_kontrak = ContractApproval::where('id', $id_perubahan_kontrak)->where("periode_laporan", (int)$filterBulan)->where("tahun", (int)$filterTahun)->first();
         //     if (empty($perubahan_kontrak)) {

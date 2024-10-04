@@ -147,7 +147,13 @@ class ProyekController extends Controller
         } 
         
         if (!empty($filterStage)) {
-            $proyeks = $proyeks->where('stage', '=', (int) $filterStage);
+            if ($filterStage == "11") {
+                $proyeks = $proyeks->where('is_tidak_lulus_pq', true);
+            } elseif ($filterStage == "12") {
+                $proyeks = $proyeks->where('is_cancel', true);
+            } else {
+                $proyeks = $proyeks->where('stage', '=', (int) $filterStage);
+            }
             // $proyeks = $proyeks->get()->filter(function ($p) use ($column, $filterStage) {
             //     return preg_match("/$filterStage/i", $p[$column]);
             // });

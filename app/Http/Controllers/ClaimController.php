@@ -3118,15 +3118,15 @@ class ClaimController extends Controller
             }
         } else {
             if (!empty($filterStatus)) {
-                $claims = ContractApproval::where("profit_center", "=", $profitCenter)->where("stage", "=", $filterStatus)->where("periode_laporan", "=", $periode)->where("tahun", "=", $tahun)->get();
-                if ($claims->isEmpty()) {
+                // $claims = ContractApproval::where("profit_center", "=", $profitCenter)->where("stage", "=", $filterStatus)->where("periode_laporan", "=", $periode)->where("tahun", "=", $tahun)->get();
+                // if ($claims->isEmpty()) {
                     $claims = PerubahanKontrak::where("profit_center", "=", $profitCenter)->where("stage", "=", $filterStatus)->where("periode_laporan", "=", $periode)->where("tahun", "=", $tahun)->get();
-                }
+                // }
             } else {
-                $claims = ContractApproval::where("profit_center", "=", $profitCenter)->where("periode_laporan", "=", $periode)->where("tahun", "=", $tahun)->get();
-                if ($claims->isEmpty()) {
+                // $claims = ContractApproval::where("profit_center", "=", $profitCenter)->where("periode_laporan", "=", $periode)->where("tahun", "=", $tahun)->get();
+                // if ($claims->isEmpty()) {
                     $claims = PerubahanKontrak::where("profit_center", "=", $profitCenter)->where("periode_laporan", "=", $periode)->where("tahun", "=", $tahun)->get();
-                }
+                // }
             }
         }
 
