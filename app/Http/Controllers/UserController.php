@@ -370,31 +370,59 @@ class UserController extends Controller
         ];
         $rules = [
             "nip" => "required",
+            "aplikasi.*" => "required"
         ];
 
         $validation = Validator::make($data, $rules, $messages);
 
-        $is_administrator = $request->has("administrator") ?? false;
-        $is_admin_kontrak = $request->has("admin-kontrak") ?? false;
-        $is_user_sales = $request->has("user-sales") ?? false;
-        $is_user_csi = $request->has("user-csi") ?? false;
-        $is_team_proyek = $request->has("team-proyek") ?? false;
-        $is_user_mobile = $request->has("mobile") ?? false;
-        $is_user_ska_skt = $request->has("ska-skt") ?? false;
+        // $is_administrator = $request->has("administrator") ?? false;
+        // $is_admin_kontrak = $request->has("admin-kontrak") ?? false;
+        // $is_user_sales = $request->has("user-sales") ?? false;
+        // $is_user_csi = $request->has("user-csi") ?? false;
+        // $is_team_proyek = $request->has("team-proyek") ?? false;
+        // $is_user_mobile = $request->has("mobile") ?? false;
+        // $is_user_ska_skt = $request->has("ska-skt") ?? false;
 
-        if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_user_csi == false && $is_team_proyek == false && $is_user_mobile == false && $is_user_ska_skt == false) {
-            $rules["administrator"] = "accepted";
-            $rules["admin-kontrak"] = "accepted";
-            $rules["user-sales"] = "accepted";
-            $rules["user-csi"] = "accepted";
-            $rules["team-proyek"] = "accepted";
-            $rules["mobile"] = "accepted";
-            $rules["ska-skt"] = "accepted";
+        // if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_user_csi == false && $is_team_proyek == false && $is_user_mobile == false && $is_user_ska_skt == false) {
+        //     $rules["administrator"] = "accepted";
+        //     $rules["admin-kontrak"] = "accepted";
+        //     $rules["user-sales"] = "accepted";
+        //     $rules["user-csi"] = "accepted";
+        //     $rules["team-proyek"] = "accepted";
+        //     $rules["mobile"] = "accepted";
+        //     $rules["ska-skt"] = "accepted";
 
-            $validation = Validator::make($data, $rules, $messages);
-            if ($validation->fails()) {
-                Alert::error("Error", "Pilih Hak Akses Terlebih Dahulu");
-                $validation->validate();
+        //     $validation = Validator::make($data, $rules, $messages);
+        //     if ($validation->fails()) {
+        //         Alert::error("Error", "Pilih Hak Akses Terlebih Dahulu");
+        //         $validation->validate();
+        //     }
+        // }
+
+        $is_administrator = false;
+        $is_admin_kontrak = false;
+        $is_user_sales = false;
+        $is_user_csi = false;
+        $is_user_mobile = false;
+
+        // Loop aplikasi yang dipilih
+        foreach ($data['aplikasi'] as $aplikasi) {
+            switch ($aplikasi) {
+                case 'SUPER':
+                    $is_administrator = true;
+                    break;
+                case 'CRM':
+                    $is_user_sales = true;
+                    break;
+                case 'CCM':
+                    $is_admin_kontrak = true;
+                    break;
+                case 'CSI':
+                    $is_user_csi = true;
+                    break;
+                case 'MOB':
+                    $is_user_mobile = true;
+                    break;
             }
         }
 
@@ -410,9 +438,9 @@ class UserController extends Controller
         $user->check_admin_kontrak = $is_admin_kontrak;
         $user->check_user_sales = $is_user_sales;
         $user->check_user_csi = $is_user_csi;
-        $user->check_team_proyek = $is_team_proyek;
         $user->check_user_mobile = $is_user_mobile;
-        $user->check_user_ska_skt = $is_user_ska_skt;
+        // $user->check_team_proyek = $is_team_proyek;
+        // $user->check_user_ska_skt = $is_user_ska_skt;
         $user->password = Hash::make("password");
 
         if ($user->save()) {
@@ -480,168 +508,168 @@ class UserController extends Controller
         return view("/User/viewUser", ["user" => $user, "unit_kerjas" => UnitKerja::all(), "dops" => Dop::with("UnitKerjas")->get()->sortBy("dop"), 'collectMenu' => $collectMenu, 'userManagementSelected' => $userManagementSelected, 'menuSelected' => $menuSelected?->flatten(), 'collectAplikasi' => $collectAplikasi]);
     }
 
-    public function updateOld(Request $request)
-    {
-        $data = $request->all();
-        // dd($data);
-        $messages = [
-            "required" => "This field is required",
-        ];
-        $rules = [
-            "nip" => "required",
-            "name-user" => "required",
-            "email" => "required",
-            "phone-number" => "required",
-            // "upload-ttd" => "required",
-        ];
-        $validation = Validator::make($data, $rules, $messages);
+    // public function updateOld(Request $request)
+    // {
+    //     $data = $request->all();
+    //     // dd($data);
+    //     $messages = [
+    //         "required" => "This field is required",
+    //     ];
+    //     $rules = [
+    //         "nip" => "required",
+    //         "name-user" => "required",
+    //         "email" => "required",
+    //         "phone-number" => "required",
+    //         // "upload-ttd" => "required",
+    //     ];
+    //     $validation = Validator::make($data, $rules, $messages);
 
-        $is_administrator = $request->has("administrator") ?? false;
-        $is_admin_kontrak = $request->has("admin-kontrak") ?? false;
-        $is_user_sales = $request->has("user-sales") ?? false;
-        $is_user_csi = $request->has("user-csi") ?? false;
-        $is_team_proyek = $request->has("team-proyek") ?? false;
-        $is_user_mobile = $request->has("mobile") ?? false;
-        $is_user_ska_skt = $request->has("ska-skt") ?? false;
-        $role_admin = $request->has("role_admin") ?? false;
-        $role_user = $request->has("role_user") ?? false;
-        $role_approver = $request->has("role_approver") ?? false;
-        $role_risk = $request->has("role_risk") ?? false;
-        $role_unlock = $request->has("role_unlock") ?? false;
-        $role_scm = $request->has("role_scm") ?? false;
+    //     $is_administrator = $request->has("administrator") ?? false;
+    //     $is_admin_kontrak = $request->has("admin-kontrak") ?? false;
+    //     $is_user_sales = $request->has("user-sales") ?? false;
+    //     $is_user_csi = $request->has("user-csi") ?? false;
+    //     $is_team_proyek = $request->has("team-proyek") ?? false;
+    //     $is_user_mobile = $request->has("mobile") ?? false;
+    //     $is_user_ska_skt = $request->has("ska-skt") ?? false;
+    //     $role_admin = $request->has("role_admin") ?? false;
+    //     $role_user = $request->has("role_user") ?? false;
+    //     $role_approver = $request->has("role_approver") ?? false;
+    //     $role_risk = $request->has("role_risk") ?? false;
+    //     $role_unlock = $request->has("role_unlock") ?? false;
+    //     $role_scm = $request->has("role_scm") ?? false;
 
 
-        // if ($validation->fails()) {
-        //     $request->old("nip");
-        //     $request->old("name-user");
-        //     $request->old("email");
-        //     $request->old("phone-number");
-        //     // return redirect()->back();
-        //     Alert::error('Error', "User Gagal Dibuat, Periksa Kembali !");
+    //     // if ($validation->fails()) {
+    //     //     $request->old("nip");
+    //     //     $request->old("name-user");
+    //     //     $request->old("email");
+    //     //     $request->old("phone-number");
+    //     //     // return redirect()->back();
+    //     //     Alert::error('Error', "User Gagal Dibuat, Periksa Kembali !");
 
-        //     $validation->validate();
-        //     // return redirect()->back();
-        // }
+    //     //     $validation->validate();
+    //     //     // return redirect()->back();
+    //     // }
 
-        if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_user_csi == false && $is_team_proyek == false && $role_admin == false && $role_user == false && $role_approver == false && $role_risk == false && $role_unlock == false && $role_scm == false && $is_user_mobile == false && $is_user_ska_skt == false) {
-            $rules["administrator"] = "accepted";
-            $rules["admin-kontrak"] = "accepted";
-            $rules["user-sales"] = "accepted";
-            $rules["user-csi"] = "accepted";
-            $rules["team-proyek"] = "accepted";
-            $rules["mobile"] = "accepted";
-            $rules["ska-skt"] = "accepted";
+    //     if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_user_csi == false && $is_team_proyek == false && $role_admin == false && $role_user == false && $role_approver == false && $role_risk == false && $role_unlock == false && $role_scm == false && $is_user_mobile == false && $is_user_ska_skt == false) {
+    //         $rules["administrator"] = "accepted";
+    //         $rules["admin-kontrak"] = "accepted";
+    //         $rules["user-sales"] = "accepted";
+    //         $rules["user-csi"] = "accepted";
+    //         $rules["team-proyek"] = "accepted";
+    //         $rules["mobile"] = "accepted";
+    //         $rules["ska-skt"] = "accepted";
 
-            $rules["role_admin"] = "accepted";
-            $rules["role_user"] = "accepted";
-            $rules["role_approver"] = "accepted";
-            $rules["role_risk"] = "accepted";
-            $rules["role_unlock"] = "accepted";
-            $rules["role_scm"] = "accepted";
+    //         $rules["role_admin"] = "accepted";
+    //         $rules["role_user"] = "accepted";
+    //         $rules["role_approver"] = "accepted";
+    //         $rules["role_risk"] = "accepted";
+    //         $rules["role_unlock"] = "accepted";
+    //         $rules["role_scm"] = "accepted";
 
-            Alert::error("Error", "Pilih Hak Akses Terlebih Dahulu");
-            $request->old("nip");
-            $request->old("name-user");
-            $request->old("email");
-            $request->old("phone-number");
-            // dd("tes");
+    //         Alert::error("Error", "Pilih Hak Akses Terlebih Dahulu");
+    //         $request->old("nip");
+    //         $request->old("name-user");
+    //         $request->old("email");
+    //         $request->old("phone-number");
+    //         // dd("tes");
 
-            $validation = Validator::make($data, $rules, $messages);
-            $validation->validate();
+    //         $validation = Validator::make($data, $rules, $messages);
+    //         $validation->validate();
 
-            if ($validation->fails()) {
-                Alert::error("Error", "User Gagal Diperbaharui, Periksa Kembali !");
-                $validation->validate();
-            }
-        }
+    //         if ($validation->fails()) {
+    //             Alert::error("Error", "User Gagal Diperbaharui, Periksa Kembali !");
+    //             $validation->validate();
+    //         }
+    //     }
 
-        // // loading the source image
-        // // $src = imagecreatetruecolor(150, 150);
-        // // $color = imagecolorat($src, 0, 0);
-        // // $hex = dechex($color);
+    //     // // loading the source image
+    //     // // $src = imagecreatetruecolor(150, 150);
+    //     // // $color = imagecolorat($src, 0, 0);
+    //     // // $hex = dechex($color);
         
-        // // dd($hex);
-        // $white = imagecolorallocatealpha($src, 255, 255, 255, 127);
-        // $_transColor = imagecolortransparent($src, $white);
-        // imagefill($src, 0, 0, $_transColor);
-        // // saving the image to public folder
-        // $file_name = "tanda-tangan-" . $data["nip"] . "." . "png";
-        // imagesavealpha($src, true);
+    //     // // dd($hex);
+    //     // $white = imagecolorallocatealpha($src, 255, 255, 255, 127);
+    //     // $_transColor = imagecolortransparent($src, $white);
+    //     // imagefill($src, 0, 0, $_transColor);
+    //     // // saving the image to public folder
+    //     // $file_name = "tanda-tangan-" . $data["nip"] . "." . "png";
+    //     // imagesavealpha($src, true);
         
-        // $file_name = "tanda-tangan-" . $data["nip"] . "." . $data["upload-ttd"]->clientExtension();
-        // $src = imagecreatefromjpeg($data["upload-ttd"]);
-        // $new = imagescale($src,100);
+    //     // $file_name = "tanda-tangan-" . $data["nip"] . "." . $data["upload-ttd"]->clientExtension();
+    //     // $src = imagecreatefromjpeg($data["upload-ttd"]);
+    //     // $new = imagescale($src,100);
 
-        // imagejpeg($new, public_path("/file-ttd/$file_name"), 100);
-        // $data["upload-ttd"]->storeAs("/", $file_name, ["disk" => "public/ttd"]);
+    //     // imagejpeg($new, public_path("/file-ttd/$file_name"), 100);
+    //     // $data["upload-ttd"]->storeAs("/", $file_name, ["disk" => "public/ttd"]);
 
-        $user = User::find($data["user-id"]);
-        $user->nip = $data["nip"];
-        $user->name = $data["name-user"];
-        $user->email = $data["email"];
-        $user->no_hp = $data["phone-number"];
-        // $user->file_ttd = $file_name;
-        $user->is_active = $request->has("is-active");
-        // if (!Auth::user()->check_administrator) {
-        if (Gate::allows('user-csi')) {
-            $user->unit_kerja = null;
-        } else {
-            $user->unit_kerja = count($data["unit-kerja"]) > 1 ? join(",", $data["unit-kerja"]) : $data["unit-kerja"][0];
-        }
+    //     $user = User::find($data["user-id"]);
+    //     $user->nip = $data["nip"];
+    //     $user->name = $data["name-user"];
+    //     $user->email = $data["email"];
+    //     $user->no_hp = $data["phone-number"];
+    //     // $user->file_ttd = $file_name;
+    //     $user->is_active = $request->has("is-active");
+    //     // if (!Auth::user()->check_administrator) {
+    //     if (Gate::allows('user-csi')) {
+    //         $user->unit_kerja = null;
+    //     } else {
+    //         $user->unit_kerja = count($data["unit-kerja"]) > 1 ? join(",", $data["unit-kerja"]) : $data["unit-kerja"][0];
+    //     }
         
-        // }
-        $user->check_administrator = $is_administrator;
-        $user->check_admin_kontrak = $is_admin_kontrak;
-        $user->check_user_sales = $is_user_sales;
-        $user->check_user_csi = $is_user_csi;
-        $user->check_team_proyek = $is_team_proyek;
-        $user->check_user_mobile = $is_user_mobile;
-        $user->check_user_ska_skt = $is_user_ska_skt;
+    //     // }
+    //     $user->check_administrator = $is_administrator;
+    //     $user->check_admin_kontrak = $is_admin_kontrak;
+    //     $user->check_user_sales = $is_user_sales;
+    //     $user->check_user_csi = $is_user_csi;
+    //     $user->check_team_proyek = $is_team_proyek;
+    //     $user->check_user_mobile = $is_user_mobile;
+    //     $user->check_user_ska_skt = $is_user_ska_skt;
 
-        $user->role_admin = $role_admin;
-        $user->role_user = $role_user;
-        $user->role_approver = $role_approver;
-        $user->role_risk = $role_risk;
-        $user->is_unlock = $role_unlock;
-        $user->role_scm = $role_scm;
+    //     $user->role_admin = $role_admin;
+    //     $user->role_user = $role_user;
+    //     $user->role_approver = $role_approver;
+    //     $user->role_risk = $role_risk;
+    //     $user->is_unlock = $role_unlock;
+    //     $user->role_scm = $role_scm;
 
-        // if (isset($data['proyeks'])) {
-        //     $proyekSelectedCollect = collect($data['proyeks']);
-        //     if (empty($user->proyeks_selected)) {
-        //         $user->proyeks_selected = $proyekSelectedCollect->toJson();
-        //     } else {
-        //         $collectProyekExist = collect(json_decode($user->proyeks_selected));
-        //         $proyekCancel = $collectProyekExist->diff($data["proyeks"]);
+    //     // if (isset($data['proyeks'])) {
+    //     //     $proyekSelectedCollect = collect($data['proyeks']);
+    //     //     if (empty($user->proyeks_selected)) {
+    //     //         $user->proyeks_selected = $proyekSelectedCollect->toJson();
+    //     //     } else {
+    //     //         $collectProyekExist = collect(json_decode($user->proyeks_selected));
+    //     //         $proyekCancel = $collectProyekExist->diff($data["proyeks"]);
 
-        //         if ($proyekCancel->count() < 1) { //Jika tidak ada yg di cancel maka gunakan yg sebelumnya
-        //             $arrayTemp = $collectProyekExist;
-        //         } else { //Jika ada di proyekCancel maka hapus si proyeknya
-        //             $arrayTemp = $collectProyekExist->reject(function ($proyek) use ($proyekCancel) {
-        //                 return in_array($proyek, $proyekCancel->toArray());
-        //             });
-        //         }
+    //     //         if ($proyekCancel->count() < 1) { //Jika tidak ada yg di cancel maka gunakan yg sebelumnya
+    //     //             $arrayTemp = $collectProyekExist;
+    //     //         } else { //Jika ada di proyekCancel maka hapus si proyeknya
+    //     //             $arrayTemp = $collectProyekExist->reject(function ($proyek) use ($proyekCancel) {
+    //     //                 return in_array($proyek, $proyekCancel->toArray());
+    //     //             });
+    //     //         }
 
-        //         $proyekNew = $proyekSelectedCollect->diff($arrayTemp);
-        //         $finalProyek = $arrayTemp->push($proyekNew->flatten()->toArray());
+    //     //         $proyekNew = $proyekSelectedCollect->diff($arrayTemp);
+    //     //         $finalProyek = $arrayTemp->push($proyekNew->flatten()->toArray());
 
-        //         $user->proyeks_selected = $finalProyek->flatten()->toJson();
-        //     }
-        // } else {
-        //     $user->proyeks_selected = null;
-        // }
+    //     //         $user->proyeks_selected = $finalProyek->flatten()->toJson();
+    //     //     }
+    //     // } else {
+    //     //     $user->proyeks_selected = null;
+    //     // }
 
-        if (isset($data['proyeks'])) {
-            $user->proyeks_selected = $data['list-proyek'];
-        } else {
-            $user->proyeks_selected = null;
-        }
-        // $user->alamat = $data["alamat"];
+    //     if (isset($data['proyeks'])) {
+    //         $user->proyeks_selected = $data['list-proyek'];
+    //     } else {
+    //         $user->proyeks_selected = null;
+    //     }
+    //     // $user->alamat = $data["alamat"];
         
-        if ($user->save()) {
-            Alert::success("Success", "User berhasil diperbarui.")->autoClose(3000);
-            return redirect()->back();
-        }
-    }
+    //     if ($user->save()) {
+    //         Alert::success("Success", "User berhasil diperbarui.")->autoClose(3000);
+    //         return redirect()->back();
+    //     }
+    // }
 
     public function update(Request $request)
     {
@@ -712,6 +740,8 @@ class UserController extends Controller
                             'read' => isset($menuData['read']) ? 1 : 0,
                             'update' => isset($menuData['update']) ? 1 : 0,
                             'delete' => isset($menuData['delete']) ? 1 : 0,
+                            'lock' => isset($menuData['lock']) ? 1 : 0,
+                            'approve' => isset($menuData['approve']) ? 1 : 0,
                         ]
                     );
 

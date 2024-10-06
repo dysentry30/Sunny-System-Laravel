@@ -534,7 +534,7 @@
                                                                     <th class="min-w-auto ps-3" rowspan="2">Nama Menu</th>
                                                                     <th class="min-w-auto" rowspan="2">Kode Menu</th>
                                                                     <th class="min-w-auto" rowspan="2">Selected</th>
-                                                                    <th class="min-w-auto" colspan="4">User Role</th>
+                                                                    <th class="min-w-auto" colspan="6">User Role</th>
                                                                     </tr>
                                                                     <!--end::Table row-->
                                                                     <!--begin::Table row-->
@@ -543,6 +543,8 @@
                                                                     <th class="min-w-auto">Read</th>
                                                                     <th class="min-w-auto">Update</th>
                                                                     <th class="min-w-auto">Delete</th>
+                                                                    <th class="min-w-auto">Lock</th>
+                                                                    <th class="min-w-auto">Approve</th>
                                                                     </tr>
                                                                     <!--end::Table row-->
                                                                 </thead>
@@ -569,6 +571,12 @@
                                                                             <td class="text-center">
                                                                                 <input type="checkbox" name="menus[{{ $menu->kode_menu }}][delete]" class="form-check-input" value="1" id="delete-{{ $index }}" {{ $userManagementSelected->where("menu", $menu->kode_menu)->first()?->delete ? "checked" : "" }} {{ $userManagementSelected->contains("menu", $menu->kode_menu) ? "" : "disabled" }}>
                                                                             </td>
+                                                                            <td class="text-center">
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][lock]" class="form-check-input" value="1" id="lock-{{ $index }}" {{ $userManagementSelected->where("menu", $menu->kode_menu)->first()?->lock ? "checked" : "" }} {{ $userManagementSelected->contains("menu", $menu->kode_menu) ? "" : "disabled" }}>
+                                                                            </td>
+                                                                            <td class="text-center">
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][approve]" class="form-check-input" value="1" id="approve-{{ $index }}" {{ $userManagementSelected->where("menu", $menu->kode_menu)->first()?->approve ? "checked" : "" }} {{ $userManagementSelected->contains("menu", $menu->kode_menu) ? "" : "disabled" }}>
+                                                                            </td>
                                                                         </tr>                                                                        
                                                                     @else
                                                                         <tr>
@@ -588,6 +596,12 @@
                                                                             </td>
                                                                             <td class="text-center">
                                                                                 <input type="checkbox" name="menus[{{ $menu->kode_menu }}][delete]" class="form-check-input" value="1" id="delete-{{ $index }}" {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "" : "disabled" }}>
+                                                                            </td>
+                                                                            <td class="text-center">
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][lock]" class="form-check-input" value="1" id="lock-{{ $index }}" {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "" : "disabled" }}>
+                                                                            </td>
+                                                                            <td class="text-center">
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][approve]" class="form-check-input" value="1" id="approve-{{ $index }}" {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "" : "disabled" }}>
                                                                             </td>
                                                                         </tr>                                                                      
                                                                     @endif

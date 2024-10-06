@@ -737,8 +737,8 @@ a{{-- Begin::Extend Header --}}
                         <!--begin::Options-->
                         <br>
                         <label class="fs-6 fw-bold form-label mt-3">Aplikasi</label>
-                        <div class="d-flex" style="flex-direction: row">
-                            <!--begin::Options-->
+                        <div class="d-flex flex-row">
+                            {{-- <!--begin::Options-->
                             <label class="form-check form-check-sm form-check-custom form-check-solid me-6 ms-4 align-middle">
                                 <input class="form-check-input" type="checkbox" value="" id="administrator" name="administrator" />
                                 <span class="form-check-label me-8 required"><b>Super Admin</b></span>
@@ -773,7 +773,50 @@ a{{-- Begin::Extend Header --}}
                                 <input class="form-check-input" type="checkbox" value="" id="ska-skt" name="ska-skt" />
                                 <span class="form-check-label me-8 required"><b>SKA SKT</b></span>
                             </label>
-                            <!--end::Options-->
+                            <!--end::Options--> --}}
+
+                            @foreach ($collectAplikasi as $aplikasi)
+                                @php
+                                    switch ($aplikasi->kode_aplikasi) {
+                                        case 'SUPER':
+                                            $namaInput = "administrator";
+                                            // $isChecked = $user->check_administrator ? "checked" : "";
+                                            break;
+                                        case 'CRM':
+                                            $namaInput = "user-sales";
+                                            // $isChecked = $user->check_user_sales ? "checked" : "";
+                                            break;
+                                        case 'CCM':
+                                            $namaInput = "admin-kontrak";
+                                            // $isChecked = $user->check_admin_kontrak ? "checked" : "";
+                                            break;
+                                        case 'CSI':
+                                            $namaInput = "user-csi";
+                                            // $isChecked = $user->check_user_csi ? "checked" : "";
+                                            break;
+                                        case 'MOB':
+                                            $namaInput = "mobile";
+                                            // $isChecked = $user->check_user_mobile ? "checked" : "";
+                                            break;
+                                        
+                                        default:
+                                            $namaInput = "";
+                                            // $isChecked = "";
+                                            break;
+                                    }
+                                @endphp
+                                <!-- begin:: Form Input Administrator -->
+                                <div class="form-check me-12">
+                                    <input class="form-check-input" type="checkbox"
+                                        value="{{ $aplikasi->nama_aplikasi }}"
+                                        name="aplikasi[]" id="aplikasi">
+                                    <label class="form-check-label"
+                                        for="{{ $namaInput }}">
+                                        {{ $aplikasi->nama_aplikasi }}
+                                    </label>
+                                </div>
+                                <!-- end:: Form Input Administrator -->                                                                        
+                            @endforeach
                         </div>
                         <br>
                         <br>

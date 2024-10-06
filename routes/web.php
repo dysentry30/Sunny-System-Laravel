@@ -3804,7 +3804,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         }
 
         $pegawai_all = Pegawai::select(['id_pegawai', 'nip', 'nama_pegawai'])->get();
-        return view("/MasterData/User", ["users" => $users, "unit_kerjas" => UnitKerja::all(), "pegawai_all" => $pegawai_all]);
+        $collectAplikasi = MasterApplication::all();
+        return view("/MasterData/User", ["users" => $users, "unit_kerjas" => UnitKerja::where('id_profit_center', "!=", null)->orderBy("id_profit_center")->get()->values(), "pegawai_all" => $pegawai_all, 'collectAplikasi' => $collectAplikasi]);
         // return view("/MasterData/User", ["users" => User::all()->reverse()]);
     });
     // Route::get('/user', [UserController::class, 'index']);
