@@ -17,7 +17,6 @@ return new class extends Migration
             Schema::create('user_menu_management', function (Blueprint $table) {
                 $table->uuid("id")->primary();
                 $table->string("nip", 30);
-                $table->foreign("nip");
                 $table->text("aplikasi");
                 $table->text("menu");
                 $table->boolean("create")->default(false);
