@@ -195,7 +195,8 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                         $unit_kerja_count = collect($unit_kerja)->count();
                                                     @endphp
                                                 @endif
-                                                @if (!str_contains(Auth::user()->name, "(PIC)") || !Auth::user()->can('admin-crm'))
+                                                {{-- @if (!str_contains(Auth::user()->name, "(PIC)") || !Auth::user()->can('admin-crm')) --}}
+                                                @can('access-menu-lock', 'FRCST')
                                                     <div class="col-2" style="width: 11% !important">
                                                         @if ($historyForecast->count() == $unit_kerja_count)
                                                             <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="Untuk Request Unlock, silahkan buka tab <b>Request Approval History</b>." data-bs-placement="top">
@@ -214,8 +215,9 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                     <i class="bi bi-unlock-fill text-white"></i>
                                                             </button>
                                                         @endif
-                                                    </div>
-                                                @endif
+                                                    </div>                                                    
+                                                @endcan
+                                                {{-- @endif --}}
                                                 <div class="col-2 mt-4 me-8" style="width: 10% !important">
                                                     {{-- <button type="button" id="unlock-previous-forecast"
                                                     onclick="unlockPreviousForecast()"

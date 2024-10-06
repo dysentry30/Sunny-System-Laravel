@@ -189,6 +189,20 @@ class AuthServiceProvider extends ServiceProvider
                 ->where("delete", true)
             ->exists();
         });
+
+        Gate::define('access-menu-lock', function (User $user, $menu) {
+            return UserMenuManagement::where("nip", $user->nip)
+            ->where("menu", $menu)
+                ->where("lock", true)
+                ->exists();
+        });
+
+        Gate::define('access-menu-approve', function (User $user, $menu) {
+            return UserMenuManagement::where("nip", $user->nip)
+            ->where("menu", $menu)
+                ->where("lock", true)
+                ->exists();
+        });
         //
     }
 }

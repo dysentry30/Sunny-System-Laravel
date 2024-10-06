@@ -103,10 +103,10 @@
                             <!--begin::Actions-->
                             <div class="d-flex align-items-center py-1">
                                 <!--begin::Button-->
-                                @canany(['super-admin', 'admin-crm', 'user-crm'])
+                                {{-- @canany(['super-admin', 'admin-crm', 'user-crm']) --}}
                                     <button onclick="document.location.reload()" type="reset" class="btn btn-sm btn-light btn-active-danger pe-3 mx-2" id="cancel-button">
                                         Discard <i class="bi bi-x"></i></button>
-                                @endcanany
+                                {{-- @endcanany --}}
                                 <!--end::Button-->
 
                                 <!--begin::Button-->
@@ -133,28 +133,36 @@
 
                                 <!--begin::Button-->
                                 {{-- @canany(['super-admin', 'admin-crm', 'approver-crm', 'user-crm']) --}}
-                                @can('access-menu-edit', "PRYK")
+                                {{-- @can('access-menu-edit', "PRYK") --}}
                                 @if ($proyek->UnitKerja?->dop != "EA")
                                     @if (($proyek->stage == 8 && $proyek->is_need_approval_terkontrak && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek?->is_revisi))
+                                    @can('access-menu-lock', 'APT')
                                         <button type="button" class="btn btn-sm btn-success ms-2" data-bs-toggle="modal" data-bs-target="#modal-send-approval-terkontrak-proyeks">Ajukan Approval</button>
+                                    @endcan
                                     @endif
+                                    @can('access-menu-approve', 'APT')
                                     @if (App\Models\MatriksApprovalTerkontrakProyek::where('nip', Auth::user()->nip)->where('unit_kerja', $proyek->unit_kerja)->where("is_active", true)->first() && $proyek->ApprovalTerkontrakProyek && is_null($proyek->ApprovalTerkontrakProyek?->is_revisi) && is_null($proyek->ApprovalTerkontrakProyek->is_approved))
                                         <button type="button" class="btn btn-sm btn-success ms-2" data-bs-toggle="modal" data-bs-target="#kt_modal_approval_terkontrak">Setujui Approval</button>
                                         <button type="button" class="btn btn-sm btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#kt_modal_approval_terkontrak_revisi">Revisi Approval</button>
-                                    @endif
+                                    @endif                                        
+                                    @endcan
                                     @if (is_null($proyek->NotaRekomendasi?->is_request_rekomendasi) && !$check_green_line && $proyek->stage == 1 && is_null($proyek->NotaRekomendasi?->is_disetujui))
+                                    @can('access-menu-lock', 'OWNS')
                                         <input type="button" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan"
-                                            style="background-color:#00b48d">
+                                            style="background-color:#00b48d">                                        
+                                    @endcan
                                     @elseif ($proyek->stage == 4 && !$check_green_line_nota_2 && is_null($proyek->is_request_rekomendasi_2) && is_null($proyek->is_disetujui_rekomendasi_2) && $proyek->VerifikasiProyekNota2?->is_persetujuan_approved)
                                         @if ((empty($proyek->DokumenPenentuanProjectGreenlane) && empty($proyek->DokumenTender)) || $proyek->PorsiJO->contains(function($item){return (!is_null(($item->is_greenlane) && !$item->is_greenlane) && ($item->is_hasil_assessment) && !$item->is_hasil_assessment);}))
                                             <p class="btn btn-sm btn-success ms-2 mb-0" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="bottom" data-bs-title="<b>Dokumen Form Penentuan Project Green Lane / Non Green Lane & Dokumen Tender</b><br> Wajib Diisi">Pengajuan Rekomendasi</p>
                                         @else
-                                            <input type="button" name="proyek-rekomendasi-2" data-bs-toggle="modal"  value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi-2" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan-nota-2"
+                                            @can('access-menu-lock', 'PRJS')
+                                                <input type="button" name="proyek-rekomendasi-2" data-bs-toggle="modal"  value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi-2" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan-nota-2"
                                                     style="background-color:#00b48d">
+                                            @endcan
                                         @endif    
                                     @endif
                                 @endif
-                                @endcan
+                                {{-- @endcan --}}
                                 {{-- @endcanany --}}
                                 <!--end::Button-->
 
@@ -242,7 +250,7 @@
                     </div>
                     <!--end::Toolbar-->
 
-                    @canany(['super-admin', 'approver-crm', 'user-crm', 'admin-crm'])
+                    {{-- @canany(['super-admin', 'approver-crm', 'user-crm', 'admin-crm']) --}}
                         @if (is_null($proyek->NotaRekomendasi?->is_request_rekomendasi) && !$check_green_line && $proyek->stage == 1)
                         <!-- begin::modal confirm send wa-->
                         <div class="modal fade w-100" style="margin-top: 120px" id="modal-send-pengajuan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -404,7 +412,7 @@
                         </div>
                         <!-- end::modal confirm send wa-->
                         @endif
-                    @endcanany
+                    {{-- @endcanany --}}
 
                     @if ($proyek->UnitKerja?->dop != "EA")
                         @if (($proyek->stage == 8 && $proyek->is_need_approval_terkontrak && empty($proyek->ApprovalTerkontrakProyek) || $proyek->ApprovalTerkontrakProyek?->is_revisi))
@@ -501,7 +509,7 @@
                                                         @if ($proyek->NotaRekomendasi?->is_disetujui || $check_green_line || $proyek->UnitKerja?->dop == "EA")
                                                             <a href="#"
                                                                 class="stage-button stage-action color-is-default stage-is-not-active"
-                                                                style="outline: 0px; cursor: pointer;" stage="2">
+                                                                style="outline: 0px; cursor: pointer; {{ auth()->user()->can('access-menu-update', 'PRYK') ? '' : 'pointer-events: none;' }}" stage="2">
                                                                 Pasar Potensial
                                                             </a>
                                                         @else
@@ -554,7 +562,7 @@
                                                                     role="button" id="tidak-lulus-pq"
                                                                     aria-expanded="false" aria-controls="#tidak-lulus-pq"
                                                                     class="stage-button d-flex align-items-center stage-is-not-active color-is-default"
-                                                                    style="outline: 0px; cursor: pointer;" stage="3">
+                                                                    style="outline: 0px; cursor: pointer; {{ auth()->user()->can('access-menu-update', 'PRYK') ? '' : 'pointer-events: none;' }}" stage="3">
                                                                     <span>Prakualifikasi</span>
                                                                     <i class="bi bi-caret-down-fill text-white ms-3"></i>
                                                                 </a>
@@ -573,13 +581,17 @@
                                                                 @csrf
                                                                 <input type="hidden" name="kode_proyek"
                                                                     value="{{ $proyek->kode_proyek }}">
-                                                                <li><input type="submit"
+                                                                <li><input type="{{ auth()->user()->can('access-menu-update', 'PRYK') ? 'submit' : '' }}"
+                                                                        @can('access-menu-update', 'PRYK')
                                                                         onclick="this.form.submitted=this.value"
+                                                                        @endcan
                                                                         class="dropdown-item" name="stage-prakualifikasi"
                                                                         value="Prakualifikasi" />
                                                                 </li>
-                                                                <li><input type="submit"
+                                                                <li><input type="{{ auth()->user()->can('access-menu-update', 'PRYK') ? 'submit' : '' }}"
+                                                                        @can('access-menu-update', 'PRYK')
                                                                         onclick="this.form.submitted=this.value"
+                                                                        @endcan
                                                                         class="dropdown-item" name="stage-tidak-lulus-pq"
                                                                         value="Tidak Lulus PQ" />
                                                                 </li>
@@ -589,7 +601,7 @@
                                                     @if ($proyek->stage > 3)
                                                         <a href="#"
                                                             class="stage-button stage-action stage-is-done color-is-default"
-                                                            style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || Auth::user()->can('admin-crm') ? '' : 'pointer-events: none;' }}"
+                                                            style="outline: 0px; cursor: pointer; {{ auth()->user()->can('access-menu-update', 'PRYK') ? '' : 'pointer-events: none;' }}"
                                                             stage="4">
                                                             Tender Diikuti
                                                         </a>
@@ -630,7 +642,7 @@
                                                             @if ($proyek->NotaRekomendasi2?->is_disetujui || $check_green_line_nota_2 || $proyek->dop == "EA")
                                                                 <a href="#"
                                                                     class="stage-button stage-action stage-is-not-active color-is-default"
-                                                                    style="outline: 0px; cursor: pointer;" stage="5">
+                                                                    style="outline: 0px; cursor: pointer; {{ auth()->user()->can('access-menu-update', 'PRYK') ? '' : 'pointer-events: none;' }}" stage="5">
                                                                     Perolehan
                                                                 </a>
                                                             @else
@@ -666,7 +678,7 @@
                                                                 class="stage-button stage-is-done color-is-danger"
                                                                 data-bs-toggle="dropdown" role="button" id="menang"
                                                                 aria-expanded="false"
-                                                                style="outline: 0px; cursor: pointer;" stage="1">
+                                                                style="outline: 0px; cursor: pointer; {{ auth()->user()->can('access-menu-update', 'PRYK') ? '' : 'pointer-events: none;' }}" stage="1">
                                                                 <div class="d-flex flex-row">
                                                                     <span class="text-white">Kalah</span>&nbsp;&nbsp;
                                                                     <span class=""
@@ -686,12 +698,16 @@
                                                                     @csrf
                                                                     <input type="hidden" name="kode_proyek"
                                                                         value="{{ $proyek->kode_proyek }}">
-                                                                    <li><input type="submit"
+                                                                    <li><input type="{{ auth()->user()->can('access-menu-update', 'PRYK') ? 'submit' : '' }}"
+                                                                            @can('access-menu-update', 'PRYK')
                                                                             onclick="this.form.submitted=this.value"
+                                                                            @endcan
                                                                             class="dropdown-item" name="stage-menang"
                                                                             value="Menang" /></li>
-                                                                    <li><input type="submit"
+                                                                    <li><input type="{{ auth()->user()->can('access-menu-update', 'PRYK') ? 'submit' : '' }}"
+                                                                            @can('access-menu-update', 'PRYK')
                                                                             onclick="this.form.submitted=this.value"
+                                                                            @endcan
                                                                             class="dropdown-item" name="stage-kalah"
                                                                             value="Kalah" /></li>
                                                                 </form>
@@ -714,7 +730,7 @@
                                                             <a href="#" data-bs-toggle="dropdown" role="button"
                                                                 id="menang" aria-expanded="false"
                                                                 class="stage-button stage-is-not-active color-is-default"
-                                                                style="outline: 0px; cursor: pointer;" stage="8">
+                                                                style="outline: 0px; cursor: pointer; {{ auth()->user()->can('access-menu-update', 'PRYK') ? '' : 'pointer-events: none;' }}" stage="8">
                                                                 Menang
                                                                 &nbsp;&nbsp;
                                                                 <span class="" style="position: relative;top: 15%;"
@@ -731,13 +747,17 @@
                                                                         @csrf
                                                                         <input type="hidden" name="kode_proyek"
                                                                             value="{{ $proyek->kode_proyek }}">
-                                                                        <li><input type="submit"
+                                                                        <li><input type="{{ auth()->user()->can('access-menu-update', 'PRYK') ? 'submit' : '' }}"
+                                                                                @can('access-menu-update', 'PRYK')
                                                                                 onclick="this.form.submitted=this.value"
+                                                                                @endcan
                                                                                 class="dropdown-item" name="stage-menang"
                                                                                 value="Menang" />
                                                                         </li>
-                                                                        <li><input type="submit"
+                                                                        <li><input type="{{ auth()->user()->can('access-menu-update', 'PRYK') ? 'submit' : '' }}"
+                                                                                @can('access-menu-update', 'PRYK')
                                                                                 onclick="this.form.submitted=this.value"
+                                                                                @endcan
                                                                                 class="dropdown-item" name="stage-kalah"
                                                                                 value="Kalah" />
                                                                         </li>
@@ -756,12 +776,16 @@
                                                                     @csrf
                                                                     <input type="hidden" name="kode_proyek"
                                                                         value="{{ $proyek->kode_proyek }}">
-                                                                    <li><input type="submit"
+                                                                    <li><input type="{{ auth()->user()->can('access-menu-update', 'PRYK') ? 'submit' : '' }}"
+                                                                            @can('access-menu-update', 'PRYK')
                                                                             onclick="this.form.submitted=this.value"
+                                                                            @endcan
                                                                             class="dropdown-item" name="stage-menang"
                                                                             value="Menang" /></li>
-                                                                    <li><input type="submit"
+                                                                    <li><input type="{{ auth()->user()->can('access-menu-update', 'PRYK') ? 'submit' : '' }}"
+                                                                            @can('access-menu-update', 'PRYK')
                                                                             onclick="this.form.submitted=this.value"
+                                                                            @endcan
                                                                             class="dropdown-item" name="stage-kalah"
                                                                             value="Kalah" /></li>
                                                                 </form>
@@ -797,7 +821,7 @@
                                                             @elseif(is_null($proyek->is_need_approval_terkontrak))
                                                                 <a href="#"
                                                                     class="stage-button stage-action stage-is-not-active color-is-default"
-                                                                    style="outline: 0px; cursor: pointer;"
+                                                                    style="outline: 0px; cursor: pointer; {{ auth()->user()->can('access-menu-update', 'PRYK') ? '' : 'pointer-events: none;' }}"
                                                                     stage="8">
                                                                     Approval Terkontrak
                                                                 </a>
@@ -810,7 +834,7 @@
                                                                     id="terkontrak" aria-expanded="false"
                                                                     aria-controls="#terkontrak"
                                                                     class="stage-button stage-is-done color-is-default"
-                                                                    style="outline: 0px; cursor: pointer;" stage="8">
+                                                                    style="outline: 0px; cursor: pointer; {{ auth()->user()->can('access-menu-update', 'PRYK') ? '' : 'pointer-events: none;' }}" stage="8">
                                                                     Terkontrak
                                                                     &nbsp;&nbsp;
                                                                     <span class="" style="position: relative;top: 15%;"
@@ -822,7 +846,7 @@
                                                                     id="terkontrak" aria-expanded="false"
                                                                     aria-controls="#terkontrak"
                                                                     class="stage-button stage-is-done color-is-danger"
-                                                                    style="outline: 0px; cursor: pointer;" stage="8">
+                                                                    style="outline: 0px; cursor: pointer; {{ auth()->user()->can('access-menu-update', 'PRYK') ? '' : 'pointer-events: none;' }}" stage="8">
                                                                     Terendah
                                                                     &nbsp;&nbsp;
                                                                     <span class="" style="position: relative;top: 15%;"
@@ -841,12 +865,16 @@
                                                                         @csrf
                                                                         <input type="hidden" name="kode_proyek"
                                                                             value="{{ $proyek->kode_proyek }}">
-                                                                        <li><input type="submit"
+                                                                        <li><input type="{{ auth()->user()->can('access-menu-update', 'PRYK') ? 'submit' : '' }}"
+                                                                                @can('access-menu-update', 'PRYK')
                                                                                 onclick="this.form.submitted=this.value"
+                                                                                @endcan
                                                                                 class="dropdown-item" name="stage-terkontrak"
                                                                                 value="Terkontrak" /></li>
-                                                                        <li><input type="submit"
+                                                                        <li><input type="{{ auth()->user()->can('access-menu-update', 'PRYK') ? 'submit' : '' }}"
+                                                                                @can('access-menu-update', 'PRYK')
                                                                                 onclick="this.form.submitted=this.value"
+                                                                                @endcan
                                                                                 class="dropdown-item" name="stage-terendah"
                                                                                 value="Terendah" /></li>
                                                                     </form>
@@ -861,7 +889,7 @@
                                                                     id="terkontrak" aria-expanded="false"
                                                                     aria-controls="#terkontrak"
                                                                     class="stage-button stage-is-not-active color-is-default"
-                                                                    style="outline: 0px; cursor: pointer;" stage="8">
+                                                                    style="outline: 0px; cursor: pointer; {{ auth()->user()->can('access-menu-update', 'PRYK') ? '' : 'pointer-events: none;' }}" stage="8">
                                                                     Terkontrak
                                                                     &nbsp;&nbsp;
                                                                     <span class="" style="position: relative;top: 15%;"
@@ -887,12 +915,16 @@
                                                                         @csrf
                                                                         <input type="hidden" name="kode_proyek"
                                                                             value="{{ $proyek->kode_proyek }}">
-                                                                        <li><input type="submit"
+                                                                        <li><input type="{{ auth()->user()->can('access-menu-update', 'PRYK') ? 'submit' : '' }}"
+                                                                                @can('access-menu-update', 'PRYK')
                                                                                 onclick="this.form.submitted=this.value"
+                                                                                @endcan
                                                                                 class="dropdown-item" name="stage-terkontrak"
                                                                                 value="Terkontrak" /></li>
-                                                                        <li><input type="submit"
+                                                                        <li><input type="{{ auth()->user()->can('access-menu-update', 'PRYK') ? 'submit' : '' }}"
+                                                                                @can('access-menu-update', 'PRYK')
                                                                                 onclick="this.form.submitted=this.value"
+                                                                                @endcan
                                                                                 class="dropdown-item" name="stage-terendah"
                                                                                 value="Terendah" /></li>
                                                                     </form>
@@ -906,7 +938,7 @@
                                                     {{-- @if ($proyek->stage > 9)
                                                             <a href="#"
                                                                 class="stage-button stage-action stage-is-done color-is-default"
-                                                                style="outline: 0px; cursor: pointer;" stage="10">
+                                                                style="outline: 0px; cursor: pointer; {{ auth()->user()->can('access-menu-update', 'PRYK') ? '' : 'pointer-events: none;' }}" stage="10">
                                                                 Approval
                                                             </a>
                                                         @else
@@ -920,7 +952,7 @@
                                                             @else
                                                                 <a href="#"
                                                                     class="stage-button stage-action stage-is-not-active color-is-default"
-                                                                    style="outline: 0px; cursor: pointer;" stage="10">
+                                                                    style="outline: 0px; cursor: pointer; {{ auth()->user()->can('access-menu-update', 'PRYK') ? '' : 'pointer-events: none;' }}" stage="10">
                                                                     Approval
                                                                 </a>
                                                             @endif
@@ -1444,27 +1476,29 @@
                                                      <!--End::Col-->
                                                      <!--begin::Col-->
                                                      @if (!empty($proyekberjalans))
-                                                     @canany(['super-admin', 'admin-crm', 'user-crm', 'risk-crm'])
-                                                         <div class="col-2">
-                                                             <!--begin::Input group Website-->
-                                                             <div class="fv-row mb-7">
-                                                                 <!--begin::Label-->
-                                                                 <label class="mt-12 fs-6 fw-bold form-label mt-3">
-                                                                     <a class="btn btn-sm btn-light btn-active-primary ms-2"
-                                                                         target="_blank"
-                                                                         href="/customer/view/{{ $proyekberjalans->id_customer }}/{{ $proyekberjalans->name_customer }}"
-                                                                         id="kt_toolbar_export"><i
-                                                                             class="bi bi-search"></i> Cek Pemberi Kerja
-                                                                     </a>
-                                                                 </label>
-                                                                 {{-- <a target="_blank" href="/customer/view/{{ $proyekberjalans->id_customer }}">
-                                                                     <span> Cek Pelanggan</span>
-                                                                 </a> --}}
-                                                                 <!--end::Label-->
-                                                             </div>
-                                                             <!--end::Input group-->
-                                                         </div>
-                                                     @endcanany
+                                                     {{-- @canany(['super-admin', 'admin-crm', 'user-crm', 'risk-crm']) --}}
+                                                     @can('access-menu-read', $post)
+                                                        <div class="col-2">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="mt-12 fs-6 fw-bold form-label mt-3">
+                                                                    <a class="btn btn-sm btn-light btn-active-primary ms-2"
+                                                                        target="_blank"
+                                                                        href="/customer/view/{{ $proyekberjalans->id_customer }}/{{ $proyekberjalans->name_customer }}"
+                                                                        id="kt_toolbar_export"><i
+                                                                            class="bi bi-search"></i> Cek Pemberi Kerja
+                                                                    </a>
+                                                                </label>
+                                                                {{-- <a target="_blank" href="/customer/view/{{ $proyekberjalans->id_customer }}">
+                                                                    <span> Cek Pelanggan</span>
+                                                                </a> --}}
+                                                                <!--end::Label-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>                                                         
+                                                     @endcan
+                                                     {{-- @endcanany --}}
                                                      @endif
                                                      <!--End::Col-->
                                                      <div class="col-6">
@@ -2057,7 +2091,7 @@
                                                          <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                              Dokumen Pendukung @if(!is_null($proyek->NotaRekomendasi?->is_request_rekomendasi))<i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Data ini tidak dapat diubah karena telah diajukan Nota Rekomendasi"></i>@endif <small><i>(Mohon diperhatikan dokumen yang diupload tidak boleh terdapat permission. Total max size upload 20MB)</i></small>
                                                          </h3>
-                                                         @canany(['super-admin', 'approver-crm', 'user-crm', 'admin-crm'])
+                                                         {{-- @canany(['super-admin', 'approver-crm', 'user-crm', 'admin-crm']) --}}
                                                          {{-- @if (empty($proyek->DokumenPendukungPasarDini)) --}}
                                                          <br>
                                                          <div class="w-50">
@@ -2069,7 +2103,7 @@
                                                              style="display: none">*File
                                                              terlalu besar ! Max Size 50Mb</h6>
                                                          {{-- @endif --}}
-                                                         @endcanany
+                                                         {{-- @endcanany --}}
                                                          <br>
                                                          <!--begin::Table-->
                                                          <table class="table align-middle table-row-dashed w-50 fs-6 gy-2"
@@ -2111,7 +2145,8 @@
                                                                         <!--end::Column-->
                                                                         <!--begin::Action-->
                                                                         <td class="text-center align-middle">
-                                                                            @canany(['super-admin', 'user-crm', 'admin-crm'])
+                                                                            {{-- @canany(['super-admin', 'user-crm', 'admin-crm']) --}}
+                                                                            @can('access-menu-delete', 'PRYK')
                                                                             @if (is_null($proyek->NotaRekomendasi?->is_request_rekomendasi) || $proyek->NotaRekomendasi->is_revisi_pengajuan)
                                                                             <small>
                                                                                 <p data-bs-toggle="modal"
@@ -2121,8 +2156,9 @@
                                                                                     Delete
                                                                                 </p>
                                                                             </small>                                                                                
-                                                                            @endif
-                                                                            @endcanany
+                                                                            @endif                                                                                
+                                                                            @endcan
+                                                                            {{-- @endcanany --}}
                                                                         </td>
                                                                         <!--end::Action-->
                                                                     </tr>                                                                     
@@ -3466,8 +3502,10 @@
                                                             <!--Begin::Title Biru Form: Partner JO-->
                                                             <h3 class="fw-bolder m-0" id="HeadDetail"
                                                                 style="font-size:14px;">Partner JO
+                                                                @can('access-menu-update', 'PRYK')
                                                                 <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                    data-bs-target="#kt_modal_porsijo_pusat">+</a>
+                                                                    data-bs-target="#kt_modal_porsijo_pusat">+</a>                                                                    
+                                                                @endcan
                                                                     &nbsp;
                                                                 @php
                                                                 $selectedPartner = $porsiJO->where('is_greenlane', false);
@@ -3479,48 +3517,62 @@
                                                                     });
                                                                 }
                                                                 @endphp
-                                                                @canany(['super-admin', 'admin-crm', 'user-crm', 'approver-crm'])
+                                                                {{-- @canany(['super-admin', 'admin-crm', 'user-crm', 'approver-crm']) --}}
+                                                                @can('access-menu-lock', 'VPPS')
                                                                 {{-- @if ($porsiJO->isNotEmpty() && $proyek->AssessmentPartnerSelection->isEmpty()) --}}
-                                                                @if (($porsiJO->isNotEmpty() && $porsiJO->whereNull('is_hasil_assessment')->count() > 0))
-                                                                    @if ($isDokumenFinish)
-                                                                    <button type="button" id="approval-kso" class="btn btn-sm btn-primary" onclick="approvalKSO()"><b>Ajukan KSO</b></button>
-                                                                    @endif
-                                                                    <script>
-                                                                        function approvalKSO() {
-                                                                            Swal.fire({
-                                                                                title: '',
-                                                                                text: "Apakah anda yakin mengajukan KSO ?",
-                                                                                icon: 'warning',
-                                                                                showCancelButton: true,
-                                                                                confirmButtonColor: '#008CB4',
-                                                                                cancelButtonColor: '#BABABA',
-                                                                                confirmButtonText: 'Ya'
-                                                                            }).then(async (result)=>{
-                                                                                if(result.isConfirmed){
-                                                                                    sendPorsiJO();
-                                                                                }
-                                                                            })
-                                                                        }
-                                                                        async function sendPorsiJO() {
-                                                                            LOADING_BODY.block();
-                                                                            const formData = new FormData()
-                                                                            formData.append("_token", "{{ csrf_token() }}");
-                                                                            formData.append("kode_proyek", "{{ $proyek->kode_proyek }}");
-                                                                            
-                                                                            try {
-                                                                                const response = await fetch('/proyek/porsi-jo/approval',{
-                                                                                    method: 'POST',
-                                                                                    header: {
-                                                                                        "Content-Type": "application/json",
-                                                                                    },
-                                                                                    body: formData,
-                                                                                }).then(res => res.json());   
-                                                                                if (response.success) {
-                                                                                    LOADING_BODY.release();
+                                                                    @if (($porsiJO->isNotEmpty() && $porsiJO->whereNull('is_hasil_assessment')->count() > 0))
+                                                                        @if ($isDokumenFinish)
+                                                                        <button type="button" id="approval-kso" class="btn btn-sm btn-primary" onclick="approvalKSO()"><b>Ajukan KSO</b></button>
+                                                                        @endif
+                                                                        <script>
+                                                                            function approvalKSO() {
+                                                                                Swal.fire({
+                                                                                    title: '',
+                                                                                    text: "Apakah anda yakin mengajukan KSO ?",
+                                                                                    icon: 'warning',
+                                                                                    showCancelButton: true,
+                                                                                    confirmButtonColor: '#008CB4',
+                                                                                    cancelButtonColor: '#BABABA',
+                                                                                    confirmButtonText: 'Ya'
+                                                                                }).then(async (result)=>{
+                                                                                    if(result.isConfirmed){
+                                                                                        sendPorsiJO();
+                                                                                    }
+                                                                                })
+                                                                            }
+                                                                            async function sendPorsiJO() {
+                                                                                LOADING_BODY.block();
+                                                                                const formData = new FormData()
+                                                                                formData.append("_token", "{{ csrf_token() }}");
+                                                                                formData.append("kode_proyek", "{{ $proyek->kode_proyek }}");
+                                                                                
+                                                                                try {
+                                                                                    const response = await fetch('/proyek/porsi-jo/approval',{
+                                                                                        method: 'POST',
+                                                                                        header: {
+                                                                                            "Content-Type": "application/json",
+                                                                                        },
+                                                                                        body: formData,
+                                                                                    }).then(res => res.json());   
+                                                                                    if (response.success) {
+                                                                                        LOADING_BODY.release();
+                                                                                        Swal.fire({
+                                                                                            title: 'Success',
+                                                                                            text: response.message,
+                                                                                            icon: 'success',
+                                                                                            confirmButtonColor: '#008CB4',
+                                                                                            confirmButtonText: 'Oke'
+                                                                                        }).then(async (result)=>{
+                                                                                            if(result.isConfirmed){
+                                                                                                window.location.reload();
+                                                                                            }
+                                                                                        })
+                                                                                    }
+                                                                                } catch (error) {
                                                                                     Swal.fire({
-                                                                                        title: 'Success',
-                                                                                        text: response.message,
-                                                                                        icon: 'success',
+                                                                                        title: 'Error',
+                                                                                        text: error,
+                                                                                        icon: 'error',
                                                                                         confirmButtonColor: '#008CB4',
                                                                                         confirmButtonText: 'Oke'
                                                                                     }).then(async (result)=>{
@@ -3529,23 +3581,11 @@
                                                                                         }
                                                                                     })
                                                                                 }
-                                                                            } catch (error) {
-                                                                                Swal.fire({
-                                                                                    title: 'Error',
-                                                                                    text: error,
-                                                                                    icon: 'error',
-                                                                                    confirmButtonColor: '#008CB4',
-                                                                                    confirmButtonText: 'Oke'
-                                                                                }).then(async (result)=>{
-                                                                                    if(result.isConfirmed){
-                                                                                        window.location.reload();
-                                                                                    }
-                                                                                })
                                                                             }
-                                                                        }
-                                                                    </script>                                                                  
-                                                                @endif
-                                                                @endcanany
+                                                                        </script>                                                                  
+                                                                    @endif
+                                                                @endcan
+                                                                {{-- @endcanany --}}
                                                             </h3>
                                                             <br>
                                                             <!--End::Title Biru Form: Partner JO-->
@@ -3785,13 +3825,15 @@
                                                                                                 @endif
                                                                                                 {{-- @if ($proyek->AssessmentPartnerSelection?->isEmpty() || $proyek->AssessmentPartnerSelection?->where('partner_id', $porsi->id)?->where('is_revisi', true)?->isNotEmpty()) --}}
                                                                                                 @if ($proyek->AssessmentPartnerSelection?->isEmpty() || empty($porsi->AssessmentPartnerJO) || (!empty($porsi->AssessmentPartnerJO) && !is_null($porsi->AssessmentPartnerJO->is_rekomendasi_approved) && $porsi->AssessmentPartnerJO->is_rekomendasi_approved == false))
+                                                                                                @can('access-menu-delete', 'PRYK')
                                                                                                 <small>
                                                                                                     <p data-bs-toggle="modal"
                                                                                                         data-bs-target="#kt_porsi_delete_{{ $porsi->id }}"
                                                                                                         class="btn btn-sm btn-light btn-active-danger m-0">
                                                                                                         Delete
                                                                                                     </p>
-                                                                                                </small>                                                                                                    
+                                                                                                </small>
+                                                                                                @endcan
                                                                                                 @endif
                                                                                             </div>
                                                                                         </td>
@@ -3874,8 +3916,10 @@
                                                             <!--Begin::Title Biru Form: Partner JO-->
                                                             <h3 class="fw-bolder m-0" id="HeadDetail"
                                                                 style="font-size:14px;">Partner JO
+                                                                @can('access-menu-update', 'PRYK')
                                                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                                                     data-bs-target="#kt_modal_porsijo">+</a>
+                                                                @endcan
                                                             </h3>
                                                             <br>
                                                             <!--End::Title Biru Form: Partner JO-->
@@ -3934,13 +3978,15 @@
                                                                                         <!--end::Column-->
                                                                                         <!--begin::Action-->
                                                                                         <td class="text-center">
+                                                                                            @can('access-menu-update', 'PRYK')
                                                                                             <small>
                                                                                                 <p data-bs-toggle="modal"
                                                                                                     data-bs-target="#kt_porsi_delete_{{ $porsi->id }}"
                                                                                                     class="btn btn-sm btn-light btn-active-primary">
                                                                                                     Delete
                                                                                                 </p>
-                                                                                            </small>
+                                                                                            </small>                                                                                                
+                                                                                            @endcan
                                                                                         </td>
                                                                                         <!--end::Action-->
                                                                                 </tbody>
@@ -3968,11 +4014,13 @@
                                                                                 @if (($porsiJO->isNotEmpty() && ($porsiJO->every(function($item){return $item->is_greenlane;}) || $porsiJO->whereNotNull('is_hasil_assessment')->count() > 0)))
                                                                                     @if ($porsiJO->every(function($item){return $item->is_greenlane;}) || (isset($isDokumenFinish) && $isDokumenFinish))
                                                                                     <span>
-                                                                                        @canany(['super-admin', 'admin-crm', 'user-crm', 'approver-crm'])
+                                                                                        {{-- @canany(['super-admin', 'admin-crm', 'user-crm', 'approver-crm']) --}}
+                                                                                        @can('access-menu-lock', 'PPPS')
                                                                                         @if (empty($proyek->VerifikasiInternalPersetujuanPartner) || !empty($proyek->VerifikasiInternalPersetujuanPartner) && (collect(json_decode($proyek->VerifikasiInternalPersetujuanPartner->revisi_note))->isNotEmpty()) && collect(json_decode($proyek->VerifikasiInternalPersetujuanPartner?->revisi_note))?->where("stage", "Pengajuan")->count() > 0)
                                                                                             <button type="button" class="btn btn-sm btn-primary" data-title="persetujuan-kso" onclick="showModalRequest(this, '{{ $proyek->kode_proyek }}')">Ajukan</button>
-                                                                                        @endif                                                                                            
-                                                                                        @endcanany
+                                                                                        @endif
+                                                                                        @endcan
+                                                                                        {{-- @endcanany --}}
                                                                                         @if (!empty($proyek->VerifikasiInternalPersetujuanPartner) && is_null($proyek->VerifikasiInternalPersetujuanPartner->is_persetujuan_approved) && is_null($proyek->VerifikasiInternalPersetujuanPartner->is_revisi))
                                                                                             <span>
                                                                                                 <p class="m-0 badge rounded-pill badge-sm text-warning">Proses Verifikasi</p>
@@ -4063,6 +4111,7 @@
                                                                     <!--begin::Action-->
                                                                     @if ($proyek->stage < 4)
                                                                     <td class="text-center">
+                                                                        @can('access-menu-delete', 'PRYK')
                                                                         <small>
                                                                             <p data-bs-toggle="modal"
                                                                                 data-bs-target="#kt_dokumen_prakualifikasi_delete_{{ $dokumen_prakualifikasi->id_dokumen_prakualifikasi }}"
@@ -4070,7 +4119,8 @@
                                                                                 class="btn btn-sm btn-light btn-active-primary">
                                                                                 Delete
                                                                             </p>
-                                                                        </small>
+                                                                        </small>                                                                            
+                                                                        @endcan
                                                                     </td>
                                                                     @endif
                                                                     <!--end::Action-->
@@ -4145,14 +4195,16 @@
                                                                     <!--end::Column-->
                                                                     <!--begin::Action-->
                                                                     <td class="text-center">
-                                                                        <small>
-                                                                            <p data-bs-toggle="modal"
-                                                                                data-bs-target="#kt_dokumen_nda_delete_{{ $dokumen->id_dokumen_nda }}"
-                                                                                id="modal-delete"
-                                                                                class="btn btn-sm btn-light btn-active-primary">
-                                                                                Delete
-                                                                            </p>
-                                                                        </small>
+                                                                        @can('access-menu-delete', 'PRYK')
+                                                                            <small>
+                                                                                <p data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_dokumen_nda_delete_{{ $dokumen->id_dokumen_nda }}"
+                                                                                    id="modal-delete"
+                                                                                    class="btn btn-sm btn-light btn-active-primary">
+                                                                                    Delete
+                                                                                </p>
+                                                                            </small>                                                                            
+                                                                        @endcan
                                                                     </td>
                                                                     <!--end::Action-->
                                                                 </tr>
@@ -4226,6 +4278,7 @@
                                                                     <!--end::Column-->
                                                                     <!--begin::Action-->
                                                                     <td class="text-center">
+                                                                        @can('access-menu-delete', 'PRYK')
                                                                         <small>
                                                                             <p data-bs-toggle="modal"
                                                                                 data-bs-target="#kt_dokumen_mou_delete_{{ $dokumen->id_dokumen_mou }}"
@@ -4233,7 +4286,8 @@
                                                                                 class="btn btn-sm btn-light btn-active-primary">
                                                                                 Delete
                                                                             </p>
-                                                                        </small>
+                                                                        </small>                                                                            
+                                                                        @endcan
                                                                     </td>
                                                                     <!--end::Action-->
                                                                 </tr>
@@ -4307,6 +4361,7 @@
                                                                     <!--end::Column-->
                                                                     <!--begin::Action-->
                                                                     <td class="text-center">
+                                                                        @can('access-menu-delete', 'PRYK')
                                                                         <small>
                                                                             <p data-bs-toggle="modal"
                                                                                 data-bs-target="#kt_dokumen_eca_delete_{{ $dokumen->id_dokumen_eca }}"
@@ -4314,7 +4369,8 @@
                                                                                 class="btn btn-sm btn-light btn-active-primary">
                                                                                 Delete
                                                                             </p>
-                                                                        </small>
+                                                                        </small>                                                                            
+                                                                        @endcan
                                                                     </td>
                                                                     <!--end::Action-->
                                                                 </tr>
@@ -4388,6 +4444,7 @@
                                                                     <!--end::Column-->
                                                                     <!--begin::Action-->
                                                                     <td class="text-center">
+                                                                        @can('access-menu-delete', 'PRYK')
                                                                         <small>
                                                                             <p data-bs-toggle="modal"
                                                                                 data-bs-target="#kt_dokumen_ica_delete_{{ $dokumen->id_dokumen_ica }}"
@@ -4396,6 +4453,7 @@
                                                                                 Delete
                                                                             </p>
                                                                         </small>
+                                                                        @endcan
                                                                     </td>
                                                                     <!--end::Action-->
                                                                 </tr>
@@ -4468,6 +4526,7 @@
                                                                     <!--end::Column-->
                                                                     <!--begin::Action-->
                                                                     <td class="text-center">
+                                                                        @can('access-menu-delete', 'PRYK')
                                                                         <small>
                                                                             <p data-bs-toggle="modal"
                                                                                 data-bs-target="#kt_dokumen_rks_delete_{{ $dokumen->id_dokumen_rks }}"
@@ -4476,6 +4535,7 @@
                                                                                 Delete
                                                                             </p>
                                                                         </small>
+                                                                        @endcan
                                                                     </td>
                                                                     <!--end::Action-->
                                                                 </tr>
@@ -4549,6 +4609,7 @@
                                                                     <!--end::Column-->
                                                                     <!--begin::Action-->
                                                                     <td class="text-center">
+                                                                        @can('access-menu-delete', 'PRYK')
                                                                         <small>
                                                                             <p data-bs-toggle="modal"
                                                                                 data-bs-target="#kt_dokumen_itb_tor_delete_{{ $dokumen->id_dokumen_itb_tor }}"
@@ -4557,6 +4618,7 @@
                                                                                 Delete
                                                                             </p>
                                                                         </small>
+                                                                        @endcan
                                                                     </td>
                                                                     <!--end::Action-->
                                                                 </tr>
@@ -4571,8 +4633,10 @@
 
                                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                         Ketua Team Tender
+                                                        @can('access-menu-update', 'PRYK')
                                                         {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
                                                                 data-bs-target="#kt_modal_porsijo">+</a> --}}
+                                                        @endcan
                                                     </h3>
                                                     <br>
                                                     <!--begin::Row-->
@@ -4587,6 +4651,7 @@
                                                                     </label> --}}
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
+                                                                @can('access-menu-update', 'PRYK')
                                                                 <select onchange="this.form.submit()" id="ketua-tender"
                                                                     name="ketua-tender"
                                                                     class="form-select form-select-solid"
@@ -4595,15 +4660,16 @@
                                                                     <option></option>
                                                                     @foreach ($users as $user)
                                                                         @if ($user->id == $proyek->ketua_tender)
-                                                                            <option value="{{ $user->id }}"
-                                                                                selected>{{ $user->name }}</option>
+                                                                        <option value="{{ $user->id }}"
+                                                                        selected>{{ $user->name }}</option>
                                                                         @endif
                                                                         <option value="{{ $user->id }}">
-                                                                            {{ $user->name }}</option>
+                                                                        {{ $user->name }}</option>
                                                                     @endforeach
                                                                 </select>
                                                                 <!--end::Input-->
-                                                            </div>
+                                                                @endcan
+                                                                </div>
                                                             <!--end::Input group-->
                                                         </div>
                                                     </div>
@@ -4614,8 +4680,10 @@
                                                     <br>
                                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                         SKT Personil
+                                                        @can('access-menu-update', 'PRYK')
                                                         <a href="#" Id="Plus" data-bs-toggle="modal"
                                                             data-bs-target="#kt_modal_add_user">+</a>
+                                                        @endcan
                                                     </h3>
 
                                                     <br>
@@ -4671,6 +4739,7 @@
                                                                                 <!--end::Column-->
                                                                                 <!--begin::Action-->
                                                                                 <td class="text-center">
+                                                                                    @can('access-menu-delete', 'PRYK')
                                                                                     <small>
                                                                                         <p data-bs-toggle="modal"
                                                                                             data-bs-target="#kt_team_delete_{{ $team->id }}"
@@ -4678,7 +4747,8 @@
                                                                                             class="btn btn-sm btn-light btn-active-primary">
                                                                                             Delete
                                                                                         </p>
-                                                                                    </small>
+                                                                                    </small>                                                                                        
+                                                                                    @endcan
                                                                                 </td>
                                                                                 <!--end::Action-->
                                                                         </tbody>
@@ -5032,8 +5102,10 @@
                                                     <div class="row fv-row">
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Tim Tender
+                                                            @can('access-menu-update', 'PRYK')
                                                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                                                 data-bs-target="#kt_modal_tim_tender">+</a>
+                                                            @endcan
                                                         </h3>
                                                         <!--begin::Col-->
                                                         <div class="col-6 mt-7">
@@ -5076,6 +5148,7 @@
                                                                             </td>
                                                                             <td class="text-center">{{ $timTender->posisi }}</td>
                                                                             <td class="text-center">
+                                                                                @can('access-menu-delete', 'PRYK')
                                                                                 <small>
                                                                                     <p data-bs-toggle="modal"
                                                                                         data-bs-target="#kt_tim_tender_delete_{{ $timTender->id }}"
@@ -5084,6 +5157,7 @@
                                                                                         Delete
                                                                                     </p>
                                                                                 </small>
+                                                                                @endcan
                                                                             </td>
                                                                             <!--end::Action-->
                                                                         </tr>
@@ -5106,11 +5180,13 @@
                                                                         style="font-size:14px;">Verifikasi Internal Proyek Greenlane/Non Greenlane
                                                                         @if (!empty($proyek->jenis_terkontrak) && !empty($proyek->sistem_bayar))
                                                                             <span>
-                                                                                @canany(['super-admin', 'admin-crm', 'user-crm', 'approver-crm'])
+                                                                                {{-- @canany(['super-admin', 'admin-crm', 'user-crm', 'approver-crm']) --}}
+                                                                                @can('access-menu-lock', 'VPGN')
                                                                                 @if (empty($proyek->VerifikasiProyekNota2) || !empty($proyek->VerifikasiProyekNota2) && (collect(json_decode($proyek->VerifikasiProyekNota2->revisi_note))->isNotEmpty()) && collect(json_decode($proyek->VerifikasiProyekNota2?->revisi_note))?->where("stage", "Request Pengajuan")->count() > 0)
                                                                                     <button type="button" class="btn btn-sm btn-primary" data-title="verifikasi-proyek-nr-2" onclick="showModalRequest(this, '{{ $proyek->kode_proyek }}')">Ajukan</button>
-                                                                                @endif                                                                                    
-                                                                                @endcanany
+                                                                                @endif
+                                                                                @endcan
+                                                                                {{-- @endcanany --}}
                                                                             </span>
                                                                         @endif
                                                                         @if (!empty($proyek->VerifikasiProyekNota2) && is_null($proyek->VerifikasiProyekNota2->is_persetujuan_approved))
@@ -5138,8 +5214,10 @@
                                                     <div class="row fv-row">
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Personel Tender
+                                                            @can('access-menu-update', 'PRYK')
                                                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                                                 data-bs-target="#kt_modal_create_personel">+</a>
+                                                            @endcan
                                                         </h3>
                                                         <!--begin::Col-->
                                                         <div class="col-6 mt-7">
@@ -5195,6 +5273,7 @@
                                                                                 <div class="d-flex flex-row align-items-center justify-content-center gap-2">
                                                                                     {{-- <button type="button" class="btn btn-sm btn-primary" onclick="downloadCVPersonel('{{ $personel->id }}')">Download</button> --}}
                                                                                     <a href="https://hcms.wika.co.id/apiwika/get_cvcrm.php?nip={{ $personel->nip }}" class="btn btn-sm btn-primary text-white">Download</a>
+                                                                                    @can('access-menu-update', 'PRYK')
                                                                                     <small>
                                                                                         <p data-bs-toggle="modal"
                                                                                             data-bs-target="#kt_upload_cv_personel_{{ $personel->id }}"
@@ -5203,6 +5282,8 @@
                                                                                             Upload
                                                                                         </p>
                                                                                     </small>
+                                                                                    @endcan
+                                                                                    @can('access-menu-delete', 'PRYK')
                                                                                     <small>
                                                                                         <p data-bs-toggle="modal"
                                                                                             data-bs-target="#kt_personel_delete_{{ $personel->id }}"
@@ -5211,6 +5292,7 @@
                                                                                             Delete
                                                                                         </p>
                                                                                     </small>
+                                                                                    @endcan
                                                                                 </div>
                                                                             <!--end::Action-->
                                                                         </tr>
@@ -5228,8 +5310,10 @@
                                                         <br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Konsultan Perencana
+                                                            @can('access-menu-update', 'PRYK')
                                                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                                                 data-bs-target="#kt_modal_konsultan_perencana">+</a>
+                                                            @endcan
                                                         </h3>
                                                         <br>
                                                         <!--begin::Col-->
@@ -5270,6 +5354,7 @@
                                                                                     data-bs-target="#kt_modal_edit_konsultan_{{ $konsultan->id }}">{{ $konsultan->nama_konsultan }}</a>
                                                                             </td>
                                                                             <td class="text-center">
+                                                                                @can('access-menu-delete', 'PRYK')
                                                                                 <small>
                                                                                     <p data-bs-toggle="modal"
                                                                                         data-bs-target="#kt_konsultan_delete_{{ $konsultan->id }}"
@@ -5278,6 +5363,7 @@
                                                                                         Delete
                                                                                     </p>
                                                                                 </small>
+                                                                                @endcan
                                                                             </td>
                                                                             <!--end::Action-->
                                                                         </tr>
@@ -5297,8 +5383,10 @@
                                                     <br>
                                                     <h3 class="fw-bolder m-0" id="HeadDetail"
                                                         style="font-size:14px;">Alat
+                                                        @can('access-menu-update', 'PRYK')
                                                         <a href="#" Id="Plus" data-bs-toggle="modal"
                                                             data-bs-target="#kt_modal_create_alat">+</a>
+                                                        @endcan
                                                     </h3>
                                                     <br>
                                                     <!--begin::Col-->
@@ -5346,7 +5434,9 @@
                                                                             {!! nl2br($alat->MasterAlatProyek->spesifikasi) !!}
                                                                         </td>
                                                                         <td class="text-center">
+                                                                            @can('access-menu-delete', 'PRYK')
                                                                             <button type="button" class="btn btn-sm btn-active-danger" onclick="deletAlat('{{ $alat->id }}')">Delete</button>
+                                                                            @endcan
                                                                         </td>
                                                                         <!--end::Action-->
                                                                     </tr>
@@ -5425,6 +5515,7 @@
                                                                     <!--begin::Action-->
                                                                     {{-- @if ($proyek->stage < 5) --}}
                                                                         <td class="text-center">
+                                                                            @can('access-menu-delete', 'PRYK')
                                                                             <small>
                                                                                 <p data-bs-toggle="modal"
                                                                                     data-bs-target="#kt_dokumen_tender_delete_{{ $dokumen->id_dokumen_tender }}"
@@ -5432,6 +5523,7 @@
                                                                                     class="btn btn-sm btn-light btn-active-primary">
                                                                                     Delete</p>
                                                                             </small>
+                                                                            @endcan
                                                                         </td>
                                                                     {{-- @endif --}}
                                                                     <!--end::Action-->
@@ -5505,6 +5597,7 @@
                                                                     <!--end::Column-->
                                                                     <!--begin::Action-->
                                                                     <td class="text-center">
+                                                                        @can('access-menu-delete', 'PRYK')
                                                                         <small>
                                                                             <p data-bs-toggle="modal"
                                                                                 data-bs-target="#kt_dokumen_draft_delete_{{ $dokumen->id_dokumen_draft }}"
@@ -5512,7 +5605,8 @@
                                                                                 class="btn btn-sm btn-light btn-active-primary">
                                                                                 Delete
                                                                             </p>
-                                                                        </small>
+                                                                        </small>                                                                            
+                                                                        @endcan
                                                                     </td>
                                                                     <!--end::Action-->
                                                                 </tr>
@@ -5586,6 +5680,7 @@
                                                                     <!--begin::Action-->
                                                                     @if ($proyek->stage < 5)
                                                                         <td class="text-center">
+                                                                            @can('access-menu-update', 'PRYK')
                                                                             <small>
                                                                                 <p data-bs-toggle="modal"
                                                                                     data-bs-target="#kt_dokumen_cashflow_delete_{{ $dokumen->id }}"
@@ -5593,6 +5688,7 @@
                                                                                     class="btn btn-sm btn-light btn-active-primary">
                                                                                     Delete</p>
                                                                             </small>
+                                                                            @endcan
                                                                         </td>
                                                                     @endif
                                                                     <!--end::Action-->
@@ -5667,14 +5763,16 @@
                                                                      <!--end::Column-->
                                                                      <!--begin::Action-->
                                                                      <td class="text-center">
-                                                                         <small>
-                                                                             <p data-bs-toggle="modal"
-                                                                                 data-bs-target="#kt_dokumen_scurves_delete_{{ $dokumen->id }}"
-                                                                                 id="modal-delete"
-                                                                                 class="btn btn-sm btn-light btn-active-primary">
-                                                                                 Delete
-                                                                             </p>
-                                                                         </small>
+                                                                        @can('access-menu-delete', 'PRYK')
+                                                                        <small>
+                                                                            <p data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_dokumen_scurves_delete_{{ $dokumen->id }}"
+                                                                                id="modal-delete"
+                                                                                class="btn btn-sm btn-light btn-active-primary">
+                                                                                Delete
+                                                                            </p>
+                                                                        </small>
+                                                                        @endcan
                                                                      </td>
                                                                      <!--end::Action-->
                                                                  </tr>
@@ -5747,14 +5845,16 @@
                                                                      <!--end::Column-->
                                                                      <!--begin::Action-->
                                                                      <td class="text-center">
-                                                                         <small>
-                                                                             <p data-bs-toggle="modal"
-                                                                                 data-bs-target="#kt_dokumen_other_proyek_delete_{{ $dokumen->id }}"
-                                                                                 id="modal-delete"
-                                                                                 class="btn btn-sm btn-light btn-active-primary">
-                                                                                 Delete
-                                                                             </p>
-                                                                         </small>
+                                                                        @can('access-menu-delete', 'PRYK')
+                                                                        <small>
+                                                                            <p data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_dokumen_other_proyek_delete_{{ $dokumen->id }}"
+                                                                                id="modal-delete"
+                                                                                class="btn btn-sm btn-light btn-active-primary">
+                                                                                Delete
+                                                                            </p>
+                                                                        </small>
+                                                                        @endcan
                                                                      </td>
                                                                      <!--end::Action-->
                                                                  </tr>
@@ -5770,8 +5870,10 @@
                                                     <br>
                                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                         Kompetitor
+                                                        @can('access-menu-update', 'PRYK')
                                                         <a href="#" Id="Plus" data-bs-toggle="modal"
                                                             data-bs-target="#kt_modal_peserta_tender">+</a>
+                                                        @endcan
                                                     </h3>
                                                     <!--End::Title Biru Form: List Peserta Tender-->
                                                     <br>
@@ -5833,6 +5935,7 @@
                                                                         <!--end::Column-->
                                                                         <!--begin::Action-->
                                                                         <td class="text-center">
+                                                                            @can('access-menu-delete', 'PRYK')
                                                                             <small>
                                                                                 <p data-bs-toggle="modal"
                                                                                     data-bs-target="#kt_tender_delete_{{ $peserta->id }}"
@@ -5841,6 +5944,7 @@
                                                                                     Delete
                                                                                 </p>
                                                                             </small>
+                                                                            @endcan
                                                                         </td>
                                                                         <!--end::Action-->
                                                                     </tr>
@@ -5867,9 +5971,11 @@
                                                             Template Risk Tender</a></small>
                                                     <br><br>
                                                     <div class="w-50">
+                                                        @can('access-menu-update', 'PRYK')
                                                         <input onchange="this.form.submit()" type="file"
                                                             class="form-control form-control-sm form-input-solid"
                                                             name="risk-tender" accept=".pdf, .xlsx">
+                                                        @endcan
                                                     </div>
                                                     <h6 id="error-risk-tender" class="text-danger fw-normal"
                                                         style="display: none">*File terlalu besar ! Max Size 50Mb</h6>
@@ -5928,6 +6034,7 @@
                                                                     <!--end::Modified By-->
                                                                     <!--begin::Action-->
                                                                     <td class="text-center">
+                                                                        @can('access-menu-delete', 'PRYK')
                                                                         <small>
                                                                             <p data-bs-toggle="modal"
                                                                                 data-bs-target="#kt_risk_tender_delete_{{ $riskTender->id }}"
@@ -5936,6 +6043,7 @@
                                                                                 Delete
                                                                             </p>
                                                                         </small>
+                                                                        @endcan
                                                                     </td>
                                                                     <!--end::Action-->
                                                                 </tr>
@@ -6150,8 +6258,10 @@
                                                     <!--Begin::Title Biru Form: List Peserta Tender-->
                                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                         List Peserta Tender
+                                                        @can('access-menu-update', 'PRYK')
                                                         {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
                                                             data-bs-target="#kt_modal_peserta_tender">+</a> --}}
+                                                        @endcan
                                                     </h3>
                                                     <br>
                                                     <!--begin::Table Kriteria Pasar-->
@@ -6216,6 +6326,7 @@
                                                                     <!--end::Column-->
                                                                     <!--begin::Action-->
                                                                     <td class="text-center">
+                                                                        @can('access-menu-delete', 'PRYK')
                                                                         <small>
                                                                             <p data-bs-toggle="modal"
                                                                                 data-bs-target="#kt_tender_delete_{{ $peserta->id }}"
@@ -6224,6 +6335,7 @@
                                                                                 Delete
                                                                             </p>
                                                                         </small>
+                                                                        @endcan
                                                                     </td>
                                                                     <!--end::Action-->
                                                                 </tr>
@@ -6394,8 +6506,10 @@
                                                     <!--Begin::Title Biru Form: List Peserta Tender-->
                                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                         List Peserta Tender
+                                                        @can('access-menu-update', 'PRYK')
                                                         {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
                                                             data-bs-target="#kt_modal_peserta_tender">+</a> --}}
+                                                        @endcan
                                                     </h3>
                                                     <br>
                                                     <!--begin::Table Kriteria Pasar-->
@@ -6482,9 +6596,11 @@
                                                     </h3>
                                                     <br>
                                                     <div class="w-50">
+                                                        @can('access-menu-update', 'PRYK')
                                                         <input onchange="this.form.submit()" type="file"
                                                             class="form-control form-control-sm form-input-solid"
                                                             name="attachment-menang" accept=".pdf">
+                                                        @endcan
                                                     </div>
                                                     <h6 id="error-attachment-menang" class="text-danger fw-normal"
                                                         style="display: none">*File terlalu besar ! Max Size 50Mb</h6>
@@ -6537,6 +6653,7 @@
                                                                     <!--begin::Action-->
                                                                     @if ($proyek->stage < 8)
                                                                         <td class="text-center">
+                                                                            @can('access-menu-delete', 'PRYK')
                                                                             <small>
                                                                                 <p data-bs-toggle="modal"
                                                                                     data-bs-target="#kt_attachment_delete_{{ $attachment->id }}"
@@ -6545,6 +6662,7 @@
                                                                                     Delete
                                                                                 </p>
                                                                             </small>
+                                                                            @endcan
                                                                         </td>
                                                                     @endif
                                                                     <!--end::Action-->
@@ -7240,8 +7358,10 @@
                                                     {{-- <br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">History Adendum
+                                                            @can('access-menu-update', 'PRYK')
                                                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                                                 data-bs-target="#kt_modal_history_adendum">+</a>
+                                                            @endcan
                                                         </h3>
                                                         <br>
                                                         <!--begin::Table Kriteria Pasar-->
@@ -7997,8 +8117,10 @@
                                                         <br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Approval (user interface)
+                                                            @can('access-menu-update', 'PRYK')
                                                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                                                 data-bs-target="#kt_modal_create_namemodal"> </a>
+                                                            @endcan
                                                         </h3>
                                                         <br>
                                                         <!--End::Title Biru Form: Approval-->
@@ -8069,8 +8191,10 @@
                                                         <br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Approval (Head interface)
+                                                            @can('access-menu-update', 'PRYK')
                                                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                                                 data-bs-target="#kt_modal"> </a>
+                                                            @endcan
                                                         </h3>
                                                         <br>
                                                         <!--End::Title Biru Form: Approval -->
@@ -8158,8 +8282,10 @@
                                                         <br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Proyek Feedback
+                                                            @can('access-menu-update', 'PRYK')
                                                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                                                 data-bs-target="#kt_modal_feedback">+</a>
+                                                            @endcan
                                                         </h3>
                                                         <br>
                                                         <!--End::Title Biru Form: List Feed back-->

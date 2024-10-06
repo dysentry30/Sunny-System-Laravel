@@ -809,6 +809,7 @@
                                                             </td>
                                                         @else
                                                             <td>
+                                                                @canany(['access-menu-update', 'access-menu-lock', 'access-menu-approve'], 'OWNS')
                                                                 @if (($matriks_user->contains('kategori', 'Persetujuan') && $matriks_user->where('kategori', 'Persetujuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() && $nota_rekomendasi->is_recommended)  || ($matriks_user->contains('kategori', 'Rekomendasi') && $matriks_user->where('kategori', 'Rekomendasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() && $nota_rekomendasi->is_verifikasi_approved) || ($matriks_user->contains('kategori', 'Verifikasi') && $matriks_user->where('kategori', 'Verifikasi')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() && $nota_rekomendasi->is_penyusun_approved))
                                                                     @if ($matriks_user->contains('kategori', 'Persetujuan')  && $matriks_user->where('kategori', 'Persetujuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first() && $nota_rekomendasi->is_recommended)
                                                                             <a href="#kt_modal_view_proyek_persetujuan_{{ $proyek->kode_proyek }}"
@@ -870,14 +871,17 @@
                                                                                 target="_blank"
                                                                                 class="btn btn-sm btn-primary text-white">Submit</a> --}}
                                                                         @endif
-                                                                    @endif
+                                                                @endif
+                                                                @endcanany
                                                             </td>
                                                         @endif
 
                                                         <td class="text-center">
+                                                            @canany(['access-menu-read'], 'OWNS')
                                                             <a href="#kt_modal_rincian_proyek_{{ $proyek->kode_proyek }}"
                                                                 data-bs-toggle="modal"
                                                                 class="btn btn-sm btn-primary text-white">Rincian</a>
+                                                            @endcanany
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -1053,7 +1057,7 @@
                                                             <small class="d-flex flex-row justify-content-between">
                                                                 <p class="badge {{ $style }}">{{ $status_rekomendasi }}</p>
                                                                 <br>
-                                                                @if ($matriks_user->count() < 30 && (($matriks_user?->contains('kategori', 'Pengajuan') && $matriks_user?->where('kategori', 'Pengajuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first()) ||
+                                                                {{-- @if ($matriks_user->count() < 30 && (($matriks_user?->contains('kategori', 'Pengajuan') && $matriks_user?->where('kategori', 'Pengajuan')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first()) ||
                                                                 ($matriks_user?->contains('kategori', 'Penyusun') && $matriks_user?->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->where('urutan', '>', 1)?->first())
                                                                 ))
                                                                     
@@ -1070,7 +1074,21 @@
                                                                         View
                                                                     </button>
                                                                     @endif
-                                                                @endif
+                                                                @endif --}}
+                                                                @can('access-menu-read', 'OWNS')
+                                                                    @if (empty($nota_rekomendasi->file_persetujuan))
+                                                                        @if ($nota_rekomendasi->Proyek->is_cancel)
+                                                                        @else
+                                                                            <button type="button" class="btn btn-primary p-2" onclick="generateFile('{{ $proyek->kode_proyek }}')">
+                                                                                Generate
+                                                                            </button>  
+                                                                        @endif
+                                                                    @else
+                                                                        <button type="button" class="btn btn-primary p-2" data-bs-toggle="modal" data-bs-target="#kt_modal_view_dokumen_persetujuan_{{ $proyek->kode_proyek }}">
+                                                                            View
+                                                                        </button>
+                                                                    @endif
+                                                                @endcan
                                                                 {{-- <a href="#kt_modal_view_dokumen_persetujuan_{{ $proyek->kode_proyek }}" class="btn btn-sm btn-primary text-white" data-bs-toggle="model">Download</a> --}}
                                                             </small>
                                                         </td>

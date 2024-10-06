@@ -81,6 +81,7 @@
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
+                                    @can('access-menu-update', 'CUST')
                                     @if ($customer->kode_bp)
                                         <div class="" data-bs-toggle="tooltip" data-bs-html="true" 
                                         data-bs-title="<b>Kode BP</b> sudah didapatkan" >
@@ -101,7 +102,8 @@
 
                                     <!--begin::Button-->
                                     <button type="submit" class="btn btn-sm btn-primary" id="customer-edit-save" style="background-color:#008CB4;">
-                                        Save</button>
+                                        Save</button>                                        
+                                    @endcan
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
@@ -988,7 +990,9 @@
                                                         <!--begin::INPUT PIC-->
                                                         <h3 class="fw-bolder m-0 required" id="HeadDetail" style="font-size:14px;">
                                                             Contact / PIC
+                                                            @can('access-menu-update', 'CUST')
                                                             <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_pic">+</a>
+                                                            @endcan
                                                         </h3>
                                                         <!--end::INPUT PIC-->
                                                         <!--begin::Table-->
@@ -1048,12 +1052,14 @@
                                                                         <!--end::Phone-->
                                                                         <!--begin::Action-->
                                                                         <td class="text-center">
+                                                                            @can('access-menu-delete', 'CUST')
                                                                             <small>
                                                                                 <p data-bs-toggle="modal" data-bs-target="#kt_pic_delete_{{ $pic->id }}" id="modal-delete"
                                                                                     class="btn btn-sm btn-light btn-active-primary">
                                                                                     Delete
                                                                                 </p>
                                                                             </small>
+                                                                            @endcan
                                                                         </td>
                                                                         <!--end::Action-->
                                                                     </tr>
@@ -1068,7 +1074,9 @@
                                                             <!--begin::INPUT PIC-->
                                                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                                 Porsi Saham
+                                                                @can('access-menu-update', 'CUST')
                                                                 <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_input_porsi_saham">+</a>
+                                                                @endcan
                                                             </h3>
                                                             <!--end::INPUT PIC-->
                                                             <!--begin::Table-->
@@ -1103,7 +1111,9 @@
                                                                             <td class="text-center">{{ $item->porsi_saham }} %</td>
                                                                             <td class="text-center">{{ $item->kategori_porsi }}</td>
                                                                             <td class="text-center">
+                                                                                @can('access-menu-delete', 'CUST')
                                                                                 <button type="button" class="btn btn-sm btn-light btn-active-danger" data-bs-toggle="modal" data-bs-target="#kt_porsi_saham_delete_{{ $item->id }}">Delete</button>
+                                                                                @endcan
                                                                             </td>
                                                                         </tr>
                                                                     @endforeach
@@ -1120,7 +1130,9 @@
                                                             <!--begin::INPUT PIC-->
                                                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                                 Company Profile
+                                                                @can('access-menu-update', 'CUST')
                                                                 <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_input_company_profile">+</a>
+                                                                @endcan
                                                             </h3>
                                                             <!--end::INPUT PIC-->
                                                             <!--begin::Table-->
@@ -1152,8 +1164,12 @@
                                                                                 class="text-hover-primary">{{ $item->nama_file }}</a></td>
                                                                             <td class="text-center">{{ $item->updated_at }}</td>
                                                                             <td class="text-center">
+                                                                                @can('access-menu-update', 'CUST')
                                                                                 <button type="button" class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_edit_company_profile_{{ $item->id }}">Edit</button>
+                                                                                @endcan
+                                                                                @can('access-menu-delete', 'CUST')
                                                                                 <button type="button" class="btn btn-sm btn-light btn-danger" data-bs-toggle="modal" data-bs-target="#kt_company_profile_delete_{{ $item->id }}">Delete</button>
+                                                                                @endcan
                                                                             </td>
                                                                         </tr>
                                                                     @endforeach
@@ -1170,7 +1186,9 @@
                                                             <!--begin::INPUT PIC-->
                                                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                                 Laporan Keuangan
+                                                                @can('access-menu-update', 'CUST')
                                                                 <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_input_laporan_keuangan">+</a>
+                                                                @endcan
                                                             </h3>
                                                             <!--end::INPUT PIC-->
                                                             <!--begin::Table-->
@@ -1202,8 +1220,12 @@
                                                                                 class="text-hover-primary">{{ $item->nama_file }}</a></td>
                                                                             <td class="text-center">{{ $item->updated_at }}</td>
                                                                             <td class="text-center">
+                                                                                @can('access-menu-update', 'CUST')
                                                                                 <button type="button" class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_edit_laporan_keuangan_{{ $item->id }}">Edit</button>
+                                                                                @endcan
+                                                                                @can('access-menu-delete', 'CUST')
                                                                                 <button type="button" class="btn btn-sm btn-light btn-danger" data-bs-toggle="modal" data-bs-target="#kt_laporan_keuangan_delete_{{ $item->id }}">Delete</button>
+                                                                                @endcan
                                                                             </td>
                                                                         </tr>
                                                                     @endforeach
@@ -1219,7 +1241,9 @@
                                                             <!--begin::INPUT PIC-->
                                                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                                 <span class="required">AHU</span>
+                                                                @can('access-menu-update', 'CUST')
                                                                 <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_input_AHU">+</a>
+                                                                @endcan
                                                             </h3>
                                                             <!--end::INPUT PIC-->
                                                             <!--begin::Table-->
@@ -1251,8 +1275,12 @@
                                                                                 class="text-hover-primary">{{ $item->nama_file }}</a></td>
                                                                             <td class="text-center">{{ $item->updated_at }}</td>
                                                                             <td class="text-center">
+                                                                                @can('access-menu-update', 'CUST')
                                                                                 <button type="button" class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_edit_AHU_{{ $item->id }}">Edit</button>
+                                                                                @endcan
+                                                                                @can('access-menu-delete', 'CUST')
                                                                                 <button type="button" class="btn btn-sm btn-light btn-danger" data-bs-toggle="modal" data-bs-target="#kt_laporan_AHU_{{ $item->id }}">Delete</button>
+                                                                                @endcan
                                                                             </td>
                                                                         </tr>
                                                                     @endforeach
@@ -8395,6 +8423,14 @@
     }
 </script>
 <!--end::Show/Hide Group Tier When Instansi is BUMN-->
+
+<script>
+    $(document).on("keydown", ":input:not(textarea)", function(event) {
+    if (event.key == "Enter") {
+        event.preventDefault();
+    }
+});
+</script>
 
 <script>
     const perPage = 10;

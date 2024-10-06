@@ -382,9 +382,9 @@
                                         <th class="min-w-auto text-center"><small>Uang Muka</small></th>
                                         <th class="min-w-auto text-center"><small>SBU KBLI</small></th>
                                         <th class="min-w-auto text-center"><small>Kategori Kalah</small></th>
-                                        @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") || str_contains(auth()->user()->email, "@sunny"))
+                                        {{-- @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") || str_contains(auth()->user()->email, "@sunny")) --}}
                                             <th class="min-w-auto text-center"><small>Action</small></th>
-                                        @endif
+                                        {{-- @endif --}}
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -722,7 +722,7 @@
                                             <!--end::Kategori Kalah-->
 
                                             {{-- @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") || str_contains(auth()->user()->email, "@sunny")) --}}
-                                            @can('access-menu-delete', "PRYK}")
+                                            @can('access-menu-delete', "PRYK")
                                             <!--begin::Action-->
                                             <td class="text-center px-3">
                                                 <!--begin::Button-->

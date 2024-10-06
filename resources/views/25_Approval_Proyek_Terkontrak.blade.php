@@ -137,16 +137,18 @@
                                             </td>
                                             @if ($isCanApprove)
                                             <td class="text-center">
-                                            @if ((is_null($proyekApproval->is_approved)) && is_null($proyekApproval->is_revisi))
-                                                <div class="d-flex flex-row justify-content-center">
-                                                    <button type="button" class="btn btn-sm btn-primary"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_approved_{{ $proyekApproval->kode_proyek }}">Approve</button>
-                                                    <button type="button" class="btn btn-sm btn-danger"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_revisi_{{ $proyekApproval->kode_proyek }}">Revisi</button>
-                                                </div>
-                                            @endif
+                                                @can('access-menu-approve', 'APT')
+                                                @if ((is_null($proyekApproval->is_approved)) && is_null($proyekApproval->is_revisi))
+                                                    <div class="d-flex flex-row justify-content-center">
+                                                        <button type="button" class="btn btn-sm btn-primary"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_approved_{{ $proyekApproval->kode_proyek }}">Approve</button>
+                                                        <button type="button" class="btn btn-sm btn-danger"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_revisi_{{ $proyekApproval->kode_proyek }}">Revisi</button>
+                                                    </div>
+                                                @endif
+                                                @endcan
                                             </td>                                                
                                             @endif
                                         </tr>

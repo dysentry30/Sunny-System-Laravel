@@ -45,7 +45,7 @@ a{{-- Begin::Extend Header --}}
                             </div>
                             <!--end::Page title-->
 
-                            @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "Rahmad"))
+                            {{-- @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "Rahmad")) --}}
                                 <!--begin::Actions-->
                                 <div class="d-flex align-items-center py-1">
 
@@ -57,10 +57,12 @@ a{{-- Begin::Extend Header --}}
                                         data-bs-target="#kt_modal_create_user" id="kt_toolbar_primary_button"
                                         id="kt_toolbar_primary_button" style="background-color:#008CB4; padding: 6px">
                                         New</button> --}}
-                                    <button class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
-                                        data-bs-target="#kt_modal_create_user_new" id="kt_toolbar_primary_button"
-                                        id="kt_toolbar_primary_button" style="background-color:#008CB4; padding: 6px">
-                                        New</button>
+                                        @can('access-menu-create', "USRM")
+                                        <button class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
+                                            data-bs-target="#kt_modal_create_user_new" id="kt_toolbar_primary_button"
+                                            id="kt_toolbar_primary_button" style="background-color:#008CB4; padding: 6px">
+                                            New</button>                                            
+                                        @endcan
 
                                     <!--begin::Wrapper-->
                                     {{-- <div class="me-4" style="margin-left:10px;">
@@ -106,7 +108,7 @@ a{{-- Begin::Extend Header --}}
 
                                 </div>
                                 <!--end::Actions-->
-                            @endif
+                            {{-- @endif --}}
                         </div>
                         <!--end::Container-->
                     </div>
@@ -170,11 +172,11 @@ a{{-- Begin::Extend Header --}}
                                                 <th class="min-w-auto">Role</th>
                                                 <th class="min-w-auto text-center">Is Active</th>
                                                 <th class="min-w-auto">Nomor Kontak</th>
-                                                @if (auth()->user()->check_administrator)
+                                                {{-- @if (auth()->user()->check_administrator) --}}
                                                     <th class="text-center">
                                                         Action
                                                     </th>
-                                                @endif
+                                                {{-- @endif --}}
                                             </tr>
                                             <!--end::Table row-->
                                         </thead>
@@ -274,20 +276,21 @@ a{{-- Begin::Extend Header --}}
                                                     </td>
                                                     <!--end::Email-->
 
-                                                    @if (auth()->user()->check_administrator)
+                                                    {{-- @if (auth()->user()->check_administrator) --}}
                                                         <!--begin::Action-->
                                                         <td class="text-center">
+                                                            @can('access-menu-delete', 'USRM')
                                                             <!--begin::Button-->
                                                             <button data-bs-toggle="modal"
                                                                 data-bs-target="#kt_modal_delete{{ $user->id }}"
                                                                 id="modal-delete"
                                                                 class="btn btn-sm btn-light btn-active-primary">Delete
-                                                            </button>
-                                                            </form>
+                                                            </button>                                                                
+                                                            @endcan
                                                             <!--end::Button-->
                                                         </td>
                                                         <!--end::Action-->
-                                                    @endif
+                                                    {{-- @endif --}}
                                                 </tr>
                                             @endif
                                             @endforeach

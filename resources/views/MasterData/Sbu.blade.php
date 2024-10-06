@@ -33,21 +33,22 @@
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">SBU
+                                <h1 class="d-flex align-items-center fs-3 my-1">SBU Internal WIKA
                                 </h1>
                                 <!--end::Title-->
                             </div>
                             <!--end::Page title-->
 
-                            @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
+                            {{-- @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)")) --}}
                                 <!--begin::Actions-->
                                 <div class="d-flex align-items-center py-1">
-
+                                    @can('access-menu-create', 'MAS-SBI')
                                     <!--begin::Button-->
                                     <a href="#" class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
                                         data-bs-target="#kt_modal_create" id="kt_toolbar_primary_button"
                                         style="background-color:#008CB4; padding: 6px">
-                                        New</a>
+                                        New</a>                                        
+                                    @endcan
 
                                     <!--begin::Wrapper-->
                                     {{-- <div class="me-4" style="margin-left:10px;">
@@ -93,7 +94,7 @@
 
                                 </div>
                                 <!--end::Actions-->
-                            @endif
+                            {{-- @endif --}}
                         </div>
                         <!--end::Container-->
                     </div>
@@ -210,9 +211,9 @@
                                         <th class="min-w-auto">@sortablelink('referensi2', 'Referensi 2')</th>
                                         <th class="min-w-auto">@sortablelink('lingkup_kerja', 'Lingkup Pekerjaan')</th>
                                         <th class="min-w-auto">@sortablelink('referensi3', 'Referensi 3')</th>
-                                        @if (auth()->user()->check_administrator)
+                                        {{-- @if (auth()->user()->check_administrator) --}}
                                             <th class="text-center">Action</th>
-                                        @endif
+                                        {{-- @endif --}}
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -271,19 +272,21 @@
                                             </td>
                                             <!--end::Coloumn-->
 
-                                            @if (auth()->user()->check_administrator)
+                                            {{-- @if (auth()->user()->check_administrator) --}}
                                                 <!--begin::Action-->
                                                 <td class="text-center">
                                                     <!--begin::Button-->
+                                                    @can('access-menu-delete', "MAS-SBI")
                                                     <button data-bs-toggle="modal"
                                                         data-bs-target="#kt_modal_delete{{ $sbu->id }}"
                                                         id="modal-delete"
                                                         class="btn btn-sm btn-light btn-active-primary">Delete
-                                                    </button>
+                                                    </button>                                                        
+                                                    @endcan
                                                     <!--end::Button-->
                                                 </td>
                                                 <!--end::Action-->
-                                            @endif
+                                            {{-- @endif --}}
                                         </tr>
                                 @endforeach
                                 </tbody>

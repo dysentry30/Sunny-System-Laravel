@@ -82,19 +82,20 @@
                                 <!--end::Page title-->
                                 <!--begin::Actions-->
                                 <div class="d-flex align-items-center py-1">
-
-                                    <!--begin::Button-->
-                                    <button type="submit" class="btn btn-sm btn-primary" id="kt_toolbar_primary_button"
-                                        style="background-color:#008CB4;">
-                                        Save</button>
-                                    <!--end::Button-->
+                                    @can('access-menu-update', 'CTRM')
+                                        <!--begin::Button-->
+                                        <button type="submit" class="btn btn-sm btn-primary" id="kt_toolbar_primary_button"
+                                            style="background-color:#008CB4;">
+                                            Save</button>
+                                        <!--end::Button-->                                        
+                                    @endcan
 
                                     <!--begin::Button-->
                                     {{-- <a class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_tes" id="kt_toolbar_primary_button"
                                     style="background-color: #008CB4;margin-left:10px;">
                                     Get Progress</a> --}}
-                                    <button class="btn btn-sm btn-primary" style="background-color: #008CB4;margin-left:10px;" onclick="getProgress()">
-                                    Get Progress</button>
+                                    {{-- <button class="btn btn-sm btn-primary" style="background-color: #008CB4;margin-left:10px;" onclick="getProgress()">
+                                    Get Progress</button> --}}
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
@@ -533,6 +534,7 @@
                         </div>
                     </div>
                     {{-- begin:: Stages script --}}
+                    @can('access-menu-update', 'CTRM')
                     <script>
                         const stages = document.querySelectorAll(".stage-button");
                         stages.forEach((stage, i) => {
@@ -584,7 +586,8 @@
                                 });
                             }
                         });
-                    </script>
+                    </script>                        
+                    @endcan
                     {{-- end:: Stages script --}}
                     <!--end::Header Contract-->
                     <!--begin::Header Contract-->
@@ -961,8 +964,10 @@
                                     <a href="#" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_itb_tor" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
                                 @endif --}}
-                                {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                {{-- @can('access-menu-update', 'CTRM')
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_risk_proyek">+</a> --}}
+                                @endcan
                             </h3>
 
                             <!--begin:Table: Review-->
@@ -1026,8 +1031,10 @@
                                     <a href="#" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_rks" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
                                 @endif --}}
-                                {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                {{-- @can('access-menu-update', 'CTRM')
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_risk_proyek">+</a> --}}
+                                @endcan
                             </h3>
 
                             <!--begin:Table: Review-->
@@ -1079,8 +1086,11 @@
                                     <a href="#" onclick="exportToExcel(this, '#data-aanwitjzing')" class="">(Klik di sini untuk Export ke Excel)</a>
                                 @endif
                                 {{-- @if (empty($is_approved) || $is_approved->isEmpty()) --}}
-                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                
+                                @can('access-menu-update', 'CTRM')
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_create_aanwitjzing">+</a>
+                                @endcan
                                 {{-- @endif --}}
                                 @if (!empty($contract->questionsProjects->toArray()))
                                 {{-- @if (empty($is_approved) || $is_approved->isEmpty()) --}}
@@ -1157,11 +1167,15 @@
                                             <!--begin::Action-->
                                             <td class="text-center">
                                                 <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
-                                                    <a href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_create_aanwitjzing_{{ $dc->id }}"
+                                                        @can('access-menu-update', 'CTRM')
+                                                        <a href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_create_aanwitjzing_{{ $dc->id }}"
                                                         {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                         class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                    <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', 'dokumen-aanwitjzing', 'dokumen-aanwitjzing')">Delete</button>
+                                                        @endcan
+                                                        @can('access-menu-delete', 'CTRM')
+                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', 'dokumen-aanwitjzing', 'dokumen-aanwitjzing')">Delete</button>
+                                                        @endcan
                                                 </div>
                                             </td>
                                             <!--end::Action-->
@@ -1292,8 +1306,11 @@
                                     */
                                 @endphp
                                 @if (!empty($contract->project?->DokumenTender) || $contract->project?->DokumenTender->isNotEmpty())
+                                    
+                                @can('access-menu-update', 'CTRM')
                                     <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_create_tinjauan_dokumen_perolehan">+</a>
+                                @endcan
                                 @endif
                                 @if (!empty($contract->reviewProjects->toArray()))
                                     <a href="#" data-bs-toggle="modal"
@@ -1340,11 +1357,15 @@
                                                 <!--begin::Action-->
                                                 <td class="text-center">
                                                     <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
-                                                        <a href="#" data-bs-toggle="modal"
-                                                            data-bs-target="#kt_modal_create_tinjauan_dokumen_perolehan_{{ $dc->id }}"
+                                                            @can('access-menu-update', 'CTRM')
+                                                            <a href="#" data-bs-toggle="modal"
+                                                                data-bs-target="#kt_modal_create_tinjauan_dokumen_perolehan_{{ $dc->id }}"
                                                             {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                             class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', null, 'tinjauan-dokumen-kontrak')">Delete</button>
+                                                            @endcan
+                                                            @can('access-menu-delete', 'CTRM')
+                                                            <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', null, 'tinjauan-dokumen-kontrak')">Delete</button>
+                                                            @endcan
                                                     </div>
                                                 </td>
                                                 <!--end::Action-->
@@ -1424,8 +1445,11 @@
 
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Input Resiko
-                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                
+                                @can('access-menu-update', 'CTRM')
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_risk_proyek">+</a>
+                                @endcan
                             </h3>
 
                             <!--begin:Table: Review-->
@@ -1503,12 +1527,16 @@
                             Input Resiko - Perolehan (<i class="text-hover-primary text-gray"><a 
                                 href="{{ asset('template/RiskTender_Input-Kosong.rev.xlsx') }}"> Download
                                                             Template Risk Tender </a></i>)
-                            {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                            {{-- 
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_input_resiko_perolehan">+</a> --}}
                                 {{-- @if (empty($is_approved) || $is_approved->isEmpty()) --}}
                                 {{-- @if ($contract->project?->RiskTenderProyek->isNotEmpty()) --}}
+                                    
+                                @can('access-menu-update', 'CTRM')
                                     <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_resiko_perolehan">+</a>
+                                @endcan
                                 {{-- @endif --}}
                                 {{-- @endif --}}
                         </h3>
@@ -1568,8 +1596,11 @@
                                     <a href="#" onclick="exportToExcel(this, '#usulan-draft')" class="">(Klik di sini untuk Export ke Excel)</a>
                                 @endif
                                 {{-- @if (empty($is_approved) || $is_approved->isEmpty()) --}}
-                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                
+                                @can('access-menu-update', 'CTRM')
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_create_usulan_perubahan_draft_kontrak">+</a>
+                                @endcan
 
                                 {{-- @endif --}}
                                 {{-- @if (empty($is_approved) || $is_approved->isEmpty()) --}}
@@ -1655,11 +1686,15 @@
                                                 <!--begin::Action-->
                                                 <td class="text-center">
                                                     <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
-                                                        <a href="#" data-bs-toggle="modal"
-                                                            data-bs-target="#kt_modal_create_usulan_perubahan_draft_kontrak_{{ $dc->id }}"
+                                                            @can('access-menu-update', 'CTRM')
+                                                            <a href="#" data-bs-toggle="modal"
+                                                                data-bs-target="#kt_modal_create_usulan_perubahan_draft_kontrak_{{ $dc->id }}"
                                                             {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                             class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', null, 'usulan-perubahan-draft-kontrak')">Delete</button>
+                                                            @endcan
+                                                            @can('access-menu-delete', 'CTRM')
+                                                            <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', null, 'usulan-perubahan-draft-kontrak')">Delete</button>
+                                                            @endcan
                                                     </div>
                                                 </td>
                                                 <!--end::Action-->
@@ -1709,7 +1744,8 @@
                                     <a href="#" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_nda" id="Plus" class="">+</a>
                                 {{-- @endif   --}}
-                                {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                {{-- 
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_risk_proyek">+</a> --}}
                             </h3>
 
@@ -1795,7 +1831,8 @@
                                     <a href="#" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_mou" id="Plus">+</a>
                                 {{-- @endif --}}
-                                {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                {{-- 
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_risk_proyek">+</a> --}}
                             </h3>
 
@@ -1880,7 +1917,8 @@
                                     <a href="#" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_eca" id="Plus">+</a>
                                 {{-- @endif --}}
-                                {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                {{-- 
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_risk_proyek">+</a> --}}
                             </h3>
 
@@ -1966,7 +2004,8 @@
                                     <a href="#" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_ica" id="Plus">+</a>
                                 {{-- @endif --}}
-                                {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                {{-- 
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_risk_proyek">+</a> --}}
                             </h3>
 
@@ -2051,7 +2090,8 @@
                                     <a href="#" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_draft" id="Plus">+</a>
                                 {{-- @endif --}}
-                                {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                {{-- 
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_risk_proyek">+</a> --}}
                             </h3>
 
@@ -2136,7 +2176,8 @@
                                     <a href="#" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_loi" id="Plus">+</a>
                                 {{-- @endif --}}
-                                {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                {{-- 
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_risk_proyek">+</a> --}}
                             </h3>
 
@@ -2258,8 +2299,11 @@
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Perjanjian KSO
                                 {{-- @if (empty($is_approved) || $is_approved->isEmpty()) --}}
-                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                
+                                @can('access-menu-update', 'CTRM')
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_input_perjanjian_kso">+</a>
+                                @endcan
                                 {{-- @endif --}}
                                 @if (!empty($contract->PerjanjianKSO->toArray()))
                                     <a href="#" data-bs-toggle="modal"
@@ -2345,8 +2389,11 @@
 
                             {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Pendukung
-                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                
+                                @can('access-menu-update', 'CTRM')
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_input_dokumen_pendukung">+</a>
+                                @endcan
                             </h3>
 
                             <!--begin:Table: Review-->
@@ -2425,8 +2472,11 @@
                         <div class="card-title m-0">
                             {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Laporan Bulanan
-                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                
+                                @can('access-menu-update', 'CTRM')
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_laporan_bulanan">+</a>
+                                @endcan
                             </h3>
 
                             <!--begin:Table: Laporan Bulanan-->
@@ -2650,8 +2700,11 @@
 
                             {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 MoM Kick Off Meeting
-                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                
+                                @can('access-menu-update', 'CTRM')
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_mom_meeting">+</a>
+                                @endcan
                             </h3>
                             <!--begin:Table: Claim Contract-->
                             <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
@@ -2723,8 +2776,11 @@
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Kontrak
                                 @if (empty($is_approved) || $is_approved->isEmpty())
-                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                
+                                @can('access-menu-update', 'CTRM')
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_dokumen_kontrak">+</a>
+                                @endcan
                                 @endif
                             </h3>
 
@@ -2771,11 +2827,15 @@
                                                 <!--begin::Action-->
                                                 <td class="text-center">
                                                     <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
-                                                        <a href="#" data-bs-toggle="modal"
-                                                            data-bs-target="#kt_modal_upload_dokumen_kontrak_{{ $dc->id }}"
+                                                            @can('access-menu-update', 'CTRM')
+                                                            <a href="#" data-bs-toggle="modal"
+                                                                data-bs-target="#kt_modal_upload_dokumen_kontrak_{{ $dc->id }}"
                                                             {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                             class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', null, 'dokumen-kontrak')">Delete</button>
+                                                            @endcan
+                                                            @can('access-menu-delete', 'CTRM')
+                                                            <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', null, 'dokumen-kontrak')">Delete</button>
+                                                            @endcan
                                                     </div>
                                                 </td>
                                                 <!--end::Action-->
@@ -2805,8 +2865,11 @@
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Amandemen
                                 @if (empty($is_approved) || $is_approved->isEmpty())
-                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                
+                                @can('access-menu-update', 'CTRM')
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_dokumen_amandemen">+</a>
+                                @endcan
                                 @endif
                             </h3>
 
@@ -2853,11 +2916,15 @@
                                                 <!--begin::Action-->
                                                 <td class="text-center">
                                                     <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
-                                                        <a href="#" data-bs-toggle="modal"
-                                                            data-bs-target="#kt_modal_upload_dokumen_amandemen_{{ $dc->id }}"
+                                                            @can('access-menu-update', 'CTRM')
+                                                            <a href="#" data-bs-toggle="modal"
+                                                                data-bs-target="#kt_modal_upload_dokumen_amandemen_{{ $dc->id }}"
                                                             {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                             class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', null, 'dokumen-amandemen')">Delete</button>
+                                                            @endcan
+                                                            @can('access-menu-delete', 'CTRM')
+                                                            <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', null, 'dokumen-amandemen')">Delete</button>
+                                                            @endcan
                                                     </div>
                                                 </td>
                                                 <!--end::Action-->
@@ -2887,8 +2954,11 @@
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Bill Of Quantity
                                 @if (empty($is_approved) || $is_approved->isEmpty())
-                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                
+                                @can('access-menu-update', 'CTRM')
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_dokumen_boq">+</a>
+                                @endcan
                                 @endif
                             </h3>
 
@@ -3090,8 +3160,11 @@
                                     href="{{ asset('template/RiskTender_Input-Kosong.rev.xlsx') }}"> Download
                                     Template Risk Tender </a></i>)
                                 @if (empty($is_approved) || $is_approved->isEmpty())
-                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                
+                                @can('access-menu-update', 'CTRM')
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_input_resiko_pelaksanaan">+</a>
+                                @endcan
                                 @endif
                             </h3>
 
@@ -3130,7 +3203,9 @@
                                                 <p class="text-gray-600 mb-1">{{ Carbon\Carbon::createFromTimeString($inputRisk->created_at)->translatedFormat("d F Y") }}</p>
                                             </td>
                                             <td class="text-center">
+                                                @can('access-menu-delete', 'CTRM')
                                                 <button type="button" class="btn btn-sm btn-secondary btn-hover-danger" onclick="confirmDeleteFinalDokumen('{{ $inputRisk->id }}', null, 'dokumen-resiko')">Delete</button>
+                                                @endcan
                                             </td>
                                         </tr>
                                     @empty
@@ -3156,8 +3231,11 @@
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Rencana Kerja Manajemen Kontrak (RKAP - BAB 12)
                                 @if (empty($is_approved) || $is_approved->isEmpty())
-                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                
+                                @can('access-menu-update', 'CTRM')
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_input_rencana_kerja_kontrak">+</a>
+                                @endcan
                                 @endif
                             </h3>
 
@@ -3204,11 +3282,15 @@
                                                 <!--begin::Action-->
                                                 <td class="text-center">
                                                     <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
-                                                        <a href="#" data-bs-toggle="modal"
-                                                            data-bs-target="#kt_modal_input_rencana_kerja_kontrak_{{ $rencana_kerja->id }}"
+                                                            @can('access-menu-update', 'CTRM')
+                                                            <a href="#" data-bs-toggle="modal"
+                                                                data-bs-target="#kt_modal_input_rencana_kerja_kontrak_{{ $rencana_kerja->id }}"
                                                             {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                             class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $rencana_kerja->id }}', null, 'dokumen-rencana-kerja')">Delete</button>
+                                                            @endcan
+                                                            @can('access-menu-delete', 'CTRM')
+                                                            <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $rencana_kerja->id }}', null, 'dokumen-rencana-kerja')">Delete</button>
+                                                            @endcan
                                                     </div>
                                                 </td>
                                                 <!--end::Action-->
@@ -3246,8 +3328,11 @@
                                 @endif
                                 @endif --}}
                                 @if (!empty($dokumen_tinjauan_pelaksanaan) || $dokumen_tinjauan_pelaksanaan->isNotEmpty())
+                                    
+                                @can('access-menu-update', 'CTRM')
                                     <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_create_tinjauan_dokumen_pelaksanaan">+</a>
+                                @endcan
                                 @endif
                                 @if (!empty($contract->reviewProjects->toArray()))
                                     <a href="#" data-bs-toggle="modal"
@@ -3289,11 +3374,15 @@
                                                 <!--begin::Action-->
                                                 <td class="text-center">
                                                     <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
-                                                        <a href="#" data-bs-toggle="modal"
-                                                            data-bs-target="#kt_modal_create_tinjauan_dokumen_pelaksanaan_{{ $dc->id }}"
+                                                            @can('access-menu-update', 'CTRM')
+                                                            <a href="#" data-bs-toggle="modal"
+                                                                data-bs-target="#kt_modal_create_tinjauan_dokumen_pelaksanaan_{{ $dc->id }}"
                                                             {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                             class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', null, 'tinjauan-dokumen-kontrak')">Delete</button>
+                                                            @endcan
+                                                            @can('access-menu-delete', 'CTRM')
+                                                            <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', null, 'tinjauan-dokumen-kontrak')">Delete</button>
+                                                            @endcan
                                                     </div>
                                                 </td>
                                                 <!--end::Action-->
@@ -3339,8 +3428,11 @@
                                 <a href="#" onclick="exportToExcel(this, '#table-pasal-kontraktual')" class="">(Klik di sini untuk Export ke Excel)</a>
                                 @endif
                                 @if (empty($is_approved) || $is_approved->isEmpty())
-                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                
+                                @can('access-menu-update', 'CTRM')
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_input_pasal_kontraktual">+</a>
+                                @endcan
                                 @endif
                                 @if (!empty($contract->PasalKontraktual->toArray()))
                                 @if (empty($is_approved) || $is_approved->isEmpty())
@@ -3443,8 +3535,11 @@
                                     <a href="#" onclick="exportToExcel(this, '#pending-issue-pelaksanaan')" class="">(Klik di sini untuk Export ke Excel)</a>
                                 @endif
                                 @if (empty($is_approved) || $is_approved->isEmpty())
-                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                
+                                @can('access-menu-update', 'CTRM')
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_pending_issue_pelaksanaan">+</a>
+                                @endcan
                                 @endif
                                 @if (!empty($contract->PendingIssue->toArray()))
                                 @if (empty($is_approved) || $is_approved->isEmpty())
@@ -3559,8 +3654,11 @@
                                 {{-- @if (!empty($contract->PerubahanKontrak->toArray()))
                                     <a href="#" onclick="exportToExcel(this, '#perubahan-kontrak')" class="">(Klik di sini untuk Export ke Excel)</a>
                                 @endif --}}
-                                {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                {{-- 
+                                @can('access-menu-update', 'CTRM')
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_input_perubahan_kontrak">+</a> --}}
+                                @endcan
                                 {{-- @if (!empty($contract->PerubahanKontrak->toArray()))
                                     <a href="#" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_perubahan" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
@@ -3708,8 +3806,11 @@
                             <h3 class="fw-bolder m-0 mb-3 " id="HeadDetail" style="font-size:14px;">
                                 Jaminan
                                 @if (empty($is_approved) || $is_approved->isEmpty())
-                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                
+                                @can('access-menu-update', 'CTRM')
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_jaminan">+</a>
+                                @endcan
                                 @endif
                             </h3>
 
@@ -3834,8 +3935,11 @@
                         <h3 class="fw-bolder m-0 mb-3 " id="HeadDetail" style="font-size:14px;">
                             Asuransi
                             @if (empty($is_approved) || $is_approved->isEmpty())
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                            
+                            @can('access-menu-update', 'CTRM')
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_asuransi">+</a>
+                            @endcan
                             @endif
                         </h3>
 
@@ -3963,8 +4067,11 @@
                             <h3 class="fw-bolder m-0 mb-3 " id="HeadDetail" style="font-size:14px;">
                                 Checklist Manajemen Kontrak
                                 @if (empty($is_approved) || $is_approved->isEmpty())
-                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                
+                                @can('access-menu-update', 'CTRM')
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_input_checklist_manajemen">+</a>
+                                @endcan
                                 @endif
                                 @if (!empty($contract->ChecklistManajemen->toArray()))
                                 @if (empty($is_approved) || $is_approved->isEmpty())
@@ -4033,8 +4140,11 @@
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Site Instruction
                                 {{-- @if (empty($is_approved) || $is_approved->isEmpty())
-                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                
+                                @can('access-menu-update', 'CTRM')
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_dokumen_site_instruction">+</a>
+                                @endcan
                                 @endif --}}
                             </h3>
                             <!--begin:Table:Dokumen Site Instruction-->
@@ -4094,7 +4204,9 @@
                                                 <!--begin::Nomor Dokumen-->
                                                 <td>
                                                     <div class="d-flex flex-row align-items-center justify-content-center">
+                                                        {{-- @can('access-menu-delete', 'CTRM') --}}
                                                         {{-- <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-site-instruction/{{ $site_instruction->id_instruction }}/delete')">Delete</button> --}}
+                                                        {{-- @endcan --}}
                                                     </div>
                                                 </td>
                                                 <!--end::Nomor Dokumen-->
@@ -4185,7 +4297,9 @@
                                             <!--begin::Nomor Dokumen-->
                                             <td>
                                                 <div class="d-flex flex-row align-items-center justify-content-center">
+                                                    {{-- @can('access-menu-delete', 'CTRM') --}}
                                                     {{-- <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-technical-form/{{ $technical_form->id_technical_form }}/delete')">Delete</button> --}}
+                                                    {{-- @endcan --}}
                                                 </div>
                                             </td>
                                             <!--end::Nomor Dokumen-->
@@ -4216,8 +4330,11 @@
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Technical Query
                                 {{-- @if (empty($is_approved) || $is_approved->isEmpty())
-                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                
+                                @can('access-menu-update', 'CTRM')
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_dokumen_technical_query">+</a>
+                                @endcan
                                 @endif --}}
                             </h3>
                             <!--begin:: Table Dokumen Technical Query-->
@@ -4275,7 +4392,9 @@
                                             <!--begin::Nomor Dokumen-->
                                             <td>
                                                 <div class="d-flex flex-row align-items-center justify-content-center">
+                                                    {{-- @can('access-menu-delete', 'CTRM') --}}
                                                     {{-- <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-technical-query/{{ $technical_query->technical_query }}/delete')">Delete</button> --}}
+                                                    {{-- @endcan --}}
                                                 </div>
                                             </td>
                                             <!--end::Nomor Dokumen-->
@@ -4366,7 +4485,9 @@
                                             <!--begin::Nomor Dokumen-->
                                             <td>
                                                 <div class="d-flex flex-row align-items-center justify-content-center">
+                                                    {{-- @can('access-menu-delete', 'CTRM') --}}
                                                     {{-- <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-field-design-change/{{ $field_change->id_field_change }}/delete')">Delete</button> --}}
+                                                    {{-- @endcan --}}
                                                 </div>
                                             </td>
                                             <!--end::Nomor Dokumen-->
@@ -4456,7 +4577,9 @@
                                             <!--begin::Nomor Dokumen-->
                                             <td>
                                                 <div class="d-flex flex-row align-items-center justify-content-center">
+                                                    {{-- @can('access-menu-delete', 'CTRM') --}}
                                                     {{-- <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-contract-change-notice/{{ $change_notice->id_change_notice }}/delete')">Delete</button> --}}
+                                                    {{-- @endcan --}}
                                                 </div>
                                             </td>
                                             <!--end::Nomor Dokumen-->
@@ -4546,7 +4669,9 @@
                                             <!--begin::Nomor Dokumen-->
                                             <td>
                                                 <div class="d-flex flex-row align-items-center justify-content-center">
+                                                    {{-- @can('access-menu-delete', 'CTRM') --}}
                                                     {{-- <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-contract-change-proposal/{{ $change_proposal->id_change_proposal }}/delete')">Delete</button> --}}
+                                                    {{-- @endcan --}}
                                                 </div>
                                             </td>
                                             <!--end::Nomor Dokumen-->
@@ -4636,7 +4761,9 @@
                                             <!--begin::Nomor Dokumen-->
                                             <td>
                                                 <div class="d-flex flex-row align-items-center justify-content-center">
+                                                    {{-- @can('access-menu-delete', 'CTRM') --}}
                                                     {{-- <button class="btn btn-sm btn-danger" onclick="deleteAction('dokumen-contract-change-order/{{ $change_order->id_change_order }}/delete')">Delete</button> --}}
+                                                    {{-- @endcan --}}
                                                 </div>
                                             </td>
                                             <!--end::Nomor Dokumen-->
@@ -4666,8 +4793,11 @@
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Bast 1
                                 @if (empty($is_approved) || $is_approved->isEmpty())
-                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                
+                                @can('access-menu-update', 'CTRM')
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_bast_1">+</a>
+                                @endcan
                                 @endif
                             </h3>
 
@@ -4731,11 +4861,15 @@
                                         <!--begin::Action-->
                                         <td class="text-center">
                                             <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
-                                                <a href="#" data-bs-toggle="modal"
-                                                    data-bs-target="#kt_modal_bast_1_{{ $dokumen->id_document }}"
+                                                    @can('access-menu-update', 'CTRM')
+                                                    <a href="#" data-bs-toggle="modal"
+                                                        data-bs-target="#kt_modal_bast_1_{{ $dokumen->id_document }}"
                                                     {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                     class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDelete('{{ $dokumen->id_document }}')">Delete</button>
+                                                    @endcan
+                                                    @can('access-menu-delete', 'CTRM')
+                                                    <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDelete('{{ $dokumen->id_document }}')">Delete</button>
+                                                    @endcan
                                             </div>
                                         </td>
                                         <!--end::Action-->
@@ -4757,8 +4891,11 @@
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen Minutes of Meeting (MoM)
                             @if (empty($is_approved) || $is_approved->isEmpty())
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                            
+                            @can('access-menu-update', 'CTRM')
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_upload_mom">+</a>
+                            @endcan
                             @endif
                         </h3>
 
@@ -4796,11 +4933,15 @@
                                         <!--begin::Action-->
                                         <td class="text-center">
                                             <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
-                                                <a href="#" data-bs-toggle="modal"
-                                                    data-bs-target="#kt_modal_upload_mom_{{ $dokumen->id }}"
+                                                    @can('access-menu-update', 'CTRM')
+                                                    <a href="#" data-bs-toggle="modal"
+                                                        data-bs-target="#kt_modal_upload_mom_{{ $dokumen->id }}"
                                                     {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                     class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dokumen->id }}', null, 'dokumen-mom')">Delete</button>
+                                                    @endcan
+                                                    @can('access-menu-delete', 'CTRM')
+                                                    <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dokumen->id }}', null, 'dokumen-mom')">Delete</button>
+                                                    @endcan
                                             </div>
                                         </td>
                                         <!--end::Action-->
@@ -4821,8 +4962,11 @@
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen Kick Off Meeting
                             @if (empty($is_approved) || $is_approved->isEmpty())
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                            
+                            @can('access-menu-update', 'CTRM')
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_upload_kickoff">+</a>
+                            @endcan
                             @endif
                         </h3>
 
@@ -4860,11 +5004,15 @@
                                         <!--begin::Action-->
                                         <td class="text-center">
                                             <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
-                                                <a href="#" data-bs-toggle="modal"
-                                                    data-bs-target="#kt_modal_upload_kickoff_{{ $dokumen->id }}"
+                                                    @can('access-menu-update', 'CTRM')
+                                                    <a href="#" data-bs-toggle="modal"
+                                                        data-bs-target="#kt_modal_upload_kickoff_{{ $dokumen->id }}"
                                                     {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                     class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dokumen->id }}', null, 'dokumen-kick-off-meeting')">Delete</button>
+                                                    @endcan
+                                                    @can('access-menu-delete', 'CTRM')
+                                                    <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dokumen->id }}', null, 'dokumen-kick-off-meeting')">Delete</button>
+                                                    @endcan
                                             </div>
                                         </td>
                                         <!--end::Action-->
@@ -4891,8 +5039,11 @@
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen Kontrak
                             @if (empty($is_approved) || $is_approved->isEmpty())
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                            
+                            @can('access-menu-update', 'CTRM')
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_upload_dokumen_kontrak_pemeliharaan">+</a>
+                            @endcan
                             @endif
                         </h3>
 
@@ -4942,11 +5093,15 @@
                                             <!--begin::Action-->
                                             <td class="text-center">
                                                 <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
-                                                    <a href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_upload_dokumen_kontrak_{{ $dc->id }}"
+                                                        @can('access-menu-update', 'CTRM')
+                                                        <a href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_upload_dokumen_kontrak_{{ $dc->id }}"
                                                         {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                         class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                    <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', null, 'dokumen-kontrak')">Delete</button>
+                                                        @endcan
+                                                        @can('access-menu-delete', 'CTRM')
+                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', null, 'dokumen-kontrak')">Delete</button>
+                                                        @endcan
                                                 </div>
                                             </td>
                                             <!--end::Action-->
@@ -4976,8 +5131,11 @@
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen Amandemen
                             @if (empty($is_approved) || $is_approved->isEmpty())
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                            
+                            @can('access-menu-update', 'CTRM')
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_upload_dokumen_amandemen_pemeliharaan">+</a>
+                            @endcan
                             @endif
                         </h3>
 
@@ -5024,11 +5182,15 @@
                                             <!--begin::Action-->
                                             <td class="text-center">
                                                 <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
-                                                    <a href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_upload_dokumen_amandemen_pemeliharaan_{{ $dc->id }}"
+                                                        @can('access-menu-update', 'CTRM')
+                                                        <a href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_upload_dokumen_amandemen_pemeliharaan_{{ $dc->id }}"
                                                         {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                         class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                    <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', null, 'dokumen-amandemen')">Delete</button>
+                                                        @endcan
+                                                        @can('access-menu-delete', 'CTRM')
+                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dc->id }}', null, 'dokumen-amandemen')">Delete</button>
+                                                        @endcan
                                                 </div>
                                             </td>
                                             <!--end::Action-->
@@ -5072,8 +5234,11 @@
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen Bill Of Quantity
                             @if (empty($is_approved) || $is_approved->isEmpty())
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                            
+                            @can('access-menu-update', 'CTRM')
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_upload_dokumen_boq_pemeliharaan">+</a>
+                            @endcan
                             @endif
                         </h3>
 
@@ -5153,8 +5318,11 @@
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen Faktur Pajak Lunas
                             @if (empty($is_approved) || $is_approved->isEmpty())
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                            
+                            @can('access-menu-update', 'CTRM')
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_upload_dokumen_faktur">+</a>
+                            @endcan
                             @endif
                         </h3>
 
@@ -5219,8 +5387,11 @@
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen Bukti Setor PPh Lunas
                             @if (empty($is_approved) || $is_approved->isEmpty())
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                            
+                            @can('access-menu-update', 'CTRM')
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_upload_dokumen_pph">+</a>
+                            @endcan
                             @endif
                         </h3>
 
@@ -5292,8 +5463,11 @@
                                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                             Daftar BA Defect
                                             @if (empty($is_approved) || $is_approved->isEmpty())
-                                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                            
+                                            @can('access-menu-update', 'CTRM')
+                                                <a href="#" Id="Plus" data-bs-toggle="modal"
                                                 data-bs-target="#kt_modal_defect_ba">+</a>
+                                            @endcan
                                             @endif
                                         </h3>
 
@@ -5329,7 +5503,9 @@
                                                         <!--begin::Action-->
                                                         <td class="text-center">
                                                             <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
+                                                                @can('access-menu-delete', 'CTRM')
                                                                 <button class="btn btn-sm btn-secondary p-2 text-white btn-hover-danger" onclick="confirmDeleteFinalDokumen('{{ $dokumen->id }}', null, 'dokumen-ba-defect')">Delete</button>
+                                                                @endcan
                                                             </div>
                                                         </td>
                                                         <!--end::Action-->
@@ -5355,8 +5531,11 @@
                                             {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                 Dokumen Bast 1
                                                 @if (empty($is_approved) || $is_approved->isEmpty())
-                                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                
+                                                @can('access-menu-update', 'CTRM')
+                                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                                     data-bs-target="#kt_modal_bast_1">+</a>
+                                                @endcan
                                                 @endif
                                             </h3> --}}
                                             {{-- <input type="file" name="dokumen-bast-1" accept=".docx"
@@ -5375,8 +5554,11 @@
                                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                 Dokumen Bast 2
                                                 @if (empty($is_approved) || $is_approved->isEmpty())
-                                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                
+                                                @can('access-menu-update', 'CTRM')
+                                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                                     data-bs-target="#kt_modal_bast_2">+</a>
+                                                @endcan
                                                 @endif
                                             </h3>
                                             {{-- @if (!empty($contract->dokumen_bast_1))
@@ -5510,11 +5692,15 @@
                                                                 <!--begin::Action-->
                                                                 <td class="text-center">
                                                                     <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
-                                                                        <a href="#" data-bs-toggle="modal"
-                                                                            data-bs-target="#kt_modal_bast_2_{{ $dokumen->id_document }}"
+                                                                            @can('access-menu-update', 'CTRM')
+                                                                            <a href="#" data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_bast_2_{{ $dokumen->id_document }}"
                                                                             {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                                             class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDelete('{{ $dokumen->id_document }}')">Delete</button>
+                                                                            @endcan
+                                                                            @can('access-menu-delete', 'CTRM')
+                                                                            <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDelete('{{ $dokumen->id_document }}')">Delete</button>
+                                                                            @endcan
                                                                     </div>
                                                                 </td>
                                                                 <!--end::Action-->
@@ -5546,8 +5732,11 @@
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Lesson Learned
                                 @if (empty($is_approved) || $is_approved->isEmpty())
-                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                
+                                @can('access-menu-update', 'CTRM')
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_lesson_learned">+</a>
+                                @endcan
                                 @endif
                             </h3>
 
@@ -5592,11 +5781,15 @@
                                             <!--begin::Action-->
                                             <td class="text-center">
                                                 <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
-                                                    <a href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_upload_lesson_learned_{{ $dokumen->id }}"
+                                                        @can('access-menu-update', 'CTRM')
+                                                        <a href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_upload_lesson_learned_{{ $dokumen->id }}"
                                                         {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                         class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                    <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dokumen->id }}', null, 'dokumen-lesson-learned')">Delete</button>
+                                                        @endcan
+                                                        @can('access-menu-delete', 'CTRM')
+                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dokumen->id }}', null, 'dokumen-lesson-learned')">Delete</button>
+                                                        @endcan
                                                 </div>
                                             </td>
                                             <!--end::Action-->
@@ -5618,8 +5811,11 @@
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Dokumen Monitoring Status
                                 @if (empty($is_approved) || $is_approved->isEmpty())
-                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                
+                                @can('access-menu-update', 'CTRM')
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_monitoring_status">+</a>
+                                @endcan
                                 @endif
                             </h3>
 
@@ -5664,11 +5860,15 @@
                                             <!--begin::Action-->
                                             <td class="text-center">
                                                 <div class="d-flex flex-row justify-content-center gap-2 flex-wrap">
-                                                    <a href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_upload_monitoring_status_{{ $dokumen->id }}"
+                                                        @can('access-menu-update', 'CTRM')
+                                                        <a href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_upload_monitoring_status_{{ $dokumen->id }}"
                                                         {{-- class="btn btn-primary p-2 text-white {{ empty($is_approved) || $is_approved->isEmpty() ? '' : 'disabled' }}">Edit</a> --}}
                                                         class="btn btn-sm btn-primary p-2 text-white">Edit</a>
-                                                    <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dokumen->id }}', null, 'dokumen-monitoring-status')">Delete</button>
+                                                        @endcan
+                                                        @can('access-menu-delete', 'CTRM')
+                                                        <button class="btn btn-sm btn-secondary p-2 text-white" onclick="confirmDeleteFinalDokumen('{{ $dokumen->id }}', null, 'dokumen-monitoring-status')">Delete</button>
+                                                        @endcan
                                                 </div>
                                             </td>
                                             <!--end::Action-->
@@ -5782,8 +5982,11 @@
                                             href="{{ asset('template/RiskTender_Input-Kosong.rev.xlsx') }}"> Download
                                             Template Risk Tender </a></i>)
                                             @if (empty($is_approved) || $is_approved->isEmpty())
-                                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                            
+                                            @can('access-menu-update', 'CTRM')
+                                                <a href="#" Id="Plus" data-bs-toggle="modal"
                                                 data-bs-target="#kt_modal_input_resiko_pemeliharaan">+</a>
+                                            @endcan
                                             @endif
                                     </h3>
 
@@ -5899,8 +6102,11 @@
                                 <a href="#" onclick="exportToExcel(this, '#pending-issue-pemeliharaan')" class="">(Klik di sini untuk Export ke Excel)</a>
                             @endif
                             @if (empty($is_approved) || $is_approved->isEmpty())
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                            
+                            @can('access-menu-update', 'CTRM')
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_pending_issue_pemeliharaan">+</a>
+                            @endcan
                             @if (!empty($contract->PendingIssue->toArray()))
                                 <a href="#" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_upload_pending_issue_pemeliharaan" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
@@ -6007,8 +6213,11 @@
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Dokumen Lainnya
                             @if (empty($is_approved) || $is_approved->isEmpty())
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                            
+                            @can('access-menu-update', 'CTRM')
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
                                 data-bs-target="#kt_modal_dokumen_pendukung_serah_terima">+</a>
+                            @endcan
                             @endif
                         </h3>
 
@@ -13581,8 +13790,11 @@
             {{-- <br>
                 <h3 class="fw-bolder m-0" id="HeadDetail"
                     style="font-size:14px;">History Adendum
-                    <a href="#" Id="Plus" data-bs-toggle="modal"
+                    
+                    @can('access-menu-update', 'CTRM')
+                        <a href="#" Id="Plus" data-bs-toggle="modal"
                         data-bs-target="#kt_modal_history_adendum">+</a>
+                    @endcan
                 </h3>
                 <br>
                 <!--begin::Table Kriteria Pasar-->
@@ -18743,6 +18955,13 @@ aria-hidden="true">
 <!--end::Data Tables-->
 
 {{-- Begin :: Get Checklist Manajemen Kontrak Data --}}
+<script>
+    $(document).on("keydown", ":input:not(textarea)", function(event) {
+        if (event.key == "Enter") {
+            event.preventDefault();
+        }
+    });
+</script>
 <script>
     async function getChecklistManajemen(e) {
         const element = document.querySelector("#kt_modal_detail_checklist");

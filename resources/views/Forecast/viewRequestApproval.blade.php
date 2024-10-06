@@ -481,7 +481,7 @@
                                                                                                         </div>
                                                                                                     </div>
                                                                                                     <div class="col-3">
-                                                                                                        @if (Auth::user()->can('super-admin') || Auth::user()->can('admin-crm') || Auth::user()->can('approver-crm'))
+                                                                                                        @can('access-menu-approve', 'FRCST')
                                                                                                             @if ($history->is_approved_1 == "t")
                                                                                                                 <div
                                                                                                                     class="d-flex flex-row justify-content-evenly align-items-center w-100">
@@ -526,8 +526,8 @@
                                                                                                                         onclick="confirmAction(this, '{{ $unit_kerja }}', false, '{{$history->periode_prognosa}}')"
                                                                                                                         class="btn btn-sm btn-light btn-active-danger">Cancel</button>
                                                                                                                 </div>
-                                                                                                            @endif
-                                                                                                        @else
+                                                                                                            @endif                                                                                                            
+                                                                                                        @elsecan('access-menu-lock', 'FRCST')
                                                                                                             @if ($history->is_approved_1 == "t")
                                                                                                                 <div
                                                                                                                     class="d-flex flex-row justify-content-evenly align-items-center w-100">
@@ -583,7 +583,7 @@
                                                                                                                         style="background-color:#008CB4;">Menunggu untuk approval...</button>
                                                                                                                 </div>
                                                                                                             @endif
-                                                                                                        @endif
+                                                                                                        @endcan
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
