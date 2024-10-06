@@ -722,7 +722,7 @@
                                             <!--end::Kategori Kalah-->
 
                                             {{-- @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") || str_contains(auth()->user()->email, "@sunny")) --}}
-                                            @can('access-menu-delete', "PRYK")
+                                            @can('super-admin')
                                             <!--begin::Action-->
                                             <td class="text-center px-3">
                                                 <!--begin::Button-->
