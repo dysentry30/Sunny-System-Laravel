@@ -55,10 +55,12 @@
 
                 <!--begin::Content-->
                 <!--begin::Form-->
+                @can('access-menu-update', 'PRYK')
                 @if ($proyek->is_cancel == false)
                     <form action={{ url('/proyek/update/retail') }} method="post" enctype="multipart/form-data">
                         @csrf
-                @endif
+                @endif                    
+                @endcan
 
 
                 <!--begin:: id_customer selected-->
@@ -102,11 +104,13 @@
                                 <!--end::Button-->
 
                                 <!--begin::Button-->
+                                @can('access-menu-update', 'PRYK')
                                 @if ($proyek->is_cancel == false)
                                     <button type="submit" class="btn btn-sm btn-primary ms-2" id="proyek-save"
                                         style="background-color:#008CB4">
                                         Save</button>
                                 @endif
+                                @endcan
                                 <!--end::Button-->
 
                                 <!--begin::Button-->
@@ -341,6 +345,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                @can('access-menu-update', 'PRYK')
                                 @if ($proyek->is_cancel == false)
                                     <script>
                                         function confirmAction(form) {
@@ -418,6 +423,7 @@
                                         });
                                     </script>
                                 @endif
+                                @endcan
                                 <!--end::Header Orange-->
 
 
@@ -1790,11 +1796,13 @@
                                                                                         </td>
                                                                                         <td class="text-center">
                                                                                             @if ($is_save)
+                                                                                                @can('access-menu-update', 'PRYK')
                                                                                                 <button type="submit"
                                                                                                     class="btn btn-sm btn-light btn-active-primary"
                                                                                                     id="forecast-save">
                                                                                                     Save
                                                                                                 </button>
+                                                                                                @endcan
                                                                                             @else
                                                                                                 <span
                                                                                                     class="badge badge-danger ">
@@ -1975,11 +1983,13 @@
                                                                                         </td>
                                                                                         <td class="text-center">
                                                                                             @if ($is_save)
+                                                                                                @can('access-menu-update', 'PRYK')
                                                                                                 <button type="submit"
                                                                                                     class="btn btn-sm btn-light btn-active-primary"
                                                                                                     id="forecast-save">
                                                                                                     Save
                                                                                                 </button>
+                                                                                                @endcan
                                                                                             @else
                                                                                                 <span
                                                                                                     class="badge badge-danger ">
@@ -2168,11 +2178,13 @@
                                                                                         </td>
                                                                                         <td class="text-center">
                                                                                             @if ($is_save)
+                                                                                                @can('access-menu-update', 'PRYK')
                                                                                                 <button type="submit"
                                                                                                     class="btn btn-sm btn-light btn-active-primary"
                                                                                                     id="forecast-save">
                                                                                                     Save
                                                                                                 </button>
+                                                                                                @endcan
                                                                                             @else
                                                                                                 <span
                                                                                                     class="badge badge-danger ">
@@ -2232,6 +2244,13 @@
         @endsection
 
         @section('js-script')
+            <script>
+                $(document).on("keydown", ":input:not(textarea)", function(event) {
+                    if (event.key == "Enter") {
+                        event.preventDefault();
+                    }
+                });
+            </script>
             <!--begin:: Dokumen File Upload Max Size-->
             <script>
                 var inputs = document.getElementsByTagName('input');

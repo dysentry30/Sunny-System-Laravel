@@ -39,18 +39,20 @@
                             </div>
                             <!--end::Page title-->
 
-                            @canany(['super-admin', 'admin-crm'])
-                                <!--begin::Actions-->
-                                <div class="d-flex align-items-center py-1">
+                            {{-- @canany(['super-admin', 'admin-crm']) --}}
+                            @can('access-menu-create', 'MAS-SBKBLI')
+                            <!--begin::Actions-->
+                            <div class="d-flex align-items-center py-1">
 
-                                    <!--begin::Button-->
-                                    <a href="#" class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
-                                        data-bs-target="#kt_modal_create" id="kt_toolbar_primary_button"
-                                        style="background-color:#008CB4; padding: 6px">
-                                        New</a>
-                                </div>
-                                <!--end::Actions-->
-                            @endcanany
+                                <!--begin::Button-->
+                                <a href="#" class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_create" id="kt_toolbar_primary_button"
+                                    style="background-color:#008CB4; padding: 6px">
+                                    New</a>
+                            </div>
+                            <!--end::Actions-->                                
+                            @endcan
+                            {{-- @endcanany --}}
                         </div>
                         <!--end::Container-->
                     </div>
@@ -83,9 +85,9 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-25px">No.</th>
                                         <th class="min-w-500px">Klasifikasi</th>
-                                        @canany(['super-admin'])
+                                        {{-- @canany(['super-admin']) --}}
                                             <th class="min-w-100px">Action</th>
-                                        @endcanany
+                                        {{-- @endcanany --}}
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -109,22 +111,26 @@
                                             <td class="text-start">{{ $item->klasifikasi }}</td>
                                             <!--end::Nama Company-->
 
-                                            @canany(['super-admin'])
+                                            {{-- @canany(['super-admin']) --}}
                                                 <!--begin::Action-->
                                                 <td class="text-center">
                                                     <div class="d-flex flex-row gap-2 justify-content-center">
-                                                        <!--begin::Button-->
-                                                        <button data-bs-toggle="modal"
-                                                            data-bs-target="#kt_modal_edit_{{ $item->id }}" id="modal-edit"
-                                                            class="btn btn-sm btn-light btn-primary">Edit
-                                                        </button>
-                                                        <button class="btn btn-sm btn-light btn-hover-danger"
-                                                            onclick="deleteItem('{{ $item->id }}')">Delete</button>
+                                                        @can('access-menu-update', 'MAS-SBKBLI')
+                                                            <!--begin::Button-->
+                                                            <button data-bs-toggle="modal"
+                                                                data-bs-target="#kt_modal_edit_{{ $item->id }}" id="modal-edit"
+                                                                class="btn btn-sm btn-light btn-primary">Edit
+                                                            </button>                                                            
+                                                        @endcan
+                                                        @can('access-menu-delete', 'MAS-SBKBLI')
+                                                            <button class="btn btn-sm btn-light btn-hover-danger"
+                                                                onclick="deleteItem('{{ $item->id }}')">Delete</button>
+                                                        @endcan
                                                         <!--end::Button-->
                                                     </div>
                                                 </td>
                                                 <!--end::Action-->
-                                            @endcanany
+                                            {{-- @endcanany --}}
                                         </tr>
                                     @endforeach
                                 </tbody>

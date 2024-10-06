@@ -45,7 +45,7 @@ a{{-- Begin::Extend Header --}}
                             </div>
                             <!--end::Page title-->
 
-                            @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "Rahmad"))
+                            {{-- @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "Rahmad")) --}}
                                 <!--begin::Actions-->
                                 <div class="d-flex align-items-center py-1">
 
@@ -57,10 +57,12 @@ a{{-- Begin::Extend Header --}}
                                         data-bs-target="#kt_modal_create_user" id="kt_toolbar_primary_button"
                                         id="kt_toolbar_primary_button" style="background-color:#008CB4; padding: 6px">
                                         New</button> --}}
-                                    <button class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
-                                        data-bs-target="#kt_modal_create_user_new" id="kt_toolbar_primary_button"
-                                        id="kt_toolbar_primary_button" style="background-color:#008CB4; padding: 6px">
-                                        New</button>
+                                        @can('access-menu-create', "USRM")
+                                        <button class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
+                                            data-bs-target="#kt_modal_create_user_new" id="kt_toolbar_primary_button"
+                                            id="kt_toolbar_primary_button" style="background-color:#008CB4; padding: 6px">
+                                            New</button>                                            
+                                        @endcan
 
                                     <!--begin::Wrapper-->
                                     {{-- <div class="me-4" style="margin-left:10px;">
@@ -106,7 +108,7 @@ a{{-- Begin::Extend Header --}}
 
                                 </div>
                                 <!--end::Actions-->
-                            @endif
+                            {{-- @endif --}}
                         </div>
                         <!--end::Container-->
                     </div>
@@ -164,17 +166,18 @@ a{{-- Begin::Extend Header --}}
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                                 <th class="min-w-auto px-4">No.</th>
                                                 {{-- <th class="min-w-auto">Nip</th> --}}
+                                                <th class="min-w-auto">NIP</th>
                                                 <th class="min-w-auto">Name</th>
                                                 <th class="min-w-auto">Username</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
                                                 <th class="min-w-auto">Role</th>
                                                 <th class="min-w-auto text-center">Is Active</th>
                                                 <th class="min-w-auto">Nomor Kontak</th>
-                                                @if (auth()->user()->check_administrator)
+                                                {{-- @if (auth()->user()->check_administrator) --}}
                                                     <th class="text-center">
                                                         Action
                                                     </th>
-                                                @endif
+                                                {{-- @endif --}}
                                             </tr>
                                             <!--end::Table row-->
                                         </thead>
@@ -189,11 +192,16 @@ a{{-- Begin::Extend Header --}}
                                             @if (!Auth::user()->can('csi'))
                                                 <tr>
 
+                                                    
                                                     <!--begin::No-->
                                                     <td class="px-4">
                                                         {{ $no++ }}
                                                     </td>
                                                     <!--end::No-->
+                                                    
+                                                    <td class="text-center">
+                                                        {{ $user->nip }}
+                                                    </td>
 
                                                     <!--begin::NIP-->
                                                     {{-- <td>
@@ -274,20 +282,21 @@ a{{-- Begin::Extend Header --}}
                                                     </td>
                                                     <!--end::Email-->
 
-                                                    @if (auth()->user()->check_administrator)
+                                                    {{-- @if (auth()->user()->check_administrator) --}}
                                                         <!--begin::Action-->
                                                         <td class="text-center">
+                                                            @can('access-menu-delete', 'USRM')
                                                             <!--begin::Button-->
                                                             <button data-bs-toggle="modal"
                                                                 data-bs-target="#kt_modal_delete{{ $user->id }}"
                                                                 id="modal-delete"
                                                                 class="btn btn-sm btn-light btn-active-primary">Delete
-                                                            </button>
-                                                            </form>
+                                                            </button>                                                                
+                                                            @endcan
                                                             <!--end::Button-->
                                                         </td>
                                                         <!--end::Action-->
-                                                    @endif
+                                                    {{-- @endif --}}
                                                 </tr>
                                             @endif
                                             @endforeach
@@ -737,8 +746,8 @@ a{{-- Begin::Extend Header --}}
                         <!--begin::Options-->
                         <br>
                         <label class="fs-6 fw-bold form-label mt-3">Aplikasi</label>
-                        <div class="d-flex" style="flex-direction: row">
-                            <!--begin::Options-->
+                        <div class="d-flex flex-row">
+                            {{-- <!--begin::Options-->
                             <label class="form-check form-check-sm form-check-custom form-check-solid me-6 ms-4 align-middle">
                                 <input class="form-check-input" type="checkbox" value="" id="administrator" name="administrator" />
                                 <span class="form-check-label me-8 required"><b>Super Admin</b></span>
@@ -773,7 +782,50 @@ a{{-- Begin::Extend Header --}}
                                 <input class="form-check-input" type="checkbox" value="" id="ska-skt" name="ska-skt" />
                                 <span class="form-check-label me-8 required"><b>SKA SKT</b></span>
                             </label>
-                            <!--end::Options-->
+                            <!--end::Options--> --}}
+
+                            @foreach ($collectAplikasi as $aplikasi)
+                                @php
+                                    switch ($aplikasi->kode_aplikasi) {
+                                        case 'SUPER':
+                                            $namaInput = "administrator";
+                                            // $isChecked = $user->check_administrator ? "checked" : "";
+                                            break;
+                                        case 'CRM':
+                                            $namaInput = "user-sales";
+                                            // $isChecked = $user->check_user_sales ? "checked" : "";
+                                            break;
+                                        case 'CCM':
+                                            $namaInput = "admin-kontrak";
+                                            // $isChecked = $user->check_admin_kontrak ? "checked" : "";
+                                            break;
+                                        case 'CSI':
+                                            $namaInput = "user-csi";
+                                            // $isChecked = $user->check_user_csi ? "checked" : "";
+                                            break;
+                                        case 'MOB':
+                                            $namaInput = "mobile";
+                                            // $isChecked = $user->check_user_mobile ? "checked" : "";
+                                            break;
+                                        
+                                        default:
+                                            $namaInput = "";
+                                            // $isChecked = "";
+                                            break;
+                                    }
+                                @endphp
+                                <!-- begin:: Form Input Administrator -->
+                                <div class="form-check me-12">
+                                    <input class="form-check-input" type="checkbox"
+                                        value="{{ $aplikasi->nama_aplikasi }}"
+                                        name="aplikasi[]" id="aplikasi">
+                                    <label class="form-check-label"
+                                        for="{{ $namaInput }}">
+                                        {{ $aplikasi->nama_aplikasi }}
+                                    </label>
+                                </div>
+                                <!-- end:: Form Input Administrator -->                                                                        
+                            @endforeach
                         </div>
                         <br>
                         <br>

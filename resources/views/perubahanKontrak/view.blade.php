@@ -51,12 +51,16 @@
                                 <!--begin::Button-->
                                 @if (isset($perubahan_kontrak->periode))
                                     @if ($perubahan_kontrak->is_locked != true)
+                                        @can('access-menu-delete', 'CLMM')
                                         <button class="btn btn-sm btn-danger" onclick="deleteAction('claim-management/{{ $perubahan_kontrak->id_perubahan_kontrak }}/delete?periode={{ $filterBulan }}&tahun={{ $filterTahun }}')">Delete</button>
+                                        @endcan
                                         @if ($perubahan_kontrak->stage < 5)
                                             {{-- <a href="#" data-bs-toggle="modal" class="btn btn-sm btn-primary" id="editButton" data-bs-target="#kt_modal_edit_perubahan"
                                                 style="margin-left:10px;">
                                                 Edit</a>                                             --}}
-                                            <button type="submit" class="btn btn-sm btn-primary ms-2" form="edit-form">Save</button>
+                                            @can('access-menu-update', 'CLMM')
+                                                <button type="submit" class="btn btn-sm btn-primary ms-2" form="edit-form">Save</button>
+                                            @endcan
                                         @else
                                             {{-- <a href="#" data-bs-toggle="modal" class="btn btn-sm btn-primary" id="editButton" data-bs-target="#kt_modal_input_approve_claim"
                                                 style="margin-left:10px;">
@@ -65,18 +69,22 @@
                                         @endif
                                     @endif
                                 @else
-                                <button class="btn btn-sm btn-danger" onclick="deleteAction('claim-management/{{ $perubahan_kontrak->id_perubahan_kontrak }}/delete?periode={{ $filterBulan }}&tahun={{ $filterTahun }}')">Delete</button>
-                                @if ($perubahan_kontrak->stage < 5)
-                                            {{-- <a href="#" data-bs-toggle="modal" class="btn btn-sm btn-primary" id="editButton" data-bs-target="#kt_modal_edit_perubahan"
-                                                style="margin-left:10px;">
-                                                Edit</a>                                             --}}
-                                                <button type="submit" class="btn btn-sm btn-primary ms-2" form="edit-form">Save</button>
-                                        @else
-                                            {{-- <a href="#" data-bs-toggle="modal" class="btn btn-sm btn-primary" id="editButton" data-bs-target="#kt_modal_input_approve_claim"
-                                                style="margin-left:10px;">
-                                                Edit</a>                                             --}}
-                                            
-                                        @endif
+                                    @can('access-menu-delele', 'CLMM')
+                                    <button class="btn btn-sm btn-danger" onclick="deleteAction('claim-management/{{ $perubahan_kontrak->id_perubahan_kontrak }}/delete?periode={{ $filterBulan }}&tahun={{ $filterTahun }}')">Delete</button>
+                                    @endcan
+                                    @if ($perubahan_kontrak->stage < 5)
+                                        {{-- <a href="#" data-bs-toggle="modal" class="btn btn-sm btn-primary" id="editButton" data-bs-target="#kt_modal_edit_perubahan"
+                                            style="margin-left:10px;">
+                                            Edit</a>                                             --}}
+                                            @can('access-menu-update', 'CLMM')
+                                            <button type="submit" class="btn btn-sm btn-primary ms-2" form="edit-form">Save</button>
+                                            @endcan
+                                    @else
+                                        {{-- <a href="#" data-bs-toggle="modal" class="btn btn-sm btn-primary" id="editButton" data-bs-target="#kt_modal_input_approve_claim"
+                                            style="margin-left:10px;">
+                                            Edit</a>                                             --}}
+                                        
+                                    @endif
                                 @endif
                                 <a href="/claim-management/proyek/{{ $contract->profit_center }}" class="btn btn-sm btn-primary" id="cloedButton"
                                     style="background-color:#f3f6f9;margin-left:10px;color: black;">
@@ -123,7 +131,7 @@
                                                             <div class="d-flex align-items-center text-white">Diajukan</div>
                                                         </a>
                                                     @else
-                                                        <a href="#" role="link" class="stage-button clicked-stage color-is-default stage-is-not-active" style="outline: 0px; cursor: pointer;"
+                                                        <a href="#" role="link" class="stage-button clicked-stage color-is-default stage-is-not-active" style="outline: 0px; cursor: pointer; {{ auth()->user()->can('access-menu-update', 'CLMM') ? '' : 'pointer-events: none;' }}"
                                                             stage="2">
                                                             <div class="d-flex align-items-center text-white">Diajukan</div>
                                                         </a>
@@ -136,7 +144,7 @@
                                                         </a>
                                                     @else
                                                         @if ($perubahan_kontrak->stage == 2)
-                                                            <a href="#" role="link" class="stage-button clicked-stage color-is-default stage-is-not-active" style="outline: 0px; cursor: pointer;"
+                                                            <a href="#" role="link" class="stage-button clicked-stage color-is-default stage-is-not-active" style="outline: 0px; cursor: pointer; {{ auth()->user()->can('access-menu-update', 'CLMM') ? '' : 'pointer-events: none;' }}"
                                                                 stage="3">
                                                                 <div class="d-flex align-items-center text-white">Revisi</div>
                                                             </a>
@@ -155,7 +163,7 @@
                                                         </a>
                                                     @else
                                                         @if ($perubahan_kontrak->stage == 3)
-                                                            <a href="#" role="link" class="stage-button clicked-stage color-is-default stage-is-not-active" style="outline: 0px; cursor: pointer;"
+                                                            <a href="#" role="link" class="stage-button clicked-stage color-is-default stage-is-not-active" style="outline: 0px; cursor: pointer; {{ auth()->user()->can('access-menu-update', 'CLMM') ? '' : 'pointer-events: none;' }}"
                                                             stage="4">
                                                                 <div class="d-flex align-items-center text-white">Negoisasi</div>
                                                             </a>
@@ -185,13 +193,13 @@
                                                                         {{-- <i class="bi bi-caret-down-fill text-white"></i> --}}
                                                                     </div>
                                                                 </a>
-                                                                <a href="#" role="link" class="stage-button stage-dropdown color-is-danger stage-is-done" style="outline: 0px; cursor: pointer;">
+                                                                <a href="#" role="link" class="stage-button stage-dropdown color-is-danger stage-is-done" style="outline: 0px; cursor: pointer; {{ auth()->user()->can('access-menu-update', 'CLMM') ? '' : 'pointer-events: none;' }}">
                                                                     <div class="d-flex justify-content-between align-items-center">
                                                                         <span class="text-white me-3">Dispute</span>
                                                                     </div>
                                                                 </a>
                                                             @else
-                                                                <a href="#" role="link" class="stage-button stage-dropdown color-is-default stage-is-done" style="outline: 0px; cursor: pointer;"
+                                                                <a href="#" role="link" class="stage-button stage-dropdown color-is-default stage-is-done" style="outline: 0px; cursor: pointer; {{ auth()->user()->can('access-menu-update', 'CLMM') ? '' : 'pointer-events: none;' }}"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
                                                                     <div class="d-flex justify-content-between align-items-center">
                                                                         <span class="text-white me-3">Disetujui</span>
@@ -202,7 +210,7 @@
                                                         @endif
                                                     @else 
                                                         @if ($perubahan_kontrak->stage == 4)
-                                                            <a href="#" role="link" class="stage-button stage-dropdown color-is-default stage-is-not-active" style="cursor: pointer;"
+                                                            <a href="#" role="link" class="stage-button stage-dropdown color-is-default stage-is-not-active" style="cursor: pointer; {{ auth()->user()->can('access-menu-update', 'CLMM') ? '' : 'pointer-events: none;' }}"
                                                                 data-bs-toggle="dropdown" aria-expanded="false">
                                                                 <div class="d-flex justify-content-between align-items-center">
                                                                     <span class="text-white me-3">Disetujui</span>
@@ -250,7 +258,7 @@
                                                             </form>
                                                         @else
                                                             <li><a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                                data-bs-target="#kt_modal_input_approve_claim">Disetujui</a></li>
+                                                                data-bs-target="{{ auth()->user()->can('access-menu-update', 'CLMM') ? '#kt_modal_input_approve_claim' : '' }}">Disetujui</a></li>
                                                             <li><a href="#" class="dropdown-item clicked-stage" stage="6">Ditolak</a></li>
                                                         @endif
                                                     </ul>
@@ -660,7 +668,9 @@
                                     <!--Begin :: Dokumen Site Instruction-->
                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                         Dokumen Site Instruction
+                                        @can('access-menu-update', 'CLMM')
                                         <a href="#" Id="Plus" data-bs-toggle="modal" onclick="showModalUpload('site-instruction')">+</a>
+                                        @endcan
                                     </h3>
 
                                     <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
@@ -689,7 +699,9 @@
                                                     <td>
                                                         <div class="d-flex flex-row align-items-center justify-content-center gap-2">
                                                             <a href="/claim-management/dokumen-site-instruction/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
+                                                            @can('access-menu-delete', 'CLMM')
                                                             <button type="button" class="btn btn-sm btn-danger text-white" onclick="confirmDelete(this, 'site-instruction', '{{ $dokumen->id_document }}')">Delete</button>
+                                                            @endcan
                                                         </div>
                                                     </td>
                                                 </tr>                                            
@@ -708,7 +720,9 @@
                                     {{-- <!--Begin :: Dokumen Technical Form-->
                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                         Dokumen Technical Form
+                                        @can('access-menu-update', 'CLMM')
                                         <a href="#" Id="Plus" data-bs-toggle="modal" onclick="showModalUpload('technical-form')">+</a>
+                                        @endcan
                                     </h3>
 
                                     <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
@@ -737,7 +751,9 @@
                                                     <td>
                                                         <div class="d-flex flex-row align-items-center justify-content-center gap-2">
                                                             <a href="/claim-management/dokumen-technical-form/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
+                                                            @can('access-menu-delete', 'CLMM')
                                                             <button type="button" class="btn btn-sm btn-danger text-white" onclick="confirmDelete(this, 'technical-form', '{{ $dokumen->id_document }}')">Delete</button>
+                                                            @endcan
                                                         </div>
                                                     </td>
                                                 </tr>                                            
@@ -756,7 +772,9 @@
                                     {{-- <!--Begin :: Dokumen Technical Query-->
                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                         Dokumen Technical Query
+                                        @can('access-menu-update', 'CLMM')
                                         <a href="#" Id="Plus" data-bs-toggle="modal" onclick="showModalUpload('technical-query')">+</a>
+                                        @endcan
                                     </h3>
 
                                     <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
@@ -785,7 +803,9 @@
                                                     <td>
                                                         <div class="d-flex flex-row align-items-center justify-content-center gap-2">
                                                             <a href="/claim-management/dokumen-technical-query/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
+                                                            @can('access-menu-delete', 'CLMM')
                                                             <button type="button" class="btn btn-sm btn-danger text-white" onclick="confirmDelete(this, 'technical-query', '{{ $dokumen->id_document }}')">Delete</button>
+                                                            @endcan
                                                         </div>
                                                     </td>
                                                 </tr>                                            
@@ -804,7 +824,9 @@
                                     {{-- <!--Begin :: Dokumen Field Design Change-->
                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                         Dokumen Field Design Change
+                                        @can('access-menu-update', 'CLMM')
                                         <a href="#" Id="Plus" data-bs-toggle="modal" onclick="showModalUpload('field-design-change')">+</a>
+                                        @endcan
                                     </h3>
 
                                     <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
@@ -833,7 +855,9 @@
                                                     <td>
                                                         <div class="d-flex flex-row align-items-center justify-content-center gap-2">
                                                             <a href="/claim-management/dokumen-field-design-change/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
+                                                            @can('access-menu-delete', 'CLMM')
                                                             <button type="button" class="btn btn-sm btn-danger text-white" onclick="confirmDelete(this, 'field-design-, '{{ $dokumen->id_document }}'change')">Delete</button>
+                                                            @endcan
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -852,7 +876,9 @@
                                     <!--Begin :: Dokumen Contract Change Notice-->
                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                         Dokumen Notice dan Korespondensi
+                                        @can('access-menu-update', 'CLMM')
                                         <a href="#" Id="Plus" data-bs-toggle="modal" onclick="showModalUpload('change-notice')">+</a>
+                                        @endcan
                                     </h3>
 
                                     <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
@@ -881,7 +907,9 @@
                                                     <td>
                                                         <div class="d-flex flex-row align-items-center justify-content-center gap-2">
                                                             <a href="/claim-management/dokumen-change-notice/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
+                                                            @can('access-menu-delete', 'CLMM')
                                                             <button type="button" class="btn btn-sm btn-danger text-white" onclick="confirmDelete(this, 'change-notice', '{{ $dokumen->id_document }}')">Delete</button>
+                                                            @endcan
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -900,7 +928,9 @@
                                     <!--Begin :: Dokumen Contract Change Proposal-->
                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                         Dokumen Proposal
+                                        @can('access-menu-update', 'CLMM')
                                         <a href="#" Id="Plus" data-bs-toggle="modal" onclick="showModalUpload('change-proposal')">+</a>
+                                        @endcan
                                     </h3>
 
                                     <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
@@ -929,7 +959,9 @@
                                                     <td>
                                                         <div class="d-flex flex-row align-items-center justify-content-center gap-2">
                                                             <a href="/claim-management/dokumen-change-proposal/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
+                                                            @can('access-menu-delete', 'CLMM')
                                                             <button type="button" class="btn btn-sm btn-danger text-white" onclick="confirmDelete(this, 'change-proposal', '{{ $dokumen->id_document }}')">Delete</button>
+                                                            @endcan
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -948,7 +980,9 @@
                                     <!--Begin :: Dokumen Berita Acara Kelengkapan-->
                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                         Dokumen Berita Acara Kelengkapan
+                                        @can('access-menu-update', 'CLMM')
                                         <a href="#" Id="Plus" data-bs-toggle="modal" onclick="showModalUpload('berita-acara-kesepakatan')">+</a>
+                                        @endcan
                                     </h3>
 
                                     <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
@@ -977,7 +1011,9 @@
                                                     <td>
                                                         <div class="d-flex flex-row align-items-center justify-content-center gap-2">
                                                             <a href="/claim-management/dokumen-berita-acara-kesepakatan/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
+                                                            @can('access-menu-delete', 'CLMM')
                                                             <button type="button" class="btn btn-sm btn-danger text-white" onclick="confirmDelete(this, 'berita-acara-kesepakatan', '{{ $dokumen->id_document }}')">Delete</button>
+                                                            @endcan
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -996,7 +1032,9 @@
                                     {{-- <!--Begin :: Dokumen Contract Change Order-->
                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                         Dokumen Contract Change Order
+                                        @can('access-menu-update', 'CLMM')
                                         <a href="#" Id="Plus" data-bs-toggle="modal" onclick="showModalUpload('change-order')">+</a>
+                                        @endcan
                                     </h3>
 
                                     <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
@@ -1025,7 +1063,9 @@
                                                     <td>
                                                         <div class="d-flex flex-row align-items-center justify-content-center gap-2">
                                                             <a href="/claim-management/dokumen-change-order/{{ $dokumen->id_document }}/download" class="btn btn-primary btn-sm text-white">Download</a>
+                                                            @can('access-menu-delete', 'CLMM')
                                                             <button type="button" class="btn btn-sm btn-danger text-white" onclick="confirmDelete(this, 'change-order', '{{ $dokumen->id_document }}')">Delete</button>
+                                                            @endcan
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -1618,6 +1658,13 @@
 @endsection
 
 @section('js-script')
+<script>
+    $(document).on("keydown", ":input:not(textarea)", function(event) {
+        if (event.key == "Enter") {
+            event.preventDefault();
+        }
+    });
+</script>
 <script>
     const LOADING_BODY = new KTBlockUI(document.querySelector('#kt_body'), {
         message: '<div class="blockui-message"><span class="spinner-border text-primary"></span> Loading...</div>',

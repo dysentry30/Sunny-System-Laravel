@@ -44,10 +44,12 @@
                                         id="kt_toolbar_primary_button"
                                         style="background-color:#008CB4; padding: 6px">
                                         New</a> --}}
-                                        <button class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
-                                        data-bs-target="#kt_modal_create_pelanggan" id="kt_toolbar_primary_button"
-                                        id="kt_toolbar_primary_button" style="background-color:#008CB4; padding: 6px">
-                                        New</button>
+                                        @can('access-menu-create', 'CUST')
+                                            <button class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
+                                            data-bs-target="#kt_modal_create_pelanggan" id="kt_toolbar_primary_button"
+                                            id="kt_toolbar_primary_button" style="background-color:#008CB4; padding: 6px">
+                                            New</button>                                            
+                                        @endcan
 
                                         @if (auth()->user()->check_administrator)
 
@@ -189,9 +191,9 @@
                                         <th class="min-w-auto">Partner</th>
                                         <th class="min-w-auto">Competitor</th>
                                         <th class="min-w-auto">Kode Nasabah</th>
-                                        @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
+                                        {{-- @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)")) --}}
                                         <th class="min-w-auto text-center">Action</th>
-                                        @endif
+                                        {{-- @endif --}}
                                         {{-- <th class="max-w-120px"><center>Action</center></th> --}}
                                     </tr>
                                     <!--end::Table row-->
@@ -260,15 +262,17 @@
                                                 </td>
                                                 <!--end::Kode Nasabah-->
                                                 <!--begin::Action-->
-                                                @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
+                                                {{-- @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)")) --}}
+                                                @can('access-menu-delete', 'CUST')
                                                     <td class="text-center">
                                                         <button data-bs-toggle="modal"
                                                             data-bs-target="#kt_modal_delete{{ $customers->id_customer }}"
                                                             id="modal-delete"
                                                             class="btn btn-sm btn-light btn-active-danger">Delete
                                                         </button>
-                                                    </td>
-                                                @endif
+                                                    </td>                                                    
+                                                @endcan
+                                                {{-- @endif --}}
                                                 <!--end::Action-->
                                             </tr>
                                             @endforeach

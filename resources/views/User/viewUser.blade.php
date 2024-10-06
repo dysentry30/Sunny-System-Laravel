@@ -273,85 +273,55 @@
                                                             <div class="d-flex flex-row h-50px">
                                                                 <!-- begin:: Form Input Group -->
                                                                 @if (Auth::user()->can('super-admin'))
-                                                                    <!-- begin:: Form Input Administrator -->
-                                                                    <div class="form-check me-12">
-                                                                        <input class="form-check-input" type="checkbox"
-                                                                            value=""
-                                                                            {{ $user->check_administrator == 1 ? 'checked' : '' }}
-                                                                            name="administrator" id="administrator">
-                                                                        <label class="form-check-label"
-                                                                            for="administrator">
-                                                                            Super Admin
-                                                                        </label>
-                                                                    </div>
-                                                                    <!-- end:: Form Input Administrator -->
-
-                                                                    <!-- begin:: Form Input User Sales -->
-                                                                    <div class="form-check me-12">
-                                                                        <input class="form-check-input" type="checkbox"
-                                                                            value=""
-                                                                            {{ $user->check_user_sales == 1 ? 'checked' : '' }}
-                                                                            name="user-sales" id="user-sales">
-                                                                        <label class="form-check-label" for="user-sales">
-                                                                            CRM
-                                                                        </label>
-                                                                    </div>
-                                                                    <!-- end:: Form Input Admin Kontrak -->
-
-                                                                    <!-- begin:: Form Input Admin Kontrak -->
-                                                                    <div class="form-check me-12">
-                                                                        <input class="form-check-input" type="checkbox"
-                                                                            value=""
-                                                                            {{ $user->check_admin_kontrak == 1 ? 'checked' : '' }}
-                                                                            name="admin-kontrak" id="admin-kontrak">
-                                                                        <label class="form-check-label"
-                                                                            for="admin-kontrak">
-                                                                            CCM
-                                                                        </label>
-                                                                    </div>
-                                                                    <!-- end:: Form Input Admin Kontrak -->
-
-                                                                    <!-- begin:: Form Input Team Proyek -->
-                                                                    <div class="form-check me-12">
-                                                                        <input class="form-check-input" type="checkbox"
-                                                                            value=""
-                                                                            {{ $user->check_user_csi == 1 ? 'checked' : '' }}
-                                                                            name="user-csi" id="user-csi">
-                                                                        <label class="form-check-label" for="user-csi">
-                                                                            CSI
-                                                                        </label>
-                                                                    </div>
-                                                                    <!-- end:: Form Input Team Proyek -->
-
-                                                                    <!-- begin:: Form Input Team Proyek -->
-                                                                    <div class="form-check me-12">
-                                                                        <input class="form-check-input" type="checkbox"
-                                                                            value=""
-                                                                            {{ $user->check_user_mobile ? 'checked' : '' }}
-                                                                            name="mobile" id="mobile">
-                                                                        <label class="form-check-label" for="mobile">
-                                                                            Mobile
-                                                                        </label>
-                                                                    </div>
-                                                                    <!-- end:: Form Input Team Proyek -->
-                                                                    
-                                                                    <!-- begin:: Form Input Team Proyek -->
-                                                                    <div class="form-check me-12">
-                                                                        <input class="form-check-input" type="checkbox"
-                                                                            value=""
-                                                                            {{ $user->check_user_ska_skt ? 'checked' : '' }}
-                                                                            name="ska-skt" id="ska-skt">
-                                                                        <label class="form-check-label" for="ska-skt">
-                                                                            SKA SKT
-                                                                        </label>
-                                                                    </div>
-                                                                    <!-- end:: Form Input Team Proyek -->
+                                                                    @foreach ($collectAplikasi as $aplikasi)
+                                                                        @php
+                                                                            switch ($aplikasi->kode_aplikasi) {
+                                                                                case 'SUPER':
+                                                                                    $namaInput = "administrator";
+                                                                                    $isChecked = $user->check_administrator ? "checked" : "";
+                                                                                    break;
+                                                                                case 'CRM':
+                                                                                    $namaInput = "user-sales";
+                                                                                    $isChecked = $user->check_user_sales ? "checked" : "";
+                                                                                    break;
+                                                                                case 'CCM':
+                                                                                    $namaInput = "admin-kontrak";
+                                                                                    $isChecked = $user->check_admin_kontrak ? "checked" : "";
+                                                                                    break;
+                                                                                case 'CSI':
+                                                                                    $namaInput = "user-csi";
+                                                                                    $isChecked = $user->check_user_csi ? "checked" : "";
+                                                                                    break;
+                                                                                case 'MOB':
+                                                                                    $namaInput = "mobile";
+                                                                                    $isChecked = $user->check_user_mobile ? "checked" : "";
+                                                                                    break;
+                                                                                
+                                                                                default:
+                                                                                    $namaInput = "";
+                                                                                    $isChecked = "";
+                                                                                    break;
+                                                                            }
+                                                                        @endphp
+                                                                        <!-- begin:: Form Input Administrator -->
+                                                                        <div class="form-check me-12">
+                                                                            <input class="form-check-input" type="checkbox"
+                                                                                value="{{ $aplikasi->nama_aplikasi }}"
+                                                                                {{ $isChecked }}
+                                                                                name="aplikasi[]" id="aplikasi">
+                                                                            <label class="form-check-label"
+                                                                                for="{{ $namaInput }}">
+                                                                                {{ $aplikasi->nama_aplikasi }}
+                                                                            </label>
+                                                                        </div>
+                                                                        <!-- end:: Form Input Administrator -->                                                                        
+                                                                    @endforeach
                                                                 @endif
 
                                                                 <!-- end:: Form Input Group -->
                                                             </div>
                                                             <!--end::Row-->
-                                                            <hr>
+                                                            {{-- <hr>
                                                             <br>
                                                             <p><b>Role</b></p>
                                                             <div class="d-flex flex-row h-50px">
@@ -439,7 +409,7 @@
                                                                 @endif
 
                                                                 <!-- end:: Form Input Group -->
-                                                            </div>
+                                                            </div> --}}
                                                             <hr>
                                                             <br>
 
@@ -549,56 +519,100 @@
                                                         <!--end:::Tab pane Hak Akses-->
                                                     @endif
                                                     <!--end:: D-flex -->
-
-
-                                                    <!--Begin :: Reset Password -->
-                                                    {{-- @if (Auth::user()->can('super-admin') || !Auth::user()->can('admin-crm'))
-                                                            <div class="tab-pane fade show active" id="kt_user_view_overview_user_password" role="tabpanel">
-                                                            @else
-                                                                <div class="tab-pane fade" id="kt_user_view_overview_user_password" role="tabpanel">
-                                                        @endif
-
-                                                        <form action="/user/password/reset" autocomplete="off" method="post">
-                                                            @csrf
-                                                            <input type="hidden" value="{{ $user->id }}" name="id-user">
-                                                            <div class="input-group input-group-sm">
-                                                                <label class="input-group-text required" for="old-password">Old Password:</label>
-                                                                <input type="password" name="old-password" onchange="checkCurrentPassword(this)"
-                                                                    class="form-control" required>
-                                                                <button class="btn btn-sm btn-secondary input-group-text" type="button"
-                                                                    onclick="seePassword(this)"><i class="bi bi-eye-slash-fill fs-3"></i></button>
-                                                            </div>
-                                                            <div class="input-group input-group-sm my-3">
-                                                                <label class="input-group-text required" for="new-password">New Password:</label>
-                                                                <input type="password" name="new-password" class="form-control" required disabled>
-                                                                <button class="btn btn-sm btn-secondary input-group-text" type="button"
-                                                                    onclick="seePassword(this)"><i class="bi bi-eye-slash-fill fs-3"></i></button>
-                                                            </div>
-                                                            <div class="input-group input-group-sm mb-4">
-                                                                <label class="input-group-text required" for="confirm-password">Confirm Password:</label>
-                                                                <input type="password" name="confirm-password" onkeyup="confirmPassword(this)"
-                                                                    class="form-control" required disabled>
-                                                                <button class="btn btn-sm btn-secondary input-group-text" type="button"
-                                                                    onclick="seePassword(this)"><i class="bi bi-eye-slash-fill fs-3"></i></button>
-                                                            </div>
-                                                            <div class="" style="position: relative; width: max-content;" data-bs-toggle="tooltip"
-                                                                data-bs-title="Silahkan isi field di atas untuk bisa mengganti password">
-                                                                <input type="submit" name="password-reset" class="btn btn-sm btn-active-primary text-white"
-                                                                    style="background-color: #008CB4;" value="Reset Password" disabled />
-                                                            </div>
-                                                        </form> --}}
-                                                    {{-- @if ($user->check_administrator == false)
-                                                        @endif
-                                                        @if ($user->check_administrator == true)
-                                                        <form action="/user/password/reset" method="post">
-                                                            @csrf
-                                                            <input type="hidden" value="{{ $user->id }}" name="id-user">
-                                                            <input type="hidden" value="" id="socket-id" name="socket-id">
-                                                            <button type="submit" name="password-reset" class="btn btn-sm btn-active-primary text-white"
-                                                            style="background-color: #008CB4;">Reset Password By Request</button>
-                                                        </form>
-                                                        @endif --}}
-                                                    <!--End :: Reset Password -->
+                                                    <hr>
+                                                    <br>
+                                                    <br>
+                                                    <p><b>List Menu</b></p>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <!--begin::Table Proyek-->
+                                                            <table class="table table-striped table-hover align-middle table-row-dashed fs-6 gy-2" id="proyeks-ccm">
+                                                                <!--begin::Table head-->
+                                                                <thead>
+                                                                    <!--begin::Table row-->
+                                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase text-sm gs-0">
+                                                                    <th class="min-w-auto ps-3" rowspan="2">Nama Menu</th>
+                                                                    <th class="min-w-auto" rowspan="2">Kode Menu</th>
+                                                                    <th class="min-w-auto" rowspan="2">Selected</th>
+                                                                    <th class="min-w-auto" colspan="6">User Role</th>
+                                                                    </tr>
+                                                                    <!--end::Table row-->
+                                                                    <!--begin::Table row-->
+                                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase text-sm gs-0">
+                                                                    <th class="min-w-auto">Create</th>
+                                                                    <th class="min-w-auto">Read</th>
+                                                                    <th class="min-w-auto">Update</th>
+                                                                    <th class="min-w-auto">Delete</th>
+                                                                    <th class="min-w-auto">Lock</th>
+                                                                    <th class="min-w-auto">Approve</th>
+                                                                    </tr>
+                                                                    <!--end::Table row-->
+                                                                </thead>
+                                                                <!--end::Table head-->
+                                                                <!--begin::Table body-->
+                                                                <tbody class="fw-bold text-gray-800">
+                                                                    @foreach ($collectMenu as $index => $menu)
+                                                                    @if ($userManagementSelected->isNotEmpty())
+                                                                        <tr>
+                                                                            <td class="text-start">{{ $menu->nama_menu }}</td>
+                                                                            <td class="text-start"><a href="{{ $menu->kode_menu }}" class="text-hover-primary"></a>{{ $menu->kode_menu }}</td>
+                                                                            <td class="text-center">
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][kode_menu]" value="{{ $menu->kode_menu }}" class="form-check-input" id="checklist-menu-{{ $index }}" {{ $userManagementSelected->contains("menu", $menu->kode_menu) ? "checked" : "" }} onchange="toggleAccess(this, {{ $index }})">
+                                                                            </td>
+                                                                            <td class="text-center">
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][create]" class="form-check-input" value="1" id="create-{{ $index }}" {{ $userManagementSelected->where("menu", $menu->kode_menu)->first()?->create ? "checked" : "" }} {{ $userManagementSelected->contains("menu", $menu->kode_menu) ? "" : "disabled" }}>
+                                                                            </td>
+                                                                            <td class="text-center">
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][read]" class="form-check-input" value="1" id="read-{{ $index }}" {{ $userManagementSelected->where("menu", $menu->kode_menu)->first()?->read ? "checked" : "" }} {{ $userManagementSelected->contains("menu", $menu->kode_menu) ? "" : "disabled" }}>
+                                                                            </td>
+                                                                            <td class="text-center">
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][update]" class="form-check-input" value="1" id="update-{{ $index }}" {{ $userManagementSelected->where("menu", $menu->kode_menu)->first()?->update ? "checked" : "" }} {{ $userManagementSelected->contains("menu", $menu->kode_menu) ? "" : "disabled" }}>
+                                                                            </td>
+                                                                            <td class="text-center">
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][delete]" class="form-check-input" value="1" id="delete-{{ $index }}" {{ $userManagementSelected->where("menu", $menu->kode_menu)->first()?->delete ? "checked" : "" }} {{ $userManagementSelected->contains("menu", $menu->kode_menu) ? "" : "disabled" }}>
+                                                                            </td>
+                                                                            <td class="text-center">
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][lock]" class="form-check-input" value="1" id="lock-{{ $index }}" {{ $userManagementSelected->where("menu", $menu->kode_menu)->first()?->lock ? "checked" : "" }} {{ $userManagementSelected->contains("menu", $menu->kode_menu) ? "" : "disabled" }}>
+                                                                            </td>
+                                                                            <td class="text-center">
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][approve]" class="form-check-input" value="1" id="approve-{{ $index }}" {{ $userManagementSelected->where("menu", $menu->kode_menu)->first()?->approve ? "checked" : "" }} {{ $userManagementSelected->contains("menu", $menu->kode_menu) ? "" : "disabled" }}>
+                                                                            </td>
+                                                                        </tr>                                                                        
+                                                                    @else
+                                                                        <tr>
+                                                                            <td class="text-start">{{ $menu->nama_menu }}</td>
+                                                                            <td class="text-start"><a href="{{ $menu->kode_menu }}" class="text-hover-primary"></a>{{ $menu->kode_menu }}</td>
+                                                                            <td class="text-center">
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][kode_menu]" value="{{ $menu->kode_menu }}" class="form-check-input" id="checklist-menu-{{ $index }}" {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "checked" : "" }} onchange="toggleAccess(this, {{ $index }})">
+                                                                            </td>
+                                                                            <td class="text-center">
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][create]" class="form-check-input" value="1" id="create-{{ $index }}" {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "checked" : "" }} {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "" : "disabled" }}>
+                                                                            </td>
+                                                                            <td class="text-center">
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][read]" class="form-check-input" value="1" id="read-{{ $index }}" {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "checked" : "" }} {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "" : "disabled" }}>
+                                                                            </td>
+                                                                            <td class="text-center">
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][update]" class="form-check-input" value="1" id="update-{{ $index }}" {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "checked" : "" }} {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "" : "disabled" }}>
+                                                                            </td>
+                                                                            <td class="text-center">
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][delete]" class="form-check-input" value="1" id="delete-{{ $index }}" {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "" : "disabled" }}>
+                                                                            </td>
+                                                                            <td class="text-center">
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][lock]" class="form-check-input" value="1" id="lock-{{ $index }}" {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "checked" : "" }} {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "" : "disabled" }}>
+                                                                            </td>
+                                                                            <td class="text-center">
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][approve]" class="form-check-input" value="1" id="approve-{{ $index }}" {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "checked" : "" }} {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "" : "disabled" }}>
+                                                                            </td>
+                                                                        </tr>                                                                      
+                                                                    @endif
+                                                                    @endforeach
+                                                                </tbody>
+                                                                <!--end::Table body-->
+                                                            </table>
+                                                            <!--end::Table Proyek-->
+                                                        </div>
+                                                    </div>
+                                                    
 
                                                     <!--Begin::Table List Proyek-->
                                                     <div class="overflow-auto table-list-proyek {{ $user->check_admin_kontrak && $user->role_user ? "" : "d-none" }}" id="table-list-proyek">
@@ -679,7 +693,7 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             if (user.check_admin_kontrak && user.role_user) {
-                console.log(configDataTable);
+                // console.log(configDataTable);
                 configDataTable.ajax = {
                     dataType: "JSON",
                     cache: false,
@@ -916,6 +930,40 @@
             }else{
                 const divTableHide = document.querySelector('#table-list-proyek');
                 divTableHide.classList.add('d-none');
+            }
+        }
+
+        function toggleAccess(selectCheckbox, index) {
+            // Dapatkan checkbox create, read, update, delete berdasarkan index
+            const createCheckbox = document.getElementById('create-' + index);
+            const readCheckbox = document.getElementById('read-' + index);
+            const updateCheckbox = document.getElementById('update-' + index);
+            const deleteCheckbox = document.getElementById('delete-' + index);
+            const lockCheckbox = document.getElementById('lock-' + index);
+            const approveCheckbox = document.getElementById('approve-' + index);
+
+            // Jika 'Select' checkbox di-uncheck, uncheck semua checkbox yang terkait
+            if (!selectCheckbox.checked) {
+                createCheckbox.checked = false;
+                readCheckbox.checked = false;
+                updateCheckbox.checked = false;
+                deleteCheckbox.checked = false;
+                lockCheckbox.checked = false;
+                approveCheckbox.checked = false;
+
+                createCheckbox.disabled = true;
+                readCheckbox.disabled = true;
+                updateCheckbox.disabled = true;
+                deleteCheckbox.disabled = true;
+                lockCheckbox.disabled = true;
+                approveCheckbox.disabled = true;
+            }else{
+                createCheckbox.disabled = false;
+                readCheckbox.disabled = false;
+                updateCheckbox.disabled = false;
+                deleteCheckbox.disabled = false;
+                lockCheckbox.disabled = false;
+                approveCheckbox.disabled = false;
             }
         }
     </script>

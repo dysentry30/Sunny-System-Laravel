@@ -204,14 +204,18 @@
                                                             @endif
                                                         @else
                                                             @if ($progress >= 0.2 && $progress <= 0.4)
+                                                                @can('access-menu-create', 'CSI')
                                                                 <button type="button" class="btn btn-sm btn-light btn-active-primary" onclick="showModalCategory('{{ $proyek->unsetRelation('Csi') }}', 'A', '{{ round($progress, 2) * 100 }}')">Send</button>
+                                                                @endcan
                                                             @else
                                                                 <span>-</span>
                                                             @endif
                                                         @endif
                                                     @else
                                                         @if ($progress >= 0.2)
+                                                            @can('access-menu-create', 'CSI')
                                                             <button type="button" class="btn btn-sm btn-light btn-active-primary" onclick="showModalCategory('{{ $proyek->unsetRelation('Csi') }}', 'A', '{{ round($progress, 2) * 100 }}')">Send</button>
+                                                            @endcan
                                                         @else
                                                             <span>-</span>
                                                         @endif
@@ -257,7 +261,9 @@
                                                         @else
                                                             @if ($proyek->Csi->where('kategori', 'A')->isNotEmpty() && $proyek->Csi->where('kategori', 'A')->first()->status == "Done")
                                                                 @if ($progress >= 0.95)
+                                                                    @can('access-menu-create', 'CSI')
                                                                     <button type="button" class="btn btn-sm btn-light btn-active-primary" onclick="showModalCategory('{{ $proyek->unsetRelation('Csi') }}', 'B', '{{ round($progress, 2) * 100 }}')">Send</button>
+                                                                    @endcan
                                                                 @else
                                                                     <span>-</span>
                                                                 @endif
@@ -268,7 +274,9 @@
                                                     @else
                                                         @if ($proyek->Csi->where('kategori', 'A')->isNotEmpty() && $proyek->Csi->where('kategori', 'A')->first()->status == "Done")
                                                             @if ($progress >= 0.95)
+                                                                @can('access-menu-create', 'CSI')
                                                                 <button type="button" class="btn btn-sm btn-light btn-active-primary" onclick="showModalCategory('{{ $proyek->unsetRelation('Csi') }}', 'B', '{{ round($progress, 2) * 100 }}')">Send</button>
+                                                                @endcan
                                                             @else
                                                                 <span>-</span>
                                                             @endif

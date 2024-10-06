@@ -456,7 +456,8 @@
                                                         </div>
                                                     </td>
                                                     <td class="text-center">
-                                                        @canany(['admin-crm','approver-crm', 'risk-crm'])
+                                                        {{-- @canany(['admin-crm','approver-crm', 'risk-crm']) --}}
+                                                        @canany(['access-menu-read', 'access-menu-update', 'access-menu-lock', 'access-menu-approve'], 'PRTS')
                                                             @if (!empty($matriks_user))
                                                                 @if($assessment->is_rekomendasi_approved)
                                                                     <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#generate_final_{{ $assessment->id }}">Lihat</button>

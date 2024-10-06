@@ -458,7 +458,8 @@
                                                         @endif
                                                     </td>
                                                     <td class="text-center">
-                                                        @canany(['super-admin', 'approver-crm', 'risk-crm', 'admin-crm'])
+                                                        {{-- @canany(['super-admin', 'approver-crm', 'risk-crm', 'admin-crm']) --}}
+                                                        @canany(['access-menu-lock', 'access-menu-approve'], 'VPGN')
                                                             @if ($item->is_persetujuan_approved)
                                                                 <button class="btn btn-sm btn-primary" onclick="showModalAction('kt_modal_final', '{{ $item->kode_proyek }}')">Lihat</button>
                                                             @elseif (!empty($matriks_user) && $matriks_user->where('divisi_id', $item->divisi_id)->where('departemen_code', $item->departemen_id)->where('kategori', 'Persetujuan')->first() && $item->is_rekomendasi_approved)
@@ -563,7 +564,8 @@
                                                         @endif
                                                     </td>
                                                     <td class="text-center">
-                                                        @canany(['super-admin', 'approver-crm', 'risk-crm', 'admin-crm'])
+                                                        {{-- @canany(['super-admin', 'approver-crm', 'risk-crm', 'admin-crm']) --}}
+                                                        @canany(['access-menu-read', 'access-menu-lock', 'access-menu-approve'], 'VPGN')
                                                             @if (!is_null($item->is_persetujuan_approved) && $item->is_persetujuan_approved)
                                                             <a href="{{ asset('file-nota-rekomendasi-2\\file-verifikasi-proyek-nota-2\\') . $item->nama_dokumen }}" class="btn btn-sm btn-primary text-white" target="_blank">Download</a>
                                                             @endif

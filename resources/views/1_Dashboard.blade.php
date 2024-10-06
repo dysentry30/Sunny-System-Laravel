@@ -130,21 +130,21 @@
                                             <!--end:::Tab item Forecast Internal-->
 
                                             <!--begin:::Tab item Forecast Internal-->
-                                            @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                                            {{-- @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                                                 <li class="nav-item">
                                                     <a onclick="showCCM()" class="nav-link text-active-primary pb-4"  href="/dashboard-ccm/perolehan-kontrak"
                                                         style="font-size:14px;">Dashboard CCM</a>
                                                 </li>
-                                            @endif
+                                            @endif --}}
                                             <!--end:::Tab item Forecast Internal-->
 
                                             <!--begin:::Tab item Forecast Internal-->
-                                            @canany(['super-admin', 'risk-crm'])
+                                            {{-- @canany(['super-admin', 'risk-crm'])
                                                 <li class="nav-item">
                                                     <a class="nav-link text-active-primary pb-4"  href="/dashboard-four-eyes"
                                                         style="font-size:14px;">Dashboard Four Eyes Principle</a>
                                                 </li>
-                                            @endcanany
+                                            @endcanany --}}
                                             <!--end:::Tab item Forecast Internal-->
 
                                         </ul>

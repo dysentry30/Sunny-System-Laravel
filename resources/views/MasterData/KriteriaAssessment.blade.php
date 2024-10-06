@@ -47,18 +47,20 @@
                             </div>
                             <!--end::Page title-->
 
-                            @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
-                                <!--begin::Actions-->
-                                <div class="d-flex align-items-center py-1">
+                            {{-- @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)")) --}}
+                            @can('access-menu-create', 'KA')
+                            <!--begin::Actions-->
+                            <div class="d-flex align-items-center py-1">
 
-                                    <!--begin::Button-->
-                                    <a href="#kt_modal_input_kriteria_green_line" data-bs-toggle="modal" class="btn btn-sm btn-primary py-3"
-                                        style="background-color:#008CB4; padding: 6px">
-                                        Tambah Kriteria Assessment</a>
+                                <!--begin::Button-->
+                                <a href="#kt_modal_input_kriteria_green_line" data-bs-toggle="modal" class="btn btn-sm btn-primary py-3"
+                                    style="background-color:#008CB4; padding: 6px">
+                                    Tambah Kriteria Assessment</a>
 
-                                </div>
-                                <!--end::Actions-->
-                            @endif
+                            </div>
+                            <!--end::Actions-->                                
+                            @endcan
+                            {{-- @endif --}}
                         </div>
                         <!--end::Container-->
                     </div>
