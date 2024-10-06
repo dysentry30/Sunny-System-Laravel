@@ -10,7 +10,7 @@ class UserMenuManagement extends Model
 {
     use HasUuids;
 
-    protected $fillable = ["nip", "aplikasi", "menu", "create", "read", "update", "delete"];
+    protected $fillable = ["nip", "aplikasi", "menu", "create", "read", "update", "delete", "lock", "approve"];
 
     public function MasterMenu()
     {

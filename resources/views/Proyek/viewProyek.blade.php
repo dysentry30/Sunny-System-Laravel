@@ -1477,7 +1477,7 @@
                                                      <!--begin::Col-->
                                                      @if (!empty($proyekberjalans))
                                                      {{-- @canany(['super-admin', 'admin-crm', 'user-crm', 'risk-crm']) --}}
-                                                     @can('access-menu-read', $post)
+                                                     @can('access-menu-read', 'CUST')
                                                         <div class="col-2">
                                                             <!--begin::Input group Website-->
                                                             <div class="fv-row mb-7">
@@ -3815,13 +3815,15 @@
                                                                                                 </small>
                                                                                                 @endif
                                                                                                 @if (!$porsi->is_greenlane)
+                                                                                                @can('access-menu-update', 'PRYK')
                                                                                                 <small>
                                                                                                     <p data-bs-toggle="modal"
                                                                                                         data-bs-target="#kt_porsi_upload_dokumen_{{ $porsi->id }}"
                                                                                                         class="btn btn-sm btn-light btn-primary m-0">
                                                                                                         {{ $porsi->DokumenKelengkapanPartnerKSO->count() == 4 ? "Lihat" : "Upload" }}
                                                                                                     </p>
-                                                                                                </small>                                                                                                    
+                                                                                                </small>
+                                                                                                @endcan
                                                                                                 @endif
                                                                                                 {{-- @if ($proyek->AssessmentPartnerSelection?->isEmpty() || $proyek->AssessmentPartnerSelection?->where('partner_id', $porsi->id)?->where('is_revisi', true)?->isNotEmpty()) --}}
                                                                                                 @if ($proyek->AssessmentPartnerSelection?->isEmpty() || empty($porsi->AssessmentPartnerJO) || (!empty($porsi->AssessmentPartnerJO) && !is_null($porsi->AssessmentPartnerJO->is_rekomendasi_approved) && $porsi->AssessmentPartnerJO->is_rekomendasi_approved == false))

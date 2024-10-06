@@ -598,10 +598,10 @@
                                                                                 <input type="checkbox" name="menus[{{ $menu->kode_menu }}][delete]" class="form-check-input" value="1" id="delete-{{ $index }}" {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "" : "disabled" }}>
                                                                             </td>
                                                                             <td class="text-center">
-                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][lock]" class="form-check-input" value="1" id="lock-{{ $index }}" {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "" : "disabled" }}>
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][lock]" class="form-check-input" value="1" id="lock-{{ $index }}" {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "checked" : "" }} {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "" : "disabled" }}>
                                                                             </td>
                                                                             <td class="text-center">
-                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][approve]" class="form-check-input" value="1" id="approve-{{ $index }}" {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "" : "disabled" }}>
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][approve]" class="form-check-input" value="1" id="approve-{{ $index }}" {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "checked" : "" }} {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "" : "disabled" }}>
                                                                             </td>
                                                                         </tr>                                                                      
                                                                     @endif
@@ -939,6 +939,8 @@
             const readCheckbox = document.getElementById('read-' + index);
             const updateCheckbox = document.getElementById('update-' + index);
             const deleteCheckbox = document.getElementById('delete-' + index);
+            const lockCheckbox = document.getElementById('lock-' + index);
+            const approveCheckbox = document.getElementById('approve-' + index);
 
             // Jika 'Select' checkbox di-uncheck, uncheck semua checkbox yang terkait
             if (!selectCheckbox.checked) {
@@ -946,16 +948,22 @@
                 readCheckbox.checked = false;
                 updateCheckbox.checked = false;
                 deleteCheckbox.checked = false;
+                lockCheckbox.checked = false;
+                approveCheckbox.checked = false;
 
                 createCheckbox.disabled = true;
                 readCheckbox.disabled = true;
                 updateCheckbox.disabled = true;
                 deleteCheckbox.disabled = true;
+                lockCheckbox.disabled = true;
+                approveCheckbox.disabled = true;
             }else{
                 createCheckbox.disabled = false;
                 readCheckbox.disabled = false;
                 updateCheckbox.disabled = false;
                 deleteCheckbox.disabled = false;
+                lockCheckbox.disabled = false;
+                approveCheckbox.disabled = false;
             }
         }
     </script>

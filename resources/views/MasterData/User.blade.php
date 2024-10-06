@@ -166,6 +166,7 @@ a{{-- Begin::Extend Header --}}
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                                 <th class="min-w-auto px-4">No.</th>
                                                 {{-- <th class="min-w-auto">Nip</th> --}}
+                                                <th class="min-w-auto">NIP</th>
                                                 <th class="min-w-auto">Name</th>
                                                 <th class="min-w-auto">Username</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
@@ -191,11 +192,16 @@ a{{-- Begin::Extend Header --}}
                                             @if (!Auth::user()->can('csi'))
                                                 <tr>
 
+                                                    
                                                     <!--begin::No-->
                                                     <td class="px-4">
                                                         {{ $no++ }}
                                                     </td>
                                                     <!--end::No-->
+                                                    
+                                                    <td class="text-center">
+                                                        {{ $user->nip }}
+                                                    </td>
 
                                                     <!--begin::NIP-->
                                                     {{-- <td>

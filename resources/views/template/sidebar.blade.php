@@ -74,11 +74,11 @@
                     @endphp
                     <!--begin::Menu-->
                     <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;">
-
+                        
                         @foreach ($menusGroup as $key => $menus)
                             @if (empty($key))
                                 @foreach ($menus->unique()?->sortBy("urutan")?->values() as $menu)
-                                    @can('access-menu-read', $menu->kode_menu)
+                                    {{-- @can('access-menu-read', $menu->kode_menu) --}}
                                         @if (!empty($menu->path))
                                             <div class="menu-item">
                                                 <a class="menu-link " href="{{ $menu->path }}"
@@ -94,7 +94,7 @@
                                                 </a>
                                             </div>
                                         @endif                                        
-                                    @endcan
+                                    {{-- @endcan --}}
                                 @endforeach
                             @else
                                 @php
@@ -102,8 +102,8 @@
                                 @endphp
                                 <div class="menu-item" style="{{ $menus->contains(Request::Segment(1)) ? 'background-color:#008CB4' : '' }}">
                                     <a class="menu-link" id="collapse-button" style="color:white; padding-left:20px;"
-                                        data-bs-toggle="collapse" href="#collapseExample" role="button"
-                                        aria-expanded="false" aria-controls="collapseExample">
+                                        data-bs-toggle="collapse" href="#collapseExample{{ $parentMenu->kode_menu }}" role="button"
+                                        aria-expanded="false" aria-controls="collapseExample{{ $parentMenu->kode_menu }}">
                                         <span class="menu-icon">
                                             <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                             <span class="svg-icon svg-icon-2">
@@ -114,9 +114,9 @@
                                         <span class="menu-title" style="font-size: 16px; padding-left: 10px"> {{ $parentMenu->nama_menu }} <i class="bi bi-caret-down-fill text-white"></i></span>
                                     </a>
 
-                                    <div class="collapse" id="collapseExample">
+                                    <div class="collapse" id="collapseExample{{ $parentMenu->kode_menu }}">
                                         @foreach ($menus->unique()?->sortBy("urutan")?->values() as $menuChild)
-                                            @can('access-menu-read', $menuChild->kode_menu)
+                                            {{-- @can('access-menu-read', $menuChild->kode_menu) --}}
                                                 <!--begin::Menu Colapse-->
                                                 <div id="#kt_aside_menu" data-kt-menu="true"
                                                     style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ str_contains($menuChild, Request::Path()) ? 'background-color:#008CB4' : '' }}">
@@ -130,7 +130,7 @@
                                                     </a>
                                                 </div>
                                                 <!--end::Menu Colapse-->                                                                                            
-                                            @endcan
+                                            {{-- @endcan --}}
                                         @endforeach
                                     </div>
                                 </div>

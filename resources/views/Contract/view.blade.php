@@ -422,15 +422,17 @@
                             })
                         }
                     </script> --}}
-                    @endif
+@endif
 
                     <!--begin::Button-->
                     {{-- @if ($contract->where("id_contract", "=", $contract->id_contract)->where("stages", "!=", 1)->get()->isNotEmpty()) --}}
+                    @can('access-menu-update', 'CTRM')
                     @if ($contract->where("profit_center", "=", $contract->profit_center)->where("stages", "!=", 1)->get()->isNotEmpty())
                     <button type="submit" form="form-1" class="btn btn-sm btn-primary {{ empty($is_approved) || $is_approved->isEmpty() ? "" : "disabled" }}" id="kt_toolbar_primary_button"
                         style="background-color:#008CB4;margin-left:10px;">
                         Save</button>
                     @endif
+                    @endcan
                     <!--end::Button-->
 
                     <!--begin::Button-->
@@ -439,8 +441,8 @@
                     {{-- <a href="/get-progress/{{ $contract->id_contract }}" class="btn btn-sm btn-primary" id="get_progress"  
                     style="background-color:#f3f6f9;margin-left:10px;color: black;">
                     Get Progress</a> --}}
-                    <button class="btn btn-sm btn-primary" style="background-color: #008CB4;margin-left:10px;" onclick="getProgress()">
-                    Get Progress</button>
+                    {{-- <button class="btn btn-sm btn-primary" style="background-color: #008CB4;margin-left:10px;" onclick="getProgress()">
+                    Get Progress</button> --}}
                     <!--end::Button-->
 
                     {{-- <script>
@@ -516,7 +518,7 @@
                                         </a> --}}
                                         @if (empty($is_approved) || $is_approved->isEmpty())
                                         <a href="#" role="link" class="stage-button color-is-default"
-                                            style="outline: 0px;">
+                                            style="outline: 0px; {{ auth()->user()->can('access-menu-update', 'CTRM') ? '' : 'cursor: not-allowed;' }}">
                                             Pemeliharaan
                                         </a>
                                         @else
@@ -534,7 +536,7 @@
                         </div>
                     </div>
                     {{-- begin:: Stages script --}}
-                    @can('access-menu-update', 'CTRM')
+                    {{-- @can('access-menu-update', 'CTRM') --}}
                     <script>
                         const stages = document.querySelectorAll(".stage-button");
                         stages.forEach((stage, i) => {
@@ -587,7 +589,7 @@
                             }
                         });
                     </script>                        
-                    @endcan
+                    {{-- @endcan --}}
                     {{-- end:: Stages script --}}
                     <!--end::Header Contract-->
                     <!--begin::Header Contract-->
@@ -967,7 +969,7 @@
                                 {{-- @can('access-menu-update', 'CTRM')
                                     <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_risk_proyek">+</a> --}}
-                                @endcan
+                                {{-- @endcan --}}
                             </h3>
 
                             <!--begin:Table: Review-->
@@ -1034,7 +1036,7 @@
                                 {{-- @can('access-menu-update', 'CTRM')
                                     <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_risk_proyek">+</a> --}}
-                                @endcan
+                                {{-- @endcan --}}
                             </h3>
 
                             <!--begin:Table: Review-->
@@ -1741,8 +1743,8 @@
                                 data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
                                 data-bs-html="true"></i> --}}
                                 {{-- @if (!empty($contract->project?->DokumenNda->toArray())) --}}
-                                    <a href="#" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_upload_nda" id="Plus" class="">+</a>
+                                    {{-- <a href="#" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_upload_nda" id="Plus" class="">+</a> --}}
                                 {{-- @endif   --}}
                                 {{-- 
                                     <a href="#" Id="Plus" data-bs-toggle="modal"
@@ -1828,8 +1830,8 @@
                                 data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
                                 data-bs-html="true"></i> --}}
                                 {{-- @if (!empty($contract->project?->DokumenMou->toArray())) --}}
-                                    <a href="#" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_upload_mou" id="Plus">+</a>
+                                    {{-- <a href="#" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_upload_mou" id="Plus">+</a> --}}
                                 {{-- @endif --}}
                                 {{-- 
                                     <a href="#" Id="Plus" data-bs-toggle="modal"
@@ -1914,8 +1916,8 @@
                                 data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
                                 data-bs-html="true"></i> --}}
                                 {{-- @if (!empty($contract->project?->DokumenEca->toArray())) --}}
-                                    <a href="#" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_upload_eca" id="Plus">+</a>
+                                    {{-- <a href="#" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_upload_eca" id="Plus">+</a> --}}
                                 {{-- @endif --}}
                                 {{-- 
                                     <a href="#" Id="Plus" data-bs-toggle="modal"
@@ -2001,8 +2003,8 @@
                                 data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
                                 data-bs-html="true"></i> --}}
                                 {{-- @if (!empty($contract->project?->DokumenIca->toArray())) --}}
-                                    <a href="#" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_upload_ica" id="Plus">+</a>
+                                    {{-- <a href="#" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_upload_ica" id="Plus">+</a> --}}
                                 {{-- @endif --}}
                                 {{-- 
                                     <a href="#" Id="Plus" data-bs-toggle="modal"
@@ -2087,8 +2089,8 @@
                                 data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
                                 data-bs-html="true"></i> --}}
                                 {{-- @if (!empty($contract->project?->DokumenDraft->toArray())) --}}
-                                    <a href="#" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_upload_draft" id="Plus">+</a>
+                                    {{-- <a href="#" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_upload_draft" id="Plus">+</a> --}}
                                 {{-- @endif --}}
                                 {{-- 
                                     <a href="#" Id="Plus" data-bs-toggle="modal"
@@ -2173,8 +2175,8 @@
                                 data-bs-title="Upload dokumen ini ada di <b>CRM Detail Proyek</b>"
                                 data-bs-html="true"></i> --}}
                                 {{-- @if (!empty($contract->project?->AttachmentMenang->toArray())) --}}
-                                    <a href="#" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_upload_loi" id="Plus">+</a>
+                                    {{-- <a href="#" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_upload_loi" id="Plus">+</a> --}}
                                 {{-- @endif --}}
                                 {{-- 
                                     <a href="#" Id="Plus" data-bs-toggle="modal"
@@ -3658,7 +3660,7 @@
                                 @can('access-menu-update', 'CTRM')
                                     <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_input_perubahan_kontrak">+</a> --}}
-                                @endcan
+                                {{-- @endcan --}}
                                 {{-- @if (!empty($contract->PerubahanKontrak->toArray()))
                                     <a href="#" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_upload_perubahan" class="btn btn-primary btn-sm p-2 mx-3 text-end">Upload</a>
