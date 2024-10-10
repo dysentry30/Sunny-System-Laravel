@@ -275,47 +275,33 @@
                                                                 @if (Auth::user()->can('super-admin'))
                                                                     @foreach ($collectAplikasi as $aplikasi)
                                                                         @php
-                                                                            switch ($aplikasi->kode_aplikasi) {
-                                                                                case 'SUPER':
-                                                                                    $namaInput = "administrator";
-                                                                                    $isChecked = $user->check_administrator ? "checked" : "";
-                                                                                    break;
-                                                                                case 'CRM':
-                                                                                    $namaInput = "user-sales";
-                                                                                    $isChecked = $user->check_user_sales ? "checked" : "";
-                                                                                    break;
-                                                                                case 'CCM':
-                                                                                    $namaInput = "admin-kontrak";
-                                                                                    $isChecked = $user->check_admin_kontrak ? "checked" : "";
-                                                                                    break;
-                                                                                case 'CSI':
-                                                                                    $namaInput = "user-csi";
-                                                                                    $isChecked = $user->check_user_csi ? "checked" : "";
-                                                                                    break;
-                                                                                case 'MOB':
-                                                                                    $namaInput = "mobile";
-                                                                                    $isChecked = $user->check_user_mobile ? "checked" : "";
-                                                                                    break;
-                                                                                
-                                                                                default:
-                                                                                    $namaInput = "";
-                                                                                    $isChecked = "";
-                                                                                    break;
-                                                                            }
+                                                                            // Relasi antara kode_aplikasi dengan nama input dan kondisi checked
+                                                                            $appMapping = [
+                                                                                'SUPER' => ['name' => 'administrator', 'checked' => $user->check_administrator],
+                                                                                'CRM' => ['name' => 'user-sales', 'checked' => $user->check_user_sales],
+                                                                                'CCM' => ['name' => 'admin-kontrak', 'checked' => $user->check_admin_kontrak],
+                                                                                'CSI' => ['name' => 'user-csi', 'checked' => $user->check_user_csi],
+                                                                                'MOB' => ['name' => 'mobile', 'checked' => $user->check_user_mobile],
+                                                                                'NR' => ['name' => 'nr', 'checked' => $user->is_user_4eyes],
+                                                                            ];
+                                                                    
+                                                                            // Set default jika kode_aplikasi tidak ditemukan
+                                                                            $namaInput = $appMapping[$aplikasi->kode_aplikasi]['name'] ?? '';
+                                                                            $isChecked = $appMapping[$aplikasi->kode_aplikasi]['checked'] ?? false;
                                                                         @endphp
-                                                                        <!-- begin:: Form Input Administrator -->
+                                                                    
+                                                                        <!-- begin:: Form Input -->
                                                                         <div class="form-check me-12">
                                                                             <input class="form-check-input" type="checkbox"
-                                                                                value="{{ $aplikasi->nama_aplikasi }}"
-                                                                                {{ $isChecked }}
-                                                                                name="aplikasi[]" id="aplikasi">
-                                                                            <label class="form-check-label"
-                                                                                for="{{ $namaInput }}">
+                                                                                value="{{ $aplikasi->kode_aplikasi }}"
+                                                                                {{ $isChecked ? 'checked' : '' }}
+                                                                                name="aplikasi[]" id="aplikasi-{{ $loop->index }}">
+                                                                            <label class="form-check-label" for="aplikasi-{{ $loop->index }}">
                                                                                 {{ $aplikasi->nama_aplikasi }}
                                                                             </label>
                                                                         </div>
-                                                                        <!-- end:: Form Input Administrator -->                                                                        
-                                                                    @endforeach
+                                                                        <!-- end:: Form Input -->
+                                                                    @endforeach                                                            
                                                                 @endif
 
                                                                 <!-- end:: Form Input Group -->
@@ -552,60 +538,44 @@
                                                                 <!--begin::Table body-->
                                                                 <tbody class="fw-bold text-gray-800">
                                                                     @foreach ($collectMenu as $index => $menu)
-                                                                    @if ($userManagementSelected->isNotEmpty())
                                                                         <tr>
                                                                             <td class="text-start">{{ $menu->nama_menu }}</td>
                                                                             <td class="text-start"><a href="{{ $menu->kode_menu }}" class="text-hover-primary"></a>{{ $menu->kode_menu }}</td>
+                                                                            @php
+                                                                                // Menentukan apakah menu tersebut dipilih di userManagementSelected atau menuSelected
+                                                                                $isSelected = $userManagementSelected->isNotEmpty() 
+                                                                                                ? $userManagementSelected->contains('menu', $menu->kode_menu)
+                                                                                                : $menuSelected->contains('kode_menu', $menu->kode_menu);
+
+                                                                                // Data hak akses dari userManagementSelected atau menuSelected
+                                                                                $accessData = $userManagementSelected->isNotEmpty() 
+                                                                                                ? $userManagementSelected->where('menu', $menu->kode_menu)->first()
+                                                                                                : null;
+                                                                            @endphp
                                                                             <td class="text-center">
-                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][kode_menu]" value="{{ $menu->kode_menu }}" class="form-check-input" id="checklist-menu-{{ $index }}" {{ $userManagementSelected->contains("menu", $menu->kode_menu) ? "checked" : "" }} onchange="toggleAccess(this, {{ $index }})">
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][kode_menu]" value="{{ $menu->kode_menu }}" class="form-check-input" data-aplikasi="{{ $menu->kode_aplikasi }}" id="checklist-menu-{{ $index }}" {{ $isSelected ? 'checked' : '' }} onchange="toggleAccess(this, {{ $index }})">
                                                                             </td>
                                                                             <td class="text-center">
-                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][create]" class="form-check-input" value="1" id="create-{{ $index }}" {{ $userManagementSelected->where("menu", $menu->kode_menu)->first()?->create ? "checked" : "" }} {{ $userManagementSelected->contains("menu", $menu->kode_menu) ? "" : "disabled" }}>
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][create]" class="form-check-input" data-aplikasi="{{ $menu->kode_aplikasi }}" value="1" id="create-{{ $index }}" {{ $accessData?->create ? 'checked' : '' }} {{ $isSelected ? '' : 'disabled' }}>
                                                                             </td>
                                                                             <td class="text-center">
-                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][read]" class="form-check-input" value="1" id="read-{{ $index }}" {{ $userManagementSelected->where("menu", $menu->kode_menu)->first()?->read ? "checked" : "" }} {{ $userManagementSelected->contains("menu", $menu->kode_menu) ? "" : "disabled" }}>
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][read]" class="form-check-input" data-aplikasi="{{ $menu->kode_aplikasi }}" value="1" id="read-{{ $index }}" {{ $accessData?->read ? 'checked' : '' }} {{ $isSelected ? '' : 'disabled' }}>
                                                                             </td>
                                                                             <td class="text-center">
-                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][update]" class="form-check-input" value="1" id="update-{{ $index }}" {{ $userManagementSelected->where("menu", $menu->kode_menu)->first()?->update ? "checked" : "" }} {{ $userManagementSelected->contains("menu", $menu->kode_menu) ? "" : "disabled" }}>
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][update]" class="form-check-input" data-aplikasi="{{ $menu->kode_aplikasi }}" value="1" id="update-{{ $index }}" {{ $accessData?->update ? 'checked' : '' }} {{ $isSelected ? '' : 'disabled' }}>
                                                                             </td>
                                                                             <td class="text-center">
-                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][delete]" class="form-check-input" value="1" id="delete-{{ $index }}" {{ $userManagementSelected->where("menu", $menu->kode_menu)->first()?->delete ? "checked" : "" }} {{ $userManagementSelected->contains("menu", $menu->kode_menu) ? "" : "disabled" }}>
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][delete]" class="form-check-input" data-aplikasi="{{ $menu->kode_aplikasi }}" value="1" id="delete-{{ $index }}" {{ $accessData?->delete ? 'checked' : '' }} {{ $isSelected ? '' : 'disabled' }}>
                                                                             </td>
                                                                             <td class="text-center">
-                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][lock]" class="form-check-input" value="1" id="lock-{{ $index }}" {{ $userManagementSelected->where("menu", $menu->kode_menu)->first()?->lock ? "checked" : "" }} {{ $userManagementSelected->contains("menu", $menu->kode_menu) ? "" : "disabled" }}>
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][lock]" class="form-check-input" data-aplikasi="{{ $menu->kode_aplikasi }}" value="1" id="lock-{{ $index }}" {{ $accessData?->lock ? 'checked' : '' }} {{ $isSelected ? '' : 'disabled' }}>
                                                                             </td>
                                                                             <td class="text-center">
-                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][approve]" class="form-check-input" value="1" id="approve-{{ $index }}" {{ $userManagementSelected->where("menu", $menu->kode_menu)->first()?->approve ? "checked" : "" }} {{ $userManagementSelected->contains("menu", $menu->kode_menu) ? "" : "disabled" }}>
+                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][approve]" class="form-check-input" data-aplikasi="{{ $menu->kode_aplikasi }}" value="1" id="approve-{{ $index }}" {{ $accessData?->approve ? 'checked' : '' }} {{ $isSelected ? '' : 'disabled' }}>
                                                                             </td>
-                                                                        </tr>                                                                        
-                                                                    @else
-                                                                        <tr>
-                                                                            <td class="text-start">{{ $menu->nama_menu }}</td>
-                                                                            <td class="text-start"><a href="{{ $menu->kode_menu }}" class="text-hover-primary"></a>{{ $menu->kode_menu }}</td>
-                                                                            <td class="text-center">
-                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][kode_menu]" value="{{ $menu->kode_menu }}" class="form-check-input" id="checklist-menu-{{ $index }}" {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "checked" : "" }} onchange="toggleAccess(this, {{ $index }})">
-                                                                            </td>
-                                                                            <td class="text-center">
-                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][create]" class="form-check-input" value="1" id="create-{{ $index }}" {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "checked" : "" }} {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "" : "disabled" }}>
-                                                                            </td>
-                                                                            <td class="text-center">
-                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][read]" class="form-check-input" value="1" id="read-{{ $index }}" {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "checked" : "" }} {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "" : "disabled" }}>
-                                                                            </td>
-                                                                            <td class="text-center">
-                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][update]" class="form-check-input" value="1" id="update-{{ $index }}" {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "checked" : "" }} {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "" : "disabled" }}>
-                                                                            </td>
-                                                                            <td class="text-center">
-                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][delete]" class="form-check-input" value="1" id="delete-{{ $index }}" {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "" : "disabled" }}>
-                                                                            </td>
-                                                                            <td class="text-center">
-                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][lock]" class="form-check-input" value="1" id="lock-{{ $index }}" {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "checked" : "" }} {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "" : "disabled" }}>
-                                                                            </td>
-                                                                            <td class="text-center">
-                                                                                <input type="checkbox" name="menus[{{ $menu->kode_menu }}][approve]" class="form-check-input" value="1" id="approve-{{ $index }}" {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "checked" : "" }} {{ $menuSelected->contains("kode_menu", $menu->kode_menu) ? "" : "disabled" }}>
-                                                                            </td>
-                                                                        </tr>                                                                      
-                                                                    @endif
+                                                                        </tr>
                                                                     @endforeach
+
                                                                 </tbody>
                                                                 <!--end::Table body-->
                                                             </table>

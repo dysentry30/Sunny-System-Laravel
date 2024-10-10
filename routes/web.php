@@ -988,6 +988,26 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // DELETE KONSULTAN PERENCANA 
     Route::delete('proyek/konsultan-perencana/{id}/delete', [ProyekController::class, 'deleteKonsultan']);
 
+    // DELETE Cashflow 
+    Route::delete('proyek/cashflow/{cashflow}/delete', [ProyekController::class,
+        'deleteCashflow'
+    ]);
+
+    // DELETE DOKUMEN S CURVES 
+    Route::delete('proyek/dokumen-scurves/{scurves}/delete', [ProyekController::class, 'deleteDokumenSCurves']);
+
+    // DELETE DOKUMEN OTHER PROYEK 
+    Route::delete('proyek/dokumen-other-proyek/{other}/delete', [ProyekController::class, 'deleteDokumenOther']);
+
+    // ADD Tim Tender 
+    Route::post('proyek/tim-tender/add', [ProyekController::class, 'tambahTimTender']);
+
+    // EDIT Tim Tender 
+    Route::post('/proyek/tim-tender/{id}/edit', [ProyekController::class, 'editTimTender']);
+
+    // DELETE Tim Tender 
+    Route::delete('proyek/tim-tender/{id}/delete', [ProyekController::class, 'deleteTimTender']);
+
     // ADD Personel Tender 
     Route::post('proyek/personel-tender/add', [ProyekController::class, 'tambahPersonelTender']);
 
@@ -3047,7 +3067,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $dataCustomer = Customer::when(
             !empty($search),
             function ($query) use ($search) {
-                $query->where('name', 'like', '%' . $search . '%');
+                    $query->where('name', 'ilike', '%' . $search . '%');
             }
         );
         $data = $dataCustomer->paginate($perPage, ['*'], 'page', $page);

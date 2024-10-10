@@ -221,7 +221,7 @@
                                         <th class="min-w-auto text-center">Total Realisasi</th>
                                         <th class="min-w-auto text-center">Tanggal Locked</th>
                                         <th class="min-w-auto text-center">Tanggal Unlocked</th>
-                                        <th class="min-w-auto text-center">Is Approve</th>
+                                        <th class="min-w-auto text-center">Status Approve</th>
                                         {{-- <th class="min-w-auto text-center">@sortablelink('is_active','Is Locked')</th> --}}
                                         {{-- <th class="text-center">Action</th>
                                         <th class="text-center">Settings</th> --}}
@@ -337,7 +337,7 @@
                                             </td>
                                             <td class="">
                                                 @if($history->first()->is_approved_1 == null) 
-                                                    <span class="badge badge-info">Pending</span>
+                                                    <span class="badge badge-info">Waiting Approve</span>
                                                 @else
                                                     @if($history->first()->is_approved_1 == true)
                                                         <span class="badge badge-success">Approved</span>

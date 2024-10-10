@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use stdClass;
 use Exception;
 use App\Models\Dop;
 use App\Models\User;
@@ -404,6 +405,7 @@ class UserController extends Controller
         $is_user_sales = false;
         $is_user_csi = false;
         $is_user_mobile = false;
+        $is_user_4eyes = false;
 
         // Loop aplikasi yang dipilih
         foreach ($data['aplikasi'] as $aplikasi) {
@@ -423,6 +425,9 @@ class UserController extends Controller
                 case 'MOB':
                     $is_user_mobile = true;
                     break;
+                case 'NR':
+                    $is_user_4eyes = true;
+                    break;
             }
         }
 
@@ -439,6 +444,7 @@ class UserController extends Controller
         $user->check_user_sales = $is_user_sales;
         $user->check_user_csi = $is_user_csi;
         $user->check_user_mobile = $is_user_mobile;
+        $user->is_user_4eyes = $is_user_4eyes;
         // $user->check_team_proyek = $is_team_proyek;
         // $user->check_user_ska_skt = $is_user_ska_skt;
         $user->password = Hash::make("password");
@@ -450,24 +456,18 @@ class UserController extends Controller
         }
     }
 
-    public function view($user)
+    public function viewOld($user)
     {
         $user = User::find($user);
-        // $proyeks = ProyekPISNew::addSelect(array_map(function ($item) {
-        //     return 'proyek_pis_new.' . $item;
-        // }, ['proyek_name', 'profit_center', 'kd_divisi']))
-        // ->with('UnitKerja')
-        // ->whereIn('kd_divisi', json_decode($request->query('divcode')))
-        // ->where('profit_center', '!=', null)
-        // ->orderBy('proyek_name')
-        // ->get();
-        
+
         if (empty($user)) {
             Alert::error("Error", "User tidak ditemukan");
             return redirect("user");
         }
 
-        $collectMenu = MasterMenu::all()->groupBy("kode_parrent")->map(function ($item) {
+        $collectMenu = MasterMenu::all()->groupBy("kode_parrent")->sortBy(function ($item, $key) {
+            return $key;
+        })->map(function ($item) {
             return $item->sortBy("urutan");
         })->flatten();
 
@@ -479,199 +479,189 @@ class UserController extends Controller
 
         $menuManagement = MenuManagement::all();
 
-        if ($userManagementSelected->isEmpty()) {
-            if ($user->check_administrator) {
-                $menuSelected = $collectMenu;
-            }
+        if ($user->check_administrator) {
+            $menuSelected = $collectMenu;
+        }
 
-            if ($user->check_user_sales) {
-                $menuFilter = $menuManagement->where("kode_aplikasi", "CRM");
-                $menuSelected->push($menuFilter);
-            }
+        if ($user->check_user_sales) {
+            $menuFilter = $menuManagement->where("kode_aplikasi", "CRM");
+            // if ($userManagementSelected->isNotEmpty() && $menuFilter->isNotEmpty()) {
+            //     $userManagementSelected->each(function ($ums) use ($menuFilter, $menuSelected) {
+            //         $checkMenuFromTemplate = $menuFilter->where("kode_aplikasi", $ums->aplikasi)?->where("kode_menu", $ums->menu);
+            //         if (!empty($checkMenuFromTemplate)) {
+            //             $menuSelected->push($checkMenuFromTemplate);
+            //         }
+            //     });
+            // } else {
+            //     $menuSelected->push($menuFilter);
+            // }
+            $menuSelected->push($menuFilter);
+        }
 
-            if ($user->check_admin_kontrak) {
-                $menuFilter = $menuManagement->where("kode_aplikasi", "CCM");
-                $menuSelected->push($menuFilter);
-            }
+        if ($user->check_admin_kontrak) {
+            $menuFilter = $menuManagement->where("kode_aplikasi", "CCM");
+            // if ($userManagementSelected->isNotEmpty() && $menuFilter->isNotEmpty()) {
+            //     $userManagementSelected->each(function ($ums) use ($menuFilter, $menuSelected) {
+            //         $checkMenuFromTemplate = $menuFilter->where("kode_aplikasi", $ums->aplikasi)?->where("kode_menu", $ums->menu);
+            //         if (!empty($checkMenuFromTemplate)) {
+            //             $menuSelected->push($checkMenuFromTemplate);
+            //         }
+            //     });
+            // } else {
+            //     $menuSelected->push($menuFilter);
+            // }
+            $menuSelected->push($menuFilter);
+        }
 
-            if ($user->check_user_csi) {
-                $menuFilter = $menuManagement->where("kode_aplikasi", "CSI");
-                $menuSelected->push($menuFilter);
-            }
+        if ($user->check_user_csi) {
+            $menuFilter = $menuManagement->where("kode_aplikasi", "CSI");
+            // if ($userManagementSelected->isNotEmpty() && $menuFilter->isNotEmpty()) {
+            //     $userManagementSelected->each(function ($ums) use ($menuFilter, $menuSelected) {
+            //         $checkMenuFromTemplate = $menuFilter->where("kode_aplikasi", $ums->aplikasi)?->where("kode_menu", $ums->menu);
+            //         if (!empty($checkMenuFromTemplate)) {
+            //             $menuSelected->push($checkMenuFromTemplate);
+            //         }
+            //     });
+            // } else {
+            //     $menuSelected->push($menuFilter);
+            // }
+            $menuSelected->push($menuFilter);
+        }
 
-            if ($user->check_user_mobile) {
-                $menuFilter = $menuManagement->where("kode_aplikasi", "MOB");
-                $menuSelected->push($menuFilter);
+        if ($user->check_user_mobile) {
+            $menuFilter = $menuManagement->where("kode_aplikasi", "MOB");
+            // if ($userManagementSelected->isNotEmpty() && $menuFilter->isNotEmpty()) {
+            //     $userManagementSelected->each(function ($ums) use ($menuFilter, $menuSelected) {
+            //         $checkMenuFromTemplate = $menuFilter->where("kode_aplikasi", $ums->aplikasi)?->where("kode_menu", $ums->menu);
+            //         if (!empty($checkMenuFromTemplate)) {
+            //             $menuSelected->push($checkMenuFromTemplate);
+            //         }
+            //     });
+            // } else {
+            //     $menuSelected->push($menuFilter);
+            // }
+            $menuSelected->push($menuFilter);
+        }
+
+        if ($user->is_user_4eyes) {
+            $menuFilter = $menuManagement->where("kode_aplikasi", "NR");
+            // if ($userManagementSelected->isNotEmpty() && $menuFilter->isNotEmpty()) {
+            //     $userManagementSelected->each(function ($ums) use ($menuFilter, $menuSelected) {
+            //         $checkMenuFromTemplate = $menuFilter->where("kode_aplikasi", $ums->aplikasi)?->where("kode_menu", $ums->menu);
+            //         if (!empty($checkMenuFromTemplate)) {
+            //             $menuSelected->push($checkMenuFromTemplate);
+            //         }
+            //     });
+            // } else {
+            //     $menuSelected->push($menuFilter);
+            // }
+            $menuSelected->push($menuFilter);
+        }
+
+        $menuSelected?->flatten()?->each(function ($item) use ($user, $userManagementSelected) {
+            $existingMenu = $userManagementSelected->where('aplikasi', $item->kode_aplikasi)->where('menu', $item->kode_menu)->first();
+
+            // Jika menu tidak ada, tambahkan dengan default akses
+            if (is_null($existingMenu)) {
+                $newClass = new stdClass();
+                $newClass->nip = $user->nip;
+                $newClass->aplikasi = $item->kode_aplikasi;
+                $newClass->menu = $item->kode_menu;
+                $newClass->create = true;
+                $newClass->read = true;
+                $newClass->update = true;
+                $newClass->delete = false;
+                $newClass->lock = false;
+                $newClass->approve = false;
+
+                $userManagementSelected->push($newClass);
+            } else {
+                // Jika menu sudah ada, sesuaikan apakah akan dihapus atau tidak
+                // Misalnya jika `delete` adalah true, kita set akses menu sesuai kebutuhan
+                if ($existingMenu->delete) {
+                    // Hapus akses menu
+                    $userManagementSelected = $userManagementSelected->filter(function ($ums) use ($item) {
+                        return !($ums->aplikasi === $item->kode_aplikasi && $ums->menu === $item->kode_menu);
+                    })->values();
+                } else {
+                    // Update akses jika tidak dihapus
+                    $existingMenu->create = true;  // Sesuaikan logika sesuai kebutuhan
+                    $existingMenu->read = true;
+                    $existingMenu->update = true;
+                    $existingMenu->delete = false;  // Contoh jika delete tetap false
+                    // Update the object in the collection
+                    $userManagementSelected = $userManagementSelected->map(function ($ums) use ($existingMenu) {
+                        return ($ums->aplikasi === $existingMenu->aplikasi && $ums->menu === $existingMenu->menu) ? $existingMenu : $ums;
+                    });
+                }
             }
+        });
+
+        $userManagementSelected = $userManagementSelected->unique("menu")->values();
+        // dd($userManagementSelected);
+
+        // $userManagementSelectedNew = $userManagementSelected-
+
+
+        return view("/User/viewUser", ["user" => $user, "unit_kerjas" => UnitKerja::all(), "dops" => Dop::with("UnitKerjas")->get()->sortBy("dop"), 'collectMenu' => $collectMenu, 'userManagementSelected' => $userManagementSelected, 'menuSelected' => $menuSelected?->flatten(), 'collectAplikasi' => $collectAplikasi]);
+    }
+
+    public function view($user)
+    {
+        $user = User::find($user);
+
+        if (empty($user)) {
+            Alert::error("Error", "User tidak ditemukan");
+            return redirect("user");
+        }
+
+        $collectMenu = MasterMenu::all()->groupBy("kode_parrent")->sortBy(function ($item, $key) {
+            return $key;
+        })->map(function ($item) {
+            return $item->sortBy("urutan");
+        })->flatten();
+
+        $collectAplikasi = MasterApplication::all();
+
+        $userManagementSelected = UserMenuManagement::where("nip", $user->nip)->get();
+
+        $menuSelected = collect([]);
+
+        $menuManagement = MenuManagement::all();
+
+        if ($user->check_administrator) {
+            $menuSelected = $collectMenu;
+        }
+
+        if ($user->check_user_sales) {
+            $menuFilter = $menuManagement->where("kode_aplikasi", "CRM");
+            $menuSelected->push($menuFilter);
+        }
+
+        if ($user->check_admin_kontrak) {
+            $menuFilter = $menuManagement->where("kode_aplikasi", "CCM");
+            $menuSelected->push($menuFilter);
+        }
+
+        if ($user->check_user_csi) {
+            $menuFilter = $menuManagement->where("kode_aplikasi", "CSI");
+            $menuSelected->push($menuFilter);
+        }
+
+        if ($user->check_user_mobile) {
+            $menuFilter = $menuManagement->where("kode_aplikasi", "MOB");
+            $menuSelected->push($menuFilter);
+        }
+
+        if ($user->is_user_4eyes) {
+            $menuFilter = $menuManagement->where("kode_aplikasi", "NR");
+            $menuSelected->push($menuFilter);
         }
 
         return view("/User/viewUser", ["user" => $user, "unit_kerjas" => UnitKerja::all(), "dops" => Dop::with("UnitKerjas")->get()->sortBy("dop"), 'collectMenu' => $collectMenu, 'userManagementSelected' => $userManagementSelected, 'menuSelected' => $menuSelected?->flatten(), 'collectAplikasi' => $collectAplikasi]);
     }
 
-    // public function updateOld(Request $request)
-    // {
-    //     $data = $request->all();
-    //     // dd($data);
-    //     $messages = [
-    //         "required" => "This field is required",
-    //     ];
-    //     $rules = [
-    //         "nip" => "required",
-    //         "name-user" => "required",
-    //         "email" => "required",
-    //         "phone-number" => "required",
-    //         // "upload-ttd" => "required",
-    //     ];
-    //     $validation = Validator::make($data, $rules, $messages);
-
-    //     $is_administrator = $request->has("administrator") ?? false;
-    //     $is_admin_kontrak = $request->has("admin-kontrak") ?? false;
-    //     $is_user_sales = $request->has("user-sales") ?? false;
-    //     $is_user_csi = $request->has("user-csi") ?? false;
-    //     $is_team_proyek = $request->has("team-proyek") ?? false;
-    //     $is_user_mobile = $request->has("mobile") ?? false;
-    //     $is_user_ska_skt = $request->has("ska-skt") ?? false;
-    //     $role_admin = $request->has("role_admin") ?? false;
-    //     $role_user = $request->has("role_user") ?? false;
-    //     $role_approver = $request->has("role_approver") ?? false;
-    //     $role_risk = $request->has("role_risk") ?? false;
-    //     $role_unlock = $request->has("role_unlock") ?? false;
-    //     $role_scm = $request->has("role_scm") ?? false;
-
-
-    //     // if ($validation->fails()) {
-    //     //     $request->old("nip");
-    //     //     $request->old("name-user");
-    //     //     $request->old("email");
-    //     //     $request->old("phone-number");
-    //     //     // return redirect()->back();
-    //     //     Alert::error('Error', "User Gagal Dibuat, Periksa Kembali !");
-
-    //     //     $validation->validate();
-    //     //     // return redirect()->back();
-    //     // }
-
-    //     if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_user_csi == false && $is_team_proyek == false && $role_admin == false && $role_user == false && $role_approver == false && $role_risk == false && $role_unlock == false && $role_scm == false && $is_user_mobile == false && $is_user_ska_skt == false) {
-    //         $rules["administrator"] = "accepted";
-    //         $rules["admin-kontrak"] = "accepted";
-    //         $rules["user-sales"] = "accepted";
-    //         $rules["user-csi"] = "accepted";
-    //         $rules["team-proyek"] = "accepted";
-    //         $rules["mobile"] = "accepted";
-    //         $rules["ska-skt"] = "accepted";
-
-    //         $rules["role_admin"] = "accepted";
-    //         $rules["role_user"] = "accepted";
-    //         $rules["role_approver"] = "accepted";
-    //         $rules["role_risk"] = "accepted";
-    //         $rules["role_unlock"] = "accepted";
-    //         $rules["role_scm"] = "accepted";
-
-    //         Alert::error("Error", "Pilih Hak Akses Terlebih Dahulu");
-    //         $request->old("nip");
-    //         $request->old("name-user");
-    //         $request->old("email");
-    //         $request->old("phone-number");
-    //         // dd("tes");
-
-    //         $validation = Validator::make($data, $rules, $messages);
-    //         $validation->validate();
-
-    //         if ($validation->fails()) {
-    //             Alert::error("Error", "User Gagal Diperbaharui, Periksa Kembali !");
-    //             $validation->validate();
-    //         }
-    //     }
-
-    //     // // loading the source image
-    //     // // $src = imagecreatetruecolor(150, 150);
-    //     // // $color = imagecolorat($src, 0, 0);
-    //     // // $hex = dechex($color);
-        
-    //     // // dd($hex);
-    //     // $white = imagecolorallocatealpha($src, 255, 255, 255, 127);
-    //     // $_transColor = imagecolortransparent($src, $white);
-    //     // imagefill($src, 0, 0, $_transColor);
-    //     // // saving the image to public folder
-    //     // $file_name = "tanda-tangan-" . $data["nip"] . "." . "png";
-    //     // imagesavealpha($src, true);
-        
-    //     // $file_name = "tanda-tangan-" . $data["nip"] . "." . $data["upload-ttd"]->clientExtension();
-    //     // $src = imagecreatefromjpeg($data["upload-ttd"]);
-    //     // $new = imagescale($src,100);
-
-    //     // imagejpeg($new, public_path("/file-ttd/$file_name"), 100);
-    //     // $data["upload-ttd"]->storeAs("/", $file_name, ["disk" => "public/ttd"]);
-
-    //     $user = User::find($data["user-id"]);
-    //     $user->nip = $data["nip"];
-    //     $user->name = $data["name-user"];
-    //     $user->email = $data["email"];
-    //     $user->no_hp = $data["phone-number"];
-    //     // $user->file_ttd = $file_name;
-    //     $user->is_active = $request->has("is-active");
-    //     // if (!Auth::user()->check_administrator) {
-    //     if (Gate::allows('user-csi')) {
-    //         $user->unit_kerja = null;
-    //     } else {
-    //         $user->unit_kerja = count($data["unit-kerja"]) > 1 ? join(",", $data["unit-kerja"]) : $data["unit-kerja"][0];
-    //     }
-        
-    //     // }
-    //     $user->check_administrator = $is_administrator;
-    //     $user->check_admin_kontrak = $is_admin_kontrak;
-    //     $user->check_user_sales = $is_user_sales;
-    //     $user->check_user_csi = $is_user_csi;
-    //     $user->check_team_proyek = $is_team_proyek;
-    //     $user->check_user_mobile = $is_user_mobile;
-    //     $user->check_user_ska_skt = $is_user_ska_skt;
-
-    //     $user->role_admin = $role_admin;
-    //     $user->role_user = $role_user;
-    //     $user->role_approver = $role_approver;
-    //     $user->role_risk = $role_risk;
-    //     $user->is_unlock = $role_unlock;
-    //     $user->role_scm = $role_scm;
-
-    //     // if (isset($data['proyeks'])) {
-    //     //     $proyekSelectedCollect = collect($data['proyeks']);
-    //     //     if (empty($user->proyeks_selected)) {
-    //     //         $user->proyeks_selected = $proyekSelectedCollect->toJson();
-    //     //     } else {
-    //     //         $collectProyekExist = collect(json_decode($user->proyeks_selected));
-    //     //         $proyekCancel = $collectProyekExist->diff($data["proyeks"]);
-
-    //     //         if ($proyekCancel->count() < 1) { //Jika tidak ada yg di cancel maka gunakan yg sebelumnya
-    //     //             $arrayTemp = $collectProyekExist;
-    //     //         } else { //Jika ada di proyekCancel maka hapus si proyeknya
-    //     //             $arrayTemp = $collectProyekExist->reject(function ($proyek) use ($proyekCancel) {
-    //     //                 return in_array($proyek, $proyekCancel->toArray());
-    //     //             });
-    //     //         }
-
-    //     //         $proyekNew = $proyekSelectedCollect->diff($arrayTemp);
-    //     //         $finalProyek = $arrayTemp->push($proyekNew->flatten()->toArray());
-
-    //     //         $user->proyeks_selected = $finalProyek->flatten()->toJson();
-    //     //     }
-    //     // } else {
-    //     //     $user->proyeks_selected = null;
-    //     // }
-
-    //     if (isset($data['proyeks'])) {
-    //         $user->proyeks_selected = $data['list-proyek'];
-    //     } else {
-    //         $user->proyeks_selected = null;
-    //     }
-    //     // $user->alamat = $data["alamat"];
-        
-    //     if ($user->save()) {
-    //         Alert::success("Success", "User berhasil diperbarui.")->autoClose(3000);
-    //         return redirect()->back();
-    //     }
-    // }
-
-    public function update(Request $request)
+    public function updateOld(Request $request)
     {
         DB::beginTransaction();
 
@@ -703,6 +693,7 @@ class UserController extends Controller
             $is_user_sales = false;
             $is_user_csi = false;
             $is_user_mobile = false;
+            $is_user_4eyes = false;
 
             // Loop aplikasi yang dipilih
             foreach ($data['aplikasi'] as $aplikasi) {
@@ -721,6 +712,9 @@ class UserController extends Controller
                         break;
                     case 'MOB':
                         $is_user_mobile = true;
+                        break;
+                    case 'NR':
+                        $is_user_4eyes = true;
                         break;
                 }
 
@@ -772,6 +766,7 @@ class UserController extends Controller
             $user->check_user_sales = $is_user_sales;
             $user->check_user_csi = $is_user_csi;
             $user->check_user_mobile = $is_user_mobile;
+            $user->is_user_4eyes = $is_user_4eyes;
 
 
             if (isset($data['proyeks'])) {
@@ -788,14 +783,185 @@ class UserController extends Controller
             }
         } catch (\Throwable $th) {
             DB::rollback();
-            $request->old("nip");
-            $request->old("name-user");
-            $request->old("email");
-            $request->old("phone-number");
+            // $request->old("nip");
+            // $request->old("name-user");
+            // $request->old("email");
+            // $request->old("phone-number");
+            // Alert::error("Error", $th->getMessage());
+            // return redirect()->back();
+            return redirect()->back()->withInput()->withErrors($th->getMessage());
+        }
+    }
+
+    public function update(Request $request)
+    {
+        DB::beginTransaction();
+
+        try {
+            $data = $request->all();
+
+            $messages = [
+                "required" => "This field is required",
+            ];
+            $rules = [
+                "nip" => "required",
+                "name-user" => "required",
+                "email" => "required",
+                "phone-number" => "required",
+                "aplikasi" => "required|array",
+                "menus" => "required|array"
+            ];
+
+            $validation = Validator::make($data, $rules, $messages);
+            if ($validation->fails()) {
+                return redirect()->back()->withErrors($validation->errors())->withInput();
+            }
+
+            // Inisialisasi user di sini
+            $user = User::find($data["user-id"]);
+
+            // Ambil aplikasi yang sudah ada di database untuk user ini
+            $existingApps = UserMenuManagement::where('nip', $data['nip'])->pluck('aplikasi')->unique()->toArray();
+            // dd($existingApps);
+
+            // Aplikasi baru yang dipilih user
+            $newApps = $data['aplikasi'];
+
+            // Mengatur properti user seperti role atau hak akses lainnya
+            $roleMap = [
+                'SUPER' => 'check_administrator',
+                'CRM' => 'check_user_sales',
+                'CCM' => 'check_admin_kontrak',
+                'CSI' => 'check_user_csi',
+                'MOB' => 'check_user_mobile',
+                'NR' => 'is_user_4eyes',
+            ];
+
+            foreach ($newApps as $aplikasi) {
+                if (isset($roleMap[$aplikasi])) {
+                    // Mengatur properti user sesuai role yang dipilih
+                    $user->{$roleMap[$aplikasi]} = true;
+                }
+            }
+
+            // Tentukan aplikasi yang di-unchecklist (yang tidak dipilih lagi)
+            $removedApps = array_diff($existingApps, $newApps);
+
+            // Hapus aplikasi yang di-unchecklist dan menu terkait
+            foreach ($removedApps as $aplikasi) {
+                $modelUserManagement = UserMenuManagement::where('nip', $data['nip'])
+                ->where('aplikasi', $aplikasi)
+                    ->delete();
+            }
+
+
+            // Template Menu Management
+            $menuManagement = MenuManagement::all()->groupBy("kode_aplikasi");
+
+            $selectedMenus = [];
+
+            // Mapping menu untuk aplikasi baru
+            foreach (array_diff($newApps, $existingApps) as $aplikasi) {
+                if (isset($menuManagement[$aplikasi])) {
+                    foreach ($menuManagement[$aplikasi] as $menu) {
+                        UserMenuManagement::create([
+                            'nip' => $data['nip'],
+                            'aplikasi' => $aplikasi,
+                            'menu' => $menu->kode_menu,
+                            'create' => 1,
+                            'read' => 1,
+                            'update' => 1,
+                            'delete' => 1,  // Sesuaikan jika `delete` diperlukan
+                        ]);
+                        $selectedMenus[] = $menu->kode_menu;
+                    }
+                }
+            }
+
+            // DB::commit();
+
+            foreach ($newApps as $aplikasi) {
+
+                // $selectedMenus = [];
+
+                foreach ($data['menus'] as $kodeMenu => $menuData) {
+                    // $menu = UserMenuManagement::updateOrCreate(
+                    //     [
+                    //         'nip' => $data["nip"],
+                    //         'aplikasi' => $aplikasi,
+                    //         'menu' => $kodeMenu
+                    //     ],
+                    //     [
+                    //         'create' => isset($menuData['create']) ? 1 : 0,
+                    //         'read' => isset($menuData['read']) ? 1 : 0,
+                    //         'update' => isset($menuData['update']) ? 1 : 0,
+                    //         'delete' => isset($menuData['delete']) ? 1 : 0,
+                    //         'lock' => isset($menuData['lock']) ? 1 : 0,
+                    //         'approve' => isset($menuData['approve']) ? 1 : 0,
+                    //     ]
+                    // );
+                    $existMenuUser = UserMenuManagement::where("nip", $data['nip'])->where('aplikasi', $aplikasi)->where('menu', $kodeMenu);
+                    if ($existMenuUser->exists()) {
+                        $menuUpdate = $existMenuUser->update([
+                            'create' => isset($menuData['create']) ? 1 : 0,
+                            'read' => isset($menuData['read']) ? 1 : 0,
+                            'update' => isset($menuData['update']) ? 1 : 0,
+                            'delete' => isset($menuData['delete']) ? 1 : 0,
+                            'lock' => isset($menuData['lock']) ? 1 : 0,
+                            'approve' => isset($menuData['approve']) ? 1 : 0,
+                        ]);
+                    } else {
+                        $menuCreate = $existMenuUser->create([
+                            'nip' => $data['nip'],
+                            'aplikasi' => $aplikasi,
+                            'menu' => $kodeMenu,
+                            'create' => isset($menuData['create']) ? 1 : 0,
+                            'read' => isset($menuData['read']) ? 1 : 0,
+                            'update' => isset($menuData['update']) ? 1 : 0,
+                            'delete' => isset($menuData['delete']) ? 1 : 0,
+                            'lock' => isset($menuData['lock']) ? 1 : 0,
+                            'approve' => isset($menuData['approve']) ? 1 : 0,
+                        ]);
+                    }
+
+
+                    $selectedMenus[] = $kodeMenu;
+                }
+            }
+
+            // Hapus menu yang tidak dipilih untuk aplikasi saat ini
+            $menuDelete = UserMenuManagement::where('nip', $data["nip"])
+            // ->where('aplikasi', $aplikasi)
+            ->whereNotIn('menu', $selectedMenus)
+                ->delete();
+
+            // dd("TESS");
+
+            $user->nip = $data["nip"];
+            $user->name = $data["name-user"];
+            $user->email = $data["email"];
+            $user->no_hp = $data["phone-number"];
+            $user->is_active = $request->has("is-active");
+            $user->unit_kerja = count($data["unit-kerja"]) > 1 ? join(",", $data["unit-kerja"]) : $data["unit-kerja"][0];
+
+            if (isset($data['proyeks'])) {
+                $user->proyeks_selected = $data['list-proyek'];
+            } else {
+                $user->proyeks_selected = null;
+            }
+
+            if ($user->save()) {
+                DB::commit();
+                Alert::success("Success", "User berhasil diperbarui.")->autoClose(3000);
+                return redirect()->back();
+            }
+        } catch (\Throwable $th) {
+            DB::rollback();
             Alert::error("Error", $th->getMessage());
             return redirect()->back();
         }
     }
+
 
     public function userResetPassword(Request $request)
     {

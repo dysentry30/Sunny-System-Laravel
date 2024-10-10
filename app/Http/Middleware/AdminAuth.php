@@ -144,7 +144,7 @@ class AdminAuth
         ]);
 
         $concat_allowed_url = "";
-        if (Gate::any(['super-admin', 'admin-ccm', 'admin-crm', 'approver-crm', 'admin-csi', 'risk-crm'])) {
+        if (Gate::any(['super-admin', 'admin-ccm', 'admin-crm', 'approver-crm', 'admin-csi', 'risk-crm', 'access_menu_read'])) {
             return $next($request);
         }
         if (Gate::allows('ccm')) {

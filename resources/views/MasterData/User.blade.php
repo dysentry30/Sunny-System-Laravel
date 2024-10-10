@@ -807,6 +807,10 @@ a{{-- Begin::Extend Header --}}
                                             $namaInput = "mobile";
                                             // $isChecked = $user->check_user_mobile ? "checked" : "";
                                             break;
+                                        case 'NR':
+                                            $namaInput = "nr";
+                                            // $isChecked = $user->check_user_mobile ? "checked" : "";
+                                            break;
                                         
                                         default:
                                             $namaInput = "";
@@ -817,7 +821,7 @@ a{{-- Begin::Extend Header --}}
                                 <!-- begin:: Form Input Administrator -->
                                 <div class="form-check me-12">
                                     <input class="form-check-input" type="checkbox"
-                                        value="{{ $aplikasi->nama_aplikasi }}"
+                                        value="{{ $aplikasi->kode_aplikasi }}"
                                         name="aplikasi[]" id="aplikasi">
                                     <label class="form-check-label"
                                         for="{{ $namaInput }}">

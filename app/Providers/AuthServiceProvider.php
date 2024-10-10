@@ -200,7 +200,7 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('access-menu-approve', function (User $user, $menu) {
             return UserMenuManagement::where("nip", $user->nip)
             ->where("menu", $menu)
-                ->where("lock", true)
+                ->where("approve", true)
                 ->exists();
         });
         //

@@ -722,9 +722,9 @@
                                             <!--end::Kategori Kalah-->
 
                                             {{-- @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") || str_contains(auth()->user()->email, "@sunny")) --}}
-                                            @can('super-admin')
                                             <!--begin::Action-->
                                             <td class="text-center px-3">
+                                                @can('super-admin')
                                                 <!--begin::Button-->
                                                 <button data-bs-toggle="modal"
                                                     data-bs-target="#kt_modal_delete{{ $proyek->kode_proyek }}"
@@ -733,9 +733,9 @@
                                                 </button>
                                                 </form>
                                                 <!--end::Button-->
+                                                @endcan
                                             </td>
                                             <!--end::Action-->                                                
-                                            @endcan
                                             {{-- @endif --}}
                                         </tr>
                                     @endforeach

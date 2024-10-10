@@ -81,7 +81,7 @@
                                     {{-- @can('access-menu-read', $menu->kode_menu) --}}
                                         @if (!empty($menu->path))
                                             <div class="menu-item">
-                                                <a class="menu-link " href="{{ $menu->path }}"
+                                                <a class="menu-link " href="{{ $menu->path }}{{ $menu->path == '/forecast' ? '/' . date("m") . '/' . date("Y") : '' }}"
                                                     style="color:white; padding-left:20px; padding-top:10px; {{ Request::Segment(1) == substr($menu->path, 1) ? 'background-color:#008CB4' : '' }}">
                                                     <span class="menu-icon">
                                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->

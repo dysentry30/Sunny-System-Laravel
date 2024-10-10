@@ -437,7 +437,7 @@ function createWordRekomendasi(App\Models\Proyek $proyek, \Illuminate\Support\Co
 
     // dd($bowheer);
     // if ($customer->proyekBerjalans->where("stage", "=", 8)->count() > 0) {
-    if ($customer->Piutang->where('kategori', '!=', 1)->count() > 0 || $customer->MasalahHukum->count() > 0) {
+    if ($customer->Piutang->count() > 0 || $customer->MasalahHukum->count() > 0) {
         if (empty($key_client)) {
             $key_client = collect(["kategori" => "Internal", "kriteria_penilaian" => "Key Client", "score" => 0]);
             $hasil_assessment->push($key_client);
@@ -526,7 +526,7 @@ function createWordRekomendasi(App\Models\Proyek $proyek, \Illuminate\Support\Co
 
     // Begin :: Body
     // if($customer->proyekBerjalans->where("stage", "=", 8)->count() > 0) {
-    if ($customer->Piutang->where('kategori', '!=', 1)->count() > 0 || $customer->MasalahHukum->count() > 0) {
+    if ($customer->Piutang->count() > 0 || $customer->MasalahHukum->count() > 0) {
         $table->addRow(null, $cellCategoryStyle);
         $table->addCell(null, $cellCategoryStyle);
         $table->addCell(4000, $cellCategoryStyle)->addText("Internal", ["bold" => true]);
@@ -612,7 +612,7 @@ function createWordRekomendasi(App\Models\Proyek $proyek, \Illuminate\Support\Co
 
     $tier = "";
     // if($customer->proyekBerjalans->where("stage", "=", 8)->count() > 0) {
-    if ($customer->Piutang->where('kategori', '!=', 1)->count() > 0 || $customer->MasalahHukum->count() > 0) {
+    if ($customer->Piutang->count() > 0 || $customer->MasalahHukum->count() > 0) {
         if ($total_score >= 45) {
             $tier = "A";
         } else if($total_score < 45 && $total_score >= 25) {
@@ -637,7 +637,7 @@ function createWordRekomendasi(App\Models\Proyek $proyek, \Illuminate\Support\Co
 
     // Begin :: Footer
     // if($customer->proyekBerjalans->where("stage", "=", 8)->count() > 0) {
-    if ($customer->Piutang->where('kategori', '!=', 1)->count() > 0 || $customer->MasalahHukum->count() > 0) {
+    if ($customer->Piutang->count() > 0 || $customer->MasalahHukum->count() > 0) {
         $section->addText("Rumusan Tier dari Kolom Nilai dengan ketentuan:", ['size'=>10, "bold" => true], ['align' => "left"]);
         $section->addText("A: X >= 45", ['size' => 10, "bold" => true], ['align' => "left"]);
         $section->addText(htmlspecialchars("B: 25 =< X =< 45"), ['size'=>10, "bold" => true], ['align' => "left"]);
@@ -3368,7 +3368,7 @@ function performAssessment(App\Models\Customer $customer, App\Models\Proyek $pro
     $bowheer = collect();
     $kriteria_assessments->groupBy("kriteria_penilaian")->each(function ($ka, $kriteria) use ($customer, $result_assessments, $bowheer, $kriteria_assessments) {
         // if($customer->proyekBerjalans->where("stage", "=", 8)->count() > 0) {
-        if ($customer->Piutang->where('kategori', '!=', 1)->count() > 0 || $customer->MasalahHukum->count() > 0) {
+        if ($customer->Piutang->count() > 0 || $customer->MasalahHukum->count() > 0) {
             foreach($ka as $k) {
                 if($kriteria == "Piutang") {
                     // dd($customer->Piutang);
