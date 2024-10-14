@@ -146,7 +146,7 @@
                                         <button type="button" class="btn btn-sm btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#kt_modal_approval_terkontrak_revisi">Revisi Approval</button>
                                     @endif                                        
                                     @endcan
-                                    @if (is_null($proyek->NotaRekomendasi?->is_request_rekomendasi) && !$check_green_line && $proyek->stage == 1 && is_null($proyek->NotaRekomendasi?->is_disetujui))
+                                    @if (!$check_green_line && $proyek->stage == 1 && ($proyek->NotaRekomendasi?->is_revisi_pengajuan || is_null($proyek->NotaRekomendasi?->is_request_rekomendasi)) && is_null($proyek->NotaRekomendasi?->is_disetujui))
                                     @can('access-menu-lock', 'OWNS')
                                         <input type="button" name="proyek-rekomendasi" value="Pengajuan Rekomendasi" class="btn btn-sm btn-success ms-2" id="proyek-rekomendasi" data-bs-toggle="modal" data-bs-target="#modal-send-pengajuan"
                                             style="background-color:#00b48d">                                        
@@ -251,7 +251,7 @@
                     <!--end::Toolbar-->
 
                     {{-- @canany(['super-admin', 'approver-crm', 'user-crm', 'admin-crm']) --}}
-                        @if (is_null($proyek->NotaRekomendasi?->is_request_rekomendasi) && !$check_green_line && $proyek->stage == 1)
+                        @if (!$check_green_line && $proyek->stage == 1 && ($proyek->NotaRekomendasi?->is_revisi_pengajuan || is_null($proyek->NotaRekomendasi?->is_request_rekomendasi)) && is_null($proyek->NotaRekomendasi?->is_disetujui))
                         <!-- begin::modal confirm send wa-->
                         <div class="modal fade w-100" style="margin-top: 120px" id="modal-send-pengajuan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog mw-600px">
@@ -1910,7 +1910,7 @@
                                                          <div class="fv-row mb-7">
                                                              <!--begin::Label-->
                                                              <label class="fs-6 fw-bold form-label mt-3">
-                                                                 <span>Nilai OK (Exclude Ppn) @if(!is_null($proyek->NotaRekomendasi?->is_request_rekomendasi))<i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Data ini tidak dapat diubah karena telah diajukan Nota Rekomendasi"></i>@endif</span>
+                                                                 <span>Nilai OK (Exclude Ppn) @if(!is_null($proyek->NotaRekomendasi?->is_request_rekomendasi) && is_null($proyek->NotaRekomendasi?->is_revisi_pengajuan))<i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Data ini tidak dapat diubah karena telah diajukan Nota Rekomendasi"></i>@endif</span>
                                                              </label>
                                                              <!--end::Label-->
                                                              <!--begin::Input-->
@@ -1918,7 +1918,7 @@
                                                                  class="form-control reformat form-control-solid"
                                                                  id="nilai-rkap" name="nilai-rkap"
                                                                  value="{{ number_format((int) str_replace('.', '', $proyek->nilaiok_awal), 0, '.', '.') }}"
-                                                                 placeholder="Nilai OK (Excludde Ppn)" onfocusout="setRAKlasifikasi()" {{ !is_null($proyek->NotaRekomendasi?->is_request_rekomendasi) ? "readonly" : "" }}/>
+                                                                 placeholder="Nilai OK (Excludde Ppn)" onfocusout="setRAKlasifikasi()" {{ !is_null($proyek->NotaRekomendasi?->is_request_rekomendasi) && is_null($proyek->NotaRekomendasi?->is_revisi_pengajuan) ? "readonly" : "" }}/>
                                                              <!--end::Input-->
                                                          </div>
                                                          <!--end::Input group-->

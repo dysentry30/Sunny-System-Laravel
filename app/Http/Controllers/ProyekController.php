@@ -703,9 +703,11 @@ class ProyekController extends Controller
 
                 Alert::success('Success', "Proyek Berhasil Diajukan");
             } else {
+                $isExistNotaRekomendasi->klasifikasi_pasdin = $newProyek->klasifikasi_pasdin;
                 $isExistNotaRekomendasi->is_request_rekomendasi = true;
                 $isExistNotaRekomendasi->request_pengajuan = $request_pengajuan->toJson();
                 $isExistNotaRekomendasi->approved_rekomendasi = null;
+                $isExistNotaRekomendasi->is_revisi_pengajuan = null;
 
                 if (!$isExistNotaRekomendasi->save()) {
                     Alert::error('Error', "Proyek Gagal Diajukan");

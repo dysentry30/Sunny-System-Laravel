@@ -842,10 +842,12 @@
                                                                                     <a href="#kt_modal_view_proyek_{{ $proyek->kode_proyek }}"
                                                                                         target="_blank" data-bs-toggle="modal"
                                                                                         class="btn btn-sm btn-primary text-white">Lihat Detail</a>
-                                                                                @else
+                                                                                @elseif(is_null($nota_rekomendasi->is_revisi_pengajuan))
                                                                                     <a href="#kt_modal_view_proyek_{{ $proyek->kode_proyek }}"
                                                                                         data-bs-toggle="modal"
                                                                                         class="btn btn-sm btn-primary text-white">Ajukan</a>
+                                                                                @else
+                                                                                
                                                                                 @endif
                                                                             @elseif ($matriks_user->contains('kategori', 'Penyusun') && $matriks_user->where('kategori', 'Penyusun')?->where('departemen', $proyek->departemen_proyek)?->where('unit_kerja', $proyek->UnitKerja->Divisi->id_divisi)?->where("klasifikasi_proyek", $proyek->klasifikasi_pasdin)?->first())
                                                                                 @if ($nota_rekomendasi->is_request_rekomendasi || (($matriks_user->filter(function($value)use($proyek){

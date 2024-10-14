@@ -3586,10 +3586,14 @@ function mergeFileLampiranRisiko($kode_proyek)
 
 function sendNotifEmail($user, $subject, $message, $activatedEmailToUser, $isNotaRekomendasi = true): bool
 {
-    if (!$isNotaRekomendasi) {
-        $emailTarget = $activatedEmailToUser ? $user : env("EMAIL_DEFAULT");
+    if (env("APP_ENV") == "production") {
+        if (!$isNotaRekomendasi) {
+            $emailTarget = $activatedEmailToUser ? $user : env("EMAIL_DEFAULT");
+        } else {
+            $emailTarget = $activatedEmailToUser ? $user->email : env("EMAIL_DEFAULT");
+        }
     } else {
-        $emailTarget = $activatedEmailToUser ? $user->email : env("EMAIL_DEFAULT");
+        $emailTarget = env("EMAIL_DEFAULT");
     }
 
     $requestBody = [
