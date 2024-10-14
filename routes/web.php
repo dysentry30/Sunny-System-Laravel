@@ -997,7 +997,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::delete('proyek/dokumen-scurves/{scurves}/delete', [ProyekController::class, 'deleteDokumenSCurves']);
 
     // DELETE DOKUMEN OTHER PROYEK 
-    Route::delete('proyek/dokumen-other-proyek/{other}/delete', [ProyekController::class, 'deleteDokumenOther']);
+    Route::delete('proyek/dokumen-other-proyek/{other}/delete', [ProyekController::class, 'deleteDokumenOtherProyek']);
 
     // ADD Tim Tender 
     Route::post('proyek/tim-tender/add', [ProyekController::class, 'tambahTimTender']);
@@ -7763,7 +7763,7 @@ Route::get('tes-generate', function (Request $request) {
 });
 
 Route::get('tes-generate-2', function (Request $request) {
-    $proyek = Proyek::find("JJPD008");
+    $proyek = Proyek::find("PJPD026");
     // $newController = new VerifikasiInternalPartnerController();
     // $newController->generateFinalDokumen($request, $proyek);
     // createWordNotaRekomendasiSetuju($proyek->NotaRekomendasi, $hasil_assessment, $request);

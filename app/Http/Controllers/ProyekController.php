@@ -1594,7 +1594,7 @@ class ProyekController extends Controller
     {
         $delete = DokumenSCurvesProyek::find($id);
         // dd($delete);
-        $files = collect(File::allFiles(public_path("dokumen-scurves")))->filter(function ($f) use ($delete) {
+        $files = collect(File::allFiles(public_path("dokumen-s-curves")))->filter(function ($f) use ($delete) {
             return str_contains($f->getFilename(), $delete->id_document);
         })->first();
         File::delete($files);
