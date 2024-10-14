@@ -4743,9 +4743,14 @@ class DashboardController extends Controller
                     $proyeks = $proyeks->where("unit_kerja", "=", $filter);
                     // dd($filter, $proyeks->first());
                 } elseif ($filter != "") {
-                    $dop = str_replace("-", " ", $filter);
-                    // dd($dop, $proyeks->first());
-                    $proyeks = $proyeks->where("dop", "=", $dop);
+                    // $dop = str_replace("-", " ", $filter);
+                    // // dd($dop, $proyeks->first());
+                    // $proyeks = $proyeks->where("dop", "=", $dop);
+                    if ($filter == "PUSAT") {
+                        $proyeks = $proyeks->whereIn("dop", ["DOP 1", "DOP 2"]);
+                    } else {
+                        $proyeks = $proyeks->where("dop", $filter);
+                    }
                 }
             } else {
                 if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
@@ -4763,9 +4768,14 @@ class DashboardController extends Controller
                     $proyeks = $proyeks->where("unit_kerja", "=", $filter);
                     // dd($filter, $proyeks->first());
                 } elseif ($filter != "") {
-                    $dop = str_replace("-", " ", $filter);
-                    // dd($dop, $proyeks->first());
-                    $proyeks = $proyeks->where("dop", "=", $dop);
+                    // $dop = str_replace("-", " ", $filter);
+                    // // dd($dop, $proyeks->first());
+                    // $proyeks = $proyeks->where("dop", "=", $dop);
+                    if ($filter == "PUSAT") {
+                        $proyeks = $proyeks->whereIn("dop", ["DOP 1", "DOP 2"]);
+                    } else {
+                        $proyeks = $proyeks->where("dop", $filter);
+                    }
                 }
             } else {
                 $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->get(["nilai_perolehan", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_ri_perolehan", "bulan_pelaksanaan", "nilai_kontrak_keseluruhan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "hps_pagu", "tipe_proyek", "tahun_perolehan", "jenis_proyek", "is_cancel", "is_tidak_lulus_pq", "porsi_jo"]);
@@ -5258,9 +5268,14 @@ class DashboardController extends Controller
                     $proyeks = $proyeks->where("unit_kerja", $filter);
                     // dd($filter, $proyeks);
                 } elseif ($filter != "") {
-                    $dop = str_replace("-", " ", $filter);
-                    $proyeks = $proyeks->where("dop", $dop);
-                    // dd($dop, $proyeks);
+                    // $dop = str_replace("-", " ", $filter);
+                    // $proyeks = $proyeks->where("dop", $dop);
+                    // // dd($dop, $proyeks);
+                    if ($filter == "PUSAT") {
+                        $proyeks = $proyeks->whereIn("dop", ["DOP 1", "DOP 2"]);
+                    } else {
+                        $proyeks = $proyeks->where("dop", $filter);
+                    }
                 }
             } else {
                 if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
@@ -5289,9 +5304,14 @@ class DashboardController extends Controller
                     $proyeks = $proyeks->where("unit_kerja", $filter);
                     // dd($filter, $proyeks);
                 } elseif ($filter != "") {
-                    $dop = str_replace("-", " ", $filter);
-                    $proyeks = $proyeks->where("dop", $dop);
-                    // dd($dop, $proyeks);
+                    // $dop = str_replace("-", " ", $filter);
+                    // $proyeks = $proyeks->where("dop", $dop);
+                    // // dd($dop, $proyeks);
+                    if ($filter == "PUSAT") {
+                        $proyeks = $proyeks->whereIn("dop", ["DOP 1", "DOP 2"]);
+                    } else {
+                        $proyeks = $proyeks->where("dop", $filter);
+                    }
                 }
             } else {
                 // if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
@@ -5458,10 +5478,10 @@ class DashboardController extends Controller
                 $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("jenis_proyek", "!=", "I")->where("is_cancel", "!=", true)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "penawaran_tender", "tahun_perolehan", "jenis_proyek", "porsi_jo", "hps_pagu", "unit_kerja", "dop", "tahun_ri_perolehan"]);
             }
         }
-        $proyeks = $proyeks->where("is_cancel", "=", false)->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year)->where("tahun_ri_perolehan", $year);
+        $proyeks = $proyeks->where("is_cancel", "=", false)->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year);
         switch ($tipe) {
             case "Terkontrak Non Retail":
-                $proyeks = $proyeks->where(function ($p) {
+                $proyeks = $proyeks->where("tahun_ri_perolehan", $year)->where(function ($p) {
                     return $p->stage == 8  && !$p->is_tidak_lulus_pq;
                 })->sortBy([
                     ["bulan_pelaksanaan", "asc"],
@@ -5576,11 +5596,11 @@ class DashboardController extends Controller
                 $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("jenis_proyek", "!=", "I")->where("is_cancel", "!=", true)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender", "penawaran_tender", "tahun_perolehan", "jenis_proyek", "porsi_jo", "hps_pagu", "unit_kerja", "dop", "tahun_ri_perolehan"]);
             }
         }
-        $proyeks = $proyeks->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year)->where("tahun_ri_perolehan", $year);
+        $proyeks = $proyeks->where("jenis_proyek", "!=", "I")->where("tahun_perolehan", "=", $year);
         $stage = null;
         switch ($tipe) {
             case "Terkontrak Non Retail":
-                $proyeks = $proyeks->where(function ($p) {
+                $proyeks = $proyeks->where("tahun_ri_perolehan", $year)->where(function ($p) {
                     return $p->stage == 8  && !$p->is_tidak_lulus_pq;
                 })->sortBy([
                     ["bulan_pelaksanaan", "asc"],
