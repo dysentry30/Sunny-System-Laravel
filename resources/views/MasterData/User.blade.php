@@ -1,4 +1,4 @@
-a{{-- Begin::Extend Header --}}
+{{-- Begin::Extend Header --}}
 @extends('template.main')
 {{-- End::Extend Header --}}
 

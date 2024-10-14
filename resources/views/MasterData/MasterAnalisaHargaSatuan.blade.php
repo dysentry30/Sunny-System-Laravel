@@ -1,4 +1,4 @@
-a{{-- Begin::Extend Header --}}
+{{-- Begin::Extend Header --}}
 @extends('template.main')
 {{-- End::Extend Header --}}
 
@@ -45,14 +45,19 @@ a{{-- Begin::Extend Header --}}
                             </div>
                             <!--end::Page title-->
                             @if (auth()->user()->check_administrator || auth()->user()->email == "user-poc@sunny.com")
-                                <div class="d-flex align-items-center py-1">
+                                <div class="d-flex align-items-center py-1 gap-2">
     
+                                    <!--begin::Button-->
+                                    <a href="#" data-bs-target="#modal_kt_upload"
+                                        data-bs-toggle="modal" class="btn btn-sm btn-success py-3">
+                                        Upload AHS</a>
+                                    <!--END::Button-->
                                     <!--begin::Button-->
                                     <a href="#" data-bs-target="#kt_modal_create"
                                         data-bs-toggle="modal" class="btn btn-sm btn-primary py-3"
                                         style="background-color:#008CB4; padding: 6px">
                                         Tambah AHS</a>
-    
+                                    <!--END::Button-->
                                 </div>
                             @endif
                         </div>
@@ -204,6 +209,31 @@ a{{-- Begin::Extend Header --}}
         </div>
         <!--end::Modal - Create App-->
     </form>
+
+    <div class="modal fade" id="modal_kt_upload" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal_kt_upload" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <form action="/analisa-harga-satuan/upload" method="post" enctype="multipart/form-data" onsubmit="addLoading(this)">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="kt_modal_approvedLabel">Upload Analisa Harga Satuan</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">                                    
+                        <div class="mb-3">
+                            <label for="file" class="form-label" class="required">Upload</label>
+                            <input type="file" class="form-control" id="file" name="file" value="" accept=".xlsx">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="save-pilihan" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>                            
+            </form>
+        </div>
+    </div>
     <!--end::Modals-->
 
     <!--begin::Modal New User-->
@@ -215,6 +245,10 @@ a{{-- Begin::Extend Header --}}
     <script src="/datatables/jquery.dataTables.min.js"></script>
     
     <script>
+        const LOADING_BODY = new KTBlockUI(document.querySelector('#kt_body'), {
+            message: '<div class="blockui-message"><span class="spinner-border text-primary"></span> Loading...</div>',
+        })
+
         $(document).ready(function() {
             $('#user_table').DataTable( {
                 dom: '<"float-start"f><"#user_table"t>rtip',
@@ -226,6 +260,11 @@ a{{-- Begin::Extend Header --}}
                 // ]
             } );
         } );
+
+        function addLoading(elt) {
+            LOADING_BODY.block();
+            elt.form.submit();
+        }
     </script>
     <!--end::Data Tables-->
 

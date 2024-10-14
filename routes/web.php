@@ -7672,8 +7672,10 @@ Route::get('/testing-qr', function (Request $request) {
 Route::group(['prefix' => 'analisa-harga-satuan'], function () {
     Route::get('/', [MasterAnalisaHargaSatuanController::class, 'index']);
     Route::post('/save', [MasterAnalisaHargaSatuanController::class, 'insert']);
+    Route::post('/upload', [MasterAnalisaHargaSatuanController::class, 'insertFromFile']);
     Route::get('/view/{masterAHS}', [MasterAnalisaHargaSatuanController::class, 'view']);
     Route::post('/detail/save/{masterAHS}', [MasterAnalisaHargaSatuanController::class, 'insertDetail']);
+    Route::post('/detail/sumberdaya/save/{masterAHS}', [MasterAnalisaHargaSatuanController::class, 'insertSumberDaya']);
 });
 
 Route::group(["prefix" => "estimasi-proyek"], function () {

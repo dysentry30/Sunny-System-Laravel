@@ -10,7 +10,7 @@ class AnalisaHargaSatuanDetail extends Model
 {
     use HasUuids;
     public $incrementing = false;
-    protected $fillable = ['kode_ahs', 'kode_sumber_daya'];
+    protected $fillable = ['kode_ahs', 'resource_code'];
 
     public function MasterAnalisaHargaSatuan()
     {
@@ -19,11 +19,11 @@ class AnalisaHargaSatuanDetail extends Model
 
     public function MasterSumberDaya()
     {
-        return $this->hasOne(MasterSumberDaya::class, "kode_sumber_daya", "kode_sumber_daya");
+        return $this->hasOne(MasterSumberDaya::class, "code", "resource_code");
     }
 
     public function MasterHargaSatuan()
     {
-        return $this->hasOne(MasterHargaSatuan::class, "kode_sumber_daya", "kode_sumber_daya");
+        return $this->hasOne(MasterHargaSatuan::class, "resource_code", "resource_code");
     }
 }

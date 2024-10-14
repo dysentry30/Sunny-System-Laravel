@@ -10,4 +10,6 @@ class MasterAnalisaHargaSatuan extends Model
 {
     use HasUuids;
     protected $table = "master_analisa_harga_satuan";
+
+    protected $fillable = ['kode_ahs', 'uraian', 'satuan'];
 }

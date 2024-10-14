@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('kode_tahap_parent')->nullable();
             $table->string('kode_tahap_child')->nullable();
             $table->string('kode_boq')->nullable();
+            $table->string('kode_ahs')->nullable();
             $table->string('index')->nullable();
             $table->timestamps();
         });

@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\AhsImport;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\MasterSumberDaya;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\AnalisaHargaSatuanDetail;
 use App\Models\MasterAnalisaHargaSatuan;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -74,6 +77,62 @@ class MasterAnalisaHargaSatuanController extends Controller
         } catch (\Throwable $th) {
             throw $th;
             Alert::error("Error", "Terjadi Kesalahan. Hubungi Admin");
+            return redirect()->back();
+        }
+    }
+
+    public function insertSumberDaya(Request $request, MasterAnalisaHargaSatuan $masterAHS)
+    {
+        $selectedSumberDaya = $request->get("selectedId");
+
+        try {
+            DB::beginTransaction();
+
+            if (!empty($selectedSumberDaya)) {
+                $collectIdSumberDaya = collect(json_decode($selectedSumberDaya));
+
+                $collectIdSumberDaya->each(function ($id) use ($masterAHS) {
+                    $masterSumberDaya = MasterSumberDaya::find($id);
+                    $saveMasterAnalisaDetail = AnalisaHargaSatuanDetail::updateOrCreate([
+                        "kode_ahs" => $masterAHS->kode_ahs,
+                        "resource_code" => $masterSumberDaya->code
+                    ]);
+                });
+            } else {
+                return response()->json([
+                    "success" => false,
+                    "message" => "Tidak ada data yang dipilih"
+                ]);
+            }
+
+            DB::commit();
+            return response()->json([
+                "success" => true,
+                "message" => "Data Berhasil Diupdate"
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json([
+                "success" => false,
+                "message" => $th->getMessage()
+            ]);
+        }
+    }
+
+    public function insertFromFile(Request $request)
+    {
+        try {
+            $request->validate([
+                'file' => 'required|mimes:xlsx',
+            ]);
+
+            // Lakukan import dan masukkan kode proyek ke dalam BoqImport
+            Excel::import(new AhsImport(), $request->file('file'));
+
+            Alert::success("Success", "Data Berhasil Di Upload");
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            Alert::error("Error", $th->getMessage());
             return redirect()->back();
         }
     }

@@ -33,6 +33,7 @@ class BoqImport implements ToModel, WithHeadingRow
             'kode_proyek' => $this->kodeProyek,
             'kode_boq' => $row['NO'],
             'uraian_pekerjaan' => $row['URAIAN PEKERJAAN'],
+            'kode_ahs' => $row['KODE AHS'],
             'satuan' => $row['SATUAN'],
             'volume' => $row['VOLUME'],
             'level' => 0,

@@ -671,13 +671,13 @@
                                             <thead>
                                                 <!--begin::Table row-->
                                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0 bg-primary">
-                                                    <th class="min-w-auto text-white" rowspan="2">Kode BOQ</th>
-                                                    <th class="min-w-auto text-white" rowspan="2">Kode Tahap (Parent)</th>
-                                                    <th class="min-w-auto text-white" rowspan="2">Kode Tahap (Child)</th>
-                                                    <th class="min-w-450px text-white" rowspan="2">Uraian Pekerjaan</th>
-                                                    <th class="min-w-auto text-white" rowspan="2">Satuan</th>
-                                                    <th class="min-w-auto text-white" rowspan="2">Volume</th>
-                                                    <th class="min-w-auto text-white" rowspan="2">Action</th>
+                                                    <th class="min-w-auto text-white">Kode BOQ</th>
+                                                    <th class="min-w-auto text-white">Kode Tahap (Parent)</th>
+                                                    <th class="min-w-auto text-white">Kode Tahap (Child)</th>
+                                                    <th class="min-w-450px text-white">Uraian Pekerjaan</th>
+                                                    <th class="min-w-auto text-white">Kode AHS</th>
+                                                    <th class="min-w-auto text-white">Satuan</th>
+                                                    <th class="min-w-auto text-white">Volume</th>
                                                 </tr>
                                                 <!--end::Table row-->
                                             </thead>
@@ -695,9 +695,9 @@
                                                             <input type="text" class="form-control" name="kode_tahap_child[]" value="{{ $data->kode_tahap_child }}">
                                                         </td>
                                                         <td>{{ $data->uraian_pekerjaan }}</td>
+                                                        <td class="text-center">{{ $data->kode_ahs }}</td>
                                                         <td class="text-center">{{ $data->satuan }}</td>
                                                         <td class="text-end">{{ number_format($data->volume, 0, ',', '.') }}</td>
-                                                        <td></td>
                                                     </tr>
                                                 @endforeach
                                             </tbody>
