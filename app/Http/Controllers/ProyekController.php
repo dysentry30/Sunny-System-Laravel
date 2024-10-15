@@ -2231,11 +2231,19 @@ class ProyekController extends Controller
                 }
                 if ($error_msg->isNotEmpty()) {
                     Alert::html("Error - Pelanggan !", "Untuk pindah ke stage terkontrak, pastikan data <b>Pelanggan</b> dengan field <b>" . $error_msg->join(", ", " </b>dan<b> ") . "</b> sudah terisi!", "error")->autoClose(10000);
-                    return redirect()->back();
+                    // return redirect()->back();
+                    return response()->json([
+                        "status" => "success",
+                        "link" => true,
+                    ]);
                 }
             } else if (empty($customer)) {
                 Alert::html("Error - Proyek !", "Untuk pindah ke stage terkontrak, pastikan field <b>Pelanggan</b> pada stage Pasar Dini sudah terpilih!", "error")->autoClose(10000);
-                return redirect()->back();
+                // return redirect()->back();
+                return response()->json([
+                    "status" => "success",
+                    "link" => true,
+                ]);
             }
             $sap = $customer->sap;
             $pic = $customer->pic->filter(function ($p) {

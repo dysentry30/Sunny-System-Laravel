@@ -246,6 +246,7 @@
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-auto">No</th>
                                                 <th class="min-w-auto">Kode Proyek</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
@@ -261,6 +262,10 @@
                                         <!--end::Table head-->
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600 fs-6">
+                                            @php
+                                                $no = 1;
+                                                $nilaiOKPerolehan = 0;
+                                            @endphp
                                             @forelse ($proyeks_perolehan as $proyek)
                                                 @php
                                                     $total_forecast = $proyek->Forecasts->filter(function($f) use($filterBulan, $filterTahun) {
@@ -279,6 +284,9 @@
                                                     // }
                                                 @endphp
                                                 <tr>
+                                                    <td class="text-center">
+                                                        {{ $no++ }}
+                                                    </td>
                                                     @if (!empty($proyek))
                                                         <td>
                                                             <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->id_contract) }}" id="click-name"
@@ -385,8 +393,11 @@
                                                     <!--end::Jenis-->
                                                     <!--begin::Forecast-->
                                                     <td class="text-end">
-                                                        <small>
+                                                        {{-- <small>
                                                             {{ number_format((int)$total_forecast, 0, '.', '.') ?? '-' }}
+                                                        </small> --}}
+                                                        <small>
+                                                            {{ number_format((int)$proyek->nilaiok_awal, 0, '.', '.') ?? '-' }}
                                                         </small>
                                                     </td>
                                                     <!--end::Forecast-->
@@ -401,9 +412,20 @@
                                                     </td>
                                                     <!--end::Email-->
                                                 </tr>
+                                                @php
+                                                   $nilaiOKPerolehan += (int)$proyek->nilaiok_awal;
+                                                @endphp
                                             @empty
                                             @endforelse
                                         </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="6" class="bg-primary text-white fw-bold ps-3">Total</td>
+                                                <td colspan="" class="text-end">{{ number_format((int)$nilaiOKPerolehan, 0, '.', '.') }}</td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                     <!--end::Table -->
                                 </div>
@@ -417,6 +439,7 @@
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-auto">No</th>
                                                 <th class="min-w-auto">Kode Proyek</th>
                                                 <th class="min-w-auto">Nomor Kontrak</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
@@ -432,9 +455,15 @@
                                         <!--end::Table head-->
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600 fs-6">
+                                            @php
+                                                $no = 1;
+                                            @endphp
                                             @forelse ($proyeks_pelaksanaan->where("stages", 2) as $proyek)
                                                 <tr>
                                                     <!--begin::Name=-->
+                                                    <td class="text-center">
+                                                        {{ $no++ }}
+                                                    </td>
                                                     <td>
                                                         <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->profit_center) }}" id="click-name"
                                                             class="text-hover-primary">{{ $proyek->profit_center }}</a>
@@ -581,6 +610,7 @@
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-auto">No</th>
                                                 <th class="min-w-auto">Kode Proyek</th>
                                                 <th class="min-w-auto">Nomor Kontrak</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
@@ -596,6 +626,9 @@
                                         <!--end::Table head-->
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600 fs-6">
+                                            @php
+                                                $no = 1;
+                                            @endphp
                                             @forelse ($proyeks_pelaksanaan->where("stages", 3) as $proyek)
                                                 {{-- <tr>
                                                     <!--begin::Name=-->
@@ -662,6 +695,9 @@
                                                 </tr> --}}
                                                 <tr>
                                                     <!--begin::Name=-->
+                                                    <td class="text-center">
+                                                        {{ $no++ }}
+                                                    </td>
                                                     <td>
                                                         <a target="_blank" href="/contract-management/view/{{ url_encode($proyek->profit_center) }}" id="click-name"
                                                             class="text-hover-primary">{{ $proyek->profit_center }}</a>

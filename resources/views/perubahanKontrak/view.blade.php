@@ -312,7 +312,7 @@
                                                             </div>
                                                         </div>
                                                         
-                                                        <div class="col">
+                                                        {{-- <div class="col">
                                                             <div class="mb-3">
                                                                 <label for="jenis-perubahan" class="form-label fw-bold">
                                                                     <span style="font-weight: normal">Tanggal Kejadian Perubahan</span>
@@ -322,17 +322,24 @@
                                                                 </label>
                                                                 <input type="date" name="tanggal-perubahan" id="tanggal-perubahan" class="form-control form-control-solid" value="{{ $perubahan_kontrak->tanggal_perubahan }}">
                                                             </div>
-                                                        </div>
-                                                    </div>
-    
-                                                    <div class="row">
-                                                        <div class="col">
+                                                        </div> --}}
+
+                                                        <div class="col mt-3">
                                                             <div class="mb-3">
                                                                 <label for="proposal-klaim" class="form-label fw-bold">No Proposal Klaim</label>
                                                                 <input type="text" name="proposal-klaim" id="proposal-klaim" class="form-control form-control-solid" value="{{ $perubahan_kontrak->proposal_klaim }}">
                                                             </div>
                                                         </div>
                                                     </div>
+    
+                                                    {{-- <div class="row">
+                                                        <div class="col">
+                                                            <div class="mb-3">
+                                                                <label for="proposal-klaim" class="form-label fw-bold">No Proposal Klaim</label>
+                                                                <input type="text" name="proposal-klaim" id="proposal-klaim" class="form-control form-control-solid" value="{{ $perubahan_kontrak->proposal_klaim }}">
+                                                            </div>
+                                                        </div>
+                                                    </div> --}}
 
                                                     <div class="row">
                                                         <div class="mb-3">
@@ -413,7 +420,7 @@
                                                         
                                                     <div class="row">
                                                         <div class="mb-3">
-                                                            <label for="biaya-pengajuan" class="form-label fw-bold">Keterangan</label>
+                                                            <label for="biaya-pengajuan" class="form-label fw-bold">Update Status</label>
                                                             <textarea cols="2" name="keterangan" class="form-control form-control-solid">{!! $perubahan_kontrak->keterangan !!}</textarea>
                                                         </div>
                                                     </div>
@@ -667,7 +674,7 @@
 
                                     <!--Begin :: Dokumen Site Instruction-->
                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                        Dokumen Site Instruction
+                                        Dokumen Site Instruction / Technical Quarry
                                         @can('access-menu-update', 'CLMM')
                                         <a href="#" Id="Plus" data-bs-toggle="modal" onclick="showModalUpload('site-instruction')">+</a>
                                         @endcan
@@ -979,7 +986,7 @@
 
                                     <!--Begin :: Dokumen Berita Acara Kelengkapan-->
                                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                        Dokumen Berita Acara Kelengkapan
+                                        Dokumen Berita Acara Kesepakatan
                                         @can('access-menu-update', 'CLMM')
                                         <a href="#" Id="Plus" data-bs-toggle="modal" onclick="showModalUpload('berita-acara-kesepakatan')">+</a>
                                         @endcan
@@ -1085,7 +1092,7 @@
                                     <!--Begin :: Dokumen Final Change-->
                                     @if ($perubahan_kontrak->stage > 4)
                                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                            Dokumen Final
+                                            Addendum Kontrak
                                         </h3>
                                         
                                         <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
