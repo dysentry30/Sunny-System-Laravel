@@ -869,15 +869,8 @@
                                                                                 @can('access-menu-update', 'PRYK')
                                                                                 onclick="this.form.submitted=this.value"
                                                                                 @endcan
-                                                                                class="dropdown-item" name="stage-terkontrak"
-                                                                                value="Terkontrak" /></li>
-                                                                        <li><input type="{{ auth()->user()->can('access-menu-update', 'PRYK') ? 'submit' : '' }}"
-                                                                                @can('access-menu-update', 'PRYK')
-                                                                                onclick="this.form.submitted=this.value"
-                                                                                @endcan
-                                                                                class="dropdown-item" name="stage-terendah"
-                                                                                value="Terendah" /></li>
-                                                                    </form>
+                                                                                class="dropdown-item" name="send-data-nasabah"
+                                                                                value="Send Data Nasabah" /></li>
                                                                 </ul>
                                                             @endif
                                                         @else
@@ -1025,6 +1018,10 @@
                                             if (form.submitted == "Terendah") {
                                                 html +=
                                                     `<input type="hidden" class="dropdown-item" name="stage-terendah" value="Terendah"/>`;
+                                            }
+                                            if (form.submitted == "Send Data Nasabah") {
+                                                html +=
+                                                    `<input type="hidden" class="dropdown-item" name="send-data-nasabah" value="Send Data Nasabah"/>`;
                                             }
                                             formSend.innerHTML = html;
                                             document.body.appendChild(formSend);
