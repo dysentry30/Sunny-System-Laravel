@@ -538,7 +538,7 @@ class CustomerController extends Controller
         $editCustomer->kode_nasabah = $data["kodenasabah-company"];
         $editCustomer->negara = $data["negara"];
         $editCustomer->provinsi = $data["provinsi"];
-        $editCustomer->kota_kabupaten = $data["kabupaten"];
+        $editCustomer->kota_kabupaten = strtoupper($data["kabupaten"]);
         $editCustomer->industry_sector = $data["industry-sector"];
         $editCustomer->forbes_rank = $data["forbes_rank"];
         $editCustomer->lq_rank = $data["lq_rank"];
