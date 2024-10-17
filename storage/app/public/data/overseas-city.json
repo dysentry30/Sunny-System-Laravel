@@ -1,0 +1,152 @@
+[
+    {
+        "id": 1,
+        "province_id": "JP-13",
+        "name": "Tokyo"
+    },
+    {
+        "id": 2,
+        "province_id": "JP-13",
+        "name": "Hachioji"
+    },
+    {
+        "id": 3,
+        "province_id": "JP-14",
+        "name": "Yokohama"
+    },
+    {
+        "id": 4,
+        "province_id": "JP-14",
+        "name": "Kawasaki"
+    },
+    {
+        "id": 5,
+        "province_id": "JP-27",
+        "name": "Osaka"
+    },
+    {
+        "id": 6,
+        "province_id": "JP-27",
+        "name": "Sakai"
+    },
+    {
+        "id": 7,
+        "province_id": "JP-23",
+        "name": "Nagoya"
+    },
+    {
+        "id": 8,
+        "province_id": "JP-23",
+        "name": "Toyota"
+    },
+    {
+        "id": 9,
+        "province_id": "JP-26",
+        "name": "Kyoto"
+    },
+    {
+        "id": 10,
+        "province_id": "JP-26",
+        "name": "Uji"
+    },
+    {
+        "id": 11,
+        "province_id": "JP-01",
+        "name": "Sapporo"
+    },
+    {
+        "id": 12,
+        "province_id": "JP-01",
+        "name": "Hakodate"
+    },
+    {
+        "id": 13,
+        "province_id": "JP-40",
+        "name": "Fukuoka"
+    },
+    {
+        "id": 14,
+        "province_id": "JP-40",
+        "name": "Kitakyushu"
+    },
+    {
+        "id": 15,
+        "province_id": "JP-04",
+        "name": "Sendai"
+    },
+    {
+        "id": 16,
+        "province_id": "JP-04",
+        "name": "Ishinomaki"
+    },
+    {
+        "id": 17,
+        "province_id": "JP-34",
+        "name": "Hiroshima"
+    },
+    {
+        "id": 18,
+        "province_id": "JP-34",
+        "name": "Kure"
+    },
+    {
+        "id": 19,
+        "province_id": "JP-28",
+        "name": "Kobe"
+    },
+    {
+        "id": 20,
+        "province_id": "JP-28",
+        "name": "Himeji"
+    },
+    {
+        "id": 21,
+        "province_id": "JP-11",
+        "name": "Saitama"
+    },
+    {
+        "id": 22,
+        "province_id": "JP-11",
+        "name": "Kawaguchi"
+    },
+    {
+        "id": 23,
+        "province_id": "JP-12",
+        "name": "Chiba"
+    },
+    {
+        "id": 24,
+        "province_id": "JP-12",
+        "name": "Funabashi"
+    },
+    {
+        "id": 25,
+        "province_id": "JP-08",
+        "name": "Mito"
+    },
+    {
+        "id": 26,
+        "province_id": "JP-08",
+        "name": "Hitachi"
+    },
+    {
+        "id": 27,
+        "province_id": "JP-21",
+        "name": "Gifu"
+    },
+    {
+        "id": 28,
+        "province_id": "JP-21",
+        "name": "Ogaki"
+    },
+    {
+        "id": 29,
+        "province_id": "JP-15",
+        "name": "Niigata"
+    },
+    {
+        "id": 30,
+        "province_id": "JP-15",
+        "name": "Nagaoka"
+    }
+]
