@@ -602,11 +602,15 @@
 
                                 <!--Begin :: Tab Pane - Pareto-->
                                 <div class="tab-pane fade" id="kt_view_analisa_harsat">
+                                    <div class="d-flex flex-row align-items-end mb-5">
+                                        <a href="#" class="btn btn-sm btn-primary">Generate AHS</a>
+                                    </div>
                                     <table class="table align-middle table-bordered border-dark fs-6 gy-2" id="example2">
                                         <!--begin::Table head-->
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0 bg-primary">
+                                                <th class="min-w-auto text-white">Kode Tahap</th>
                                                 <th class="min-w-auto text-white">Kode Sumber Daya</th>
                                                 <th class="min-w-450px text-white">Uraian</th>
                                                 <th class="min-w-auto text-white">Satuan</th>

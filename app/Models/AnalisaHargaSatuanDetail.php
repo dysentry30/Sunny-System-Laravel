@@ -10,7 +10,7 @@ class AnalisaHargaSatuanDetail extends Model
 {
     use HasUuids;
     public $incrementing = false;
-    protected $fillable = ['kode_ahs', 'resource_code'];
+    protected $fillable = ['kode_ahs', 'resource_code', 'formula', 'koef'];
 
     public function MasterAnalisaHargaSatuan()
     {

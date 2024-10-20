@@ -7676,6 +7676,9 @@ Route::group(['prefix' => 'analisa-harga-satuan'], function () {
     Route::get('/view/{masterAHS}', [MasterAnalisaHargaSatuanController::class, 'view']);
     Route::post('/detail/save/{masterAHS}', [MasterAnalisaHargaSatuanController::class, 'insertDetail']);
     Route::post('/detail/sumberdaya/save/{masterAHS}', [MasterAnalisaHargaSatuanController::class, 'insertSumberDaya']);
+    Route::get('/get-formula/{resource_code}', [MasterAnalisaHargaSatuanController::class, 'getFormulaSumberDaya']);
+    Route::post('/sumber-daya/{sumberDayaAHS}/save', [MasterAnalisaHargaSatuanController::class, 'saveFormulaSumberDaya']);
+    Route::post('/sumber-daya/{sumberDayaAHS}/edit', [MasterAnalisaHargaSatuanController::class, 'editFormulaSumberDaya']);
 });
 
 Route::group(["prefix" => "estimasi-proyek"], function () {

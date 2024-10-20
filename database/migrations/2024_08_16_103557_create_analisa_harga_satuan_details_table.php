@@ -19,6 +19,8 @@ return new class extends Migration
                 $table->string('resource_code', 15);
                 // $table->foreign('resource_code')->references('code')->on('master_sumber_daya')->onDelete('cascade');
                 $table->string('kode_ahs', 15);
+                $table->string('formula')->nullable();
+                $table->float('koef')->nullable();
                 // $table->foreign('kode_ahs')->references('kode_ahs')->on('master_analisa_harga_satuan')->onDelete('cascade');
                 $table->timestamps();
             });

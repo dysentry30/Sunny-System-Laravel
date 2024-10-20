@@ -18,6 +18,7 @@ return new class extends Migration
                 $table->uuid('id')->primary();
                 $table->string('kode_ahs', 15)->unique();
                 $table->string('uraian');
+                $table->string('satuan')->nullable();
                 $table->timestamps();
             });
         }
